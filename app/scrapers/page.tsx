@@ -22,7 +22,7 @@ const Scapers = () => {
           <div className="container mx-auto mt-28 py-10">
             <div className={augillion.className}>
               <h1 className="text-6xl md:text-9xl text-center text-orange-400">
-                Scraper(s)
+                Handcrafted Scraper(s)
               </h1>
             </div>
           </div>
