@@ -76,7 +76,7 @@ You can use the given datasource and the handcrafted scrapers to recreate the ex
 
 We do not have any intermediate API layer, making more contribution easier without causing breakdowns within the entire webapp
 
-This does bring some challanges pagination and limiting the rows queried at times, but this isn't a problem as of now, the loading speed do take a bit of hit, not signficant enough to slow down the entire app, and quering after every toggle option is made, loading the entire data on the client, make the user expirence seamless, while the inital boot might take a bit longer
+This does bring some challanges in pagination and limiting the rows queried at times, but this isn't a problem as of now, the loading speed do take a bit of hit, not significant enough to slow down the entire app, and quering after every toggle option is made, loading the entire data on the client, make the user experience seamless, while the inital boot might take a bit longer
 
 In this usecase, it benifits us to use this method of directly fetching and displaying the data!
 
