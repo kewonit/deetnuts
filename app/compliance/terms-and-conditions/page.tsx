@@ -64,7 +64,7 @@ const TermsAndConditions = () => {
       <section className="mb-6">
         <h2 className="text-2xl font-semibold mb-3">9. Contact Information</h2>
         <p>
-          If you have any questions about these Terms and Conditions, please contact us at -
+          If you have any questions about these Terms and Conditions, please contact us at - help@deetnuts.com
         </p>
       </section>
     </div>

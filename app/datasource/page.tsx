@@ -79,7 +79,7 @@ const Datasource = () => {
         <section>
           <div className="container mx-auto mt-28 py-10">
             <div className={augillion.className}>
-              <h1 className="text-9xl text-center text-orange-400">
+              <h1 className="text-7xl md:text-9xl text-center text-orange-400">
                 Data Source
               </h1>
             </div>

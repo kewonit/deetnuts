@@ -161,7 +161,7 @@ const InstitutePage: React.FC<{ params: Params }> = async ({ params }) => {
             </svg>
             <span className="sr-only">Info</span>
             <div>
-              <span className="font-medium">Warning!</span> Please select &quot;Year and Round&quot; and &quot;Seat Pool&quot; to view the ranks.
+              <span className="font-medium">Warning!</span> Please select &quot;Year and Round&quot; and &quot;Seat Type&quot; to view the ranks.
             </div>
           </div>
         </section>
