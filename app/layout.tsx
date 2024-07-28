@@ -20,8 +20,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="bg-[#E4DFF2]">
-      <meta property="og:image" content="https://res.cloudinary.com/dfyrk32ua/image/upload/v1720885204/deetnuts/preview.png" />
-      <meta property="og:image:webp" content="https://res.cloudinary.com/dfyrk32ua/image/upload/v1720885204/deetnuts/preview.png" />
+      <meta property="og:image" content="https://res.cloudinary.com/dfyrk32ua/image/upload/v1722186653/deetnuts/preview_o5ykn7.png" />
+      <meta property="og:image:webp" content="https://res.cloudinary.com/dfyrk32ua/image/upload/v1722186653/deetnuts/preview_o5ykn7.png" />
       <link rel="icon" href="/favicon.ico" />
       <body className={inter.className}>
         <Navbar />

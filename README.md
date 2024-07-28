@@ -11,6 +11,10 @@ tldr : Large public college data, made accessible & simpler to use
 - [The Annoyance/Problem](#the-annoyanceproblem)
 - [The Solution](#the-solution)
 - [How to install \& run?](#how-to-install--run)
+  - [Prerequisites](#prerequisites)
+  - [The UI](#the-ui)
+  - [The DB](#the-db)
+    - [Set up environment variables:](#set-up-environment-variables)
 - [Contribution](#contribution)
 - [License](#license)
 
@@ -30,7 +34,52 @@ We have read enough stories, where people were unaware of better college they co
 
 # How to install & run?
 
-To be updated
+## Prerequisites
+
+- Node.js (version 14 or later)
+- npm or yarn
+- Git
+
+## The UI
+Clone the repository locally 
+`git clone https://github.com/kewonit/deetnuts`
+
+Change directory to deetnuts, if it isn't already
+
+`cd deetnuts`
+
+Install the packages
+
+`npm install`
+
+Run the npm server
+
+`npm run dev`
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## The DB
+
+Staying close to the FOSS roots of this project we have used the <a href="https://github.com/supabase/supabase">Supabase Postgres </a>(The open source Firebase alternative.)
+
+<a href="https://supabase.com/docs/reference/javascript/installing">To get started with installing</a>
+
+### Set up environment variables:
+- Copy `.env.example` to `.env`
+- Fill in your Supabase project details:
+  ```
+  NEXT_PUBLIC_SUPABASE_URL=your-project-url
+  SUPABASE_PUBLIC_ROLE_KEY=your-anon-key
+  ```
+
+You can use the given datasource and the handcrafted scrapers to recreate the exact data within the existing tables and add them in the `public` schema and fetch them down accordingly
+
+We do not have any intermediate API layer, making more contribution easier without causing breakdowns within the entire webapp
+
+This does bring some challanges pagination and limiting the rows queried at times, but this isn't a problem as of now, the loading speed do take a bit of hit, not signficant enough to slow down the entire app, and quering after every toggle option is made, loading the entire data on the client, make the user expirence seamless, while the inital boot might take a bit longer
+
+In this usecase, it benifits us to use this method of directly fetching and displaying the data!
+
 
 # Contribution
 
