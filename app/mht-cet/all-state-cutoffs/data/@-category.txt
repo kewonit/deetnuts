@@ -1,0 +1,286 @@
+CATEGORIES = [
+  {
+    value: "DEFOBCS",
+    label: "DEFOBCS",
+  },
+  {
+    value: "DEFOPENS",
+    label: "DEFOPENS",
+  },
+  {
+    value: "DEFRNT1S",
+    label: "DEFRNT1S",
+  },
+  {
+    value: "DEFRNT2S",
+    label: "DEFRNT2S",
+  },
+  {
+    value: "DEFRNT3S",
+    label: "DEFRNT3S",
+  },
+  {
+    value: "DEFROBCS",
+    label: "DEFROBCS",
+  },
+  {
+    value: "DEFRSCS",
+    label: "DEFRSCS",
+  },
+  {
+    value: "DEFSCS",
+    label: "DEFSCS",
+  },
+  {
+    value: "EWS",
+    label: "EWS",
+  },
+  {
+    value: "GNT1H",
+    label: "GNT1H",
+  },
+  {
+    value: "GNT1O",
+    label: "GNT1O",
+  },
+  {
+    value: "GNT1S",
+    label: "GNT1S",
+  },
+  {
+    value: "GNT2H",
+    label: "GNT2H",
+  },
+  {
+    value: "GNT2O",
+    label: "GNT2O",
+  },
+  {
+    value: "GNT2S",
+    label: "GNT2S",
+  },
+  {
+    value: "GNT3H",
+    label: "GNT3H",
+  },
+  {
+    value: "GNT3O",
+    label: "GNT3O",
+  },
+  {
+    value: "GNT3S",
+    label: "GNT3S",
+  },
+  {
+    value: "GOBCH",
+    label: "GOBCH",
+  },
+  {
+    value: "GOBCO",
+    label: "GOBCO",
+  },
+  {
+    value: "GOBCS",
+    label: "GOBCS",
+  },
+  {
+    value: "GOPENH",
+    label: "GOPENH",
+  },
+  {
+    value: "GOPENO",
+    label: "GOPENO",
+  },
+  {
+    value: "GOPENS",
+    label: "GOPENS",
+  },
+  {
+    value: "GSCH",
+    label: "GSCH",
+  },
+  {
+    value: "GSCO",
+    label: "GSCO",
+  },
+  {
+    value: "GSCS",
+    label: "GSCS",
+  },
+  {
+    value: "GSTH",
+    label: "GSTH",
+  },
+  {
+    value: "GSTO",
+    label: "GSTO",
+  },
+  {
+    value: "GSTS",
+    label: "GSTS",
+  },
+  {
+    value: "GVJH",
+    label: "GVJH",
+  },
+  {
+    value: "GVJO",
+    label: "GVJO",
+  },
+  {
+    value: "GVJS",
+    label: "GVJS",
+  },
+  {
+    value: "LNT1H",
+    label: "LNT1H",
+  },
+  {
+    value: "LNT1O",
+    label: "LNT1O",
+  },
+  {
+    value: "LNT1S",
+    label: "LNT1S",
+  },
+  {
+    value: "LNT2H",
+    label: "LNT2H",
+  },
+  {
+    value: "LNT2O",
+    label: "LNT2O",
+  },
+  {
+    value: "LNT2S",
+    label: "LNT2S",
+  },
+  {
+    value: "LNT3H",
+    label: "LNT3H",
+  },
+  {
+    value: "LNT3O",
+    label: "LNT3O",
+  },
+  {
+    value: "LNT3S",
+    label: "LNT3S",
+  },
+  {
+    value: "LOBCH",
+    label: "LOBCH",
+  },
+  {
+    value: "LOBCO",
+    label: "LOBCO",
+  },
+  {
+    value: "LOBCS",
+    label: "LOBCS",
+  },
+  {
+    value: "LOPENH",
+    label: "LOPENH",
+  },
+  {
+    value: "LOPENO",
+    label: "LOPENO",
+  },
+  {
+    value: "LOPENS",
+    label: "LOPENS",
+  },
+  {
+    value: "LSCH",
+    label: "LSCH",
+  },
+  {
+    value: "LSCO",
+    label: "LSCO",
+  },
+  {
+    value: "LSCS",
+    label: "LSCS",
+  },
+  {
+    value: "LSTH",
+    label: "LSTH",
+  },
+  {
+    value: "LSTO",
+    label: "LSTO",
+  },
+  {
+    value: "LSTS",
+    label: "LSTS",
+  },
+  {
+    value: "LVJH",
+    label: "LVJH",
+  },
+  {
+    value: "LVJO",
+    label: "LVJO",
+  },
+  {
+    value: "LVJS",
+    label: "LVJS",
+  },
+  {
+    value: "MI",
+    label: "MI",
+  },
+  {
+    value: "ORPHAN",
+    label: "ORPHAN",
+  },
+  {
+    value: "PWDOBCH",
+    label: "PWDOBCH",
+  },
+  {
+    value: "PWDOBCS",
+    label: "PWDOBCS",
+  },
+  {
+    value: "PWDOPENH",
+    label: "PWDOPENH",
+  },
+  {
+    value: "PWDOPENS",
+    label: "PWDOPENS",
+  },
+  {
+    value: "PWDRNT1S",
+    label: "PWDRNT1S",
+  },
+  {
+    value: "PWDRNT2S",
+    label: "PWDRNT2S",
+  },
+  {
+    value: "PWDRNT3S",
+    label: "PWDRNT3S",
+  },
+  {
+    value: "PWDRSCH",
+    label: "PWDRSCH",
+  },
+  {
+    value: "PWDRSCS",
+    label: "PWDRSCS",
+  },
+  {
+    value: "PWDSCH",
+    label: "PWDSCH",
+  },
+  {
+    value: "PWDSCS",
+    label: "PWDSCS",
+  },
+  {
+    value: "TFWS",
+    label: "TFWS",
+  },
+]

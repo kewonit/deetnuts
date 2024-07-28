@@ -3,31 +3,102 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --bg: #daf5f0;
+  --main: #c4a1ff;
+  --main-accent: #a36ec4;
+  --border-radius: 5px;
+  --horizontal-box-shadow: 4px;
+  --vertical-box-shadow: 4px;
+  --heading-font-weight: 700;
+  --base-font-weight: 500;
 }
 
-@media (prefers-color-scheme: dark) {
+body,
+.scrollbar {
+  --sb-track-color: #ffffff;
+  --sb-thumb-color: #000000;
+  --sb-size: 8px;
+
+}
+
+@layer base {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --chart-1: 25 34% 28%;
+    --chart-2: 26 36% 34%;
+    --chart-3: 28 40% 40%;
+    --chart-4: 31 41% 48%;
+    --chart-5: 35 43% 53%;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+body::-webkit-scrollbar,
+.scrollbar::-webkit-scrollbar {
+  width: var(--sb-size);
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+body::-webkit-scrollbar-track,
+.scrollbar::-webkit-scrollbar-track,
+.code::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+}
+
+body::-webkit-scrollbar-thumb,
+.scrollbar::-webkit-scrollbar-thumb,
+.code::-webkit-scrollbar-thumb,
+figure[data-rehype-pretty-code-figure] pre::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  body,
+  .scrollbar {
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
   }
+}
+
+figure[data-rehype-pretty-code-figure] pre::-webkit-scrollbar,
+.code::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+figure[data-rehype-pretty-code-figure] pre::-webkit-scrollbar-track,
+.code::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+figure[data-rehype-pretty-code-figure] pre::-webkit-scrollbar-corner,
+.code::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+::selection {
+  background: rgba(173, 216, 230, 0.5);
+}
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 3.9%;
+  --primary: 240 5.9% 10%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 240 4.8% 95.9%;
+  --secondary-foreground: 240 5.9% 10%;
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
+  --accent: 240 4.8% 95.9%;
+  --accent-foreground: 240 5.9% 10%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 5.9% 90%;
+  --input: 240 5.9% 90%;
+  --ring: 240 10% 3.9%;
+  --chart-1: 12 76% 61%;
+  --chart-2: 173 58% 39%;
+  --chart-3: 197 37% 24%;
+  --chart-4: 43 74% 66%;
+  --chart-5: 27 87% 67%;
 }

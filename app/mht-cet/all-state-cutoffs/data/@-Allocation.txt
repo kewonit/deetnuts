@@ -1,0 +1,22 @@
+CATEGORIES = [
+  {
+    value: "Home University Seats Allotted to Home University Candidates",
+    label: "Home University Seats Allotted to Home University Candidates",
+  },
+  {
+    value: "Home University Seats Allotted to Other Than Home University Candidates",
+    label: "Home University Seats Allotted to Other Than Home University Candidates",
+  },
+  {
+    value: "Other Than Home University Seats Allotted to Home University Candidates",
+    label: "Other Than Home University Seats Allotted to Home University Candidates",
+  },
+  {
+    value: "Other Than Home University Seats Allotted to Other Than Home University Candidates",
+    label: "Other Than Home University Seats Allotted to Other Than Home University Candidates",
+  },
+  {
+    value: "State Level",
+    label: "State Level",
+  },
+]

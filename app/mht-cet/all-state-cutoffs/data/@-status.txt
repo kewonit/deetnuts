@@ -1,0 +1,118 @@
+CATEGORIES = [
+  {
+    value: "Deemed University Autonomous",
+    label: "Deemed University Autonomous",
+  },
+  {
+    value: "Government",
+    label: "Government",
+  },
+  {
+    value: "Government Autonomous",
+    label: "Government Autonomous",
+  },
+  {
+    value: "Government- Aided Autonomous",
+    label: "Government- Aided Autonomous",
+  },
+  {
+    value: "Un-Aided",
+    label: "Un-Aided",
+  },
+  {
+    value: "Un-Aided Autonomous",
+    label: "Un-Aided Autonomous",
+  },
+  {
+    value: "Un-Aided Autonomous Linguistic Minority - Gujarathi",
+    label: "Un-Aided Autonomous Linguistic Minority - Gujarathi",
+  },
+  {
+    value: "Un-Aided Autonomous Linguistic Minority - Hindi",
+    label: "Un-Aided Autonomous Linguistic Minority - Hindi",
+  },
+  {
+    value: "Un-Aided Autonomous Linguistic Minority - Malyalam",
+    label: "Un-Aided Autonomous Linguistic Minority - Malyalam",
+  },
+  {
+    value: "Un-Aided Autonomous Linguistic Minority - Sindhi",
+    label: "Un-Aided Autonomous Linguistic Minority - Sindhi",
+  },
+  {
+    value: "Un-Aided Autonomous Religious Minority - Christian",
+    label: "Un-Aided Autonomous Religious Minority - Christian",
+  },
+  {
+    value: "Un-Aided Autonomous Religious Minority - Jain",
+    label: "Un-Aided Autonomous Religious Minority - Jain",
+  },
+  {
+    value: "Un-Aided Linguistic Minority - Gujar",
+    label: "Un-Aided Linguistic Minority - Gujar",
+  },
+  {
+    value: "Un-Aided Linguistic Minority - Gujarathi",
+    label: "Un-Aided Linguistic Minority - Gujarathi",
+  },
+  {
+    value: "Un-Aided Linguistic Minority - Gujarathi(Jain)",
+    label: "Un-Aided Linguistic Minority - Gujarathi(Jain)",
+  },
+  {
+    value: "Un-Aided Linguistic Minority - Hindi",
+    label: "Un-Aided Linguistic Minority - Hindi",
+  },
+  {
+    value: "Un-Aided Linguistic Minority - Malyalam",
+    label: "Un-Aided Linguistic Minority - Malyalam",
+  },
+  {
+    value: "Un-Aided Linguistic Minority - Punjabi",
+    label: "Un-Aided Linguistic Minority - Punjabi",
+  },
+  {
+    value: "Un-Aided Linguistic Minority - Sindhi",
+    label: "Un-Aided Linguistic Minority - Sindhi",
+  },
+  {
+    value: "Un-Aided Linguistic Minority - Tamil",
+    label: "Un-Aided Linguistic Minority - Tamil",
+  },
+  {
+    value: "Un-Aided Religious Minority - Christian",
+    label: "Un-Aided Religious Minority - Christian",
+  },
+  {
+    value: "Un-Aided Religious Minority - Jain",
+    label: "Un-Aided Religious Minority - Jain",
+  },
+  {
+    value: "Un-Aided Religious Minority - Muslim",
+    label: "Un-Aided Religious Minority - Muslim",
+  },
+  {
+    value: "Un-Aided Religious Minority - Roman Catholics",
+    label: "Un-Aided Religious Minority - Roman Catholics",
+  },
+  {
+    value: "University Autonomous",
+    label: "University Autonomous",
+  },
+  {
+    value: "University Department",
+    label: "University Department",
+  },
+  {
+    value: "University Managed",
+    label: "University Managed",
+  },
+  {
+    value: "University Managed (Un-Aided)",
+    label: "University Managed (Un-Aided)",
+  },
+  {
+    value: "University Managed Autonomous",
+    label: "University Managed Autonomous",
+  },
+]

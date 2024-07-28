@@ -1,0 +1,12 @@
+/* components/GrainEffect.module.css */
+.grain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  opacity: 0.04; 
+  z-index: 100;
+  pointer-events: none;
+  background: url('https://res.cloudinary.com/dfyrk32ua/image/upload/v1721326245/deetnuts/pixel_kwxo1f.gif');
+}
