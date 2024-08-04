@@ -10,7 +10,7 @@ const lato = Montserrat({
 
 export default function Footer() {
   const legalLinks = [
-    { name: "Terms & Conditions", href: "/compliance/terms-and-conditions" },
+    { name: "Good Being Terms", href: "/compliance/terms-and-conditions" },
   ];
 
   const socialLinks = [
@@ -131,7 +131,7 @@ export default function Footer() {
           <div className="py-8 px-8 mx-auto max-w-7xl">
             <div className="sm:flex sm:justify-between">
               <p className="text-xs text-gray-500">
-                &copy; {new Date().getFullYear()}. DeetNuts. All rights reserved.
+                DeetNuts, <a className="hover:underline" href="https://github.com/kewonit/deetnuts/blob/main/LICENSE"> MIT License  {new Date().getFullYear()} </a>
               </p>
               <ul className="mt-8 flex flex-wrap justify-start gap-4 text-xs sm:mt-0 lg:justify-end">
                 {legalLinks.map((link, index) => (
