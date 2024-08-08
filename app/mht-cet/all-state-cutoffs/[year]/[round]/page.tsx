@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 async function getTasks(year: number, round: string) {
   
   const { data, error } = await supabase
-    .from(`mhtcet-state-cutoffs-pcm-${round}-${year}`)
+    .from(`${year}-${round}-pcm-mhtcet-state-cutoffs`)
     .select(`"Serial Number", "ID", "College", "Branch", "Branch_id", "Status", "Allocation", "Category", "Cutoff", "Percentile", "City"`);
   if (error) {
       console.error('Error fetching tasks:', error);
