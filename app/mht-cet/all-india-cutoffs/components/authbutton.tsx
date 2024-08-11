@@ -17,9 +17,22 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 export default async function AuthButton() {
   const supabase = createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  let username = 'User';
+  if (user) {
+    const { data: profileData, error: profileError } = await supabase
+      .from('profiles')
+      .select('username')
+      .eq('id', user.id)
+      .single()
+
+    if (profileError) {
+      console.error('Error fetching profile:', profileError)
+    } else {
+      username = profileData?.username || 'User'
+    }
+  }
 
   const signOut = async () => {
     "use server";
@@ -36,22 +49,28 @@ export default async function AuthButton() {
         <DrawerTrigger asChild>
         <Avatar>
             <AvatarImage src="/avatar.webp" />
-            <AvatarFallback>{user?.email?.split('@')[0]}!</AvatarFallback>
+            <AvatarFallback>{username}</AvatarFallback>
         </Avatar>
         </DrawerTrigger>
         <DrawerContent>
           <div className="mx-auto w-[300px]">
             <DrawerHeader>
             <DrawerTitle>Are you sure?</DrawerTitle>
-              <DrawerDescription>You can log back in at anytime!</DrawerDescription>
-              <DrawerDescription>({user?.email?.split('@')[0]})</DrawerDescription>
+              <DrawerDescription>{username}, you can log back in at anytime!</DrawerDescription>
             </DrawerHeader>
                 <DrawerFooter className="grid grid-rows-2">
-                    <form action={signOut}>
-                      <Button variant="default" className="py-2 px-[115px] rounded-md text-center allign-center">
-                        Logout
-                      </Button>
-                    </form>
+                    <div className="grid grid-rows-2 gap-y-4">
+                      <a href="/account">
+                        <Button className="py-2 w-full rounded-md text-center allign-center">
+                            View Account
+                        </Button>
+                      </a>
+                      <form action={signOut}>
+                        <Button variant="noShadow" className="py-2 w-full rounded-md text-center allign-center">
+                          Logout
+                        </Button>
+                      </form>
+                    </div>
                   <DrawerClose asChild>
                     <Button variant="neutral">Cancel</Button>
                   </DrawerClose>
@@ -63,7 +82,7 @@ export default async function AuthButton() {
       <div className="hidden sm:flex">
         <Drawer>
           <DrawerTrigger asChild>
-          <Button>Hey, {user?.email?.split('@')[0]}!</Button>
+          <Button>Hey, {username}!</Button>
           </DrawerTrigger>
         <DrawerContent>
           <div className="mx-auto w-[300px]">
@@ -72,12 +91,19 @@ export default async function AuthButton() {
               <DrawerDescription>You can log back in at anytime!</DrawerDescription>
             </DrawerHeader>
                 <DrawerFooter className="grid grid-rows-2">
-                    <form action={signOut}>
-                      <Button className="py-2 px-[115px] rounded-md text-center allign-center">
-                        Logout
-                      </Button>
-                    </form>
-                  <DrawerClose asChild>
+                    <div className="grid grid-rows-2 gap-y-4">
+                      <a href="/account">
+                        <Button className="py-2 w-full rounded-md text-center allign-center">
+                            View Account
+                        </Button>
+                      </a>
+                      <form action={signOut}>
+                        <Button variant="noShadow" className="py-2 w-full rounded-md text-center allign-center">
+                          Logout
+                        </Button>
+                      </form>
+                    </div>
+                    <DrawerClose asChild>
                     <Button variant="neutral">Cancel</Button>
                   </DrawerClose>
               </DrawerFooter>

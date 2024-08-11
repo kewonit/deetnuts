@@ -36,11 +36,11 @@ export const columns: ColumnDef<Task>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "All India Merit",
+    accessorKey: "Institute Code",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="All India Merit" />
+      <DataTableColumnHeader column={column} title="Institute Code" />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("All India Merit")}</div>,
+    cell: ({ row }) => <div className="w-[80px]">{row.getValue("Institute Code")}</div>,
     enableSorting: false,
     enableHiding: false,
   },
@@ -50,7 +50,7 @@ export const columns: ColumnDef<Task>[] = [
       <DataTableColumnHeader column={column} title="Percentile" />
     ),
     cell: ({ row }) => {
-      const instituteCode = row.original["Institute Code"];
+      const instituteCode = row.original["All India Merit"];
       return (
         <div className="flex space-x-2">
           {instituteCode && <Badge variant="neutral">{instituteCode}</Badge>}

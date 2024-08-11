@@ -638,6 +638,10 @@ export const categories = [
     label: "DEFOBCS",
   },
   {
+    value: "PWDROBCS",
+    label: "PWDROBCS",
+  },
+  {
     value: "DEFOPENS",
     label: "DEFOPENS",
   },
@@ -916,10 +920,6 @@ export const categories = [
   {
     value: "SDEFRVJS",
     label: "SDEFRVJS",
-  },
-  {
-    value: "SDEFRNT2S",
-    label: "SDEFRNT2S",
   },
   {
     value: "PWDROBC",

@@ -69,7 +69,7 @@ Staying close to the FOSS roots of this project we have used the <a href="https:
 - Fill in your Supabase project details:
   ```
   NEXT_PUBLIC_SUPABASE_URL=your-project-url
-  SUPABASE_PUBLIC_ROLE_KEY=your-anon-key
+  NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
   ```
 
 You can use the given datasource and the handcrafted scrapers to recreate the exact data within the existing tables and add them in the `public` schema and fetch them down accordingly

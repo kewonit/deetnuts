@@ -4,6 +4,10 @@ CATEGORIES = [
     label: "DEFOBCS",
   },
   {
+    value: "PWDROBCS",
+    label: "PWDROBCS",
+  },
+  {
     value: "DEFOPENS",
     label: "DEFOPENS",
   },

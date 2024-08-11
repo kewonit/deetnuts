@@ -9,12 +9,13 @@ const lato = Montserrat({
 })
 
 interface Institute {
-  institute_code: number;
-  institute_name: string;
+  ID: number;
+  College: string;
+  City : string;
 }
 
 const InstitutesList = async () => {
-  const { data } = await supabase.from('MH_Colleges').select('*');
+  const { data } = await supabase.from('colleges_within_mhtcet_pcm').select('*');
 
   return (
     <div className={lato.className}>
@@ -39,10 +40,10 @@ const InstitutesList = async () => {
             </thead>
             <tbody className="divide-y divide-gray-200">
               {data?.map((institute: Institute) => (
-                <tr key={institute.institute_code} className='odd:bg-gray-50 text-left'>
+                <tr key={institute.ID} className='odd:bg-gray-50 text-left'>
                   <td className='whitespace-nowrap px-4 py-1 font-medium text-gray-900'>
-                    <Link href={`/mht-cet/colleges/${institute.institute_code}/${formatInstituteName(institute.institute_name)}`}>
-                    {institute.institute_name}
+                    <Link href={`/mht-cet/colleges/${institute.ID}/${formatInstituteName(institute.College)}`}>
+                    {institute.College}
                     </Link>
                   </td>
                 </tr>

@@ -33,24 +33,22 @@ export default function Home() {
         </section>
       </div>
       <Features />
-      <Marquee
+        <Marquee
           className="py-3 font-base sm:py-5 bg-gradient-to-r from-purple-300 to-yellow-100 border-b-[2px] border-b-black"
           direction="right"
         >
-          {Array(10)
-            .fill('xd')
-            .map((x, id) => (
-              <div className="flex items-center" key={id}>
-                <span className="mx-10 text-xl font-bold sm:text-2xl lg:text-4xl">
-                  mildly important college data simplified
-                </span>
-                <a className='text-2xl md:text-6xl' key={x}> 🎀 </a>
-                <span className="mx-10 text-xl font-bold sm:text-2xl lg:text-4xl">
-                  self scrapped da data
-                </span>
-                <a className='text-2xl md:text-6xl' key={x}> 🎀 </a>
-              </div>
-            ))}
+          {Array(10).fill(null).map((_, id) => (
+            <div className="flex items-center" key={id}>
+              <span className="mx-10 text-xl font-bold sm:text-2xl lg:text-4xl">
+                mildly important college data simplified
+              </span>
+              <a className='text-2xl md:text-6xl' key={`emoji-${id}`}> 🎀 </a>
+              <span className="mx-10 text-xl font-bold sm:text-2xl lg:text-4xl">
+                self scrapped da data
+              </span>
+              <a className='text-2xl md:text-6xl' key={`emoji-${id}-2`}> 🎀 </a>
+            </div>
+          ))}
         </Marquee>
       <Hero />
     </main>

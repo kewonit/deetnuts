@@ -3,30 +3,9 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { SubmitButton } from "./sumbit-button";
 import { Input } from "@/components/ui/input";
+import { login, signup } from './actions'
 
-export default function Login({
-  searchParams,
-}: {
-  searchParams: { message: string };
-}) {
-  const signIn = async (formData: FormData) => {
-    "use server";
-
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const supabase = createClient();
-
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      return redirect("/login?message=Could not authenticate user");
-    }
-
-    return redirect("/profile");
-  };
+export default function Login(){
 
   return (
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2 mx-auto pt-28 min-h-screen">
@@ -72,23 +51,20 @@ export default function Login({
           required
         />
         <SubmitButton
-          formAction={signIn}
+          formAction={login}
           className="bg-main border-2 border-black"
           pendingText="Signing In..."
         >
           Sign In
         </SubmitButton>
-        <p className="text-center mt-4">
-          Dont have an account?{" "}
-          <Link href="/signup" className="text-blue-500 hover:underline">
-            Sign Up
-          </Link>
-        </p>
-        {searchParams?.message && (
-          <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
-            {searchParams.message}
-          </p>
-        )}
+        <SubmitButton
+          formAction={signup}
+          className="bg-main border-2 border-black"
+          pendingText="Signing In..."
+        >
+          Sign Up
+        </SubmitButton>
+
       </form>
     </div>
   );

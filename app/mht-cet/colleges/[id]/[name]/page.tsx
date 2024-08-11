@@ -21,14 +21,14 @@ type Params = {
 };
 
 type InstituteData = {
-  'Institute Code': number;
-  'Institute Name': string;
+  'ID': number;
+  'College': string;
   [key: string]: any; 
 };
 
 async function getCollegeStateTasks(year: number, round: string, collegeId: string) {
   const { data, error } = await supabase
-    .from(`mhtcet-state-cutoffs-pcm-round-${round}-${year}`)
+    .from(`${year}-round-${round}-pcm-mhtcet-state-cutoffs`)
     .select(`"Serial Number", "ID", "College", "Branch", "Branch_id", "Status", "Allocation", "Category", "Cutoff", "Percentile", "City"`)
     .eq('ID', collegeId);
   if (error) {
@@ -39,32 +39,32 @@ async function getCollegeStateTasks(year: number, round: string, collegeId: stri
 }
 
 export async function generateStaticParams() {
-  const { data } = await supabase.from('MH_Colleges').select('institute_code, institute_name');
-  return data?.map(({ institute_code, institute_name }) => ({
-    id: institute_code.toString(),
-    name: formatInstituteName(institute_name),
+  const { data } = await supabase.from('colleges_within_mhtcet_pcm').select('ID, College');
+  return data?.map(({ ID, College }) => ({
+    id: ID.toString(),
+    name: formatInstituteName(College),
   })) || [];
 }
 
 export async function generateMetadata({ params }: { params: Params }) {
   const { data } = await supabase
-    .from('MH_Colleges')
-    .select('institute_name')
-    .eq('institute_code', params.id)
+    .from('colleges_within_mhtcet_pcm')
+    .select('College')
+    .eq('ID', params.id)
     .single();
 
   if (!data) {
     return { title: 'Institute Not Found' };
   }
 
-  return { title: data.institute_name };
+  return { title: data.College };
 }
 
 const InstitutePage: React.FC<{ params: Params }> = async ({ params }) => {
   const { data: instituteData, error: instituteError } = await supabase
-    .from('MH_Colleges')
+    .from('colleges_within_mhtcet_pcm')
     .select('*')
-    .eq('institute_code', params.id)
+    .eq('ID', params.id)
     .single();
 
   if (instituteError || !instituteData) {
@@ -73,7 +73,7 @@ const InstitutePage: React.FC<{ params: Params }> = async ({ params }) => {
 
   const typedInstituteData = instituteData as InstituteData;
 
-  const expectedName = formatInstituteName(typedInstituteData['institute_name']);
+  const expectedName = formatInstituteName(typedInstituteData['College']);
   if (params.name !== expectedName) {
     redirect(`/institute/${params.id}/${expectedName}`);
   }
@@ -95,8 +95,7 @@ const InstitutePage: React.FC<{ params: Params }> = async ({ params }) => {
   const roundTwoCutoffs = await fetchCutoffData('mhtcet-allindia-cutoffs-round-two-2023');
   const roundThreeCutoffs = await fetchCutoffData('mhtcet-allindia-cutoffs-round-three-2023');
 
-  // Fetch state data for this specific college
-  const year = 2023; // You might want to make this dynamic
+  const year = 2023;
   const rounds = ['one'];
   const stateData = await Promise.all(
     rounds.map(async (round) => ({
@@ -109,9 +108,9 @@ const InstitutePage: React.FC<{ params: Params }> = async ({ params }) => {
     <div className={lato.className}>
       <div className="p-8 pt-24 md:pt-48">
         <span className="whitespace-nowrap rounded-full bg-purple-100 px-2.5 py-0.5 text-sm sm:text-md text-purple-700">
-          <a>Institute code : {instituteData.institute_code}</a>
+          <a>Institute code : {instituteData.ID}</a>
         </span>
-        <h1 className="text-4xl lg:text-7xl font-bold">{instituteData.institute_name}</h1>
+        <h1 className="text-4xl lg:text-7xl font-bold">{instituteData.College}</h1>
         
         
         {/* State Data Section */}
@@ -131,7 +130,7 @@ const InstitutePage: React.FC<{ params: Params }> = async ({ params }) => {
               </div>
               {data.length > 0 ? (
                 <DataTable data={data} columns={columns} />
-              ) : (
+                ) : (
                 <p>No state cutoff data available for this round.</p>
               )}
             </div>
@@ -140,7 +139,7 @@ const InstitutePage: React.FC<{ params: Params }> = async ({ params }) => {
         <hr className='mt-20 border-black'/>
         {/* All India Cutoffs Section */}
         <div className="mt-4">
-          <h2 className="text-2xl font-bold mb-4">All India Cutoffs</h2>
+          <h2 className="text-2xl font-bold mb-4">All India Cutoffs</h2> 
           <Accordion type="single" collapsible className="w-full space-y-2">
             {[
               { round: 'Round One', data: roundOneCutoffs },

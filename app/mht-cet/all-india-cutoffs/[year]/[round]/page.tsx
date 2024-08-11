@@ -40,10 +40,9 @@ export default async function TaskPage({ params }: TaskPageProps) {
 
 
   return (
-    <>
-      <div className="h-full flex-1 flex-col space-y-8 mt-20 p-8 md:flex">
-        <div className=" items-center justify-between space-y-2 block flex-1 sm:flex sm:flex-1 sm:pt-2">
-          <div>
+    <div className="h-full flex-1 flex-col space-y-8 mt-20 p-8 md:flex">
+      <div className=" items-center justify-between space-y-2 block flex-1 sm:flex sm:flex-1 sm:pt-2">
+        <div>
             <h2 className="text-2xl font-bold tracking-tight">
               MHTCET All India Cutoffs ({round}) {year}
             </h2>
@@ -54,8 +53,7 @@ export default async function TaskPage({ params }: TaskPageProps) {
             <Selector type="round" value={round} year={year} />
           </div>
         </div>
-        <DataTable data={tasks} columns={columns} />
-      </div>
-    </>
+      <DataTable data={tasks} columns={columns} />
+    </div>
   );
 }
