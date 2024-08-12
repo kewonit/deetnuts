@@ -13,7 +13,7 @@ services:
       resources:
         limits:
           cpus: '0.8'
-          memory: 700M
+          memory: 400M
 
   db:
     image: postgres:latest
@@ -26,4 +26,4 @@ services:
       resources:
         limits:
           cpus: '0.8'
-          memory: 700M
+          memory: 400M
