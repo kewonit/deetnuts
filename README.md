@@ -4,6 +4,8 @@
 
 tldr : Large public college data, made accessible & simpler to use
 
+> test branch is live at https://deetnuts.site
+
 ## Table of Contents
 
 - [Deetnuts](#deetnuts)
