@@ -12,15 +12,6 @@ export default function CommunityPartners() {
       banner: 'https://res.cloudinary.com/dfyrk32ua/image/upload/v1743018683/deetnuts/bannerBackgroundImage_pgczyvumruxa1_ji8x8s.webp',
       highlights: ['Exam Prep', 'College Reviews']
     },
-    {
-      name: 'r/btechtards',
-      description: 'Discussion forum for engineering students in India to share experiences and advice.',
-      url: 'https://www.reddit.com/r/btechtards/',
-      members: '300k+',
-      logo: 'https://res.cloudinary.com/dfyrk32ua/image/upload/v1743018533/deetnuts/communityIcon_15c8yp4pap9d1_yhjada.webp',
-      banner: 'https://res.cloudinary.com/dfyrk32ua/image/upload/v1743018682/deetnuts/bannerBackgroundImage_gorno5tpjbtc1_k4zvvf.webp',
-      highlights: ['Placement Tips', 'College Life']
-    }
   ];
 
   return (
