@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getPocketBase, ensureUserAuthenticated } from '@/lib/pocketbaseClient';
+import { ensureUserAuthenticated } from '@/lib/supabaseAuth';
+import { getPocketBase } from '@/lib/pocketbaseClient';
 
 export async function GET(request: NextRequest) {
     try {
@@ -19,7 +20,7 @@ export async function GET(request: NextRequest) {
         let allRecords;
 
         try {
-            // Ensure user authentication before making the request
+            // Ensure user authentication using Supabase before making the request
             await ensureUserAuthenticated();
 
             // Helper function to build filter query parts

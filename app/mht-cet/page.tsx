@@ -20,7 +20,7 @@ const LINKS: { [key: string]: Link } = {
   },
   link2: {
     title: 'State Level Cutoffs',
-    link: '/mht-cet/all-state-cutoffs/2023/round-one',
+    link: '/mht-cet/state-cutoffs',
     icon: {
       src: 'https://res.cloudinary.com/dfyrk32ua/image/upload/v1721510815/deetnuts/logos/MHT-CET_logo_wxbnlw-min_n5sbju.png',
     },
@@ -39,13 +39,7 @@ const LINKS: { [key: string]: Link } = {
       src: 'https://res.cloudinary.com/dfyrk32ua/image/upload/v1721510815/deetnuts/logos/MHT-CET_logo_wxbnlw-min_n5sbju.png',
     },
   },
-  link5: {
-    title: 'State Cutoffs 2024',
-    link: '/mht-cet/state-cutoffs',
-    icon: {
-      src: 'https://res.cloudinary.com/dfyrk32ua/image/upload/v1721510815/deetnuts/logos/MHT-CET_logo_wxbnlw-min_n5sbju.png',
-    },
-  },
+
 };
 
 export const metadata: Metadata = {
@@ -78,7 +72,8 @@ export default function Home() {
           className="grid w-full grid-cols-1 gap-10 md:grid-cols-3 xl:w-1/2 xl:pb-16 w450:grid-cols-1 w450:gap-7"
         >
           {Object.keys(LINKS).map((key) => {
-            const isUnderConstruction = key !== 'link5'; // All except the new state cutoffs link
+            // All links except 'link2' are under construction
+            const isUnderConstruction = key !== 'link2';
 
             if (isUnderConstruction) {
               return (
@@ -113,6 +108,7 @@ export default function Home() {
               );
             }
 
+            // Only 'State Level Cutoffs' is active
             return (
               <Link
                 className="relative rounded-base border-2 border-black bg-main p-5 shadow-base transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none ring-1 ring-blue-200 ring-offset-1"
@@ -127,7 +123,7 @@ export default function Home() {
                   />
                 </picture>
                 <p
-                  className={`mt-3 text-lg font-semibold sm:text-xl ${key === 'link5' ? 'text-black' : 'text-blue-500'}`}
+                  className="mt-3 text-lg font-semibold sm:text-xl text-black"
                 >
                   {LINKS[key].title}
                 </p>

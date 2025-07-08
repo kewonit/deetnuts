@@ -4,7 +4,7 @@ import { type User } from '@/lib/auth'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { signOut, updateProfile } from '@/app/login/actions'
+import { updateProfile } from '@/app/login/actions'
 import { SubmitButton } from '@/app/login/sumbit-button'
 
 export default function AccountForm({ user, message }: { user: User | null; message?: string }) {

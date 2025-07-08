@@ -54,14 +54,22 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   // Define routes that require authentication
-  const protectedRoutes = ['/dashboard', '/profile', '/settings']
+  const protectedRoutes = ['/dashboard', '/profile', '/settings', '/mht-cet']
 
   // Check if the current route requires authentication
   const isProtectedRoute = protectedRoutes.some(route => request.nextUrl.pathname.startsWith(route))
 
   if (!user && isProtectedRoute) {
     const url = request.nextUrl.clone()
-    url.pathname = '/login'
+
+    // For /mht-cet routes, redirect to the special login page with redirect parameter
+    if (request.nextUrl.pathname.startsWith('/mht-cet')) {
+      url.pathname = '/mht-cet-login-required'
+      url.searchParams.set('redirect', request.nextUrl.pathname)
+    } else {
+      url.pathname = '/login'
+    }
+
     return NextResponse.redirect(url)
   }
 

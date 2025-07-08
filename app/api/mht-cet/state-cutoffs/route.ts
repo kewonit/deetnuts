@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getPocketBase, ensureUserAuthenticated } from '@/lib/pocketbaseClient';
+import { ensureUserAuthenticated } from '@/lib/supabaseAuth';
+import { getPocketBase } from '@/lib/pocketbaseClient';
 
 export async function POST(request: NextRequest) {
     try {
@@ -20,7 +21,7 @@ export async function POST(request: NextRequest) {
 
         const pb = getPocketBase();
 
-        // Ensure user authentication - uses logged-in user's token
+        // Ensure user authentication using Supabase
         try {
             await ensureUserAuthenticated();
         } catch (authError) {
