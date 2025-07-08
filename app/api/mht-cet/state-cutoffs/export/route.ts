@@ -23,33 +23,44 @@ export async function GET(request: NextRequest) {
             // Ensure user authentication using Supabase before making the request
             await ensureUserAuthenticated();
 
-            // Helper function to build filter query parts
-            const buildFilterParts = (courseChunk?: string[]) => {
+            // Helper function to build filter query parts with chunked parameters
+            const buildFilterParts = (
+                courseChunk?: string[],
+                categoryChunk?: string[],
+                statusChunk?: string[],
+                homeUniversityChunk?: string[]
+            ) => {
                 const filterParts: string[] = [];
 
                 if (search) {
                     filterParts.push(`(college_name ~ "${search}" || course_name ~ "${search}")`);
                 }
 
-                if (categories && categories.length > 0) {
-                    const categoryFilter = categories.map((cat: string) => `category = "${cat}"`).join(' || ');
+                // Use chunked categories if provided, otherwise use all categories
+                const categoriesToFilter = categoryChunk || categories;
+                if (categoriesToFilter && categoriesToFilter.length > 0) {
+                    const categoryFilter = categoriesToFilter.map((cat: string) => `category = "${cat}"`).join(' || ');
                     filterParts.push(`(${categoryFilter})`);
                 }
 
-                // Use courseChunk if provided, otherwise use all courses
+                // Use chunked courses if provided, otherwise use all courses
                 const coursesToFilter = courseChunk || courses;
                 if (coursesToFilter && coursesToFilter.length > 0) {
                     const courseFilter = coursesToFilter.map((course: string) => `course_name = "${course}"`).join(' || ');
                     filterParts.push(`(${courseFilter})`);
                 }
 
-                if (statuses && statuses.length > 0) {
-                    const statusFilter = statuses.map((status: string) => `status = "${status}"`).join(' || ');
+                // Use chunked statuses if provided, otherwise use all statuses
+                const statusesToFilter = statusChunk || statuses;
+                if (statusesToFilter && statusesToFilter.length > 0) {
+                    const statusFilter = statusesToFilter.map((status: string) => `status = "${status}"`).join(' || ');
                     filterParts.push(`(${statusFilter})`);
                 }
 
-                if (homeUniversities && homeUniversities.length > 0) {
-                    const homeUniversityFilter = homeUniversities.map((uni: string) => `home_university = "${uni}"`).join(' || ');
+                // Use chunked home universities if provided, otherwise use all home universities
+                const homeUniversitiesToFilter = homeUniversityChunk || homeUniversities;
+                if (homeUniversitiesToFilter && homeUniversitiesToFilter.length > 0) {
+                    const homeUniversityFilter = homeUniversitiesToFilter.map((uni: string) => `home_university = "${uni}"`).join(' || ');
                     filterParts.push(`(${homeUniversityFilter})`);
                 }
 
@@ -64,33 +75,68 @@ export async function GET(request: NextRequest) {
                 return filterParts.length > 0 ? filterParts.join(' && ') : '';
             };
 
-            // Check if we need to split the query due to large course lists
-            const MAX_COURSES_PER_QUERY = 15;
-            const shouldSplitQuery = courses && courses.length > MAX_COURSES_PER_QUERY;
+            // Calculate if we need to chunk the query due to large filter lists
+            const MAX_ITEMS_PER_CHUNK = 10; // Reduced chunk size to prevent URL length issues
+            const totalFilterItems = (categories?.length || 0) + (courses?.length || 0) + (statuses?.length || 0) + (homeUniversities?.length || 0);
+            const shouldChunkQuery = totalFilterItems > 30; // If total filters exceed 30 items, use chunking
 
-            if (shouldSplitQuery) {
-                // Split courses into chunks and execute multiple queries
-                const courseChunks = [];
-                for (let i = 0; i < courses.length; i += MAX_COURSES_PER_QUERY) {
-                    courseChunks.push(courses.slice(i, i + MAX_COURSES_PER_QUERY));
+            console.log(`Export: Total filter items: ${totalFilterItems}, shouldChunk: ${shouldChunkQuery}`);
+
+            if (shouldChunkQuery) {
+                // Create chunks for each filter type
+                const categoryChunks = categories && categories.length > MAX_ITEMS_PER_CHUNK
+                    ? Array.from({ length: Math.ceil(categories.length / MAX_ITEMS_PER_CHUNK) }, (_, i) =>
+                        categories.slice(i * MAX_ITEMS_PER_CHUNK, (i + 1) * MAX_ITEMS_PER_CHUNK)
+                    )
+                    : [categories];
+
+                const courseChunks = courses && courses.length > MAX_ITEMS_PER_CHUNK
+                    ? Array.from({ length: Math.ceil(courses.length / MAX_ITEMS_PER_CHUNK) }, (_, i) =>
+                        courses.slice(i * MAX_ITEMS_PER_CHUNK, (i + 1) * MAX_ITEMS_PER_CHUNK)
+                    )
+                    : [courses];
+
+                const statusChunks = statuses && statuses.length > MAX_ITEMS_PER_CHUNK
+                    ? Array.from({ length: Math.ceil(statuses.length / MAX_ITEMS_PER_CHUNK) }, (_, i) =>
+                        statuses.slice(i * MAX_ITEMS_PER_CHUNK, (i + 1) * MAX_ITEMS_PER_CHUNK)
+                    )
+                    : [statuses];
+
+                const homeUniversityChunks = homeUniversities && homeUniversities.length > MAX_ITEMS_PER_CHUNK
+                    ? Array.from({ length: Math.ceil(homeUniversities.length / MAX_ITEMS_PER_CHUNK) }, (_, i) =>
+                        homeUniversities.slice(i * MAX_ITEMS_PER_CHUNK, (i + 1) * MAX_ITEMS_PER_CHUNK)
+                    )
+                    : [homeUniversities];
+
+                console.log(`Export: Creating chunks - Categories: ${categoryChunks.length}, Courses: ${courseChunks.length}, Statuses: ${statusChunks.length}, Universities: ${homeUniversityChunks.length}`);
+
+                // Execute queries for all combinations of chunks
+                const chunkPromises = [];
+                for (const categoryChunk of categoryChunks) {
+                    for (const courseChunk of courseChunks) {
+                        for (const statusChunk of statusChunks) {
+                            for (const homeUniversityChunk of homeUniversityChunks) {
+                                const chunkFilterQuery = buildFilterParts(courseChunk, categoryChunk, statusChunk, homeUniversityChunk);
+                                if (chunkFilterQuery) {
+                                    chunkPromises.push(
+                                        pb.collection('2024_mht_cet_round_one_cutoffs').getFullList({
+                                            filter: chunkFilterQuery,
+                                            sort: '-last_rank',
+                                        })
+                                    );
+                                }
+                            }
+                        }
+                    }
                 }
 
-                console.log(`Export: Splitting query into ${courseChunks.length} chunks`);
-
-                // Execute all chunk queries in parallel
-                const chunkPromises = courseChunks.map(async (courseChunk) => {
-                    const chunkFilterQuery = buildFilterParts(courseChunk);
-                    return pb.collection('2024_mht_cet_round_one_cutoffs').getFullList({
-                        filter: chunkFilterQuery,
-                        sort: '-last_rank',
-                    });
-                });
+                console.log(`Export: Executing ${chunkPromises.length} chunk queries`);
 
                 // Wait for all chunk queries to complete and combine results
                 const chunkResults = await Promise.all(chunkPromises);
                 allRecords = chunkResults.flatMap(result => result);
 
-                // Remove duplicates that might occur if a record matches multiple course categories
+                // Remove duplicates
                 const uniqueRecords = new Map();
                 allRecords.forEach(record => {
                     uniqueRecords.set(record.id, record);
@@ -99,8 +145,10 @@ export async function GET(request: NextRequest) {
 
                 console.log(`Export: Combined ${chunkResults.length} chunks into ${allRecords.length} unique records`);
             } else {
-                // Execute single query for smaller course lists
+                // Execute single query for smaller filter lists
                 const filterQuery = buildFilterParts();
+                console.log(`Export: Executing single query with filter length: ${filterQuery.length}`);
+
                 allRecords = await pb.collection('2024_mht_cet_round_one_cutoffs').getFullList({
                     filter: filterQuery,
                     sort: '-last_rank',

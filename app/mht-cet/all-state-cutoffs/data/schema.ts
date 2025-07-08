@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-// Define the schema for MHTCET state cutoffs (PocketBase 2024 structure)
+// Define the schema for MHTCET state cutoffs (2024 structure)
 export const taskSchema = z.object({
   "id": z.string(),
   "college_code": z.string(),
