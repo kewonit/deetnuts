@@ -12,6 +12,7 @@ import { Toaster as SonnerToaster } from "sonner"
 import NextTopLoader from 'nextjs-toploader';
 import MotionWrapper from '@/components/MotionWrapper';
 
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

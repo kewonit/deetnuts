@@ -24,7 +24,7 @@ export default async function AuthButton() {
           <DrawerTrigger asChild>
             <Avatar>
               <AvatarImage src="/avatar.webp" />
-              <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
+              <AvatarFallback>{(user.name || '').charAt(0).toUpperCase()}</AvatarFallback>
             </Avatar>
           </DrawerTrigger>
           <DrawerContent>

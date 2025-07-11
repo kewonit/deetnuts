@@ -24,7 +24,7 @@ interface CutoffRecord {
 class BatchMHTCETCutoffUploader {
     private pb: PocketBase;
     private csvFilePath: string;
-    private collectionName = '2024_mht_cet_round_one_cutoffs_duplicate';
+    private collectionName = '2024_mht_cet_round_three_cutoffs';
     private batchSize = 500; // Reduced batch size for better reliability
     private maxConcurrentBatches = 5; // Reduced concurrent batches to prevent auto-cancellation issues
 

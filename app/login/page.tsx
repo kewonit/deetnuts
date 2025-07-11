@@ -30,13 +30,12 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
         Back
       </Link>
 
-      {params?.message && (
-        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
-          <p className="text-red-800 text-sm text-center">{params.message}</p>
-        </div>
-      )}
-
       <form className="animate-in flex-1 flex flex-col w-full justify-center gap-4 text-foreground">
+        {params?.message && (
+          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
+            <p className="text-red-800 text-sm text-center">{params.message}</p>
+          </div>
+        )}
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold">Sign In</h1>
           <p className="text-muted-foreground">Welcome back! Please sign in to your account.</p>
@@ -57,26 +56,12 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
           />
         </div>
 
-        <div>
-          <label className="text-md font-medium" htmlFor="password">
-            Password
-          </label>
-          <Input
-            className="mt-1 px-4 py-2 bg-inherit border"
-            type="password"
-            name="password"
-            placeholder="••••••••"
-            required
-            minLength={8}
-          />
-        </div>
-
         <SubmitButton
           formAction={login}
           className="bg-main border-2 border-black mt-4"
-          pendingText="Signing In..."
+          pendingText="Sending Magic Link..."
         >
-          Sign In
+          Send OTP
         </SubmitButton>
 
         <div className="text-center mt-4">

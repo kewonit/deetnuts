@@ -30,13 +30,12 @@ export default async function Signup({ searchParams }: { searchParams: Promise<{
         Back
       </Link>
 
-      {params?.message && (
-        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
-          <p className="text-red-800 text-sm text-center">{params.message}</p>
-        </div>
-      )}
-
       <form className="animate-in flex-1 flex flex-col w-full justify-center gap-4 text-foreground">
+        {params?.message && (
+          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
+            <p className="text-red-800 text-sm text-center">{params.message}</p>
+          </div>
+        )}
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold">Create Account</h1>
           <p className="text-muted-foreground">Sign up to get started with your account.</p>
@@ -71,37 +70,6 @@ export default async function Signup({ searchParams }: { searchParams: Promise<{
           />
         </div>
 
-        <div>
-          <label className="text-md font-medium" htmlFor="password">
-            Password
-          </label>
-          <Input
-            className="mt-1 px-4 py-2 bg-inherit border"
-            type="password"
-            name="password"
-            placeholder="••••••••"
-            required
-            minLength={8}
-          />
-          <p className="text-xs text-muted-foreground mt-1">
-            Password must be at least 8 characters long
-          </p>
-        </div>
-
-        <div>
-          <label className="text-md font-medium" htmlFor="passwordConfirm">
-            Confirm Password
-          </label>
-          <Input
-            className="mt-1 px-4 py-2 bg-inherit border"
-            type="password"
-            name="passwordConfirm"
-            placeholder="••••••••"
-            required
-            minLength={8}
-          />
-        </div>
-
         <SubmitButton
           formAction={signup}
           className="bg-main border-2 border-black mt-4"
@@ -113,7 +81,10 @@ export default async function Signup({ searchParams }: { searchParams: Promise<{
         <div className="text-center mt-4">
           <p className="text-sm text-muted-foreground">
             Already have an account?{" "}
-            <Link href="/login" className="text-primary hover:underline font-medium">
+            <Link
+              href={redirectTo !== '/account' ? `/login?redirect=${encodeURIComponent(redirectTo)}` : '/login'}
+              className="text-primary hover:underline font-medium"
+            >
               Sign in here
             </Link>
           </p>

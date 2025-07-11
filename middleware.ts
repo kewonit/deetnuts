@@ -1,53 +1,20 @@
+
+import { updateSession } from '@/utils/supabase/middleware'
 import { type NextRequest, NextResponse } from 'next/server'
-import { getPocketBase } from '@/lib/pocketbaseClient'
 
 export async function middleware(request: NextRequest) {
-  const response = NextResponse.next()
+  // Handle Supabase auth session
+  const response = await updateSession(request)
 
-  // Add pathname to headers for layout access
-  response.headers.set('x-pathname', request.nextUrl.pathname)
-
-  // Check for authentication cookie
-  const authCookie = request.cookies.get('pb_auth')
-
-  if (authCookie?.value) {
-    try {
-      const pb = getPocketBase()
-      pb.authStore.loadFromCookie(authCookie.value)
-
-      // Try to refresh the auth token
-      if (pb.authStore.isValid) {
-        try {
-          await pb.collection('users').authRefresh()
-          // Update the cookie with the refreshed auth
-          const newCookie = pb.authStore.exportToCookie({
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax'
-          })
-          response.cookies.set('pb_auth', newCookie, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
-            maxAge: 60 * 60 * 24 * 7 // 1 week
-          })
-        } catch (error) {
-          // Auth refresh failed, clear the cookie
-          response.cookies.delete('pb_auth')
-        }
-      } else {
-        // Auth is invalid, clear the cookie
-        response.cookies.delete('pb_auth')
-      }
-    } catch (error) {
-      // Error loading auth, clear the cookie
-      response.cookies.delete('pb_auth')
-    }
+  // Check if the old pocketbase auth cookie exists and clear it
+  if (request.cookies.has('pb_auth')) {
+    response.cookies.set('pb_auth', '', { maxAge: 0, path: '/' })
   }
 
   return response
 }
 
+// See "Matching Paths" below to learn more
 export const config = {
   matcher: [
     /*
