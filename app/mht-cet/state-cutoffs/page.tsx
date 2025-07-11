@@ -15,6 +15,7 @@ import { getDisplayNameForRound } from './constants';
 export default function StateCutoffsPage() {
     const [records, setRecords] = useState<CutoffRecord[]>([]);
     const [loading, setLoading] = useState(true);
+    const [paginationLoading, setPaginationLoading] = useState(false);
     const [totalItems, setTotalItems] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(25);
@@ -125,6 +126,7 @@ export default function StateCutoffsPage() {
             setRecords(cachedResult.data);
             setTotalItems(cachedResult.totalItems);
             setLoading(false);
+            setPaginationLoading(false);
             setIsSearching(false);
             setIsRequestActive(false);
             return;
@@ -141,7 +143,14 @@ export default function StateCutoffsPage() {
         abortControllerRef.current = new AbortController();
 
         setIsRequestActive(true);
-        setLoading(true);
+
+        // Set appropriate loading state based on whether it's pagination or full search
+        if (isOnlyPaginationChange) {
+            setPaginationLoading(true);
+        } else {
+            setLoading(true);
+            setPaginationLoading(false);
+        }
 
         try {
             const response = await fetch(`/api/mht-cet/state-cutoffs`, {
@@ -225,8 +234,8 @@ export default function StateCutoffsPage() {
         } finally {
             if (requestId === requestIdRef.current) {
                 setLoading(false);
+                setPaginationLoading(false);
                 setIsSearching(false);
-
             }
         }
     }, [currentPage, itemsPerPage, debouncedFilters]);
@@ -340,6 +349,7 @@ export default function StateCutoffsPage() {
                 currentPage={currentPage}
                 itemsPerPage={itemsPerPage}
                 loading={loading}
+                paginationLoading={paginationLoading}
                 filters={filters}
                 setCurrentPage={setCurrentPage}
                 setItemsPerPage={setItemsPerPage}

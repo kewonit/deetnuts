@@ -8,10 +8,50 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
 import { CutoffRecord, FilterState } from '../types';
 import { calculatePercentileDistance } from '../utils';
 import { ITEMS_PER_PAGE_OPTIONS, getDisplayNameForRound } from '../constants';
 import { toast } from 'sonner';
+
+// Table skeleton component for pagination loading
+function TableSkeleton({ itemsPerPage }: { itemsPerPage: number }) {
+    return (
+        <>
+            {Array.from({ length: itemsPerPage }).map((_, index) => (
+                <TableRow key={`skeleton-${index}`} className="h-12 md:h-14">
+                    <TableCell className="py-2 h-12 md:h-14 text-xs md:text-sm px-2 md:px-4">
+                        <Skeleton className="h-4 w-full max-w-[200px] sm:max-w-[300px]" />
+                    </TableCell>
+                    <TableCell className="py-2 h-12 md:h-14 text-xs md:text-sm px-2 md:px-4">
+                        <Skeleton className="h-4 w-full max-w-[180px] sm:max-w-[250px]" />
+                    </TableCell>
+                    <TableCell className="py-2 h-12 md:h-14 text-xs md:text-sm px-2 md:px-4">
+                        <Skeleton className="h-6 w-12 rounded-full" />
+                    </TableCell>
+                    <TableCell className="py-2 h-12 md:h-14 text-xs md:text-sm px-2 md:px-4">
+                        <Skeleton className="h-4 w-16" />
+                    </TableCell>
+                    <TableCell className="py-2 h-12 md:h-14 text-xs md:text-sm px-2 md:px-4">
+                        <Skeleton className="h-4 w-20" />
+                    </TableCell>
+                    <TableCell className="py-2 h-12 md:h-14 text-xs md:text-sm px-2 md:px-4">
+                        <Skeleton className="h-4 w-16" />
+                    </TableCell>
+                    <TableCell className="py-2 h-12 md:h-14 text-xs md:text-sm px-2 md:px-4">
+                        <Skeleton className="h-4 w-24" />
+                    </TableCell>
+                    <TableCell className="py-2 h-12 md:h-14 text-xs md:text-sm px-2 md:px-4">
+                        <Skeleton className="h-4 w-20" />
+                    </TableCell>
+                    <TableCell className="py-2 h-12 md:h-14 text-xs md:text-sm px-2 md:px-4">
+                        <Skeleton className="h-4 w-16" />
+                    </TableCell>
+                </TableRow>
+            ))}
+        </>
+    );
+}
 
 interface CutoffTableProps {
     records: CutoffRecord[];
@@ -19,6 +59,7 @@ interface CutoffTableProps {
     currentPage: number;
     itemsPerPage: number;
     loading: boolean;
+    paginationLoading: boolean;
     filters: FilterState;
     setCurrentPage: (page: number) => void;
     setItemsPerPage: (perPage: number) => void;
@@ -36,6 +77,7 @@ export function CutoffTable({
     currentPage,
     itemsPerPage,
     loading,
+    paginationLoading,
     filters,
     setCurrentPage,
     setItemsPerPage,
@@ -461,10 +503,6 @@ export function CutoffTable({
                     <span className="font-medium">{filters.homeUniversities.length}</span>
                     <span className="text-muted-foreground">universities</span>
                 </div>
-                <div className="flex items-center gap-1 md:gap-2 bg-muted/50 px-2 md:px-3 py-1 md:py-2 rounded-md">
-                    <span className="font-medium">{filters.percentileInput ? '0% to target' : 'All'}</span>
-                    <span className="text-muted-foreground">range</span>
-                </div>
             </div>
 
             {/* Pagination Controls (Top) */}
@@ -522,7 +560,9 @@ export function CutoffTable({
                             ))}
                         </TableHeader>
                         <TableBody>
-                            {table.getRowModel().rows?.length ? (
+                            {paginationLoading ? (
+                                <TableSkeleton itemsPerPage={itemsPerPage} />
+                            ) : table.getRowModel().rows?.length ? (
                                 table.getRowModel().rows.map((row) => (
                                     <TableRow
                                         key={row.id}
@@ -575,6 +615,7 @@ export function CutoffTable({
                             setItemsPerPage(newPerPage);
                             setCurrentPage(1); // Reset to first page when changing items per page
                         }}
+                        disabled={loading || paginationLoading}
                     >
                         <SelectTrigger className="h-8 w-[60px] md:w-[70px] font-abel">
                             <SelectValue placeholder={itemsPerPage} />
@@ -591,7 +632,14 @@ export function CutoffTable({
 
                 <div className="flex items-center space-x-2 md:space-x-6 lg:space-x-8">
                     <div className="flex w-[80px] md:w-[100px] items-center justify-center text-xs md:text-sm font-medium font-abel">
-                        Page {currentPage} of {Math.ceil(totalItems / itemsPerPage)}
+                        {paginationLoading ? (
+                            <div className="flex items-center space-x-1">
+                                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-gray-900"></div>
+                                <span>Loading...</span>
+                            </div>
+                        ) : (
+                            `Page ${currentPage} of ${Math.ceil(totalItems / itemsPerPage)}`
+                        )}
                     </div>
                     <div className="flex items-center space-x-1">
                         <Button
@@ -601,7 +649,7 @@ export function CutoffTable({
                                 console.log('First page button clicked!');
                                 handlePageChange(1);
                             }}
-                            disabled={currentPage === 1 || loading || totalItems === 0}
+                            disabled={currentPage === 1 || loading || paginationLoading || totalItems === 0}
                         >
                             <span className="sr-only">Go to first page</span>
                             <ChevronsLeft className="h-4 w-4" />
@@ -613,7 +661,7 @@ export function CutoffTable({
                                 console.log('Previous button clicked!');
                                 handlePageChange(Math.max(1, currentPage - 1));
                             }}
-                            disabled={currentPage === 1 || loading || totalItems === 0}
+                            disabled={currentPage === 1 || loading || paginationLoading || totalItems === 0}
                         >
                             <span className="sr-only">Go to previous page</span>
                             <ChevronLeft className="h-4 w-4" />
@@ -626,7 +674,7 @@ export function CutoffTable({
                                 const totalPages = Math.ceil(totalItems / itemsPerPage);
                                 handlePageChange(Math.min(totalPages, currentPage + 1));
                             }}
-                            disabled={currentPage >= Math.ceil(totalItems / itemsPerPage) || loading || totalItems === 0}
+                            disabled={currentPage >= Math.ceil(totalItems / itemsPerPage) || loading || paginationLoading || totalItems === 0}
                         >
                             <span className="sr-only">Go to next page</span>
                             <ChevronRight className="h-4 w-4" />
@@ -639,7 +687,7 @@ export function CutoffTable({
                                 const totalPages = Math.ceil(totalItems / itemsPerPage);
                                 handlePageChange(totalPages);
                             }}
-                            disabled={currentPage >= Math.ceil(totalItems / itemsPerPage) || loading || totalItems === 0}
+                            disabled={currentPage >= Math.ceil(totalItems / itemsPerPage) || loading || paginationLoading || totalItems === 0}
                         >
                             <span className="sr-only">Go to last page</span>
                             <ChevronsRight className="h-4 w-4" />

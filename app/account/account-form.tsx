@@ -13,8 +13,8 @@ export default function AccountForm({ user, message }: { user: User | null; mess
 
   useEffect(() => {
     if (user) {
-      setName(user.name)
-      setEmail(user.email)
+      setName(user.name || '')
+      setEmail(user.email || '')
     }
   }, [user])
 
