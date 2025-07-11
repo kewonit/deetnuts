@@ -10,7 +10,8 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { Badge } from '@/components/ui/badge';
 import { CutoffRecord, FilterState } from '../types';
 import { calculatePercentileDistance } from '../utils';
-import { ITEMS_PER_PAGE_OPTIONS } from '../constants';
+import { ITEMS_PER_PAGE_OPTIONS, getDisplayNameForRound } from '../constants';
+import { toast } from 'sonner';
 
 interface CutoffTableProps {
     records: CutoffRecord[];
@@ -436,6 +437,10 @@ export function CutoffTable({
         <div className="space-y-4">
             {/* Compact Results Summary */}
             <div className="flex flex-wrap gap-2 text-xs md:text-sm font-abel">
+                <div className="flex items-center gap-1 md:gap-2 bg-muted/50 px-2 md:px-3 py-1 md:py-2 rounded-md">
+                    <span className="font-medium">{getDisplayNameForRound(filters.round)}</span>
+                    <span className="text-muted-foreground">round</span>
+                </div>
                 <div className="flex items-center gap-1 md:gap-2 bg-muted/50 px-2 md:px-3 py-1 md:py-2 rounded-md">
                     <span className="font-medium">{totalItems.toLocaleString()}</span>
                     <span className="text-muted-foreground">total</span>

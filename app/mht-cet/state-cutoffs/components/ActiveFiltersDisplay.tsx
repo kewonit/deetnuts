@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { FilterState } from '../types';
+import { getDisplayNameForRound } from '../constants';
 
 interface ActiveFiltersDisplayProps {
     filters: FilterState;
@@ -19,7 +20,8 @@ export function ActiveFiltersDisplay({
         filters.categories.length === 0 &&
         filters.courses.length === 0 &&
         filters.statuses.length === 0 &&
-        filters.homeUniversities.length === 0) {
+        filters.homeUniversities.length === 0 &&
+        filters.round === 1) {
         return null;
     }
 
@@ -31,6 +33,11 @@ export function ActiveFiltersDisplay({
                     <h3 className="text-lg sm:text-xl font-bold text-blue-900 font-abel">Active Filters</h3>
                 </div>
                 <div className="flex flex-wrap gap-3">
+                    {filters.round !== 1 && (
+                        <Badge variant="default" className="bg-purple-200 text-purple-900 font-abel text-sm sm:text-base">
+                            {getDisplayNameForRound(filters.round)}
+                        </Badge>
+                    )}
                     {filters.percentileInput && (
                         <Badge variant="default" className="bg-blue-200 text-blue-900 font-abel text-sm sm:text-base">
                             Target: {filters.percentileInput}%

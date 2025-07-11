@@ -215,3 +215,66 @@ export const HOME_UNIVERSITY_OPTIONS = [
 ];
 
 export const ITEMS_PER_PAGE_OPTIONS = [10, 25, 50, 100, 200];
+
+// Round Configuration
+export const ROUND_CONFIG: Record<number, { collection: string; displayName: string }> = {
+    1: {
+        collection: '2024_mht_cet_round_one_cutoffs',
+        displayName: 'Round 1'
+    },
+    2: {
+        collection: '2024_mht_cet_round_two_cutoffs',
+        displayName: 'Round 2',
+    },
+    3: {
+        collection: '2024_mht_cet_round_three_cutoffs',
+        displayName: 'Round 3',
+    }
+} as const;
+
+export const ROUND_OPTIONS = [
+    {
+        value: 1,
+        label: 'Round 1',
+        collection: '2024_mht_cet_round_one_cutoffs',
+    },
+    {
+        value: 2,
+        label: 'Round 2',
+        collection: '2024_mht_cet_round_two_cutoffs',
+    },
+    {
+        value: 3,
+        label: 'Round 3',
+        collection: '2024_mht_cet_round_three_cutoffs',
+    }
+] as const;
+
+// Valid round numbers
+export const VALID_ROUNDS = [1, 2, 3] as const;
+export type ValidRound = typeof VALID_ROUNDS[number];
+
+// Default round selection
+export const DEFAULT_ROUND: ValidRound = 1;
+
+// Validate round number
+export const isValidRound = (round: number): round is ValidRound => {
+    return VALID_ROUNDS.includes(round as ValidRound);
+};
+
+// Get collection name for round with fallback
+export const getCollectionForRound = (round: number): string => {
+    if (!isValidRound(round)) {
+        console.warn(`Invalid round ${round}, falling back to Round 1`);
+        return ROUND_CONFIG[1].collection;
+    }
+    return ROUND_CONFIG[round].collection;
+};
+
+// Get display name for round with fallback
+export const getDisplayNameForRound = (round: number): string => {
+    if (!isValidRound(round)) {
+        return ROUND_CONFIG[1].displayName;
+    }
+    return ROUND_CONFIG[round].displayName;
+};

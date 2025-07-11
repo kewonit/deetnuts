@@ -10,6 +10,7 @@ import { CutoffFilters } from './components/CutoffFilters';
 import { ActiveFiltersDisplay } from './components/ActiveFiltersDisplay';
 import { CutoffTable } from './components/CutoffTable';
 import { CutoffInfoCards } from './components/CutoffInfoCards';
+import { getDisplayNameForRound } from './constants';
 
 export default function StateCutoffsPage() {
     const [records, setRecords] = useState<CutoffRecord[]>([]);
@@ -26,6 +27,7 @@ export default function StateCutoffsPage() {
         statuses: [],
         homeUniversities: [],
         percentileInput: '',
+        round: 1,
         sortBy: 'last_rank',
         sortOrder: 'desc'
     });
@@ -36,7 +38,8 @@ export default function StateCutoffsPage() {
         courses: [],
         statuses: [],
         homeUniversities: [],
-        percentileInput: ''
+        percentileInput: '',
+        round: 1
     });
 
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -65,7 +68,8 @@ export default function StateCutoffsPage() {
             JSON.stringify(pendingFilters.courses) !== JSON.stringify(filters.courses) ||
             JSON.stringify(pendingFilters.statuses) !== JSON.stringify(filters.statuses) ||
             JSON.stringify(pendingFilters.homeUniversities) !== JSON.stringify(filters.homeUniversities) ||
-            pendingFilters.percentileInput !== filters.percentileInput
+            pendingFilters.percentileInput !== filters.percentileInput ||
+            pendingFilters.round !== filters.round
         );
         setHasUnsavedChanges(filtersChanged);
     }, [pendingFilters, filters]);
@@ -106,13 +110,14 @@ export default function StateCutoffsPage() {
             statuses: debouncedFilters.statuses,
             homeUniversities: debouncedFilters.homeUniversities,
             percentileInput: debouncedFilters.percentileInput,
+            round: debouncedFilters.round,
             sortBy: debouncedFilters.sortBy,
             sortOrder: debouncedFilters.sortOrder,
         };
 
         const cacheKey = JSON.stringify(requestBody);
 
-        const currentRequestKey = `${debouncedFilters.search}-${debouncedFilters.categories.join(',')}-${debouncedFilters.courses.join(',')}-${debouncedFilters.statuses.join(',')}-${debouncedFilters.homeUniversities.join(',')}-${debouncedFilters.percentileInput}`;
+        const currentRequestKey = `${debouncedFilters.search}-${debouncedFilters.categories.join(',')}-${debouncedFilters.courses.join(',')}-${debouncedFilters.statuses.join(',')}-${debouncedFilters.homeUniversities.join(',')}-${debouncedFilters.percentileInput}-${debouncedFilters.round}`;
         const isOnlyPaginationChange = currentRequestParamsRef.current === currentRequestKey;
 
         if (cacheRef.current.has(cacheKey)) {
@@ -164,6 +169,14 @@ export default function StateCutoffsPage() {
             }
 
             if (!result.success) {
+                // Enhanced error handling for different error types
+                if (result.error === 'Data not available') {
+                    toast.error(`${getDisplayNameForRound(debouncedFilters.round)} data is not available yet. Please try Round 1 instead.`);
+                } else if (result.error === 'Authentication required') {
+                    toast.error('Please log in to access cutoff data.');
+                } else {
+                    toast.error(result.message || result.error || 'Failed to fetch data');
+                }
                 throw new Error(result.error || 'Failed to fetch data');
             }
 
@@ -194,7 +207,21 @@ export default function StateCutoffsPage() {
             }
 
             console.error(`Request ${requestId} error:`, error);
-            toast.error('Failed to fetch cutoff data. Please try again.');
+
+            // Enhanced error handling for better user experience
+            if (error instanceof Error) {
+                if (error.message.includes('Data not available')) {
+                    toast.error(`${getDisplayNameForRound(debouncedFilters.round)} data is not available yet. Please try Round 1 instead.`);
+                } else if (error.message.includes('Authentication required')) {
+                    toast.error('Please log in to access cutoff data.');
+                } else if (error.message.includes('network') || error.message.includes('fetch')) {
+                    toast.error('Network error. Please check your connection and try again.');
+                } else {
+                    toast.error(`Failed to fetch cutoff data: ${error.message}`);
+                }
+            } else {
+                toast.error('Failed to fetch cutoff data. Please try again.');
+            }
         } finally {
             if (requestId === requestIdRef.current) {
                 setLoading(false);
@@ -241,7 +268,8 @@ export default function StateCutoffsPage() {
             courses: pendingFilters.courses,
             statuses: pendingFilters.statuses,
             homeUniversities: pendingFilters.homeUniversities,
-            percentileInput: pendingFilters.percentileInput
+            percentileInput: pendingFilters.percentileInput,
+            round: pendingFilters.round
         }));
         setSorting([{ id: 'cutoff_score', desc: true }]);
         setCurrentPage(1);
@@ -255,7 +283,8 @@ export default function StateCutoffsPage() {
             courses: [],
             statuses: [],
             homeUniversities: [],
-            percentileInput: ''
+            percentileInput: '',
+            round: 1
         };
         cacheRef.current.clear();
         setPendingFilters(clearedFilters);
@@ -280,14 +309,14 @@ export default function StateCutoffsPage() {
 
     return (
         <div className="w-full max-w-full md:max-w-7xl lg:max-w-7xl xl:max-w-7xl 2xl:max-w-7xl mx-auto py-4 md:py-8 lg:py-16 xl:py-24 px-3 md:px-4 lg:px-6 space-y-4 md:space-y-6 font-inter">
-            {/* Header */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-4 pt-20 lg:pt-6">
-                <div className="flex-1 min-w-0">
-                    <h1 className="text-3xl lg:text-3xl xl:text-4xl font-black tracking-tight text-black font-inter break-words">
-                        MHT-CET State Cutoffs 2024
+            {/* Clean Header */}
+            <div className="pt-20 lg:pt-6">
+                <div className="flex flex-col gap-3">
+                    <h1 className="text-3xl lg:text-3xl xl:text-4xl font-black tracking-tight text-gray-900 font-inter break-words">
+                        MHT-CET State Cutoffs 2024 - {getDisplayNameForRound(filters.round)}
                     </h1>
-                    <p className="text-muted-foreground text-sm md:text-base lg:text-lg font-medium mt-1 md:mt-2 font-inter">
-                        Use these to predict your chances of admission based on your percentile. (Data : 2024 Round 1)
+                    <p className="text-gray-600 text-sm md:text-base lg:text-lg font-medium font-inter">
+                        Use these to predict your chances of admission based on your percentile. (Data : 2024 {getDisplayNameForRound(filters.round)})
                     </p>
                 </div>
             </div>

@@ -14,9 +14,16 @@ export async function POST(request: NextRequest) {
             statuses = [],
             homeUniversities = [],
             percentileInput = '',
+            round = 1,
             sortBy = 'last_rank',
             sortOrder = 'desc'
         } = body;
+
+        // Validate round parameter
+        const sanitizedRound = Number.isInteger(round) && round >= 1 && round <= 3 ? round : 1;
+        if (sanitizedRound !== round) {
+            console.warn(`Invalid round ${round} provided in API, using round ${sanitizedRound}`);
+        }
 
         // Call the server action
         const result = await getCutoffRecords(
@@ -28,6 +35,7 @@ export async function POST(request: NextRequest) {
             statuses,
             homeUniversities,
             percentileInput,
+            sanitizedRound,
             sortBy,
             sortOrder
         );

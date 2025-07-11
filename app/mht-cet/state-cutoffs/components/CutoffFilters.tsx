@@ -9,7 +9,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { CATEGORY_GROUPS, COURSE_GROUPS, STATUS_OPTIONS, HOME_UNIVERSITY_OPTIONS } from '../constants';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { CATEGORY_GROUPS, COURSE_GROUPS, STATUS_OPTIONS, HOME_UNIVERSITY_OPTIONS, ROUND_OPTIONS } from '../constants';
 import { getPrecisePercentileRange } from '../utils';
 import { FilterState, PendingFilters } from '../types';
 import { Dispatch, SetStateAction, useCallback } from 'react';
@@ -72,14 +73,28 @@ export function CutoffFilters({
         }));
     }, [setPendingFilters]);
 
+    const handleRoundChange = useCallback((roundValue: string) => {
+        const round = parseInt(roundValue, 10);
+        if (Number.isInteger(round) && round >= 1 && round <= 3) {
+            setPendingFilters(prev => ({ ...prev, round }));
+        }
+    }, [setPendingFilters]);
+
     return (
-        <Card>
-            <CardHeader className="pb-3 md:pb-4">
-                <CardTitle className="flex items-center gap-2 font-abel text-lg md:text-xl">
-                    <Filter className="h-4 w-4 md:h-5 md:w-5" />
-                    Filters
+        <Card className="shadow-lg border border-gray-200 overflow-hidden">
+            <CardHeader className="pb-4 border-b border-gray-200">
+                <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-gray-100 rounded-lg border border-gray-200">
+                            <Filter className="h-5 w-5 text-gray-700" />
+                        </div>
+                        <div>
+                            <h3 className="font-abel text-xl font-bold text-gray-900">Search Filters</h3>
+                            <p className="text-sm text-gray-600 font-abel mt-1">Customize your search parameters</p>
+                        </div>
+                    </div>
                     {hasUnsavedChanges && (
-                        <Badge variant="neutral" className="ml-2 font-abel bg-red-100 text-red-800 border-red-300 text-xs md:text-sm">
+                        <Badge variant="neutral" className="font-abel bg-amber-100 text-amber-800 border-amber-300 text-sm px-3 py-1 animate-pulse">
                             Changes Pending
                         </Badge>
                     )}
@@ -101,6 +116,47 @@ export function CutoffFilters({
                         className="pl-10 font-abel text-sm md:text-base h-12"
                         maxLength={100}
                     />
+                </div>
+
+                {/* Enhanced Counseling Round Selection - Fully Responsive */}
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-3 md:p-5 space-y-3 md:space-y-4">
+                    <div className="flex items-center gap-2 md:gap-3">
+                        <div className="w-2.5 h-2.5 md:w-3 md:h-3 bg-blue-500 rounded-full flex-shrink-0"></div>
+                        <Label className="text-base md:text-lg font-bold font-abel text-blue-900">
+                            Counseling Round
+                        </Label>
+                    </div>
+                    <p className="text-xs md:text-sm text-blue-700 font-abel leading-relaxed">
+                        Select which round of MHT-CET counseling data to view. Each round has different cutoff scores.
+                    </p>
+                    <Select
+                        value={pendingFilters.round.toString()}
+                        onValueChange={handleRoundChange}
+                    >
+                        <SelectTrigger className="font-abel text-sm md:text-base h-12 md:h-14 bg-white border-2 border-blue-300 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 shadow-sm">
+                            <SelectValue placeholder="Choose a counseling round" />
+                        </SelectTrigger>
+                        <SelectContent className="border-blue-200 w-[calc(100vw-2rem)] sm:w-[380px] md:min-w-[400px] max-w-[500px]">
+                            {ROUND_OPTIONS.map((option) => (
+                                <SelectItem
+                                    key={option.value}
+                                    value={option.value.toString()}
+                                    className="font-abel hover:bg-blue-50 focus:bg-blue-50 py-3 md:py-4 cursor-pointer"
+                                >
+                                    <div className="flex items-center gap-2 md:gap-4 w-full">
+                                        <div className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center border-2 border-blue-300">
+                                            <span className="text-sm md:text-base font-bold text-blue-700">{option.value}</span>
+                                        </div>
+                                        <div className="flex flex-col flex-1 text-left min-w-0">
+                                            <span className="font-bold text-blue-900 text-sm md:text-base mb-0.5 md:mb-1 truncate">
+                                                {option.label}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 </div>
 
                 <div className="grid grid-cols-1 gap-4">

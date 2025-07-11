@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ensureUserAuthenticated } from '@/lib/supabaseAuth';
 import { getPocketBase } from '@/lib/pocketbaseClient';
+import { getCollectionForRound, isValidRound, DEFAULT_ROUND, getDisplayNameForRound } from '@/app/mht-cet/state-cutoffs/constants';
 
 export async function GET(request: NextRequest) {
     try {
@@ -14,6 +15,20 @@ export async function GET(request: NextRequest) {
         const statuses = searchParams.getAll('statuses');
         const homeUniversities = searchParams.getAll('homeUniversities');
         const percentileInput = searchParams.get('percentileInput') || '';
+        const roundParam = searchParams.get('round');
+
+        // Validate and sanitize round parameter
+        const round = roundParam ? parseInt(roundParam, 10) : DEFAULT_ROUND;
+        const sanitizedRound = Number.isInteger(round) && isValidRound(round) ? round : DEFAULT_ROUND;
+        if (sanitizedRound !== round) {
+            console.warn(`Invalid round ${round} provided in export, using round ${sanitizedRound}`);
+        }
+
+        // Get collection name for the round
+        const collectionName = getCollectionForRound(sanitizedRound);
+        const roundDisplayName = getDisplayNameForRound(sanitizedRound);
+
+        console.log(`Export: Using collection ${collectionName} for ${roundDisplayName}`);
 
         const pb = getPocketBase();
 
@@ -119,9 +134,12 @@ export async function GET(request: NextRequest) {
                                 const chunkFilterQuery = buildFilterParts(courseChunk, categoryChunk, statusChunk, homeUniversityChunk);
                                 if (chunkFilterQuery) {
                                     chunkPromises.push(
-                                        pb.collection('2024_mht_cet_round_one_cutoffs').getFullList({
+                                        pb.collection(collectionName).getFullList({
                                             filter: chunkFilterQuery,
                                             sort: '-last_rank',
+                                        }).catch(error => {
+                                            console.error(`Export chunk query failed for ${collectionName}:`, error);
+                                            return [];
                                         })
                                     );
                                 }
@@ -130,7 +148,7 @@ export async function GET(request: NextRequest) {
                     }
                 }
 
-                console.log(`Export: Executing ${chunkPromises.length} chunk queries`);
+                console.log(`Export: Executing ${chunkPromises.length} chunk queries against ${collectionName}`);
 
                 // Wait for all chunk queries to complete and combine results
                 const chunkResults = await Promise.all(chunkPromises);
@@ -143,16 +161,41 @@ export async function GET(request: NextRequest) {
                 });
                 allRecords = Array.from(uniqueRecords.values());
 
-                console.log(`Export: Combined ${chunkResults.length} chunks into ${allRecords.length} unique records`);
+                console.log(`Export: Combined ${chunkResults.length} chunks into ${allRecords.length} unique records from ${collectionName}`);
             } else {
                 // Execute single query for smaller filter lists
                 const filterQuery = buildFilterParts();
-                console.log(`Export: Executing single query with filter length: ${filterQuery.length}`);
+                console.log(`Export: Executing single query with filter length: ${filterQuery.length} against ${collectionName}`);
 
-                allRecords = await pb.collection('2024_mht_cet_round_one_cutoffs').getFullList({
-                    filter: filterQuery,
-                    sort: '-last_rank',
-                });
+                try {
+                    allRecords = await pb.collection(collectionName).getFullList({
+                        filter: filterQuery,
+                        sort: '-last_rank',
+                    });
+                } catch (collectionError) {
+                    console.error(`Export query failed for ${collectionName}:`, collectionError);
+
+                    // Check if it's a collection not found error
+                    if (collectionError instanceof Error &&
+                        (collectionError.message.includes('not found') ||
+                            collectionError.message.includes('does not exist'))) {
+                        return NextResponse.json({
+                            success: false,
+                            error: 'Data not available',
+                            message: `${roundDisplayName} data is not available for export`,
+                            details: `Collection ${collectionName} not found`,
+                            round: sanitizedRound
+                        }, {
+                            status: 404,
+                            headers: {
+                                'Cache-Control': 'no-cache',
+                                'X-Content-Type-Options': 'nosniff'
+                            }
+                        });
+                    }
+
+                    throw collectionError; // Re-throw other errors
+                }
             }
         } catch (error) {
             console.error('Database export failed or authentication error:', error);
@@ -212,7 +255,7 @@ export async function GET(request: NextRequest) {
             status: 200,
             headers: {
                 'Content-Type': 'text/csv',
-                'Content-Disposition': 'attachment; filename=mht_cet_state_cutoffs_2024.csv',
+                'Content-Disposition': `attachment; filename=mht_cet_state_cutoffs_2024_${roundDisplayName.toLowerCase().replace(' ', '_')}.csv`,
             },
         });
 

@@ -23,6 +23,7 @@ export interface FilterState {
     statuses: string[];
     homeUniversities: string[];
     percentileInput: string;
+    round: number;
     sortBy: string;
     sortOrder: 'asc' | 'desc';
 }
@@ -34,4 +35,20 @@ export interface PendingFilters {
     statuses: string[];
     homeUniversities: string[];
     percentileInput: string;
+    round: number;
+}
+
+export interface RoundOption {
+    value: number;
+    label: string;
+    collection: string;
+    description: string;
+}
+
+export interface CollectionConfig {
+    [key: number]: {
+        collection: string;
+        displayName: string;
+        description: string;
+    };
 }

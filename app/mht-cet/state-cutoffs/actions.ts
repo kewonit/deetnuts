@@ -2,6 +2,7 @@
 
 import { getPocketBase } from '@/lib/pocketbaseClient';
 import { ensureUserAuthenticated } from '@/lib/supabaseAuth';
+import { getCollectionForRound, isValidRound, DEFAULT_ROUND, ROUND_CONFIG } from './constants';
 
 export async function getCutoffRecords(
     page: number,
@@ -12,11 +13,34 @@ export async function getCutoffRecords(
     statuses: string[],
     homeUniversities: string[],
     percentileInput: string,
+    round: number,
     sortBy: string,
     sortOrder: string,
 ) {
     try {
-        console.log('Server Action called with:', { page, perPage, search, categories, courses, statuses, homeUniversities, percentileInput, sortBy, sortOrder });
+        console.log('Server Action called with:', {
+            page,
+            perPage,
+            search,
+            categories,
+            courses,
+            statuses,
+            homeUniversities,
+            percentileInput,
+            round,
+            sortBy,
+            sortOrder
+        });
+
+        // Validate and sanitize round input
+        const sanitizedRound = Number.isInteger(round) && isValidRound(round) ? round : DEFAULT_ROUND;
+        if (sanitizedRound !== round) {
+            console.warn(`Invalid round ${round} provided, using default round ${sanitizedRound}`);
+        }
+
+        // Get the collection name for the specified round
+        const collectionName = getCollectionForRound(sanitizedRound);
+        console.log(`Using collection: ${collectionName} for round ${sanitizedRound}`);
 
         const pb = getPocketBase();
 
@@ -29,7 +53,8 @@ export async function getCutoffRecords(
                 success: false,
                 error: 'Authentication required',
                 message: 'Please log in to access cutoff data',
-                details: 'User authentication failed'
+                details: 'User authentication failed',
+                round: sanitizedRound
             };
         }
 
@@ -116,7 +141,31 @@ export async function getCutoffRecords(
 
         let result;
 
+        // Helper function to validate collection exists
+        const validateCollectionExists = async (pb: any, collectionName: string): Promise<boolean> => {
+            try {
+                await pb.collection(collectionName).getList(1, 1, { skipTotal: true });
+                return true;
+            } catch (error) {
+                console.error(`Collection validation failed for ${collectionName}:`, error);
+                return false;
+            }
+        };
+
         if (shouldSplitQuery) {
+            // When chunking queries, we need to be more careful about collection validation
+            const collectionExists = await validateCollectionExists(pb, collectionName);
+            if (!collectionExists) {
+                console.error(`Collection ${collectionName} does not exist or is not accessible`);
+                return {
+                    success: false,
+                    error: 'Data not available',
+                    message: `Round ${sanitizedRound} data is not available`,
+                    details: `Collection ${collectionName} not found`,
+                    round: sanitizedRound
+                };
+            }
+
             // Create chunks for each filter type
             const categoryChunks = categories && categories.length > MAX_ITEMS_PER_CHUNK
                 ? Array.from({ length: Math.ceil(categories.length / MAX_ITEMS_PER_CHUNK) }, (_, i) =>
@@ -153,14 +202,17 @@ export async function getCutoffRecords(
                             const chunkFilterQuery = buildFilterParts(courseChunk, categoryChunk, statusChunk, homeUniversityChunk);
                             if (chunkFilterQuery) {
                                 chunkPromises.push(
-                                    pb.collection('2024_mht_cet_round_one_cutoffs_duplicate').getList(
+                                    pb.collection(collectionName).getList(
                                         1, // Always get page 1 for chunks
                                         200, // Get more items per chunk to have enough for final pagination
                                         {
                                             filter: chunkFilterQuery,
                                             sort: sortString,
                                         }
-                                    )
+                                    ).catch(error => {
+                                        console.error(`Chunk query failed for ${collectionName}:`, error);
+                                        return { items: [], totalItems: 0, totalPages: 0, page: 1, perPage: 200 };
+                                    })
                                 );
                             }
                         }
@@ -168,7 +220,7 @@ export async function getCutoffRecords(
                 }
             }
 
-            console.log(`Executing ${chunkPromises.length} chunk queries`);
+            console.log(`Executing ${chunkPromises.length} chunk queries against ${collectionName}`);
 
             // Wait for all chunk queries to complete
             const chunkResults = await Promise.all(chunkPromises);
@@ -217,6 +269,7 @@ export async function getCutoffRecords(
             };
 
             console.log('Combined query result:', {
+                collection: collectionName,
                 chunksExecuted: chunkResults.length,
                 totalItemsFound: totalItems,
                 finalPaginatedItems: paginatedItems.length
@@ -225,22 +278,44 @@ export async function getCutoffRecords(
             // Execute single query for smaller course lists
             const filterQuery = buildFilterParts();
             console.log('Executing single query:', {
+                collection: collectionName,
                 filterQuery: filterQuery.substring(0, 200) + (filterQuery.length > 200 ? '...' : ''),
                 filterLength: filterQuery.length
             });
 
             // This query uses the authenticated user's credentials and respects collection permissions
-            result = await pb.collection('2024_mht_cet_round_one_cutoffs_duplicate').getList(
-                page,
-                perPage,
-                {
-                    filter: filterQuery,
-                    sort: sortString,
+            try {
+                result = await pb.collection(collectionName).getList(
+                    page,
+                    perPage,
+                    {
+                        filter: filterQuery,
+                        sort: sortString,
+                    }
+                );
+            } catch (collectionError) {
+                console.error(`Failed to query collection ${collectionName}:`, collectionError);
+
+                // Check if it's a collection not found error
+                if (collectionError instanceof Error &&
+                    (collectionError.message.includes('not found') ||
+                        collectionError.message.includes('does not exist'))) {
+                    return {
+                        success: false,
+                        error: 'Data not available',
+                        message: `Round ${sanitizedRound} data is not available`,
+                        details: `Collection ${collectionName} not found`,
+                        round: sanitizedRound
+                    };
                 }
-            );
+
+                throw collectionError; // Re-throw other errors
+            }
         }
 
         console.log('Database result:', {
+            collection: collectionName,
+            round: sanitizedRound,
             totalItems: result.totalItems,
             totalPages: result.totalPages,
             page: result.page,
@@ -254,24 +329,59 @@ export async function getCutoffRecords(
             totalItems: result.totalItems,
             totalPages: result.totalPages,
             page: result.page,
-            perPage: result.perPage
+            perPage: result.perPage,
+            round: sanitizedRound,
+            collection: collectionName
         };
     } catch (error: any) {
         console.error('Server Action Error:', error);
-        // Check if it's an authentication error
-        if (error instanceof Error && error.message.includes('authentication')) {
-            return {
-                success: false,
-                error: 'Authentication required',
-                message: 'Please log in to access cutoff data',
-                details: error.message
-            };
+
+        // Enhanced error handling for different error types
+        if (error instanceof Error) {
+            // Check if it's an authentication error
+            if (error.message.includes('authentication') || error.message.includes('unauthorized')) {
+                return {
+                    success: false,
+                    error: 'Authentication required',
+                    message: 'Please log in to access cutoff data',
+                    details: error.message,
+                    round: round
+                };
+            }
+
+            // Check if it's a collection not found error
+            if (error.message.includes('not found') ||
+                error.message.includes('does not exist') ||
+                error.message.includes('collection')) {
+                return {
+                    success: false,
+                    error: 'Data not available',
+                    message: `Round ${round} data is not available`,
+                    details: `Collection data not accessible: ${error.message}`,
+                    round: round
+                };
+            }
+
+            // Check if it's a network/connectivity error
+            if (error.message.includes('network') ||
+                error.message.includes('fetch') ||
+                error.message.includes('timeout')) {
+                return {
+                    success: false,
+                    error: 'Connection error',
+                    message: 'Unable to connect to the database. Please check your internet connection and try again.',
+                    details: error.message,
+                    round: round
+                };
+            }
         }
 
+        // Generic error fallback
         return {
             success: false,
             error: 'Failed to fetch cutoff data',
-            details: error.message || 'Unknown error'
+            details: error.message || 'Unknown error occurred',
+            round: round
         };
     }
 }
