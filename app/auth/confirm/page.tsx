@@ -43,7 +43,7 @@ export default async function OtpForm({ searchParams }: { searchParams: Promise<
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold">Enter OTP</h1>
           <p className="text-muted-foreground">An OTP has been sent to your email address.</p>
-          <p className="text-muted-foreground">(gib it a few seconds pls thanks)</p>
+          <p className="text-muted-foreground">(gib it a few seconds pls, also check the spam folder thanks)</p>
         </div>
 
         <input type="hidden" name="email" value={email} />
