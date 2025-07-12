@@ -6,7 +6,11 @@ export default async function MHTCETLoginRequired({ searchParams }: {
     searchParams: Promise<{ redirect?: string }>
 }) {
     const params = await searchParams
-    const redirectTo = params?.redirect || '/mht-cet'
+    // Default to /mht-cet, but if redirect is pointing to login-required page, use /mht-cet instead
+    let redirectTo = params?.redirect || '/mht-cet'
+    if (redirectTo === '/mht-cet-login-required' || redirectTo.startsWith('/mht-cet-login-required')) {
+        redirectTo = '/mht-cet'
+    }
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center px-4 pt-32">
