@@ -64,13 +64,16 @@ export async function updateSession(request: NextRequest) {
 
     // For /mht-cet routes, redirect to the special login page with redirect parameter
     if (request.nextUrl.pathname.startsWith('/mht-cet')) {
-      url.pathname = '/mht-cet-login-required'
-      url.searchParams.set('redirect', request.nextUrl.pathname)
+      // Avoid redirecting if already on the login required page
+      if (!request.nextUrl.pathname.startsWith('/mht-cet-login-required')) {
+        url.pathname = '/mht-cet-login-required'
+        url.searchParams.set('redirect', request.nextUrl.pathname)
+        return NextResponse.redirect(url)
+      }
     } else {
       url.pathname = '/login'
+      return NextResponse.redirect(url)
     }
-
-    return NextResponse.redirect(url)
   }
 
   return supabaseResponse
