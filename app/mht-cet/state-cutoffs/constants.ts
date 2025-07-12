@@ -219,7 +219,7 @@ export const ITEMS_PER_PAGE_OPTIONS = [10, 25, 50, 100, 200];
 // Round Configuration
 export const ROUND_CONFIG: Record<number, { collection: string; displayName: string }> = {
     1: {
-        collection: '2024_mht_cet_round_one_cutoffs',
+        collection: '2024_mht_cet_round_one_cutoffs_duplicate',
         displayName: 'Round 1'
     },
     2: {
@@ -236,7 +236,7 @@ export const ROUND_OPTIONS = [
     {
         value: 1,
         label: 'Round 1',
-        collection: '2024_mht_cet_round_one_cutoffs',
+        collection: '2024_mht_cet_round_one_cutoffs_duplicate',
     },
     {
         value: 2,
