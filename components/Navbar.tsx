@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 import MobileDrawer from '@/components/MobileDrawer'
 import NavDropdown from '@/components/NavDropdown'
-import AuthButton from '@/app/mht-cet/all-india-cutoffs/components/authbutton'
+import AuthButton from './authbutton'
 
 function Navbar() {
   return (

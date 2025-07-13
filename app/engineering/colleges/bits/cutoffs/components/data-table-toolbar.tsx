@@ -5,7 +5,6 @@ import { Table } from "@tanstack/react-table"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { DataTableViewOptions } from "@/app/mht-cet/all-india-cutoffs/components/data-table-view-options"
 
 import { statuses } from "../data/data"
 import { DataTableFacetedFilter } from "./data-table-faceted-filter"
@@ -21,7 +20,7 @@ export function DataTableToolbar<TData>({
 
   return (
     <div className="flex items-center justify-between">
-     <div className="block flex-1 items-center pb-6 sm:pb-0  sm:space-x-2 sm:flex sm:flex-1 space-y-6 sm:space-y-0">
+      <div className="block flex-1 items-center pb-6 sm:pb-0  sm:space-x-2 sm:flex sm:flex-1 space-y-6 sm:space-y-0">
         <Input
           placeholder="Search Program..."
           value={(table.getColumn("Program")?.getFilterValue() as string) ?? ""}
@@ -48,7 +47,6 @@ export function DataTableToolbar<TData>({
           </Button>
         )}
       </div>
-      <DataTableViewOptions table={table} />
     </div>
   )
 }

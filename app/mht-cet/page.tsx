@@ -13,7 +13,7 @@ interface Link {
 const LINKS: { [key: string]: Link } = {
   link1: {
     title: 'All India Cutoffs',
-    link: '/mht-cet/all-india-cutoffs/2023/round-one',
+    link: '/mht-cet/all-india-cutoffs',
     icon: {
       src: 'https://res.cloudinary.com/dfyrk32ua/image/upload/v1721510815/deetnuts/logos/MHT-CET_logo_wxbnlw-min_n5sbju.png',
     },
@@ -72,8 +72,8 @@ export default function Home() {
           className="grid w-full grid-cols-1 gap-10 md:grid-cols-3 xl:w-1/2 xl:pb-16 w450:grid-cols-1 w450:gap-7"
         >
           {Object.keys(LINKS).map((key) => {
-            // All links except 'link2' are under construction
-            const isUnderConstruction = key !== 'link2';
+            // All links except 'link2' and 'link1' are under construction
+            const isUnderConstruction = key !== 'link2' && key !== 'link1';
 
             if (isUnderConstruction) {
               return (
@@ -108,7 +108,7 @@ export default function Home() {
               );
             }
 
-            // Only 'State Level Cutoffs' is active
+            // Both 'All India Cutoffs' and 'State Level Cutoffs' are active
             return (
               <Link
                 className="relative rounded-base border-2 border-black bg-main p-5 shadow-base transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none ring-1 ring-blue-200 ring-offset-1"
