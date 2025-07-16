@@ -2,9 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
-export default async function MHTCETLoginRequired({ searchParams }: {
-    searchParams: Promise<{ redirect?: string }>
-}) {
+export default async function MHTCETLoginRequired({ searchParams }: any) {
     const params = await searchParams
     // Default to /mht-cet, but if redirect is pointing to login-required page, use /mht-cet instead
     let redirectTo = params?.redirect || '/mht-cet'

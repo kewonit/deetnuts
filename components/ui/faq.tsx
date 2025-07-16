@@ -9,6 +9,7 @@
 import { AlertTriangle } from 'lucide-react'
 import { Alert } from '@/components/ui/alert'
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Features() {
   const features = [
@@ -77,7 +78,7 @@ export default function Features() {
                 {/* Content layer, blurred if not MHT-CET */}
                 <div className={isMhtCet ? 'relative z-10' : 'relative z-10 blur-sm'}>
                   <picture>
-                    <img
+                    <Image
                       className="h-12 w-12 rounded-base object-cover"
                       src={feature.image}
                       alt={`${feature.title} icon`}
@@ -91,7 +92,7 @@ export default function Features() {
                 {/* Under Construction Overlay (sharp) */}
                 {!isMhtCet && (
                   <div className="absolute top-2 right-2 transform rotate-12 z-20 pointer-events-none">
-                    <img
+                    <Image
                       className="h-20 w-20"
                       src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1751487107/gdgc/pngimg.com_-_under_construction_PNG34_fr5yo4.webp"
                       alt="Under Construction"

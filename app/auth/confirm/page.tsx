@@ -1,11 +1,10 @@
-
 import Link from "next/link";
 import { SubmitButton } from "@/app/login/sumbit-button";
 import { Input } from "@/components/ui/input";
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot, } from '@/components/ui/input-otp'
 import { verifyOtp } from "@/app/login/actions";
 
-export default async function OtpForm({ searchParams }: { searchParams: Promise<{ message?: string; email?: string; redirect?: string }> }) {
+export default async function OtpForm({ searchParams }: any) {
   const params = await searchParams
   const email = params?.email || ''
   const redirectTo = params?.redirect || '/account'

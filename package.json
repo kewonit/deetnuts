@@ -11,7 +11,10 @@
     "upload-cutoffs": "npx tsx scripts/upload-mht-cet-cutoffs.ts",
     "upload-cutoffs-v2": "npx tsx scripts/upload-mht-cet-cutoffs-v2.ts",
     "batch-upload": "npx tsx scripts/batch-upload-mht-cet-cutoffs.ts",
+    "batch-upload-colleges": "npx tsx scripts/batch-upload-colleges.ts",
+    "batch-upload-seat-matrix": "npx tsx scripts/batch-upload-seat-matrix.ts",
     "test-batch-api": "npx tsx scripts/test-batch-api.ts",
+    "test-seat-matrix": "npx tsx scripts/test-seat-matrix-upload.ts",
     "test-upload-setup": "npx tsx scripts/test-setup.ts",
     "test-pocketbase": "npx tsx scripts/test-pocketbase.ts",
     "diagnose-pocketbase": "npx tsx scripts/diagnostic-pocketbase.ts"

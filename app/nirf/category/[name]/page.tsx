@@ -1,4 +1,4 @@
-// File: app/nirf/[...name]/page.tsx
+// File: app/nirf/category/[name]/page.tsx
 
 import { Montserrat } from "next/font/google";
 import Link from 'next/link';
@@ -49,16 +49,9 @@ const colors = [
   "bg-amber-500"
 ];
 
-export async function generateStaticParams() {
-  return fields.map(field => ({
-    name: [field.toLowerCase().replace(/ /g, '-')],
-  }));
-}
-
-export async function generateMetadata(props: { params: Promise<{ name: string[] }> }) {
-  const params = await props.params;
-  const decodedField = params.name[0].replace(/-/g, ' ');
-  const fieldTitle = decodedField.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+export async function generateMetadata({ params }: any) {
+  const decodedField = params.name.replace(/-/g, ' ');
+  const fieldTitle = decodedField.split(' ').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
   return {
     title: `NIRF - ${fieldTitle}`,
@@ -66,12 +59,11 @@ export async function generateMetadata(props: { params: Promise<{ name: string[]
   };
 }
 
-export default async function FieldPage(props: { params: Promise<{ name: string[] }> }) {
-  const params = await props.params;
+export default async function FieldPage({ params }: any) {
   console.log("Params received:", params); // Debugging line
 
-  const decodedField = params.name[0].replace(/-/g, ' ');
-  const fieldTitle = decodedField.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  const decodedField = params.name.replace(/-/g, ' ');
+  const fieldTitle = decodedField.split(' ').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   const colorIndex = fields.findIndex(f => f.toLowerCase() === fieldTitle.toLowerCase());
   const bgColor = colors[colorIndex % colors.length];
 
@@ -86,7 +78,7 @@ export default async function FieldPage(props: { params: Promise<{ name: string[
 
         <div className={`${bgColor} border-8 border-black shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] p-8 mb-8`}>
           <h1 className="text-4xl sm:text-7xl font-black text-white mb-4 leading-none">
-            {fieldTitle.split(' ').map((word, index) => (
+            {fieldTitle.split(' ').map((word: string, index: number) => (
               <span key={index} className="inline-block transform -skew-y-3 mr-2">{word}</span>
             ))}
           </h1>

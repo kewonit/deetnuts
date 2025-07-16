@@ -3,7 +3,7 @@ import { createClient } from '@/app/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 
-export default async function Account({ searchParams }: { searchParams: Promise<{ message?: string }> }) {
+export default async function Account({ searchParams }: any) {
   const cookieStore = await cookies()
   const supabase = createClient(cookieStore)
 

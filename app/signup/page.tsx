@@ -3,7 +3,7 @@ import { SubmitButton } from "./sumbit-button";
 import { Input } from "@/components/ui/input";
 import { signup } from '../login/actions'
 
-export default async function Signup({ searchParams }: { searchParams: Promise<{ message?: string; redirect?: string }> }) {
+export default async function Signup({ searchParams }: any) {
   const params = await searchParams
   const redirectTo = params?.redirect || '/account'
 
