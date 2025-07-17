@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { ExternalLink, CheckCircle, Users } from 'lucide-react';
 
@@ -60,7 +61,7 @@ export default function CommunityPartners() {
 
                 {/* Logo overlapping banner and content */}
                 <div className="absolute -bottom-8 left-4 h-20 w-20 rounded-full border-2 border-black bg-white p-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                  <img
+                  <Image
                     src={partner.logo}
                     alt={partner.name}
                     className="h-full w-full rounded-full object-cover"

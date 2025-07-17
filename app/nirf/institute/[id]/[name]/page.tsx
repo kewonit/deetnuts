@@ -22,36 +22,7 @@ const lato = Montserrat({
   weight: ['400', '700', '900'],
 })
 
-type Params = {
-  id: string;
-  name: string;
-};
-
-export async function generateStaticParams() {
-  const { data } = await supabase.from('nirf').select('institute_id, institute_name');
-  return data?.map(({ institute_id, institute_name }) => ({
-    id: institute_id.toString(),
-    name: formatInstituteName(institute_name),
-  })) || [];
-}
-
-export async function generateMetadata(props: { params: Promise<Params> }) {
-  const params = await props.params;
-  const { data } = await supabase
-    .from('nirf')
-    .select('"institute_name", "institute_id"')
-    .eq('institute_id', params.id)
-    .single();
-
-  if (!data) {
-    return { title: 'Institute Not Found' };
-  }
-
-  return { title: `${data.institute_name} | ${data.institute_id}` };
-}
-
-const InstitutePage = async (props: { params: Promise<Params> }) => {
-  const params = await props.params;
+const InstitutePage = async ({ params }: any) => {
   const { data: instituteData, error: instituteError } = await supabase
     .from('nirf')
     .select('*')
@@ -64,7 +35,7 @@ const InstitutePage = async (props: { params: Promise<Params> }) => {
 
   const expectedName = formatInstituteName(instituteData.institute_name);
   if (params.name !== expectedName) {
-    redirect(`/institute/${params.id}/${expectedName}`);
+    redirect(`/nirf/institute/${params.id}/${expectedName}`);
   }
 
   const { data: extraData, error: extraError } = await supabase
@@ -201,7 +172,7 @@ const InstitutePage = async (props: { params: Promise<Params> }) => {
             <TableRow>
               <TableCell className="text-left">{extraData['UG-full-tuition-fee-reimbursement-from-Government']}</TableCell>
               <TableCell className='text-center'>{extraData['UG-full-tuition-fee-reimbursement-from-Institution-Funds']}</TableCell>
-              <TableCell className='text-center'>{extraData['UG-full-tuition-fee-reimbursement-from-the-Private-Bodies']}</TableCell>
+              <TableCell className='text-center'>{extraData['PG-full-tuition-fee-reimbursement-from-the-Private-Bodies']}</TableCell>
               <TableCell className="text-right">{extraData['UG-not-receiving-full-tuition-fee-reimbursement']}</TableCell>
             </TableRow>
           </TableBody>
@@ -401,7 +372,6 @@ const InstitutePage = async (props: { params: Promise<Params> }) => {
           </div>
         </div>
     </div>
-
   );
 };
 
