@@ -3,7 +3,7 @@ import { updateSession } from '@/utils/supabase/middleware'
 import { type NextRequest, NextResponse } from 'next/server'
 
 export async function middleware(request: NextRequest) {
-  // Handle Supabase auth session
+  // Handle Supabase auth session for all other routes
   const response = await updateSession(request)
 
   // Check if the old pocketbase auth cookie exists and clear it

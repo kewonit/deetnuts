@@ -5,7 +5,7 @@ import { Suspense } from 'react';
 
 async function getCollege(slug: string) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/mht-cet/colleges/${slug}`, { cache: 'no-store' });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/mht-cet/colleges/${slug}`, { next: { revalidate: 3600 } });
     if (!res.ok) {
       if (res.status === 404) {
         return null; // Return null instead of throwing notFound
@@ -21,7 +21,7 @@ async function getCollege(slug: string) {
 
 async function getSeatMatrix(slug: string) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/mht-cet/colleges/${slug}/seat-matrix`, { cache: 'no-store' });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/mht-cet/colleges/${slug}/seat-matrix`, { next: { revalidate: 3600 } });
     if (!res.ok) {
       if (res.status === 404) {
         return { seatMatrix: [], matchInfo: null };
@@ -37,25 +37,43 @@ async function getSeatMatrix(slug: string) {
 
 export async function generateMetadata({ params }: any) {
   const resolvedParams = await params;
-  const { name } = parseCollegeSlug(resolvedParams.id);
+  const college = await getCollege(resolvedParams.id);
 
-  try {
-    const college = await getCollege(resolvedParams.id);
-    if (college) {
-      return {
-        title: `${college.college_name} - MHT-CET College Details`,
-        description: `Complete information about ${college.college_name}, including seat matrix, courses, and admission details for MHT-CET counseling.`,
-      };
-    }
-  } catch (error) {
-    console.error('Error generating metadata:', error);
+  if (!college) {
+    return {
+      title: 'College Not Found',
+      description: 'The college you are looking for could not be found.',
+    };
   }
 
+  const title = `${college.college_name} MHT-CET 2025: Cutoffs, Fees, Seats & Admission`;
+  const description = `Find all details for ${college.college_name} for MHT-CET 2025 admissions. Get the latest cutoffs, fee structure, seat matrix, and admission process. Your complete guide to securing admission in ${college.college_name}.`;
+
   return {
-    title: name ? `${name.replace(/-/g, ' ')} - MHT-CET College` : 'MHT-CET College Details',
-    description: 'MHT-CET college information and seat matrix details.',
+    title,
+    description,
+    keywords: [college.college_name, 'MHT-CET', 'MHT-CET 2025', 'Engineering Admissions', 'College Cutoffs', 'Fee Structure', 'Seat Matrix', college.home_university],
+    creator: 'DeetNuts',
+    openGraph: {
+      title,
+      description,
+      url: `${process.env.NEXT_PUBLIC_APP_URL}/mht-cet/colleges/${resolvedParams.id}`,
+      siteName: 'DeetNuts',
+      images: [
+        {
+          url: '/MHT-CET_logo.png', // Replace with a more specific image if available
+          width: 800,
+          height: 600,
+          alt: `Logo of ${college.college_name}`,
+        },
+      ],
+      locale: 'en_US',
+      type: 'website',
+    },
   };
 }
+
+import CollegeJsonLd from '@/components/CollegeJsonLd';
 
 export default async function CollegePage({ params }: any) {
   const resolvedParams = await params;
@@ -108,6 +126,7 @@ export default async function CollegePage({ params }: any) {
 
   return (
     <div className="min-h-screen bg-bg">
+      <CollegeJsonLd college={college} />
       <div className="container mx-auto max-w-full sm:max-w-3xl md:max-w-4xl lg:max-w-5xl xl:max-w-7xl px-2 sm:px-4 pt-28 sm:pt-32 pb-8 sm:pb-12">
         {/* Breadcrumb */}
         <nav className="mb-8">

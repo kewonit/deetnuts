@@ -82,6 +82,8 @@ export default function Features() {
                       className="h-12 w-12 rounded-base object-cover"
                       src={feature.image}
                       alt={`${feature.title} icon`}
+                      width={48}
+                      height={48}
                     />
                   </picture>
                   <h4 className="mt-2 text-xl font-heading">

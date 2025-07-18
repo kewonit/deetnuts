@@ -53,27 +53,26 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // Define routes that require authentication
-  const protectedRoutes = ['/dashboard', '/profile', '/settings', '/mht-cet']
+  const pathname = request.nextUrl.pathname
 
-  // Check if the current route requires authentication
-  const isProtectedRoute = protectedRoutes.some(route => request.nextUrl.pathname.startsWith(route))
+  // Define routes that require general authentication
+  const protectedRoutes = ['/dashboard', '/profile', '/settings']
+  const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route))
 
+  // Handle general protected routes
   if (!user && isProtectedRoute) {
     const url = request.nextUrl.clone()
+    url.pathname = '/login'
+    url.searchParams.set('redirect', pathname)
+    return NextResponse.redirect(url)
+  }
 
-    // For /mht-cet routes, redirect to the special login page with redirect parameter
-    if (request.nextUrl.pathname.startsWith('/mht-cet')) {
-      // Avoid redirecting if already on the login required page
-      if (!request.nextUrl.pathname.startsWith('/mht-cet-login-required')) {
-        url.pathname = '/mht-cet-login-required'
-        url.searchParams.set('redirect', request.nextUrl.pathname)
-        return NextResponse.redirect(url)
-      }
-    } else {
-      url.pathname = '/login'
-      return NextResponse.redirect(url)
-    }
+  // Handle specific MHT-CET protected route
+  if (!user && pathname.startsWith('/mht-cet/state-cutoffs')) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/mht-cet-login-required'
+    url.searchParams.set('redirect', pathname)
+    return NextResponse.redirect(url)
   }
 
   return supabaseResponse
