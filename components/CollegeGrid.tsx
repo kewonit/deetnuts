@@ -123,12 +123,12 @@ export default function CollegeGrid({ colleges }: CollegeGridProps) {
                     {filteredColleges.map((college) => {
                         const slug = createCollegeSlug(college.college_name, college.college_id.toString());
                         return (
-                            <div key={college.id} className="group bg-white border-4 border-black rounded-base shadow-base hover:shadow-lg transition-all duration-300 overflow-hidden hover:border-main">
-                                <div className="p-6">
+                            <div key={college.id} className="group bg-white border-4 border-black rounded-base shadow-base hover:shadow-lg transition-all duration-300 overflow-hidden hover:border-main flex flex-col">
+                                <div className="p-6 flex-grow">
                                     <div className="flex items-start justify-between mb-4">
                                         <div className="flex-1">
                                             <Link href={`/mht-cet/colleges/${slug}`}>
-                                                <h2 className="text-xl font-heading text-black hover:text-main transition-colors group-hover:text-main line-clamp-2 mb-3">
+                                                <h2 className="text-xl font-heading text-black hover:text-main transition-colors group-hover:text-main line-clamp-2 mb-3 h-14">
                                                     {college.college_name}
                                                 </h2>
                                             </Link>
@@ -136,49 +136,46 @@ export default function CollegeGrid({ colleges }: CollegeGridProps) {
                                     </div>
 
                                     <div className="space-y-4">
-                                        <div className="space-y-4">
-                                            <div className="flex items-start">
-                                                <div className="w-12 h-12 bg-main border-2 border-black rounded-base flex items-center justify-center mr-4">
-                                                    <span className="text-2xl">🆔</span>
-                                                </div>
-                                                <div>
-                                                    <span className="font-heading text-black block text-lg">College ID</span>
-                                                    <span className="font-base text-black text-xl">{college.college_id}</span>
-                                                </div>
+                                        <div className="flex items-start">
+                                            <div className="w-12 h-12 bg-main border-2 border-black rounded-base flex items-center justify-center mr-4 shrink-0">
+                                                <span className="text-2xl">🆔</span>
                                             </div>
-                                            <div className="flex items-start">
-                                                <div className="w-12 h-12 bg-green-300 border-2 border-black rounded-base flex items-center justify-center mr-4">
-                                                    <span className="text-2xl">📋</span>
-                                                </div>
-                                                <div>
-                                                    <span className="font-heading text-black block text-lg">Status</span>
-                                                    <span className="font-base text-black text-xl italic">{college.status}</span>
-                                                </div>
+                                            <div>
+                                                <span className="font-heading text-black block text-lg">College ID</span>
+                                                <span className="font-base text-black text-xl">{college.college_id}</span>
                                             </div>
                                         </div>
-
                                         <div className="flex items-start">
-                                            <div className="w-12 h-12 bg-purple-300 border-2 border-black rounded-base flex items-center justify-center mr-4">
+                                            <div className="w-12 h-12 bg-green-300 border-2 border-black rounded-base flex items-center justify-center mr-4 shrink-0">
+                                                <span className="text-2xl">📋</span>
+                                            </div>
+                                            <div>
+                                                <span className="font-heading text-black block text-lg">Status</span>
+                                                <span className="font-base text-black text-xl italic">{college.status}</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-start">
+                                            <div className="w-12 h-12 bg-purple-300 border-2 border-black rounded-base flex items-center justify-center mr-4 shrink-0">
                                                 <span className="text-2xl">🏫</span>
                                             </div>
                                             <div>
                                                 <span className="font-heading text-black block text-lg">Home University</span>
-                                                <p className="font-base text-black text-xl">{college.home_university}</p>
+                                                <p className="font-base text-black text-xl line-clamp-2">{college.home_university}</p>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div className="mt-6 pt-4 border-t-2 border-black">
-                                        <Link
-                                            href={`/mht-cet/colleges/${slug}`}
-                                            className="w-full inline-flex items-center justify-center px-6 py-3 bg-main text-black font-heading rounded-base hover:bg-main-dark transition-all duration-200 border-2 border-black shadow-base"
-                                        >
-                                            <span>View Details</span>
-                                            <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                                            </svg>
-                                        </Link>
-                                    </div>
+                                <div className="p-6 pt-4 border-t-2 border-black">
+                                    <Link
+                                        href={`/mht-cet/colleges/${slug}`}
+                                        className="w-full inline-flex items-center justify-center px-6 py-3 bg-main text-black font-heading rounded-base hover:bg-main-dark transition-all duration-200 border-2 border-black shadow-base"
+                                    >
+                                        <span>View Details</span>
+                                        <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                                        </svg>
+                                    </Link>
                                 </div>
                             </div>
                         );

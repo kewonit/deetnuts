@@ -1,20 +1,9 @@
 import CollegeGrid from '@/components/CollegeGrid';
 import Link from 'next/link';
-
-async function getColleges() {
-  // This is a server component, so we can fetch directly without exposing an API route if we wanted to.
-  // However, for this implementation, we will use the API route we created.
-  // This also allows the client-side to use the same endpoint.
-  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/mht-cet/colleges`, { cache: 'no-store' });
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch colleges');
-  }
-  return res.json();
-}
+import { getCollegesData } from '@/lib/college-data';
 
 export default async function CollegesPage() {
-  const colleges = await getColleges();
+  const colleges = await getCollegesData();
 
   return (
     <div className="min-h-screen bg-bg">
@@ -31,31 +20,34 @@ export default async function CollegesPage() {
         </nav>
 
         {/* Header Section */}
-        <div className="bg-white border-8 border-black rounded-base shadow-brutal p-8 sm:p-14 mb-14 text-center relative overflow-hidden">
-          <div className="absolute inset-0 pointer-events-none opacity-20 select-none flex justify-center items-center">
-            <img src="/MHT-CET_logo.png" alt="MHT-CET Logo" className="w-1/2 max-w-xs mx-auto blur-sm" />
-          </div>
-          <div className="relative z-10 max-w-4xl mx-auto">
-            <h1 className="text-5xl md:text-7xl font-heading mb-4 text-black leading-tight tracking-tight drop-shadow-text-heavy">
-              <span className="inline-block bg-main/20 border-b-4 border-main px-4 rounded-lg">MHT-CET <span className="text-main">COLLEGES</span></span>
+        <div className="bg-white border-4 border-black rounded-base shadow-brutal p-8 sm:p-12 mb-12 text-center relative">
+          <div className="relative z-10 max-w-3xl mx-auto">
+            <h1 className="text-4xl md:text-6xl font-heading mb-3 text-black">
+              MHT-CET Colleges
             </h1>
-            <p className="text-lg md:text-2xl text-black mb-10 leading-relaxed font-base drop-shadow-text-light">
-              <span className="font-heading text-main text-2xl md:text-3xl">✨ Discover. Explore. Decide. ✨</span><br />
-              <span className="block mt-2">Browse all participating colleges in the MHT-CET counseling process, compare seat matrix, and explore detailed course offerings.<br />
-                Find the perfect fit for your future in engineering!</span>
+            <p className="text-lg md:text-xl text-black/80 mb-8 leading-relaxed font-base">
+              Your complete guide to MHT-CET counseling. Browse colleges, compare seat matrices, and find the perfect fit for your future in engineering.
             </p>
-            <div className="flex flex-wrap justify-center gap-6">
-              <div className="flex items-center bg-white border-2 border-black rounded-base px-6 py-4 shadow-base hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none hover:scale-105 transition-all">
-                <span className="text-2xl mr-3">✅</span>
-                <span className="font-heading text-black text-lg">Comprehensive College Database</span>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              {/* Discover Card */}
+              <div className="bg-main border-2 border-black rounded-base p-6 shadow-base hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none transition-all">
+                <div className="text-4xl mb-3">🔍</div>
+                <h3 className="text-xl font-heading text-black">Discover</h3>
+                <p className="font-base text-black/70 mt-1">A comprehensive, filterable database of all participating colleges.</p>
               </div>
-              <div className="flex items-center bg-purple-200 border-2 border-black rounded-base px-6 py-4 shadow-base hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none hover:scale-105 transition-all">
-                <span className="text-2xl mr-3">📊</span>
-                <span className="font-heading text-black text-lg">Detailed Seat Matrix</span>
+
+              {/* Explore Card */}
+              <div className="bg-yellow-200 border-2 border-black rounded-base p-6 shadow-base hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none transition-all">
+                <div className="text-4xl mb-3">📊</div>
+                <h3 className="text-xl font-heading text-black">Explore</h3>
+                <p className="font-base text-black/70 mt-1">In-depth details for each college, including seat matrices and courses.</p>
               </div>
-              <div className="flex items-center bg-yellow-200 border-2 border-black rounded-base px-6 py-4 shadow-base hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none hover:scale-105 transition-all">
-                <span className="text-2xl mr-3">🔍</span>
-                <span className="font-heading text-black text-lg">Advanced Search & Filters</span>
+
+              {/* Decide Card */}
+              <div className="bg-purple-300 border-2 border-black rounded-base p-6 shadow-base hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none transition-all">
+                <div className="text-4xl mb-3">✅</div>
+                <h3 className="text-xl font-heading text-black">Decide</h3>
+                <p className="font-base text-black/70 mt-1">Make informed decisions with accurate and up-to-date information.</p>
               </div>
             </div>
           </div>

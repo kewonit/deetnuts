@@ -65,6 +65,8 @@ export default function CommunityPartners() {
                     src={partner.logo}
                     alt={partner.name}
                     className="h-full w-full rounded-full object-cover"
+                    width={80}
+                    height={80}
                   />
                 </div>
               </div>
