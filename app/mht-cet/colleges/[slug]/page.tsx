@@ -53,7 +53,8 @@ async function getCutoffs(id: string) {
     }
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const { slug } = params;
   const { id } = parseCollegeSlug(slug);
   if (!id) {
@@ -100,7 +101,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
 import CollegeJsonLd from '@/components/CollegeJsonLd';
 
-export default async function CollegePage({ params }: { params: { slug: string } }) {
+export default async function CollegePage(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const { slug } = params;
   const { id } = parseCollegeSlug(slug);
 

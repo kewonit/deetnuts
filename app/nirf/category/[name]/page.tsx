@@ -49,7 +49,8 @@ const colors = [
   "bg-amber-500"
 ];
 
-export async function generateMetadata({ params }: any) {
+export async function generateMetadata(props: any) {
+  const params = await props.params;
   const decodedField = params.name.replace(/-/g, ' ');
   const fieldTitle = decodedField.split(' ').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
@@ -59,7 +60,8 @@ export async function generateMetadata({ params }: any) {
   };
 }
 
-export default async function FieldPage({ params }: any) {
+export default async function FieldPage(props: any) {
+  const params = await props.params;
   console.log("Params received:", params); // Debugging line
 
   const decodedField = params.name.replace(/-/g, ' ');

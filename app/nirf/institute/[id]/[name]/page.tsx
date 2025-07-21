@@ -22,7 +22,8 @@ const lato = Montserrat({
   weight: ['400', '700', '900'],
 })
 
-const InstitutePage = async ({ params }: any) => {
+const InstitutePage = async (props: any) => {
+  const params = await props.params;
   const { data: instituteData, error: instituteError } = await supabase
     .from('nirf')
     .select('*')

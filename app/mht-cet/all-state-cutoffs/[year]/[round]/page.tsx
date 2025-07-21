@@ -11,7 +11,8 @@ async function getCutoffs(year: string, round: string) {
   return res.json();
 }
 
-export default async function CutoffPage({ params }: any) {
+export default async function CutoffPage(props: any) {
+  const params = await props.params;
   const cutoffs = await getCutoffs(params.year, params.round);
 
   return (
