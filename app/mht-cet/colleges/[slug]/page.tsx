@@ -118,22 +118,18 @@ export default async function CollegePage(props: { params: Promise<{ slug: strin
   let cutoffsError = null;
 
   try {
-    college = await getCollege(id);
+    [college, seatMatrix, cutoffs] = await Promise.all([
+      getCollege(id),
+      getSeatMatrix(id),
+      getCutoffs(id),
+    ]);
   } catch (error: any) {
-    collegeError = error.message;
-    // Don't throw here, let the component handle the error state
-  }
-
-  try {
-    seatMatrix = await getSeatMatrix(id);
-  } catch (error: any) {
-    seatMatrixError = error.message;
-  }
-
-  try {
-    cutoffs = await getCutoffs(id);
-  } catch (error: any) {
-    cutoffsError = error.message;
+    // Handle errors for all promises, or individual errors if needed
+    console.error("Error fetching data in parallel:", error);
+    // For now, we'll set a generic error and let individual components handle their missing data
+    collegeError = "Failed to load college data.";
+    seatMatrixError = "Failed to load seat matrix data.";
+    cutoffsError = "Failed to load cutoffs data.";
   }
 
   // If we don't have college data, render an error state instead of calling notFound()

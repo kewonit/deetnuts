@@ -79,6 +79,7 @@
     "@types/csv-parse": "^1.1.12",
     "@types/node": "^20",
     "@types/react": "19.1.8",
+    "@types/react-dom": "^19.1.6",
     "dotenv-cli": "^8.0.0",
     "eslint": "^8",
     "eslint-config-next": "15.0.4",
