@@ -70,37 +70,12 @@ export async function GET(request: Request, { params }: any) {
     try {
         const pb = getPocketBase();
 
-        // Try to authenticate for seat matrix access (required by PocketBase)
-        try {
-            await ensureAuthenticatedServer();
-        } catch (authError) {
-            // If authentication fails, return a more user-friendly message
-            return NextResponse.json(
-                {
-                    message: 'Seat matrix data requires authentication. This data may not be publicly available.',
-                    error: 'Authentication required'
-                },
-                { status: 401 }
-            );
-        }
-
         const { id } = parseCollegeSlug(resolvedParams.id);
 
         // First get the college by college_id field (not the record ID)
         let college: College;
         try {
-            const colleges = await pb.collection('2024_mht_cet_colleges').getFullList({
-                filter: `college_id=${id}`,
-            }) as College[];
-
-            if (colleges.length === 0) {
-                return NextResponse.json(
-                    { message: 'College not found' },
-                    { status: 404 }
-                );
-            }
-
-            college = colleges[0];
+            college = await pb.collection('2024_mht_cet_colleges').getFirstListItem(`college_id=${id}`) as College;
         } catch (collegeError) {
             if (collegeError instanceof ClientResponseError && collegeError.status === 404) {
                 return NextResponse.json(
@@ -118,30 +93,12 @@ export async function GET(request: Request, { params }: any) {
         // Always match seat matrix by normalized college code (ignore leading zeros)
         try {
             seatMatrixRecords = await pb.collection('2024_mht_cet_colleges_seat_matrix').getFullList({
-                // Use a filter that matches college_code numerically, ignoring leading zeros
-                filter: `college_code="${normalizedCollegeId}" || college_code="${parseInt(normalizedCollegeId, 10)}"`,
+                // Match college_code by its raw string form or with a leading zero, to handle variations like '5380' and '05380'
+                filter: `college_code="${String(college.college_id)}" || college_code="0${String(college.college_id)}"`,
                 sort: 'course_name,choice_code',
             }) as SeatMatrixRecord[];
         } catch (error) {
             console.warn('Seat matrix fetch by normalized college_code failed:', error);
-        }
-
-        // If still no results, try to match manually by normalizing all codes
-        if (seatMatrixRecords.length === 0) {
-            try {
-                const allRecords = await pb.collection('2024_mht_cet_colleges_seat_matrix').getFullList({
-                    sort: 'course_name,choice_code',
-                }) as SeatMatrixRecord[];
-                seatMatrixRecords = allRecords.filter((record: SeatMatrixRecord) => {
-                    if (record.college_code) {
-                        // Compare as numbers to ignore leading zeros
-                        return parseInt(record.college_code, 10) === parseInt(normalizedCollegeId, 10);
-                    }
-                    return false;
-                });
-            } catch (error) {
-                console.warn('Manual seat matrix mapping failed:', error);
-            }
         }
 
         return NextResponse.json({
@@ -166,4 +123,4 @@ export async function GET(request: Request, { params }: any) {
             { status: 500 }
         );
     }
-}
+};

@@ -1,0 +1,355 @@
+college_id,college_name,status,home_university
+1002,Government College Of Engineering Amravati,Government Autonomous,Autonomous Institute
+1005,Sant Gadge Baba Amravati University Amravati,University Department,Sant Gadge Baba Amravati University
+1012,Government College Of Engineering Yavatmal,Government,Sant Gadge Baba Amravati University
+1101,Shri Sant Gajanan Maharaj College Of Engineering Shegaon,Un-Aided,Sant Gadge Baba Amravati University
+1105,Prof. Ram Meghe Institute Of Technology Research Amravati,Un-Aided Autonomous,Autonomous Institute
+1107,P. R. Pote Patil College Of Engineering Management Amravati,Un-Aided Autonomous,Autonomous Institute
+1114,Sipna Shikshan Prasarak Mandal College Of Engineering Technology Amravati,Un-Aided Autonomous,Autonomous Institute
+1116,Shri Shivaji Education Society S College Of Engineering And Technology Akola,Un-Aided,Sant Gadge Baba Amravati University
+1117,Janata Shikshan Prasarak Mandal S Babasaheb Naik College Of Engineering Pusad,Un-Aided,Sant Gadge Baba Amravati University
+1119,Paramhansa Ramkrishna Maunibaba Shikshan Santha S Anuradha Engineering College Chikhali,Un-Aided,Sant Gadge Baba Amravati University
+1120,Jawaharlal Darda Institute Of Engineering And Technology Yavatmal,Un-Aided Linguistic Minority - Hindi,Sant Gadge Baba Amravati University
+1121,Shri Hanuman Vyayam Prasarak Mandals College Of Engineering Technology Amravati,Un-Aided,Sant Gadge Baba Amravati University
+1123,Dr.Rajendra Gode Institute Of Technology Research Amravati,Un-Aided,Sant Gadge Baba Amravati University
+1125,Dwarka Bahu Uddeshiya Gramin Vikas Foundation Rajarshi Shahu College Of Engineering Buldhana,Un-Aided,Sant Gadge Baba Amravati University
+1126,Takshashila Institute Of Engineering Technology Darapur Amravati,Un-Aided,Sant Gadge Baba Amravati University
+1127,Jagadambha Bahuuddeshiya Gramin Vikas Sanstha S Jagdambha College Of Engineering And Technology Yavatmal,Un-Aided Autonomous,Autonomous Institute
+1128,Prof Ram Meghe College Of Engineering And Management Badnera,Un-Aided,Sant Gadge Baba Amravati University
+1130,Vision Buldhana Educational Welfare Society S Pankaj Laddhad Institute Of Technology Management Studies Yelgaon,Un-Aided,Sant Gadge Baba Amravati University
+1180,Sanmati Engineering College Sawargaon Barde Washim,Un-Aided,Sant Gadge Baba Amravati University
+1182,Padmashri Dr. V.B. Kolte College Of Engineering Malkapur Buldhana,Un-Aided,Sant Gadge Baba Amravati University
+1265,Mauli Group Of Institutions College Of Engineering And Technology Shegaon.,Un-Aided,Sant Gadge Baba Amravati University
+1268,Siddhivinayak Technical Campus School Of Engineering Research Technology Shirasgon Nile,Un-Aided,Sant Gadge Baba Amravati University
+1276,Manav School Of Engineering Technology Gut No. 1035 Nagpur Surat Highway Nh No. 6 Tal.Vyala Balapur Akola 444302,Un-Aided,Sant Gadge Baba Amravati University
+2008,Government College Of Engineering Chhatrapati Sambhajinagar,Government Autonomous,Autonomous Institute
+2020,Shri Guru Gobind Singhji Institute Of Engineering And Technology Nanded,Government-Aided Autonomous,Autonomous Institute
+2021,University Department Of Chemical Technology Aurangabad,University Department,Dr. Babasaheb Ambedkar Marathwada University
+2032,Institute Of Chemical Technology Mumbai Marathwada Off Campus Jalna,University Managed Autonomous,Deemed to be University
+2111,Everest Education Society Group Of Institutions (Integrated Campus) Ohar,Un-Aided Religious Minority - Muslim,Dr. Babasaheb Ambedkar Marathwada University
+2112,Shree Yash Pratishthan Shreeyash College Of Engineering And Technology Aurangabad,Un-Aided,Dr. Babasaheb Ambedkar Marathwada University
+2113,G. S. Mandal S Maharashtra Institute Of Technology Aurangabad,Un-Aided Autonomous,Autonomous Institute
+2114,Deogiri Institute Of Engineering And Management Studies Aurangabad,Un-Aided,Dr. Babasaheb Ambedkar Marathwada University
+2116,Matoshri Pratishan S Group Of Institutions (Integrated Campus) Kupsarwadi Nanded,Un-Aided,Swami Ramanand Teerth Marathwada University Nanded
+2127,Mahatma Gandhi Missions College Of Engineering Hingoli Rd Nanded.,Un-Aided,Swami Ramanand Teerth Marathwada University Nanded
+2129,M.S. Bidve Engineering College Latur,Un-Aided,Swami Ramanand Teerth Marathwada University Nanded
+2130,Terna Public Charitable Trust S College Of Engineering Osmanabad,Un-Aided,Dr. Babasaheb Ambedkar Marathwada University
+2131,Shree Tuljabhavani College Of Engineering Tuljapur,Un-Aided,Dr. Babasaheb Ambedkar Marathwada University
+2133,Mahatma Basaweshwar Education Society S College Of Engineering Ambejogai,Un-Aided,Dr. Babasaheb Ambedkar Marathwada University
+2134,Peoples Education Society S College Of Engineering Aurangabad,Un-Aided,Dr. Babasaheb Ambedkar Marathwada University
+2135,Hi-Tech Institute Of Technology Aurangabad,Un-Aided,Dr. Babasaheb Ambedkar Marathwada University
+2136,Aditya Engineering College Beed,Un-Aided,Dr. Babasaheb Ambedkar Marathwada University
+2137,Nagnathappa Halge Engineering College Parli Beed,Un-Aided,Dr. Babasaheb Ambedkar Marathwada University
+2138,Matsyodari Shikshan Sansatha S College Of Engineering And Technology Jalna,Un-Aided,Dr. Babasaheb Ambedkar Marathwada University
+2146,Adarsh Shikshan Prasarak Mandal S K. T. Patil College Of Engineering And Technology Osmanabad,Un-Aided,Dr. Babasaheb Ambedkar Marathwada University
+2250,Aurangabad College Of Engineering Naygaon Savangi Aurangabad,Un-Aided,Dr. Babasaheb Ambedkar Marathwada University
+2252,Marathwada Shikshan Prasarak Mandal S Shri Shivaji Institute Of Engineering And Management Studies Parbhani,Un-Aided,Swami Ramanand Teerth Marathwada University Nanded
+2254,Vilasrao Deshmukh Foundation Group Of Institutions Latur,Un-Aided,Swami Ramanand Teerth Marathwada University Nanded
+2282,Aditya Education Trust S Mitthulalji Sarada Polytechnic Nalwandi Road Beed,Un-Aided,Dr. Babasaheb Ambedkar Marathwada University
+2508,Gramin Technical And Management Campus Nanded.,Un-Aided,Swami Ramanand Teerth Marathwada University Nanded
+2516,International Centre Of Excellence In Engineering And Management (Iceem),Un-Aided,Dr. Babasaheb Ambedkar Marathwada University
+2522,Stmei S Sandipani Technical Campus-Faculty Of Engineering Latur.,Un-Aided,Swami Ramanand Teerth Marathwada University Nanded
+2533,Csmss Chh. Shahu College Of Engineering Aurangabad,Un-Aided,Dr. Babasaheb Ambedkar Marathwada University
+2637,Jijau Institute Of Engineering Technology And Management Khandgaon (Bendri) Taluka Naigaon District Nanded,Un-Aided,Swami Ramanand Teerth Marathwada University Nanded
+2641,Dr. V.K. Patil College Of Engineering Technology,Un-Aided,Dr. Babasaheb Ambedkar Marathwada University
+2666,Mangaldeep College Of Engineering,Un-Aided,Dr. Babasaheb Ambedkar Marathwada University
+3012,Veermata Jijabai Technological Institute(Vjti) Matunga Mumbai,Government-Aided Autonomous,Autonomous Institute
+3014,Sardar Patel College Of Engineering Andheri,Government-Aided Autonomous,Autonomous Institute
+3025,Svkm S Shri Bhagubhai Mafatlal Polytechnic College Of Engineering,Un-Aided Linguistic Minority - Gujarathi,Mumbai University
+3033,Dr. Babasaheb Ambedkar Technological University Lonere,University,Dr. Babasaheb Ambedkar Technological University Lonere
+3035,Usha Mittal Institute Of Technology Sndt Women S University Mumbai,University Managed (Un-Aided),SNDT Women s University
+3036,Institute Of Chemical Technology Matunga Mumbai,Deemed University Autonomous,Deemed to be University
+3042,Loknete Shamrao Peje Government College Of Engineering Ratnagiri,Government,Mumbai University
+3135,Manjara Charitable Trust S Rajiv Gandhi Institute Of Technology Mumbai,Un-Aided,Mumbai University
+3139,Vidyalankar Institute Of Technology Wadala Mumbai,Un-Aided Autonomous,Autonomous Institute
+3143,Thakur Shyamnarayan Engineering College Mumbai,Un-Aided Linguistic Minority - Hindi,Mumbai University
+3146,Jawahar Education Society S Annasaheb Chudaman Patil College Of Engineering Kharghar Navi Mumbai,Un-Aided,Mumbai University
+3147,Saraswati Education Society Yadavrao Tasgaonkar Institute Of Engineering Technology Karjat,Un-Aided,Mumbai University
+3148,Mahavir Education Trust S Shah Anchor Kutchhi Engineering College Mumbai,Un-Aided Autonomous Linguistic Minority - Gujarathi(Jain),Autonomous Institute
+3154,Saraswati Education Society S Saraswati College Of Engineering Kharghar Navi Mumbai,Un-Aided,Mumbai University
+3175,M.G.M. S College Of Engineering And Technology Kamothe Navi Mumbai,Un-Aided,Mumbai University
+3176,Thakur College Of Engineering And Technology Kandivali Mumbai,Un-Aided Autonomous Linguistic Minority - Hindi,Autonomous Institute
+3182,Thadomal Shahani Engineering College Bandra Mumbai,Un-Aided Linguistic Minority - Sindhi,Mumbai University
+3183,Anjuman-I-Islam S M.H. Saboo Siddik College Of Engineering Byculla Mumbai,Un-Aided Religious Minority - Muslim,Mumbai University
+3184,Fr. Conceicao Rodrigues College Of Engineering Bandra Mumbai,Un-Aided Autonomous Religious Minority - Christian,Autonomous Institute
+3185,Vivekanand Education Society S Institute Of Technology Chembur Mumbai,Un-Aided Autonomous Linguistic Minority - Sindhi,Autonomous Institute
+3187,N.Y.S.S. S Datta Meghe College Of Engineering Airoli Navi Mumbai,Un-Aided,Mumbai University
+3188,Vasantdada Patil Pratishthan S College Of Engineering And Visual Arts Sion Mumbai,Un-Aided,Mumbai University
+3189,Bharati Vidyapeeth College Of Engineering Navi Mumbai,Un-Aided,Mumbai University
+3190,Terna Engineering College Nerul Navi Mumbai,Un-Aided,Mumbai University
+3192,Smt. Indira Gandhi College Of Engineering Navi Mumbai,Un-Aided,Mumbai University
+3193,Shivajirao S. Jondhale College Of Engineering Dombivali Mumbai,Un-Aided,Mumbai University
+3194,Vidyavardhini S College Of Engineering And Technology Vasai,Un-Aided,Mumbai University
+3196,Lokmanya Tilak College Of Engineering Kopar Khairane Navi Mumbai,Un-Aided Linguistic Minority - Hindi,Mumbai University
+3197,Agnel Charities Fr. C. Rodrigues Institute Of Technology Vashi Navi Mumbai,Un-Aided Autonomous Religious Minority - Christian,Autonomous Institute
+3198,Konkan Gyanpeeth College Of Engineering Karjat,Un-Aided,Mumbai University
+3199,Shri Vile Parle Kelvani Mandal S Dwarkadas J. Sanghvi College Of Engineering Vile Parle Mumbai,Un-Aided Autonomous Linguistic Minority - Gujarathi,Autonomous Institute
+3200,Hope Foundation And Research Center S Finolex Academy Of Management And Technology Ratnagiri,Un-Aided,Mumbai University
+3201,Rizvi Education Society S Rizvi College Of Engineering Bandra Mumbai,Un-Aided Religious Minority - Muslim,Mumbai University
+3202,Rajendra Mane College Of Engineering Technology Ambav Deorukh,Un-Aided,Mumbai University
+3203,Atharva College Of Engineering Malad(West) Mumbai,Un-Aided,Mumbai University
+3204,St. Francis Institute Of Technology Borivali Mumbai,Un-Aided Religious Minority - Christian,Mumbai University
+3206,S.S.P.M. S College Of Engineering Kankavli,Un-Aided,Mumbai University
+3207,Mahatma Education Society S Pillai College Of Engineering New Panvel,Un-Aided Autonomous Linguistic Minority - Malyalam,Autonomous Institute
+3208,Don Bosco Institute Of Technology Mumbai,Un-Aided Religious Minority - Roman Catholics,Mumbai University
+3209,K J Somaiya Institute Of Technology,Un-Aided Autonomous Linguistic Minority - Gujarathi,Autonomous Institute
+3210,Excelsior Education Society S K.C. College Of Engineering And Management Studies And Research Kopri Thane (E),Un-Aided Linguistic Minority - Punjabi,Mumbai University
+3211,S.I.E.S. Graduate School Of Technology Nerul Navi Mumbai,Un-Aided Autonomous Linguistic Minority - Tamil,Autonomous Institute
+3212,Watumull Institute Of Engineering Technology Ulhasnagar,Un-Aided Linguistic Minority - Sindhi,Mumbai University
+3214,Xavier Institute Of Engineering C O Xavier Technical Institute Mahim Mumbai,Un-Aided Religious Minority - Christian,Mumbai University
+3215,Bhartiya Vidya Bhavan S Sardar Patel Institute Of Technology Andheri Mumbai,Un-Aided Autonomous,Autonomous Institute
+3216,Gharda Foundation S Gharda Institute Of Technology Khed Ratnagiri,Un-Aided,Mumbai University
+3217,Vighnaharata Trust S Shivajirao S. Jondhale College Of Engineering Technology Shahapur Asangaon Dist Thane,Un-Aided,Mumbai University
+3218,Aldel Education Trust S St. John College Of Engineering Management Vevoor Palghar,Un-Aided Autonomous Religious Minority - Christian,Autonomous Institute
+3219,Koti Vidya Charitable Trust S Smt. Alamuri Ratnamala Institute Of Engineering And Technology Sapgaon Tal. Shahapur,Un-Aided Linguistic Minority - Hindi,Mumbai University
+3220,Yadavrao Tasgaonkar College Of Engineering Management,Un-Aided,Mumbai University
+3221,Vishnu Waman Thakur Charitable Trust S Viva Institute Of Technology Virar,Un-Aided,Mumbai University
+3222,Haji Jamaluddin Thim Trust S Theem College Of Engineering At. Villege Betegaon Boisar,Un-Aided Religious Minority - Muslim,Mumbai University
+3223,Mahatma Education Society S Pillai Hoc College Of Engineering Technology Tal. Khalapur. Dist. Raigad,Un-Aided Linguistic Minority - Malyalam,Mumbai University
+3224,Leela Education Society G.V. Acharya Institute Of Engineering And Technology Shelu Karjat,Un-Aided,Mumbai University
+3257,Vidya Prasarak Mandal S College Of Engineering Thane,Un-Aided,Mumbai University
+3277,Pravin Rohidas Patil College Of Engineering Technology,Un-Aided,Mumbai University
+3351,Bharat College Of Engineering Kanhor Badlapur(W),Un-Aided,Mumbai University
+3353,Dilkap Research Institute Of Engineering And Management Studies At.Mamdapur Post- Neral Tal- Karjat Mumbai,Un-Aided,Mumbai University
+3423,Shree L.R. Tiwari College Of Engineering Mira Road Mumbai,Un-Aided Linguistic Minority - Hindi,Mumbai University
+3436,B.R. Harne College Of Engineering Technology Karav Tal-Ambernath.,Un-Aided,Mumbai University
+3439,Anjuman-I-Islam S Kalsekar Technical Campus Panvel,Un-Aided Religious Minority - Muslim,Mumbai University
+3440,Metropolitan Institute Of Technology Management Sukhalwad Sindhudurg.,Un-Aided,Mumbai University
+3445,Vishwatmak Jangli Maharaj Ashram Trust (Kokamthan) Atma Malik Institute Of Technology Research,Un-Aided,Mumbai University
+3447,G.M.Vedak Institute Of Technology Tala Raigad.,Un-Aided,Mumbai University
+3460,Universal College Of Engineering Kaman Dist. Palghar,Un-Aided Linguistic Minority - Gujarathi,Mumbai University
+3462,Vpm S Maharshi Parshuram College Of Engineering Velneshwar Ratnagiri.,Un-Aided,Mumbai University
+3465,Ideal Institute Of Technology Wada Dist.Thane,Un-Aided,Mumbai University
+3467,Vishwaniketan S Institute Of Management Entrepreneurship And Engineering Technology(I Meet) Khalapur Dist Raigad,Un-Aided,Mumbai University
+3470,Yashwantrao Bhonsale Institute Of Technology,Un-Aided,Mumbai University
+3471,New Horizon Institute Of Technology Management Thane,Un-Aided,Mumbai University
+3475,A. P. Shah Institute Of Technology Thane,Un-Aided Religious Minority - Jain,Mumbai University
+3477,Chhartrapati Shivaji Maharaj Institute Of Technology Shedung Panvel,Un-Aided,Mumbai University
+3503,Indala College Of Engineering Bapsai Tal.Kalyan,Un-Aided,Mumbai University
+3546,Devi Mahalaxmi College Of Engineering And Technology,Un-Aided,Mumbai University
+4004,Government College Of Engineering Chandrapur,Government,Gondwana University
+4025,Government College Of Engineering Nagpur,Government,Rashtrasant Tukadoji Maharaj Nagpur University
+4104,Kavi Kulguru Institute Of Technology Science Ramtek,Un-Aided,Rashtrasant Tukadoji Maharaj Nagpur University
+4116,Ankush Shikshan Sanstha S G.H.Raisoni College Of Engineering Nagpur,Un-Aided Autonomous Linguistic Minority - Hindi,Autonomous Institute
+4118,Bapurao Deshmukh College Of Engineering Sevagram,Un-Aided,Rashtrasant Tukadoji Maharaj Nagpur University
+4123,Lokmanya Tilak Jankalyan Shikshan Sanstha Priyadarshani College Of Engineering Nagpur,Un-Aided Autonomous Linguistic Minority - Hindi,Autonomous Institute
+4133,Sanmarg Shikshan Sanstha S Smt. Radhikatai Pandav College Of Engineering Nagpur,Un-Aided,Rashtrasant Tukadoji Maharaj Nagpur University
+4134,Guru Nanak Institute Of Engineering Technology Kalmeshwar Nagpur,Un-Aided,Rashtrasant Tukadoji Maharaj Nagpur University
+4135,Amar Seva Mandal S Shree Govindrao Vanjari College Of Engineering Technology Nagpur,Un-Aided,Rashtrasant Tukadoji Maharaj Nagpur University
+4136,Lokmanya Tilak Jankalyan Shikshan Sastha Priyadarshini J. L. College Of Engineering Nagpur,Un-Aided Autonomous Linguistic Minority - Hindi,Autonomous Institute
+4137,Sir Shantilal Badjate Charitable Trust S S. B. Jain Institute Of Technology Management Research Nagpur,Un-Aided Autonomous Linguistic Minority - Hindi,Autonomous Institute
+4138,Jaidev Education Society J D College Of Engineering And Management Nagpur,Un-Aided Autonomous Linguistic Minority - Hindi,Autonomous Institute
+4139,Samridhi Sarwajanik Charitable Trust Jhulelal Institute Of Technology Nagpur,Un-Aided Autonomous Linguistic Minority - Sindhi,Autonomous Institute
+4141,Shriram Gram Vikas Shikshan Sanstha Vilasrao Deshmukh College Of Engineering And Technology Nagpur,Un-Aided,Rashtrasant Tukadoji Maharaj Nagpur University
+4142,G H Raisoni College Of Engineering Management Nagpur,Un-Aided Autonomous Linguistic Minority - Hindi,Autonomous Institute
+4143,Sanmarg Shikshan Sanstha Mandukarrao Pandav College Of Engineering Bhandara,Un-Aided,Rashtrasant Tukadoji Maharaj Nagpur University
+4144,Shri. Sai Shikshan Sanstha Nagpur Institute Of Technology Nagpur,Un-Aided,Rashtrasant Tukadoji Maharaj Nagpur University
+4145,Wainganga College Of Engineering And Management Dongargaon Nagpur,Un-Aided Autonomous,Autonomous Institute
+4147,K.D.K. College Of Engineering Nagpur,Un-Aided,Rashtrasant Tukadoji Maharaj Nagpur University
+4151,Tulsiramji Gaikwad Patil College Of Engineering Technology Nagpur,Un-Aided Autonomous,Autonomous Institute
+4163,Rajiv Gandhi College Of Engineering Research Technology Chandrapur,Un-Aided,Gondwana University
+4167,Yeshwantrao Chavan College Of Engineering Wanadongri Nagpur,Un-Aided Autonomous,Autonomous Institute
+4172,Anjuman College Of Engineering Technology Nagpur,Un-Aided Religious Minority - Muslim,Rashtrasant Tukadoji Maharaj Nagpur University
+4174,St. Vincent Pallotti College Of Engineering Technology Nagpur,Un-Aided Autonomous Religious Minority - Christian,Autonomous Institute
+4175,Jmss Shri Shankarprasad Agnihotri College Of Engineering Wardha,Un-Aided,Rashtrasant Tukadoji Maharaj Nagpur University
+4177,Priyadarshini Bhagwati College Of Engineering Harpur Nagar Umred Road Nagpur,Un-Aided Linguistic Minority - Hindi,Rashtrasant Tukadoji Maharaj Nagpur University
+4181,Swaminarayan Siddhanta Institute Of Technology Nagpur,Un-Aided,Rashtrasant Tukadoji Maharaj Nagpur University
+4188,Krushi Jivan Vikas Pratishthan Ballarpur Institute Of Technology Mouza Bamni,Un-Aided,Gondwana University
+4190,M.D. Yergude Memorial Shikshan Prasarak Mandal S Shri Sai College Of Engineering Technology Bhadrawati,Un-Aided,Gondwana University
+4192,Maitraya Education Society Nagarjuna Institute Of Engineering Technology Management Nagpur,Un-Aided,Rashtrasant Tukadoji Maharaj Nagpur University
+4193,K.D.M. Education Society Vidharbha Institute Of Technology Umred Road Nagpur,Un-Aided Autonomous Linguistic Minority - Hindi,Autonomous Institute
+4196,Gurunanak Educational Society S Gurunanak Institute Of Technology Nagpur,Un-Aided,Rashtrasant Tukadoji Maharaj Nagpur University
+4197,Jai Mahakali Shikshan Sanstha Agnihotri College Of Engineering Sindhi(Meghe),Un-Aided,Rashtrasant Tukadoji Maharaj Nagpur University
+4285,V M Institute Of Engineering And Technology Dongargaon Nagpur,Un-Aided,Rashtrasant Tukadoji Maharaj Nagpur University
+4302,Gondia Education Society S Manoharbhai Patel Institute Of Engineering Technology Shahapur Bhandara,Un-Aided,Rashtrasant Tukadoji Maharaj Nagpur University
+4304,Cummins College Of Engineering For Women Sukhali (Gupchup) Tal. Hingna Hingna Nagpur,Un-Aided,Rashtrasant Tukadoji Maharaj Nagpur University
+4613,Suryodaya College Of Engineering Technology Nagpur,Un-Aided Autonomous,Autonomous Institute
+4648,R.V. Parankar College Of Engineering Technology Arvi Dist Wardha,Un-Aided,Rashtrasant Tukadoji Maharaj Nagpur University
+4649,Bajaj Institute Of Technology Wardha,Un-Aided Linguistic Minority - Hindi,Rashtrasant Tukadoji Maharaj Nagpur University
+4679,Karanjekar College Of Engineering Management Sakoli,Un-Aided,Rashtrasant Tukadoji Maharaj Nagpur University
+5003,University Institute Of Chemical Technology North Maharashtra University Jalgaon,University Department,Kavayitri Bahinabai Chaudhari North Maharashtra University Jalgaon
+5004,Government College Of Engineering Jalgaon,Government Autonomous,Autonomous Institute
+5103,Shri Shivaji Vidya Prasarak Sanstha S Late Bapusaheb Shivaji Rao Deore College Of Engineering Dhule,Un-Aided,Kavayitri Bahinabai Chaudhari North Maharashtra University Jalgaon
+5104,Shramsadhana Bombay Trust College Of Engineering Technology Jalgaon,Un-Aided,Kavayitri Bahinabai Chaudhari North Maharashtra University Jalgaon
+5106,Khandesh College Education Society S College Of Engineering And Management Jalgaon,Un-Aided,Kavayitri Bahinabai Chaudhari North Maharashtra University Jalgaon
+5108,Maratha Vidya Prasarak Samaj S Karmaveer Adv. Baburao Ganpatrao Thakare College Of Engineering Nashik,Un-Aided Autonomous,Autonomous Institute
+5109,Sandip Foundation Sandip Institute Of Technology And Research Centre Mahiravani Nashik,Un-Aided Autonomous,Autonomous Institute
+5121,K. K. Wagh Institute Of Engineering Education And Research Nashik,Un-Aided Autonomous,Autonomous Institute
+5124,Jagadamba Education Soc. Nashik S S.N.D. College Of Engineering Reserch Babulgaon,Un-Aided,Savitribai Phule Pune University
+5125,Pravara Rural Education Society S Sir Visvesvaraya Institute Of Technology Chincholi Dist. Nashik,Un-Aided,Savitribai Phule Pune University
+5130,Brahma Valley College Of Engineering Research Trimbakeshwar Nashik,Un-Aided,Savitribai Phule Pune University
+5139,Pravara Rural College Of Engineering Loni Pravaranagar Ahmednagar.,Un-Aided,Savitribai Phule Pune University
+5151,Met Bhujbal Knowledge City Met League S Engineering College Adgaon Nashik.,Un-Aided,Savitribai Phule Pune University
+5152,G H Raisoni College Of Engineering And Management Jalgaon,Un-Aided Autonomous Linguistic Minority - Hindi,Autonomous Institute
+5160,Sanjivani Rural Education Society S Sanjivani College Of Engineering Kopargaon,Un-Aided Autonomous,Autonomous Institute
+5161,Dr. Vithalrao Vikhe Patil College Of Engineering Ahmednagar,Un-Aided,Savitribai Phule Pune University
+5162,Amrutvahini Sheti Shikshan Vikas Sanstha S Amrutvahini College Of Engineering Sangamner,Un-Aided,Savitribai Phule Pune University
+5164,P.S.G.V.P. Mandal S D.N. Patel College Of Engineering Shahada Dist. Nandurbar,Un-Aided Linguistic Minority - Gujar,Kavayitri Bahinabai Chaudhari North Maharashtra University Jalgaon
+5168,T.M.E. Society S J.T.Mahajan College Of Engineering Faizpur,Un-Aided,Kavayitri Bahinabai Chaudhari North Maharashtra University Jalgaon
+5169,Nagaon Education Society S Gangamai College Of Engineering Nagaon Tal Dist Dhule,Un-Aided,Kavayitri Bahinabai Chaudhari North Maharashtra University Jalgaon
+5170,Hindi Seva Mandal S Shri Sant Gadgebaba College Of Engineering Technology Bhusawal,Un-Aided Linguistic Minority - Hindi,Kavayitri Bahinabai Chaudhari North Maharashtra University Jalgaon
+5171,Godavari Foundation S Godavari College Of Engineering Jalgaon,Un-Aided,Kavayitri Bahinabai Chaudhari North Maharashtra University Jalgaon
+5172,R. C. Patel Institute Of Technology Shirpur,Un-Aided Autonomous Linguistic Minority - Gujarathi,Autonomous Institute
+5173,Snjb S Late Sau. Kantabai Bhavarlalji Jain College Of Engineering (Jain Gurukul) Neminagar Chandwad (Nashik),Un-Aided Autonomous Religious Minority - Jain,Autonomous Institute
+5177,Matoshri College Of Engineering And Research Centre Eklahare Nashik,Un-Aided Autonomous,Autonomous Institute
+5179,Vishwabharati Academy S College Of Engineering Ahmednagar,Un-Aided,Savitribai Phule Pune University
+5181,Gokhale Education Society S R.H. Sapat College Of Engineering Management Studies And Research Nashik,Un-Aided,Savitribai Phule Pune University
+5182,Kalyani Charitable Trust Late Gambhirrao Natuba Sapkal College Of Engineering Anjaneri Trimbakeshwar Road Nashik,Un-Aided,Savitribai Phule Pune University
+5184,Amruta Vaishnavi Education Welfare Trust S Shatabdi Institute Of Engineering Research Agaskhind Tal. Sinnar,Un-Aided Religious Minority - Christian,Savitribai Phule Pune University
+5244,Met S Institute Of Technology Polytechnic Bhujbal Knowledge City Adgaon Nashik,Un-Aided,Savitribai Phule Pune University
+5256,Matoshri Education Soceity Matoshri Asarabai Polytechnic Nashik,Un-Aided,Savitribai Phule Pune University
+5263,Matoshri Education Soceity Matoshri Institute Of Technology Dhanore Nashik,Un-Aided,Savitribai Phule Pune University
+5303,Hon. Shri. Babanrao Pachpute Vichardhara Trust Group Of Institutions (Integrated Campus)-Parikrama Kashti Shrigondha,Un-Aided,Savitribai Phule Pune University
+5322,Jamia Institute Of Engineering And Management Studies Akkalkuwa,Un-Aided Religious Minority - Muslim,Kavayitri Bahinabai Chaudhari North Maharashtra University Jalgaon
+5330,Pune Vidyarthi Griha S College Of Engineering Shrikrushna S. Dhamankar Institute Of Management Nashik,Un-Aided,Savitribai Phule Pune University
+5331,Sandip Foundation S Sandip Institute Of Engineering Management Nashik,Un-Aided,Savitribai Phule Pune University
+5365,Vardhaman Education Welfare Society Ahinsa Institute Of Technology Post. Dondaicha Dhule,Un-Aided Religious Minority - Jain,Kavayitri Bahinabai Chaudhari North Maharashtra University Jalgaon
+5370,Kedareshwar Gramin Vikas Pratishthan Samajbhushan Eknathrao Dhakane College Of Engineering Shevgaon,Un-Aided,Savitribai Phule Pune University
+5380,Adsul S Technical Campus Chas Dist. Ahmednagar,Un-Aided,Savitribai Phule Pune University
+5381,Shri. Jaykumar Rawal Institute Of Technology Dondaicha.,Un-Aided,Kavayitri Bahinabai Chaudhari North Maharashtra University Jalgaon
+5382,Ahmednagar Jilha Maratha Vidya Prasarak Samajache Shri. Chhatrapati Shivaji Maharaj College Of Engineering Nepti,Un-Aided,Savitribai Phule Pune University
+5390,K.V.N. Naik S. P. Sansth S Loknete Gopinathji Munde Institute Of Engineering Education Research Nashik.,Un-Aided,Savitribai Phule Pune University
+5396,College Of Engineering And Technology North Maharashtra Knowledge City Jalgaon,Un-Aided,Kavayitri Bahinabai Chaudhari North Maharashtra University Jalgaon
+5399,Sanghavi College Of Engineering Varvandi Nashik.,Un-Aided,Savitribai Phule Pune University
+5401,Jawahar Education Society S Institute Of Technology Management Research Nashik.,Un-Aided,Savitribai Phule Pune University
+5408,Vidya Niketan College Of Engineering Bota Sangamner,Un-Aided,Savitribai Phule Pune University
+5409,Rajiv Gandhi College Of Engineering At Post Karjule Hariya Tal.Parner Dist.Ahmednagar,Un-Aided,Savitribai Phule Pune University
+5411,Maulana Mukhtar Ahmad Nadvi Technical Campus Malegaon.,Un-Aided Religious Minority - Muslim,Savitribai Phule Pune University
+5418,Guru Gobind Singh College Of Engineering Research Centre Nashik.,Un-Aided,Savitribai Phule Pune University
+5433,R.C. Patel College Of Engineering And Polytechnic Shirpur,Un-Aided Linguistic Minority - Gujarathi,Kavayitri Bahinabai Chaudhari North Maharashtra University Jalgaon
+5449,Shri Vile Parle Kelavani Mandal S Institute Of Technology Dhule,Un-Aided Linguistic Minority - Gujarathi,Kavayitri Bahinabai Chaudhari North Maharashtra University Jalgaon
+5497,P.G. College Of Engineering Technology Nandurbar,Un-Aided,Kavayitri Bahinabai Chaudhari North Maharashtra University Jalgaon
+5509,Shri Swami Samarth Institute Of Management And Technology Malwadi-Bota,Un-Aided,Savitribai Phule Pune University
+5513,Mkd Institute Of Technology Nadurbar,Un-Aided,Kavayitri Bahinabai Chaudhari North Maharashtra University Jalgaon
+6004,Government College Of Engineering Research Avasari Khurd,Government,Savitribai Phule Pune University
+6005,Government College Of Engineering Karad,Government Autonomous,Autonomous Institute
+6007,Walchand College Of Engineering Sangli,Government-Aided Autonomous,Autonomous Institute
+6028,Department Of Technology Shivaji University Kolhapur,University Department,Shivaji University
+6036,Government College Of Engineering Kolhapur,Government,Shivaji University
+6122,Tssms S Pd. Vasantdada Patil Institute Of Technology Bavdhan Pune,Un-Aided,Savitribai Phule Pune University
+6138,Genba Sopanrao Moze Trust Parvatibai Genba Moze College Of Engineering Wagholi Pune,Un-Aided,Savitribai Phule Pune University
+6139,Progressive Education Society S Modern College Of Engineering Pune,Un-Aided Autonomous,Autonomous Institute
+6141,Jaywant Shikshan Prasarak Mandal S Rajarshi Shahu College Of Engineering Tathawade Pune,Un-Aided Autonomous,Autonomous Institute
+6144,Genba Sopanrao Moze College Of Engineering Baner-Balewadi Pune,Un-Aided,Savitribai Phule Pune University
+6145,Jspm S Jaywantrao Sawant College Of Engineering Pune,Un-Aided,Savitribai Phule Pune University
+6146,Mit Academy Of Engineering Alandi Pune,Un-Aided Autonomous,Autonomous Institute
+6149,Siddhant College Of Engineering A P Sudumbare Tal.Maval Dist-Pune,Un-Aided Linguistic Minority - Hindi,Savitribai Phule Pune University
+6155,G.H.Raisoni College Of Engineering Management Wagholi Pune,Un-Aided Autonomous Linguistic Minority - Hindi,Autonomous Institute
+6156,Marathwada Mitra Mandal S College Of Engineering Karvenagar Pune,Un-Aided Autonomous,Autonomous Institute
+6175,Pimpri Chinchwad Education Trust Pimpri Chinchwad College Of Engineering Pune,Un-Aided Autonomous,Autonomous Institute
+6177,Sinhgad College Of Engineering Vadgaon (Bk) Pune,Un-Aided,Savitribai Phule Pune University
+6178,Sinhgad Technical Education Society S Smt. Kashibai Navale College Of Engineering Vadgaon Pune,Un-Aided,Savitribai Phule Pune University
+6179,Indira College Of Engineering Management Pune,Un-Aided Autonomous,Autonomous Institute
+6182,Sinhgad Technical Education Society Sinhgad Institute Of Technology And Science Narhe (Ambegaon),Un-Aided,Savitribai Phule Pune University
+6183,Al-Ameen Educational And Medical Foundation College Of Engineering Koregaon Bhima,Un-Aided Religious Minority - Muslim,Savitribai Phule Pune University
+6184,K. J. S Educational Institut Trinity College Of Engineering And Research Pisoli Haveli,Un-Aided,Savitribai Phule Pune University
+6185,Sinhgad Institute Of Technology,Un-Aided,Savitribai Phule Pune University
+6187,Sinhgad Academy Of Engineering Kondhwa (Bk) Kondhwa-Saswad Road Pune,Un-Aided,Savitribai Phule Pune University
+6203,Marathwada Mitra Mandal S Institute Of Technology Lohgaon Pune,Un-Aided,Savitribai Phule Pune University
+6206,Pune District Education Association S College Of Engineering Manjari(Bk) Hadapsar Pune,Un-Aided,Savitribai Phule Pune University
+6207,Dr. D. Y. Patil Unitech Society S Dr. D. Y. Patil Institute Of Technology Pimpri Pune,Un-Aided,Savitribai Phule Pune University
+6214,K. E. Society S Rajarambapu Institute Of Technology Walwa Sangli,Un-Aided Autonomous,Autonomous Institute
+6217,Shri. Balasaheb Mane Shikshan Prasarak Mandal S Ashokrao Mane Group Of Institutions,Un-Aided,Shivaji University
+6219,Ksgbs S Bharat- Ratna Indira Gandhi College Of Engineering Kegaon Solapur,Un-Aided,Punyashlok Ahilyadevi Holkar Solapur University
+6220,Shri Vithal Education And Research Institute S College Of Engineering Pandharpur,Un-Aided Autonomous,Autonomous Institute
+6222,Dattajirao Kadam Technical Education Society S Textile Engineering Institute Ichalkaranji.,Un-Aided Autonomous,Autonomous Institute
+6223,Pradnya Niketan Education Society S Nagesh Karajagi Orchid College Of Engineering Technology Solapur,Un-Aided Autonomous,Autonomous Institute
+6250,D.Y. Patil College Of Engineering And Technology Kolhapur,Un-Aided Autonomous,Autonomous Institute
+6265,Walchand Institute Of Technology Solapur,Un-Aided Autonomous Religious Minority - Jain,Autonomous Institute
+6267,Kolhapur Institute Of Technology S College Of Engineering(Autonomous) Kolhapur,Un-Aided Autonomous,Autonomous Institute
+6268,Tatyasaheb Kore Institute Of Engineering And Technology Warananagar,Un-Aided Autonomous,Autonomous Institute
+6269,Shetkari Shikshan Mandal S Pad. Vasantraodada Patil Institute Of Technology Budhgaon Sangli,Un-Aided,Shivaji University
+6270,Rayat Shikshan Sanstha S Karmaveer Bhaurao Patil College Of Engineering Satara,Un-Aided,Shivaji University
+6271,Pune Institute Of Computer Technology,Un-Aided Autonomous,Autonomous Institute
+6272,Dr. D. Y. Patil Pratishthan S D.Y.Patil College Of Engineering Akurdi Pune,Un-Aided Autonomous,Autonomous Institute
+6273,Bansilal Ramnath Agarawal Charitable Trust S Vishwakarma Institute Of Technology Bibwewadi Pune,Un-Aided Autonomous,Autonomous Institute
+6274,Pune Vidyarthi Griha S College Of Engineering And Technology And G K Pate(Wani) Institute Of Management Pune,Un-Aided,Savitribai Phule Pune University
+6275,Shivnagar Vidya Prasarak Mandal S College Of Engineering Malegaon-Baramati,Un-Aided,Savitribai Phule Pune University
+6276,Mksss S Cummins College Of Engineering For Women Karvenagar Pune,Un-Aided Autonomous,Autonomous Institute
+6277,Dr. J. J. Magdum Charitable Trust S Dr. J.J. Magdum College Of Engineering Jaysingpur,Un-Aided Autonomous,Autonomous Institute
+6278,All India Shri Shivaji Memorial Society S College Of Engineering Pune,Un-Aided,Savitribai Phule Pune University
+6281,Modern Education Society S Wadia College Of Engineering Pune,Un-Aided,Savitribai Phule Pune University
+6282,All India Shri Shivaji Memorial Society S Institute Of Information Technology Pune,Un-Aided Autonomous,Autonomous Institute
+6283,Annasaheb Dange College Of Engineering And Technology Ashta Sangli,Un-Aided Autonomous,Autonomous Institute
+6284,Vidya Pratishthan S Kamalnayan Bajaj Institute Of Engineering Technology Baramati Dist.Pune,Un-Aided Autonomous,Autonomous Institute
+6285,Bharati Vidyapeeth S College Of Engineering For Women Katraj Dhankawadi Pune,Un-Aided,Savitribai Phule Pune University
+6288,Bharati Vidyapeeth S College Of Engineering Kolhapur,Un-Aided,Shivaji University
+6293,Kai Amdar Bramhadevdada Mane Shikshan Samajik Prathistan S Bramhadevdada Mane Institute Of Technology Solapur,Un-Aided,Punyashlok Ahilyadevi Holkar Solapur University
+6298,Zeal Education Society S Zeal College Of Engineering Reserch Narhe Pune,Un-Aided Autonomous,Autonomous Institute
+6303,Dr. Ashok Gujar Technical Institute S Dr. Daulatrao Aher College Of Engineering Karad,Un-Aided,Shivaji University
+6304,Loknete Hanumantrao Charitable Trust S Adarsh Institute Of Technology And Research Centre Vita Sangli,Un-Aided,Shivaji University
+6305,Late Narayandas Bhawandas Chhabada Institute Of Engineering Technology Satara,Un-Aided,Shivaji University
+6307,Dhole Patil Education Society Dhole Patil College Of Engineering Wagholi Tal. Haveli,Un-Aided,Savitribai Phule Pune University
+6308,Shanti Education Society A.G. Patil Institute Of Technology Soregaon Solapur(North),Un-Aided,Punyashlok Ahilyadevi Holkar Solapur University
+6310,Nutan Maharashtra Vidya Prasarak Mandal Nutan Maharashtra Institute Of Engineering Technology Talegaon Station Pune,Un-Aided,Savitribai Phule Pune University
+6311,Jayawant Shikshan Prasarak Mandal Bhivarabai Sawant Institute Of Technology Research Wagholi,Un-Aided,Savitribai Phule Pune University
+6313,Jaywant College Of Engineering Polytechnic Kille Macchindragad Tal. Walva District- Sangali,Un-Aided,Shivaji University
+6315,Sanjeevan Group Of Institutions,Un-Aided,Shivaji University
+6317,Sharad Institute Of Technology College Of Engineering Yadrav(Ichalkaranji),Un-Aided Autonomous,Autonomous Institute
+6318,Abhinav Education Society S College Of Engineering And Technology (Degree) Wadwadi,Un-Aided,Shivaji University
+6319,Shahajirao Patil Vikas Pratishthan S.B.Patil College Of Engineering Vangali Tal. Indapur,Un-Aided,Savitribai Phule Pune University
+6320,K.J. S Educational Institute S K.J.College Of Engineering Management Research Pisoli,Un-Aided,Savitribai Phule Pune University
+6321,Vidya Vikas Pratishthan Institute Of Engineering And Technology Solapur,Un-Aided,Punyashlok Ahilyadevi Holkar Solapur University
+6322,Shree Gajanan Maharaj Shikshan Prasarak Manda L Sharadchandra Pawar College Of Engineering Dumbarwadi,Un-Aided,Savitribai Phule Pune University
+6324,Rajgad Dnyanpeeth S Shri Chhatrapati Shivajiraje College Of Engineering Bhor,Un-Aided,Savitribai Phule Pune University
+6325,Alard Charitable Trust S Alard College Of Engineering And Management Pune,Un-Aided Linguistic Minority - Hindi,Savitribai Phule Pune University
+6326,Karmayogi Institute Of Technology,Un-Aided,Punyashlok Ahilyadevi Holkar Solapur University
+6402,New Institute Of Technology Kolhapur,Un-Aided,Shivaji University
+6444,Shriram Institute Of Engineering Technology (Poly) Paniv,Un-Aided,Punyashlok Ahilyadevi Holkar Solapur University
+6466,Shree Santkrupa Shikshan Sanstha Shree Santkrupa Institute Of Engineering Technology Karad,Un-Aided,Shivaji University
+6468,Swami Vivekananda Shikshan Sanstha Dr. Bapuji Salunkhe Institute Of Engineering Technology Kolhapur,Un-Aided,Shivaji University
+6545,Samarth Education Trust S Arvind Gavali College Of Engineering Panwalewadi Varye Satara.,Un-Aided,Shivaji University
+6609,Jaihind College Of Engineering Kuran,Un-Aided,Savitribai Phule Pune University
+6622,Isbm College Of Engineering Pune,Un-Aided Linguistic Minority - Hindi,Savitribai Phule Pune University
+6628,Dattakala Group Of Institutions Swami - Chincholi Tal. Daund Dist. Pune,Un-Aided,Savitribai Phule Pune University
+6632,Navsahyadri Education Society S Group Of Institutions,Un-Aided,Savitribai Phule Pune University
+6634,Kjei S Trinity Academy Of Engineering Yewalewadi Pune,Un-Aided,Savitribai Phule Pune University
+6635,Samarth College Of Engineering And Management,Un-Aided,Savitribai Phule Pune University
+6640,N. B. Navale Sinhgad College Of Engineering Kegaon Solapur,Un-Aided,Punyashlok Ahilyadevi Holkar Solapur University
+6643,S K N Sinhgad College Of Engineering Korti Tal. Pandharpur Dist Solapur,Un-Aided,Punyashlok Ahilyadevi Holkar Solapur University
+6644,Shri. Ambabai Talim Sanstha S Sanjay Bhokare Group Of Institutes Miraj,Un-Aided,Shivaji University
+6649,Tssm S Bhivarabai Sawant College Of Engineering And Research Narhe Pune,Un-Aided,Savitribai Phule Pune University
+6714,Appasaheb Alias Sa.Re.Patil Institute Of Technology Dattanagar Tal-Shirol Dist Kolhapur,Un-Aided,Shivaji University
+6732,Ajeenkya Dy Patil School Of Engineering Lohegaon Pune,Un-Aided,Savitribai Phule Pune University
+6754,International Institute Of Information Technology (I²It) Pune.,Un-Aided,Savitribai Phule Pune University
+6755,Jspm Narhe Technical Campus Pune.,Un-Aided,Savitribai Phule Pune University
+6756,Fabtech Technical Campus College Of Engineering And Research Sangola,Un-Aided,Punyashlok Ahilyadevi Holkar Solapur University
+6757,Yashoda Technical Campus Wadhe Satara.,Un-Aided,Shivaji University
+6758,Sahyadri Valley College Of Engineering Technology Rajuri Pune.,Un-Aided,Savitribai Phule Pune University
+6759,Shree Ramchandra College Of Engineering Lonikand Pune,Un-Aided,Savitribai Phule Pune University
+6762,Nanasaheb Mahadik College Of Engineering Walwa Sangli.,Un-Aided,Shivaji University
+6766,Phaltan Education Society S College Of Engineering Thakurki Tal- Phaltan Dist-Satara,Un-Aided,Shivaji University
+6767,Suman Ramesh Tulsiani Technical Campus: Faculty Of Engineering Kamshet Pune.,Un-Aided,Savitribai Phule Pune University
+6768,P.K. Technical Campus Pune.,Un-Aided,Savitribai Phule Pune University
+6769,Rasiklal M. Dhariwal Sinhgad Technical Institutes Campus Warje Pune.,Un-Aided,Savitribai Phule Pune University
+6770,Skn Sinhgad Institute Of Technology Science Kusgaon(Bk) Pune.,Un-Aided,Savitribai Phule Pune University
+6771,Flora Institute Of Technology Khopi Near Khed Shivapur Toll Plaza Pune,Un-Aided,Savitribai Phule Pune University
+6772,Nbn Sinhgad Technical Institutes Campus Pune,Un-Aided,Savitribai Phule Pune University
+6780,D.Y.Patil Education Society S D.Y.Patil Technical Campus Faculty Of Engineering Faculty Of Management Talsande Kolhapur.,Un-Aided Autonomous,Autonomous Institute
+6781,Bhagwant Institute Of Technology Barshi,Un-Aided,Punyashlok Ahilyadevi Holkar Solapur University
+6782,Sahakar Maharshee Shankarrao Mohite Patil Institute Of Technology Research Akluj,Un-Aided,Punyashlok Ahilyadevi Holkar Solapur University
+6794,Anantrao Pawar College Of Engineering Research Pune,Un-Aided,Savitribai Phule Pune University
+6795,Shri.Someshwar Shikshan Prasarak Mandal Sharadchandra Pawar College Of Engineering Technology Someshwar Nagar,Un-Aided,Savitribai Phule Pune University
+6796,Bharati Vidyapeeth S College Of Engineering Lavale Pune,Un-Aided,Savitribai Phule Pune University
+6797,Dnyanshree Institute Engineering And Technology Satara,Un-Aided,Shivaji University
+6799,Shivganga Charitable Trust Sangli Vishveshwarya Technical Campus Faculty Of Diploma Engineering Patgaon Miraj,Un-Aided,Shivaji University
+6803,Sant Gajanan Maharaj College Of Engineering Gadhinglaj,Un-Aided,Shivaji University
+6808,Keystone School Of Engineering Pune,Un-Aided,Savitribai Phule Pune University
+6811,Sanjay Ghodawat Institute,Un-Aided,Shivaji University
+6815,Vidya Prasarini Sabha S College Of Engineering Technology Lonavala,Un-Aided,Savitribai Phule Pune University
+6822,Pimpri Chinchwad Education Trust S Pimpri Chinchwad College Of Engineering And Research Ravet,Un-Aided,Savitribai Phule Pune University
+6834,Dr.D.Y.Patil College Of Engineering Innovation Talegaon,Un-Aided,Savitribai Phule Pune University
+6839,Dr. D Y Patil Pratishthan S College Of Engineering Kolhapur,Un-Aided,Shivaji University
+6878,Dr. A. D. Shinde College Of Engineering Tal.Gadhinglaj Kolhapur,Un-Aided,Shivaji University
+6901,Maeer S Mit College Of Railway Engineering And Research Jamgaon Barshi,Un-Aided,Punyashlok Ahilyadevi Holkar Solapur University
+6938,Shree Siddheshwar Women S College Of Engineering Solapur.,Un-Aided,Punyashlok Ahilyadevi Holkar Solapur University
+6991,Dr. D.Y. Patil Technical Campus Varale Talegaon Pune,Un-Aided,Savitribai Phule Pune University
+14005,Laxminarayan Innovation Technological University Nagpur,University Autonomous,Autonomous Institute
+16006,Coep Technological University,University Autonomous,Autonomous Institute
+16121,Shri. Anandrao Abitkar College Of Engineering Pal,Un-Aided,Shivaji University
+16126,Tatyasaheb Kore Institute Of Engineering And Technology Yelur,Un-Aided Autonomous,Autonomous Institute
+02758,Sant Eknath College of Engineering,Un-Aided,Dr. Babasaheb Ambedkar Marathwada University
+04703,Somayya Institute of Technology Chandrapur,Un-Aided,Gondwana University
+05545,Shri. Vile Parle Kelwani Mandal's College of Engineering Shirpur,Un-Aided Linguistic Minority - Gujarathi,Kavayitri Bahinabai Chaudhari North Maharashtra University Jalgaon
+06625,Universal College of Engineering & Research Sasewadi,Un-Aided
+05249,Trimurti Shikshan Prasarak Mandal Trimurti Institute Of Technology Paladhi Bk Jalgaon,Un-Aided,Kavayitri Bahinabai Chaudhari North Maharashtra University Jalgaon

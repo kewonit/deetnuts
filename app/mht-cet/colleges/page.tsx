@@ -7,7 +7,7 @@ export default async function CollegesPage() {
 
   return (
     <div className="min-h-screen bg-bg">
-      <div className="container mx-auto px-4 pt-32 pb-12">
+      <div className="max-w-full md:max-w-7xl mx-auto px-4 pt-32 pb-12">
         {/* Breadcrumb */}
         <nav className="mb-8">
           <div className="flex items-center space-x-2 text-sm font-base">

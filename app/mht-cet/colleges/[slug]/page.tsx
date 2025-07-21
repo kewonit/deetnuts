@@ -1,16 +1,18 @@
 import Link from 'next/link';
 import { parseCollegeSlug } from '@/lib/slugify';
 import SeatMatrix from '@/components/SeatMatrix';
+import CutoffsTable from '@/components/CutoffsTable';
 import { Suspense } from 'react';
+import { notFound } from 'next/navigation';
 
-async function getCollege(slug: string) {
+async function getCollege(id: string) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/mht-cet/colleges/${slug}`, { next: { revalidate: 3600 } });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/mht-cet/colleges/${id}`, { next: { revalidate: 3600 } });
     if (!res.ok) {
       if (res.status === 404) {
         return null; // Return null instead of throwing notFound
       }
-      throw new Error(`Failed to fetch college data for slug: ${slug}. Status: ${res.status}`);
+      throw new Error(`Failed to fetch college data for id: ${id}. Status: ${res.status}`);
     }
     return res.json();
   } catch (error) {
@@ -19,14 +21,14 @@ async function getCollege(slug: string) {
   }
 }
 
-async function getSeatMatrix(slug: string) {
+async function getSeatMatrix(id: string) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/mht-cet/colleges/${slug}/seat-matrix`, { next: { revalidate: 3600 } });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/mht-cet/colleges/${id}/seat-matrix`, { next: { revalidate: 3600 } });
     if (!res.ok) {
       if (res.status === 404) {
         return { seatMatrix: [], matchInfo: null };
       }
-      throw new Error(`Failed to fetch seat matrix data for slug: ${slug}`);
+      throw new Error(`Failed to fetch seat matrix data for id: ${id}`);
     }
     return res.json();
   } catch (error) {
@@ -35,9 +37,33 @@ async function getSeatMatrix(slug: string) {
   }
 }
 
-export async function generateMetadata({ params }: any) {
-  const resolvedParams = await params;
-  const college = await getCollege(resolvedParams.id);
+async function getCutoffs(id: string) {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/mht-cet/colleges/${id}/cutoffs`, { next: { revalidate: 3600 } });
+    if (!res.ok) {
+      if (res.status === 404) {
+        return { cutoffs: [] };
+      }
+      throw new Error(`Failed to fetch cutoffs data for id: ${id}`);
+    }
+    return res.json();
+  } catch (error) {
+    console.error('Error fetching cutoffs:', error);
+    return { cutoffs: [] };
+  }
+}
+
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
+  const { slug } = params;
+  const { id } = parseCollegeSlug(slug);
+  if (!id) {
+    return {
+      title: 'College Not Found',
+      description: 'The college you are looking for could not be found.',
+    };
+  }
+  const college = await getCollege(id);
 
   if (!college) {
     return {
@@ -57,7 +83,7 @@ export async function generateMetadata({ params }: any) {
     openGraph: {
       title,
       description,
-      url: `${process.env.NEXT_PUBLIC_APP_URL}/mht-cet/colleges/${resolvedParams.id}`,
+      url: `${process.env.NEXT_PUBLIC_APP_URL}/mht-cet/colleges/${slug}`,
       siteName: 'DeetNuts',
       images: [
         {
@@ -75,25 +101,35 @@ export async function generateMetadata({ params }: any) {
 
 import CollegeJsonLd from '@/components/CollegeJsonLd';
 
-export default async function CollegePage({ params }: any) {
-  const resolvedParams = await params;
+export default async function CollegePage(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
+  const { slug } = params;
+  const { id } = parseCollegeSlug(slug);
+
+  if (!id) {
+    notFound();
+  }
 
   let college;
   let seatMatrix;
+  let cutoffs;
   let collegeError = null;
   let seatMatrixError = null;
+  let cutoffsError = null;
 
   try {
-    college = await getCollege(resolvedParams.id);
+    [college, seatMatrix, cutoffs] = await Promise.all([
+      getCollege(id),
+      getSeatMatrix(id),
+      getCutoffs(id),
+    ]);
   } catch (error: any) {
-    collegeError = error.message;
-    // Don't throw here, let the component handle the error state
-  }
-
-  try {
-    seatMatrix = await getSeatMatrix(resolvedParams.id);
-  } catch (error: any) {
-    seatMatrixError = error.message;
+    // Handle errors for all promises, or individual errors if needed
+    console.error("Error fetching data in parallel:", error);
+    // For now, we'll set a generic error and let individual components handle their missing data
+    collegeError = "Failed to load college data.";
+    seatMatrixError = "Failed to load seat matrix data.";
+    cutoffsError = "Failed to load cutoffs data.";
   }
 
   // If we don't have college data, render an error state instead of calling notFound()
@@ -209,15 +245,30 @@ export default async function CollegePage({ params }: any) {
         </div>
 
         {/* Seat Matrix Section */}
-        <Suspense fallback={<SeatMatrix data={[]} isLoading={true} />}>
-          <div className="space-y-6">
-            <SeatMatrix
-              data={seatMatrix?.seatMatrix || []}
-              error={seatMatrixError}
-              isLoading={false}
-            />
-          </div>
-        </Suspense>
+        <div className="mb-12">
+          <Suspense fallback={<SeatMatrix data={[]} isLoading={true} />}>
+            <div className="space-y-6">
+              <SeatMatrix
+                data={seatMatrix?.seatMatrix || []}
+                error={seatMatrixError}
+                isLoading={false}
+              />
+            </div>
+          </Suspense>
+        </div>
+
+        {/* Cutoffs Section */}
+        <div>
+          <Suspense fallback={<CutoffsTable data={[]} isLoading={true} />}>
+            <div className="space-y-6">
+              <CutoffsTable
+                data={cutoffs?.cutoffs || []}
+                error={cutoffsError}
+                isLoading={false}
+              />
+            </div>
+          </Suspense>
+        </div>
       </div>
     </div>
   );

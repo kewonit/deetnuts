@@ -9,7 +9,7 @@ export function slugify(text: string): string {
 
 // Function to normalize college codes for comparison (pad with leading zeros)
 export function normalizeCollegeCode(code: string | number): string {
-    return String(code).padStart(4, '0');
+    return String(code).padStart(5, '0');
 }
 
 export function createCollegeSlug(collegeName: string, collegeId: string): string {
