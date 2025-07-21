@@ -346,11 +346,15 @@ page_number,college_code,college_name,choice_code,course_name,SI,MS_seats,minori
 345,06005,"Government College of Engineering, Karad",0600537210,Electronics and Telecommunication Engg,60,60,0,0,0,1,60,State_Level,15,7,5,3,2,2,2,0,1,0,1,1,1,0,7,2,4,2,55,2,1,2,1,6,0600537211T,3
 346,06005,"Government College of Engineering, Karad",0600561210,Mechanical Engineering,60,60,0,0,0,1,60,State_Level,16,6,6,2,3,1,1,1,1,0,2,0,0,1,6,3,4,2,55,2,1,2,1,6,0600561211T,3
 347,06007,"Walchand College of Engineering, Sangli",0600719110,Civil Engineering,60,59,0,0,1,1,59,State_Level,15,6,5,2,3,1,2,0,1,1,2,1,1,0,6,3,4,1,54,2,1,2,1,6,0600719111T,3
+348,06007,"Walchand College of Engineering, Sangli",0600721970U,Robotics and Automation,60,51,0,9,0,1,60,State_Level,12,6,5,2,2,1,0,1,1,0,1,1,1,0,6,2,3,2,46,2,1,2,1,6,0600721971UT,3
 349,06007,"Walchand College of Engineering, Sangli",0600724210,Computer Science and Engineering,90,86,0,0,4,1,86,State_Level,21,9,6,3,4,2,2,1,1,1,2,1,1,1,10,4,6,2,77,4,0,4,0,9,0600724211T,5
+350,06007,"Walchand College of Engineering, Sangli",0600724270U,Computer Science and Engineering,90,76,0,14,0,1,90,State_Level,18,8,5,2,4,2,2,0,2,0,3,0,1,0,8,4,5,3,67,4,0,4,0,9,0600724271UT,5
 351,06007,"Walchand College of Engineering, Sangli",0600724610,Information Technology,60,59,0,0,1,1,59,State_Level,15,6,6,2,3,1,1,1,0,1,1,1,1,0,6,3,4,2,54,2,1,2,1,6,0600724611T,3
+352,06007,"Walchand College of Engineering, Sangli",0600724670U,Information Technology,60,51,0,9,0,1,60,State_Level,13,5,4,3,2,1,1,0,2,0,1,1,0,1,5,2,4,1,46,2,1,2,1,6,0600724671UT,3
 353,06007,"Walchand College of Engineering, Sangli",0600729310,Electrical Engineering,60,60,0,0,0,1,60,State_Level,15,7,6,2,3,1,1,1,0,1,2,0,1,0,7,2,4,2,55,2,1,2,1,6,0600729311T,3
 354,06007,"Walchand College of Engineering, Sangli",0600737610,Electronics Engineering,60,60,0,0,0,1,60,State_Level,15,6,5,2,4,1,2,0,2,0,1,1,1,0,6,3,4,2,55,2,1,2,1,6,0600737611T,3
 355,06007,"Walchand College of Engineering, Sangli",0600761210,Mechanical Engineering,60,59,0,0,1,1,59,State_Level,14,7,6,2,2,2,1,1,0,1,2,0,0,1,6,3,5,1,54,2,1,2,1,6,0600761211T,3
+356,06007,"Walchand College of Engineering, Sangli",0600792170U,Artificial Intelligence and Machine Learning,60,51,0,9,0,1,60,State_Level,13,5,4,2,3,1,1,0,2,0,1,1,1,0,5,2,3,2,46,2,1,2,1,6,0600792171UT,3
 357,06139,"Progressive Education Society's Modern College of Engineering, Pune",0613924510,Computer Engineering,180,117,0,27,36,1,144,State_Level,29,13,9,4,6,2,3,1,2,1,3,1,1,1,14,6,7,3,106,5,1,5,1,18,0613924511T,9
 358,06139,"Progressive Education Society's Modern College of Engineering, Pune",0613924610,Information Technology,120,78,0,18,24,1,96,State_Level,19,8,5,3,4,2,1,1,1,1,1,1,2,0,9,4,5,2,69,4,0,4,0,12,0613924611T,6
 359,06139,"Progressive Education Society's Modern College of Engineering, Pune",0613929310,Electrical Engineering,120,102,0,18,0,1,120,State_Level,26,11,8,3,5,2,2,1,2,0,3,1,1,1,12,5,6,2,91,5,0,5,0,12,0613929311T,6
@@ -394,6 +398,7 @@ page_number,college_code,college_name,choice_code,course_name,SI,MS_seats,minori
 397,06156,"Marathwada Mitra Mandal's College of Engineering, Karvenagar, Pune",0615699510,Artificial Intelligence and Data Science,120,78,0,18,24,1,96,State_Level,18,9,5,3,3,2,1,1,1,1,2,1,1,1,9,4,5,2,69,4,0,4,0,12,0615699511T,6
 398,06175,"Pimpri Chinchwad Education Trust, Pimpri Chinchwad College of Engineering, Pune",0617519110,Civil Engineering,60,39,0,9,12,0,48,State_Level,10,4,4,1,3,0,1,0,1,0,0,1,1,0,5,2,3,1,37,1,1,1,1,6,0617519111T,3
 399,06175,"Pimpri Chinchwad Education Trust, Pimpri Chinchwad College of Engineering, Pune",0617524510,Computer Engineering,240,156,0,36,48,2,192,State_Level,39,16,12,6,7,4,3,2,3,1,5,1,2,1,17,8,9,4,140,7,1,7,1,24,0617524511T,12
+400,06175,"Pimpri Chinchwad Education Trust, Pimpri Chinchwad College of Engineering, Pune",0617524590L,Computer Engineering,60,39,0,9,12,0,48,State_Level,10,4,4,1,2,1,1,0,0,1,0,1,1,0,5,2,3,1,37,1,1,1,1,6,0617524591LT,3
 401,06175,"Pimpri Chinchwad Education Trust, Pimpri Chinchwad College of Engineering, Pune",0617524610,Information Technology,120,78,0,18,24,1,96,State_Level,18,9,5,3,5,1,1,1,2,0,2,0,1,1,9,4,5,2,69,4,0,4,0,12,0617524611T,6
 402,06175,"Pimpri Chinchwad Education Trust, Pimpri Chinchwad College of Engineering, Pune",0617537210,Electronics and Telecommunication Engg,180,117,0,27,36,1,144,State_Level,31,12,10,3,5,3,3,1,1,1,2,2,2,0,14,6,7,3,106,5,1,5,1,18,0617537211T,9
 403,06175,"Pimpri Chinchwad Education Trust, Pimpri Chinchwad College of Engineering, Pune",0617561210,Mechanical Engineering,180,117,0,27,36,1,144,State_Level,29,13,9,4,6,2,3,1,2,1,4,1,1,1,14,6,6,3,106,5,1,5,1,18,0617561211T,9
@@ -488,6 +493,11 @@ page_number,college_code,college_name,choice_code,course_name,SI,MS_seats,minori
 492,06273,"Bansilal Ramnath Agarawal Charitable Trust's Vishwakarma Institute of Technology, Bibwewadi, Pune",0627392010,Computer Science and Engineering (Internet of,180,117,0,27,36,1,144,State_Level,30,12,9,4,7,2,3,1,2,1,3,1,2,0,14,6,7,2,106,5,1,5,1,18,0627392011T,9
 493,06273,"Bansilal Ramnath Agarawal Charitable Trust's Vishwakarma Institute of Technology, Bibwewadi, Pune",0627392710,Computer Engineering (Software Engineering),180,117,0,27,36,1,144,State_Level,30,13,9,4,5,3,2,1,2,1,3,1,1,1,14,6,7,3,106,5,1,5,1,18,0627392711T,9
 494,06273,"Bansilal Ramnath Agarawal Charitable Trust's Vishwakarma Institute of Technology, Bibwewadi, Pune",0627399510,Artificial Intelligence and Data Science,360,234,0,54,72,2,288,State_Level,57,25,19,7,12,4,5,2,5,1,6,3,3,1,29,12,14,7,212,10,2,10,2,36,0627399511T,18
+495,06276,"MKSSS's Cummins College of Engineering for Women, Karvenagar,Pune",0627624550F,Computer Engineering,180,117,0,27,36,1,144,State_Level,0,42,0,14,0,8,0,4,0,3,0,4,0,2,0,20,0,9,106,5,1,5,1,18,0627624551FT,9
+496,06276,"MKSSS's Cummins College of Engineering for Women, Karvenagar,Pune",0627624650F,Information Technology,120,78,0,18,24,1,96,State_Level,0,27,0,8,0,6,0,2,0,2,0,3,0,1,0,12,0,8,69,4,0,4,0,12,0627624651FT,6
+497,06276,"MKSSS's Cummins College of Engineering for Women, Karvenagar,Pune",0627637250F,Electronics and Telecommunication Engg,180,117,0,27,36,1,144,State_Level,0,42,0,13,0,8,0,4,0,3,0,4,0,3,0,20,0,9,106,5,1,5,1,18,0627637251FT,9
+498,06276,"MKSSS's Cummins College of Engineering for Women, Karvenagar,Pune",0627646450F,Instrumentation and Control Engineering,60,39,0,9,12,0,48,State_Level,0,14,0,5,0,3,0,1,0,1,0,1,0,0,0,8,0,4,37,1,1,1,1,6,0627646451FT,3
+499,06276,"MKSSS's Cummins College of Engineering for Women, Karvenagar,Pune",0627661250F,Mechanical Engineering,60,39,0,9,12,0,48,State_Level,0,14,0,5,0,3,0,1,0,1,0,1,0,1,0,7,0,4,37,1,1,1,1,6,0627661251FT,3
 500,06277,"Dr. J. J. Magdum Charitable Trust's Dr. J.J. Magdum College of Engineering, Jaysingpur",0627719110,Civil Engineering,60,51,0,9,0,1,60,State_Level,12,6,4,2,3,1,1,0,0,1,1,1,1,0,5,3,4,1,46,2,1,2,1,6,,
 501,06277,"Dr. J. J. Magdum Charitable Trust's Dr. J.J. Magdum College of Engineering, Jaysingpur",0627724210,Computer Science and Engineering,60,42,0,9,9,0,51,State_Level,10,4,5,1,1,1,1,1,1,0,2,0,0,1,6,2,2,2,40,1,1,1,1,6,0627724211T,3
 502,06277,"Dr. J. J. Magdum Charitable Trust's Dr. J.J. Magdum College of Engineering, Jaysingpur",0627724610,Information Technology,60,48,0,9,3,0,57,State_Level,13,5,4,2,3,1,1,0,1,0,0,1,1,0,6,3,4,1,46,1,1,1,1,6,0627724611T,3
@@ -868,16 +878,36 @@ page_number,college_code,college_name,choice_code,course_name,SI,MS_seats,minori
 723,02641,Dr. V.K. Patil College of Engineering & Technology,0264161210,Mechanical Engineering,30,25,0,5,0,0,30,OHU,1,1,2,0,1,0,0,0,0,0,0,0,0,0,2,0,0,1,8,1,0,1,0,3,,
 724,02641,Dr. V.K. Patil College of Engineering & Technology,0264199710,Artificial Intelligence,30,25,0,5,0,0,30,HU,4,2,1,1,1,1,0,1,0,1,0,0,1,0,3,1,2,0,19,1,0,1,0,3,,
 724,02641,Dr. V.K. Patil College of Engineering & Technology,0264199710,Artificial Intelligence,30,25,0,5,0,0,30,OHU,1,1,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,4,1,0,1,0,3,,
+725,03025,Svkm's Shri Bhagubhai Mafatlal Polytechnic & College of Engineering,0302524270U,Computer Science and Engineering,60,14,31,3,12,0,48,HU,7,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,0,0,0302524271UT,3
+725,03025,Svkm's Shri Bhagubhai Mafatlal Polytechnic & College of Engineering,0302524270U,Computer Science and Engineering,60,14,31,3,12,0,48,OHU,3,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0302524271UT,3
+726,03025,Svkm's Shri Bhagubhai Mafatlal Polytechnic & College of Engineering,0302524570U,Computer Engineering,60,14,31,3,12,0,48,HU,7,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,0,0,0302524571UT,3
+726,03025,Svkm's Shri Bhagubhai Mafatlal Polytechnic & College of Engineering,0302524570U,Computer Engineering,60,14,31,3,12,0,48,OHU,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0302524571UT,3
+727,03025,Svkm's Shri Bhagubhai Mafatlal Polytechnic & College of Engineering,0302524670U,Information Technology,60,14,31,3,12,0,48,HU,7,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,0,0,0302524671UT,3
+727,03025,Svkm's Shri Bhagubhai Mafatlal Polytechnic & College of Engineering,0302524670U,Information Technology,60,14,31,3,12,0,48,OHU,3,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0302524671UT,3
+728,03025,Svkm's Shri Bhagubhai Mafatlal Polytechnic & College of Engineering,0302591170U,Computer Science and Engineering(Artificial,60,14,31,3,12,0,48,HU,7,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,0,0,0,0,0,0302591171UT,3
+728,03025,Svkm's Shri Bhagubhai Mafatlal Polytechnic & College of Engineering,0302591170U,Computer Science and Engineering(Artificial,60,14,31,3,12,0,48,OHU,4,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0302591171UT,3
 729,03033,"Dr. Babasaheb Ambedkar Technological University, Lonere",0303319110,Civil Engineering,46,46,0,0,0,0,46,State_Level,11,5,4,2,3,1,1,1,0,1,2,0,1,0,5,3,3,1,44,1,1,1,1,5,,
+730,03033,"Dr. Babasaheb Ambedkar Technological University, Lonere",0303319113K,Civil Engineering,8,8,0,0,0,0,8,State_Level,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,,
 731,03033,"Dr. Babasaheb Ambedkar Technological University, Lonere",0303324510,Computer Engineering,46,46,0,0,0,0,46,State_Level,12,5,4,2,2,1,1,0,1,0,0,1,0,1,7,2,4,1,44,1,1,1,1,5,0303324511T,3
+732,03033,"Dr. Babasaheb Ambedkar Technological University, Lonere",0303324513K,Computer Engineering,8,8,0,0,0,0,8,State_Level,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,,
 733,03033,"Dr. Babasaheb Ambedkar Technological University, Lonere",0303324610,Information Technology,46,46,0,0,0,0,46,State_Level,11,5,4,2,2,1,1,0,1,1,2,0,1,0,6,3,2,2,44,1,1,1,1,5,0303324611T,3
+734,03033,"Dr. Babasaheb Ambedkar Technological University, Lonere",0303324613K,Information Technology,8,8,0,0,0,0,8,State_Level,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,,
 735,03033,"Dr. Babasaheb Ambedkar Technological University, Lonere",0303329310,Electrical Engineering,46,46,0,0,0,0,46,State_Level,11,5,4,2,2,1,1,1,1,0,1,1,1,0,5,3,4,1,44,1,1,1,1,5,0303329311T,3
+736,03033,"Dr. Babasaheb Ambedkar Technological University, Lonere",0303329313K,Electrical Engineering,8,8,0,0,0,0,8,State_Level,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,,
 737,03033,"Dr. Babasaheb Ambedkar Technological University, Lonere",0303337210,Electronics and Telecommunication Engg,51,51,0,0,0,1,51,State_Level,13,5,5,1,3,1,1,0,1,0,1,1,0,1,6,2,3,2,46,2,1,2,1,5,0303337211T,3
+738,03033,"Dr. Babasaheb Ambedkar Technological University, Lonere",0303337213K,Electronics and Telecommunication Engg,9,9,0,0,0,0,9,State_Level,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,0,0,0,0,0,,
+739,03033,"Dr. Babasaheb Ambedkar Technological University, Lonere",0303337290L,Electronics and Telecommunication Engg,25,25,0,0,0,0,25,State_Level,5,3,2,1,2,0,0,1,1,0,1,0,0,0,4,1,2,0,23,1,0,1,0,3,,
+740,03033,"Dr. Babasaheb Ambedkar Technological University, Lonere",0303337293LK,Electronics and Telecommunication Engg,5,5,0,0,0,0,5,State_Level,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,,
 741,03033,"Dr. Babasaheb Ambedkar Technological University, Lonere",0303337810,Electronics Engineering ( VLSI Design and,25,25,0,0,0,0,25,State_Level,5,3,2,2,0,1,1,0,0,0,0,0,1,0,3,2,2,1,23,1,0,1,0,3,0303337811T,2
+742,03033,"Dr. Babasaheb Ambedkar Technological University, Lonere",0303337813K,Electronics Engineering ( VLSI Design and,5,5,0,0,0,0,5,State_Level,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,,
 743,03033,"Dr. Babasaheb Ambedkar Technological University, Lonere",0303350710,Chemical Engineering,46,46,0,0,0,0,46,State_Level,12,5,5,1,2,1,1,0,1,1,1,0,1,0,6,2,3,2,44,1,1,1,1,5,0303350711T,3
+744,03033,"Dr. Babasaheb Ambedkar Technological University, Lonere",0303350713K,Chemical Engineering,8,8,0,0,0,0,8,State_Level,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,,
 745,03033,"Dr. Babasaheb Ambedkar Technological University, Lonere",0303352710,Petro Chemical Engineering,46,46,0,0,0,0,46,State_Level,11,5,4,2,3,1,0,1,1,0,1,1,1,0,6,3,3,1,44,1,1,1,1,5,,
+746,03033,"Dr. Babasaheb Ambedkar Technological University, Lonere",0303352713K,Petro Chemical Engineering,8,8,0,0,0,0,8,State_Level,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,,
 747,03033,"Dr. Babasaheb Ambedkar Technological University, Lonere",0303361210,Mechanical Engineering,46,46,0,0,0,0,46,State_Level,12,5,4,2,2,1,2,0,0,1,2,0,0,0,6,2,4,1,44,1,1,1,1,5,0303361211T,3
+748,03033,"Dr. Babasaheb Ambedkar Technological University, Lonere",0303361213K,Mechanical Engineering,8,8,0,0,0,0,8,State_Level,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,,
 749,03033,"Dr. Babasaheb Ambedkar Technological University, Lonere",0303390510,Computer Science and Engineering,51,51,0,0,0,1,51,State_Level,12,6,4,2,3,1,1,0,1,0,1,1,0,1,5,3,3,2,46,2,1,2,1,5,0303390511T,3
+750,03033,"Dr. Babasaheb Ambedkar Technological University, Lonere",0303390513K,Computer Science and Engineering,9,9,0,0,0,0,9,State_Level,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,0,0,0,0,0,,
 751,03042,"Loknete Shamrao Peje Government College of Engineering, Ratnagiri",0304229310,Electrical Engineering,60,60,0,0,0,1,60,HU,11,5,4,2,2,1,1,0,1,0,1,1,0,1,5,1,4,1,41,2,1,2,1,6,0304229311T,3
 751,03042,"Loknete Shamrao Peje Government College of Engineering, Ratnagiri",0304229310,Electrical Engineering,60,60,0,0,0,1,60,OHU,5,1,2,0,1,0,1,0,0,0,0,0,0,0,2,1,0,1,14,2,1,2,1,6,0304229311T,3
 752,03042,"Loknete Shamrao Peje Government College of Engineering, Ratnagiri",0304250410,Food Technology And Management,60,60,0,0,0,1,60,HU,10,5,4,1,2,1,1,1,0,0,1,0,0,0,5,3,3,1,38,2,1,2,1,6,,
@@ -1434,6 +1464,16 @@ page_number,college_code,college_name,choice_code,course_name,SI,MS_seats,minori
 1027,06811,Sanjay Ghodawat Institute,0681137210,Electronics and Telecommunication Engg,60,48,0,9,3,0,57,OHU,4,1,1,1,0,1,0,1,0,0,0,1,0,1,2,1,1,0,15,1,1,1,1,6,0681137211T,3
 1028,06811,Sanjay Ghodawat Institute,0681161210,Mechanical Engineering,60,48,0,9,3,0,57,HU,9,4,3,2,2,0,0,1,0,1,1,0,0,1,5,2,2,1,34,1,1,1,1,6,,
 1028,06811,Sanjay Ghodawat Institute,0681161210,Mechanical Engineering,60,48,0,9,3,0,57,OHU,2,2,1,1,1,0,0,0,0,0,0,0,0,0,2,1,1,1,12,1,1,1,1,6,,
+1029,06938,Shree Siddheshwar Women's College Of Engineering Solapur.,0693824250F,Computer Science and Engineering,120,96,0,18,6,1,114,HU,0,24,0,8,0,4,0,2,0,1,0,2,0,1,0,11,0,6,59,5,0,5,0,12,0693824251FT,6
+1029,06938,Shree Siddheshwar Women's College Of Engineering Solapur.,0693824250F,Computer Science and Engineering,120,96,0,18,6,1,114,OHU,0,10,0,3,0,2,0,1,0,1,0,1,0,1,0,5,0,2,26,5,0,5,0,12,0693824251FT,6
+1030,06938,Shree Siddheshwar Women's College Of Engineering Solapur.,0693829350F,Electrical Engineering,30,25,0,5,0,0,30,HU,0,6,0,2,0,2,0,1,0,1,0,0,0,0,0,4,0,2,18,1,0,1,0,3,,
+1030,06938,Shree Siddheshwar Women's College Of Engineering Solapur.,0693829350F,Electrical Engineering,30,25,0,5,0,0,30,OHU,0,2,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,5,1,0,1,0,3,,
+1031,06938,Shree Siddheshwar Women's College Of Engineering Solapur.,0693837250F,Electronics and Telecommunication Engg,60,51,0,9,0,1,60,HU,0,13,0,4,0,2,0,0,0,1,0,2,0,1,0,5,0,3,31,2,1,2,1,6,0693837251FT,3
+1031,06938,Shree Siddheshwar Women's College Of Engineering Solapur.,0693837250F,Electronics and Telecommunication Engg,60,51,0,9,0,1,60,OHU,0,5,0,2,0,2,0,1,0,1,0,0,0,0,0,2,0,2,15,2,1,2,1,6,0693837251FT,3
+1032,06938,Shree Siddheshwar Women's College Of Engineering Solapur.,0693884450F,Electronics and Computer Engineering,60,51,0,9,0,1,60,HU,0,13,0,5,0,3,0,2,0,1,0,1,0,1,0,5,0,4,35,2,1,2,1,6,,
+1032,06938,Shree Siddheshwar Women's College Of Engineering Solapur.,0693884450F,Electronics and Computer Engineering,60,51,0,9,0,1,60,OHU,0,5,0,2,0,0,0,0,0,0,0,1,0,0,0,2,0,1,11,2,1,2,1,6,,
+1033,06938,Shree Siddheshwar Women's College Of Engineering Solapur.,0693892550F,Computer Science and Engineering (Artificial,90,71,0,14,5,1,85,HU,0,18,0,5,0,3,0,1,0,2,0,2,0,1,0,8,0,4,44,4,0,4,0,9,0693892551FT,5
+1033,06938,Shree Siddheshwar Women's College Of Engineering Solapur.,0693892550F,Computer Science and Engineering (Artificial,90,71,0,14,5,1,85,OHU,0,6,0,2,0,2,0,1,0,0,0,0,0,1,0,3,0,3,18,4,0,4,0,9,0693892551FT,5
 1034,16121,"Shri. Anandrao Abitkar College of Engineering, Pal",1612119110,Civil Engineering,60,51,0,9,0,1,60,HU,9,4,4,1,1,1,0,0,1,0,1,0,1,0,4,2,3,1,33,2,1,2,1,6,1612119111T,3
 1034,16121,"Shri. Anandrao Abitkar College of Engineering, Pal",1612119110,Civil Engineering,60,51,0,9,0,1,60,OHU,4,1,1,1,0,1,1,0,0,0,1,0,0,0,2,0,1,0,13,2,1,2,1,6,1612119111T,3
 1035,16121,"Shri. Anandrao Abitkar College of Engineering, Pal",1612124510,Computer Engineering,120,102,0,18,0,1,120,HU,18,8,5,3,4,1,2,1,2,0,1,1,1,0,8,4,4,2,65,5,0,5,0,12,1612124511T,6
@@ -2350,6 +2390,12 @@ page_number,college_code,college_name,choice_code,course_name,SI,MS_seats,minori
 1490,04302,"Gondia Education Society's Manoharbhai Patel Institute Of Engineering & Technology, Shahapur, Bhandara",0430224510,Computer Engineering,54,46,0,8,0,0,54,OHU,3,1,1,1,1,0,0,0,0,0,1,0,0,0,2,1,1,1,13,1,1,1,1,5,0430224511T,3
 1491,04302,"Gondia Education Society's Manoharbhai Patel Institute Of Engineering & Technology, Shahapur, Bhandara",0430261210,Mechanical Engineering,30,25,0,5,0,0,30,HU,4,2,2,1,0,1,0,0,0,0,1,0,1,0,3,1,2,0,18,1,0,1,0,3,0430261211T,2
 1491,04302,"Gondia Education Society's Manoharbhai Patel Institute Of Engineering & Technology, Shahapur, Bhandara",0430261210,Mechanical Engineering,30,25,0,5,0,0,30,OHU,1,1,1,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,5,1,0,1,0,3,0430261211T,2
+1492,04304,"Cummins College of Engineering For Women, Sukhali (Gupchup), Tal. Hingna Hingna Nagpur",0430424550F,Computer Engineering,120,78,0,18,24,1,96,HU,0,19,0,6,0,4,0,2,0,1,0,1,0,1,0,8,0,5,47,4,0,4,0,12,0430424551FT,6
+1492,04304,"Cummins College of Engineering For Women, Sukhali (Gupchup), Tal. Hingna Hingna Nagpur",0430424550F,Computer Engineering,120,78,0,18,24,1,96,OHU,0,8,0,2,0,2,0,0,0,1,0,1,0,1,0,4,0,3,22,4,0,4,0,12,0430424551FT,6
+1493,04304,"Cummins College of Engineering For Women, Sukhali (Gupchup), Tal. Hingna Hingna Nagpur",0430437250F,Electronics and Telecommunication Engg,60,45,0,9,6,0,54,HU,0,12,0,4,0,2,0,1,0,1,0,2,0,1,0,7,0,3,33,1,1,1,1,6,0430437251FT,3
+1493,04304,"Cummins College of Engineering For Women, Sukhali (Gupchup), Tal. Hingna Hingna Nagpur",0430437250F,Electronics and Telecommunication Engg,60,45,0,9,6,0,54,OHU,0,4,0,2,0,1,0,0,0,0,0,0,0,0,0,2,0,1,10,1,1,1,1,6,0430437251FT,3
+1494,04304,"Cummins College of Engineering For Women, Sukhali (Gupchup), Tal. Hingna Hingna Nagpur",0430461250F,Mechanical Engineering,60,51,0,9,0,1,60,HU,0,13,0,4,0,3,0,1,0,0,0,1,0,1,0,5,0,4,32,2,1,2,1,6,0430461251FT,3
+1494,04304,"Cummins College of Engineering For Women, Sukhali (Gupchup), Tal. Hingna Hingna Nagpur",0430461250F,Mechanical Engineering,60,51,0,9,0,1,60,OHU,0,5,0,2,0,1,0,1,0,1,0,1,0,0,0,2,0,1,14,2,1,2,1,6,0430461251FT,3
 1495,04648,"R.V. Parankar College of Engineering & Technology, Arvi, Dist Wardha",0464819110,Civil Engineering,30,25,0,5,0,0,30,HU,4,2,2,1,0,1,0,0,0,0,0,0,0,0,2,1,1,1,15,1,0,1,0,3,,
 1495,04648,"R.V. Parankar College of Engineering & Technology, Arvi, Dist Wardha",0464819110,Civil Engineering,30,25,0,5,0,0,30,OHU,1,1,1,0,0,0,0,0,0,1,0,0,1,0,2,0,1,0,8,1,0,1,0,3,,
 1496,04648,"R.V. Parankar College of Engineering & Technology, Arvi, Dist Wardha",0464824210,Computer Science and Engineering,60,39,0,9,12,0,48,HU,8,3,2,1,2,0,1,0,1,0,1,0,1,0,3,2,2,1,28,1,1,1,1,6,0464824211T,3
@@ -3050,6 +3096,12 @@ page_number,college_code,college_name,choice_code,course_name,SI,MS_seats,minori
 1843,06281,"Modern Education Society's Wadia College of Engineering, Pune",0628161210,Mechanical Engineering,120,102,0,18,0,1,120,OHU,7,3,2,1,1,1,0,0,0,1,1,0,0,1,3,1,1,1,24,5,0,5,0,12,0628161211T,6
 1844,06281,"Modern Education Society's Wadia College of Engineering, Pune",0628191610,Automation and Robotics,60,51,0,9,0,1,60,HU,9,4,4,1,2,0,0,0,0,0,1,0,0,1,4,2,3,1,32,2,1,2,1,6,0628191611T,3
 1844,06281,"Modern Education Society's Wadia College of Engineering, Pune",0628191610,Automation and Robotics,60,51,0,9,0,1,60,OHU,3,2,1,1,1,0,0,1,1,0,1,0,0,0,1,1,1,0,14,2,1,2,1,6,0628191611T,3
+1845,06285,"Bharati Vidyapeeth's College of Engineering for Women, Katraj, Dhankawadi, Pune",0628524550F,Computer Engineering,120,78,0,18,24,1,96,HU,0,19,0,6,0,4,0,2,0,1,0,2,0,1,0,10,0,6,51,4,0,4,0,12,0628524551FT,6
+1845,06285,"Bharati Vidyapeeth's College of Engineering for Women, Katraj, Dhankawadi, Pune",0628524550F,Computer Engineering,120,78,0,18,24,1,96,OHU,0,7,0,2,0,1,0,1,0,1,0,1,0,0,0,3,0,2,18,4,0,4,0,12,0628524551FT,6
+1846,06285,"Bharati Vidyapeeth's College of Engineering for Women, Katraj, Dhankawadi, Pune",0628524650F,Information Technology,60,39,0,9,12,0,48,HU,0,11,0,3,0,2,0,0,0,1,0,1,0,1,0,5,0,3,27,1,1,1,1,6,0628524651FT,3
+1846,06285,"Bharati Vidyapeeth's College of Engineering for Women, Katraj, Dhankawadi, Pune",0628524650F,Information Technology,60,39,0,9,12,0,48,OHU,0,3,0,2,0,1,0,1,0,0,0,0,0,0,0,2,0,1,10,1,1,1,1,6,0628524651FT,3
+1847,06285,"Bharati Vidyapeeth's College of Engineering for Women, Katraj, Dhankawadi, Pune",0628537250F,Electronics and Telecommunication Engg,120,96,0,18,6,1,114,HU,0,24,0,8,0,5,0,2,0,2,0,3,0,1,0,11,0,5,61,5,0,5,0,12,0628537251FT,6
+1847,06285,"Bharati Vidyapeeth's College of Engineering for Women, Katraj, Dhankawadi, Pune",0628537250F,Electronics and Telecommunication Engg,120,96,0,18,6,1,114,OHU,0,10,0,2,0,2,0,1,0,0,0,1,0,1,0,5,0,2,24,5,0,5,0,12,0628537251FT,6
 1848,06307,"Dhole Patil Education Society, Dhole Patil College of Engineering, Wagholi, Tal. Haveli",0630724510,Computer Engineering,90,58,0,14,18,1,72,HU,11,5,3,1,3,0,1,1,1,0,1,0,0,1,5,2,4,1,40,2,1,2,1,9,0630724511T,5
 1848,06307,"Dhole Patil Education Society, Dhole Patil College of Engineering, Wagholi, Tal. Haveli",0630724510,Computer Engineering,90,58,0,14,18,1,72,OHU,4,1,2,1,0,1,0,0,0,0,1,0,0,0,1,1,0,1,13,2,1,2,1,9,0630724511T,5
 1849,06307,"Dhole Patil Education Society, Dhole Patil College of Engineering, Wagholi, Tal. Haveli",0630724610,Information Technology,45,29,0,7,9,0,36,HU,5,2,2,1,0,1,0,0,0,1,1,0,0,0,2,1,1,1,18,1,0,1,0,5,0630724611T,2
@@ -3442,6 +3494,8 @@ page_number,college_code,college_name,choice_code,course_name,SI,MS_seats,minori
 2042,06839,"Dr. D Y Patil Pratishthan's College of Engineering, Kolhapur",0683991210,Computer Science and Engineering(Data Science),60,39,0,9,12,0,48,OHU,3,1,2,0,0,0,1,0,0,0,0,0,0,0,2,0,1,0,10,1,1,1,1,6,0683991211T,3
 2043,06878,"Dr. A. D. Shinde College Of Engineering, Tal.Gadhinglaj, Kolhapur",0687819110,Civil Engineering,30,25,0,5,0,0,30,HU,4,2,1,1,1,0,1,0,0,0,0,0,0,0,3,1,1,1,16,1,0,1,0,3,,
 2043,06878,"Dr. A. D. Shinde College Of Engineering, Tal.Gadhinglaj, Kolhapur",0687819110,Civil Engineering,30,25,0,5,0,0,30,OHU,1,1,0,1,1,0,0,0,0,0,0,1,0,0,1,0,0,1,7,1,0,1,0,3,,
+2044,06878,"Dr. A. D. Shinde College Of Engineering, Tal.Gadhinglaj, Kolhapur",0687819190L,Civil Engineering,30,25,0,5,0,0,30,HU,4,2,2,0,2,0,0,0,1,0,0,0,1,0,2,1,2,0,17,1,0,1,0,3,0687819191LT,2
+2044,06878,"Dr. A. D. Shinde College Of Engineering, Tal.Gadhinglaj, Kolhapur",0687819190L,Civil Engineering,30,25,0,5,0,0,30,OHU,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,6,1,0,1,0,3,0687819191LT,2
 2045,06878,"Dr. A. D. Shinde College Of Engineering, Tal.Gadhinglaj, Kolhapur",0687824210,Computer Science and Engineering,60,45,0,9,6,0,54,HU,8,3,3,2,1,1,1,0,0,1,1,1,0,1,4,2,2,1,32,1,1,1,1,6,,
 2045,06878,"Dr. A. D. Shinde College Of Engineering, Tal.Gadhinglaj, Kolhapur",0687824210,Computer Science and Engineering,60,45,0,9,6,0,54,OHU,4,1,1,0,0,1,0,0,0,0,0,0,0,0,2,1,1,0,11,1,1,1,1,6,,
 2046,06878,"Dr. A. D. Shinde College Of Engineering, Tal.Gadhinglaj, Kolhapur",0687825910,Mechanical and Mechatronics Engineering (Additive,60,51,0,9,0,1,60,HU,9,4,3,1,1,1,0,0,1,0,1,0,0,0,4,2,2,1,30,2,1,2,1,6,0687825911T,3
@@ -3452,3 +3506,9 @@ page_number,college_code,college_name,choice_code,course_name,SI,MS_seats,minori
 2048,06878,"Dr. A. D. Shinde College Of Engineering, Tal.Gadhinglaj, Kolhapur",0687891110,Computer Science and Engineering(Artificial,30,22,0,5,3,0,27,OHU,1,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,4,1,0,1,0,3,0687891111T,2
 2049,06878,"Dr. A. D. Shinde College Of Engineering, Tal.Gadhinglaj, Kolhapur",0687892610,Electrical and Computer Engineering,60,51,0,9,0,1,60,HU,9,4,2,2,2,1,1,0,1,1,1,0,0,0,4,1,3,0,32,2,1,2,1,6,0687892611T,3
 2049,06878,"Dr. A. D. Shinde College Of Engineering, Tal.Gadhinglaj, Kolhapur",0687892610,Electrical and Computer Engineering,60,51,0,9,0,1,60,OHU,3,2,1,1,1,0,0,0,0,0,1,0,1,0,1,1,1,1,14,2,1,2,1,6,0687892611T,3
+2050,03035,"Usha Mittal Institute of Technology SNDT Women's University, Mumbai",0303524550F,Computer Engineering,60,60,0,0,0,1,60,State_Level,0,21,0,8,0,4,0,2,0,2,0,2,0,1,0,9,0,6,55,2,1,2,1,6,0303524551FT,3
+2051,03035,"Usha Mittal Institute of Technology SNDT Women's University, Mumbai",0303524650F,Information Technology,60,60,0,0,0,1,60,State_Level,0,22,0,7,0,4,0,2,0,1,0,3,0,1,0,9,0,6,55,2,1,2,1,6,0303524651FT,3
+2052,03035,"Usha Mittal Institute of Technology SNDT Women's University, Mumbai",0303525450F,Computer Science and Technology,60,60,0,0,0,1,60,State_Level,0,21,0,8,0,4,0,2,0,1,0,2,0,1,0,10,0,6,55,2,1,2,1,6,0303525451FT,3
+2053,03035,"Usha Mittal Institute of Technology SNDT Women's University, Mumbai",0303537050F,Electronics and Communication Engineering,60,60,0,0,0,1,60,State_Level,0,22,0,8,0,4,0,1,0,2,0,2,0,1,0,9,0,6,55,2,1,2,1,6,0303537051FT,3
+2054,03035,"Usha Mittal Institute of Technology SNDT Women's University, Mumbai",0303591750F,Data Science,60,60,0,0,0,1,60,State_Level,0,22,0,8,0,4,0,2,0,1,0,2,0,1,0,9,0,6,55,2,1,2,1,6,0303591751FT,3
+2055,03035,"Usha Mittal Institute of Technology SNDT Women's University, Mumbai",0303599750F,Artificial Intelligence,60,60,0,0,0,1,60,State_Level,0,21,0,8,0,4,0,2,0,2,0,2,0,1,0,9,0,6,55,2,1,2,1,6,0303599751FT,3

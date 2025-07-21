@@ -158,7 +158,7 @@ export default function SeatMatrix({ data, isLoading, error }: SeatMatrixProps) 
         return acc;
     }, {} as Record<string, SeatMatrixData[]>);
 
-    const totalSeats = safeData.reduce((sum, row) => sum + (row.Total || 0), 0);
+    const totalSeats = safeData.reduce((sum, row) => sum + (row.CAP_seats || 0), 0);
     const totalCourses = Object.keys(courseGroups).length;
     const totalAllIndiaSeats = safeData.reduce((sum, row) => sum + (row.all_india || 0), 0);
     const totalMSSeats = safeData.reduce((sum, row) => sum + (row.MS_seats || 0), 0);

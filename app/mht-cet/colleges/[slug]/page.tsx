@@ -38,19 +38,19 @@ async function getSeatMatrix(id: string) {
 }
 
 async function getCutoffs(id: string) {
-    try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/mht-cet/colleges/${id}/cutoffs`, { next: { revalidate: 3600 } });
-        if (!res.ok) {
-            if (res.status === 404) {
-                return { cutoffs: [] };
-            }
-            throw new Error(`Failed to fetch cutoffs data for id: ${id}`);
-        }
-        return res.json();
-    } catch (error) {
-        console.error('Error fetching cutoffs:', error);
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/mht-cet/colleges/${id}/cutoffs`, { next: { revalidate: 3600 } });
+    if (!res.ok) {
+      if (res.status === 404) {
         return { cutoffs: [] };
+      }
+      throw new Error(`Failed to fetch cutoffs data for id: ${id}`);
     }
+    return res.json();
+  } catch (error) {
+    console.error('Error fetching cutoffs:', error);
+    return { cutoffs: [] };
+  }
 }
 
 export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
@@ -107,7 +107,7 @@ export default async function CollegePage(props: { params: Promise<{ slug: strin
   const { id } = parseCollegeSlug(slug);
 
   if (!id) {
-      notFound();
+    notFound();
   }
 
   let college;
@@ -246,28 +246,28 @@ export default async function CollegePage(props: { params: Promise<{ slug: strin
 
         {/* Seat Matrix Section */}
         <div className="mb-12">
-            <Suspense fallback={<SeatMatrix data={[]} isLoading={true} />}>
-              <div className="space-y-6">
-                <SeatMatrix
-                  data={seatMatrix?.seatMatrix || []}
-                  error={seatMatrixError}
-                  isLoading={false}
-                />
-              </div>
-            </Suspense>
+          <Suspense fallback={<SeatMatrix data={[]} isLoading={true} />}>
+            <div className="space-y-6">
+              <SeatMatrix
+                data={seatMatrix?.seatMatrix || []}
+                error={seatMatrixError}
+                isLoading={false}
+              />
+            </div>
+          </Suspense>
         </div>
 
         {/* Cutoffs Section */}
         <div>
-            <Suspense fallback={<CutoffsTable data={[]} isLoading={true} />}>
-                <div className="space-y-6">
-                    <CutoffsTable
-                        data={cutoffs?.cutoffs || []}
-                        error={cutoffsError}
-                        isLoading={false}
-                    />
-                </div>
-            </Suspense>
+          <Suspense fallback={<CutoffsTable data={[]} isLoading={true} />}>
+            <div className="space-y-6">
+              <CutoffsTable
+                data={cutoffs?.cutoffs || []}
+                error={cutoffsError}
+                isLoading={false}
+              />
+            </div>
+          </Suspense>
         </div>
       </div>
     </div>

@@ -122,18 +122,18 @@ export default function CutoffsTable({ data, isLoading, error }: CutoffsTablePro
                     <Table>
                         <TableHeader className="bg-main">
                             <TableRow>
-                                <TableHead className="font-heading text-black">Course Name</TableHead>
                                 <TableHead className="font-heading text-black">Course Code</TableHead>
+                                <TableHead className="font-heading text-black">Course Name</TableHead>
                                 <TableHead className="font-heading text-black">Category</TableHead>
                                 <TableHead className="font-heading text-black">Cutoff Score</TableHead>
-                                <TableHead className="font-heading text-black">Last Rank</TableHead>
+                                <TableHead className="font-heading text-black">Rank</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {filteredData.map((row) => (
                                 <TableRow key={row.id} className="hover:bg-gray-100">
-                                    <TableCell>{row.course_name}</TableCell>
                                     <TableCell>{row.course_code}</TableCell>
+                                    <TableCell>{row.course_name}</TableCell>
                                     <TableCell>
                                         <span className="font-mono bg-gray-200 px-2 py-1 rounded-md text-sm">{row.category}</span>
                                     </TableCell>
