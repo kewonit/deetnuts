@@ -18,6 +18,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "DEETNUTS",
   description: "mildly important data related to colleges simplified",
+  metadataBase: new URL('https://deetnuts.com'),
 };
 
 export default function RootLayout({
