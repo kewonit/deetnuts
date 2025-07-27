@@ -20,7 +20,10 @@ import {
     Info,
     ListTree,
     BarChart,
-    ChevronDown
+    ChevronDown,
+    Building2,
+    Users2,
+    Baby
 } from 'lucide-react';
 
 // Updated data interface to include all fields from the API response
@@ -106,6 +109,15 @@ const SeatCategoryCard = ({ category, general, ladies }: { category: string; gen
     </div>
 );
 
+const DetailedInfoCard = ({ title, value, className, subtext }: { title: string; value: string | number; className?: string, subtext?: string }) => (
+    <div className={`p-3 rounded-base border-2 border-black text-center ${className}`}>
+        <div className="text-2xl font-bold">{value}</div>
+        <div className="text-sm font-heading">{title}</div>
+        {subtext && <div className="text-xs font-mono">{subtext}</div>}
+    </div>
+);
+
+
 export default function SeatMatrix({ data, isLoading, error }: SeatMatrixProps) {
     const [selectedView, setSelectedView] = useState<'overview' | 'detailed'>('overview');
 
@@ -158,17 +170,20 @@ export default function SeatMatrix({ data, isLoading, error }: SeatMatrixProps) 
         return acc;
     }, {} as Record<string, SeatMatrixData[]>);
 
-    const totalSeats = safeData.reduce((sum, row) => sum + (row.CAP_seats || 0), 0);
+    const totalSeats = safeData.reduce((sum, row) => sum + (row.SI || 0), 0);
     const totalCourses = Object.keys(courseGroups).length;
     const totalAllIndiaSeats = safeData.reduce((sum, row) => sum + (row.all_india || 0), 0);
     const totalMSSeats = safeData.reduce((sum, row) => sum + (row.MS_seats || 0), 0);
     const totalEWSSeats = safeData.reduce((sum, row) => sum + (row.EWS_seat || 0), 0);
     const totalPWDSeats = safeData.reduce((sum, row) => sum + (row.PWD_total || 0), 0);
     const totalDEFSeats = safeData.reduce((sum, row) => sum + (row.DEF_total || 0), 0);
+    const totalInstituteSeats = safeData.reduce((sum, row) => sum + (row.institute_seats || 0), 0);
+    const totalMinoritySeats = safeData.reduce((sum, row) => sum + (row.minority_seats || 0), 0);
+    const totalOrphanSeats = safeData.reduce((sum, row) => sum + (row.orphan || 0), 0);
 
     return (
         <div className="bg-white border-4 border-black rounded-base shadow-base">
-            <div className="p-6 border-b-4 border-black flex justify-between items-center bg-purple-300">
+            <div className="p-6 border-b-4 border-black flex justify-between items-center bg-purple-300 flex-wrap gap-4">
                 <h2 className="text-3xl font-heading text-black flex items-center">
                     <BarChart className="w-8 h-8 mr-4" />
                     Seat Matrix
@@ -187,50 +202,47 @@ export default function SeatMatrix({ data, isLoading, error }: SeatMatrixProps) 
                 </div>
             </div>
 
-            <div className="p-8">
+            <div className="p-4 sm:p-8">
                 {selectedView === 'overview' && (
                     <div className="space-y-8">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <InfoCard title="Total Seats" value={totalSeats.toLocaleString()} icon={Users} />
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <InfoCard title="Total Seats (SI)" value={totalSeats.toLocaleString()} icon={Users} />
                             <InfoCard title="Total Courses" value={totalCourses} icon={ListTree} />
                             <InfoCard title="MS Seats" value={totalMSSeats.toLocaleString()} icon={Building} />
                             <InfoCard title="All India Seats" value={totalAllIndiaSeats.toLocaleString()} icon={Globe} />
                             <InfoCard title="EWS Seats" value={totalEWSSeats} icon={HeartHandshake} />
                             <InfoCard title="PWD Seats" value={totalPWDSeats} icon={Accessibility} />
                             <InfoCard title="Defence Seats" value={totalDEFSeats} icon={ShieldCheck} />
+                            {totalInstituteSeats > 0 && <InfoCard title="Institute Seats" value={totalInstituteSeats} icon={Building2} />}
+                            {totalMinoritySeats > 0 && <InfoCard title="Minority Seats" value={totalMinoritySeats} icon={Users2} />}
+                            {totalOrphanSeats > 0 && <InfoCard title="Orphan Seats" value={totalOrphanSeats} icon={Baby} />}
                         </div>
                         <div className="space-y-6">
                             {Object.entries(courseGroups).map(([courseName, rows]) => {
-                                const courseTotal = rows.reduce((sum, r) => sum + (r.Total || 0), 0);
+                                const courseTotal = rows.reduce((sum, r) => sum + (r.SI || 0), 0);
                                 const courseMS = rows.reduce((sum, r) => sum + (r.MS_seats || 0), 0);
                                 const courseAI = rows.reduce((sum, r) => sum + (r.all_india || 0), 0);
                                 const courseCAP = rows.reduce((sum, r) => sum + (r.CAP_seats || 0), 0);
+                                const courseInstitute = rows.reduce((sum, r) => sum + (r.institute_seats || 0), 0);
+                                const courseMinority = rows.reduce((sum, r) => sum + (r.minority_seats || 0), 0);
+                                const courseOrphan = rows.reduce((sum, r) => sum + (r.orphan || 0), 0);
 
                                 return (
                                     <div key={courseName} className="bg-white border-2 border-black rounded-base p-6 shadow-base">
-                                        <div className="flex items-center justify-between mb-4">
+                                        <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
                                             <h3 className="text-2xl font-heading text-black flex items-center"><GraduationCap className="mr-3 text-purple-600" />{courseName}</h3>
                                             <Badge className="bg-purple-300 text-black px-4 py-2 border-2 border-black rounded-base font-heading text-sm">
                                                 {courseTotal} Total Seats
                                             </Badge>
                                         </div>
-                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                                            <div className="p-3 rounded-base bg-purple-100 border-2 border-black">
-                                                <div className="text-3xl font-bold text-purple-800">{courseTotal}</div>
-                                                <div className="text-sm font-heading text-purple-900">Total</div>
-                                            </div>
-                                            <div className="p-3 rounded-base bg-green-100 border-2 border-black">
-                                                <div className="text-3xl font-bold text-green-800">{courseMS}</div>
-                                                <div className="text-sm font-heading text-green-900">MS Seats</div>
-                                            </div>
-                                            <div className="p-3 rounded-base bg-blue-100 border-2 border-black">
-                                                <div className="text-3xl font-bold text-blue-800">{courseAI}</div>
-                                                <div className="text-sm font-heading text-blue-900">All India</div>
-                                            </div>
-                                            <div className="p-3 rounded-base bg-yellow-100 border-2 border-black">
-                                                <div className="text-3xl font-bold text-yellow-800">{courseCAP}</div>
-                                                <div className="text-sm font-heading text-yellow-900">CAP Seats</div>
-                                            </div>
+                                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 text-center">
+                                            <DetailedInfoCard title="Total" value={courseTotal} className="bg-purple-100 text-purple-800" />
+                                            <DetailedInfoCard title="MS Seats" value={courseMS} className="bg-green-100 text-green-800" />
+                                            <DetailedInfoCard title="All India" value={courseAI} className="bg-blue-100 text-blue-800" />
+                                            <DetailedInfoCard title="CAP Seats" value={courseCAP} className="bg-yellow-100 text-yellow-800" />
+                                            {courseInstitute > 0 && <DetailedInfoCard title="Institute" value={courseInstitute} className="bg-indigo-100 text-indigo-900" />}
+                                            {courseMinority > 0 && <DetailedInfoCard title="Minority" value={courseMinority} className="bg-pink-100 text-pink-900" />}
+                                            {courseOrphan > 0 && <DetailedInfoCard title="Orphan" value={courseOrphan} className="bg-orange-100 text-orange-900" />}
                                         </div>
                                     </div>
                                 );
@@ -248,30 +260,42 @@ export default function SeatMatrix({ data, isLoading, error }: SeatMatrixProps) 
                                 className="border-2 border-black rounded-base overflow-hidden shadow-base bg-white"
                             >
                                 <AccordionTrigger className="text-xl font-heading text-black hover:bg-main p-6">
-                                    <div className="flex items-center justify-between w-full">
-                                        <span className="flex items-center"><GraduationCap className="mr-3 text-purple-600" />{courseName}</span>
+                                    <div className="flex items-center justify-between w-full flex-wrap gap-2">
+                                        <span className="flex items-center text-left"><GraduationCap className="mr-3 text-purple-600 flex-shrink-0" />{courseName}</span>
                                         <div className="flex items-center">
                                             <Badge className="bg-purple-300 text-black px-4 py-2 border-2 border-black rounded-base font-heading text-sm mr-4">
-                                                {rows.reduce((sum, r) => sum + (r.Total || 0), 0)} Seats
+                                                {rows.reduce((sum, r) => sum + (r.SI || 0), 0)} Seats
                                             </Badge>
                                             <ChevronDown className="h-6 w-6 transition-transform duration-200" />
                                         </div>
                                     </div>
                                 </AccordionTrigger>
-                                <AccordionContent className="p-6 bg-gray-100">
+                                <AccordionContent className="p-4 sm:p-6 bg-gray-100">
                                     {rows.map(row => (
                                         <div key={row.id} className="mb-6 p-4 border-2 border-black rounded-base bg-white shadow-inner">
-                                            <div className="flex justify-between items-center mb-4 pb-2 border-b-2 border-dashed border-black">
+                                            <div className="flex justify-between items-start mb-4 pb-2 border-b-2 border-dashed border-black flex-wrap gap-2">
                                                 <div>
                                                     <p className="font-heading text-lg">Choice Code: <span className="font-mono text-purple-600">{row.choice_code}</span></p>
                                                     <p className="font-base text-md">Seat Type: <span className="font-semibold text-gray-800">{row.seat_type}</span></p>
                                                 </div>
                                                 <div className="text-right">
-                                                    <p className="font-heading text-lg">Total Seats</p>
+                                                    <p className="font-heading text-lg">Total Seats for Row</p>
                                                     <p className="font-bold text-4xl text-purple-600">{row.Total}</p>
                                                 </div>
                                             </div>
-                                            <div className="flex flex-wrap gap-4 justify-center">
+
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                                                <DetailedInfoCard title="Sanctioned Intake" value={row.SI} className="bg-purple-100 text-purple-900" />
+                                                <DetailedInfoCard title="MS Seats" value={row.MS_seats} className="bg-green-100 text-green-900" />
+                                                <DetailedInfoCard title="All India" value={row.all_india} className="bg-blue-100 text-blue-900" />
+                                                <DetailedInfoCard title="CAP Seats" value={row.CAP_seats} className="bg-yellow-100 text-yellow-900" />
+                                                {row.institute_seats > 0 && <DetailedInfoCard title="Institute" value={row.institute_seats} className="bg-indigo-100 text-indigo-900" />}
+                                                {row.minority_seats > 0 && <DetailedInfoCard title="Minority" value={row.minority_seats} className="bg-pink-100 text-pink-900" />}
+                                                {row.orphan > 0 && <DetailedInfoCard title="Orphan" value={row.orphan} className="bg-orange-100 text-orange-900" />}
+                                                <DetailedInfoCard title="EWS Seats" value={row.EWS_seat} className="bg-teal-100 text-teal-900" />
+                                            </div>
+
+                                            <div className="flex flex-wrap gap-4 justify-center mb-4">
                                                 <SeatCategoryCard category="OPEN" general={row.OPEN_General} ladies={row.OPEN_Ladies} />
                                                 <SeatCategoryCard category="SC" general={row.SC_General} ladies={row.SC_Ladies} />
                                                 <SeatCategoryCard category="ST" general={row.ST_General} ladies={row.ST_Ladies} />
@@ -280,27 +304,14 @@ export default function SeatMatrix({ data, isLoading, error }: SeatMatrixProps) 
                                                 <SeatCategoryCard category="NT-B" general={row.NTB_General} ladies={row.NTB_Ladies} />
                                                 <SeatCategoryCard category="NT-C" general={row.NTC_General} ladies={row.NTC_Ladies} />
                                                 <SeatCategoryCard category="NT-D" general={row.NTD_General} ladies={row.NTD_Ladies} />
-                                                <SeatCategoryCard category="SEBC" general={row.SEBC_General} ladies={row.SEBC_Ladies} />
+                                                {(row.SEBC_General > 0 || row.SEBC_Ladies > 0) && <SeatCategoryCard category="SEBC" general={row.SEBC_General} ladies={row.SEBC_Ladies} />}
                                             </div>
+
                                             <div className="mt-4 pt-4 border-t-2 border-dashed border-gray-300">
-                                                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
-                                                    <div className="p-3 rounded-base bg-blue-100 border-2 border-black">
-                                                        <div className="text-2xl font-bold text-blue-800">{row.PWD_total + row.PWD_common_reserved}</div>
-                                                        <div className="text-sm font-heading text-blue-900">PWD Seats (Total)</div>
-                                                    </div>
-                                                    <div className="p-3 rounded-base bg-green-100 border-2 border-black">
-                                                        <div className="text-2xl font-bold text-green-800">{row.DEF_total + row.DEF_common_reserved}</div>
-                                                        <div className="text-sm font-heading text-green-900">Defence Seats (Total)</div>
-                                                    </div>
-                                                    <div className="p-3 rounded-base bg-yellow-100 border-2 border-black">
-                                                        <div className="text-2xl font-bold text-yellow-800">{row.TFWS_seats}</div>
-                                                        <div className="text-sm font-heading text-yellow-900">TFWS Seats</div>
-                                                    </div>
-                                                    
-                                                    <div className="p-3 rounded-base bg-orange-100 border-2 border-black">
-                                                        <div className="text-2xl font-bold text-orange-800">{row.orphan}</div>
-                                                        <div className="text-sm font-heading text-orange-900">Orphan Seats</div>
-                                                    </div>
+                                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+                                                    <DetailedInfoCard title="PWD Seats (Total)" value={row.PWD_total + row.PWD_common_reserved} className="bg-blue-100 text-blue-900" subtext={`Reserved: ${row.PWD_common_reserved}`} />
+                                                    <DetailedInfoCard title="Defence Seats (Total)" value={row.DEF_total + row.DEF_common_reserved} className="bg-green-100 text-green-900" subtext={`Reserved: ${row.DEF_common_reserved}`} />
+                                                    <DetailedInfoCard title="TFWS Seats" value={row.TFWS_seats} className="bg-yellow-100 text-yellow-900" subtext={row.TFWS_seats > 0 ? `Choice Code: ${row.TFWS_choice_code}` : undefined} />
                                                 </div>
                                             </div>
                                         </div>

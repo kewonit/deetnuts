@@ -93,7 +93,7 @@ export default function Features() {
                 </div>
                 {/* Under Construction Overlay (sharp) */}
                 {!isMhtCet && (
-                  <div className="absolute top-2 right-2 transform rotate-12 z-20 pointer-events-none">
+                  <div className="absolute top-2 right-2 transform rotate-12 z-10 pointer-events-none max-w-[80px] max-h-[80px] overflow-hidden drop-shadow-lg">
                     <Image
                       className="h-20 w-20"
                       src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1751487107/gdgc/pngimg.com_-_under_construction_PNG34_fr5yo4.webp"

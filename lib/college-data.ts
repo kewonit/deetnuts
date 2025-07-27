@@ -23,7 +23,7 @@ export interface SeatMatrixData {
     all_india: number;
     institute_seats: number;
     orphan: number;
-    CAP_seats:number;
+    CAP_seats: number;
     seat_type: string;
     OPEN_General: number;
     OPEN_Ladies: number;
@@ -73,14 +73,14 @@ export interface CutoffData {
 }
 
 export const getCollegesData = cache(async (): Promise<College[]> => {
-  const pb = getPocketBase();
-  const records: RecordModel[] = await pb.collection('2024_mht_cet_colleges').getFullList({
-    sort: 'college_name',
-  });
-  
-  // The records from PocketBase are RecordModel, we need to cast them.
-  // This is safe if the collection schema matches the College interface.
-  return records as unknown as College[];
+    const pb = getPocketBase();
+    const records: RecordModel[] = await pb.collection('2024_mht_cet_colleges').getFullList({
+        sort: 'college_name',
+    });
+
+    // The records from PocketBase are RecordModel, we need to cast them.
+    // This is safe if the collection schema matches the College interface.
+    return records as unknown as College[];
 }, ['colleges'], { revalidate: 60 * 60 * 24 }); // Cache for 24 hours
 
 export const getCollegeDetails = cache(async (collegeId: string) => {
