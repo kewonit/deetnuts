@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
         const result = await pb.collection('2024_all_india_rounds_two').getList(page, perPage, {
             filter: filterString,
             sort: sort,
-            fields: 'id,sr_no,rank,percentile,choice_code,institute_code,college_code,course_code,course_name,college_name,mapping_status,created,updated'
+            fields: 'id,sr_no,rank,percentile,choice_code,institute_code,merit_exam,type,seat_type,college_code,course_name,college_name,created,updated'
         });
 
         return NextResponse.json({

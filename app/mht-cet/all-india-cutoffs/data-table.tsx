@@ -162,7 +162,7 @@ export function DataTable({
                     )
                 },
                 cell: ({ row }) => (
-                    <div className="min-w-0 max-w-xs lg:max-w-sm">
+                    <div className="min-w-0 max-w-md lg:max-w-lg">
                         <div className="font-semibold text-sm text-gray-900 line-clamp-2 break-words">
                             {row.getValue('college_name')}
                         </div>
@@ -193,39 +193,116 @@ export function DataTable({
                     )
                 },
                 cell: ({ row }) => (
-                    <div className="min-w-0 max-w-sm lg:max-w-md">
+                    <div className="min-w-0 max-w-md lg:max-w-lg">
                         <div className="font-medium text-sm text-gray-900 line-clamp-2 break-words">
                             {row.getValue('course_name')}
                         </div>
-                        <div className="text-xs text-gray-500 mt-1">
-                            Code: {row.original.course_code}
-                        </div>
                     </div>
                 ),
             },
             {
-                accessorKey: 'institute_code',
-                header: 'Institute Code',
+                accessorKey: 'merit_exam',
+                header: ({ column }) => {
+                    return (
+                        <Button
+                            variant="noShadow"
+                            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                            className="h-auto p-0 font-bold hover:text-blue-600"
+                        >
+                            Merit Exam
+                            {column.getIsSorted() === "asc" ? (
+                                <ArrowUp className="ml-2 h-4 w-4" />
+                            ) : column.getIsSorted() === "desc" ? (
+                                <ArrowDown className="ml-2 h-4 w-4" />
+                            ) : (
+                                <ArrowUpDown className="ml-2 h-4 w-4" />
+                            )}
+                        </Button>
+                    )
+                },
                 cell: ({ row }) => (
-                    <div className="w-32 text-center">
-                        <span className="inline-block px-2 py-1 bg-purple-100 border-2 border-purple-300 rounded-base font-mono text-sm">
-                            {row.getValue('institute_code')}
-                        </span>
+                    <div className="w-28 text-center font-mono text-sm">
+                        {row.getValue('merit_exam')}
                     </div>
                 ),
-                enableSorting: false,
+            },
+            {
+                accessorKey: 'type',
+                header: ({ column }) => {
+                    return (
+                        <Button
+                            variant="noShadow"
+                            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                            className="h-auto p-0 font-bold hover:text-blue-600"
+                        >
+                            Type
+                            {column.getIsSorted() === "asc" ? (
+                                <ArrowUp className="ml-2 h-4 w-4" />
+                            ) : column.getIsSorted() === "desc" ? (
+                                <ArrowDown className="ml-2 h-4 w-4" />
+                            ) : (
+                                <ArrowUpDown className="ml-2 h-4 w-4" />
+                            )}
+                        </Button>
+                    )
+                },
+                cell: ({ row }) => (
+                    <div className="w-24 text-center font-mono text-sm">
+                        {row.getValue('type')}
+                    </div>
+                ),
+            },
+            {
+                accessorKey: 'seat_type',
+                header: ({ column }) => {
+                    return (
+                        <Button
+                            variant="noShadow"
+                            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                            className="h-auto p-0 font-bold hover:text-blue-600"
+                        >
+                            Seat Type
+                            {column.getIsSorted() === "asc" ? (
+                                <ArrowUp className="ml-2 h-4 w-4" />
+                            ) : column.getIsSorted() === "desc" ? (
+                                <ArrowDown className="ml-2 h-4 w-4" />
+                            ) : (
+                                <ArrowUpDown className="ml-2 h-4 w-4" />
+                            )}
+                        </Button>
+                    )
+                },
+                cell: ({ row }) => (
+                    <div className="w-24 text-center font-mono text-sm">
+                        {row.getValue('seat_type')}
+                    </div>
+                ),
             },
             {
                 accessorKey: 'choice_code',
-                header: 'Choice Code',
+                header: ({ column }) => {
+                    return (
+                        <Button
+                            variant="noShadow"
+                            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                            className="h-auto p-0 font-bold hover:text-blue-600"
+                        >
+                            Choice Code
+                            {column.getIsSorted() === "asc" ? (
+                                <ArrowUp className="ml-2 h-4 w-4" />
+                            ) : column.getIsSorted() === "desc" ? (
+                                <ArrowDown className="ml-2 h-4 w-4" />
+                            ) : (
+                                <ArrowUpDown className="ml-2 h-4 w-4" />
+                            )}
+                        </Button>
+                    )
+                },
                 cell: ({ row }) => (
-                    <div className="w-28 text-center">
-                        <span className="inline-block px-2 py-1 bg-gray-100 border-2 border-gray-300 rounded-base font-mono text-sm">
-                            {row.getValue('choice_code')}
-                        </span>
+                    <div className="w-28 text-center font-mono text-sm">
+                        {row.getValue('choice_code')}
                     </div>
                 ),
-                enableSorting: false,
             },
         ],
         []

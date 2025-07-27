@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useCallback } from 'react';
-import { SortingState, ColumnFiltersState } from '@tanstack/react-table';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import { SortingState } from '@tanstack/react-table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -11,11 +11,7 @@ import { Button } from '@/components/ui/button';
 import { DataTable } from './data-table';
 import { Filters } from './filters';
 import { useAllIndiaCutoffs } from './use-all-india-cutoffs';
-import {
-    FilterState,
-    RoundType,
-    ROUND_LABELS
-} from './types';
+import { FilterState, RoundType, ROUND_LABELS } from './types';
 
 const initialFilters: FilterState = {
     search: '',
@@ -31,42 +27,73 @@ const initialFilters: FilterState = {
 export default function AllIndiaCutoffsPage() {
     const [activeRound, setActiveRound] = useState<RoundType>('round-one');
     const [filters, setFilters] = useState<FilterState>(initialFilters);
-    const [sorting, setSorting] = useState<SortingState>([]);
+    const [sorting, setSorting] = useState<SortingState>([{ id: 'rank', desc: false }]);
     const [currentPage, setCurrentPage] = useState(1);
     const [perPage] = useState(50);
 
-    // Use optimized hook for current round
     const {
         data,
         pagination,
         loading,
         error,
-        refetch
+        refetch,
     } = useAllIndiaCutoffs({
         round: activeRound,
         filters,
         sorting,
         page: currentPage,
         perPage,
-        debounceMs: 300,
     });
+
+    const isInitialMount = useRef(true);
+
+    // Effect for immediate fetches on page change, sort change, or round change
+    useEffect(() => {
+        // Skip the initial fetch on mount, as the filter effect will handle it.
+        if (isInitialMount.current) {
+            return;
+        }
+        refetch();
+    }, [currentPage, sorting, activeRound, refetch]);
+
+    // Effect for debounced fetches on filter changes
+    useEffect(() => {
+        const debounceTimer = setTimeout(() => {
+            // On initial mount, or when filters change, fetch data.
+            // A search should always reset to page 1.
+            if (currentPage !== 1) {
+                setCurrentPage(1);
+            } else {
+                refetch();
+            }
+        }, 500); // 500ms debounce delay
+
+        // Set initial mount to false after the first run.
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+        }
+
+        return () => clearTimeout(debounceTimer);
+    }, [filters, refetch, currentPage]);
+
 
     const handleRoundChange = useCallback((newRound: string) => {
         setActiveRound(newRound as RoundType);
-        setCurrentPage(1); // Reset to first page when changing rounds
+        setCurrentPage(1);
     }, []);
 
     const handleFiltersChange = useCallback((newFilters: FilterState) => {
         setFilters(newFilters);
-        setCurrentPage(1); // Reset to first page when filters change
     }, []);
 
     const handleSearch = useCallback(() => {
-        // The search is handled automatically by the hook through debouncing
-        // This is mainly for explicit search button clicks
-        setCurrentPage(1);
-        refetch();
-    }, [refetch]);
+        // The search button provides an immediate, non-debounced search.
+        if (currentPage !== 1) {
+            setCurrentPage(1);
+        } else {
+            refetch();
+        }
+    }, [currentPage, refetch]);
 
     const handlePageChange = useCallback((page: number) => {
         setCurrentPage(page);
@@ -74,30 +101,15 @@ export default function AllIndiaCutoffsPage() {
 
     const handleSortChange = useCallback((newSorting: SortingState) => {
         setSorting(newSorting);
-        setCurrentPage(1); // Reset to first page when sorting changes
-    }, []);
-
-    const handleColumnFiltersChange = useCallback((columnFilters: ColumnFiltersState) => {
-        // Convert column filters to our filter format
-        const newFilters = { ...filters };
-
-        columnFilters.forEach(filter => {
-            if (filter.id === 'college_name' && typeof filter.value === 'string') {
-                newFilters.search = filter.value;
-            }
-        });
-
-        setFilters(newFilters);
         setCurrentPage(1);
-    }, [filters]);
+    }, []);
 
     const clearAllFilters = useCallback(() => {
         setFilters(initialFilters);
-        setCurrentPage(1);
     }, []);
 
     return (
-        <div className="min-h-screen bg-[#E4DFF2] pt-[120px] pb-8">
+        <div className="min-h-screen bg-[#E4DFF2] pt-[50px] pb-8">
             <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
                 {/* Header */}
                 <div className="space-y-2">
@@ -186,14 +198,14 @@ export default function AllIndiaCutoffsPage() {
                             </Alert>
                         )}
                     </CardContent>
-                </Card>                {/* Info Alert */}
+                </Card>
+
+                {/* Info Alert */}
                 <Alert className="border-2 border-blue-500 bg-blue-50">
                     <Info className="h-4 w-4 text-blue-600" />
                     <AlertDescription className="text-gray-700">
-                        Data shows actual cutoffs from MHT-CET 2024 All India quota.
-                        Percentile range filters help you find seats within your score range.
-                        Use the branch filter to narrow down to specific engineering disciplines.
-                        {Object.values(filters).some(value => value !== '') && (
+                        Enter your percentile and the search will begin automatically.
+                        {Object.values(filters).some(value => value !== '' && value.length > 0) && (
                             <Button
                                 variant="link"
                                 size="sm"
@@ -212,37 +224,17 @@ export default function AllIndiaCutoffsPage() {
                     onFiltersChange={handleFiltersChange}
                     onSearch={handleSearch}
                     loading={loading}
-                />                {/* Round Tabs with Data Table */}
+                />
+
+                {/* Round Tabs with Data Table */}
                 <Tabs value={activeRound} onValueChange={handleRoundChange} className="w-full">
-                    <TabsList className="grid w-full grid-cols-3 bg-white border-2 border-black shadow-base">
+                    <TabsList className="grid w-full grid-cols-1 bg-white border-2 border-black shadow-base">
                         <TabsTrigger
                             value="round-one"
                             className="relative data-[state=active]:bg-main data-[state=active]:text-black font-bold"
                         >
                             {ROUND_LABELS['round-one']}
-                            {activeRound === 'round-one' && pagination.totalItems > 0 && (
-                                <Badge variant="neutral" className="ml-2 text-xs">
-                                    {pagination.totalItems.toLocaleString()}
-                                </Badge>
-                            )}
-                        </TabsTrigger>
-                        <TabsTrigger
-                            value="round-two"
-                            className="relative data-[state=active]:bg-main data-[state=active]:text-black font-bold"
-                        >
-                            {ROUND_LABELS['round-two']}
-                            {activeRound === 'round-two' && pagination.totalItems > 0 && (
-                                <Badge variant="neutral" className="ml-2 text-xs">
-                                    {pagination.totalItems.toLocaleString()}
-                                </Badge>
-                            )}
-                        </TabsTrigger>
-                        <TabsTrigger
-                            value="round-three"
-                            className="relative data-[state=active]:bg-main data-[state=active]:text-black font-bold"
-                        >
-                            {ROUND_LABELS['round-three']}
-                            {activeRound === 'round-three' && pagination.totalItems > 0 && (
+                            {pagination.totalItems > 0 && (
                                 <Badge variant="neutral" className="ml-2 text-xs">
                                     {pagination.totalItems.toLocaleString()}
                                 </Badge>
@@ -251,42 +243,20 @@ export default function AllIndiaCutoffsPage() {
                     </TabsList>
 
                     <TabsContent value={activeRound} className="mt-6">
-                        <Card className="border-2 border-black shadow-base bg-white">
-                            <CardHeader>
-                                <div className="flex items-center justify-between">
-                                    <CardTitle className="text-xl font-bold text-black">
-                                        {ROUND_LABELS[activeRound]} Cutoffs
-                                    </CardTitle>
-                                    <div className="flex items-center space-x-2">
-                                        {loading && (
-                                            <div className="flex items-center space-x-2 text-sm text-gray-600">
-                                                <Loader2 className="h-4 w-4 animate-spin" />
-                                                Loading...
-                                            </div>
-                                        )}
-                                        {pagination.totalItems > 0 && (
-                                            <Badge variant="neutral" className="bg-main">
-                                                {pagination.totalItems.toLocaleString()} records
-                                            </Badge>
-                                        )}
-                                    </div>
-                                </div>
-                            </CardHeader>
-                            <CardContent>
-                                <DataTable
-                                    key={activeRound}
-                                    data={data}
-                                    pagination={pagination}
-                                    loading={loading}
-                                    onPageChange={handlePageChange}
-                                    onSortChange={handleSortChange}
-                                    onFiltersChange={handleColumnFiltersChange}
-                                />
-                            </CardContent>
-                        </Card>
+                        <DataTable
+                            key={activeRound}
+                            data={data}
+                            pagination={pagination}
+                            loading={loading}
+                            onPageChange={handlePageChange}
+                            onSortChange={handleSortChange}
+                            onFiltersChange={() => { }} // Column filters are handled by the main search
+                        />
                     </TabsContent>
                 </Tabs>
             </div>
         </div>
     );
 }
+
+

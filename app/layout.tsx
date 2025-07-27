@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+
 import Navbar from "@/components/Navbar";
+import DiscordHeader from "@/components/DiscordHeader";
 import Footer from '@/components/footer'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import GrainEffect from '@/components/graineffect';
@@ -32,7 +34,9 @@ export default function RootLayout({
       <meta property="og:image:png" content="https://res.cloudinary.com/dfyrk32ua/image/upload/v1722186653/deetnuts/preview_o5ykn7.png" />
       <link rel="icon" href="/favicon.ico" />
       <body className={`${inter.className} relative min-h-screen overflow-x-hidden`}>
-        <Navbar />
+        <Navbar>
+          <DiscordHeader />
+        </Navbar>
         <Suspense fallback={<Loading />}>
           <MotionWrapper>
             <NextTopLoader

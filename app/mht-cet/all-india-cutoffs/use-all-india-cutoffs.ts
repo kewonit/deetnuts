@@ -31,38 +31,42 @@ export function useAllIndiaCutoffs({
     const [pagination, setPagination] = useState<PaginationInfo>({
         page: 1,
         perPage: 50,
-        totalPages: 1,
+        totalPages: 0,
         totalItems: 0,
     });
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     const abortControllerRef = useRef<AbortController | null>(null);
-    const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const isMountedRef = useRef(true);
+    const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    // Use a ref to hold the latest props and state, making fetchData stable
+    const stateRef = useRef({ round, filters, sorting, page, perPage });
+    useEffect(() => {
+        stateRef.current = { round, filters, sorting, page, perPage };
+    }, [round, filters, sorting, page, perPage]);
 
     const buildQueryParams = useCallback((
-        filters: FilterState,
-        sorting: SortingState,
-        page: number,
-        perPage: number
+        currentFilters: FilterState,
+        currentSorting: SortingState,
+        currentPage: number,
+        currentPerPage: number
     ) => {
         const params = new URLSearchParams();
+        params.set('page', currentPage.toString());
+        params.set('perPage', currentPerPage.toString());
 
-        params.set('page', page.toString());
-        params.set('perPage', perPage.toString());
-
-        if (sorting.length > 0) {
-            const sortField = sorting[0].id;
-            const sortDirection = sorting[0].desc ? '-' : '';
+        if (currentSorting.length > 0) {
+            const sortField = currentSorting[0].id;
+            const sortDirection = currentSorting[0].desc ? '-' : '';
             params.set('sort', `${sortDirection}${sortField}`);
         }
 
-        Object.entries(filters).forEach(([key, value]) => {
-            if (key === 'branches' && Array.isArray(value) && value.length > 0) {
-                // Handle multiple branches - join them with commas
-                params.set('branches', value.join(','));
-            } else if (key !== 'branches' && typeof value === 'string' && value.trim()) {
+        Object.entries(currentFilters).forEach(([key, value]) => {
+            if (Array.isArray(value) && value.length > 0) {
+                params.set(key, value.join(','));
+            } else if (typeof value === 'string' && value.trim()) {
                 params.set(key, value.trim());
             }
         });
@@ -70,106 +74,17 @@ export function useAllIndiaCutoffs({
         return params.toString();
     }, []);
 
-    const fetchData = useCallback(async (
-        round: RoundType,
-        filters: FilterState,
-        sorting: SortingState,
-        page: number,
-        perPage: number,
-        signal?: AbortSignal
-    ) => {
-        try {
-            const queryParams = buildQueryParams(filters, sorting, page, perPage);
-            const url = `${ROUND_ENDPOINTS[round]}?${queryParams}`;
+    const fetchData = useCallback(async (immediate = false) => {
+        const { round, filters, sorting, page, perPage } = stateRef.current;
 
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                cache: 'no-store',
-                signal,
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const result: ApiResponse = await response.json();
-
-            if (result.success) {
-                if (isMountedRef.current) {
-                    setData(result.data);
-                    setPagination(result.pagination);
-                    setError(null);
-                }
-            } else {
-                throw new Error(result.error || 'Failed to fetch data');
-            }
-        } catch (error) {
-            if (error instanceof Error && error.name === 'AbortError') {
-                return; // Request was cancelled, don't update state
-            }
-
-            console.error(`Error fetching ${round} data:`, error);
-            if (isMountedRef.current) {
-                setError(error instanceof Error ? error.message : 'Unknown error occurred');
-                setData([]);
-                setPagination({
-                    page: 1,
-                    perPage: 50,
-                    totalPages: 1,
-                    totalItems: 0,
-                });
-            }
-        }
-    }, [buildQueryParams]);
-
-    const refetch = useCallback(() => {
-        // Clear any pending debounced requests
         if (debounceTimeoutRef.current) {
             clearTimeout(debounceTimeoutRef.current);
         }
 
-        // Cancel any ongoing request
-        if (abortControllerRef.current) {
-            abortControllerRef.current.abort();
-        }
-
-        // Create new abort controller
-        abortControllerRef.current = new AbortController();
-
-        if (isMountedRef.current) {
-            setLoading(true);
-            setError(null);
-        }
-
-        fetchData(round, filters, sorting, page, perPage, abortControllerRef.current.signal)
-            .finally(() => {
-                if (isMountedRef.current) {
-                    setLoading(false);
-                }
-            });
-    }, [round, filters, sorting, page, perPage, fetchData]);
-
-    // Effect to handle data fetching with debouncing
-    useEffect(() => {
-        // Clear any pending debounced requests
-        if (debounceTimeoutRef.current) {
-            clearTimeout(debounceTimeoutRef.current);
-        }
-
-        // Cancel any ongoing request
-        if (abortControllerRef.current) {
-            abortControllerRef.current.abort();
-        }
-
-        // For non-search operations (pagination, sorting), fetch immediately
-        const isSearchOperation = filters.search !== '' || filters.branch !== '';
-        const delay = isSearchOperation ? debounceMs : 0;
-
-        debounceTimeoutRef.current = setTimeout(() => {
-            // Create new abort controller
+        const executeFetch = async () => {
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort();
+            }
             abortControllerRef.current = new AbortController();
 
             if (isMountedRef.current) {
@@ -177,35 +92,72 @@ export function useAllIndiaCutoffs({
                 setError(null);
             }
 
-            fetchData(round, filters, sorting, page, perPage, abortControllerRef.current.signal)
-                .finally(() => {
-                    if (isMountedRef.current) {
-                        setLoading(false);
-                    }
+            try {
+                const queryParams = buildQueryParams(filters, sorting, page, perPage);
+                const url = `${ROUND_ENDPOINTS[round]}?${queryParams}`;
+                
+                const response = await fetch(url, {
+                    signal: abortControllerRef.current.signal,
+                    cache: 'no-store',
                 });
-        }, delay);
 
-        // Cleanup function
-        return () => {
-            if (debounceTimeoutRef.current) {
-                clearTimeout(debounceTimeoutRef.current);
-            }
-            if (abortControllerRef.current) {
-                abortControllerRef.current.abort();
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.details || `HTTP error! status: ${response.status}`);
+                }
+
+                const result: ApiResponse = await response.json();
+
+                if (isMountedRef.current) {
+                    if (result.success) {
+                        setData(result.data);
+                        setPagination(result.pagination);
+                    } else {
+                        throw new Error(result.error || 'API returned an error');
+                    }
+                }
+            } catch (err) {
+                if (err instanceof Error && err.name === 'AbortError') {
+                    return;
+                }
+                
+                console.error(`Error fetching ${round} data:`, err);
+                if (isMountedRef.current) {
+                    setError(err instanceof Error ? err.message : 'An unknown error occurred');
+                    setData([]);
+                    setPagination({ page: 1, perPage, totalPages: 0, totalItems: 0 });
+                }
+            } finally {
+                if (isMountedRef.current) {
+                    setLoading(false);
+                }
             }
         };
-    }, [round, filters, sorting, page, perPage, debounceMs, fetchData]);
 
-    // Cleanup on unmount
+        if (immediate) {
+            executeFetch();
+        } else {
+            debounceTimeoutRef.current = setTimeout(executeFetch, debounceMs);
+        }
+    }, [buildQueryParams, debounceMs]);
+
+    const refetch = useCallback(() => {
+        fetchData(true);
+    }, [fetchData]);
+
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
+
     useEffect(() => {
         isMountedRef.current = true;
         return () => {
             isMountedRef.current = false;
-            if (debounceTimeoutRef.current) {
-                clearTimeout(debounceTimeoutRef.current);
-            }
             if (abortControllerRef.current) {
                 abortControllerRef.current.abort();
+            }
+            if (debounceTimeoutRef.current) {
+                clearTimeout(debounceTimeoutRef.current);
             }
         };
     }, []);

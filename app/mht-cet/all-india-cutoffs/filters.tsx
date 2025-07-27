@@ -34,7 +34,6 @@ interface FiltersProps {
 }
 
 export function Filters({ filters, onFiltersChange, onSearch, loading }: FiltersProps) {
-    const [isExpanded, setIsExpanded] = useState(false);
     const [branchPopoverOpen, setBranchPopoverOpen] = useState(false);
 
     const updateFilter = useCallback((key: keyof FilterState, value: string) => {
@@ -120,15 +119,6 @@ export function Filters({ filters, onFiltersChange, onSearch, loading }: Filters
                         )}
                     </div>
                     <div className="flex items-center space-x-2">
-                        <Button
-                            variant="neutral"
-                            size="sm"
-                            onClick={() => setIsExpanded(!isExpanded)}
-                            className="shadow-base border-2 border-black hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none"
-                        >
-                            <Filter className="h-4 w-4 mr-2" />
-                            {isExpanded ? 'Less' : 'More'} Filters
-                        </Button>
                         {hasActiveFilters && (
                             <Button
                                 variant="neutral"
@@ -403,44 +393,29 @@ export function Filters({ filters, onFiltersChange, onSearch, loading }: Filters
                     </Popover>
                 </div>
 
-                {/* Expandable Filters */}
-                {isExpanded && (
-                    <>
-                        <Separator />
+                <Separator />
 
-                        {/* Percentile Range */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <Label htmlFor="minPercentile" className="text-sm font-medium text-black">Min Percentile</Label>
-                                <Input
-                                    id="minPercentile"
-                                    type="number"
-                                    placeholder="0"
-                                    min="0"
-                                    max="100"
-                                    step="0.01"
-                                    value={filters.minPercentile}
-                                    onChange={(e) => updateFilter('minPercentile', e.target.value)}
-                                    className="border-2 border-black shadow-base rounded-base"
-                                />
-                            </div>
-                            <div>
-                                <Label htmlFor="maxPercentile" className="text-sm font-medium text-black">Max Percentile</Label>
-                                <Input
-                                    id="maxPercentile"
-                                    type="number"
-                                    placeholder="100"
-                                    min="0"
-                                    max="100"
-                                    step="0.01"
-                                    value={filters.maxPercentile}
-                                    onChange={(e) => updateFilter('maxPercentile', e.target.value)}
-                                    className="border-2 border-black shadow-base rounded-base"
-                                />
-                            </div>
-                        </div>
-                    </>
-                )}
+                {/* Percentile Filter */}
+                <div>
+                    <Label htmlFor="maxPercentile" className="text-sm font-medium text-black">Your Percentile</Label>
+                    <p className="text-xs text-gray-500 mb-1">Find colleges with cutoffs at or below your percentile.</p>
+                    <Input
+                        id="maxPercentile"
+                        type="text"
+                        inputMode="decimal"
+                        placeholder="e.g., 98.54"
+                        value={filters.maxPercentile}
+                        onChange={(e) => {
+                            const { value } = e.target;
+                            // Regex to allow only numbers and a single decimal point.
+                            // Allows an empty string, a number, a number with a decimal, or a decimal followed by a number.
+                            if (/^$|^(\d+)?(\.\d*)?$/.test(value)) {
+                                updateFilter('maxPercentile', value);
+                            }
+                        }}
+                        className="border-2 border-black shadow-base rounded-base"
+                    />
+                </div>
 
                 {/* Active Filters Display */}
                 {hasActiveFilters && (
