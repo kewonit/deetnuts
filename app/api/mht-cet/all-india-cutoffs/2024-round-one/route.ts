@@ -5,70 +5,65 @@ export async function GET(request: NextRequest) {
     try {
         const { searchParams } = new URL(request.url);
 
-        // Get pagination parameters
-        const page = parseInt(searchParams.get('page') || '1');
-        const perPage = parseInt(searchParams.get('perPage') || '50');
+        // Pagination
+        const page = parseInt(searchParams.get('page') || '1', 10) || 1;
+        const perPage = parseInt(searchParams.get('perPage') || '50', 10) || 50;
         const sort = searchParams.get('sort') || 'rank';
 
-        // Get filter parameters
+        // Filters
         const search = searchParams.get('search') || '';
-        const branch = searchParams.get('branch') || '';
         const branches = searchParams.get('branches') || '';
-        const minPercentile = searchParams.get('minPercentile') || '';
-        const maxPercentile = searchParams.get('maxPercentile') || '';
-        const minRank = searchParams.get('minRank') || '';
-        const maxRank = searchParams.get('maxRank') || '';
+        const maxPercentileStr = searchParams.get('maxPercentile') || '';
+        const minRankStr = searchParams.get('minRank') || '';
+        const maxRankStr = searchParams.get('maxRank') || '';
         const collegeName = searchParams.get('collegeName') || '';
 
-        // Build filter string
         const filters = [];
 
+        // General search filter
         if (search) {
-            filters.push(`(course_name ~ "${search}" || college_name ~ "${search}" || choice_code ~ "${search}")`);
+            const safeSearch = search.replace(/"/g, '""');
+            filters.push(`(course_name ~ "${safeSearch}" || college_name ~ "${safeSearch}" || choice_code ~ "${safeSearch}")`);
         }
 
-        if (branch) {
-            filters.push(`course_name ~ "${branch}"`);
-        }
-
+        // Branch filter (supports multiple, comma-separated)
         if (branches) {
-            // Handle multiple branches
             const branchList = branches.split(',').map(b => b.trim()).filter(b => b);
             if (branchList.length > 0) {
-                const branchFilters = branchList.map(b => `course_name ~ "${b}"`).join(' || ');
+                const branchFilters = branchList.map(b => `course_name ~ "${b.replace(/"/g, '""')}"`).join(' || ');
                 filters.push(`(${branchFilters})`);
             }
         }
 
-        if (minPercentile) {
-            filters.push(`percentile >= ${parseFloat(minPercentile)}`);
+        // Percentile filter (handles the "at or below" case)
+        const maxPercentile = parseFloat(maxPercentileStr);
+        if (!isNaN(maxPercentile)) {
+            filters.push(`percentile <= ${maxPercentile}`);
         }
 
-        if (maxPercentile) {
-            filters.push(`percentile <= ${parseFloat(maxPercentile)}`);
+        // Rank filters
+        const minRank = parseInt(minRankStr, 10);
+        if (!isNaN(minRank)) {
+            filters.push(`rank >= ${minRank}`);
+        }
+        const maxRank = parseInt(maxRankStr, 10);
+        if (!isNaN(maxRank)) {
+            filters.push(`rank <= ${maxRank}`);
         }
 
-        if (minRank) {
-            filters.push(`rank >= ${parseInt(minRank)}`);
-        }
-
-        if (maxRank) {
-            filters.push(`rank <= ${parseInt(maxRank)}`);
-        }
-
+        // College name filter
         if (collegeName) {
-            filters.push(`college_name ~ "${collegeName}"`);
+            filters.push(`college_name ~ "${collegeName.replace(/"/g, '""')}"`);
         }
 
-        const filterString = filters.length > 0 ? filters.join(' && ') : '';
+        const filterString = filters.join(' && ');
 
         const pb = getPocketBase();
 
-        // Fetch records with pagination and filtering
         const result = await pb.collection('2024_all_india_rounds_one').getList(page, perPage, {
             filter: filterString,
             sort: sort,
-            fields: 'id,sr_no,rank,percentile,choice_code,institute_code,college_code,course_code,course_name,college_name,mapping_status,created,updated'
+            fields: 'id,sr_no,rank,percentile,choice_code,institute_code,merit_exam,type,seat_type,college_code,course_name,college_name,created,updated'
         });
 
         return NextResponse.json({
@@ -83,11 +78,15 @@ export async function GET(request: NextRequest) {
         });
     } catch (error) {
         console.error('Error fetching 2024 All India Round One data:', error);
+        // Ensure a consistent error response format
+        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
         return NextResponse.json(
             {
                 success: false,
-                error: 'Failed to fetch data',
-                details: error instanceof Error ? error.message : 'Unknown error'
+                error: 'Failed to fetch data from the server.',
+                details: errorMessage,
+                data: [],
+                pagination: { page: 1, perPage: 50, totalPages: 0, totalItems: 0 }
             },
             { status: 500 }
         );

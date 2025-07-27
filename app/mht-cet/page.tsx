@@ -73,7 +73,7 @@ export default function Home() {
         >
           {Object.keys(LINKS).map((key) => {
             // Only 'link1' and 'link3' are under construction
-            const isUnderConstruction = key === 'link1' || key === 'link3';
+            const isUnderConstruction = key === 'link3';
 
             if (isUnderConstruction) {
               return (

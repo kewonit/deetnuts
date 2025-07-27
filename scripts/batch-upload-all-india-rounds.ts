@@ -10,14 +10,15 @@ dotenv.config();
 interface AllIndiaRoundRecord {
     sr_no: number;
     rank: number;
-    percentile: number;
+    percentile: string;
     choice_code: string;
     institute_code: string;
+    merit_exam: string;
+    type: string;
+    seat_type: string;
     college_code: string;
-    course_code: string;
     course_name: string;
     college_name: string;
-    mapping_status: string;
 }
 
 class BatchAllIndiaRoundsUploader {
@@ -81,16 +82,17 @@ class BatchAllIndiaRoundsUploader {
                 }))
                 .on('data', (row) => {
                     const record: AllIndiaRoundRecord = {
-                        sr_no: parseFloat(row.sr_no) || 0,
+                        sr_no: parseFloat(row.sr_no.replace(/,/g, '')) || 0,
                         rank: parseFloat(row.rank) || 0,
-                        percentile: parseFloat(row.percentile) || 0,
+                        percentile: row.percentile?.toString() || '',
                         choice_code: row.choice_code?.toString() || '',
                         institute_code: row.institute_code?.toString() || '',
+                        merit_exam: row.merit_exam?.toString() || '',
+                        type: row.type?.toString() || '',
+                        seat_type: row.seat_type?.toString() || '',
                         college_code: row.college_code?.toString() || '',
-                        course_code: row.course_code?.toString() || '',
                         course_name: row.course_name?.toString() || '',
                         college_name: row.college_name?.toString() || '',
-                        mapping_status: row.mapping_status?.toString() || ''
                     };
                     records.push(record);
                 })

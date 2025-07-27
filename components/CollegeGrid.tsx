@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { createCollegeSlug } from '@/lib/slugify';
+import fuzzysort from 'fuzzysort';
 
 interface College {
     id: string;
@@ -21,15 +22,24 @@ export default function CollegeGrid({ colleges }: CollegeGridProps) {
     const [statusFilter, setStatusFilter] = useState('all');
 
     const filteredColleges = useMemo(() => {
-        return colleges.filter(college => {
-            const matchesSearch = college.college_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                college.college_id.toString().includes(searchTerm) ||
-                college.home_university.toLowerCase().includes(searchTerm.toLowerCase());
+        if (!searchTerm.trim() && statusFilter === 'all') return colleges;
 
-            const matchesStatus = statusFilter === 'all' || college.status === statusFilter;
-
-            return matchesSearch && matchesStatus;
-        });
+        let result = colleges;
+        if (searchTerm.trim()) {
+            // Fuzzy search across name, ID, and university
+            const searchKeys = ['college_name', 'college_id', 'home_university'];
+            // Combine all searchable fields into a string for each college
+            const prepared = result.map(college => ({
+                ...college,
+                _search: `${college.college_name} ${college.college_id} ${college.home_university}`
+            }));
+            const fuzzyResults = fuzzysort.go(searchTerm, prepared, { key: '_search', threshold: -10000 });
+            result = fuzzyResults.map(r => r.obj);
+        }
+        if (statusFilter !== 'all') {
+            result = result.filter(college => college.status === statusFilter);
+        }
+        return result;
     }, [colleges, searchTerm, statusFilter]);
 
     const uniqueStatuses = useMemo(() => {

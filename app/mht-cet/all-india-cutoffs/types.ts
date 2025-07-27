@@ -5,11 +5,12 @@ export interface CutoffRecord {
     percentile: string;
     choice_code: string;
     institute_code: string;
+    merit_exam: string;
+    type: string;
+    seat_type: string;
     college_code: string;
-    course_code: string;
     course_name: string;
     college_name: string;
-    mapping_status: string;
     created: string;
     updated: string;
 }
