@@ -10,7 +10,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CATEGORY_GROUPS, COURSE_GROUPS, STATUS_OPTIONS, HOME_UNIVERSITY_OPTIONS, ROUND_OPTIONS } from '../constants';
+import { CATEGORY_GROUPS, COURSE_GROUPS, STATUS_OPTIONS, HOME_UNIVERSITY_OPTIONS, ROUND_OPTIONS, YEAR_OPTIONS } from '../constants';
 import { getPrecisePercentileRange } from '../utils';
 import { FilterState, PendingFilters } from '../types';
 import { Dispatch, SetStateAction, useCallback } from 'react';
@@ -24,6 +24,7 @@ interface CutoffFiltersProps {
     loading: boolean;
     applyFilters: () => void;
     clearAllFilters: () => void;
+    isRoundSelectionDisabled?: boolean;
 }
 
 export function CutoffFilters({
@@ -35,6 +36,7 @@ export function CutoffFilters({
     loading,
     applyFilters,
     clearAllFilters,
+    isRoundSelectionDisabled = false,
 }: CutoffFiltersProps) {
 
     const handleCategoryToggle = useCallback((category: string) => {
@@ -80,6 +82,13 @@ export function CutoffFilters({
         }
     }, [setPendingFilters]);
 
+    const handleYearChange = useCallback((yearValue: string) => {
+        const year = parseInt(yearValue, 10);
+        if (Number.isInteger(year)) {
+            setPendingFilters(prev => ({ ...prev, year }));
+        }
+    }, [setPendingFilters]);
+
     return (
         <Card className="shadow-lg border border-gray-200 overflow-hidden">
             <CardHeader className="pb-4 border-b border-gray-200">
@@ -119,44 +128,90 @@ export function CutoffFilters({
                 </div>
 
                 {/* Enhanced Counseling Round Selection - Fully Responsive */}
-                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-3 md:p-5 space-y-3 md:space-y-4">
-                    <div className="flex items-center gap-2 md:gap-3">
-                        <div className="w-2.5 h-2.5 md:w-3 md:h-3 bg-blue-500 rounded-full flex-shrink-0"></div>
-                        <Label className="text-base md:text-lg font-bold font-abel text-blue-900">
-                            Counseling Round
-                        </Label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-xl p-3 md:p-5 space-y-3 md:space-y-4">
+                        <div className="flex items-center gap-2 md:gap-3">
+                            <div className="w-2.5 h-2.5 md:w-3 md:h-3 bg-purple-500 rounded-full flex-shrink-0"></div>
+                            <Label className="text-base md:text-lg font-bold font-abel text-purple-900">
+                                Year
+                            </Label>
+                        </div>
+                        <p className="text-xs md:text-sm text-purple-700 font-abel leading-relaxed">
+                            Select the year of MHT-CET counseling data to view.
+                        </p>
+                        <Select
+                            value={pendingFilters.year.toString()}
+                            onValueChange={handleYearChange}
+                        >
+                            <SelectTrigger className="font-abel text-sm md:text-base h-12 md:h-14 bg-white border-2 border-purple-300 hover:border-purple-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200 shadow-sm">
+                                <SelectValue placeholder="Choose a year" />
+                            </SelectTrigger>
+                            <SelectContent className="border-purple-200 w-[calc(100vw-2rem)] sm:w-[380px] md:min-w-[400px] max-w-[500px]">
+                                {YEAR_OPTIONS.map((option) => (
+                                    <SelectItem
+                                        key={option.value}
+                                        value={option.value.toString()}
+                                        className="font-abel hover:bg-purple-50 focus:bg-purple-50 py-3 md:py-4 cursor-pointer"
+                                    >
+                                        <div className="flex items-center gap-2 md:gap-4 w-full">
+                                            <div className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 bg-purple-100 rounded-full flex items-center justify-center border-2 border-purple-300">
+                                                <span className="text-sm md:text-base font-bold text-purple-700">{option.value}</span>
+                                            </div>
+                                            <div className="flex flex-col flex-1 text-left min-w-0">
+                                                <span className="font-bold text-purple-900 text-sm md:text-base mb-0.5 md:mb-1 truncate">
+                                                    {option.label}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
-                    <p className="text-xs md:text-sm text-blue-700 font-abel leading-relaxed">
-                        Select which round of MHT-CET counseling data to view. Each round has different cutoff scores.
-                    </p>
-                    <Select
-                        value={pendingFilters.round.toString()}
-                        onValueChange={handleRoundChange}
-                    >
-                        <SelectTrigger className="font-abel text-sm md:text-base h-12 md:h-14 bg-white border-2 border-blue-300 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 shadow-sm">
-                            <SelectValue placeholder="Choose a counseling round" />
-                        </SelectTrigger>
-                        <SelectContent className="border-blue-200 w-[calc(100vw-2rem)] sm:w-[380px] md:min-w-[400px] max-w-[500px]">
-                            {ROUND_OPTIONS.map((option) => (
-                                <SelectItem
-                                    key={option.value}
-                                    value={option.value.toString()}
-                                    className="font-abel hover:bg-blue-50 focus:bg-blue-50 py-3 md:py-4 cursor-pointer"
-                                >
-                                    <div className="flex items-center gap-2 md:gap-4 w-full">
-                                        <div className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center border-2 border-blue-300">
-                                            <span className="text-sm md:text-base font-bold text-blue-700">{option.value}</span>
+                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-3 md:p-5 space-y-3 md:space-y-4">
+                        <div className="flex items-center gap-2 md:gap-3">
+                            <div className="w-2.5 h-2.5 md:w-3 md:h-3 bg-blue-500 rounded-full flex-shrink-0"></div>
+                            <Label className="text-base md:text-lg font-bold font-abel text-blue-900">
+                                Counseling Round
+                            </Label>
+                        </div>
+                        <p className="text-xs md:text-sm text-blue-700 font-abel leading-relaxed">
+                            Select which round of MHT-CET counseling data to view. Each round has different cutoff scores.
+                        </p>
+                        <Select
+                            value={pendingFilters.round.toString()}
+                            onValueChange={handleRoundChange}
+                            disabled={isRoundSelectionDisabled}
+                        >
+                            <SelectTrigger className="font-abel text-sm md:text-base h-12 md:h-14 bg-white border-2 border-blue-300 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                                <SelectValue placeholder="Choose a counseling round" />
+                            </SelectTrigger>
+                            <SelectContent className="border-blue-200 w-[calc(100vw-2rem)] sm:w-[380px] md:min-w-[400px] max-w-[500px]">
+                                {ROUND_OPTIONS.map((option) => (
+                                    <SelectItem
+                                        key={option.value}
+                                        value={option.value.toString()}
+                                        className="font-abel hover:bg-blue-50 focus:bg-blue-50 py-3 md:py-4 cursor-pointer"
+                                        disabled={isRoundSelectionDisabled && option.value !== 1}
+                                    >
+                                        <div className="flex items-center gap-2 md:gap-4 w-full">
+                                            <div className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center border-2 border-blue-300">
+                                                <span className="text-sm md:text-base font-bold text-blue-700">{option.value}</span>
+                                            </div>
+                                            <div className="flex flex-col flex-1 text-left min-w-0">
+                                                <span className="font-bold text-blue-900 text-sm md:text-base mb-0.5 md:mb-1 truncate">
+                                                    {option.label}
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div className="flex flex-col flex-1 text-left min-w-0">
-                                            <span className="font-bold text-blue-900 text-sm md:text-base mb-0.5 md:mb-1 truncate">
-                                                {option.label}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        {isRoundSelectionDisabled && (
+                            <p className="text-xs text-blue-600 font-abel">Only Round 1 data is available for 2025.</p>
+                        )}
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-4">

@@ -2,7 +2,7 @@
 
 import { getPocketBase } from '@/lib/pocketbaseClient';
 import { ensureUserAuthenticated } from '@/lib/supabaseAuth';
-import { getCollectionForRound, isValidRound, DEFAULT_ROUND, ROUND_CONFIG } from './constants';
+import { getCollectionForRound, isValidRound, DEFAULT_ROUND, ROUND_CONFIG, COURSE_GROUPS } from './constants';
 
 export async function getCutoffRecords(
     page: number,
@@ -14,6 +14,7 @@ export async function getCutoffRecords(
     homeUniversities: string[],
     percentileInput: string,
     round: number,
+    year: number,
     sortBy: string,
     sortOrder: string,
 ) {
@@ -28,6 +29,7 @@ export async function getCutoffRecords(
             homeUniversities,
             percentileInput,
             round,
+            year,
             sortBy,
             sortOrder
         });
@@ -38,9 +40,9 @@ export async function getCutoffRecords(
             console.warn(`Invalid round ${round} provided, using default round ${sanitizedRound}`);
         }
 
-        // Get the collection name for the specified round
-        const collectionName = getCollectionForRound(sanitizedRound);
-        console.log(`Using collection: ${collectionName} for round ${sanitizedRound}`);
+        // Get the collection name for the specified round and year
+        const collectionName = getCollectionForRound(sanitizedRound, year);
+        console.log(`Using collection: ${collectionName} for round ${sanitizedRound} and year ${year}`);
 
         const pb = getPocketBase();
 
@@ -72,7 +74,8 @@ export async function getCutoffRecords(
             }
 
             // Use chunked categories if provided, otherwise use all categories
-            const categoriesToFilter = categoryChunk || categories;
+            let categoriesToFilter = categoryChunk || categories;
+
             if (categoriesToFilter && Array.isArray(categoriesToFilter) && categoriesToFilter.length > 0) {
                 const categoryFilter = categoriesToFilter.map((cat: string) => `category = "${cat}"`).join(' || ');
                 filterParts.push(`(${categoryFilter})`);

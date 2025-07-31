@@ -22,16 +22,17 @@ interface CutoffRecord {
 class MHTCETCutoffUploader {
     private pb: PocketBase;
     private csvFilePath: string;
-    private collectionName = '2024_mht_cet_round_one_cutoffs_duplicate';
+    private collectionName = '2025_mht_cet_round_one_cutoffs';
     private authToken: string | null = null;
 
     constructor() {
         // Initialize PocketBase - adjust URL as needed
         const pbUrl = process.env.POCKETBASE_URL || 'https://api.deetnuts.com';
         this.pb = new PocketBase(pbUrl);
+        this.pb.autoCancellation(false); // Disable auto-cancellation for bulk uploads
 
         // Set CSV file path - the CSV is in the scripts folder
-        this.csvFilePath = path.join(__dirname, 'combined_cutoffs.csv');
+        this.csvFilePath = path.join(__dirname, 'combined_cutoffs_with_status.csv');
     }
 
     async authenticateWithToken() {
@@ -129,45 +130,34 @@ class MHTCETCutoffUploader {
 
         let successCount = 0;
         let errorCount = 0;
-        const batchSize = 50; // Reduced batch size for better error handling
+        const batchSize = 500; // Increased batch size for performance.
 
         for (let i = 0; i < records.length; i += batchSize) {
             const batch = records.slice(i, i + batchSize);
             console.log(`📦 Processing batch ${Math.floor(i / batchSize) + 1} (records ${i + 1}-${Math.min(i + batchSize, records.length)})`);
 
-            // Process batch sequentially to avoid overwhelming the server
-            for (let j = 0; j < batch.length; j++) {
-                const record = batch[j];
+            const uploadPromises = batch.map((record, j) => {
                 const recordIndex = i + j;
+                return this.pb.collection(this.collectionName).create(record)
+                    .then(() => {
+                        successCount++;
+                        if (successCount % 100 === 0) {
+                            console.log(`✅ Uploaded ${successCount} records...`);
+                        }
+                    })
+                    .catch((error: any) => {
+                        errorCount++;
+                        console.error(`❌ Error uploading record ${recordIndex + 1}:`, error.response?.message || error.message);
 
-                try {
-                    await this.pb.collection(this.collectionName).create(record);
-                    successCount++;
+                        // Log the problematic record for debugging
+                        if (errorCount <= 5) { // Only log first 5 errors to avoid spam
+                            console.error('Record data:', record);
+                        }
+                    });
+            });
 
-                    // Log progress every 100 records
-                    if ((recordIndex + 1) % 100 === 0) {
-                        console.log(`✅ Uploaded ${recordIndex + 1} records...`);
-                    }
-                } catch (error: any) {
-                    errorCount++;
-                    console.error(`❌ Error uploading record ${recordIndex + 1}:`, error.response?.message || error.message);
-
-                    // Log the problematic record for debugging
-                    if (errorCount <= 5) { // Only log first 5 errors to avoid spam
-                        console.error('Record data:', record);
-                    }
-                }
-
-                // Small delay between records to be respectful to the server
-                if (j < batch.length - 1) {
-                    await new Promise(resolve => setTimeout(resolve, 10));
-                }
-            }
-
-            // Larger delay between batches
-            if (i + batchSize < records.length) {
-                await new Promise(resolve => setTimeout(resolve, 500));
-            }
+            // Process batch concurrently without any delay
+            await Promise.all(uploadPromises);
         }
 
         console.log(`\n📈 Upload Summary:`);
@@ -261,5 +251,3 @@ if (require.main === module) {
     const uploader = new MHTCETCutoffUploader();
     uploader.run();
 }
-
-export default MHTCETCutoffUploader;

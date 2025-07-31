@@ -24,6 +24,7 @@ export interface FilterState {
     homeUniversities: string[];
     percentileInput: string;
     round: number;
+    year: number;
     sortBy: string;
     sortOrder: 'asc' | 'desc';
 }
@@ -36,6 +37,7 @@ export interface PendingFilters {
     homeUniversities: string[];
     percentileInput: string;
     round: number;
+    year: number;
 }
 
 export interface RoundOption {

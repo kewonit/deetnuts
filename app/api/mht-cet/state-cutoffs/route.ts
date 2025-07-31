@@ -15,6 +15,7 @@ export async function POST(request: NextRequest) {
             homeUniversities = [],
             percentileInput = '',
             round = 1,
+            year = 2025, // Add year to destructuring
             sortBy = 'last_rank',
             sortOrder = 'desc'
         } = body;
@@ -36,6 +37,7 @@ export async function POST(request: NextRequest) {
             homeUniversities,
             percentileInput,
             sanitizedRound,
+            year, // Pass year to server action
             sortBy,
             sortOrder
         );

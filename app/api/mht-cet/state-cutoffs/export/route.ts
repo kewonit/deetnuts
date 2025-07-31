@@ -16,6 +16,7 @@ export async function GET(request: NextRequest) {
         const homeUniversities = searchParams.getAll('homeUniversities');
         const percentileInput = searchParams.get('percentileInput') || '';
         const roundParam = searchParams.get('round');
+        const yearParam = searchParams.get('year');
 
         // Validate and sanitize round parameter
         const round = roundParam ? parseInt(roundParam, 10) : DEFAULT_ROUND;
@@ -23,9 +24,10 @@ export async function GET(request: NextRequest) {
         if (sanitizedRound !== round) {
             console.warn(`Invalid round ${round} provided in export, using round ${sanitizedRound}`);
         }
+        const year = yearParam ? parseInt(yearParam, 10) : 2024;
 
         // Get collection name for the round
-        const collectionName = getCollectionForRound(sanitizedRound);
+        const collectionName = getCollectionForRound(sanitizedRound, year);
         const roundDisplayName = getDisplayNameForRound(sanitizedRound);
 
         console.log(`Export: Using collection ${collectionName} for ${roundDisplayName}`);
@@ -255,7 +257,7 @@ export async function GET(request: NextRequest) {
             status: 200,
             headers: {
                 'Content-Type': 'text/csv',
-                'Content-Disposition': `attachment; filename=mht_cet_state_cutoffs_2024_${roundDisplayName.toLowerCase().replace(' ', '_')}.csv`,
+                'Content-Disposition': `attachment; filename=mht_cet_state_cutoffs_${year}_${roundDisplayName.toLowerCase().replace(' ', '_')}.csv`,
             },
         });
 
