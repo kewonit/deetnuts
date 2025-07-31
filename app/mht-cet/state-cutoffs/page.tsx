@@ -29,6 +29,7 @@ export default function StateCutoffsPage() {
         homeUniversities: [],
         percentileInput: '',
         round: 1,
+        year: 2025,
         sortBy: 'last_rank',
         sortOrder: 'desc'
     });
@@ -40,7 +41,8 @@ export default function StateCutoffsPage() {
         statuses: [],
         homeUniversities: [],
         percentileInput: '',
-        round: 1
+        round: 1,
+        year: 2025,
     });
 
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -63,6 +65,12 @@ export default function StateCutoffsPage() {
     const memoizedTotalItems = useMemo(() => totalItems, [totalItems]);
 
     useEffect(() => {
+        if (pendingFilters.year === 2025 && pendingFilters.round !== 1) {
+            setPendingFilters(prev => ({ ...prev, round: 1 }));
+        }
+    }, [pendingFilters.year, pendingFilters.round]);
+
+    useEffect(() => {
         const filtersChanged = (
             pendingFilters.search !== filters.search ||
             JSON.stringify(pendingFilters.categories) !== JSON.stringify(filters.categories) ||
@@ -70,7 +78,8 @@ export default function StateCutoffsPage() {
             JSON.stringify(pendingFilters.statuses) !== JSON.stringify(filters.statuses) ||
             JSON.stringify(pendingFilters.homeUniversities) !== JSON.stringify(filters.homeUniversities) ||
             pendingFilters.percentileInput !== filters.percentileInput ||
-            pendingFilters.round !== filters.round
+            pendingFilters.round !== filters.round ||
+            pendingFilters.year !== filters.year
         );
         setHasUnsavedChanges(filtersChanged);
     }, [pendingFilters, filters]);
@@ -112,13 +121,14 @@ export default function StateCutoffsPage() {
             homeUniversities: debouncedFilters.homeUniversities,
             percentileInput: debouncedFilters.percentileInput,
             round: debouncedFilters.round,
+            year: debouncedFilters.year,
             sortBy: debouncedFilters.sortBy,
             sortOrder: debouncedFilters.sortOrder,
         };
 
         const cacheKey = JSON.stringify(requestBody);
 
-        const currentRequestKey = `${debouncedFilters.search}-${debouncedFilters.categories.join(',')}-${debouncedFilters.courses.join(',')}-${debouncedFilters.statuses.join(',')}-${debouncedFilters.homeUniversities.join(',')}-${debouncedFilters.percentileInput}-${debouncedFilters.round}`;
+        const currentRequestKey = `${debouncedFilters.search}-${debouncedFilters.categories.join(',')}-${debouncedFilters.courses.join(',')}-${debouncedFilters.statuses.join(',')}-${debouncedFilters.homeUniversities.join(',')}-${debouncedFilters.percentileInput}-${debouncedFilters.round}-${debouncedFilters.year}`;
         const isOnlyPaginationChange = currentRequestParamsRef.current === currentRequestKey;
 
         if (cacheRef.current.has(cacheKey)) {
@@ -278,7 +288,8 @@ export default function StateCutoffsPage() {
             statuses: pendingFilters.statuses,
             homeUniversities: pendingFilters.homeUniversities,
             percentileInput: pendingFilters.percentileInput,
-            round: pendingFilters.round
+            round: pendingFilters.round,
+            year: pendingFilters.year,
         }));
         setSorting([{ id: 'cutoff_score', desc: true }]);
         setCurrentPage(1);
@@ -293,7 +304,8 @@ export default function StateCutoffsPage() {
             statuses: [],
             homeUniversities: [],
             percentileInput: '',
-            round: 1
+            round: 1,
+            year: 2025,
         };
         cacheRef.current.clear();
         setPendingFilters(clearedFilters);
@@ -322,10 +334,10 @@ export default function StateCutoffsPage() {
             <div className="pt-20 lg:pt-6">
                 <div className="flex flex-col gap-3">
                     <h1 className="text-3xl lg:text-3xl xl:text-4xl font-black tracking-tight text-gray-900 font-inter break-words">
-                        MHT-CET State Cutoffs 2024 - {getDisplayNameForRound(filters.round)}
+                        MHT-CET State Cutoffs {filters.year} - {getDisplayNameForRound(filters.round)}
                     </h1>
                     <p className="text-gray-600 text-sm md:text-base lg:text-lg font-medium font-inter">
-                        Use these to predict your chances of admission based on your percentile. (Data : 2024 {getDisplayNameForRound(filters.round)})
+                        Use these to predict your chances of admission based on your percentile. (Data : {filters.year} {getDisplayNameForRound(filters.round)})
                     </p>
                 </div>
             </div>
@@ -339,6 +351,7 @@ export default function StateCutoffsPage() {
                 loading={loading}
                 applyFilters={applyFilters}
                 clearAllFilters={clearAllFilters}
+                isRoundSelectionDisabled={pendingFilters.year === 2025}
             />
 
             <ActiveFiltersDisplay filters={filters} clearAllFilters={clearAllFilters} />

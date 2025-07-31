@@ -32,7 +32,9 @@ export default function CutoffsTable({ data, isLoading, error }: CutoffsTablePro
     const [categoryFilter, setCategoryFilter] = useState('all');
 
     const filteredData = useMemo(() => {
-        return (data || []).filter(row => {
+        let filtered = data || [];
+
+        return filtered.filter(row => {
             const matchesSearch = row.course_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 row.course_code.toLowerCase().includes(searchTerm.toLowerCase());
             const matchesCategory = categoryFilter === 'all' || row.category === categoryFilter;
@@ -42,7 +44,7 @@ export default function CutoffsTable({ data, isLoading, error }: CutoffsTablePro
 
     const uniqueCategories = useMemo(() => {
         if (!data) return [];
-        const categories = data.map(row => row.category);
+        let categories = data.map(row => row.category);
         return Array.from(new Set(categories)).sort();
     }, [data]);
 

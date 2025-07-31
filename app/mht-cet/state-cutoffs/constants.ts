@@ -1,5 +1,6 @@
 // Constants
 export const CATEGORY_GROUPS = {
+    'All India (JEE Rank)': ['AI'],
     'Open Category (General)': [
         'GOPENS', 'GOPENH', 'GOPENO', 'LOPENS', 'LOPENH', 'LOPENO'
     ],
@@ -18,12 +19,13 @@ export const CATEGORY_GROUPS = {
     ],
     'Defence Personnel': [
         'DEFOPENS', 'DEFOBCS', 'DEFSCS', 'DEFSTS', 'DEFSEBCS',
-        'DEFRVJS', 'DEFRSC', 'DEFRSCS', 'DEFRSEBCS', 'DEFRSTS'
+        'DEFRVJS', 'DEFRSC', 'DEFRSCS', 'DEFRSEBCS', 'DEFRSTS',
+        'DEFRNT1S', 'DEFRNT2S', 'DEFRNT3S'
     ],
     'Persons with Disabilities (PWD)': [
         'PWDOPENS', 'PWDOPENH', 'PWDOBCS', 'PWDOBCH', 'PWDSCS', 'PWDSCH',
         'PWDRSTS', 'PWDRSTH', 'PWDRSCS', 'PWDRSCH', 'PWDRSEBCS', 'PWDRSEBCH',
-        'PWDRVJS', 'PWDROBCS', 'PWDROBCH'
+        'PWDRVJS', 'PWDROBCS', 'PWDROBCH', 'PWDRNT1S', 'PWDRNT2S', 'PWDRNT3S'
     ],
     'Economically Weaker Sections (EWS)': [
         'EWS'
@@ -180,6 +182,8 @@ export const STATUS_OPTIONS = [
     { value: 'Un-Aided Autonomous Linguistic Minority - Tamil', label: 'Un-Aided Autonomous Linguistic Minority - Tamil' },
     { value: 'Un-Aided Autonomous Religious Minority - Christian', label: 'Un-Aided Autonomous Religious Minority - Christian' },
     { value: 'Un-Aided Autonomous Religious Minority - Jain', label: 'Un-Aided Autonomous Religious Minority - Jain' },
+    { value: 'Un-Aided Autonomous Religious Minority - Muslim', label: 'Un-Aided Autonomous Religious Minority - Muslim' },
+    { value: 'Un-Aided Autonomous Religious Minority - Roman Catholics', label: 'Un-Aided Autonomous Religious Minority - Roman Catholics' },
     { value: 'Un-Aided Linguistic Minority - Gujar', label: 'Un-Aided Linguistic Minority - Gujar' },
     { value: 'Un-Aided Linguistic Minority - Gujarathi', label: 'Un-Aided Linguistic Minority - Gujarathi' },
     { value: 'Un-Aided Linguistic Minority - Hindi', label: 'Un-Aided Linguistic Minority - Hindi' },
@@ -215,6 +219,11 @@ export const HOME_UNIVERSITY_OPTIONS = [
 ];
 
 export const ITEMS_PER_PAGE_OPTIONS = [10, 25, 50, 100, 200];
+
+export const YEAR_OPTIONS = [
+    { value: 2025, label: '2025' },
+    { value: 2024, label: '2024' },
+];
 
 // Round Configuration
 export const ROUND_CONFIG: Record<number, { collection: string; displayName: string }> = {
@@ -263,7 +272,10 @@ export const isValidRound = (round: number): round is ValidRound => {
 };
 
 // Get collection name for round with fallback
-export const getCollectionForRound = (round: number): string => {
+export const getCollectionForRound = (round: number, year: number): string => {
+    if (year === 2025) {
+        return '2025_mht_cet_round_one_cutoffs';
+    }
     if (!isValidRound(round)) {
         console.warn(`Invalid round ${round}, falling back to Round 1`);
         return ROUND_CONFIG[1].collection;
