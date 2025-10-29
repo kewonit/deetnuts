@@ -32,7 +32,9 @@ export default function Drawer({ active, setActive, children }: Props) {
     document.body.appendChild(container)
 
     return () => {
-      document.body.removeChild(container)
+      if (container && container.parentNode === document.body) {
+        document.body.removeChild(container)
+      }
     }
   }, [])
 
