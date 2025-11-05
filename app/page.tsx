@@ -33,30 +33,6 @@ export default function Home() {
             </picture>
           </div>
           
-          {/* NEW: Predictions CTA */}
-          <div className="mt-12 w-full max-w-4xl">
-            <Link href="/predictions">
-              <div className="bg-gradient-to-r from-purple-300 to-yellow-100 border-4 border-black rounded-base shadow-base p-8 hover:translate-y-[-4px] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                  <div className="text-left flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-3xl">🔮</span>
-                      <h3 className="font-heading text-2xl md:text-3xl">
-                        JEE Main 2026 Predictions
-                      </h3>
-                    </div>
-                    <p className="font-inter text-base md:text-lg text-gray-800">
-                      AI-powered cutoff predictions for IITs, NITs, IIITs & GFTIs. 
-                      Compare with 2025 data and find your ideal college!
-                    </p>
-                  </div>
-                  <Button className="bg-black text-white border-2 border-black font-heading text-lg px-6 py-6 hover:bg-gray-800 whitespace-nowrap">
-                    View Predictions →
-                  </Button>
-                </div>
-              </div>
-            </Link>
-          </div>
         </section>
       </div>
       <Features />
