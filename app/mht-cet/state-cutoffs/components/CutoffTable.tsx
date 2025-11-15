@@ -2,7 +2,7 @@
 
 import { useMemo, useCallback } from 'react';
 import { ColumnDef, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, SortingState, ColumnFiltersState, VisibilityState } from '@tanstack/react-table';
-import { ArrowUpDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Search } from 'lucide-react';
+import { ArrowUpDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Search, Download } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -88,6 +88,68 @@ export function CutoffTable({
     columnVisibility,
     setColumnVisibility,
 }: CutoffTableProps) {
+
+    // CSV Export function - exports only currently displayed data
+    const exportToCSV = useCallback(() => {
+        if (records.length === 0) {
+            toast.error('No data to export');
+            return;
+        }
+
+        try {
+            // Define CSV headers
+            const headers = [
+                'College Name',
+                'Course Name',
+                'Category',
+                'Cutoff Score',
+                'Cutoff Percentile',
+                'Last Rank',
+                'College Code',
+                'Course Code',
+                'Status',
+                'Home University'
+            ];
+            console.log(records);
+            // Convert records to CSV rows
+            const csvRows = records.map(record => [
+                `"${record.college_name || ''}"`,
+                `"${record.course_name || ''}"`,
+                `"${record.category || ''}"`,
+                record.cutoff_score || '',
+                record.last_rank || '',
+                record.college_code || '',
+                record.course_code || '',
+                `"${record.status || ''}"`,
+                `"${record.home_university || ''}"`,
+            ]);
+
+            // Combine headers and rows
+            const csvContent = [
+                headers.join(','),
+                ...csvRows.map(row => row.join(','))
+            ].join('\n');
+
+            // Create blob and download
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            const fileName = `mht-cet-cutoffs-${filters.year}-${getDisplayNameForRound(filters.round).replace(/\s+/g, '-')}-page-${currentPage}.csv`;
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', fileName);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            toast.success(`Exported ${records.length} records to CSV`);
+        } catch (error) {
+            console.error('Export error:', error);
+            toast.error('Failed to export data');
+        }
+    }, [records, filters.year, filters.round, currentPage]);
 
     const columns: ColumnDef<CutoffRecord>[] = useMemo(
         () => {
@@ -704,6 +766,19 @@ export function CutoffTable({
                 <div className="text-xs md:text-sm text-muted-foreground font-abel">
                     {table.getFilteredRowModel().rows.length} row(s) displayed.
                 </div>
+            </div>
+
+            {/* CSV Export Button */}
+            <div className="flex justify-center px-2 md:px-4 pb-4">
+                <Button
+                    onClick={exportToCSV}
+                    disabled={loading || records.length === 0}
+                    variant="neutral"
+                    className="shadow-base hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none transition-all"
+                >
+                    <Download className="mr-2 h-4 w-4" />
+                    Export Current Page to CSV
+                </Button>
             </div>
         </div>
     );
