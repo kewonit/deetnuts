@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
+  turbopack: {},
   images: {
     domains: ['localhost', 'deetnuts.com', 'deetnuts.site', 'cloudinary.com', 'res.cloudinary.com', 'external-preview.redd.it'],
   },
