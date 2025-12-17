@@ -18,7 +18,8 @@
     "test-upload-setup": "npx tsx scripts/test-setup.ts",
     "test-pocketbase": "npx tsx scripts/test-pocketbase.ts",
     "diagnose-pocketbase": "npx tsx scripts/diagnostic-pocketbase.ts",
-    "upload-all-india-cutoffs": "npx tsx scripts/batch-upload-all-india-rounds.ts"
+    "upload-all-india-cutoffs": "npx tsx scripts/batch-upload-all-india-rounds.ts",
+    "import-josaa": "npx tsx scripts/batch-import-josaa.ts"
   },
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
@@ -39,7 +40,7 @@
     "@radix-ui/react-slider": "^1.1.2",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.2.5",
-    "@radix-ui/react-tabs": "^1.0.4",
+    "@radix-ui/react-tabs": "^1.1.13",
     "@radix-ui/react-toast": "^1.2.1",
     "@radix-ui/react-tooltip": "^1.1.2",
     "@supabase/auth-helpers-react": "^0.5.0",
@@ -90,6 +91,7 @@
     "postcss": "^8",
     "supabase": "^1.226.4",
     "tailwindcss": "^3.4.1",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }
