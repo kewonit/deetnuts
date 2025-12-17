@@ -39,3 +39,7 @@ next-env.d.ts
 # PocketBase
 /pb_data/
 /pb_migrations/
+
+# Data folders
+/data/josaa/
+/data/output/

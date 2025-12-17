@@ -1,5 +1,4 @@
 import PocketBase, { ClientResponseError } from 'pocketbase';
-import { cookies } from 'next/headers';
 
 /**
  * Global auth cache to persist across API calls
@@ -17,6 +16,7 @@ let pbClient: PocketBase | null = null;
 
 /**
  * Get PocketBase instance (singleton pattern)
+ * This function is safe for both client and server components
  */
 export function getPocketBase() {
   if (!pbClient) {
@@ -46,13 +46,15 @@ function isCachedAuthValid(): boolean {
 
 /**
  * User-based authentication function (uses logged-in user's token)
- * This function ensures that the API request is made with the user's authentication,
- * respecting any collection-level permissions that may be set in PocketBase.
+ * NOTE: This function requires cookies and should only be called from server components/API routes
+ * Import cookies dynamically to avoid build errors in client components
  */
 export async function ensureUserAuthenticated(): Promise<void> {
   const pocketbase = getPocketBase();
 
   try {
+    // Dynamic import of cookies to avoid build errors in client components
+    const { cookies } = await import('next/headers');
     const cookieStore = await cookies();
     const authCookie = cookieStore.get('pb_auth');
 
