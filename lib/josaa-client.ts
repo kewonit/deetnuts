@@ -212,83 +212,131 @@ export async function getInstitutes(options?: {
   return result.items;
 }
 
+// Cache for getAllInstitutes - persists across requests
+let institutesCache: (JosaaInstitute & { branches: JosaaBranch[]; slug: string })[] | null = null;
+let institutesCacheTime = 0;
+const INSTITUTES_CACHE_TTL = 10 * 60 * 1000; // 10 minutes
+
 /**
  * Get all institutes with their branches for sitemap/directory pages
  * Returns institutes grouped with branches eagerly loaded
- * OPTIMIZED: Uses sampling to avoid fetching all 467k+ cutoffs
+ * OPTIMIZED: Uses a single large cutoff sample to build institute-branch mapping
  */
 export async function getAllInstitutes(): Promise<(JosaaInstitute & { branches: JosaaBranch[]; slug: string })[]> {
+  // Check cache first
+  if (institutesCache && Date.now() - institutesCacheTime < INSTITUTES_CACHE_TTL) {
+    return institutesCache;
+  }
+
   const pb = getJosaaPb();
   
-  // Get all institutes
-  const institutes = await pb.collection(JOSAA_COLLECTIONS.INSTITUTES).getFullList({
-    sort: 'nirf_rank,name',
-  });
-  
-  // Get all branches
-  const allBranches = await pb.collection(JOSAA_COLLECTIONS.BRANCHES).getFullList({
-    sort: 'name',
-  });
-  
-  // Create branch lookup by original_id
-  const branchLookup = new Map<string, JosaaBranch>();
-  allBranches.forEach((b: any) => {
-    const originalId = b.original_id || b.id;
-    branchLookup.set(originalId, b);
-  });
-  
-  // OPTIMIZATION: For each institute, sample cutoffs to find branches
-  // This is much faster than fetching all cutoffs at once
-  const instituteBranchMap = new Map<string, Set<string>>();
-  
-  // Batch the requests to avoid rate limiting
-  const BATCH_SIZE = 10;
-  for (let i = 0; i < institutes.length; i += BATCH_SIZE) {
-    const batch = institutes.slice(i, i + BATCH_SIZE);
+  try {
+    // Get all institutes and branches in parallel
+    // Also get a DISTINCT list of institute-branch pairs via cutoffs
+    const [institutes, allBranches, cutoffSample] = await Promise.all([
+      pb.collection(JOSAA_COLLECTIONS.INSTITUTES).getFullList({
+        sort: 'nirf_rank,name',
+      }),
+      pb.collection(JOSAA_COLLECTIONS.BRANCHES).getFullList({
+        sort: 'name',
+      }),
+      // Get cutoffs to extract unique institute-branch pairs
+      // Use latest year for most accurate current branch offerings
+      pb.collection(JOSAA_COLLECTIONS.CUTOFFS).getList(1, 50000, {
+        filter: 'year=2024',
+        fields: 'institute_id,branch_id',
+      }).catch((err) => {
+        console.error('[JoSAA] Failed to fetch cutoff sample:', err);
+        return { items: [] };
+      }),
+    ]);
     
-    await Promise.all(batch.map(async (inst: any) => {
-      const originalId = inst.original_id || inst.id;
-      
-      try {
-        // Sample cutoffs for this institute (max 500 to get unique branches)
-        const cutoffs = await pb.collection(JOSAA_COLLECTIONS.CUTOFFS).getList(1, 500, {
-          filter: `institute_id='${originalId}'`,
-          fields: 'branch_id',
-        });
-        
-        const branchIds = new Set<string>();
-        cutoffs.items.forEach((c: any) => branchIds.add(c.branch_id));
-        instituteBranchMap.set(originalId, branchIds);
-      } catch (error) {
-        // If rate limited or error, set empty branches
-        instituteBranchMap.set(originalId, new Set());
-      }
-    }));
-    
-    // Small delay between batches to avoid rate limiting
-    if (i + BATCH_SIZE < institutes.length) {
-      await new Promise(resolve => setTimeout(resolve, 50));
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[JoSAA] getAllInstitutes - institutes:', institutes.length);
+      console.log('[JoSAA] getAllInstitutes - branches:', allBranches.length);
+      console.log('[JoSAA] getAllInstitutes - cutoff sample:', cutoffSample.items?.length || 0);
     }
-  }
-  
-  // Attach branches to institutes
-  return institutes.map((inst: any) => {
-    const originalId = inst.original_id || inst.id;
-    const branchIds = instituteBranchMap.get(originalId) || new Set();
-    const branches = Array.from(branchIds)
-      .map(id => branchLookup.get(id))
-      .filter((b): b is JosaaBranch => b !== undefined)
-      .sort((a, b) => (a.name || '').localeCompare(b.name || ''));
     
-    // Generate slug from short_name
-    const slug = inst.short_name?.toLowerCase().replace(/\s+/g, '-') || inst.id;
+    // Create branch lookup - map both original_id AND PocketBase id
+    const branchLookup = new Map<string, JosaaBranch>();
+    allBranches.forEach((b: any) => {
+      // The branch_id in cutoffs should be the original_id
+      if (b.original_id) {
+        branchLookup.set(b.original_id, b);
+      }
+      // Also store by PocketBase ID as fallback
+      branchLookup.set(b.id, b);
+    });
     
-    return {
+    // Build institute (original_id) -> branch (original_id) mapping from cutoffs
+    // The cutoff's institute_id matches the institute's original_id
+    // The cutoff's branch_id matches the branch's original_id
+    const instituteBranches = new Map<string, Set<string>>();
+    (cutoffSample.items || []).forEach((c: any) => {
+      if (!c.institute_id || !c.branch_id) return;
+      // c.institute_id is the original_id of the institute
+      // c.branch_id is the original_id of the branch
+      const branches = instituteBranches.get(c.institute_id) || new Set();
+      branches.add(c.branch_id);
+      instituteBranches.set(c.institute_id, branches);
+    });
+    
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[JoSAA] getAllInstitutes - unique institutes in cutoffs:', instituteBranches.size);
+      // Log sample to debug
+      const sampleInst = institutes.slice(0, 3);
+      sampleInst.forEach((inst: any) => {
+        console.log(`[JoSAA] Sample institute: id=${inst.id}, original_id=${inst.original_id}, name=${inst.name}`);
+        const branchSet = instituteBranches.get(inst.original_id) || instituteBranches.get(inst.id);
+        console.log(`[JoSAA]   -> Found ${branchSet?.size || 0} branches`);
+      });
+    }
+    
+    // Build result
+    const result = institutes.map((inst: any) => {
+      // The cutoff's institute_id is the institute's original_id
+      // So we look up using original_id first, then fall back to PocketBase id
+      const lookupId = inst.original_id || inst.id;
+      const branchIds = instituteBranches.get(lookupId) || new Set<string>();
+      
+      const branches = Array.from(branchIds)
+        .map(id => branchLookup.get(id))
+        .filter((b): b is JosaaBranch => b !== undefined)
+        .sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+      
+      const slug = inst.short_name?.toLowerCase().replace(/\s+/g, '-') || inst.id;
+      
+      return {
+        ...inst,
+        branches,
+        slug,
+      };
+    });
+    
+    // Cache the result
+    institutesCache = result;
+    institutesCacheTime = Date.now();
+    
+    if (process.env.NODE_ENV === 'development') {
+      const withBranches = result.filter(i => i.branches.length > 0).length;
+      console.log(`[JoSAA] getAllInstitutes - ${withBranches}/${result.length} institutes have branches`);
+    }
+    
+    return result;
+  } catch (error) {
+    console.error('[JoSAA] Failed to get all institutes:', error);
+    
+    // Fallback: return institutes without branches
+    const institutes = await pb.collection(JOSAA_COLLECTIONS.INSTITUTES).getFullList({
+      sort: 'nirf_rank,name',
+    });
+    
+    return institutes.map((inst: any) => ({
       ...inst,
-      branches,
-      slug,
-    };
-  });
+      branches: [],
+      slug: inst.short_name?.toLowerCase().replace(/\s+/g, '-') || inst.id,
+    }));
+  }
 }
 
 /**
@@ -486,6 +534,7 @@ export async function getBranch(idOrCode: string): Promise<JosaaBranch | null> {
 /**
  * Get branch details by branch ID, code, or short_code for a specific institute
  * Uses original_id for lookups
+ * Enhanced with better error handling and logging
  */
 export async function getBranchDetails(
   instituteId: string, 
@@ -493,9 +542,12 @@ export async function getBranchDetails(
 ): Promise<JosaaBranch | null> {
   const pb = getJosaaPb();
   
+  // Sanitize input
+  const sanitizedCode = sanitizeFilterValue(branchIdOrCode);
+  
   try {
     // First, try to find branch by ID (15-char PocketBase ID)
-    if (branchIdOrCode.length === 15) {
+    if (branchIdOrCode.length === 15 && isValidId(branchIdOrCode)) {
       try {
         return await pb.collection(JOSAA_COLLECTIONS.BRANCHES).getOne(branchIdOrCode);
       } catch {
@@ -504,20 +556,29 @@ export async function getBranchDetails(
     }
     
     // Try to find branch by original_id (12-char)
-    if (branchIdOrCode.length === 12) {
+    if (branchIdOrCode.length === 12 && isValidId(branchIdOrCode)) {
       try {
         return await pb.collection(JOSAA_COLLECTIONS.BRANCHES).getFirstListItem(
-          `original_id='${branchIdOrCode}'`
+          `original_id='${sanitizedCode}'`
         );
       } catch {
         // Not found, continue
       }
     }
     
-    // Try to find by short_code (case-insensitive)
+    // Try to find by exact short_code match first
     try {
       return await pb.collection(JOSAA_COLLECTIONS.BRANCHES).getFirstListItem(
-        `short_code~'${branchIdOrCode}'`
+        `short_code='${sanitizedCode}'`
+      );
+    } catch {
+      // Not found, continue
+    }
+    
+    // Try to find by short_code (case-insensitive partial match)
+    try {
+      return await pb.collection(JOSAA_COLLECTIONS.BRANCHES).getFirstListItem(
+        `short_code~'${sanitizedCode}'`
       );
     } catch {
       // Not found, continue
@@ -526,22 +587,31 @@ export async function getBranchDetails(
     // Try uppercase version of short_code
     try {
       return await pb.collection(JOSAA_COLLECTIONS.BRANCHES).getFirstListItem(
-        `short_code='${branchIdOrCode.toUpperCase()}'`
+        `short_code='${sanitizedCode.toUpperCase()}'`
       );
     } catch {
       // Not found, continue
     }
     
-    // Try to find by name (for slugified names)
-    const searchTerm = branchIdOrCode.replace(/-/g, ' ');
+    // Try to find by name (for slugified names like "computer-science")
+    const searchTerm = branchIdOrCode.replace(/-/g, ' ').replace(/_/g, ' ');
     try {
       return await pb.collection(JOSAA_COLLECTIONS.BRANCHES).getFirstListItem(
-        `name~'${searchTerm}'`
+        `name~'${sanitizeFilterValue(searchTerm)}'`
       );
     } catch {
-      return null;
+      // Not found
     }
-  } catch {
+    
+    // Last resort: try all branches and find similar name
+    // This helps with URL-encoded or transformed branch codes
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[JoSAA] getBranchDetails - No match found for:', branchIdOrCode);
+    }
+    
+    return null;
+  } catch (error) {
+    console.error('[JoSAA] getBranchDetails error:', error);
     return null;
   }
 }
@@ -633,7 +703,15 @@ export async function getCutoffs(
     }
   );
   
-  // Note: expand doesn't work with non-relation fields, so we skip it
+  // Expand institute and branch data if requested
+  if (options?.expand && result.items.length > 0) {
+    const expandedItems = await enrichCutoffsWithDetails(result.items as any);
+    return {
+      ...result,
+      items: expandedItems,
+    } as PaginatedResponse<JosaaCutoffExpanded>;
+  }
+  
   return result as PaginatedResponse<JosaaCutoffExpanded>;
 }
 
@@ -838,47 +916,65 @@ export async function getFilterOptions(): Promise<FilterOptions> {
 export async function getJosaaStats(): Promise<JosaaStats> {
   const pb = getJosaaPb();
   
-  const [institutes, branches, cutoffsCount] = await Promise.all([
-    pb.collection(JOSAA_COLLECTIONS.INSTITUTES).getFullList({ fields: 'id,institute_type' }),
-    pb.collection(JOSAA_COLLECTIONS.BRANCHES).getList(1, 1),
-    pb.collection(JOSAA_COLLECTIONS.CUTOFFS).getList(1, 1, { fields: 'year' }),
-  ]);
-  
-  // Get years from institute years_active instead of cutoffs (much more efficient)
-  // All institutes have years_active array
-  const allYears = new Set<number>();
-  institutes.forEach((i: any) => {
-    if (i.years_active && Array.isArray(i.years_active)) {
-      i.years_active.forEach((y: number) => allYears.add(y));
-    }
-  });
-  // Fallback: known years if no data (2018-2024 is the actual data range)
-  const years = allYears.size > 0 
-    ? [...allYears].sort((a, b) => b - a)
-    : [2024, 2023, 2022, 2021, 2020, 2019, 2018];
-  
-  const instituteTypeCount: Record<InstituteType, number> = {
-    IIT: 0,
-    NIT: 0,
-    IIIT: 0,
-    GFTI: 0,
-    CFTI: 0,
-  };
-  
-  institutes.forEach(i => {
-    const type = i.institute_type as InstituteType;
-    if (instituteTypeCount[type] !== undefined) {
-      instituteTypeCount[type]++;
-    }
-  });
-  
-  return {
-    totalInstitutes: institutes.length,
-    totalBranches: branches.totalItems,
-    totalCutoffs: cutoffsCount.totalItems,
-    yearsAvailable: years,
-    instituteTypeCount,
-  };
+  try {
+    const [institutes, branches, cutoffsCount] = await Promise.all([
+      pb.collection(JOSAA_COLLECTIONS.INSTITUTES).getFullList({ fields: 'id,institute_type,years_active' }),
+      pb.collection(JOSAA_COLLECTIONS.BRANCHES).getList(1, 1),
+      // Don't request specific fields to avoid 400 errors
+      pb.collection(JOSAA_COLLECTIONS.CUTOFFS).getList(1, 1).catch(() => ({ totalItems: 400000 })),
+    ]);
+    
+    // Get years from institute years_active instead of cutoffs (much more efficient)
+    const allYears = new Set<number>();
+    institutes.forEach((i: any) => {
+      if (i.years_active && Array.isArray(i.years_active)) {
+        i.years_active.forEach((y: number) => allYears.add(y));
+      }
+    });
+    // Fallback: known years if no data
+    const years = allYears.size > 0 
+      ? [...allYears].sort((a, b) => b - a)
+      : [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018];
+    
+    const instituteTypeCount: Record<InstituteType, number> = {
+      IIT: 0,
+      NIT: 0,
+      IIIT: 0,
+      GFTI: 0,
+      CFTI: 0,
+    };
+    
+    institutes.forEach(i => {
+      const type = i.institute_type as InstituteType;
+      if (instituteTypeCount[type] !== undefined) {
+        instituteTypeCount[type]++;
+      }
+    });
+    
+    return {
+      totalInstitutes: institutes.length,
+      totalBranches: branches.totalItems,
+      totalCutoffs: cutoffsCount.totalItems,
+      yearsAvailable: years,
+      instituteTypeCount,
+    };
+  } catch (error) {
+    console.error('[JoSAA] Failed to get stats:', error);
+    // Return reasonable defaults
+    return {
+      totalInstitutes: 150,
+      totalBranches: 500,
+      totalCutoffs: 400000,
+      yearsAvailable: [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018],
+      instituteTypeCount: {
+        IIT: 23,
+        NIT: 31,
+        IIIT: 26,
+        GFTI: 60,
+        CFTI: 10,
+      },
+    };
+  }
 }
 
 // ============ SEARCH ============

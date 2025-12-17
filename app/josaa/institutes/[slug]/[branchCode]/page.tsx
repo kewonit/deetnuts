@@ -72,11 +72,31 @@ export default async function BranchPage({ params, searchParams }: PageProps) {
 
   const decodedBranchCode = decodeURIComponent(branchCode);
 
-  // Get branch details and trends
-  const [branch, trends] = await Promise.all([
-    getBranchDetails(institute.id, decodedBranchCode),
-    getCutoffTrends(institute.id, decodedBranchCode),
-  ]);
+  // Get branch details and trends with error handling
+  let branch = null;
+  let trends: Array<{
+    year: number;
+    round: number;
+    opening_rank: number;
+    closing_rank: number;
+    category: string;
+    gender: string;
+  }> = [];
+
+  try {
+    [branch, trends] = await Promise.all([
+      getBranchDetails(institute.id, decodedBranchCode),
+      getCutoffTrends(institute.id, decodedBranchCode).catch(() => []),
+    ]);
+  } catch (error) {
+    console.error("[BranchPage] Error fetching data:", error);
+    // Try with just branch details
+    try {
+      branch = await getBranchDetails(institute.id, decodedBranchCode);
+    } catch {
+      // Continue, branch might still be null
+    }
+  }
 
   if (!branch) {
     notFound();

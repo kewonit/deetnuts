@@ -216,31 +216,49 @@ export default async function AllCollegesPage() {
                     </div>
                   </CardHeader>
 
-                  {institute.branches && institute.branches.length > 0 && (
-                    <CardContent className="pt-4">
-                      <p className="text-sm font-bold text-gray-600 mb-3">
-                        {institute.branches.length} Programs Available:
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        {institute.branches.slice(0, 15).map((branch: any) => (
-                          <Link
-                            key={branch.id}
-                            href={`/josaa/institutes/${
-                              institute.slug || institute.id
-                            }/${branch.short_code || branch.id}`}
-                            className="text-xs px-3 py-1.5 border-2 border-black bg-gray-50 hover:bg-yellow-100 transition-colors font-medium"
-                          >
-                            {getBranchDisplayName(branch, { showCount: true })}
-                          </Link>
-                        ))}
-                        {institute.branches.length > 15 && (
-                          <span className="text-xs px-3 py-1.5 border-2 border-black bg-gray-200 font-bold">
-                            +{institute.branches.length - 15} more
-                          </span>
-                        )}
+                  <CardContent className="pt-4">
+                    {institute.branches && institute.branches.length > 0 ? (
+                      <>
+                        <p className="text-sm font-bold text-gray-600 mb-3">
+                          {institute.branches.length} Programs Available:
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {institute.branches
+                            .slice(0, 15)
+                            .map((branch: any) => (
+                              <Link
+                                key={branch.id}
+                                href={`/josaa/institutes/${
+                                  institute.slug || institute.id
+                                }/${branch.short_code || branch.id}`}
+                                className="text-xs px-3 py-1.5 border-2 border-black bg-gray-50 hover:bg-yellow-100 transition-colors font-medium"
+                              >
+                                {getBranchDisplayName(branch, {
+                                  showCount: true,
+                                })}
+                              </Link>
+                            ))}
+                          {institute.branches.length > 15 && (
+                            <span className="text-xs px-3 py-1.5 border-2 border-black bg-gray-200 font-bold">
+                              +{institute.branches.length - 15} more
+                            </span>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <div className="flex items-center gap-2 text-sm text-gray-500">
+                        <GraduationCap className="w-4 h-4" />
+                        <Link
+                          href={`/josaa/institutes/${
+                            institute.slug || institute.id
+                          }`}
+                          className="font-medium hover:underline"
+                        >
+                          View all programs and cutoffs →
+                        </Link>
                       </div>
-                    </CardContent>
-                  )}
+                    )}
+                  </CardContent>
                 </Card>
               ))}
             </div>

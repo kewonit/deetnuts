@@ -1,16 +1,8 @@
 "use client";
 
-import {
-  useState,
-  useMemo,
-  useCallback,
-  useTransition,
-  useRef,
-  useEffect,
-} from "react";
+import { useState, useMemo, useEffect, useTransition } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useQueryState, parseAsInteger, parseAsString } from "nuqs";
-import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -23,26 +15,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Search,
   Filter,
   Loader2,
-  ArrowRight,
-  Building2,
-  GraduationCap,
   X,
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
-import {
-  FilterOptions,
-  InstituteType,
-  CategoryType,
-  GenderType,
-  JosaaCutoffExpanded,
-} from "@/lib/types/josaa";
-import { getBranchDisplayName } from "@/lib/formatBranchCode";
+import { FilterOptions, JosaaCutoffExpanded } from "@/lib/types/josaa";
+import CutoffMatrix from "@/components/josaa/CutoffMatrix";
 
 // Debounce hook for performance
 function useDebounce<T>(value: T, delay: number): T {
@@ -185,14 +167,6 @@ export default function JosaaSearchForm({
       cutoffs: cutoffs.sort((a, b) => a.closing_rank - b.closing_rank),
     }));
   }, [results]);
-
-  const typeColors: Record<string, string> = {
-    IIT: "bg-orange-100 border-orange-300",
-    NIT: "bg-blue-100 border-blue-300",
-    IIIT: "bg-green-100 border-green-300",
-    GFTI: "bg-purple-100 border-purple-300",
-    CFTI: "bg-pink-100 border-pink-300",
-  };
 
   return (
     <div className="space-y-6">
@@ -417,110 +391,15 @@ export default function JosaaSearchForm({
             </Card>
           )}
 
-          {/* Results List */}
-          {!loading && results.length > 0 && (
-            <div className="space-y-4">
-              {groupedResults.map(({ institute, cutoffs }) => {
-                if (!institute) return null;
-
-                return (
-                  <Card
-                    key={institute.id}
-                    className={`border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${
-                      typeColors[institute.institute_type] || "bg-gray-50"
-                    }`}
-                  >
-                    <CardHeader className="pb-2">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <div className="flex items-center gap-2 mb-1">
-                            <Badge className="bg-white/80 text-black border border-black">
-                              {institute.institute_type}
-                            </Badge>
-                            {institute.nirf_rank != null &&
-                              institute.nirf_rank > 0 && (
-                                <Badge className="bg-yellow-400 text-black border border-black text-xs">
-                                  NIRF #{institute.nirf_rank}
-                                </Badge>
-                              )}
-                          </div>
-                          <CardTitle className="text-lg">
-                            <Link
-                              href={`/josaa/institutes/${institute.short_name
-                                .toLowerCase()
-                                .replace(/\s+/g, "-")}`}
-                              className="hover:text-blue-600 transition-colors"
-                            >
-                              {institute.name}
-                            </Link>
-                          </CardTitle>
-                        </div>
-                        <Link
-                          href={`/josaa/institutes/${institute.short_name
-                            .toLowerCase()
-                            .replace(/\s+/g, "-")}`}
-                        >
-                          <Button
-                            variant="noShadow"
-                            size="sm"
-                            className="border-2 border-black"
-                          >
-                            View All <ArrowRight className="w-4 h-4 ml-1" />
-                          </Button>
-                        </Link>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm font-semibold mb-2 text-gray-700">
-                        <GraduationCap className="w-4 h-4 inline mr-1" />
-                        {cutoffs.length} branch{cutoffs.length > 1 ? "es" : ""}{" "}
-                        available:
-                      </p>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                        {cutoffs.slice(0, 6).map((cutoff) => (
-                          <div
-                            key={cutoff.id}
-                            className="flex items-center justify-between p-2 bg-white/70 rounded-lg border border-gray-300"
-                          >
-                            <div className="min-w-0 flex-grow">
-                              <p className="font-medium text-sm truncate">
-                                {cutoff.expand?.branch
-                                  ? getBranchDisplayName(cutoff.expand.branch)
-                                  : "Unknown"}
-                              </p>
-                              <p className="text-xs text-gray-500">
-                                {cutoff.expand?.branch?.degree_type}
-                              </p>
-                            </div>
-                            <div className="text-right flex-shrink-0 ml-2">
-                              <p className="font-mono text-sm">
-                                <span className="text-green-600">
-                                  {cutoff.opening_rank.toLocaleString()}
-                                </span>
-                                <span className="text-gray-400 mx-1">-</span>
-                                <span className="text-red-600 font-bold">
-                                  {cutoff.closing_rank.toLocaleString()}
-                                </span>
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      {cutoffs.length > 6 && (
-                        <Link
-                          href={`/josaa/institutes/${institute.short_name
-                            .toLowerCase()
-                            .replace(/\s+/g, "-")}`}
-                          className="block text-center text-sm text-blue-600 mt-2 hover:underline"
-                        >
-                          +{cutoffs.length - 6} more branches
-                        </Link>
-                      )}
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
+          {/* Cutoff Matrix */}
+          {!loading && results.length > 0 && rank && (
+            <CutoffMatrix
+              results={results}
+              userRank={rank}
+              category={category}
+              year={year}
+              isLoading={loading}
+            />
           )}
         </div>
       )}
