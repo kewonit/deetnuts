@@ -81,8 +81,8 @@ function PercentileDistanceBadge({
         isTarget
           ? "bg-green-100 text-green-700 border-green-300"
           : distance < 0
-          ? "bg-blue-100 text-blue-700 border-blue-300"
-          : "bg-red-100 text-red-700 border-red-300"
+            ? "bg-blue-100 text-blue-700 border-blue-300"
+            : "bg-red-100 text-red-700 border-red-300",
       )}
     >
       {isTarget
@@ -318,14 +318,14 @@ function Pagination({
                   className={cn(
                     "h-8 min-w-[32px] p-0 border-2 text-xs font-bold",
                     pageNum === currentPage &&
-                      "bg-purple-600 text-white border-purple-700 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                      "bg-purple-600 text-white border-purple-700 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]",
                   )}
                   onClick={() => onPageChange(pageNum)}
                   disabled={loading}
                 >
                   {pageNum}
                 </Button>
-              )
+              ),
             )}
           </div>
 
@@ -433,7 +433,7 @@ export const DataTable = memo(function DataTable({
                   ? sortOrder === "asc"
                     ? "desc"
                     : "asc"
-                  : "asc"
+                  : "asc",
               )
             }
             className="flex items-center gap-1 font-semibold text-gray-700 hover:text-gray-900"
@@ -481,7 +481,7 @@ export const DataTable = memo(function DataTable({
                   ? sortOrder === "asc"
                     ? "desc"
                     : "asc"
-                  : "asc"
+                  : "asc",
               )
             }
             className="flex items-center gap-1 font-semibold text-gray-700 hover:text-gray-900"
@@ -546,7 +546,7 @@ export const DataTable = memo(function DataTable({
                   ? sortOrder === "asc"
                     ? "desc"
                     : "asc"
-                  : "desc"
+                  : "desc",
               )
             }
             className="flex items-center gap-1 font-semibold text-gray-700 hover:text-gray-900"
@@ -589,7 +589,7 @@ export const DataTable = memo(function DataTable({
                   ? sortOrder === "asc"
                     ? "desc"
                     : "asc"
-                  : "desc"
+                  : "desc",
               )
             }
             className="flex items-center gap-1 font-semibold text-gray-700 hover:text-gray-900"
@@ -641,7 +641,7 @@ export const DataTable = memo(function DataTable({
                   ? sortOrder === "asc"
                     ? "desc"
                     : "asc"
-                  : "desc"
+                  : "desc",
               )
             }
             className="flex items-center gap-1 font-semibold text-gray-700 hover:text-gray-900"
@@ -829,13 +829,13 @@ export const DataTable = memo(function DataTable({
                       key={header.id}
                       className={cn(
                         "px-3 py-3 text-left text-xs uppercase tracking-wider",
-                        "border-r border-gray-200 last:border-r-0"
+                        "border-r border-gray-200 last:border-r-0",
                       )}
                       style={{ width: header.getSize() }}
                     >
                       {flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                     </th>
                   ))}
@@ -855,7 +855,7 @@ export const DataTable = memo(function DataTable({
                     className={cn(
                       "hover:bg-purple-50/50 transition-colors",
                       index % 2 === 0 ? "bg-white" : "bg-gray-50/30",
-                      paginationLoading && "opacity-60"
+                      paginationLoading && "opacity-60",
                     )}
                   >
                     {row.getVisibleCells().map((cell) => (
@@ -866,13 +866,13 @@ export const DataTable = memo(function DataTable({
                           density === "compact"
                             ? "py-1"
                             : density === "spacious"
-                            ? "py-4"
-                            : "py-2"
+                              ? "py-4"
+                              : "py-2",
                         )}
                       >
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )}
                       </td>
                     ))}

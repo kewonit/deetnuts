@@ -1,6 +1,7 @@
-import { Metadata } from 'next';
-import Link from 'next/link';
-import Image from 'next/image';
+import { Metadata } from "next";
+import Link from "next/link";
+import Image from "next/image";
+import FAQJsonLd, { MHTCET_FAQS } from "@/components/FAQJsonLd";
 
 interface Link {
   title: string;
@@ -12,45 +13,66 @@ interface Link {
 
 const LINKS: { [key: string]: Link } = {
   link1: {
-    title: 'All India Cutoffs',
-    link: '/mht-cet/all-india-cutoffs',
+    title: "All India Cutoffs",
+    link: "/mht-cet/all-india-cutoffs",
     icon: {
-      src: 'https://res.cloudinary.com/dfyrk32ua/image/upload/v1721510815/deetnuts/logos/MHT-CET_logo_wxbnlw-min_n5sbju.png',
+      src: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1721510815/deetnuts/logos/MHT-CET_logo_wxbnlw-min_n5sbju.png",
     },
   },
   link2: {
-    title: 'State Level Cutoffs',
-    link: '/mht-cet/state-cutoffs',
+    title: "State Level Cutoffs",
+    link: "/mht-cet/state-cutoffs",
     icon: {
-      src: 'https://res.cloudinary.com/dfyrk32ua/image/upload/v1721510815/deetnuts/logos/MHT-CET_logo_wxbnlw-min_n5sbju.png',
+      src: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1721510815/deetnuts/logos/MHT-CET_logo_wxbnlw-min_n5sbju.png",
     },
   },
   link3: {
-    title: 'Rank Predictor',
-    link: '/mht-cet/rank-predictor',
+    title: "Rank Predictor",
+    link: "/mht-cet/rank-predictor",
     icon: {
-      src: 'https://res.cloudinary.com/dfyrk32ua/image/upload/v1721510815/deetnuts/logos/MHT-CET_logo_wxbnlw-min_n5sbju.png',
+      src: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1721510815/deetnuts/logos/MHT-CET_logo_wxbnlw-min_n5sbju.png",
     },
   },
   link4: {
-    title: 'College List',
-    link: '/mht-cet/colleges',
+    title: "College List",
+    link: "/mht-cet/colleges",
     icon: {
-      src: 'https://res.cloudinary.com/dfyrk32ua/image/upload/v1721510815/deetnuts/logos/MHT-CET_logo_wxbnlw-min_n5sbju.png',
+      src: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1721510815/deetnuts/logos/MHT-CET_logo_wxbnlw-min_n5sbju.png",
     },
   },
-
 };
 
 export const metadata: Metadata = {
-  title: "MHTCET | All India Cutoffs | State Level Cuttoffs | Rank Predictor",
-  description: "MHTCET | All India Cutoffs | State Level Cuttoffs | Rank Predictor",
+  title: "MHT-CET 2025 Cutoffs | Maharashtra Engineering Admission | DEETNUTS",
+  description:
+    "Explore MHT-CET 2025 cutoffs, seat matrix, all India cutoffs, and state level cutoffs for Maharashtra engineering colleges. Get comprehensive admission data.",
+  keywords: [
+    "MHT-CET",
+    "MHT-CET 2025",
+    "Maharashtra CET",
+    "engineering cutoffs",
+    "Maharashtra colleges",
+    "seat matrix",
+    "CAP rounds",
+  ],
+  openGraph: {
+    title: "MHT-CET 2025 Cutoffs | Maharashtra Engineering Admission",
+    description:
+      "Explore MHT-CET 2025 cutoffs, seat matrix, and admission data for Maharashtra engineering colleges.",
+    url: "https://deetnuts.com/mht-cet",
+    type: "website",
+  },
+  alternates: {
+    canonical: "https://deetnuts.com/mht-cet",
+  },
 };
-
 
 export default function Home() {
   return (
     <div className=" mx-auto h-full mt-24 w-[700px] max-w-full p-8 md:p-16 xl:w-[1400px] min-h-screen">
+      {/* FAQ Schema for SEO */}
+      <FAQJsonLd faqs={MHTCET_FAQS} />
+
       <div className="mb-20">
         <picture>
           <img
@@ -73,7 +95,7 @@ export default function Home() {
         >
           {Object.keys(LINKS).map((key) => {
             // Only 'link1' and 'link3' are under construction
-            const isUnderConstruction = key === 'link3';
+            const isUnderConstruction = key === "link3";
 
             if (isUnderConstruction) {
               return (
@@ -122,9 +144,7 @@ export default function Home() {
                     alt={LINKS[key].title}
                   />
                 </picture>
-                <p
-                  className="mt-3 text-lg font-semibold sm:text-xl text-black"
-                >
+                <p className="mt-3 text-lg font-semibold sm:text-xl text-black">
                   {LINKS[key].title}
                 </p>
               </Link>

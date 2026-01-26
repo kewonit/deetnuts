@@ -1,6 +1,5 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
-// todo : change the tokenisation for email, before publishing the update, otherwise rip auth verification
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({

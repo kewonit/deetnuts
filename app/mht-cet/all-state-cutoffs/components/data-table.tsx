@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -14,7 +14,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 
 import {
   Table,
@@ -23,11 +23,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
-import { DataTablePagination } from "./data-table-pagination"
-import { DataTableToolbar } from "./data-table-toolbar"
-import { Card } from "@/components/ui/card"
+import { DataTablePagination } from "./data-table-pagination";
+import { DataTableToolbar } from "./data-table-toolbar";
+import { Card } from "@/components/ui/card";
 
 interface FilterState {
   collegeFilter: string;
@@ -37,19 +37,19 @@ interface FilterState {
 }
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
   pagination?: {
-    page: number
-    perPage: number
-    totalItems: number
-    totalPages: number
-  }
-  onPaginationChange?: (page: number, perPage: number) => void
-  sorting?: SortingState
-  onSortingChange?: (sorting: SortingState) => void
-  filters?: FilterState
-  onFiltersChange?: (filters: FilterState) => void
+    page: number;
+    perPage: number;
+    totalItems: number;
+    totalPages: number;
+  };
+  onPaginationChange?: (page: number, perPage: number) => void;
+  sorting?: SortingState;
+  onSortingChange?: (sorting: SortingState) => void;
+  filters?: FilterState;
+  onFiltersChange?: (filters: FilterState) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -60,36 +60,50 @@ export function DataTable<TData, TValue>({
   sorting,
   onSortingChange,
   filters,
-  onFiltersChange
+  onFiltersChange,
 }: DataTableProps<TData, TValue>) {
-  const [rowSelection, setRowSelection] = React.useState({})
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+  const [rowSelection, setRowSelection] = React.useState({});
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
 
   // Use the provided sorting state or create a local one
-  const [localSorting, setLocalSorting] = React.useState<SortingState>([])
-  const effectiveSorting = sorting || localSorting
+  const [localSorting, setLocalSorting] = React.useState<SortingState>([]);
+  const effectiveSorting = sorting || localSorting;
 
   // Default to hiding the ID column for cleaner UI
   React.useEffect(() => {
-    setColumnVisibility(prev => ({
+    setColumnVisibility((prev) => ({
       ...prev,
-      "ID": false,
+      ID: false,
     }));
   }, []);
 
   // Local filter state for when server-side filtering is not used
   const [localCollegeFilter, setLocalCollegeFilter] = React.useState("");
-  const [localBranchFilter, setLocalBranchFilter] = React.useState<string[]>([]);
-  const [localCategoryFilter, setLocalCategoryFilter] = React.useState<string[]>([]);
-  const [localAllocationFilter, setLocalAllocationFilter] = React.useState<string[]>([]);
+  const [localBranchFilter, setLocalBranchFilter] = React.useState<string[]>(
+    [],
+  );
+  const [localCategoryFilter, setLocalCategoryFilter] = React.useState<
+    string[]
+  >([]);
+  const [localAllocationFilter, setLocalAllocationFilter] = React.useState<
+    string[]
+  >([]);
 
   // Handle column filter changes
-  const handleColumnFilterChange = (updaterOrValue: ColumnFiltersState | ((old: ColumnFiltersState) => ColumnFiltersState)) => {
+  const handleColumnFilterChange = (
+    updaterOrValue:
+      | ColumnFiltersState
+      | ((old: ColumnFiltersState) => ColumnFiltersState),
+  ) => {
     // Apply the updater to get the new filters
-    const newFilters = typeof updaterOrValue === 'function'
-      ? updaterOrValue(columnFilters)
-      : updaterOrValue;
+    const newFilters =
+      typeof updaterOrValue === "function"
+        ? updaterOrValue(columnFilters)
+        : updaterOrValue;
 
     // Update our local state
     setColumnFilters(newFilters);
@@ -97,14 +111,15 @@ export function DataTable<TData, TValue>({
     // If we have server-side filtering and a callback
     if (onFiltersChange) {
       // Extract the college filter
-      const collegeFilterValue = (newFilters.find(f => f.id === 'College')?.value as string) || '';
+      const collegeFilterValue =
+        (newFilters.find((f) => f.id === "College")?.value as string) || "";
 
       // Handle the filter updates
       onFiltersChange({
         collegeFilter: collegeFilterValue,
         branchFilter: localBranchFilter,
         categoryFilter: localCategoryFilter,
-        allocationFilter: localAllocationFilter
+        allocationFilter: localAllocationFilter,
       });
     }
   };
@@ -113,22 +128,29 @@ export function DataTable<TData, TValue>({
   const isFilterUpdate = React.useRef(false);
 
   // Handle faceted filter changes with better state persistence
-  const handleFacetedFilterChange = (filterType: 'collegeFilter' | 'branchFilter' | 'categoryFilter' | 'allocationFilter', value: string[]) => {
+  const handleFacetedFilterChange = (
+    filterType:
+      | "collegeFilter"
+      | "branchFilter"
+      | "categoryFilter"
+      | "allocationFilter",
+    value: string[],
+  ) => {
     // Set flag to indicate this is a filter update
     isFilterUpdate.current = true;
 
     // Update our local filter state
     switch (filterType) {
-      case 'branchFilter':
+      case "branchFilter":
         setLocalBranchFilter(value);
         break;
-      case 'categoryFilter':
+      case "categoryFilter":
         setLocalCategoryFilter(value);
         break;
-      case 'allocationFilter':
+      case "allocationFilter":
         setLocalAllocationFilter(value);
         break;
-      case 'collegeFilter':
+      case "collegeFilter":
         // College filter is handled separately through text input
         break;
     }
@@ -136,14 +158,17 @@ export function DataTable<TData, TValue>({
     // If we have server-side filtering and a callback
     if (onFiltersChange) {
       // Get the current college filter from column filters
-      const collegeFilterValue = (columnFilters.find(f => f.id === 'College')?.value as string) || '';
+      const collegeFilterValue =
+        (columnFilters.find((f) => f.id === "College")?.value as string) || "";
 
       // Create the updated filter state with all current filters
       const updatedFilters = {
         collegeFilter: collegeFilterValue,
-        branchFilter: filterType === 'branchFilter' ? value : localBranchFilter,
-        categoryFilter: filterType === 'categoryFilter' ? value : localCategoryFilter,
-        allocationFilter: filterType === 'allocationFilter' ? value : localAllocationFilter
+        branchFilter: filterType === "branchFilter" ? value : localBranchFilter,
+        categoryFilter:
+          filterType === "categoryFilter" ? value : localCategoryFilter,
+        allocationFilter:
+          filterType === "allocationFilter" ? value : localAllocationFilter,
       };
 
       // Send all filter values to parent component for server-side filtering
@@ -164,19 +189,20 @@ export function DataTable<TData, TValue>({
       columnVisibility,
       rowSelection,
       columnFilters,
-      ...(pagination ? {
-        pagination: {
-          pageIndex: pagination.page - 1,
-          pageSize: pagination.perPage,
-        }
-      } : {})
+      ...(pagination
+        ? {
+            pagination: {
+              pageIndex: pagination.page - 1,
+              pageSize: pagination.perPage,
+            },
+          }
+        : {}),
     },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: (updater) => {
-      const newSorting = updater instanceof Function
-        ? updater(effectiveSorting)
-        : updater;
+      const newSorting =
+        updater instanceof Function ? updater(effectiveSorting) : updater;
 
       // Update local state
       setLocalSorting(newSorting);
@@ -190,30 +216,41 @@ export function DataTable<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
 
     // If we're using external pagination, enable manual pagination
-    ...(pagination ? {
-      manualPagination: true,
-      pageCount: pagination.totalPages,
-    } : {}),
+    ...(pagination
+      ? {
+          manualPagination: true,
+          pageCount: pagination.totalPages,
+        }
+      : {}),
 
     // If we're using external sorting, enable manual sorting
-    ...(onSortingChange ? {
-      manualSorting: true,
-    } : {}),
+    ...(onSortingChange
+      ? {
+          manualSorting: true,
+        }
+      : {}),
 
     // If we're using external filtering, enable manual filtering
-    ...(onFiltersChange ? {
-      manualFiltering: true,
-    } : {}),
+    ...(onFiltersChange
+      ? {
+          manualFiltering: true,
+        }
+      : {}),
 
     // Handle pagination changes if we have a callback
-    onPaginationChange: pagination && onPaginationChange
-      ? (updater) => {
-        const state = updater instanceof Function
-          ? updater({ pageIndex: pagination.page - 1, pageSize: pagination.perPage })
-          : updater;
-        onPaginationChange(state.pageIndex + 1, state.pageSize);
-      }
-      : undefined,
+    onPaginationChange:
+      pagination && onPaginationChange
+        ? (updater) => {
+            const state =
+              updater instanceof Function
+                ? updater({
+                    pageIndex: pagination.page - 1,
+                    pageSize: pagination.perPage,
+                  })
+                : updater;
+            onPaginationChange(state.pageIndex + 1, state.pageSize);
+          }
+        : undefined,
 
     // Table feature functions
     getCoreRowModel: getCoreRowModel(),
@@ -237,7 +274,7 @@ export function DataTable<TData, TValue>({
         pageSize: pagination?.perPage || 25,
       },
     },
-  })
+  });
 
   // Create a ref to prevent the initial effect from resetting filters
   const isInitialRender = React.useRef(true);
@@ -252,7 +289,10 @@ export function DataTable<TData, TValue>({
 
     if (filters) {
       // For branch filter
-      if (Array.isArray(filters.branchFilter) && filters.branchFilter.length > 0) {
+      if (
+        Array.isArray(filters.branchFilter) &&
+        filters.branchFilter.length > 0
+      ) {
         const branchColumn = table.getColumn("course_name");
         if (branchColumn) {
           branchColumn.setFilterValue(filters.branchFilter);
@@ -261,15 +301,16 @@ export function DataTable<TData, TValue>({
       }
 
       // For category filter
-      if (Array.isArray(filters.categoryFilter) && filters.categoryFilter.length > 0) {
+      if (
+        Array.isArray(filters.categoryFilter) &&
+        filters.categoryFilter.length > 0
+      ) {
         const categoryColumn = table.getColumn("category");
         if (categoryColumn) {
           categoryColumn.setFilterValue(filters.categoryFilter);
           setLocalCategoryFilter(filters.categoryFilter);
         }
       }
-
-
 
       // For college filter
       if (filters.collegeFilter) {
@@ -292,18 +333,25 @@ export function DataTable<TData, TValue>({
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id} className="border-b-2 border-black bg-main">
+                <TableRow
+                  key={headerGroup.id}
+                  className="border-b-2 border-black bg-main"
+                >
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead key={header.id} colSpan={header.colSpan} className="text-black font-heading bg-main border-b-2 border-black">
+                      <TableHead
+                        key={header.id}
+                        colSpan={header.colSpan}
+                        className="text-black font-heading bg-main border-b-2 border-black"
+                      >
                         {header.isPlaceholder
                           ? null
                           : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                              header.column.columnDef.header,
+                              header.getContext(),
+                            )}
                       </TableHead>
-                    )
+                    );
                   })}
                 </TableRow>
               ))}
@@ -314,14 +362,18 @@ export function DataTable<TData, TValue>({
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
-                    className={`border-b border-black hover:bg-main/30 transition-colors ${index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                      }`}
+                    className={`border-b border-black hover:bg-main/30 transition-colors ${
+                      index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                    }`}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="py-4 px-4 text-black font-base">
+                      <TableCell
+                        key={cell.id}
+                        className="py-4 px-4 text-black font-base"
+                      >
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )}
                       </TableCell>
                     ))}
@@ -338,8 +390,12 @@ export function DataTable<TData, TValue>({
                         <span className="text-2xl">🔍</span>
                       </div>
                       <div className="space-y-2">
-                        <div className="text-lg font-heading">No results found</div>
-                        <div className="text-sm font-base">Try adjusting your filters or search criteria</div>
+                        <div className="text-lg font-heading">
+                          No results found
+                        </div>
+                        <div className="text-sm font-base">
+                          Try adjusting your filters or search criteria
+                        </div>
                       </div>
                     </div>
                   </TableCell>
@@ -360,5 +416,5 @@ export function DataTable<TData, TValue>({
         </div>
       )}
     </div>
-  )
+  );
 }

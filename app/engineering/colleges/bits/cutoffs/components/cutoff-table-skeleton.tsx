@@ -1,7 +1,14 @@
-"use client"
+"use client";
 
-import { Skeleton } from "@/components/ui/skeleton"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export function CutoffTableSkeleton() {
   return (
@@ -14,25 +21,51 @@ export function CutoffTableSkeleton() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead><Skeleton className="h-5 w-[80px]" /></TableHead>
-              <TableHead><Skeleton className="h-5 w-[200px]" /></TableHead>
-              <TableHead><Skeleton className="h-5 w-[100px]" /></TableHead>
-              <TableHead><Skeleton className="h-5 w-[100px]" /></TableHead>
-              <TableHead><Skeleton className="h-5 w-[100px]" /></TableHead>
-              <TableHead><Skeleton className="h-5 w-[100px]" /></TableHead>
+              <TableHead>
+                <Skeleton className="h-5 w-[80px]" />
+              </TableHead>
+              <TableHead>
+                <Skeleton className="h-5 w-[200px]" />
+              </TableHead>
+              <TableHead>
+                <Skeleton className="h-5 w-[100px]" />
+              </TableHead>
+              <TableHead>
+                <Skeleton className="h-5 w-[100px]" />
+              </TableHead>
+              <TableHead>
+                <Skeleton className="h-5 w-[100px]" />
+              </TableHead>
+              <TableHead>
+                <Skeleton className="h-5 w-[100px]" />
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {Array(10).fill(0).map((_, i) => (
-              <TableRow key={i}>
-                <TableCell><Skeleton className="h-5 w-[80px]" /></TableCell>
-                <TableCell><Skeleton className="h-5 w-[200px]" /></TableCell>
-                <TableCell><Skeleton className="h-5 w-[100px]" /></TableCell>
-                <TableCell><Skeleton className="h-5 w-[100px]" /></TableCell>
-                <TableCell><Skeleton className="h-5 w-[100px]" /></TableCell>
-                <TableCell><Skeleton className="h-5 w-[100px]" /></TableCell>
-              </TableRow>
-            ))}
+            {Array(10)
+              .fill(0)
+              .map((_, i) => (
+                <TableRow key={i}>
+                  <TableCell>
+                    <Skeleton className="h-5 w-[80px]" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-5 w-[200px]" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-5 w-[100px]" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-5 w-[100px]" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-5 w-[100px]" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-5 w-[100px]" />
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </div>
@@ -41,5 +74,5 @@ export function CutoffTableSkeleton() {
         <Skeleton className="h-10 w-[70px]" />
       </div>
     </div>
-  )
+  );
 }

@@ -1,11 +1,10 @@
-"use client"
+"use client";
 
-import { ColumnDef } from "@tanstack/react-table"
-import { Checkbox } from "@/components/ui/checkbox"
-import { statuses } from "../data/data"
-import { Task } from "../data/schema"
-import { DataTableColumnHeader } from "./data-table-column-header"
-
+import { ColumnDef } from "@tanstack/react-table";
+import { Checkbox } from "@/components/ui/checkbox";
+import { statuses } from "../data/data";
+import { Task } from "../data/schema";
+import { DataTableColumnHeader } from "./data-table-column-header";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -39,21 +38,21 @@ export const columns: ColumnDef<Task>[] = [
     ),
     cell: ({ row }) => {
       const status = statuses.find(
-        (status) => status.value === row.getValue("Program")
-      )
+        (status) => status.value === row.getValue("Program"),
+      );
 
       if (!status) {
-        return <p>-</p>
+        return <p>-</p>;
       }
 
       return (
         <div className="flex w-[300px] items-center">
           <span>{status.label}</span>
         </div>
-      )
+      );
     },
     filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id))
+      return value.includes(row.getValue(id));
     },
     enableSorting: false,
     enableHiding: false,
@@ -114,11 +113,13 @@ export const columns: ColumnDef<Task>[] = [
       );
     },
   },
-]
+];
 
-{/*  
+{
+  /*  
 {
     id: "actions",
     cell: ({ row }) => <DataTableRowActions row={row} />,
   },
-*/}
+*/
+}

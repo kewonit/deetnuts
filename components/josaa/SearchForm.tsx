@@ -60,19 +60,19 @@ export default function JosaaSearchForm({
   const [rank, setRank] = useQueryState("rank", parseAsInteger);
   const [instituteType, setInstituteType] = useQueryState(
     "type",
-    parseAsString
+    parseAsString,
   );
   const [year, setYear] = useQueryState(
     "year",
-    parseAsInteger.withDefault(filterOptions.years[0])
+    parseAsInteger.withDefault(filterOptions.years[0]),
   );
   const [category, setCategory] = useQueryState(
     "category",
-    parseAsString.withDefault("OPEN")
+    parseAsString.withDefault("OPEN"),
   );
   const [gender, setGender] = useQueryState(
     "gender",
-    parseAsString.withDefault("Gender-Neutral")
+    parseAsString.withDefault("Gender-Neutral"),
   );
 
   // Local state
@@ -127,7 +127,7 @@ export default function JosaaSearchForm({
       // Sort by closing rank (best matches first - colleges where you barely get in)
       results.sort(
         (a: JosaaCutoffExpanded, b: JosaaCutoffExpanded) =>
-          a.closing_rank - b.closing_rank
+          a.closing_rank - b.closing_rank,
       );
 
       setResults(results);

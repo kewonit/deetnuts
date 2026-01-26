@@ -81,7 +81,7 @@ interface CutoffMatrixProps {
 // Admission chance helper
 function getMatchStrength(
   userRank: number,
-  closingRank: number
+  closingRank: number,
 ): "safe" | "moderate" | "reach" | "dream" {
   const ratio = userRank / closingRank;
   if (ratio <= 0.7) return "safe"; // Rank is much better than cutoff
@@ -195,12 +195,12 @@ export default function CutoffMatrix({
         if (!institute) return null;
 
         const sortedCutoffs = cutoffs.sort(
-          (a, b) => a.closing_rank - b.closing_rank
+          (a, b) => a.closing_rank - b.closing_rank,
         );
         const bestRank = Math.min(...cutoffs.map((c) => c.closing_rank));
         const worstRank = Math.max(...cutoffs.map((c) => c.closing_rank));
         const avgRank = Math.round(
-          cutoffs.reduce((sum, c) => sum + c.closing_rank, 0) / cutoffs.length
+          cutoffs.reduce((sum, c) => sum + c.closing_rank, 0) / cutoffs.length,
         );
 
         return {
@@ -223,7 +223,7 @@ export default function CutoffMatrix({
     // Institute type filter
     if (instituteTypeFilter !== "all") {
       filtered = filtered.filter(
-        (g) => g.institute.institute_type === instituteTypeFilter
+        (g) => g.institute.institute_type === instituteTypeFilter,
       );
     }
 
@@ -242,8 +242,8 @@ export default function CutoffMatrix({
           g.cutoffs.some(
             (c) =>
               c.expand?.branch?.name.toLowerCase().includes(search) ||
-              c.expand?.branch?.short_code.toLowerCase().includes(search)
-          )
+              c.expand?.branch?.short_code.toLowerCase().includes(search),
+          ),
       );
     }
 
@@ -272,7 +272,7 @@ export default function CutoffMatrix({
           break;
         case "type":
           comparison = a.institute.institute_type.localeCompare(
-            b.institute.institute_type
+            b.institute.institute_type,
           );
           break;
         case "nirf":
@@ -302,16 +302,16 @@ export default function CutoffMatrix({
   const stats = useMemo(() => {
     const total = groupedResults.length;
     const safe = groupedResults.filter(
-      (g) => g.matchStrength === "safe"
+      (g) => g.matchStrength === "safe",
     ).length;
     const moderate = groupedResults.filter(
-      (g) => g.matchStrength === "moderate"
+      (g) => g.matchStrength === "moderate",
     ).length;
     const reach = groupedResults.filter(
-      (g) => g.matchStrength === "reach"
+      (g) => g.matchStrength === "reach",
     ).length;
     const dream = groupedResults.filter(
-      (g) => g.matchStrength === "dream"
+      (g) => g.matchStrength === "dream",
     ).length;
     const totalBranches = results.length;
     return { total, safe, moderate, reach, dream, totalBranches };
@@ -646,8 +646,8 @@ export default function CutoffMatrix({
                         isSelected
                           ? "bg-purple-50"
                           : idx % 2 === 0
-                          ? "bg-white"
-                          : "bg-gray-50"
+                            ? "bg-white"
+                            : "bg-gray-50"
                       } hover:bg-gray-100`}
                     >
                       {/* Checkbox */}
@@ -669,7 +669,7 @@ export default function CutoffMatrix({
                           <TooltipTrigger>
                             <Badge
                               className={`${getMatchBadgeColor(
-                                group.matchStrength
+                                group.matchStrength,
                               )} border flex items-center gap-1`}
                             >
                               {getMatchIcon(group.matchStrength)}
@@ -769,20 +769,20 @@ export default function CutoffMatrix({
                             {group.cutoffs.map((cutoff) => {
                               const branchMatch = getMatchStrength(
                                 userRank,
-                                cutoff.closing_rank
+                                cutoff.closing_rank,
                               );
                               return (
                                 <div
                                   key={cutoff.id}
                                   className={`p-3 rounded-lg border-2 border-black ${getMatchColor(
-                                    branchMatch
+                                    branchMatch,
                                   )} flex items-center justify-between`}
                                 >
                                   <div className="min-w-0 flex-grow">
                                     <p className="font-medium text-sm truncate">
                                       {cutoff.expand?.branch
                                         ? getBranchDisplayName(
-                                            cutoff.expand.branch
+                                            cutoff.expand.branch,
                                           )
                                         : "Unknown"}
                                     </p>

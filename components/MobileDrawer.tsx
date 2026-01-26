@@ -1,20 +1,20 @@
-'use client'
-import { FaBars } from 'react-icons/fa'
-import { useState } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
-import { MAIN_SIDEBAR, } from '@/data/sidebar-links'
-import Drawer from '@/components/ui/drawer'
+"use client";
+import { FaBars } from "react-icons/fa";
+import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { MAIN_SIDEBAR } from "@/data/sidebar-links";
+import Drawer from "@/components/ui/drawer";
 
 export default function MobileDrawer() {
-  const router = useRouter()
-  const pathname = usePathname()
-  const ACTIVE_SIDEBAR = pathname.includes('/') ? MAIN_SIDEBAR : MAIN_SIDEBAR
-  const [isDrawerActive, setIsDrawerActive] = useState(false)
+  const router = useRouter();
+  const pathname = usePathname();
+  const ACTIVE_SIDEBAR = pathname.includes("/") ? MAIN_SIDEBAR : MAIN_SIDEBAR;
+  const [isDrawerActive, setIsDrawerActive] = useState(false);
 
   const handleLinkClick = (path: string) => {
-    setIsDrawerActive(false)
-    router.push(path)
-  }
+    setIsDrawerActive(false);
+    router.push(path);
+  };
 
   return (
     <>
@@ -29,7 +29,7 @@ export default function MobileDrawer() {
       <Drawer active={isDrawerActive} setActive={setIsDrawerActive}>
         <div className="scrollbar h-full w-full overflow-y-auto bg-white">
           {ACTIVE_SIDEBAR.map((item, id) => {
-            return typeof item === 'string' ? (
+            return typeof item === "string" ? (
               <div
                 key={id}
                 className="sidebaritem block border-b-4 border-r-4 border-black p-4 text-xl font-heading m800:p-4 m800:text-base"
@@ -40,13 +40,13 @@ export default function MobileDrawer() {
               <button
                 key={id}
                 onClick={() => {
-                  handleLinkClick(item.href)
+                  handleLinkClick(item.href);
                 }}
                 className="sidebaritem block w-full border-b-4 border-r-4 border-black p-4 pl-7 text-left text-lg font-base text-black/90 hover:bg-main m800:p-4 m800:pl-6 m800:text-base"
               >
                 {item.text}
               </button>
-            )
+            );
           })}
           {/*}
           <button
@@ -61,5 +61,5 @@ export default function MobileDrawer() {
         </div>
       </Drawer>
     </>
-  )
+  );
 }

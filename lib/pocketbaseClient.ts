@@ -1,4 +1,4 @@
-import PocketBase, { ClientResponseError } from 'pocketbase';
+import PocketBase, { ClientResponseError } from "pocketbase";
 
 /**
  * Global auth cache to persist across API calls
@@ -23,7 +23,9 @@ export function getPocketBase() {
     const pocketbaseUrl = process.env.NEXT_PUBLIC_POCKETBASE_URL;
 
     if (!pocketbaseUrl) {
-      throw new Error('NEXT_PUBLIC_POCKETBASE_URL environment variable is not defined');
+      throw new Error(
+        "NEXT_PUBLIC_POCKETBASE_URL environment variable is not defined",
+      );
     }
 
     pbClient = new PocketBase(pocketbaseUrl);
@@ -54,38 +56,39 @@ export async function ensureUserAuthenticated(): Promise<void> {
 
   try {
     // Dynamic import of cookies to avoid build errors in client components
-    const { cookies } = await import('next/headers');
+    const { cookies } = await import("next/headers");
     const cookieStore = await cookies();
-    const authCookie = cookieStore.get('pb_auth');
+    const authCookie = cookieStore.get("pb_auth");
 
     if (!authCookie?.value) {
-      throw new Error('No authentication cookie found');
+      throw new Error("No authentication cookie found");
     }
 
     // Load the user's authentication from cookie
     pocketbase.authStore.loadFromCookie(authCookie.value);
 
     if (!pocketbase.authStore.isValid) {
-      throw new Error('Invalid authentication token');
+      throw new Error("Invalid authentication token");
     }
 
     // Try to refresh the auth to ensure it's still valid
     try {
-      await pocketbase.collection('users').authRefresh();
+      await pocketbase.collection("users").authRefresh();
     } catch (refreshError) {
-      throw new Error('Authentication token expired or invalid');
+      throw new Error("Authentication token expired or invalid");
     }
 
     // Cache the auth for subsequent requests in the same API call
     globalAuthCache = {
       token: pocketbase.authStore.token,
       model: pocketbase.authStore.model,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
-
   } catch (error) {
-    console.error('User authentication failed:', error);
-    throw new Error(`User authentication failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    console.error("User authentication failed:", error);
+    throw new Error(
+      `User authentication failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+    );
   }
 }
 
@@ -108,7 +111,7 @@ export async function ensureAuthenticatedServer(): Promise<void> {
     globalAuthCache = {
       token: pocketbase.authStore.token,
       model: pocketbase.authStore.model,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
     return;
   }
@@ -119,20 +122,22 @@ export async function ensureAuthenticatedServer(): Promise<void> {
     const adminPassword = process.env.POCKETBASE_ADMIN_PASSWORD;
 
     if (!adminEmail || !adminPassword) {
-      throw new Error('Admin credentials not found in environment variables');
+      throw new Error("Admin credentials not found in environment variables");
     }
 
-    const authData = await pocketbase.admins.authWithPassword(adminEmail, adminPassword);
+    const authData = await pocketbase.admins.authWithPassword(
+      adminEmail,
+      adminPassword,
+    );
 
     // Cache the auth for future requests
     globalAuthCache = {
       token: pocketbase.authStore.token,
       model: pocketbase.authStore.model,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
-
   } catch (error) {
-    console.error('Authentication failed:', error);
+    console.error("Authentication failed:", error);
     throw new Error(`PocketBase authentication failed: ${error}`);
   }
 }
@@ -154,7 +159,7 @@ export class PocketBaseError extends Error {
 
   constructor(message: string, status: number = 500, data: any = null) {
     super(message);
-    this.name = 'PocketBaseError';
+    this.name = "PocketBaseError";
     this.status = status;
     this.data = data;
   }
@@ -171,10 +176,12 @@ export async function getBitsCutoffsData(year: number | string) {
     const yearStr = year.toString();
 
     // Query the engineering_bits_cutoffs collection
-    const result = await pb.collection('engineering_bits_cutoffs').getList(1, 500, {
-      filter: `Year='${yearStr}'`,
-      sort: 'Program',
-    });
+    const result = await pb
+      .collection("engineering_bits_cutoffs")
+      .getList(1, 500, {
+        filter: `Year='${yearStr}'`,
+        sort: "Program",
+      });
 
     if (!result || !result.items || result.items.length === 0) {
       throw new PocketBaseError(`No data found for year ${year}`, 404);
@@ -186,22 +193,18 @@ export async function getBitsCutoffsData(year: number | string) {
       throw error;
     }
 
-    console.error('Error fetching BITS cutoffs data:', error);
+    console.error("Error fetching BITS cutoffs data:", error);
 
     // Check if it's a ClientResponseError from PocketBase
     if (error instanceof ClientResponseError) {
       throw new PocketBaseError(
-        error.message || 'Failed to fetch BITS cutoffs data',
+        error.message || "Failed to fetch BITS cutoffs data",
         error.status || 500,
-        error.data || null
+        error.data || null,
       );
     }
 
     // Default error handling for unknown error types
-    throw new PocketBaseError(
-      'Failed to fetch BITS cutoffs data',
-      500,
-      null
-    );
+    throw new PocketBaseError("Failed to fetch BITS cutoffs data", 500, null);
   }
 }

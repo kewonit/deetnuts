@@ -36,7 +36,7 @@ export default function CutoffsTable({
   const [categoryFilter, setCategoryFilter] = useState("all");
 
   const filteredData = useMemo(() => {
-    let filtered = data || [];
+    const filtered = data || [];
 
     return filtered.filter((row) => {
       const matchesSearch =
@@ -50,7 +50,7 @@ export default function CutoffsTable({
 
   const uniqueCategories = useMemo(() => {
     if (!data) return [];
-    let categories = data.map((row) => row.category);
+    const categories = data.map((row) => row.category);
     return Array.from(new Set(categories)).sort();
   }, [data]);
 

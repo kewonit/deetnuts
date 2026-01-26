@@ -4,29 +4,39 @@
  */
 
 // Institute types based on JoSAA categorization
-export type InstituteType = 'IIT' | 'NIT' | 'IIIT' | 'GFTI' | 'CFTI';
+export type InstituteType = "IIT" | "NIT" | "IIIT" | "GFTI" | "CFTI";
 
 // Degree types
-export type DegreeType = 'B.Tech' | 'B.Arch' | 'B.Des' | 'B.Plan' | 'Dual Degree' | 'Integrated M.Tech' | 'Integrated M.Sc' | 'M.Tech' | 'M.Sc' | 'M.Des';
+export type DegreeType =
+  | "B.Tech"
+  | "B.Arch"
+  | "B.Des"
+  | "B.Plan"
+  | "Dual Degree"
+  | "Integrated M.Tech"
+  | "Integrated M.Sc"
+  | "M.Tech"
+  | "M.Sc"
+  | "M.Des";
 
 // Category types
-export type CategoryType = 
-  | 'OPEN' 
-  | 'EWS' 
-  | 'OBC-NCL' 
-  | 'SC' 
-  | 'ST' 
-  | 'OPEN (PwD)' 
-  | 'EWS (PwD)' 
-  | 'OBC-NCL (PwD)' 
-  | 'SC (PwD)' 
-  | 'ST (PwD)';
+export type CategoryType =
+  | "OPEN"
+  | "EWS"
+  | "OBC-NCL"
+  | "SC"
+  | "ST"
+  | "OPEN (PwD)"
+  | "EWS (PwD)"
+  | "OBC-NCL (PwD)"
+  | "SC (PwD)"
+  | "ST (PwD)";
 
 // Gender types
-export type GenderType = 'Gender-Neutral' | 'Female-only (supernumerary)';
+export type GenderType = "Gender-Neutral" | "Female-only (supernumerary)";
 
 // Seat type (for state quota NITs)
-export type SeatType = 'AI' | 'HS' | 'OS';
+export type SeatType = "AI" | "HS" | "OS";
 
 // Base PocketBase record fields
 interface BaseRecord {
@@ -156,7 +166,7 @@ export interface JosaaStats {
 
 // Search result item
 export interface SearchResultItem {
-  type: 'institute' | 'branch';
+  type: "institute" | "branch";
   id: string;
   name: string;
   subtitle: string;
@@ -167,8 +177,18 @@ export interface SearchResultItem {
 // Form options (for dropdowns)
 export interface FilterOptions {
   instituteTypes: InstituteType[];
-  institutes: Array<{ id: string; name: string; shortName: string; type: InstituteType }>;
-  branches: Array<{ id: string; name: string; shortCode: string; degreeType: DegreeType }>;
+  institutes: Array<{
+    id: string;
+    name: string;
+    shortName: string;
+    type: InstituteType;
+  }>;
+  branches: Array<{
+    id: string;
+    name: string;
+    shortCode: string;
+    degreeType: DegreeType;
+  }>;
   years: number[];
   rounds: number[];
   categories: CategoryType[];

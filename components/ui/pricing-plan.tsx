@@ -1,7 +1,7 @@
-import { Check } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
-import Link from 'next/link'
+import { Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export default function PricingPlan({
   perks,
@@ -10,11 +10,11 @@ export default function PricingPlan({
   description,
   price,
 }: {
-  perks: string[]
-  mostPopular?: boolean
-  planName: string
-  description: string
-  price: string
+  perks: string[];
+  mostPopular?: boolean;
+  planName: string;
+  description: string;
+  price: string;
 }) {
   return (
     <div className="flex flex-col justify-between rounded-base border-2 border-black bg-white p-5">
@@ -29,8 +29,8 @@ export default function PricingPlan({
         </div>
         <p className="mb-3 mt-1">{description}</p>
         <div>
-          <span className="text-3xl font-heading">₹{price}</span>{' '}
-          <span>/ month</span>{' '}
+          <span className="text-3xl font-heading">₹{price}</span>{" "}
+          <span>/ month</span>{" "}
         </div>
         <ul className="mt-8 flex flex-col gap-2">
           {perks.map((perk) => {
@@ -38,18 +38,18 @@ export default function PricingPlan({
               <li key={perk} className="flex items-center gap-3">
                 <Check className="shrink-0" size={20} /> {perk}
               </li>
-            )
+            );
           })}
         </ul>
       </div>
-      <Link href='/'>
+      <Link href="/">
         <Button
-          size={mostPopular ? 'lg' : 'default'}
-          className={cn('mt-12 w-full', mostPopular && 'text-black')}
+          size={mostPopular ? "lg" : "default"}
+          className={cn("mt-12 w-full", mostPopular && "text-black")}
         >
           Access
         </Button>
       </Link>
     </div>
-  )
+  );
 }

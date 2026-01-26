@@ -1,29 +1,37 @@
-import Link from 'next/link';
-import { parseCollegeSlug } from '@/lib/slugify';
-import SeatMatrix from '@/components/SeatMatrix';
-import CutoffsTable from '@/components/CutoffsTable';
-import { Suspense } from 'react';
-import { notFound } from 'next/navigation';
+import Link from "next/link";
+import { parseCollegeSlug } from "@/lib/slugify";
+import SeatMatrix from "@/components/SeatMatrix";
+import CutoffsTable from "@/components/CutoffsTable";
+import { Suspense } from "react";
+import { notFound } from "next/navigation";
 
 async function getCollege(id: string) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/mht-cet/colleges/${id}`, { next: { revalidate: 3600 } });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_APP_URL}/api/mht-cet/colleges/${id}`,
+      { next: { revalidate: 3600 } },
+    );
     if (!res.ok) {
       if (res.status === 404) {
         return null; // Return null instead of throwing notFound
       }
-      throw new Error(`Failed to fetch college data for id: ${id}. Status: ${res.status}`);
+      throw new Error(
+        `Failed to fetch college data for id: ${id}. Status: ${res.status}`,
+      );
     }
     return res.json();
   } catch (error) {
-    console.error('Error fetching college:', error);
+    console.error("Error fetching college:", error);
     return null; // Return null for any fetch errors
   }
 }
 
 async function getSeatMatrix(id: string) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/mht-cet/colleges/${id}/seat-matrix`, { next: { revalidate: 3600 } });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_APP_URL}/api/mht-cet/colleges/${id}/seat-matrix`,
+      { next: { revalidate: 3600 } },
+    );
     if (!res.ok) {
       if (res.status === 404) {
         return { seatMatrix: [], matchInfo: null };
@@ -32,14 +40,17 @@ async function getSeatMatrix(id: string) {
     }
     return res.json();
   } catch (error) {
-    console.error('Error fetching seat matrix:', error);
+    console.error("Error fetching seat matrix:", error);
     return { seatMatrix: [], matchInfo: null };
   }
 }
 
 async function getCutoffs(id: string) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/mht-cet/colleges/${id}/cutoffs`, { next: { revalidate: 3600 } });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_APP_URL}/api/mht-cet/colleges/${id}/cutoffs`,
+      { next: { revalidate: 3600 } },
+    );
     if (!res.ok) {
       if (res.status === 404) {
         return { cutoffs: [] };
@@ -48,60 +59,77 @@ async function getCutoffs(id: string) {
     }
     return res.json();
   } catch (error) {
-    console.error('Error fetching cutoffs:', error);
+    console.error("Error fetching cutoffs:", error);
     return { cutoffs: [] };
   }
 }
 
-export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata(props: {
+  params: Promise<{ slug: string }>;
+}) {
   const params = await props.params;
   const { slug } = params;
   const { id } = parseCollegeSlug(slug);
   if (!id) {
     return {
-      title: 'College Not Found',
-      description: 'The college you are looking for could not be found.',
+      title: "College Not Found",
+      description: "The college you are looking for could not be found.",
     };
   }
   const college = await getCollege(id);
 
   if (!college) {
     return {
-      title: 'College Not Found',
-      description: 'The college you are looking for could not be found.',
+      title: "College Not Found",
+      description: "The college you are looking for could not be found.",
     };
   }
 
   const title = `${college.college_name} MHT-CET 2025: Cutoffs, Fees, Seats & Admission`;
   const description = `Find all details for ${college.college_name} for MHT-CET 2025 admissions. Get the latest cutoffs, fee structure, seat matrix, and admission process. Your complete guide to securing admission in ${college.college_name}.`;
+  const canonicalUrl = `https://deetnuts.com/mht-cet/colleges/${slug}`;
 
   return {
     title,
     description,
-    keywords: [college.college_name, 'MHT-CET', 'MHT-CET 2025', 'Engineering Admissions', 'College Cutoffs', 'Fee Structure', 'Seat Matrix', college.home_university],
-    creator: 'DeetNuts',
+    keywords: [
+      college.college_name,
+      "MHT-CET",
+      "MHT-CET 2025",
+      "Engineering Admissions",
+      "College Cutoffs",
+      "Fee Structure",
+      "Seat Matrix",
+      college.home_university,
+    ],
+    creator: "DeetNuts",
     openGraph: {
       title,
       description,
-      url: `${process.env.NEXT_PUBLIC_APP_URL}/mht-cet/colleges/${slug}`,
-      siteName: 'DeetNuts',
+      url: canonicalUrl,
+      siteName: "DeetNuts",
       images: [
         {
-          url: '/MHT-CET_logo.png', // Replace with a more specific image if available
+          url: "/MHT-CET_logo.png", // Replace with a more specific image if available
           width: 800,
           height: 600,
           alt: `Logo of ${college.college_name}`,
         },
       ],
-      locale: 'en_US',
-      type: 'website',
+      locale: "en_US",
+      type: "website",
+    },
+    alternates: {
+      canonical: canonicalUrl,
     },
   };
 }
 
-import CollegeJsonLd from '@/components/CollegeJsonLd';
+import CollegeJsonLd from "@/components/CollegeJsonLd";
 
-export default async function CollegePage(props: { params: Promise<{ slug: string }> }) {
+export default async function CollegePage(props: {
+  params: Promise<{ slug: string }>;
+}) {
   const params = await props.params;
   const { slug } = params;
   const { id } = parseCollegeSlug(slug);
@@ -140,10 +168,14 @@ export default async function CollegePage(props: { params: Promise<{ slug: strin
           <div className="max-w-2xl mx-auto text-center">
             <div className="bg-white border-4 border-black rounded-base shadow-base p-12">
               <div className="text-8xl mb-6">😿</div>
-              <h1 className="text-4xl font-heading text-black mb-6">COLLEGE NOT FOUND</h1>
+              <h1 className="text-4xl font-heading text-black mb-6">
+                COLLEGE NOT FOUND
+              </h1>
               <p className="text-xl font-base text-black mb-8 leading-relaxed">
-                we couldn&apos;t find the college you&apos;re looking for! 🔍<br />
-                this might be due to an invalid ID or the college data might not be available.
+                we couldn&apos;t find the college you&apos;re looking for! 🔍
+                <br />
+                this might be due to an invalid ID or the college data might not
+                be available.
               </p>
               <div className="space-y-4">
                 <Link
@@ -167,13 +199,30 @@ export default async function CollegePage(props: { params: Promise<{ slug: strin
         {/* Breadcrumb */}
         <nav className="mb-8">
           <div className="flex items-center space-x-2 text-sm font-base">
-            <Link href="/" className="hover:text-main transition-colors font-medium">Home</Link>
+            <Link
+              href="/"
+              className="hover:text-main transition-colors font-medium"
+            >
+              Home
+            </Link>
             <span className="font-bold">🎀</span>
-            <Link href="/mht-cet" className="hover:text-main transition-colors font-medium">MHT-CET</Link>
+            <Link
+              href="/mht-cet"
+              className="hover:text-main transition-colors font-medium"
+            >
+              MHT-CET
+            </Link>
             <span className="font-bold">🎀</span>
-            <Link href="/mht-cet/colleges" className="hover:text-main transition-colors font-medium">Colleges</Link>
+            <Link
+              href="/mht-cet/colleges"
+              className="hover:text-main transition-colors font-medium"
+            >
+              Colleges
+            </Link>
             <span className="font-bold">🎀</span>
-            <span className="text-black font-heading">{college.college_name}</span>
+            <span className="text-black font-heading">
+              {college.college_name}
+            </span>
           </div>
         </nav>
 
@@ -188,11 +237,14 @@ export default async function CollegePage(props: { params: Promise<{ slug: strin
                 <span className="bg-purple-300 text-black px-4 py-2 border-2 border-black rounded-base font-heading text-sm">
                   🆔 ID: {college.college_id}
                 </span>
-                <span className={`px-4 py-2 border-2 border-black rounded-base font-heading text-sm ${college.status === 'Active'
-                  ? 'bg-green-300 text-black'
-                  : 'bg-red-300 text-black'
-                  }`}>
-                  {college.status === 'Active' ? '✅' : '🔴'} {college.status}
+                <span
+                  className={`px-4 py-2 border-2 border-black rounded-base font-heading text-sm ${
+                    college.status === "Active"
+                      ? "bg-green-300 text-black"
+                      : "bg-red-300 text-black"
+                  }`}
+                >
+                  {college.status === "Active" ? "✅" : "🔴"} {college.status}
                 </span>
               </div>
             </div>
@@ -205,8 +257,12 @@ export default async function CollegePage(props: { params: Promise<{ slug: strin
                   <span className="text-2xl">🆔</span>
                 </div>
                 <div>
-                  <span className="font-heading text-black block text-lg">College ID</span>
-                  <span className="font-base text-black text-xl">{college.college_id}</span>
+                  <span className="font-heading text-black block text-lg">
+                    College ID
+                  </span>
+                  <span className="font-base text-black text-xl">
+                    {college.college_id}
+                  </span>
                 </div>
               </div>
               <div className="flex items-start">
@@ -214,8 +270,12 @@ export default async function CollegePage(props: { params: Promise<{ slug: strin
                   <span className="text-2xl">📋</span>
                 </div>
                 <div>
-                  <span className="font-heading text-black block text-lg">Status</span>
-                  <span className="font-base text-black text-xl italic">{college.status}</span>
+                  <span className="font-heading text-black block text-lg">
+                    Status
+                  </span>
+                  <span className="font-base text-black text-xl italic">
+                    {college.status}
+                  </span>
                 </div>
               </div>
             </div>
@@ -225,8 +285,12 @@ export default async function CollegePage(props: { params: Promise<{ slug: strin
                   <span className="text-2xl">🏫</span>
                 </div>
                 <div>
-                  <span className="font-heading text-black block text-lg">Home University</span>
-                  <span className="font-base text-black text-xl">{college.home_university}</span>
+                  <span className="font-heading text-black block text-lg">
+                    Home University
+                  </span>
+                  <span className="font-base text-black text-xl">
+                    {college.home_university}
+                  </span>
                 </div>
               </div>
             </div>
@@ -236,8 +300,12 @@ export default async function CollegePage(props: { params: Promise<{ slug: strin
                   <span className="text-2xl">🗂️</span>
                 </div>
                 <div>
-                  <span className="font-heading text-black block text-lg">Record ID</span>
-                  <span className="font-base text-black text-sm font-mono">{college.id}</span>
+                  <span className="font-heading text-black block text-lg">
+                    Record ID
+                  </span>
+                  <span className="font-base text-black text-sm font-mono">
+                    {college.id}
+                  </span>
                 </div>
               </div>
             </div>

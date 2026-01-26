@@ -175,7 +175,7 @@ export function CutoffTable({
         filters.year
       }-${getDisplayNameForRound(filters.round).replace(
         /\s+/g,
-        "-"
+        "-",
       )}-page-${currentPage}.csv`;
 
       link.setAttribute("href", url);
@@ -335,7 +335,7 @@ export function CutoffTable({
         },
         cell: ({ row }) => {
           const currentPercentile = parseFloat(
-            row.getValue("cutoff_score") as string
+            row.getValue("cutoff_score") as string,
           );
           const showDistance =
             filters.percentileInput &&
@@ -345,7 +345,7 @@ export function CutoffTable({
             const targetPercentile = parseFloat(filters.percentileInput);
             const distance = calculatePercentileDistance(
               currentPercentile,
-              targetPercentile
+              targetPercentile,
             );
             const isTarget = Math.abs(distance) < 0.01;
 
@@ -363,8 +363,8 @@ export function CutoffTable({
                           isTarget
                             ? "bg-green-100 text-green-700 border-green-300"
                             : distance < 0
-                            ? "bg-blue-100 text-blue-700 border-blue-300"
-                            : "bg-red-100 text-red-700 border-red-300"
+                              ? "bg-blue-100 text-blue-700 border-blue-300"
+                              : "bg-red-100 text-red-700 border-red-300"
                         }`}
                       >
                         {isTarget
@@ -378,12 +378,12 @@ export function CutoffTable({
                       {isTarget
                         ? "This matches your target percentile exactly"
                         : distance < 0
-                        ? `This is ${Math.abs(
-                            distance
-                          )}% below your target of ${targetPercentile}%`
-                        : `This is ${Math.abs(
-                            distance
-                          )}% above your target of ${targetPercentile}%`}
+                          ? `This is ${Math.abs(
+                              distance,
+                            )}% below your target of ${targetPercentile}%`
+                          : `This is ${Math.abs(
+                              distance,
+                            )}% above your target of ${targetPercentile}%`}
                     </p>
                   </TooltipContent>
                 </Tooltip>
@@ -576,7 +576,7 @@ export function CutoffTable({
           </TooltipProvider>
         ),
         size: 250,
-      }
+      },
     );
 
     return baseColumns;
@@ -631,7 +631,7 @@ export function CutoffTable({
       // No throttling here, as it's handled in the parent component's fetchRecords
       setCurrentPage(newPage);
     },
-    [setCurrentPage]
+    [setCurrentPage],
   );
 
   return (
@@ -721,7 +721,7 @@ export function CutoffTable({
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
-                              header.getContext()
+                              header.getContext(),
                             )}
                       </TableHead>
                     );
@@ -748,7 +748,7 @@ export function CutoffTable({
                         <div className="truncate">
                           {flexRender(
                             cell.column.columnDef.cell,
-                            cell.getContext()
+                            cell.getContext(),
                           )}
                         </div>
                       </TableCell>

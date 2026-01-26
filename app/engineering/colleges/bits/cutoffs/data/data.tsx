@@ -1,79 +1,74 @@
-import {
-  ColumnsIcon
-} from "@radix-ui/react-icons"
-
+import { ColumnsIcon } from "@radix-ui/react-icons";
 
 export const statuses = [
   {
     value: "B.E. Chemical",
     label: "B.E. Chemical",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "B.E. Civil",
     label: "B.E. Civil",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "B.E. Electrical & Electronics",
     label: "B.E. Electrical & Electronics",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "B.E. Mechanical",
     label: "B.E. Mechanical",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "B.E. Computer Science",
     label: "B.E. Computer Science",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "B.E. Electronics & Instrumentation",
     label: "B.E. Electronics & Instrumentation",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "B.E. Electronics & Communication",
     label: "B.E. Electronics & Communication",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "B.E. Manufacturing",
     label: "B.E. Manufacturing",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "B. Pharm",
     label: "B. Pharm",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "M.Sc. Biological Sciences",
     label: "M.Sc. Biological Sciences",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "M.Sc. Chemistry",
     label: "M.Sc. Chemistry",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "M.Sc. Economics",
     label: "M.Sc. Economics",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "M.Sc. Mathematics",
     label: "M.Sc. Mathematics",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "M.Sc. Physics",
     label: "M.Sc. Physics",
-    icon: ColumnsIcon
-  }
-]
-
-
+    icon: ColumnsIcon,
+  },
+];

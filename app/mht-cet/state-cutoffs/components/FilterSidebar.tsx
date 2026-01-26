@@ -102,7 +102,7 @@ const YearRoundSelector = memo(function YearRoundSelector({
                 "border hover:scale-[1.01] active:scale-[0.99]",
                 year === opt.value
                   ? "bg-purple-600 text-white border-purple-600"
-                  : "bg-white text-gray-700 border-gray-300 hover:border-purple-400 hover:bg-purple-50"
+                  : "bg-white text-gray-700 border-gray-300 hover:border-purple-400 hover:bg-purple-50",
               )}
             >
               {opt.label}
@@ -133,8 +133,8 @@ const YearRoundSelector = memo(function YearRoundSelector({
                   isDisabled
                     ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
                     : round === opt.value
-                    ? "bg-blue-600 text-white border-blue-600"
-                    : "bg-white text-gray-700 border-gray-300 hover:border-blue-400 hover:bg-blue-50 hover:scale-[1.01] active:scale-[0.99]"
+                      ? "bg-blue-600 text-white border-blue-600"
+                      : "bg-white text-gray-700 border-gray-300 hover:border-blue-400 hover:bg-blue-50 hover:scale-[1.01] active:scale-[0.99]",
                 )}
               >
                 R{opt.value}
@@ -168,7 +168,7 @@ const PercentileInput = memo(function PercentileInput({
     (vals: number[]) => {
       onChange(vals[0].toFixed(2));
     },
-    [onChange]
+    [onChange],
   );
 
   const handleInputChange = useCallback(
@@ -186,7 +186,7 @@ const PercentileInput = memo(function PercentileInput({
         }
       }
     },
-    [onChange]
+    [onChange],
   );
 
   return (
@@ -205,7 +205,7 @@ const PercentileInput = memo(function PercentileInput({
             "h-11 text-base font-semibold text-center pr-8",
             "border border-gray-300 focus:border-purple-500 rounded-lg",
             "transition-all duration-150",
-            value ? "bg-purple-50 border-purple-300" : "bg-white"
+            value ? "bg-purple-50 border-purple-300" : "bg-white",
           )}
           maxLength={14}
         />
@@ -250,7 +250,7 @@ const RankInput = memo(function RankInput({
         onChange(val);
       }
     },
-    [onChange]
+    [onChange],
   );
 
   return (
@@ -298,7 +298,7 @@ const ScoreModeTabs = memo(function ScoreModeTabs({
             "h-9 rounded-md text-sm font-semibold transition-all",
             mode === opt.value
               ? "bg-white shadow-sm border border-gray-300 text-gray-900"
-              : "text-gray-600 hover:text-gray-800"
+              : "text-gray-600 hover:text-gray-800",
           )}
         >
           {opt.label}
@@ -333,7 +333,7 @@ const FilterGroup = memo(function FilterGroup({
         onChange([...selected, item]);
       }
     },
-    [selected, onChange]
+    [selected, onChange],
   );
 
   const toggleGroup = useCallback(
@@ -351,7 +351,7 @@ const FilterGroup = memo(function FilterGroup({
         onChange(newSelected);
       }
     },
-    [selected, onChange]
+    [selected, onChange],
   );
 
   const clearAll = useCallback(() => {
@@ -366,14 +366,14 @@ const FilterGroup = memo(function FilterGroup({
       return groups.filter(
         (item) =>
           item.label.toLowerCase().includes(term) ||
-          item.value.toLowerCase().includes(term)
+          item.value.toLowerCase().includes(term),
       );
     }
 
     const filtered: Record<string, string[]> = {};
     Object.entries(groups).forEach(([groupName, items]) => {
       const matchedItems = items.filter((item) =>
-        item.toLowerCase().includes(term)
+        item.toLowerCase().includes(term),
       );
       if (matchedItems.length > 0 || groupName.toLowerCase().includes(term)) {
         filtered[groupName] = groupName.toLowerCase().includes(term)
@@ -396,13 +396,13 @@ const FilterGroup = memo(function FilterGroup({
               "p-2 rounded-lg transition-colors",
               selected.length > 0
                 ? "bg-purple-600"
-                : "bg-gray-100 group-hover:bg-gray-200"
+                : "bg-gray-100 group-hover:bg-gray-200",
             )}
           >
             <Icon
               className={cn(
                 "h-4 w-4",
-                selected.length > 0 ? "text-white" : "text-gray-600"
+                selected.length > 0 ? "text-white" : "text-gray-600",
               )}
             />
           </div>
@@ -466,7 +466,7 @@ const FilterGroup = memo(function FilterGroup({
                         >
                           <Checkbox
                             checked={items.every((item) =>
-                              selected.includes(item)
+                              selected.includes(item),
                             )}
                             className="h-4 w-4 data-[state=checked]:bg-purple-600 pointer-events-none"
                           />
@@ -485,7 +485,7 @@ const FilterGroup = memo(function FilterGroup({
                               "flex items-center gap-3 w-full py-2 px-3 text-sm rounded-lg transition-colors cursor-pointer min-w-0",
                               selected.includes(item)
                                 ? "bg-purple-100 text-purple-700"
-                                : "hover:bg-gray-50 text-gray-600"
+                                : "hover:bg-gray-50 text-gray-600",
                             )}
                           >
                             <Checkbox
@@ -508,27 +508,27 @@ const FilterGroup = memo(function FilterGroup({
                         tabIndex={0}
                         onClick={() =>
                           toggleItem(
-                            typeof item === "string" ? item : item.value
+                            typeof item === "string" ? item : item.value,
                           )
                         }
                         onKeyDown={(e) =>
                           e.key === "Enter" &&
                           toggleItem(
-                            typeof item === "string" ? item : item.value
+                            typeof item === "string" ? item : item.value,
                           )
                         }
                         className={cn(
                           "flex items-center gap-3 w-full py-2.5 px-3 text-sm rounded-lg transition-colors cursor-pointer min-w-0",
                           selected.includes(
-                            typeof item === "string" ? item : item.value
+                            typeof item === "string" ? item : item.value,
                           )
                             ? "bg-purple-100 text-purple-700"
-                            : "hover:bg-gray-50 text-gray-600"
+                            : "hover:bg-gray-50 text-gray-600",
                         )}
                       >
                         <Checkbox
                           checked={selected.includes(
-                            typeof item === "string" ? item : item.value
+                            typeof item === "string" ? item : item.value,
                           )}
                           className="h-4 w-4 pointer-events-none"
                         />
@@ -536,7 +536,7 @@ const FilterGroup = memo(function FilterGroup({
                           {typeof item === "string" ? item : item.label}
                         </span>
                       </div>
-                    )
+                    ),
                   )}
             </div>
           </ScrollArea>

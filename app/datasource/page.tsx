@@ -1,10 +1,10 @@
 "use client";
 import { useEffect } from "react";
 import { gsap } from "gsap";
-import Augillion from 'next/font/local';
+import Augillion from "next/font/local";
 const augillion = Augillion({
-    src: '../../public/Augillion.otf',
-    display: 'swap',
+  src: "../../public/Augillion.otf",
+  display: "swap",
 });
 
 import {
@@ -15,10 +15,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
 const Datasource = () => {
-  {/* 
+  {
+    /* 
   useEffect(() => {
     gsap.from(".fruit-image", {
       opacity: 100,
@@ -35,11 +36,12 @@ const Datasource = () => {
       repeat: -1,
     });
   }, []);
-*/}
+*/
+  }
   return (
     <div>
       <main>
-      {/* 
+        {/* 
         <section className="section" id="section1">
           <div className="fruit-images block justify-center items-center md:flex relative py-64">
             <div className="fruit-image mx-auto md:mx-5 z-0">
@@ -86,67 +88,101 @@ const Datasource = () => {
           </div>
         </section>
         <section className="container max-w-5xl pb-20">
-        <Table>
-          <TableCaption>All the data sources used across the webapp!</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Organisation</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead className="min-w-40">Year</TableHead>
-              <TableHead className="text-left">The URL</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell className="font-medium">MHTCET State</TableCell>
-              <TableCell>Cut Offs</TableCell>
-              <TableCell>2022-23</TableCell>
-              <TableCell className="text-left hover:underline"><a href="https://fe2023.mahacet.org/2022/2022ENGG_CAP1_CutOff.pdf">https://fe2023.mahacet.org/2022/2022ENGG_CAP1_CutOff.pdf</a></TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">MHTCET All India</TableCell>
-              <TableCell>Cut Offs</TableCell>
-              <TableCell>2022-23, Round 1</TableCell>
-              <TableCell className="text-left hover:underline"><a href="https://fe2023.mahacet.org/2022/2022ENGG_CAP1_AI_CutOff.pdf">https://fe2023.mahacet.org/2022/2022ENGG_CAP1_AI_CutOff.pdf</a></TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">MHTCET All India</TableCell>
-              <TableCell>Cut Offs</TableCell>
-              <TableCell>2022-23, Round 2</TableCell>
-              <TableCell className="text-left hover:underline"><a href="https://fe2023.mahacet.org/2022/2022ENGG_CAP2_AI_CutOff.pdf">https://fe2023.mahacet.org/2022/2022ENGG_CAP2_AI_CutOff.pdf</a></TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">MHTCET All India</TableCell>
-              <TableCell>Cut Offs</TableCell>
-              <TableCell>2022-23, Round 3</TableCell>
-              <TableCell className="text-left hover:underline"><a href="https://fe2023.mahacet.org/2022/2022ENGG_CAP3_AI_CutOff.pdf">https://fe2023.mahacet.org/2022/2022ENGG_CAP3_AI_CutOff.pdf</a></TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">JOSAA</TableCell>
-              <TableCell>Cut Offs</TableCell>
-              <TableCell>2024, All Rounds</TableCell>
-              <TableCell className="text-left hover:underline"><a href="https://josaa.admissions.nic.in/applicant/SeatAllotmentResult/CurrentORCR.aspx">https://josaa.admissions.nic.in/applicant/SeatAllotmentResult/CurrentORCR.aspx</a></TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">BITS</TableCell>
-              <TableCell>Cut Offs</TableCell>
-              <TableCell>2023, All Rounds</TableCell>
-              <TableCell className="text-left hover:underline"><a href="https://www.bitsadmission.com/bitsat/2023/BITSAT-2023_Cut-off_Scores.pdf">https://www.bitsadmission.com/bitsat/2023/BITSAT-2023_Cut-off_Scores.pdf</a></TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">BITS</TableCell>
-              <TableCell>Cut Offs</TableCell>
-              <TableCell>2022, All Rounds</TableCell>
-              <TableCell className="text-left hover:underline"><a href="https://www.bitsadmission.com/bitsat/2022/BITSAT-2022_Cut-off_Scores.pdf">https://www.bitsadmission.com/bitsat/2022/BITSAT-2022_Cut-off_Scores.pdf</a></TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">BITS</TableCell>
-              <TableCell>Cut Offs</TableCell>
-              <TableCell>2021, All Rounds</TableCell>
-              <TableCell className="text-left hover:underline"><a href="https://www.bitsadmission.com/bitsat/2021/BITSAT-2021_Cut-off_Scores.pdf">https://www.bitsadmission.com/bitsat/2021/BITSAT-2021_Cut-off_Scores.pdf</a></TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+          <Table>
+            <TableCaption>
+              All the data sources used across the webapp!
+            </TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[100px]">Organisation</TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead className="min-w-40">Year</TableHead>
+                <TableHead className="text-left">The URL</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell className="font-medium">MHTCET State</TableCell>
+                <TableCell>Cut Offs</TableCell>
+                <TableCell>2022-23</TableCell>
+                <TableCell className="text-left hover:underline">
+                  <a href="https://fe2023.mahacet.org/2022/2022ENGG_CAP1_CutOff.pdf">
+                    https://fe2023.mahacet.org/2022/2022ENGG_CAP1_CutOff.pdf
+                  </a>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">MHTCET All India</TableCell>
+                <TableCell>Cut Offs</TableCell>
+                <TableCell>2022-23, Round 1</TableCell>
+                <TableCell className="text-left hover:underline">
+                  <a href="https://fe2023.mahacet.org/2022/2022ENGG_CAP1_AI_CutOff.pdf">
+                    https://fe2023.mahacet.org/2022/2022ENGG_CAP1_AI_CutOff.pdf
+                  </a>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">MHTCET All India</TableCell>
+                <TableCell>Cut Offs</TableCell>
+                <TableCell>2022-23, Round 2</TableCell>
+                <TableCell className="text-left hover:underline">
+                  <a href="https://fe2023.mahacet.org/2022/2022ENGG_CAP2_AI_CutOff.pdf">
+                    https://fe2023.mahacet.org/2022/2022ENGG_CAP2_AI_CutOff.pdf
+                  </a>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">MHTCET All India</TableCell>
+                <TableCell>Cut Offs</TableCell>
+                <TableCell>2022-23, Round 3</TableCell>
+                <TableCell className="text-left hover:underline">
+                  <a href="https://fe2023.mahacet.org/2022/2022ENGG_CAP3_AI_CutOff.pdf">
+                    https://fe2023.mahacet.org/2022/2022ENGG_CAP3_AI_CutOff.pdf
+                  </a>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">JOSAA</TableCell>
+                <TableCell>Cut Offs</TableCell>
+                <TableCell>2024, All Rounds</TableCell>
+                <TableCell className="text-left hover:underline">
+                  <a href="https://josaa.admissions.nic.in/applicant/SeatAllotmentResult/CurrentORCR.aspx">
+                    https://josaa.admissions.nic.in/applicant/SeatAllotmentResult/CurrentORCR.aspx
+                  </a>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">BITS</TableCell>
+                <TableCell>Cut Offs</TableCell>
+                <TableCell>2023, All Rounds</TableCell>
+                <TableCell className="text-left hover:underline">
+                  <a href="https://www.bitsadmission.com/bitsat/2023/BITSAT-2023_Cut-off_Scores.pdf">
+                    https://www.bitsadmission.com/bitsat/2023/BITSAT-2023_Cut-off_Scores.pdf
+                  </a>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">BITS</TableCell>
+                <TableCell>Cut Offs</TableCell>
+                <TableCell>2022, All Rounds</TableCell>
+                <TableCell className="text-left hover:underline">
+                  <a href="https://www.bitsadmission.com/bitsat/2022/BITSAT-2022_Cut-off_Scores.pdf">
+                    https://www.bitsadmission.com/bitsat/2022/BITSAT-2022_Cut-off_Scores.pdf
+                  </a>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">BITS</TableCell>
+                <TableCell>Cut Offs</TableCell>
+                <TableCell>2021, All Rounds</TableCell>
+                <TableCell className="text-left hover:underline">
+                  <a href="https://www.bitsadmission.com/bitsat/2021/BITSAT-2021_Cut-off_Scores.pdf">
+                    https://www.bitsadmission.com/bitsat/2021/BITSAT-2021_Cut-off_Scores.pdf
+                  </a>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
         </section>
       </main>
     </div>

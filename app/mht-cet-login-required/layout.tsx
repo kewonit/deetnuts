@@ -1,8 +1,8 @@
 export default function LoginRequiredLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode
+  children: React.ReactNode;
 }) {
-    // No authentication required for this page
-    return <>{children}</>
+  // No authentication required for this page
+  return <>{children}</>;
 }

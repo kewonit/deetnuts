@@ -1,25 +1,31 @@
-'use client'
-import { useEffect, useState } from 'react'
-import { type User } from '@/lib/auth'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { updateProfile } from '@/app/login/actions'
-import { SubmitButton } from '@/app/login/sumbit-button'
+"use client";
+import { useEffect, useState } from "react";
+import { type User } from "@/lib/auth";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { updateProfile } from "@/app/login/actions";
+import { SubmitButton } from "@/app/login/sumbit-button";
 
-export default function AccountForm({ user, message }: { user: User | null; message?: string }) {
-  const [name, setName] = useState<string>(user?.name || '')
-  const [email, setEmail] = useState<string>(user?.email || '')
+export default function AccountForm({
+  user,
+  message,
+}: {
+  user: User | null;
+  message?: string;
+}) {
+  const [name, setName] = useState<string>(user?.name || "");
+  const [email, setEmail] = useState<string>(user?.email || "");
 
   useEffect(() => {
     if (user) {
-      setName(user.name || '')
-      setEmail(user.email || '')
+      setName(user.name || "");
+      setEmail(user.email || "");
     }
-  }, [user])
+  }, [user]);
 
   if (!user) {
-    return <div>Loading...</div>
+    return <div>Loading...</div>;
   }
 
   return (
@@ -30,10 +36,13 @@ export default function AccountForm({ user, message }: { user: User | null; mess
         </div>
 
         {message && (
-          <div className={`mb-4 p-4 border rounded-md ${message.includes('successfully')
-            ? 'bg-green-50 border-green-200 text-green-800'
-            : 'bg-red-50 border-red-200 text-red-800'
-            }`}>
+          <div
+            className={`mb-4 p-4 border rounded-md ${
+              message.includes("successfully")
+                ? "bg-green-50 border-green-200 text-green-800"
+                : "bg-red-50 border-red-200 text-red-800"
+            }`}
+          >
             <p className="text-sm text-center">{message}</p>
           </div>
         )}
@@ -49,7 +58,8 @@ export default function AccountForm({ user, message }: { user: User | null; mess
               className="mt-1"
             />
             <p className="text-sm text-muted-foreground mt-1">
-              Email cannot be changed. Contact support if you need to update your email.
+              Email cannot be changed. Contact support if you need to update
+              your email.
             </p>
           </div>
 
@@ -71,11 +81,14 @@ export default function AccountForm({ user, message }: { user: User | null; mess
           <div>
             <Label>Account Status</Label>
             <div className="mt-1 flex items-center gap-2">
-              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${user.verified
-                ? 'bg-green-100 text-green-800'
-                : 'bg-yellow-100 text-yellow-800'
-                }`}>
-                {user.verified ? 'Verified' : 'Unverified'}
+              <span
+                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                  user.verified
+                    ? "bg-green-100 text-green-800"
+                    : "bg-yellow-100 text-yellow-800"
+                }`}
+              >
+                {user.verified ? "Verified" : "Unverified"}
               </span>
             </div>
           </div>
@@ -92,5 +105,5 @@ export default function AccountForm({ user, message }: { user: User | null; mess
         </form>
       </div>
     </div>
-  )
+  );
 }

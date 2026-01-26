@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons"
-import { Column } from "@tanstack/react-table"
+import * as React from "react";
+import { CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons";
+import { Column } from "@tanstack/react-table";
 
-import { cn } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -15,28 +15,28 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@/components/ui/command"
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { Separator } from "@/components/ui/separator"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
 
 interface DataTableFacetedFilterProps<TData, TValue> {
-  column?: Column<TData, TValue>
-  title?: string
+  column?: Column<TData, TValue>;
+  title?: string;
   options?: {
-    label: string
-    value: string
-    icon?: React.ComponentType<{ className?: string }>
-  }[]
-  onFilterChange?: (values: string[]) => void
-  onRangeFilterChange?: (range: [number, number]) => void
-  isRangeFilter?: boolean
-  minValue?: number
-  maxValue?: number
+    label: string;
+    value: string;
+    icon?: React.ComponentType<{ className?: string }>;
+  }[];
+  onFilterChange?: (values: string[]) => void;
+  onRangeFilterChange?: (range: [number, number]) => void;
+  isRangeFilter?: boolean;
+  minValue?: number;
+  maxValue?: number;
 }
 
 export function DataTableFacetedFilter<TData, TValue>({
@@ -47,11 +47,13 @@ export function DataTableFacetedFilter<TData, TValue>({
   onRangeFilterChange,
   isRangeFilter = false,
   minValue = 0,
-  maxValue = 100
+  maxValue = 100,
 }: DataTableFacetedFilterProps<TData, TValue>) {
-  const facets = column?.getFacetedUniqueValues()
+  const facets = column?.getFacetedUniqueValues();
   // Store the selected values in state to prevent them from being reset
-  const [persistedValues, setPersistedValues] = React.useState<Set<string>>(new Set());
+  const [persistedValues, setPersistedValues] = React.useState<Set<string>>(
+    new Set(),
+  );
 
   // Initialize from column filter value
   React.useEffect(() => {
@@ -65,38 +67,43 @@ export function DataTableFacetedFilter<TData, TValue>({
   const selectedValues = persistedValues;
 
   // For range filter
-  const [rangeMin, setRangeMin] = React.useState<number | undefined>(undefined)
-  const [rangeMax, setRangeMax] = React.useState<number | undefined>(undefined)
-  const [debouncedRange, setDebouncedRange] = React.useState<[number, number] | undefined>(undefined)
+  const [rangeMin, setRangeMin] = React.useState<number | undefined>(undefined);
+  const [rangeMax, setRangeMax] = React.useState<number | undefined>(undefined);
+  const [debouncedRange, setDebouncedRange] = React.useState<
+    [number, number] | undefined
+  >(undefined);
 
   // Function to handle selecting an option for categorical filters
-  const handleSelect = React.useCallback((value: string) => {
-    if (!column) return;
+  const handleSelect = React.useCallback(
+    (value: string) => {
+      if (!column) return;
 
-    // Create a new set from the current selectedValues
-    const newSelectedValues = new Set(selectedValues);
+      // Create a new set from the current selectedValues
+      const newSelectedValues = new Set(selectedValues);
 
-    // Toggle the selected value
-    if (newSelectedValues.has(value)) {
-      newSelectedValues.delete(value);
-    } else {
-      newSelectedValues.add(value);
-    }
+      // Toggle the selected value
+      if (newSelectedValues.has(value)) {
+        newSelectedValues.delete(value);
+      } else {
+        newSelectedValues.add(value);
+      }
 
-    // Update our persisted state
-    setPersistedValues(newSelectedValues);
+      // Update our persisted state
+      setPersistedValues(newSelectedValues);
 
-    // Convert to array for the column filter and API
-    const valuesArray = Array.from(newSelectedValues);
+      // Convert to array for the column filter and API
+      const valuesArray = Array.from(newSelectedValues);
 
-    // First update the local column filter
-    column.setFilterValue(valuesArray);
+      // First update the local column filter
+      column.setFilterValue(valuesArray);
 
-    // Then trigger the server-side filter update
-    if (onFilterChange) {
-      onFilterChange(valuesArray);
-    }
-  }, [column, selectedValues, onFilterChange, setPersistedValues]);
+      // Then trigger the server-side filter update
+      if (onFilterChange) {
+        onFilterChange(valuesArray);
+      }
+    },
+    [column, selectedValues, onFilterChange, setPersistedValues],
+  );
 
   // Debounce the range filter changes
   React.useEffect(() => {
@@ -119,7 +126,15 @@ export function DataTableFacetedFilter<TData, TValue>({
         clearTimeout(handler);
       };
     }
-  }, [rangeMin, rangeMax, isRangeFilter, column, minValue, maxValue, onRangeFilterChange]);
+  }, [
+    rangeMin,
+    rangeMax,
+    isRangeFilter,
+    column,
+    minValue,
+    maxValue,
+    onRangeFilterChange,
+  ]);
 
   // Get current range filter values
   React.useEffect(() => {
@@ -136,12 +151,12 @@ export function DataTableFacetedFilter<TData, TValue>({
 
   // Handle range input changes
   const handleRangeMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value === '' ? undefined : Number(e.target.value);
+    const value = e.target.value === "" ? undefined : Number(e.target.value);
     setRangeMin(value);
   };
 
   const handleRangeMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value === '' ? undefined : Number(e.target.value);
+    const value = e.target.value === "" ? undefined : Number(e.target.value);
     setRangeMax(value);
   };
 
@@ -156,7 +171,8 @@ export function DataTableFacetedFilter<TData, TValue>({
   };
 
   // Calculate if the filter is active
-  const isRangeFilterActive = isRangeFilter &&
+  const isRangeFilterActive =
+    isRangeFilter &&
     ((rangeMin !== undefined && rangeMin > minValue) ||
       (rangeMax !== undefined && rangeMax < maxValue));
 
@@ -167,7 +183,10 @@ export function DataTableFacetedFilter<TData, TValue>({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="neutral" className="h-10 border-2 border-black bg-white hover:bg-main/30 font-base">
+        <Button
+          variant="neutral"
+          className="h-10 border-2 border-black bg-white hover:bg-main/30 font-base"
+        >
           <PlusCircledIcon className="h-4 w-4 mr-2" />
           {title}
           {isFilterActive && (
@@ -218,7 +237,10 @@ export function DataTableFacetedFilter<TData, TValue>({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0 border-2 border-black rounded-base bg-white" align="start">
+      <PopoverContent
+        className="w-[200px] p-0 border-2 border-black rounded-base bg-white"
+        align="start"
+      >
         {isRangeFilter ? (
           <div className="p-4 space-y-4">
             <div className="space-y-2">
@@ -238,7 +260,7 @@ export function DataTableFacetedFilter<TData, TValue>({
               <Input
                 type="number"
                 placeholder={`Min (${minValue})`}
-                value={rangeMin ?? ''}
+                value={rangeMin ?? ""}
                 onChange={handleRangeMinChange}
                 className="h-8 border-2 border-black rounded-base"
               />
@@ -250,23 +272,30 @@ export function DataTableFacetedFilter<TData, TValue>({
               <Input
                 type="number"
                 placeholder={`Max (${maxValue})`}
-                value={rangeMax ?? ''}
+                value={rangeMax ?? ""}
                 onChange={handleRangeMaxChange}
                 className="h-8 border-2 border-black rounded-base"
               />
             </div>
             <div className="text-xs text-black font-base">
-              {isRangeFilterActive ? `Filtering: ${rangeMin ?? minValue} - ${rangeMax ?? maxValue}` : `Full range: ${minValue} - ${maxValue}`}
+              {isRangeFilterActive
+                ? `Filtering: ${rangeMin ?? minValue} - ${rangeMax ?? maxValue}`
+                : `Full range: ${minValue} - ${maxValue}`}
             </div>
           </div>
         ) : (
           <Command className="border-0">
-            <CommandInput placeholder={title} className="border-0 border-b-2 border-black rounded-none font-base" />
+            <CommandInput
+              placeholder={title}
+              className="border-0 border-b-2 border-black rounded-none font-base"
+            />
             <CommandList>
-              <CommandEmpty className="text-black font-base">No results found.</CommandEmpty>
+              <CommandEmpty className="text-black font-base">
+                No results found.
+              </CommandEmpty>
               <CommandGroup>
                 {options.map((option) => {
-                  const isSelected = selectedValues.has(option.value)
+                  const isSelected = selectedValues.has(option.value);
                   return (
                     <CommandItem
                       key={option.value}
@@ -276,12 +305,15 @@ export function DataTableFacetedFilter<TData, TValue>({
                       <div
                         className={cn(
                           "mr-2 flex h-4 w-4 items-center justify-center rounded-base border-2 border-black",
-                          isSelected
-                            ? "bg-main text-black"
-                            : "bg-white"
+                          isSelected ? "bg-main text-black" : "bg-white",
                         )}
                       >
-                        <CheckIcon className={cn("h-3 w-3", isSelected ? "visible" : "invisible")} />
+                        <CheckIcon
+                          className={cn(
+                            "h-3 w-3",
+                            isSelected ? "visible" : "invisible",
+                          )}
+                        />
                       </div>
                       <span>{option.label}</span>
                       {facets?.get(option.value) && (
@@ -290,7 +322,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                         </span>
                       )}
                     </CommandItem>
-                  )
+                  );
                 })}
               </CommandGroup>
             </CommandList>
@@ -298,5 +330,5 @@ export function DataTableFacetedFilter<TData, TValue>({
         )}
       </PopoverContent>
     </Popover>
-  )
+  );
 }

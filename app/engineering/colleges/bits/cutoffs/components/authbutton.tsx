@@ -1,7 +1,7 @@
 import { getCurrentUser } from "@/lib/auth";
 import { signOut } from "@/app/login/actions";
 import Link from "next/link";
-import { Button } from '@/components/ui/button'
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
@@ -11,8 +11,8 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from '@/components/ui/drawer-2'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+} from "@/components/ui/drawer-2";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default async function AuthButton() {
   const user = await getCurrentUser();
@@ -24,19 +24,26 @@ export default async function AuthButton() {
           <DrawerTrigger asChild>
             <Avatar>
               <AvatarImage src="/avatar.webp" />
-              <AvatarFallback>{(user.name || '').charAt(0).toUpperCase()}</AvatarFallback>
+              <AvatarFallback>
+                {(user.name || "").charAt(0).toUpperCase()}
+              </AvatarFallback>
             </Avatar>
           </DrawerTrigger>
           <DrawerContent>
             <div className="mx-auto w-[300px]">
               <DrawerHeader>
                 <DrawerTitle>Are you sure?</DrawerTitle>
-                <DrawerDescription>You can log back in at anytime!</DrawerDescription>
+                <DrawerDescription>
+                  You can log back in at anytime!
+                </DrawerDescription>
                 <DrawerDescription>({user.name})</DrawerDescription>
               </DrawerHeader>
               <DrawerFooter className="grid grid-rows-2">
                 <form action={signOut}>
-                  <Button variant="default" className="py-2 px-[115px] rounded-md text-center allign-center">
+                  <Button
+                    variant="default"
+                    className="py-2 px-[115px] rounded-md text-center allign-center"
+                  >
                     Logout
                   </Button>
                 </form>
@@ -57,7 +64,9 @@ export default async function AuthButton() {
             <div className="mx-auto w-[300px]">
               <DrawerHeader>
                 <DrawerTitle>Are you sure?</DrawerTitle>
-                <DrawerDescription>You can log back in at anytime!</DrawerDescription>
+                <DrawerDescription>
+                  You can log back in at anytime!
+                </DrawerDescription>
               </DrawerHeader>
               <DrawerFooter className="grid grid-rows-2">
                 <form action={signOut}>

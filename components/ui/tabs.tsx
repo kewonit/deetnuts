@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import * as TabsPrimitive from "@radix-ui/react-tabs"
+import * as TabsPrimitive from "@radix-ui/react-tabs";
 
-import * as React from "react"
+import * as React from "react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 function Tabs({
   className,
@@ -16,7 +16,7 @@ function Tabs({
       className={cn("w-full", className)}
       {...props}
     />
-  )
+  );
 }
 
 function TabsList({
@@ -32,7 +32,7 @@ function TabsList({
       )}
       {...props}
     />
-  )
+  );
 }
 
 function TabsTrigger({
@@ -48,7 +48,7 @@ function TabsTrigger({
       )}
       {...props}
     />
-  )
+  );
 }
 
 function TabsContent({
@@ -64,7 +64,7 @@ function TabsContent({
       )}
       {...props}
     />
-  )
+  );
 }
 
-export { Tabs, TabsList, TabsTrigger, TabsContent }
+export { Tabs, TabsList, TabsTrigger, TabsContent };

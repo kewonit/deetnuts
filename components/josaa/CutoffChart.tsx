@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   LineChart,
   Line,
@@ -12,7 +13,16 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
-import { Card, CardContent } from "@/components/ui/card";
+
+// Loading component for charts
+const ChartLoading = () => (
+  <div className="h-full flex items-center justify-center bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+    <div className="text-center">
+      <div className="animate-spin w-8 h-8 border-4 border-green-500 border-t-transparent rounded-full mx-auto mb-2" />
+      <p className="text-gray-500">Loading chart...</p>
+    </div>
+  </div>
+);
 import {
   Select,
   SelectContent,
@@ -21,7 +31,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { getCutoffTrends } from "@/lib/josaa-client";
 import { JosaaBranch } from "@/lib/types/josaa";
 import { getBranchDisplayName } from "@/lib/formatBranchCode";
 
@@ -87,27 +96,63 @@ export default function JosaaCutoffChart({
   defaultCategory = "OPEN",
   defaultGender = "Gender-Neutral",
 }: CutoffChartProps) {
-  const [selectedBranch, setSelectedBranch] = useState<string>(
-    branches.find((b) => b.name.toLowerCase().includes("computer science"))
-      ?.id ||
-      branches[0]?.id ||
-      ""
-  );
+  const [mounted, setMounted] = useState(false);
+  // Use original_id if available for better API compatibility
+  const getPreferredBranchId = (branch: JosaaBranch) =>
+    (branch as any).original_id || branch.id;
+
+  const [selectedBranch, setSelectedBranch] = useState<string>(() => {
+    const cseBranch = branches.find((b) =>
+      b.name.toLowerCase().includes("computer science"),
+    );
+    if (cseBranch) return getPreferredBranchId(cseBranch);
+    if (branches[0]) return getPreferredBranchId(branches[0]);
+    return "";
+  });
   const [category, setCategory] = useState(defaultCategory);
   const [gender, setGender] = useState(defaultGender);
   const [trendData, setTrendData] = useState(initialTrendData);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // Start with loading=true to fetch on mount
 
   // Fetch new data when filters change
   const fetchTrendData = useCallback(
     async (branchId: string, cat: string, gen: string) => {
-      if (!branchId) return;
+      if (!branchId) {
+        console.log("[CutoffChart] No branchId provided, skipping fetch");
+        setLoading(false);
+        return;
+      }
 
+      console.log("[CutoffChart] Fetching trends for:", {
+        instituteId,
+        branchId,
+        cat,
+        gen,
+      });
       setLoading(true);
       try {
-        const data = await getCutoffTrends(instituteId, branchId, cat, gen);
+        // Use API route instead of direct server function call
+        const params = new URLSearchParams({
+          instituteId,
+          branchId,
+          category: cat,
+          gender: gen,
+        });
+        const response = await fetch(`/api/josaa/trends?${params}`);
+
+        if (!response.ok) {
+          console.error(
+            "[CutoffChart] API error:",
+            response.status,
+            response.statusText,
+          );
+          throw new Error("Failed to fetch trends");
+        }
+
+        const data = await response.json();
+        console.log("[CutoffChart] Received data:", data.length, "items");
         // Convert snake_case to camelCase for chart compatibility
-        const convertedData = data.map((item) => ({
+        const convertedData = data.map((item: any) => ({
           year: item.year,
           round: item.round,
           openingRank: item.opening_rank,
@@ -115,13 +160,22 @@ export default function JosaaCutoffChart({
         }));
         setTrendData(convertedData);
       } catch (error) {
-        console.error("Error fetching trend data:", error);
+        console.error("[CutoffChart] Error fetching trend data:", error);
       } finally {
         setLoading(false);
       }
     },
-    [instituteId]
+    [instituteId],
   );
+
+  // Ensure component is mounted and fetch initial data
+  useEffect(() => {
+    setMounted(true);
+    // Fetch trend data on mount to get all years (not just current year)
+    if (selectedBranch) {
+      fetchTrendData(selectedBranch, category, gender);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleBranchChange = (value: string) => {
     setSelectedBranch(value);
@@ -140,6 +194,11 @@ export default function JosaaCutoffChart({
 
   // Prepare chart data - group by year, take last round
   const chartData = useMemo(() => {
+    console.log(
+      "[CutoffChart] Processing trendData:",
+      trendData.length,
+      "items",
+    );
     const yearMap = new Map<number, (typeof trendData)[0]>();
 
     trendData.forEach((item) => {
@@ -149,7 +208,14 @@ export default function JosaaCutoffChart({
       }
     });
 
-    return Array.from(yearMap.values()).sort((a, b) => a.year - b.year);
+    const result = Array.from(yearMap.values()).sort((a, b) => a.year - b.year);
+    console.log(
+      "[CutoffChart] chartData result:",
+      result.length,
+      "years",
+      result,
+    );
+    return result;
   }, [trendData]);
 
   // Calculate stats
@@ -183,12 +249,14 @@ export default function JosaaCutoffChart({
         closingChange > 0
           ? "increased"
           : closingChange < 0
-          ? "decreased"
-          : "stable",
+            ? "decreased"
+            : "stable",
     };
   }, [chartData]);
 
-  const selectedBranchInfo = branches.find((b) => b.id === selectedBranch);
+  const selectedBranchInfo = branches.find(
+    (b) => getPreferredBranchId(b) === selectedBranch,
+  );
 
   return (
     <div className="space-y-6">
@@ -204,7 +272,10 @@ export default function JosaaCutoffChart({
             </SelectTrigger>
             <SelectContent>
               {branches.map((branch) => (
-                <SelectItem key={branch.id} value={branch.id}>
+                <SelectItem
+                  key={branch.id}
+                  value={getPreferredBranchId(branch)}
+                >
                   {getBranchDisplayName(branch)} ({branch.degree_type})
                 </SelectItem>
               ))}
@@ -298,8 +369,8 @@ export default function JosaaCutoffChart({
                   stats.trend === "decreased"
                     ? "text-green-600"
                     : stats.trend === "increased"
-                    ? "text-red-600"
-                    : "text-gray-600"
+                      ? "text-red-600"
+                      : "text-gray-600"
                 }`}
               >
                 {stats.trend} ({stats.changePercent}%)
@@ -310,8 +381,8 @@ export default function JosaaCutoffChart({
       )}
 
       {/* Chart */}
-      <div className="h-[400px] w-full">
-        {loading ? (
+      <div className="h-[400px] w-full" style={{ minHeight: "400px" }}>
+        {!mounted || loading ? (
           <div className="h-full flex items-center justify-center bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
             <div className="text-center">
               <div className="animate-spin w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-2" />
@@ -325,7 +396,7 @@ export default function JosaaCutoffChart({
             </p>
           </div>
         ) : (
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height={400}>
             <LineChart
               data={chartData}
               margin={{ top: 20, right: 30, left: 80, bottom: 20 }}
@@ -414,17 +485,17 @@ export function CutoffChart({ trends, title }: SimpleCutoffChartProps) {
   // Get available options from data
   const categories = useMemo(
     () => [...new Set(trends.map((t) => t.category))].sort(),
-    [trends]
+    [trends],
   );
   const genders = useMemo(
     () => [...new Set(trends.map((t) => t.gender))].sort(),
-    [trends]
+    [trends],
   );
 
   // Filter and prepare chart data
   const chartData = useMemo(() => {
     const filtered = trends.filter(
-      (t) => t.category === selectedCategory && t.gender === selectedGender
+      (t) => t.category === selectedCategory && t.gender === selectedGender,
     );
 
     // Group by year, take last round

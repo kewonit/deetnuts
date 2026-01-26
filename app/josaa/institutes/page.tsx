@@ -20,6 +20,24 @@ export const metadata: Metadata = {
   title: "All Institutes | JoSAA Cutoffs | DEETNUTS",
   description:
     "Browse all IITs, NITs, IIITs, and GFTIs participating in JoSAA counseling. View cutoffs and branch details.",
+  keywords: [
+    "IIT list",
+    "NIT list",
+    "IIIT list",
+    "GFTI list",
+    "JoSAA institutes",
+    "engineering colleges India",
+  ],
+  openGraph: {
+    title: "All Institutes | JoSAA Cutoffs | DEETNUTS",
+    description:
+      "Browse all IITs, NITs, IIITs, and GFTIs participating in JoSAA counseling.",
+    url: "https://deetnuts.com/josaa/institutes",
+    type: "website",
+  },
+  alternates: {
+    canonical: "https://deetnuts.com/josaa/institutes",
+  },
 };
 
 // Force dynamic rendering for PocketBase data fetching
@@ -110,7 +128,7 @@ async function InstitutesContent({
 
   if (state) {
     allInstitutes = allInstitutes.filter((i) =>
-      i.state?.toLowerCase().includes(state.toLowerCase())
+      i.state?.toLowerCase().includes(state.toLowerCase()),
     );
   }
 
@@ -121,7 +139,7 @@ async function InstitutesContent({
         i.name.toLowerCase().includes(q) ||
         i.short_name.toLowerCase().includes(q) ||
         i.city?.toLowerCase().includes(q) ||
-        i.state?.toLowerCase().includes(q)
+        i.state?.toLowerCase().includes(q),
     );
   }
 
@@ -131,7 +149,7 @@ async function InstitutesContent({
       Object.values(institutesByType)
         .flat()
         .map((i) => i.state)
-        .filter(Boolean)
+        .filter(Boolean),
     ),
   ].sort();
 

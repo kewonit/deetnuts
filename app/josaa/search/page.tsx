@@ -11,6 +11,22 @@ export const metadata: Metadata = {
   title: "Search JoSAA Cutoffs | Find Your Best College",
   description:
     "Search JoSAA cutoffs by rank, category, and preferences. Find colleges where you can get admission based on your JEE rank.",
+  keywords: [
+    "JoSAA search",
+    "JEE rank search",
+    "college finder",
+    "cutoff search",
+    "engineering admission",
+  ],
+  openGraph: {
+    title: "Search JoSAA Cutoffs | Find Your Best College",
+    description: "Search JoSAA cutoffs by rank, category, and preferences.",
+    url: "https://deetnuts.com/josaa/search",
+    type: "website",
+  },
+  alternates: {
+    canonical: "https://deetnuts.com/josaa/search",
+  },
 };
 
 // Force dynamic rendering for PocketBase data fetching

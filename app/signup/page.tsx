@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { SubmitButton } from "./sumbit-button";
 import { Input } from "@/components/ui/input";
-import { signup } from '../login/actions'
+import { signup } from "../login/actions";
 
 export default async function Signup({ searchParams }: any) {
-  const params = await searchParams
-  const redirectTo = params?.redirect || '/account'
+  const params = await searchParams;
+  const redirectTo = params?.redirect || "/account";
 
   return (
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2 mx-auto pt-28 min-h-screen">
@@ -38,7 +38,9 @@ export default async function Signup({ searchParams }: any) {
         )}
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold">Create Account</h1>
-          <p className="text-muted-foreground">Sign up to get started with your account.</p>
+          <p className="text-muted-foreground">
+            Sign up to get started with your account.
+          </p>
         </div>
 
         <input type="hidden" name="redirect" value={redirectTo} />
@@ -82,7 +84,11 @@ export default async function Signup({ searchParams }: any) {
           <p className="text-sm text-muted-foreground">
             Already have an account?{" "}
             <Link
-              href={redirectTo !== '/account' ? `/login?redirect=${encodeURIComponent(redirectTo)}` : '/login'}
+              href={
+                redirectTo !== "/account"
+                  ? `/login?redirect=${encodeURIComponent(redirectTo)}`
+                  : "/login"
+              }
               className="text-primary hover:underline font-medium"
             >
               Sign in here

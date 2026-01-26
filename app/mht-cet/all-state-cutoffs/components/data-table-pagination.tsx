@@ -1,20 +1,25 @@
-"use client"
+"use client";
 
-import { Table } from "@tanstack/react-table"
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react"
+import { Table } from "@tanstack/react-table";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from "lucide-react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
 interface DataTablePaginationProps<TData> {
-  table: Table<TData>
-  totalItems?: number
+  table: Table<TData>;
+  totalItems?: number;
 }
 
 export function DataTablePagination<TData>({
@@ -35,11 +40,17 @@ export function DataTablePagination<TData>({
       <div className="flex-1 text-sm text-black font-base">
         {total > 0 ? (
           <p>
-            📊 Showing <strong>{start}</strong> to{" "}
-            <strong>{end}</strong>{" "}
-            of <strong>{total.toLocaleString()}</strong> results
+            📊 Showing <strong>{start}</strong> to <strong>{end}</strong> of{" "}
+            <strong>{total.toLocaleString()}</strong> results
             {table.getFilteredSelectedRowModel().rows.length > 0 && (
-              <> (<strong>{table.getFilteredSelectedRowModel().rows.length}</strong> selected)</>
+              <>
+                {" "}
+                (
+                <strong>
+                  {table.getFilteredSelectedRowModel().rows.length}
+                </strong>{" "}
+                selected)
+              </>
             )}
           </p>
         ) : (
@@ -53,15 +64,22 @@ export function DataTablePagination<TData>({
           <Select
             value={`${pageSize}`}
             onValueChange={(value) => {
-              table.setPageSize(Number(value))
+              table.setPageSize(Number(value));
             }}
           >
             <SelectTrigger className="h-10 w-[70px] border-2 border-black rounded-base bg-white font-base">
               <SelectValue placeholder={pageSize} />
             </SelectTrigger>
-            <SelectContent side="top" className="border-2 border-black rounded-base bg-white">
+            <SelectContent
+              side="top"
+              className="border-2 border-black rounded-base bg-white"
+            >
               {[10, 25, 50, 100].map((size) => (
-                <SelectItem key={size} value={`${size}`} className="font-base hover:bg-main/30">
+                <SelectItem
+                  key={size}
+                  value={`${size}`}
+                  className="font-base hover:bg-main/30"
+                >
                   {size}
                 </SelectItem>
               ))}
@@ -117,5 +135,5 @@ export function DataTablePagination<TData>({
         </div>
       </div>
     </div>
-  )
+  );
 }

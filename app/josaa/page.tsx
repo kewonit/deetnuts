@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { getInstitutesByType, getJosaaStats } from "@/lib/josaa-client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import FAQJsonLd, { JOSAA_FAQS } from "@/components/FAQJsonLd";
 import {
   Building2,
   GraduationCap,
@@ -18,10 +19,26 @@ export const metadata: Metadata = {
   title: "JoSAA Cutoffs Explorer | DEETNUTS",
   description:
     "Explore JEE Main & Advanced cutoffs for IITs, NITs, IIITs and GFTIs. View historical trends, compare branches, and find your best college options.",
+  keywords: [
+    "JoSAA",
+    "JEE Advanced cutoffs",
+    "JEE Main cutoffs",
+    "IIT cutoffs",
+    "NIT cutoffs",
+    "IIIT cutoffs",
+    "GFTI cutoffs",
+    "JoSAA counselling",
+    "engineering admission",
+  ],
   openGraph: {
     title: "JoSAA Cutoffs Explorer | DEETNUTS",
     description:
       "Comprehensive JoSAA cutoff data for IITs, NITs, IIITs and GFTIs with trend analysis.",
+    url: "https://deetnuts.com/josaa",
+    type: "website",
+  },
+  alternates: {
+    canonical: "https://deetnuts.com/josaa",
   },
 };
 
@@ -290,6 +307,9 @@ function LoadingSkeleton() {
 export default function JosaaPage() {
   return (
     <main className="container mx-auto px-4 py-8 max-w-7xl">
+      {/* FAQ Schema for SEO */}
+      <FAQJsonLd faqs={JOSAA_FAQS} />
+
       {/* Hero Section */}
       <div className="mb-8">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">

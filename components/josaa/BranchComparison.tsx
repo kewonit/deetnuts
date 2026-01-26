@@ -1,6 +1,11 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { JosaaCutoffExpanded, JosaaBranch } from "@/lib/types/josaa";
+import { BarChart3, TrendingDown, TrendingUp, Info } from "lucide-react";
+import { getBranchDisplayName } from "@/lib/formatBranchCode";
 import {
   BarChart,
   Bar,
@@ -12,11 +17,16 @@ import {
   Cell,
   ReferenceLine,
 } from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { JosaaCutoffExpanded, JosaaBranch } from "@/lib/types/josaa";
-import { BarChart3, TrendingDown, TrendingUp, Info } from "lucide-react";
-import { getBranchDisplayName } from "@/lib/formatBranchCode";
+
+// Loading component for charts
+const ChartLoading = () => (
+  <div className="h-full flex items-center justify-center bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+    <div className="text-center">
+      <div className="animate-spin w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full mx-auto mb-2" />
+      <p className="text-gray-500">Loading chart...</p>
+    </div>
+  </div>
+);
 
 interface BranchComparisonProps {
   cutoffs: JosaaCutoffExpanded[];
@@ -81,6 +91,13 @@ export default function JosaaBranchComparison({
   category,
   gender,
 }: BranchComparisonProps) {
+  const [mounted, setMounted] = useState(false);
+
+  // Ensure component is mounted before rendering charts
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Create branch lookup map by original_id
   const branchMap = useMemo(() => {
     const map = new Map<string, JosaaBranch>();
@@ -90,16 +107,46 @@ export default function JosaaBranchComparison({
       }
       map.set(b.id, b);
     });
+    // Debug logging
+    if (process.env.NODE_ENV === "development" && branches.length > 0) {
+      console.log(
+        "[BranchComparison] branchMap size:",
+        map.size,
+        "branches:",
+        branches.length,
+      );
+    }
     return map;
   }, [branches]);
 
   // Process data for chart
   const chartData = useMemo(() => {
+    // Debug logging
+    if (process.env.NODE_ENV === "development") {
+      console.log("[BranchComparison] cutoffs received:", cutoffs.length);
+      if (cutoffs.length > 0) {
+        console.log("[BranchComparison] sample cutoff:", {
+          branch_id: (cutoffs[0] as any).branch_id,
+          branch: cutoffs[0].branch,
+          opening_rank: cutoffs[0].opening_rank,
+          closing_rank: cutoffs[0].closing_rank,
+        });
+      }
+    }
+
     return cutoffs
       .map((c) => {
         const branchId = (c as any).branch_id || c.branch;
         const branch = branchMap.get(branchId);
-        if (!branch) return null;
+        if (!branch) {
+          if (process.env.NODE_ENV === "development") {
+            console.log(
+              "[BranchComparison] No branch found for branchId:",
+              branchId,
+            );
+          }
+          return null;
+        }
         return {
           id: c.id,
           branchId,
@@ -126,10 +173,10 @@ export default function JosaaBranchComparison({
       best: chartData[0],
       worst: chartData[chartData.length - 1],
       avgClosing: Math.round(
-        closingRanks.reduce((a, b) => a + b, 0) / closingRanks.length
+        closingRanks.reduce((a, b) => a + b, 0) / closingRanks.length,
       ),
       avgOpening: Math.round(
-        openingRanks.reduce((a, b) => a + b, 0) / openingRanks.length
+        openingRanks.reduce((a, b) => a + b, 0) / openingRanks.length,
       ),
       median: closingRanks[Math.floor(closingRanks.length / 2)],
       total: chartData.length,
@@ -137,6 +184,18 @@ export default function JosaaBranchComparison({
   }, [chartData]);
 
   const maxRank = Math.max(...chartData.map((d) => d.closingRank), 1);
+
+  // Show loading state while mounting on client
+  if (!mounted) {
+    return (
+      <Card className="border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-gradient-to-br from-white to-orange-50/30">
+        <CardContent className="p-12 text-center">
+          <div className="animate-spin w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full mx-auto mb-2" />
+          <p className="text-gray-500">Loading chart...</p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   if (chartData.length === 0) {
     return (
@@ -271,8 +330,8 @@ export default function JosaaBranchComparison({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="h-[500px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="h-[500px] w-full" style={{ minHeight: "500px" }}>
+            <ResponsiveContainer width="100%" height={500}>
               <BarChart
                 data={chartData}
                 layout="vertical"

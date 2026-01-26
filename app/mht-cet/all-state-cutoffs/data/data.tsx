@@ -1,7 +1,4 @@
-import {
-  CheckCircledIcon,
-  ColumnsIcon,
-} from "@radix-ui/react-icons"
+import { CheckCircledIcon, ColumnsIcon } from "@radix-ui/react-icons";
 
 export const labels = [
   {
@@ -16,501 +13,506 @@ export const labels = [
     value: "documentation",
     label: "Documentation",
   },
-]
+];
 
 export const branch = [
   {
     value: "5G",
     label: "5G",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Aeronautical Engineering",
     label: "Aeronautical Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Agricultural Engineering",
     label: "Agricultural Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Artificial Intelligence",
     label: "Artificial Intelligence",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Artificial Intelligence (AI) and Data Science",
     label: "Artificial Intelligence (AI) and Data Science",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Artificial Intelligence and Data Science",
     label: "Artificial Intelligence and Data Science",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Artificial Intelligence and Machine Learning",
     label: "Artificial Intelligence and Machine Learning",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Automation and Robotics",
     label: "Automation and Robotics",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Automobile Engineering",
     label: "Automobile Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Bio Medical Engineering",
     label: "Bio Medical Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Bio Technology",
     label: "Bio Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Chemical Engineering",
     label: "Chemical Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Civil Engineering",
     label: "Civil Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Civil Engineering and Planning",
     label: "Civil Engineering and Planning",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Civil and Environmental Engineering",
     label: "Civil and Environmental Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Civil and infrastructure Engineering",
     label: "Civil and infrastructure Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Computer Engineering",
     label: "Computer Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Computer Engineering (Software Engineering)",
     label: "Computer Engineering (Software Engineering)",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Computer Science",
     label: "Computer Science",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Computer Science and Business Systems",
     label: "Computer Science and Business Systems",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Computer Science and Design",
     label: "Computer Science and Design",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Computer Science and Engineering",
     label: "Computer Science and Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
-    value: "Computer Science and Engineering (Artificial Intelligence and Data Science)",
-    label: "Computer Science and Engineering (Artificial Intelligence and Data Science)",
-    icon: ColumnsIcon
+    value:
+      "Computer Science and Engineering (Artificial Intelligence and Data Science)",
+    label:
+      "Computer Science and Engineering (Artificial Intelligence and Data Science)",
+    icon: ColumnsIcon,
   },
   {
     value: "Computer Science and Engineering (Artificial Intelligence)",
     label: "Computer Science and Engineering (Artificial Intelligence)",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Computer Science and Engineering (Cyber Security)",
     label: "Computer Science and Engineering (Cyber Security)",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
-    value: "Computer Science and Engineering (Internet of Things and Cyber Security Including Block Chain",
-    label: "Computer Science and Engineering (Internet of Things and Cyber Security Including Block Chain",
-    icon: ColumnsIcon
+    value:
+      "Computer Science and Engineering (Internet of Things and Cyber Security Including Block Chain",
+    label:
+      "Computer Science and Engineering (Internet of Things and Cyber Security Including Block Chain",
+    icon: ColumnsIcon,
   },
   {
     value: "Computer Science and Engineering (IoT)",
     label: "Computer Science and Engineering (IoT)",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
-    value: "Computer Science and Engineering(Artificial Intelligence and Machine Learning)",
-    label: "Computer Science and Engineering(Artificial Intelligence and Machine Learning)",
-    icon: ColumnsIcon
+    value:
+      "Computer Science and Engineering(Artificial Intelligence and Machine Learning)",
+    label:
+      "Computer Science and Engineering(Artificial Intelligence and Machine Learning)",
+    icon: ColumnsIcon,
   },
   {
     value: "Computer Science and Engineering(Cyber Security)",
     label: "Computer Science and Engineering(Cyber Security)",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Computer Science and Engineering(Data Science)",
     label: "Computer Science and Engineering(Data Science)",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Computer Science and Information Technology",
     label: "Computer Science and Information Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Computer Science and Technology",
     label: "Computer Science and Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Computer Technology",
     label: "Computer Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Cyber Security",
     label: "Cyber Security",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Data Engineering",
     label: "Data Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Data Science",
     label: "Data Science",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Dyestuff Technology",
     label: "Dyestuff Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Electrical Engg [Electrical and Power]",
     label: "Electrical Engg [Electrical and Power]",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Electrical Engg[Electronics and Power]",
     label: "Electrical Engg[Electronics and Power]",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Electrical Engineering",
     label: "Electrical Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Electrical and Computer Engineering",
     label: "Electrical and Computer Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Electrical and Electronics Engineering",
     label: "Electrical and Electronics Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Electronics Engineering",
     label: "Electronics Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Electronics Engineering ( VLSI Design and Technology)",
     label: "Electronics Engineering ( VLSI Design and Technology)",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Electronics and Biomedical Engineering",
     label: "Electronics and Biomedical Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Electronics and Communication (Advanced Communication Technology)",
     label: "Electronics and Communication (Advanced Communication Technology)",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Electronics and Communication Engineering",
     label: "Electronics and Communication Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Electronics and Communication(Advanced Communication Technology)",
     label: "Electronics and Communication(Advanced Communication Technology)",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Electronics and Computer Engineering",
     label: "Electronics and Computer Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Electronics and Computer Science",
     label: "Electronics and Computer Science",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Electronics and Telecommunication Engg",
     label: "Electronics and Telecommunication Engg",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Fashion Technology",
     label: "Fashion Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Fibres and Textile Processing Technology",
     label: "Fibres and Textile Processing Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Food Engineering and Technology",
     label: "Food Engineering and Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Food Technology",
     label: "Food Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Food Technology And Management",
     label: "Food Technology And Management",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Industrial IoT",
     label: "Industrial IoT",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Information Technology",
     label: "Information Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Instrumentation Engineering",
     label: "Instrumentation Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Instrumentation and Control Engineering",
     label: "Instrumentation and Control Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Internet of Things (IoT)",
     label: "Internet of Things (IoT)",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Logistics",
     label: "Logistics",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Man Made Textile Technology",
     label: "Man Made Textile Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Manufacturing Science and Engineering",
     label: "Manufacturing Science and Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Mechanical & Automation Engineering",
     label: "Mechanical & Automation Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Mechanical Engineering",
     label: "Mechanical Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Mechanical Engineering[Sandwich]",
     label: "Mechanical Engineering[Sandwich]",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Mechanical and Mechatronics Engineering (Additive Manufacturing)",
     label: "Mechanical and Mechatronics Engineering (Additive Manufacturing)",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Mechatronics Engineering",
     label: "Mechatronics Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Metallurgy and Material Technology",
     label: "Metallurgy and Material Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Mining Engineering",
     label: "Mining Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Oil Fats and Waxes Technology",
     label: "Oil Fats and Waxes Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Oil Technology",
     label: "Oil Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Oil and Paints Technology",
     label: "Oil and Paints Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Oil,Oleochemicals and Surfactants Technology",
     label: "Oil,Oleochemicals and Surfactants Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Paints Technology",
     label: "Paints Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Paper and Pulp Technology",
     label: "Paper and Pulp Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Petro Chemical Engineering",
     label: "Petro Chemical Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Petro Chemical Technology",
     label: "Petro Chemical Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Pharmaceutical and Fine Chemical Technology",
     label: "Pharmaceutical and Fine Chemical Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Pharmaceuticals Chemistry and Technology",
     label: "Pharmaceuticals Chemistry and Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Plastic Technology",
     label: "Plastic Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Plastic and Polymer Engineering",
     label: "Plastic and Polymer Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Plastic and Polymer Technology",
     label: "Plastic and Polymer Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Polymer Engineering and Technology",
     label: "Polymer Engineering and Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Printing Technology",
     label: "Printing Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Production Engineering",
     label: "Production Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Production Engineering[Sandwich]",
     label: "Production Engineering[Sandwich]",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Robotics and Artificial Intelligence",
     label: "Robotics and Artificial Intelligence",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Robotics and Automation",
     label: "Robotics and Automation",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Safety and Fire Engineering",
     label: "Safety and Fire Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Structural Engineering",
     label: "Structural Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Surface Coating Technology",
     label: "Surface Coating Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Textile Chemistry",
     label: "Textile Chemistry",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Textile Engineering / Technology",
     label: "Textile Engineering / Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Textile Plant Engineering",
     label: "Textile Plant Engineering",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "Textile Technology",
     label: "Textile Technology",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
   {
     value: "VLSI",
     label: "VLSI",
-    icon: ColumnsIcon
+    icon: ColumnsIcon,
   },
-]
-
+];
 
 export const status = [
   {
@@ -629,8 +631,7 @@ export const status = [
     value: "University Managed Autonomous",
     label: "University Managed Autonomous",
   },
-]
-
+];
 
 export const categories = [
   {
@@ -937,7 +938,7 @@ export const categories = [
     value: "TFWS",
     label: "TFWS",
   },
-]
+];
 
 export const allocation = [
   {
@@ -945,22 +946,28 @@ export const allocation = [
     label: "Home University Seats Allotted to Home University Candidates",
   },
   {
-    value: "Home University Seats Allotted to Other Than Home University Candidates",
-    label: "Home University Seats Allotted to Other Than Home University Candidates",
+    value:
+      "Home University Seats Allotted to Other Than Home University Candidates",
+    label:
+      "Home University Seats Allotted to Other Than Home University Candidates",
   },
   {
-    value: "Other Than Home University Seats Allotted to Home University Candidates",
-    label: "Other Than Home University Seats Allotted to Home University Candidates",
+    value:
+      "Other Than Home University Seats Allotted to Home University Candidates",
+    label:
+      "Other Than Home University Seats Allotted to Home University Candidates",
   },
   {
-    value: "Other Than Home University Seats Allotted to Other Than Home University Candidates",
-    label: "Other Than Home University Seats Allotted to Other Than Home University Candidates",
+    value:
+      "Other Than Home University Seats Allotted to Other Than Home University Candidates",
+    label:
+      "Other Than Home University Seats Allotted to Other Than Home University Candidates",
   },
   {
     value: "State Level",
     label: "State Level",
   },
-]
+];
 
 export const cities = [
   {
@@ -1379,4 +1386,4 @@ export const cities = [
     value: "Yelgaon",
     label: "Yelgaon",
   },
-]
+];

@@ -14,13 +14,82 @@ import { Toaster as SonnerToaster } from "sonner";
 import NextTopLoader from "nextjs-toploader";
 import MotionWrapper from "@/components/MotionWrapper";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import SiteJsonLd from "@/components/SiteJsonLd";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "DEETNUTS",
-  description: "mildly important data related to colleges simplified",
+  title: {
+    default: "DEETNUTS - College Data Simplified",
+    template: "%s | DEETNUTS",
+  },
+  description:
+    "Mildly important data related to colleges simplified. Explore JoSAA cutoffs for IITs, NITs, IIITs, MHT-CET cutoffs, NIRF rankings, and admission trends.",
   metadataBase: new URL("https://deetnuts.com"),
+  keywords: [
+    "JoSAA",
+    "JEE Advanced",
+    "JEE Main",
+    "MHT-CET",
+    "IIT cutoffs",
+    "NIT cutoffs",
+    "IIIT cutoffs",
+    "engineering admission",
+    "college cutoffs",
+    "NIRF rankings",
+    "seat matrix",
+  ],
+  authors: [{ name: "DEETNUTS" }],
+  creator: "DEETNUTS",
+  publisher: "DEETNUTS",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  openGraph: {
+    title: "DEETNUTS - College Data Simplified",
+    description:
+      "Explore JoSAA cutoffs for IITs, NITs, IIITs, MHT-CET cutoffs, NIRF rankings, and admission trends.",
+    url: "https://deetnuts.com",
+    siteName: "DEETNUTS",
+    images: [
+      {
+        url: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1722186653/deetnuts/preview_o5ykn7.png",
+        width: 1200,
+        height: 630,
+        alt: "DEETNUTS - Mildly important college data simplified",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "DEETNUTS - College Data Simplified",
+    description:
+      "Explore JoSAA cutoffs for IITs, NITs, IIITs, MHT-CET cutoffs, NIRF rankings, and admission trends.",
+    images: [
+      "https://res.cloudinary.com/dfyrk32ua/image/upload/v1722186653/deetnuts/preview_o5ykn7.png",
+    ],
+    creator: "@deetnuts",
+  },
+  alternates: {
+    canonical: "https://deetnuts.com",
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
+  verification: {
+    // Add Google Search Console verification when available
+    // google: 'your-verification-code',
+  },
 };
 
 export default function RootLayout({
@@ -30,15 +99,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="bg-[#E4DFF2]">
-      <meta
-        property="og:image"
-        content="https://res.cloudinary.com/dfyrk32ua/image/upload/v1722186653/deetnuts/preview_o5ykn7.png"
-      />
-      <meta
-        property="og:image:png"
-        content="https://res.cloudinary.com/dfyrk32ua/image/upload/v1722186653/deetnuts/preview_o5ykn7.png"
-      />
-      <link rel="icon" href="/favicon.ico" />
+      <head>
+        <SiteJsonLd />
+      </head>
       <body
         className={`${inter.className} relative min-h-screen overflow-x-hidden`}
       >

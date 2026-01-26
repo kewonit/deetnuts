@@ -68,7 +68,7 @@ export default function InstitutesFilter({
         router.push(`${pathname}?${params.toString()}`, { scroll: false });
       });
     },
-    [searchParams, pathname, router]
+    [searchParams, pathname, router],
   );
 
   const handleTypeChange = (type: string) => {

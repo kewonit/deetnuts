@@ -52,12 +52,28 @@ export async function generateMetadata({
     };
   }
 
+  const canonicalUrl = `https://deetnuts.com/josaa/institutes/${slug}`;
+
   return {
     title: `${institute.short_name} Cutoffs | JoSAA | DEETNUTS`,
     description: `View JoSAA cutoffs, branch comparisons, and historical trends for ${institute.name}. Find opening and closing ranks for all categories.`,
+    keywords: [
+      institute.short_name,
+      institute.name,
+      "JoSAA cutoffs",
+      `${institute.short_name} cutoff`,
+      "JEE Advanced",
+      "JEE Main",
+      "engineering admission",
+    ],
     openGraph: {
       title: `${institute.short_name} JoSAA Cutoffs`,
       description: `Comprehensive cutoff data for ${institute.name}`,
+      url: canonicalUrl,
+      type: "website",
+    },
+    alternates: {
+      canonical: canonicalUrl,
     },
   };
 }
@@ -244,24 +260,37 @@ async function InstituteContent({
   const actualSelectedYear = selectedYear || yearsAvailable[0];
 
   // Get trend data from pre-fetched cutoffs (no extra DB call!)
-  let trendData: any[] = [];
+  let trendData: Array<{
+    year: number;
+    round: number;
+    openingRank: number;
+    closingRank: number;
+  }> = [];
   if (branches.length > 0) {
     // Find CSE or first available branch
     const cseBranch =
       branches.find(
         (b) =>
           b.name.toLowerCase().includes("computer science") ||
-          b.short_code.includes("CSE")
+          b.short_code.includes("CSE"),
       ) || branches[0];
 
     // Use the helper to filter from already-fetched data
     const branchId = (cseBranch as any).original_id || cseBranch.id;
-    trendData = filterCutoffsForBranch(
+    const rawTrendData = filterCutoffsForBranch(
       allCutoffs,
       branchId,
       selectedCategory,
-      selectedGender
+      selectedGender,
     );
+
+    // Convert snake_case to camelCase for chart compatibility
+    trendData = rawTrendData.map((item) => ({
+      year: item.year,
+      round: item.round,
+      openingRank: item.opening_rank,
+      closingRank: item.closing_rank,
+    }));
   }
 
   return (

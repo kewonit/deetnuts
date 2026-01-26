@@ -1,12 +1,17 @@
-import { notFound } from 'next/navigation';
+import { notFound } from "next/navigation";
 
 async function getCutoffs(year: string, round: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/mht-cet/state-cutoffs/${year}/${round}`, { cache: 'no-store' });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/mht-cet/state-cutoffs/${year}/${round}`,
+    { cache: "no-store" },
+  );
   if (!res.ok) {
     if (res.status === 404) {
       notFound();
     }
-    throw new Error(`Failed to fetch cutoff data for year: ${year}, round: ${round}`);
+    throw new Error(
+      `Failed to fetch cutoff data for year: ${year}, round: ${round}`,
+    );
   }
   return res.json();
 }
@@ -17,7 +22,9 @@ export default async function CutoffPage(props: any) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">MHT-CET State Cutoffs - {params.year} - Round {params.round}</h1>
+      <h1 className="text-3xl font-bold mb-6">
+        MHT-CET State Cutoffs - {params.year} - Round {params.round}
+      </h1>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border">
           <thead className="bg-gray-200">

@@ -1,5 +1,5 @@
 // components/DiscordHeader.tsx
-import React from 'react';
+import React from "react";
 
 const DiscordHeader = () => {
   return (

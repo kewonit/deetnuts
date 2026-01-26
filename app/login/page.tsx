@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { SubmitButton } from "./sumbit-button";
 import { Input } from "@/components/ui/input";
-import { login } from './actions'
+import { login } from "./actions";
 
 export default async function Login({ searchParams }: any) {
-  const params = await searchParams
-  const redirectTo = params?.redirect || '/account'
+  const params = await searchParams;
+  const redirectTo = params?.redirect || "/account";
 
   return (
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2 mx-auto pt-28 min-h-screen">
@@ -38,7 +38,9 @@ export default async function Login({ searchParams }: any) {
         )}
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold">Sign In</h1>
-          <p className="text-muted-foreground">Welcome back! Please sign in to your account.</p>
+          <p className="text-muted-foreground">
+            Welcome back! Please sign in to your account.
+          </p>
         </div>
 
         <input type="hidden" name="redirect" value={redirectTo} />
@@ -68,7 +70,11 @@ export default async function Login({ searchParams }: any) {
           <p className="text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
             <Link
-              href={redirectTo !== '/account' ? `/signup?redirect=${encodeURIComponent(redirectTo)}` : '/signup'}
+              href={
+                redirectTo !== "/account"
+                  ? `/signup?redirect=${encodeURIComponent(redirectTo)}`
+                  : "/signup"
+              }
               className="text-primary hover:underline font-medium"
             >
               Sign up here

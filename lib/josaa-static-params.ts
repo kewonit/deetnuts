@@ -1,4 +1,4 @@
-import { getInstitutes, getBranchesForInstitute } from '@/lib/josaa-client';
+import { getInstitutes, getBranchesForInstitute } from "@/lib/josaa-client";
 
 /**
  * Generate static params for institute pages
@@ -7,12 +7,12 @@ import { getInstitutes, getBranchesForInstitute } from '@/lib/josaa-client';
 export async function generateStaticParams() {
   try {
     const institutes = await getInstitutes();
-    
+
     return institutes.map((institute) => ({
       slug: institute.slug,
     }));
   } catch (error) {
-    console.error('Error generating static params for institutes:', error);
+    console.error("Error generating static params for institutes:", error);
     return [];
   }
 }
@@ -25,12 +25,12 @@ export async function generateBranchStaticParams() {
   try {
     const institutes = await getInstitutes();
     const params: { slug: string; branchCode: string }[] = [];
-    
+
     // Process in batches to avoid overwhelming the database
     const batchSize = 10;
     for (let i = 0; i < institutes.length; i += batchSize) {
       const batch = institutes.slice(i, i + batchSize);
-      
+
       await Promise.all(
         batch.map(async (institute) => {
           try {
@@ -42,15 +42,18 @@ export async function generateBranchStaticParams() {
               });
             });
           } catch (error) {
-            console.error(`Error fetching branches for ${institute.slug}:`, error);
+            console.error(
+              `Error fetching branches for ${institute.slug}:`,
+              error,
+            );
           }
-        })
+        }),
       );
     }
-    
+
     return params;
   } catch (error) {
-    console.error('Error generating static params for branches:', error);
+    console.error("Error generating static params for branches:", error);
     return [];
   }
 }

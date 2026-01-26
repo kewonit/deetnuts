@@ -1,8 +1,8 @@
-import Link from 'next/link'
+import Link from "next/link";
 
-import MobileDrawer from '@/components/MobileDrawer'
-import NavDropdown from '@/components/NavDropdown'
-import AuthButton from './authbutton'
+import MobileDrawer from "@/components/MobileDrawer";
+import NavDropdown from "@/components/NavDropdown";
+import AuthButton from "./authbutton";
 import React from "react";
 
 type NavbarProps = {
@@ -18,15 +18,19 @@ const Navbar: React.FC<NavbarProps> = ({ children }) => {
           <MobileDrawer />
 
           <div className="flex items-center gap-10 pl-5 m400:flex-1 m400:pl-5">
-            <Link className="text-4xl font-heading m500:text-xl" href={'/'}>
+            <Link
+              className="relative text-4xl font-heading m500:text-xl"
+              href={"/"}
+            >
               DEETNUTS
+              <span className="absolute -top-3 -right-12 m500:-top-2 m500:-right-8 bg-purple-400 text-black text-xs font-bold px-2 py-0.5 rounded-full border-2 border-black rotate-12 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                BETA
+              </span>
             </Link>
           </div>
 
           <div className="flex items-center gap-10 m900:hidden">
-
             <NavDropdown />
-
           </div>
 
           <div className="flex w-[160px] items-center justify-end gap-5 m800:w-[unset] m400:gap-3">
@@ -44,7 +48,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }) => {
         </div>
       </nav>
     </>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

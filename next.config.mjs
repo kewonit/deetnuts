@@ -1,7 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
+  
+  // React 19 & Next.js 16 Performance Features
+  reactCompiler: true, // Enable React Compiler for automatic memoization
+  
+  // Turbopack configuration
   turbopack: {},
+  
   // Production performance optimizations
   poweredByHeader: false, // Remove X-Powered-By header for security
   compress: true, // Enable gzip compression

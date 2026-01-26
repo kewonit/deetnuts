@@ -1,32 +1,76 @@
 // components/CollegeJsonLd.tsx
-import { College } from '@/lib/college-data'; // Assuming you have a College type defined
+// Enhanced structured data for MHT-CET college pages
+import { College } from "@/lib/college-data";
+import { createCollegeSlug } from "@/lib/slugify";
 
 interface CollegeJsonLdProps {
   college: College;
+  slug?: string;
 }
 
-export default function CollegeJsonLd({ college }: CollegeJsonLdProps) {
+export default function CollegeJsonLd({ college, slug }: CollegeJsonLdProps) {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://deetnuts.com";
+  const collegeSlug =
+    slug || createCollegeSlug(college.college_name, college.college_id);
+  const collegeUrl = `${baseUrl}/mht-cet/colleges/${collegeSlug}`;
+
+  // College/University structured data
   const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'CollegeOrUniversity',
+    "@context": "https://schema.org",
+    "@type": "CollegeOrUniversity",
+    "@id": collegeUrl,
     name: college.college_name,
-    url: `${process.env.NEXT_PUBLIC_APP_URL}/mht-cet/colleges/${college.id}`, // Assuming college.id is the slug
-    // You can add more details here if they are available in your college object
-    // "address": {
-    //   "@type": "PostalAddress",
-    //   "streetAddress": "123 College Ave",
-    //   "addressLocality": "City",
-    //   "addressRegion": "State",
-    //   "postalCode": "12345",
-    //   "addressCountry": "IN"
-    // },
-    // "telephone": "+91-123-456-7890"
+    url: collegeUrl,
+    address: {
+      "@type": "PostalAddress",
+      addressRegion: "Maharashtra",
+      addressCountry: "IN",
+    },
+    description: `${college.college_name} - View MHT-CET cutoffs, seat matrix, and admission data for 2025.`,
+    ...(college.home_university && {
+      parentOrganization: {
+        "@type": "EducationalOrganization",
+        name: college.home_university,
+      },
+    }),
+  };
+
+  // Breadcrumb structured data
+  const breadcrumbData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "MHT-CET",
+        item: `${baseUrl}/mht-cet`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Colleges",
+        item: `${baseUrl}/mht-cet/colleges`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: college.college_name,
+        item: collegeUrl,
+      },
+    ],
   };
 
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
+      />
+    </>
   );
 }

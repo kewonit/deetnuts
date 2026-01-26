@@ -77,11 +77,11 @@ export default function YearwiseCutoffs({
       dataToFilter = Array.from(lastRoundMap.values());
     } else if (selectedRound !== "all") {
       dataToFilter = trends.filter(
-        (item) => item.round === parseInt(selectedRound)
+        (item) => item.round === parseInt(selectedRound),
       );
     }
 
-    let filtered = dataToFilter.filter((item) => {
+    const filtered = dataToFilter.filter((item) => {
       if (selectedYear !== "all" && item.year !== parseInt(selectedYear))
         return false;
       if (selectedCategory !== "all" && item.category !== selectedCategory)
@@ -420,7 +420,7 @@ export default function YearwiseCutoffs({
                             <td className="py-2 px-3">
                               <Badge
                                 className={`border-2 ${getCategoryColor(
-                                  row.category
+                                  row.category,
                                 )} font-bold`}
                               >
                                 {row.category}
@@ -429,7 +429,7 @@ export default function YearwiseCutoffs({
                             <td className="py-2 px-3">
                               <Badge
                                 className={`border ${getGenderColor(
-                                  row.gender
+                                  row.gender,
                                 )}`}
                               >
                                 {row.gender}

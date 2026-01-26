@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
-import clsx from 'clsx'
-import { ChevronDown } from 'lucide-react'
-import { useState } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
-import arrow from '@/public/svg/arrow.svg'
+import clsx from "clsx";
+import { ChevronDown } from "lucide-react";
+import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import arrow from "@/public/svg/arrow.svg";
 
 interface LinkItem {
   href: string;
@@ -14,12 +14,10 @@ interface LinkItem {
 }
 
 const cutoffLinks: LinkItem[] = [
-  { href: '/mht-cet', title: 'MHTCET', subtitle: 'All India & State Cutoffs' },
+  { href: "/mht-cet", title: "MHTCET", subtitle: "All India & State Cutoffs" },
 ];
 
-const toolLinks: LinkItem[] = [
-  { href: '#', title: '/', subtitle: '/' },
-];
+const toolLinks: LinkItem[] = [{ href: "#", title: "/", subtitle: "/" }];
 
 interface DropdownProps {
   title: string;
@@ -27,7 +25,7 @@ interface DropdownProps {
 }
 
 function Dropdown({ title, links }: DropdownProps) {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="relative">
@@ -39,16 +37,16 @@ function Dropdown({ title, links }: DropdownProps) {
         {title}
         <ChevronDown
           className={clsx(
-            isOpen ? 'rotate-180' : 'rotate-0',
-            'h-5 w-5 transition-transform',
+            isOpen ? "rotate-180" : "rotate-0",
+            "h-5 w-5 transition-transform",
           )}
           color="black"
         />
       </button>
       <div
         className={clsx(
-          isOpen ? 'visible top-12 opacity-100' : 'invisible top-10 opacity-0',
-          'absolute flex w-[250px] flex-col rounded-base border-2 border-black bg-white text-lg font-base transition-all',
+          isOpen ? "visible top-12 opacity-100" : "invisible top-10 opacity-0",
+          "absolute flex w-[250px] flex-col rounded-base border-2 border-black bg-white text-lg font-base transition-all",
         )}
       >
         {links.map((link, index) => (
@@ -74,7 +72,7 @@ function Dropdown({ title, links }: DropdownProps) {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 export default function NavDropdowns() {
@@ -86,5 +84,5 @@ export default function NavDropdowns() {
         Data Source
       </Link>
     </div>
-  )
+  );
 }

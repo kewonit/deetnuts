@@ -1,7 +1,7 @@
 // app/mht-cet/all-india-cutoffs/components/year-selector.tsx
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -10,7 +10,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 
 interface YearSelectorProps {
   year: number;

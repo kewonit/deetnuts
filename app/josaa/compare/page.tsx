@@ -1,18 +1,87 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { useQueryStates, parseAsString, parseAsArrayOf } from "nuqs";
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useTransition,
+} from "react";
+import type { ComponentType } from "react";
+import { useQueryStates, parseAsString, parseAsArrayOf } from "nuqs";
+import dynamic from "next/dynamic";
 import Link from "next/link";
+import { useJosaaInstitutes } from "@/lib/hooks/use-swr-fetch";
+
+// Dynamic import for recharts - reduces initial bundle size
+
+const BarChart = dynamic(
+  () =>
+    import("recharts").then((mod) => mod.BarChart) as Promise<
+      ComponentType<any>
+    >,
+  {
+    ssr: false,
+  },
+);
+
+const Bar = dynamic(
+  () =>
+    import("recharts").then((mod) => mod.Bar) as Promise<ComponentType<any>>,
+  {
+    ssr: false,
+  },
+);
+
+const XAxis = dynamic(
+  () =>
+    import("recharts").then((mod) => mod.XAxis) as Promise<ComponentType<any>>,
+  {
+    ssr: false,
+  },
+);
+
+const YAxis = dynamic(
+  () =>
+    import("recharts").then((mod) => mod.YAxis) as Promise<ComponentType<any>>,
+  {
+    ssr: false,
+  },
+);
+
+const CartesianGrid = dynamic(
+  () =>
+    import("recharts").then((mod) => mod.CartesianGrid) as Promise<
+      ComponentType<any>
+    >,
+  { ssr: false },
+);
+
+const Tooltip = dynamic(
+  () =>
+    import("recharts").then((mod) => mod.Tooltip) as Promise<
+      ComponentType<any>
+    >,
+  {
+    ssr: false,
+  },
+);
+
+const Legend = dynamic(
+  () =>
+    import("recharts").then((mod) => mod.Legend) as Promise<ComponentType<any>>,
+  {
+    ssr: false,
+  },
+);
+
+const ResponsiveContainer = dynamic(
+  () =>
+    import("recharts").then((mod) => mod.ResponsiveContainer) as Promise<
+      ComponentType<any>
+    >,
+  { ssr: false },
+);
 import type {
   JosaaInstitute,
   JosaaBranch,
@@ -232,7 +301,7 @@ function calculateSimilarity(name1: string, name2: string): number {
 function areBranchesSimilar(
   branch1: JosaaBranch,
   branch2: JosaaBranch,
-  threshold = 0.5
+  threshold = 0.5,
 ): boolean {
   if (
     branch1.short_code &&
@@ -254,8 +323,9 @@ export default function ComparePage() {
     year: parseAsString.withDefault("2025"),
   });
 
-  const [allInstitutes, setAllInstitutes] = useState<JosaaInstitute[]>([]);
-  const [institutesLoading, setInstitutesLoading] = useState(true);
+  // Use SWR for institutes - automatic deduplication & caching
+  const { institutes: allInstitutes, isLoading: institutesLoading } =
+    useJosaaInstitutes();
   const [selectedInstitutesData, setSelectedInstitutesData] = useState<
     { institute: JosaaInstitute; branches: JosaaBranch[]; cutoffs: any[] }[]
   >([]);
@@ -267,38 +337,21 @@ export default function ComparePage() {
   const [sortBy, setSortBy] = useState<"name" | "rank">("name");
   const [sortDesc, setSortDesc] = useState(false);
   const [branchFilter, setBranchFilter] = useState("");
+  const [isPending, startTransition] = useTransition();
 
   const debouncedSearch = useDebounce(searchQuery, 300);
   const debouncedBranchFilter = useDebounce(branchFilter, 300);
 
-  // Fetch all institutes on mount
-  useEffect(() => {
-    async function fetchInstitutes() {
-      setInstitutesLoading(true);
-      try {
-        const res = await fetch("/api/josaa/institutes");
-        if (!res.ok) throw new Error("Failed to fetch");
-        const data = await res.json();
-        setAllInstitutes(data.institutes || data || []);
-      } catch (error) {
-        console.error("Failed to fetch institutes:", error);
-      } finally {
-        setInstitutesLoading(false);
-      }
-    }
-    fetchInstitutes();
-  }, []);
-
   // Filter institutes based on search
   const filteredInstitutes = useMemo(() => {
-    if (!debouncedSearch) return [];
+    if (!debouncedSearch) return [] as JosaaInstitute[];
     const query = debouncedSearch.toLowerCase();
     return allInstitutes
       .filter(
-        (inst) =>
+        (inst: JosaaInstitute) =>
           (inst.name.toLowerCase().includes(query) ||
             inst.short_name?.toLowerCase().includes(query)) &&
-          !searchParams.institutes.includes(inst.id)
+          !searchParams.institutes.includes(inst.id),
       )
       .slice(0, 10);
   }, [allInstitutes, debouncedSearch, searchParams.institutes]);
@@ -312,20 +365,22 @@ export default function ComparePage() {
 
     setLoading(true);
     try {
-      const promises = searchParams.institutes.map(async (id) => {
-        const inst = allInstitutes.find((i) => i.id === id);
+      const promises = searchParams.institutes.map(async (id: string) => {
+        const inst = allInstitutes.find((i: JosaaInstitute) => i.id === id);
         if (!inst) return null;
 
         const slug = inst.short_name.toLowerCase().replace(/\s+/g, "-");
         const res = await fetch(
-          `/api/josaa/institutes/${slug}?year=${searchParams.year}`
+          `/api/josaa/institutes/${slug}?year=${searchParams.year}`,
         );
         if (!res.ok) return null;
         return res.json();
       });
 
       const results = (await Promise.all(promises)).filter(Boolean);
-      setSelectedInstitutesData(results);
+      startTransition(() => {
+        setSelectedInstitutesData(results);
+      });
     } catch (error) {
       console.error("Failed to fetch comparison data:", error);
     } finally {
@@ -378,7 +433,7 @@ export default function ComparePage() {
 
           if (areBranchesSimilar(refBranch, branch)) {
             const existingFromInstitute = match.branches.find(
-              (b) => b.instituteId === instituteData.institute.id
+              (b) => b.instituteId === instituteData.institute.id,
             );
 
             if (!existingFromInstitute) {
@@ -411,7 +466,7 @@ export default function ComparePage() {
     });
 
     return Array.from(matches.values()).filter(
-      (match) => match.branches.length >= 2
+      (match) => match.branches.length >= 2,
     );
   }, [selectedInstitutesData]);
 
@@ -433,7 +488,7 @@ export default function ComparePage() {
 
       match.branches.forEach(({ branch, instituteId, instituteName }) => {
         const instituteData = selectedInstitutesData.find(
-          (d) => d.institute.id === instituteId
+          (d) => d.institute.id === instituteId,
         );
 
         if (instituteData) {
@@ -442,7 +497,7 @@ export default function ComparePage() {
               (c.branch_id === (branch.original_id || branch.id) ||
                 c.branch === branch.id) &&
               c.category === searchParams.category &&
-              c.gender === searchParams.gender
+              c.gender === searchParams.gender,
           );
           row[instituteName] = cutoff?.closing_rank || 0;
         }
@@ -465,13 +520,13 @@ export default function ComparePage() {
       data = data.filter(
         (row) =>
           row.branch.toLowerCase().includes(search) ||
-          row.fullName.toLowerCase().includes(search)
+          row.fullName.toLowerCase().includes(search),
       );
     }
 
     data = data.filter((row) => {
       const values = Object.values(row).filter(
-        (v) => typeof v === "number" && v > 0
+        (v) => typeof v === "number" && v > 0,
       );
       return values.length >= 2;
     });
@@ -482,10 +537,10 @@ export default function ComparePage() {
         return sortDesc ? -comparison : comparison;
       } else {
         const aValues = Object.values(a).filter(
-          (v) => typeof v === "number" && v > 0
+          (v) => typeof v === "number" && v > 0,
         ) as number[];
         const bValues = Object.values(b).filter(
-          (v) => typeof v === "number" && v > 0
+          (v) => typeof v === "number" && v > 0,
         ) as number[];
         const aAvg =
           aValues.length > 0
@@ -545,7 +600,9 @@ export default function ComparePage() {
 
   const selectedInstitutes = useMemo(() => {
     return searchParams.institutes
-      .map((id) => allInstitutes.find((i) => i.id === id))
+      .map((id: string) =>
+        allInstitutes.find((i: JosaaInstitute) => i.id === id),
+      )
       .filter(Boolean) as JosaaInstitute[];
   }, [searchParams.institutes, allInstitutes]);
 
@@ -627,7 +684,7 @@ export default function ComparePage() {
                 {/* Dropdown */}
                 {showDropdown && filteredInstitutes.length > 0 && (
                   <div className="absolute z-20 w-full mt-1 bg-white border-4 border-black max-h-60 overflow-auto shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                    {filteredInstitutes.map((inst) => (
+                    {filteredInstitutes.map((inst: JosaaInstitute) => (
                       <button
                         key={inst.id}
                         onClick={() => handleAddInstitute(inst)}
@@ -1014,7 +1071,7 @@ export default function ComparePage() {
                                           selectedInstitutes.findIndex(
                                             (i) =>
                                               i.short_name ===
-                                              bestInstitute.name
+                                              bestInstitute.name,
                                           ) % COLORS.length
                                         ] + "40",
                                       color:
@@ -1022,7 +1079,7 @@ export default function ComparePage() {
                                           selectedInstitutes.findIndex(
                                             (i) =>
                                               i.short_name ===
-                                              bestInstitute.name
+                                              bestInstitute.name,
                                           ) % COLORS.length
                                         ],
                                     }}
@@ -1056,7 +1113,7 @@ export default function ComparePage() {
                     width="100%"
                     height={Math.max(
                       400,
-                      filteredComparisonData.slice(0, 20).length * 35
+                      filteredComparisonData.slice(0, 20).length * 35,
                     )}
                   >
                     <BarChart
@@ -1067,7 +1124,7 @@ export default function ComparePage() {
                       <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
                       <XAxis
                         type="number"
-                        tickFormatter={(v) => v.toLocaleString()}
+                        tickFormatter={(v: number) => v.toLocaleString()}
                         tick={{ fontWeight: 600 }}
                       />
                       <YAxis

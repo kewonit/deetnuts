@@ -1,13 +1,18 @@
 import Link from "next/link";
 import { SubmitButton } from "@/app/login/sumbit-button";
 import { Input } from "@/components/ui/input";
-import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot, } from '@/components/ui/input-otp'
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 import { verifyOtp } from "@/app/login/actions";
 
 export default async function OtpForm({ searchParams }: any) {
-  const params = await searchParams
-  const email = params?.email || ''
-  const redirectTo = params?.redirect || '/account'
+  const params = await searchParams;
+  const email = params?.email || "";
+  const redirectTo = params?.redirect || "/account";
 
   return (
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2 mx-auto pt-28 min-h-screen">
@@ -41,8 +46,12 @@ export default async function OtpForm({ searchParams }: any) {
       <form className="animate-in flex-1 flex flex-col w-full justify-center gap-4 text-foreground">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold">Enter OTP</h1>
-          <p className="text-muted-foreground">An OTP has been sent to your email address.</p>
-          <p className="text-muted-foreground">(gib it a few seconds pls, also check the spam folder thanks)</p>
+          <p className="text-muted-foreground">
+            An OTP has been sent to your email address.
+          </p>
+          <p className="text-muted-foreground">
+            (gib it a few seconds pls, also check the spam folder thanks)
+          </p>
         </div>
 
         <input type="hidden" name="email" value={email} />

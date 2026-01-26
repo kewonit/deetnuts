@@ -15,6 +15,7 @@ import {
   parseAsArrayOf,
   parseAsStringLiteral,
 } from "nuqs";
+import dynamic from "next/dynamic";
 import {
   Menu,
   X,
@@ -36,10 +37,24 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { FilterSidebar } from "./components/FilterSidebar";
 import { TopToolbar } from "./components/TopToolbar";
-import { DataTable } from "./components/DataTable";
 import { useCutoffData } from "./hooks/use-cutoff-data";
 import { getDisplayNameForRound } from "./constants";
 import { CutoffRecord } from "./types";
+
+// Dynamic import for heavy DataTable component - reduces initial bundle
+const DataTable = dynamic(
+  () => import("./components/DataTable").then((mod) => mod.DataTable),
+  {
+    loading: () => (
+      <div className="space-y-3 animate-pulse">
+        {Array.from({ length: 10 }).map((_, i) => (
+          <Skeleton key={i} className="h-12 w-full" />
+        ))}
+      </div>
+    ),
+    ssr: false,
+  },
+);
 
 // Default visible columns
 const DEFAULT_COLUMNS = [
@@ -77,13 +92,13 @@ function StatsCard({
       className={cn(
         "flex items-center gap-3 px-4 py-3 rounded-xl border-2",
         "bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]",
-        color
+        color,
       )}
     >
       <div
         className={cn(
           "p-2 rounded-lg",
-          color.replace("border-", "bg-").replace("-500", "-100")
+          color.replace("border-", "bg-").replace("-500", "-100"),
         )}
       >
         <Icon className={cn("h-4 w-4", color.replace("border-", "text-"))} />
@@ -103,55 +118,55 @@ function StateCutoffsContent() {
   // URL State with nuqs
   const [percentile, setPercentile] = useQueryState(
     "percentile",
-    parseAsString.withDefault("")
+    parseAsString.withDefault(""),
   );
   const [search, setSearch] = useQueryState(
     "search",
-    parseAsString.withDefault("")
+    parseAsString.withDefault(""),
   );
   const [year, setYear] = useQueryState(
     "year",
-    parseAsInteger.withDefault(2025)
+    parseAsInteger.withDefault(2025),
   );
   const [round, setRound] = useQueryState(
     "round",
-    parseAsInteger.withDefault(1)
+    parseAsInteger.withDefault(1),
   );
   const [categories, setCategories] = useQueryState(
     "categories",
-    parseAsArrayOf(parseAsString, ",").withDefault([])
+    parseAsArrayOf(parseAsString, ",").withDefault([]),
   );
   const [courses, setCourses] = useQueryState(
     "courses",
-    parseAsArrayOf(parseAsString, ",").withDefault([])
+    parseAsArrayOf(parseAsString, ",").withDefault([]),
   );
   const [statuses, setStatuses] = useQueryState(
     "statuses",
-    parseAsArrayOf(parseAsString, ",").withDefault([])
+    parseAsArrayOf(parseAsString, ",").withDefault([]),
   );
   const [universities, setUniversities] = useQueryState(
     "universities",
-    parseAsArrayOf(parseAsString, ",").withDefault([])
+    parseAsArrayOf(parseAsString, ",").withDefault([]),
   );
   const [scoreMode, setScoreMode] = useQueryState(
     "scoreMode",
     parseAsStringLiteral(["percentile", "rank"] as const).withDefault(
-      "percentile"
-    )
+      "percentile",
+    ),
   );
   const [rank, setRank] = useQueryState("rank", parseAsString.withDefault(""));
   const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [perPage, setPerPage] = useQueryState(
     "perPage",
-    parseAsInteger.withDefault(25)
+    parseAsInteger.withDefault(25),
   );
   const [sortBy, setSortBy] = useQueryState(
     "sortBy",
-    parseAsString.withDefault("cutoff_score")
+    parseAsString.withDefault("cutoff_score"),
   );
   const [sortOrder, setSortOrder] = useQueryState(
     "sortOrder",
-    parseAsStringLiteral(["asc", "desc"] as const).withDefault("desc")
+    parseAsStringLiteral(["asc", "desc"] as const).withDefault("desc"),
   );
   const [density, setDensity] = useQueryState(
     "density",
@@ -159,7 +174,7 @@ function StateCutoffsContent() {
       "compact",
       "comfortable",
       "spacious",
-    ] as const).withDefault("comfortable")
+    ] as const).withDefault("comfortable"),
   );
 
   // Local state for column visibility
@@ -324,7 +339,7 @@ function StateCutoffsContent() {
     (newPage: number) => {
       setPage(newPage);
     },
-    [setPage]
+    [setPage],
   );
 
   const handlePerPageChange = useCallback(
@@ -332,7 +347,7 @@ function StateCutoffsContent() {
       setPerPage(newPerPage);
       setPage(1);
     },
-    [setPerPage, setPage]
+    [setPerPage, setPage],
   );
 
   const handleSortChange = useCallback(
@@ -340,13 +355,13 @@ function StateCutoffsContent() {
       setSortBy(newSortBy);
       setSortOrder(newSortOrder);
     },
-    [setSortBy, setSortOrder]
+    [setSortBy, setSortOrder],
   );
 
   const handleRemoveFilter = useCallback(
     (
       type: "categories" | "courses" | "statuses" | "universities",
-      value: string
+      value: string,
     ) => {
       switch (type) {
         case "categories":
@@ -374,7 +389,7 @@ function StateCutoffsContent() {
       setStatuses,
       setUniversities,
       setPage,
-    ]
+    ],
   );
 
   // Memoized handlers for filter sidebar to prevent re-renders
@@ -383,14 +398,14 @@ function StateCutoffsContent() {
       setPercentile(v || null);
       setPage(1);
     },
-    [setPercentile, setPage]
+    [setPercentile, setPage],
   );
   const handleSearchChange = useCallback(
     (v: string) => {
       setSearch(v || null);
       setPage(1);
     },
-    [setSearch, setPage]
+    [setSearch, setPage],
   );
   const handleYearChange = useCallback(
     (v: number) => {
@@ -398,7 +413,7 @@ function StateCutoffsContent() {
       setPage(1);
       clearCache();
     },
-    [setYear, setPage, clearCache]
+    [setYear, setPage, clearCache],
   );
   const handleRoundChange = useCallback(
     (v: number) => {
@@ -406,60 +421,60 @@ function StateCutoffsContent() {
       setPage(1);
       clearCache();
     },
-    [setRound, setPage, clearCache]
+    [setRound, setPage, clearCache],
   );
   const handleCategoriesChange = useCallback(
     (v: string[]) => {
       setCategories(v.length > 0 ? v : null);
       setPage(1);
     },
-    [setCategories, setPage]
+    [setCategories, setPage],
   );
   const handleCoursesChange = useCallback(
     (v: string[]) => {
       setCourses(v.length > 0 ? v : null);
       setPage(1);
     },
-    [setCourses, setPage]
+    [setCourses, setPage],
   );
   const handleStatusesChange = useCallback(
     (v: string[]) => {
       setStatuses(v.length > 0 ? v : null);
       setPage(1);
     },
-    [setStatuses, setPage]
+    [setStatuses, setPage],
   );
   const handleUniversitiesChange = useCallback(
     (v: string[]) => {
       setUniversities(v.length > 0 ? v : null);
       setPage(1);
     },
-    [setUniversities, setPage]
+    [setUniversities, setPage],
   );
   const handleScoreModeChange = useCallback(
     (mode: "percentile" | "rank") => {
       setScoreMode(mode);
       setPage(1);
     },
-    [setScoreMode, setPage]
+    [setScoreMode, setPage],
   );
   const handleRankChange = useCallback(
     (v: string) => {
       setRank(v || null);
       setPage(1);
     },
-    [setRank, setPage]
+    [setRank, setPage],
   );
   const handleToolbarSearchChange = useCallback(
     (v: string) => {
       setSearch(v || null);
       setPage(1);
     },
-    [setSearch, setPage]
+    [setSearch, setPage],
   );
   const handleDensityChange = useCallback(
     (v: "compact" | "comfortable" | "spacious") => setDensity(v),
-    [setDensity]
+    [setDensity],
   );
 
   // Filter sidebar props - memoized
@@ -511,7 +526,7 @@ function StateCutoffsContent() {
       handleRankChange,
       handleClearAll,
       activeFilterCount,
-    ]
+    ],
   );
 
   // Active filters for toolbar - memoized
@@ -522,7 +537,7 @@ function StateCutoffsContent() {
       statuses,
       universities,
     }),
-    [categories, courses, statuses, universities]
+    [categories, courses, statuses, universities],
   );
 
   return (
@@ -537,7 +552,7 @@ function StateCutoffsContent() {
                 "bg-purple-600 text-white hover:bg-purple-700",
                 "shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]",
                 "border-2 border-black",
-                "flex items-center gap-2"
+                "flex items-center gap-2",
               )}
             >
               <Menu className="h-5 w-5" />
@@ -616,8 +631,8 @@ function StateCutoffsContent() {
                         ? `Rank ${rank}`
                         : "Not set"
                       : percentile
-                      ? `${percentile}%`
-                      : "Not set"
+                        ? `${percentile}%`
+                        : "Not set"
                   }
                   color="border-orange-500"
                 />

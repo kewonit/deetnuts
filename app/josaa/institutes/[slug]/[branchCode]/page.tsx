@@ -103,14 +103,17 @@ export default async function BranchPage({ params, searchParams }: PageProps) {
   }
 
   // Group trends by category
-  const trendsByCategory = trends.reduce((acc, trend) => {
-    const key = `${trend.category}-${trend.gender}`;
-    if (!acc[key]) {
-      acc[key] = [];
-    }
-    acc[key].push(trend);
-    return acc;
-  }, {} as Record<string, typeof trends>);
+  const trendsByCategory = trends.reduce(
+    (acc, trend) => {
+      const key = `${trend.category}-${trend.gender}`;
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key].push(trend);
+      return acc;
+    },
+    {} as Record<string, typeof trends>,
+  );
 
   // Get unique years and categories
   const years = [...new Set(trends.map((t) => t.year))].sort((a, b) => b - a);
@@ -187,7 +190,8 @@ export default async function BranchPage({ params, searchParams }: PageProps) {
             {branch.degree_type && (
               <>
                 Degree:{" "}
-                <span className="font-semibold">{branch.degree_type}</span> •{" "}
+                <span className="font-semibold">{branch.degree_type}</span>{" "}
+                •{" "}
               </>
             )}
             Duration:{" "}
@@ -199,7 +203,7 @@ export default async function BranchPage({ params, searchParams }: PageProps) {
           {/* Specializations */}
           {(() => {
             const specs = parseSpecializations(branch.specializations).filter(
-              (s) => !s.toLowerCase().includes("any of the listed")
+              (s) => !s.toLowerCase().includes("any of the listed"),
             );
             if (specs.length === 0) return null;
             return (

@@ -1,6 +1,6 @@
-import CollegeGrid from '@/components/CollegeGrid';
-import Link from 'next/link';
-import { getCollegesData } from '@/lib/college-data';
+import CollegeGrid from "@/components/CollegeGrid";
+import Link from "next/link";
+import { getCollegesData } from "@/lib/college-data";
 
 export default async function CollegesPage() {
   const colleges = await getCollegesData();
@@ -11,9 +11,19 @@ export default async function CollegesPage() {
         {/* Breadcrumb */}
         <nav className="mb-8">
           <div className="flex items-center space-x-2 text-sm font-base">
-            <Link href="/" className="hover:text-main transition-colors font-medium">Home</Link>
+            <Link
+              href="/"
+              className="hover:text-main transition-colors font-medium"
+            >
+              Home
+            </Link>
             <span className="font-bold">🎀</span>
-            <Link href="/mht-cet" className="hover:text-main transition-colors font-medium">MHT-CET</Link>
+            <Link
+              href="/mht-cet"
+              className="hover:text-main transition-colors font-medium"
+            >
+              MHT-CET
+            </Link>
             <span className="font-bold">🎀</span>
             <span className="text-black font-heading">Colleges</span>
           </div>
@@ -21,7 +31,9 @@ export default async function CollegesPage() {
 
         {/* Header Section */}
         <div className="bg-white border-4 border-black rounded-base shadow-brutal p-8 sm:p-12 mb-12 text-center">
-          <h1 className="text-4xl md:text-6xl font-heading mb-3 text-black">MHT-CET Colleges</h1>
+          <h1 className="text-4xl md:text-6xl font-heading mb-3 text-black">
+            MHT-CET Colleges
+          </h1>
           <p className="text-lg md:text-xl text-black/80 mb-2 leading-relaxed font-base">
             Browse colleges and seat matrices for MHT-CET counseling.
           </p>

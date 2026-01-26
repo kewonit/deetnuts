@@ -67,7 +67,7 @@ interface TopToolbarProps {
   };
   onRemoveFilter: (
     type: "categories" | "courses" | "statuses" | "universities",
-    value: string
+    value: string,
   ) => void;
 
   // Export
@@ -162,7 +162,7 @@ export const TopToolbar = memo(function TopToolbar({
       const url = URL.createObjectURL(blob);
 
       const fileName = `mht-cet-cutoffs-${year}-${getDisplayNameForRound(
-        round
+        round,
       ).replace(/\s+/g, "-")}-page-${currentPage}.csv`;
 
       link.setAttribute("href", url);
@@ -295,7 +295,7 @@ export const TopToolbar = memo(function TopToolbar({
                         ? sortOrder === "asc"
                           ? "desc"
                           : "asc"
-                        : "desc"
+                        : "desc",
                     )
                   }
                   className="flex items-center justify-between"
@@ -362,7 +362,7 @@ export const TopToolbar = memo(function TopToolbar({
                       onColumnVisibilityChange([...visibleColumns, col.value]);
                     } else {
                       onColumnVisibilityChange(
-                        visibleColumns.filter((c) => c !== col.value)
+                        visibleColumns.filter((c) => c !== col.value),
                       );
                     }
                   }}

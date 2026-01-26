@@ -1,51 +1,51 @@
-'use client'
-import ReactDom from 'react-dom'
-import { useEffect, useState, useRef, type JSX } from 'react';
+"use client";
+import ReactDom from "react-dom";
+import { useEffect, useState, useRef, type JSX } from "react";
 
 type Props = {
-  active: boolean
-  setActive: React.Dispatch<React.SetStateAction<boolean>>
-  children: string | JSX.Element | JSX.Element[]
-}
+  active: boolean;
+  setActive: React.Dispatch<React.SetStateAction<boolean>>;
+  children: string | JSX.Element | JSX.Element[];
+};
 
 export default function Drawer({ active, setActive, children }: Props) {
-  const [isVisible, setIsVisible] = useState(false)
-  const drawerContainerRef = useRef<HTMLDivElement | null>(null)
+  const [isVisible, setIsVisible] = useState(false);
+  const drawerContainerRef = useRef<HTMLDivElement | null>(null);
 
   const closeDrawer = () => {
-    setIsVisible(false)
+    setIsVisible(false);
     setTimeout(() => {
-      setActive(false)
-    }, 300)
-  }
+      setActive(false);
+    }, 300);
+  };
 
   useEffect(() => {
     if (active) {
-      setIsVisible(true)
+      setIsVisible(true);
     }
-  }, [active])
+  }, [active]);
 
   useEffect(() => {
-    const container = document.createElement('div')
-    container.id = 'drawer'
-    drawerContainerRef.current = container
-    document.body.appendChild(container)
+    const container = document.createElement("div");
+    container.id = "drawer";
+    drawerContainerRef.current = container;
+    document.body.appendChild(container);
 
     return () => {
       if (container && container.parentNode === document.body) {
-        document.body.removeChild(container)
+        document.body.removeChild(container);
       }
-    }
-  }, [])
+    };
+  }, []);
 
-  if (!active) return null
+  if (!active) return null;
 
   return drawerContainerRef.current
     ? ReactDom.createPortal(
         <div
           role="dialog"
           aria-modal="true"
-          data-visible={isVisible ? 'true' : 'false'}
+          data-visible={isVisible ? "true" : "false"}
           onClick={closeDrawer}
           className="fixed left-0 group top-0 z-50 flex h-[100dvh] data-[visible=true]:opacity-100 data-[visible=true]:visible data-[visible=false]:opacity-0 data-[visible=false]:invisible w-screen items-start justify-start bg-gray-500/50 transition-all duration-300"
         >
@@ -56,7 +56,7 @@ export default function Drawer({ active, setActive, children }: Props) {
             {children}
           </div>
         </div>,
-        drawerContainerRef.current
+        drawerContainerRef.current,
       )
-    : null
+    : null;
 }

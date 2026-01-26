@@ -29,7 +29,23 @@ import {
   ArrowUpDown,
   X,
   Loader2,
+  LayoutGrid,
+  TableIcon,
+  BarChart3,
 } from "lucide-react";
+import {
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Cell,
+  Legend,
+} from "recharts";
 import { JosaaCutoffExpanded, JosaaBranch } from "@/lib/types/josaa";
 import { formatBranchCode } from "@/lib/formatBranchCode";
 
@@ -73,44 +89,73 @@ export default function JosaaCutoffsTable({
   // URL state management with nuqs
   const [year, setYear] = useQueryState(
     "year",
-    parseAsInteger.withDefault(defaultYear || yearsAvailable[0])
+    parseAsInteger.withDefault(defaultYear || yearsAvailable[0]),
   );
   const [category, setCategory] = useQueryState(
     "category",
-    parseAsString.withDefault(defaultCategory)
+    parseAsString.withDefault(defaultCategory),
   );
   const [gender, setGender] = useQueryState(
     "gender",
-    parseAsString.withDefault(defaultGender)
+    parseAsString.withDefault(defaultGender),
   );
   const [search, setSearch] = useQueryState("q", parseAsString.withDefault(""));
 
   // Local state
-  const [round, setRound] = useState<number | "all">("all");
   const [sortField, setSortField] = useState<SortField>("closing");
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
   const [expandedBranch, setExpandedBranch] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<"chart" | "table">("chart");
+  const [mounted, setMounted] = useState(false);
+  const [selectedChartBranch, setSelectedChartBranch] = useState<string>("");
+
+  // Ensure component is mounted before rendering charts
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Dynamic cutoffs state - for when year changes and we need to fetch new data
   const [cutoffs, setCutoffs] = useState<JosaaCutoffExpanded[]>(initialCutoffs);
   const [isLoading, setIsLoading] = useState(false);
   const [loadedYear, setLoadedYear] = useState<number>(
-    defaultYear || yearsAvailable[0]
+    defaultYear || yearsAvailable[0],
   );
 
-  // Fetch cutoffs when year changes (if we have instituteId)
+  // Fetch all cutoffs for a year - handles pagination to get complete data
   const fetchCutoffsForYear = useCallback(
     async (newYear: number) => {
       if (!instituteId || newYear === loadedYear) return;
 
       setIsLoading(true);
       try {
+        // First request - get first page and total count
         const response = await fetch(
-          `/api/josaa/cutoffs?instituteId=${instituteId}&year=${newYear}&perPage=500`
+          `/api/josaa/cutoffs?instituteId=${instituteId}&year=${newYear}&perPage=1000`,
         );
         if (response.ok) {
           const data = await response.json();
-          setCutoffs(data.items || []);
+          let allCutoffs = data.items || [];
+
+          // If there are more pages, fetch them all
+          const totalPages = data.totalPages || 1;
+          if (totalPages > 1) {
+            const pagePromises = [];
+            for (let page = 2; page <= totalPages; page++) {
+              pagePromises.push(
+                fetch(
+                  `/api/josaa/cutoffs?instituteId=${instituteId}&year=${newYear}&perPage=1000&page=${page}`,
+                )
+                  .then((res) => res.json())
+                  .then((d) => d.items || []),
+              );
+            }
+            const additionalPages = await Promise.all(pagePromises);
+            additionalPages.forEach((items) => {
+              allCutoffs = [...allCutoffs, ...items];
+            });
+          }
+
+          setCutoffs(allCutoffs);
           setLoadedYear(newYear);
         }
       } catch (error) {
@@ -119,7 +164,7 @@ export default function JosaaCutoffsTable({
         setIsLoading(false);
       }
     },
-    [instituteId, loadedYear]
+    [instituteId, loadedYear],
   );
 
   // Handle year change
@@ -131,7 +176,7 @@ export default function JosaaCutoffsTable({
         fetchCutoffsForYear(yearNum);
       }
     },
-    [setYear, instituteId, loadedYear, fetchCutoffsForYear]
+    [setYear, instituteId, loadedYear, fetchCutoffsForYear],
   );
 
   // Create branch lookup map by original_id (12-char IDs from data files)
@@ -149,20 +194,35 @@ export default function JosaaCutoffsTable({
     return map;
   }, [branches]);
 
-  // Get available rounds for selected year
-  const availableRounds = useMemo(() => {
+  // Get available rounds for selected year with current filters (for accurate info display)
+  const availableRoundsInfo = useMemo(() => {
     const rounds = new Set<number>();
-    cutoffs.filter((c) => c.year === year).forEach((c) => rounds.add(c.round));
-    return Array.from(rounds).sort((a, b) => a - b);
-  }, [cutoffs, year]);
+    let maxRound = 0;
+    cutoffs
+      .filter((c) => {
+        if (c.year !== year) return false;
+        if (c.category !== category) return false;
+        if (c.gender !== gender) return false;
+        return true;
+      })
+      .forEach((c) => {
+        rounds.add(c.round);
+        if (c.round > maxRound) maxRound = c.round;
+      });
+    return {
+      uniqueRounds: Array.from(rounds).sort((a, b) => a - b),
+      count: rounds.size,
+      max: maxRound,
+    };
+  }, [cutoffs, year, category, gender]);
 
-  // Filter and sort cutoffs
+  // Filter and sort cutoffs - now shows ALL rounds for the selected year
   const filteredCutoffs = useMemo(() => {
-    let filtered = cutoffs.filter((c) => {
+    const filtered = cutoffs.filter((c) => {
       if (c.year !== year) return false;
       if (c.category !== category) return false;
       if (c.gender !== gender) return false;
-      if (round !== "all" && c.round !== round) return false;
+      // Show all rounds - no round filtering
 
       // ALWAYS filter out cutoffs without matching branches
       const branchId = (c as any).branch_id || c.branch;
@@ -188,31 +248,24 @@ export default function JosaaCutoffsTable({
       return true;
     });
 
-    // If showing all rounds, group by branch and take last round
-    if (round === "all") {
-      const branchRoundMap = new Map<string, JosaaCutoffExpanded>();
-      filtered.forEach((c) => {
-        const key = (c as any).branch_id || c.branch;
-        const existing = branchRoundMap.get(key);
-        if (!existing || c.round > existing.round) {
-          branchRoundMap.set(key, c);
-        }
-      });
-      filtered = Array.from(branchRoundMap.values());
-    }
-
-    // Sort
+    // Sort by branch first, then by round (ascending) to show progression
+    // This ensures all rounds for a branch are grouped together - primary by selected field, secondary by round for consistency
     filtered.sort((a, b) => {
       let comparison = 0;
 
       switch (sortField) {
-        case "branch":
+        case "branch": {
           const branchIdA = (a as any).branch_id || a.branch;
           const branchIdB = (b as any).branch_id || b.branch;
           const branchA = branchMap.get(branchIdA)?.name || "";
           const branchB = branchMap.get(branchIdB)?.name || "";
           comparison = branchA.localeCompare(branchB);
+          // Secondary sort by round (ascending) if same branch
+          if (comparison === 0) {
+            comparison = a.round - b.round;
+          }
           break;
+        }
         case "opening":
           comparison = a.opening_rank - b.opening_rank;
           break;
@@ -233,11 +286,11 @@ export default function JosaaCutoffsTable({
     year,
     category,
     gender,
-    round,
     search,
     sortField,
     sortDirection,
     branchMap,
+    branches,
   ]);
 
   // Get all rounds for expanded branch
@@ -248,7 +301,7 @@ export default function JosaaCutoffsTable({
           ((c as any).branch_id === branchId || c.branch === branchId) &&
           c.year === year &&
           c.category === category &&
-          c.gender === gender
+          c.gender === gender,
       )
       .sort((a, b) => a.round - b.round);
   };
@@ -266,7 +319,6 @@ export default function JosaaCutoffsTable({
   // Clear all filters
   const clearFilters = () => {
     setSearch("");
-    setRound("all");
     setCategory(defaultCategory);
     setGender(defaultGender);
   };
@@ -281,15 +333,164 @@ export default function JosaaCutoffsTable({
     );
   };
 
+  // Get all rounds for a branch for the card view
+  const getBranchRounds = useCallback(
+    (branchId: string) => {
+      return cutoffs
+        .filter(
+          (c) =>
+            ((c as any).branch_id === branchId || c.branch === branchId) &&
+            c.year === year &&
+            c.category === category &&
+            c.gender === gender,
+        )
+        .sort((a, b) => a.round - b.round);
+    },
+    [cutoffs, year, category, gender],
+  );
+
+  // Group cutoffs by branch for card view
+  const groupedByBranch = useMemo(() => {
+    const branchCutoffs = new Map<
+      string,
+      {
+        branch: JosaaBranch | undefined;
+        cutoffs: JosaaCutoffExpanded[];
+        latestRound: JosaaCutoffExpanded | null;
+      }
+    >();
+
+    cutoffs.forEach((c) => {
+      if (c.year !== year || c.category !== category || c.gender !== gender)
+        return;
+
+      const branchId = (c as any).branch_id || c.branch;
+      let branch = branchMap.get(branchId);
+
+      if (!branch && c.branch_code) {
+        branch = branches.find((b) => b.short_code === c.branch_code);
+      }
+
+      if (!branch) return;
+
+      // Search filter
+      if (search) {
+        const searchLower = search.toLowerCase();
+        if (
+          !branch.name.toLowerCase().includes(searchLower) &&
+          !branch.short_code.toLowerCase().includes(searchLower)
+        ) {
+          return;
+        }
+      }
+
+      if (!branchCutoffs.has(branchId)) {
+        branchCutoffs.set(branchId, { branch, cutoffs: [], latestRound: null });
+      }
+
+      const entry = branchCutoffs.get(branchId)!;
+      entry.cutoffs.push(c);
+
+      if (!entry.latestRound || c.round > entry.latestRound.round) {
+        entry.latestRound = c;
+      }
+    });
+
+    // Sort by closing rank of latest round
+    return Array.from(branchCutoffs.entries()).sort((a, b) => {
+      const aRank = a[1].latestRound?.closing_rank ?? Infinity;
+      const bRank = b[1].latestRound?.closing_rank ?? Infinity;
+      return sortDirection === "asc" ? aRank - bRank : bRank - aRank;
+    });
+  }, [
+    cutoffs,
+    year,
+    category,
+    gender,
+    search,
+    branchMap,
+    branches,
+    sortDirection,
+  ]);
+
+  // Set default selected branch for chart when data changes
+  useEffect(() => {
+    if (groupedByBranch.length > 0 && !selectedChartBranch) {
+      // Default to first branch (usually CSE or best closing rank)
+      setSelectedChartBranch(groupedByBranch[0][0]);
+    }
+  }, [groupedByBranch, selectedChartBranch]);
+
+  // Get chart data for selected branch - all rounds
+  const chartData = useMemo(() => {
+    if (!selectedChartBranch) return [];
+
+    const branchData = groupedByBranch.find(
+      ([id]) => id === selectedChartBranch,
+    );
+    if (!branchData) return [];
+
+    // Deduplicate by round - keep only one entry per round
+    const roundMap = new Map<number, JosaaCutoffExpanded>();
+    branchData[1].cutoffs.forEach((c) => {
+      // Keep the first entry for each round (or could update to keep latest)
+      if (!roundMap.has(c.round)) {
+        roundMap.set(c.round, c);
+      }
+    });
+
+    return Array.from(roundMap.values())
+      .sort((a, b) => a.round - b.round)
+      .map((c) => ({
+        round: `R${c.round}`,
+        roundNum: c.round,
+        openingRank: c.opening_rank,
+        closingRank: c.closing_rank,
+      }));
+  }, [selectedChartBranch, groupedByBranch]);
+
+  // Get selected branch info
+  const selectedBranchInfo = useMemo(() => {
+    const branchData = groupedByBranch.find(
+      ([id]) => id === selectedChartBranch,
+    );
+    return branchData?.[1].branch;
+  }, [selectedChartBranch, groupedByBranch]);
+
   return (
     <Card className="border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white overflow-hidden transition-all duration-300">
       <CardHeader className="border-b-4 border-black bg-gradient-to-r from-blue-100 to-blue-50">
         <CardTitle className="flex items-center justify-between flex-wrap gap-4">
-          <span className="flex items-center">
-            <Filter className="w-5 h-5 mr-2" />
+          <span className="flex items-center gap-3">
+            <Filter className="w-5 h-5" />
             <span className="hidden sm:inline">Cutoffs for</span>
             <span className="sm:hidden">Year</span>
-            <span className="ml-1 font-bold text-blue-700">{year}</span>
+            <span className="font-bold text-blue-700">{year}</span>
+            {/* View Mode Toggle */}
+            <div className="hidden sm:flex items-center gap-1 ml-4 bg-white rounded-lg border-2 border-black p-0.5">
+              <button
+                onClick={() => setViewMode("chart")}
+                className={`p-1.5 rounded transition-all ${
+                  viewMode === "chart"
+                    ? "bg-blue-500 text-white"
+                    : "hover:bg-gray-100"
+                }`}
+                title="Chart View"
+              >
+                <BarChart3 className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setViewMode("table")}
+                className={`p-1.5 rounded transition-all ${
+                  viewMode === "table"
+                    ? "bg-blue-500 text-white"
+                    : "hover:bg-gray-100"
+                }`}
+                title="Table View"
+              >
+                <TableIcon className="w-4 h-4" />
+              </button>
+            </div>
           </span>
           <Badge
             variant="neutral"
@@ -302,8 +503,28 @@ export default function JosaaCutoffsTable({
       </CardHeader>
 
       <CardContent className="p-4 sm:p-6">
+        {/* Info Banner - Shows rounds info for current filters */}
+        {availableRoundsInfo.count > 0 && (
+          <div className="mb-4 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border-2 border-blue-200 flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-700">
+                📊 Showing{" "}
+                <strong className="text-blue-700">
+                  {availableRoundsInfo.count === 1
+                    ? `Round ${availableRoundsInfo.uniqueRounds[0]}`
+                    : `all ${availableRoundsInfo.count} rounds (R${availableRoundsInfo.uniqueRounds[0]}-R${availableRoundsInfo.max})`}
+                </strong>{" "}
+                for {year} • {category} • {gender}
+              </span>
+            </div>
+            <Badge className="bg-blue-100 border border-blue-300 text-blue-800">
+              {filteredCutoffs.length} cutoff entries
+            </Badge>
+          </div>
+        )}
+
         {/* Filters Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
           <div>
             <label className="text-xs sm:text-sm font-semibold mb-1.5 sm:mb-2 block text-gray-700">
               Year
@@ -363,26 +584,6 @@ export default function JosaaCutoffsTable({
           </div>
 
           <div>
-            <label className="text-sm font-semibold mb-2 block">Round</label>
-            <Select
-              value={round.toString()}
-              onValueChange={(v) => setRound(v === "all" ? "all" : parseInt(v))}
-            >
-              <SelectTrigger className="border-2 border-black">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Last Round</SelectItem>
-                {availableRounds.map((r) => (
-                  <SelectItem key={r} value={r.toString()}>
-                    Round {r}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
             <label className="text-sm font-semibold mb-2 block">Search</label>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
@@ -406,10 +607,7 @@ export default function JosaaCutoffsTable({
         </div>
 
         {/* Active filters */}
-        {(search ||
-          round !== "all" ||
-          category !== "OPEN" ||
-          gender !== "Gender-Neutral") && (
+        {(search || category !== "OPEN" || gender !== "Gender-Neutral") && (
           <div className="flex items-center gap-2 mb-4 flex-wrap">
             <span className="text-sm text-gray-600">Active filters:</span>
             {search && (
@@ -437,14 +635,6 @@ export default function JosaaCutoffsTable({
                 className="bg-purple-100 border border-black"
               >
                 {gender}
-              </Badge>
-            )}
-            {round !== "all" && (
-              <Badge
-                variant="neutral"
-                className="bg-orange-100 border border-black"
-              >
-                Round {round}
               </Badge>
             )}
             <Button
@@ -483,30 +673,187 @@ export default function JosaaCutoffsTable({
         )}
 
         {/* Empty State - Enhanced */}
-        {!isLoading && filteredCutoffs.length === 0 && (
-          <div className="text-center py-16 bg-gradient-to-b from-gray-50 to-white rounded-xl border-2 border-dashed border-gray-300 animate-in fade-in duration-300">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-              <Search className="w-8 h-8 text-gray-400" />
+        {!isLoading &&
+          filteredCutoffs.length === 0 &&
+          groupedByBranch.length === 0 && (
+            <div className="text-center py-16 bg-gradient-to-b from-gray-50 to-white rounded-xl border-2 border-dashed border-gray-300 animate-in fade-in duration-300">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+                <Search className="w-8 h-8 text-gray-400" />
+              </div>
+              <p className="text-gray-600 text-lg font-semibold">
+                No cutoffs found
+              </p>
+              <p className="text-sm text-gray-400 mt-2 max-w-md mx-auto">
+                Try adjusting your filters or search for a different branch
+              </p>
+              <Button
+                variant="noShadow"
+                onClick={clearFilters}
+                className="mt-4 border-2 border-black hover:bg-blue-50 transition-all"
+              >
+                <X className="w-4 h-4 mr-2" />
+                Clear all filters
+              </Button>
             </div>
-            <p className="text-gray-600 text-lg font-semibold">
-              No cutoffs found
-            </p>
-            <p className="text-sm text-gray-400 mt-2 max-w-md mx-auto">
-              Try adjusting your filters or search for a different branch
-            </p>
-            <Button
-              variant="noShadow"
-              onClick={clearFilters}
-              className="mt-4 border-2 border-black hover:bg-blue-50 transition-all"
-            >
-              <X className="w-4 h-4 mr-2" />
-              Clear all filters
-            </Button>
-          </div>
-        )}
+          )}
 
-        {/* Table - Enhanced */}
-        {!isLoading && filteredCutoffs.length > 0 && (
+        {/* Chart View - Line Graph for selected branch */}
+        {!isLoading &&
+          mounted &&
+          viewMode === "chart" &&
+          groupedByBranch.length > 0 && (
+            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 space-y-4">
+              {/* Branch Selector */}
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                <div className="flex-1">
+                  <label className="text-sm font-semibold mb-2 block text-gray-700">
+                    Select Branch
+                  </label>
+                  <Select
+                    value={selectedChartBranch}
+                    onValueChange={setSelectedChartBranch}
+                  >
+                    <SelectTrigger className="border-2 border-black">
+                      <SelectValue placeholder="Select a branch" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {groupedByBranch.map(([branchId, { branch }]) => (
+                        <SelectItem key={branchId} value={branchId}>
+                          {branch?.name || branchId} (
+                          {branch?.degree_type || "B.Tech"})
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {selectedBranchInfo && (
+                  <div className="flex items-center gap-2">
+                    <Badge className="bg-blue-100 border-2 border-black">
+                      {selectedBranchInfo.degree_type}
+                    </Badge>
+                    <Badge className="bg-gray-100 border-2 border-black">
+                      {chartData.length} rounds
+                    </Badge>
+                  </div>
+                )}
+              </div>
+
+              {/* Chart Container */}
+              <div className="h-[400px] w-full bg-gradient-to-br from-sky-50 to-blue-50 rounded-xl border-2 border-gray-200 p-4">
+                {chartData.length > 0 ? (
+                  <ResponsiveContainer width="100%" height={350}>
+                    <LineChart
+                      data={chartData}
+                      margin={{ top: 20, right: 30, left: 60, bottom: 20 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+                      <XAxis
+                        dataKey="round"
+                        stroke="#333"
+                        tick={{ fontSize: 12, fontWeight: 600 }}
+                      />
+                      <YAxis
+                        stroke="#333"
+                        reversed={true}
+                        tickFormatter={(value) => value.toLocaleString()}
+                        label={{
+                          value: "Rank (lower is better)",
+                          angle: -90,
+                          position: "insideLeft",
+                          offset: -45,
+                          style: {
+                            textAnchor: "middle",
+                            fontWeight: 600,
+                            fontSize: 12,
+                          },
+                        }}
+                      />
+                      <Tooltip
+                        content={({ active, payload, label }) => {
+                          if (active && payload && payload.length) {
+                            return (
+                              <div className="bg-white p-4 rounded-lg border-2 border-black shadow-lg">
+                                <p className="font-bold text-sm mb-2">
+                                  {label}
+                                </p>
+                                <div className="space-y-1">
+                                  {payload.map((entry: any, index: number) => (
+                                    <p
+                                      key={index}
+                                      className="flex items-center gap-2"
+                                    >
+                                      <span
+                                        className="w-3 h-3 rounded-full"
+                                        style={{ backgroundColor: entry.color }}
+                                      ></span>
+                                      <span className="text-sm">
+                                        {entry.name}:{" "}
+                                        <strong>
+                                          {entry.value?.toLocaleString()}
+                                        </strong>
+                                      </span>
+                                    </p>
+                                  ))}
+                                </div>
+                              </div>
+                            );
+                          }
+                          return null;
+                        }}
+                      />
+                      <Legend />
+                      <Line
+                        type="monotone"
+                        dataKey="openingRank"
+                        name="Opening Rank"
+                        stroke="#22c55e"
+                        strokeWidth={3}
+                        dot={{ r: 6, strokeWidth: 2, fill: "white" }}
+                        activeDot={{ r: 8, strokeWidth: 3 }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="closingRank"
+                        name="Closing Rank"
+                        stroke="#ef4444"
+                        strokeWidth={3}
+                        dot={{ r: 6, strokeWidth: 2, fill: "white" }}
+                        activeDot={{ r: 8, strokeWidth: 3 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="h-full flex items-center justify-center">
+                    <p className="text-gray-500">
+                      Select a branch to view round progression
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Legend / Info */}
+              <div className="flex items-center justify-between flex-wrap gap-4 bg-gray-50 p-4 rounded-lg border-2 border-gray-200">
+                <div className="flex items-center gap-6 text-sm text-gray-600">
+                  <div className="flex items-center gap-2">
+                    <span className="w-4 h-1 rounded bg-green-500"></span>
+                    <span>Opening Rank (best rank)</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-4 h-1 rounded bg-red-500"></span>
+                    <span>Closing Rank (cutoff)</span>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500">
+                  📊 Chart shows rank progression across JoSAA counselling
+                  rounds
+                </p>
+              </div>
+            </div>
+          )}
+
+        {/* Table View - Enhanced */}
+        {!isLoading && viewMode === "table" && filteredCutoffs.length > 0 && (
           <div className="overflow-x-auto rounded-lg border-2 border-black animate-in fade-in slide-in-from-bottom-2 duration-300">
             <Table>
               <TableHeader>
@@ -562,7 +909,7 @@ export default function JosaaCutoffsTable({
                   if (!branch && cutoff.branch_code) {
                     // Try to find branch by matching short_code
                     branch = branches.find(
-                      (b) => b.short_code === cutoff.branch_code
+                      (b) => b.short_code === cutoff.branch_code,
                     );
                   }
 
