@@ -669,6 +669,7 @@ function StateCutoffsContent() {
               perPage={perPage}
               loading={loading}
               paginationLoading={paginationLoading}
+              error={error}
               percentileTarget={percentileForFetch}
               density={density}
               visibleColumns={visibleColumns}

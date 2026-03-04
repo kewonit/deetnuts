@@ -22,7 +22,8 @@
     "test-pocketbase": "npx tsx scripts/test-pocketbase.ts",
     "diagnose-pocketbase": "npx tsx scripts/diagnostic-pocketbase.ts",
     "upload-all-india-cutoffs": "npx tsx scripts/batch-upload-all-india-rounds.ts",
-    "import-josaa": "npx tsx scripts/batch-import-josaa.ts"
+    "import-josaa": "npx tsx scripts/batch-import-josaa.ts",
+    "migrate:pocketbase-to-supabase": "npx tsx scripts/migrate-pocketbase-to-supabase.ts"
   },
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
@@ -68,7 +69,6 @@
     "next": "^16.1.4",
     "nextjs-toploader": "^1.6.12",
     "nuqs": "^2.8.5",
-    "pocketbase": "^0.25.2",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-fast-marquee": "^1.6.4",

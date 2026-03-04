@@ -1,34 +1,38 @@
-import PocketBase from "pocketbase";
+import PocketBase from "./supabase-pocketbase-compat";
 import fs from "fs";
 import path from "path";
 import * as dotenv from "dotenv";
 
-dotenv.config({ path: '.env.local' });
-dotenv.config({ path: '.env' });
+dotenv.config({ path: ".env.local" });
+dotenv.config({ path: ".env" });
 
-const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_URL || "https://api.deetnuts.com");
+const pb = new PocketBase(
+  process.env.NEXT_PUBLIC_POCKETBASE_URL || "https://api.deetnuts.com",
+);
 pb.autoCancellation(false);
 
 async function main() {
   console.log("🔐 Authenticating...");
-  await pb.collection('_superusers').authWithPassword(
-    process.env.POCKETBASE_ADMIN_EMAIL!,
-    process.env.POCKETBASE_ADMIN_PASSWORD!
-  );
+  await pb
+    .collection("_superusers")
+    .authWithPassword(
+      process.env.POCKETBASE_ADMIN_EMAIL!,
+      process.env.POCKETBASE_ADMIN_PASSWORD!,
+    );
   console.log("✓ Auth OK\n");
 
   // Load ID maps
   const instituteMap = JSON.parse(
     fs.readFileSync(
       path.join(__dirname, "../data/josaa/institute_id_map.json"),
-      "utf-8"
-    )
+      "utf-8",
+    ),
   );
   const branchMap = JSON.parse(
     fs.readFileSync(
       path.join(__dirname, "../data/josaa/branch_id_map.json"),
-      "utf-8"
-    )
+      "utf-8",
+    ),
   );
 
   // Update institutes with original_id

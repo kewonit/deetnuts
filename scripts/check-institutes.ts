@@ -1,10 +1,12 @@
-import PocketBase from "pocketbase";
+import PocketBase from "./supabase-pocketbase-compat";
 import * as dotenv from "dotenv";
 
-dotenv.config({ path: '.env.local' });
-dotenv.config({ path: '.env' });
+dotenv.config({ path: ".env.local" });
+dotenv.config({ path: ".env" });
 
-const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_URL || "https://api.deetnuts.com");
+const pb = new PocketBase(
+  process.env.NEXT_PUBLIC_POCKETBASE_URL || "https://api.deetnuts.com",
+);
 pb.autoCancellation(false);
 
 async function main() {
@@ -22,7 +24,7 @@ async function main() {
   });
   console.log("\nFirst 15 institutes short_name:");
   all.items.forEach((i: any) =>
-    console.log(`  "${i.short_name}" -> ${i.name.substring(0, 50)}`)
+    console.log(`  "${i.short_name}" -> ${i.name.substring(0, 50)}`),
   );
 }
 

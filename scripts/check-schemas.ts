@@ -1,24 +1,31 @@
-import PocketBase from "pocketbase";
+import PocketBase from "./supabase-pocketbase-compat";
 import * as dotenv from "dotenv";
 
-dotenv.config({ path: '.env.local' });
-dotenv.config({ path: '.env' });
+dotenv.config({ path: ".env.local" });
+dotenv.config({ path: ".env" });
 
-const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_URL || "https://api.deetnuts.com");
+const pb = new PocketBase(
+  process.env.NEXT_PUBLIC_POCKETBASE_URL || "https://api.deetnuts.com",
+);
 pb.autoCancellation(false);
 
 async function main() {
   console.log("🔐 Authenticating...");
-  await pb.collection('_superusers').authWithPassword(
-    process.env.POCKETBASE_ADMIN_EMAIL!,
-    process.env.POCKETBASE_ADMIN_PASSWORD!
-  );
+  await pb
+    .collection("_superusers")
+    .authWithPassword(
+      process.env.POCKETBASE_ADMIN_EMAIL!,
+      process.env.POCKETBASE_ADMIN_PASSWORD!,
+    );
   console.log("✓ Auth OK\n");
 
   // Get cutoff schema
   const cutoffCollection = await pb.collections.getOne("josaa_cutoffs");
   console.log("=== Cutoff Collection Schema ===");
-  console.log("Fields:", (cutoffCollection as any).fields.map((f: any) => f.name).join(", "));
+  console.log(
+    "Fields:",
+    (cutoffCollection as any).fields.map((f: any) => f.name).join(", "),
+  );
 
   // Get a sample cutoff
   const cutoff = await pb.collection("josaa_cutoffs").getList(1, 1);

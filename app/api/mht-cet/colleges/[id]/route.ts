@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { getPocketBase } from "@/lib/pocketbaseClient";
-import { ClientResponseError } from "pocketbase";
+import { ClientResponseError, getPocketBase } from "@/lib/pocketbaseClient";
 import { parseCollegeSlug, normalizeCollegeCode } from "@/lib/slugify";
 
 interface College {
