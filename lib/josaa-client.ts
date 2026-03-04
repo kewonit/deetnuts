@@ -3,7 +3,6 @@
  * Provides typed access to JoSAA collections with caching and batch operations
  */
 
-import PocketBase, { RecordService } from "pocketbase";
 import { cache } from "react";
 import {
   JosaaInstitute,
@@ -18,7 +17,11 @@ import {
   JosaaStats,
   InstituteType,
 } from "@/lib/types/josaa";
-import { getPocketBase } from "@/lib/pocketbaseClient";
+import {
+  PocketBaseCollection,
+  PocketBaseLike,
+  getPocketBase,
+} from "@/lib/pocketbaseClient";
 
 // Collection names
 export const JOSAA_COLLECTIONS = {
@@ -29,14 +32,12 @@ export const JOSAA_COLLECTIONS = {
 } as const;
 
 // Typed PocketBase interface
-interface TypedJosaaPocketBase extends PocketBase {
-  collection(idOrName: string): RecordService;
-  collection(idOrName: "josaa_institutes"): RecordService<JosaaInstitute>;
-  collection(idOrName: "josaa_branches"): RecordService<JosaaBranch>;
-  collection(idOrName: "josaa_cutoffs"): RecordService<JosaaCutoff>;
-  collection(
-    idOrName: "josaa_institute_aliases",
-  ): RecordService<JosaaInstituteAlias>;
+interface TypedJosaaPocketBase extends PocketBaseLike {
+  collection(idOrName: string): PocketBaseCollection;
+  collection(idOrName: "josaa_institutes"): PocketBaseCollection;
+  collection(idOrName: "josaa_branches"): PocketBaseCollection;
+  collection(idOrName: "josaa_cutoffs"): PocketBaseCollection;
+  collection(idOrName: "josaa_institute_aliases"): PocketBaseCollection;
 }
 
 /**

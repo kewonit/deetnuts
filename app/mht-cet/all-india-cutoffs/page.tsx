@@ -86,7 +86,7 @@ export default function AllIndiaCutoffsPage() {
     }
 
     return () => clearTimeout(debounceTimer);
-  }, [filters, refetch, currentPage]);
+  }, [filters, refetch]);
 
   const handleRoundChange = useCallback((newRound: string) => {
     setActiveRound(newRound as RoundType);

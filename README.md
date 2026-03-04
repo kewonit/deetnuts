@@ -55,12 +55,13 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ### Environment Variables
 
 ```env
-# Supabase (Auth & PostgreSQL)
+# Supabase (Auth + Data)
 NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 DATABASE_URL=your-database-url
 
-# PocketBase (JoSAA Data)
+# One-time migration source (optional after migration)
 NEXT_PUBLIC_POCKETBASE_URL=your-pocketbase-url
 POCKETBASE_ADMIN_EMAIL=admin@example.com
 POCKETBASE_ADMIN_PASSWORD=your-password
@@ -70,14 +71,14 @@ POCKETBASE_ADMIN_PASSWORD=your-password
 
 ## 🏗️ Tech Stack
 
-| Layer          | Technology                       |
-| -------------- | -------------------------------- |
-| **Framework**  | Next.js 14 (App Router)          |
-| **Language**   | TypeScript (Strict Mode)         |
-| **Styling**    | Tailwind CSS + Neobrutalism UI   |
-| **Auth**       | Supabase Auth                    |
-| **Database**   | Supabase PostgreSQL + PocketBase |
-| **Deployment** | Docker + Standalone Build        |
+| Layer          | Technology                     |
+| -------------- | ------------------------------ |
+| **Framework**  | Next.js 14 (App Router)        |
+| **Language**   | TypeScript (Strict Mode)       |
+| **Styling**    | Tailwind CSS + Neobrutalism UI |
+| **Auth**       | Supabase Auth                  |
+| **Database**   | Supabase PostgreSQL            |
+| **Deployment** | Docker + Standalone Build      |
 
 ---
 
@@ -107,6 +108,20 @@ See the [docs/](./docs/) folder for detailed documentation:
 - [JoSAA Implementation](./docs/JOSAA_IMPLEMENTATION.md)
 - [Data Upload Guides](./docs/BATCH_UPLOAD_README.md)
 - [Scripts Reference](./docs/scripts-readme.md)
+
+---
+
+## 🔄 PocketBase to Supabase Migration
+
+```bash
+# 1) Apply SQL schema/index migration in Supabase
+# file: supabase/migrations/20260304_pocketbase_to_supabase.sql
+
+# 2) Run data migration
+npm run migrate:pocketbase-to-supabase
+```
+
+This migrates JoSAA, MHT-CET, All-India round, and BITS datasets from PocketBase records into Supabase tables with the same runtime table names.
 
 ---
 

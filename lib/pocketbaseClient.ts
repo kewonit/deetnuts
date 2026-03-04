@@ -1,49 +1,482 @@
-import PocketBase, { ClientResponseError } from "pocketbase";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 
-/**
- * Global auth cache to persist across API calls
- */
-let globalAuthCache: {
-  token: string;
-  model: any;
-  timestamp: number;
-} | null = null;
+type Primitive = string | number | boolean | null;
 
-const AUTH_CACHE_DURATION = 50 * 60 * 1000; // 50 minutes
+type SupabaseLikeError = {
+  message: string;
+  code?: string;
+  details?: string;
+  hint?: string;
+};
 
-// Added cache for the PocketBase client instance
-let pbClient: PocketBase | null = null;
+function isMissingRelationError(error: SupabaseLikeError | null): boolean {
+  if (!error) return false;
+  return (
+    error.code === "42P01" ||
+    error.message.toLowerCase().includes("does not exist") ||
+    error.message.toLowerCase().includes("relation")
+  );
+}
+
+export class ClientResponseError extends Error {
+  status: number;
+  data: unknown;
+
+  constructor(message: string, status = 500, data: unknown = null) {
+    super(message);
+    this.name = "ClientResponseError";
+    this.status = status;
+    this.data = data;
+  }
+}
+
+interface ListOptions {
+  filter?: string;
+  sort?: string;
+  fields?: string;
+  skipTotal?: boolean;
+}
+
+interface FullListOptions {
+  filter?: string;
+  sort?: string;
+  fields?: string;
+}
+
+type ListResult<T> = {
+  items: T[];
+  page: number;
+  perPage: number;
+  totalItems: number;
+  totalPages: number;
+};
+
+export interface PocketBaseCollection {
+  getList<T = any>(
+    page: number,
+    perPage: number,
+    options?: ListOptions,
+  ): Promise<ListResult<T>>;
+  getFullList<T = any>(options?: FullListOptions): Promise<T[]>;
+  getFirstListItem<T = any>(filter: string): Promise<T>;
+  getOne<T = any>(id: string): Promise<T>;
+  create<T = any>(payload: Record<string, unknown>): Promise<T>;
+  update<T = any>(id: string, payload: Record<string, unknown>): Promise<T>;
+  delete(id: string): Promise<{ id: string }>;
+  authRefresh(): Promise<{ token: string | null; record: null }>;
+  authWithPassword(
+    email: string,
+    password: string,
+  ): Promise<{ token: string; record: null }>;
+}
+
+export interface PocketBaseLike {
+  autoCancellation(disabled: boolean): void;
+  collection(name: string): PocketBaseCollection;
+}
+
+let pbClient: PocketBaseLike | null = null;
 
 /**
  * Get PocketBase instance (singleton pattern)
  * This function is safe for both client and server components
  */
-export function getPocketBase() {
+export function getPocketBase(): PocketBaseLike {
   if (!pbClient) {
-    const pocketbaseUrl = process.env.NEXT_PUBLIC_POCKETBASE_URL;
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-    if (!pocketbaseUrl) {
+    if (!supabaseUrl || !supabaseServiceKey) {
       throw new Error(
-        "NEXT_PUBLIC_POCKETBASE_URL environment variable is not defined",
+        "NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY is not defined",
       );
     }
 
-    pbClient = new PocketBase(pocketbaseUrl);
-    pbClient.autoCancellation(false);
+    const adminClient = createSupabaseClient(supabaseUrl, supabaseServiceKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
+    });
+
+    const parseFilterExpression = (
+      filter?: string,
+    ): Array<{
+      or: Array<{ field: string; operator: string; value: Primitive }>;
+    }> => {
+      if (!filter || !filter.trim()) return [];
+
+      const trimOuterParens = (value: string): string => {
+        let result = value.trim();
+        while (result.startsWith("(") && result.endsWith(")")) {
+          let depth = 0;
+          let valid = true;
+          for (let index = 0; index < result.length; index += 1) {
+            const char = result[index];
+            if (char === "(") depth += 1;
+            if (char === ")") depth -= 1;
+            if (depth === 0 && index < result.length - 1) {
+              valid = false;
+              break;
+            }
+          }
+          if (!valid) break;
+          result = result.slice(1, -1).trim();
+        }
+        return result;
+      };
+
+      const splitTopLevel = (
+        input: string,
+        separator: "&&" | "||",
+      ): string[] => {
+        const values: string[] = [];
+        let current = "";
+        let depth = 0;
+        let quote: '"' | "'" | null = null;
+
+        for (let index = 0; index < input.length; index += 1) {
+          const char = input[index];
+          const next = input[index + 1];
+
+          if ((char === '"' || char === "'") && input[index - 1] !== "\\") {
+            if (quote === char) {
+              quote = null;
+            } else if (!quote) {
+              quote = char;
+            }
+          }
+
+          if (!quote) {
+            if (char === "(") depth += 1;
+            if (char === ")") depth = Math.max(0, depth - 1);
+
+            if (depth === 0 && char === separator[0] && next === separator[1]) {
+              values.push(current.trim());
+              current = "";
+              index += 1;
+              continue;
+            }
+          }
+
+          current += char;
+        }
+
+        if (current.trim()) values.push(current.trim());
+        return values;
+      };
+
+      const parseValue = (rawValue: string): Primitive => {
+        const value = rawValue.trim();
+        if (
+          (value.startsWith('"') && value.endsWith('"')) ||
+          (value.startsWith("'") && value.endsWith("'"))
+        ) {
+          return value
+            .slice(1, -1)
+            .replace(/\\"/g, '"')
+            .replace(/\\'/g, "'")
+            .replace(/\\\\/g, "\\");
+        }
+
+        if (value === "true") return true;
+        if (value === "false") return false;
+        if (value === "null") return null;
+
+        const parsedNumber = Number(value);
+        if (!Number.isNaN(parsedNumber)) return parsedNumber;
+
+        return value;
+      };
+
+      const parseTerm = (term: string) => {
+        const normalized = trimOuterParens(term);
+        const match = normalized.match(
+          /^([a-zA-Z0-9_]+)\s*(=|!=|>=|<=|>|<|~)\s*(.+)$/,
+        );
+        if (!match) return null;
+
+        return {
+          field: match[1],
+          operator: match[2],
+          value: parseValue(match[3]),
+        };
+      };
+
+      const andGroups = splitTopLevel(trimOuterParens(filter), "&&");
+      return andGroups
+        .map((group) => {
+          const orTerms = splitTopLevel(trimOuterParens(group), "||")
+            .map(parseTerm)
+            .filter(
+              (
+                term,
+              ): term is {
+                field: string;
+                operator: string;
+                value: Primitive;
+              } => Boolean(term),
+            );
+          return { or: orTerms };
+        })
+        .filter((group) => group.or.length > 0);
+    };
+
+    const applyFilter = (query: any, filter?: string) => {
+      const groups = parseFilterExpression(filter);
+      let nextQuery = query;
+
+      for (const group of groups) {
+        if (group.or.length === 1) {
+          const [term] = group.or;
+          const value =
+            term.operator === "~" ? `%${String(term.value)}%` : term.value;
+
+          if (term.operator === "=")
+            nextQuery = nextQuery.eq(term.field, value);
+          else if (term.operator === "!=")
+            nextQuery = nextQuery.neq(term.field, value);
+          else if (term.operator === ">=")
+            nextQuery = nextQuery.gte(term.field, value);
+          else if (term.operator === "<=")
+            nextQuery = nextQuery.lte(term.field, value);
+          else if (term.operator === ">")
+            nextQuery = nextQuery.gt(term.field, value);
+          else if (term.operator === "<")
+            nextQuery = nextQuery.lt(term.field, value);
+          else if (term.operator === "~")
+            nextQuery = nextQuery.ilike(term.field, value);
+          continue;
+        }
+
+        const orExpression = group.or
+          .map((term) => {
+            const operator =
+              term.operator === "="
+                ? "eq"
+                : term.operator === "!="
+                  ? "neq"
+                  : term.operator === ">="
+                    ? "gte"
+                    : term.operator === "<="
+                      ? "lte"
+                      : term.operator === ">"
+                        ? "gt"
+                        : term.operator === "<"
+                          ? "lt"
+                          : "ilike";
+
+            const value =
+              term.operator === "~"
+                ? `%${String(term.value).replace(/,/g, "\\,")}%`
+                : String(term.value).replace(/,/g, "\\,");
+
+            return `${term.field}.${operator}.${value}`;
+          })
+          .join(",");
+
+        nextQuery = nextQuery.or(orExpression);
+      }
+
+      return nextQuery;
+    };
+
+    const applySort = (query: any, sort?: string) => {
+      if (!sort) return query;
+
+      const sortColumns = sort
+        .split(",")
+        .map((value) => value.trim())
+        .filter(Boolean);
+
+      let nextQuery = query;
+      for (const column of sortColumns) {
+        const descending = column.startsWith("-");
+        const field = descending ? column.slice(1) : column;
+        nextQuery = nextQuery.order(field, { ascending: !descending });
+      }
+
+      return nextQuery;
+    };
+
+    const collectionFactory = (name: string): PocketBaseCollection => ({
+      async getList<T = any>(
+        page: number,
+        perPage: number,
+        options?: ListOptions,
+      ): Promise<ListResult<T>> {
+        const selectColumns = options?.fields || "*";
+        let query = adminClient.from(name).select(selectColumns, {
+          count: options?.skipTotal ? undefined : "exact",
+        });
+
+        query = applyFilter(query, options?.filter);
+        query = applySort(query, options?.sort);
+
+        const from = Math.max(0, (page - 1) * perPage);
+        const to = from + perPage - 1;
+        query = query.range(from, to);
+
+        const { data, error, count } = await query;
+        if (error && !isMissingRelationError(error)) {
+          throw new ClientResponseError(error.message, 400, error);
+        }
+
+        if (isMissingRelationError(error)) {
+          return {
+            items: [],
+            page,
+            perPage,
+            totalItems: 0,
+            totalPages: 0,
+          };
+        }
+
+        const totalItems = options?.skipTotal ? data?.length || 0 : count || 0;
+        const totalPages = perPage > 0 ? Math.ceil(totalItems / perPage) : 0;
+
+        return {
+          items: (data || []) as T[],
+          page,
+          perPage,
+          totalItems,
+          totalPages,
+        };
+      },
+
+      async getFullList<T = any>(options?: FullListOptions): Promise<T[]> {
+        const selectColumns = options?.fields || "*";
+        const pageSize = 1000;
+        let page = 1;
+        const allRecords: T[] = [];
+
+        while (true) {
+          let query = adminClient.from(name).select(selectColumns);
+          query = applyFilter(query, options?.filter);
+          query = applySort(query, options?.sort);
+
+          const from = (page - 1) * pageSize;
+          const to = from + pageSize - 1;
+          const { data, error } = await query.range(from, to);
+
+          if (error && !isMissingRelationError(error)) {
+            throw new ClientResponseError(error.message, 400, error);
+          }
+
+          if (isMissingRelationError(error)) {
+            return [];
+          }
+
+          const items = (data || []) as T[];
+          allRecords.push(...items);
+
+          if (items.length < pageSize) {
+            break;
+          }
+
+          page += 1;
+        }
+
+        return allRecords;
+      },
+
+      async getFirstListItem<T = any>(filter: string): Promise<T> {
+        let query = adminClient.from(name).select("*").limit(1);
+        query = applyFilter(query, filter);
+
+        const { data, error } = await query;
+        if (error && !isMissingRelationError(error)) {
+          throw new ClientResponseError(error.message, 400, error);
+        }
+
+        if (isMissingRelationError(error) || !data || data.length === 0) {
+          throw new ClientResponseError(`No record found in ${name}`, 404);
+        }
+
+        return data[0] as T;
+      },
+
+      async getOne<T = any>(id: string): Promise<T> {
+        const { data, error } = await adminClient
+          .from(name)
+          .select("*")
+          .eq("id", id)
+          .limit(1);
+
+        if (error && !isMissingRelationError(error)) {
+          throw new ClientResponseError(error.message, 400, error);
+        }
+
+        if (isMissingRelationError(error) || !data || data.length === 0) {
+          throw new ClientResponseError(
+            `Record ${id} not found in ${name}`,
+            404,
+          );
+        }
+
+        return data[0] as T;
+      },
+
+      async create<T = any>(payload: Record<string, unknown>): Promise<T> {
+        const { data, error } = await adminClient
+          .from(name)
+          .insert(payload)
+          .select("*")
+          .single();
+
+        if (error) {
+          throw new ClientResponseError(error.message, 400, error);
+        }
+
+        return data as T;
+      },
+
+      async update<T = any>(
+        id: string,
+        payload: Record<string, unknown>,
+      ): Promise<T> {
+        const { data, error } = await adminClient
+          .from(name)
+          .update(payload)
+          .eq("id", id)
+          .select("*")
+          .single();
+
+        if (error) {
+          throw new ClientResponseError(error.message, 400, error);
+        }
+
+        return data as T;
+      },
+
+      async delete(id: string): Promise<{ id: string }> {
+        const { error } = await adminClient.from(name).delete().eq("id", id);
+
+        if (error) {
+          throw new ClientResponseError(error.message, 400, error);
+        }
+
+        return { id };
+      },
+
+      async authRefresh(): Promise<{ token: string | null; record: null }> {
+        return { token: null, record: null };
+      },
+
+      async authWithPassword(
+        _email: string,
+        _password: string,
+      ): Promise<{ token: string; record: null }> {
+        return { token: "supabase-service-role", record: null };
+      },
+    });
+
+    pbClient = {
+      autoCancellation: () => undefined,
+      collection: collectionFactory,
+    };
   }
   return pbClient;
-}
-
-/**
- * Check if cached auth is still valid
- */
-function isCachedAuthValid(): boolean {
-  if (!globalAuthCache) return false;
-
-  const now = Date.now();
-  const timeSinceAuth = now - globalAuthCache.timestamp;
-
-  return timeSinceAuth < AUTH_CACHE_DURATION;
 }
 
 /**
@@ -52,38 +485,19 @@ function isCachedAuthValid(): boolean {
  * Import cookies dynamically to avoid build errors in client components
  */
 export async function ensureUserAuthenticated(): Promise<void> {
-  const pocketbase = getPocketBase();
-
   try {
-    // Dynamic import of cookies to avoid build errors in client components
     const { cookies } = await import("next/headers");
     const cookieStore = await cookies();
-    const authCookie = cookieStore.get("pb_auth");
+    const { createClient } = await import("@/app/lib/supabase/server");
+    const supabase = createClient(cookieStore);
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
 
-    if (!authCookie?.value) {
-      throw new Error("No authentication cookie found");
+    if (error || !user) {
+      throw new Error(error?.message || "No authenticated Supabase user found");
     }
-
-    // Load the user's authentication from cookie
-    pocketbase.authStore.loadFromCookie(authCookie.value);
-
-    if (!pocketbase.authStore.isValid) {
-      throw new Error("Invalid authentication token");
-    }
-
-    // Try to refresh the auth to ensure it's still valid
-    try {
-      await pocketbase.collection("users").authRefresh();
-    } catch (refreshError) {
-      throw new Error("Authentication token expired or invalid");
-    }
-
-    // Cache the auth for subsequent requests in the same API call
-    globalAuthCache = {
-      token: pocketbase.authStore.token,
-      model: pocketbase.authStore.model,
-      timestamp: Date.now(),
-    };
   } catch (error) {
     console.error("User authentication failed:", error);
     throw new Error(
@@ -97,49 +511,7 @@ export async function ensureUserAuthenticated(): Promise<void> {
  * Use ensureUserAuthenticated instead for user-based auth
  */
 export async function ensureAuthenticatedServer(): Promise<void> {
-  const pocketbase = getPocketBase();
-
-  // First, try to use cached auth
-  if (isCachedAuthValid() && globalAuthCache) {
-    pocketbase.authStore.save(globalAuthCache.token, globalAuthCache.model);
-    return;
-  }
-
-  // Check if current authStore is valid (might be from a previous request)
-  if (pocketbase.authStore.isValid) {
-    // Update our cache with the current valid auth
-    globalAuthCache = {
-      token: pocketbase.authStore.token,
-      model: pocketbase.authStore.model,
-      timestamp: Date.now(),
-    };
-    return;
-  }
-
-  // Need to authenticate
-  try {
-    const adminEmail = process.env.POCKETBASE_ADMIN_EMAIL;
-    const adminPassword = process.env.POCKETBASE_ADMIN_PASSWORD;
-
-    if (!adminEmail || !adminPassword) {
-      throw new Error("Admin credentials not found in environment variables");
-    }
-
-    const authData = await pocketbase.admins.authWithPassword(
-      adminEmail,
-      adminPassword,
-    );
-
-    // Cache the auth for future requests
-    globalAuthCache = {
-      token: pocketbase.authStore.token,
-      model: pocketbase.authStore.model,
-      timestamp: Date.now(),
-    };
-  } catch (error) {
-    console.error("Authentication failed:", error);
-    throw new Error(`PocketBase authentication failed: ${error}`);
-  }
+  return;
 }
 
 /**
@@ -195,7 +567,7 @@ export async function getBitsCutoffsData(year: number | string) {
 
     console.error("Error fetching BITS cutoffs data:", error);
 
-    // Check if it's a ClientResponseError from PocketBase
+    // Check if it's an adapter response error
     if (error instanceof ClientResponseError) {
       throw new PocketBaseError(
         error.message || "Failed to fetch BITS cutoffs data",

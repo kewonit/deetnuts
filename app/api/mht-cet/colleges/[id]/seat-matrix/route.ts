@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import {
+  ClientResponseError,
   getPocketBase,
   ensureAuthenticatedServer,
 } from "@/lib/pocketbaseClient";
-import { ClientResponseError } from "pocketbase";
 import { parseCollegeSlug } from "@/lib/slugify";
 
 // Type definitions

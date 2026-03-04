@@ -44,6 +44,7 @@ interface DataTableProps {
   perPage: number;
   loading: boolean;
   paginationLoading: boolean;
+  error?: string | null;
   percentileTarget: string;
   density: "compact" | "comfortable" | "spacious";
   visibleColumns: string[];
@@ -157,8 +158,8 @@ function EmptyState({ hasFilters }: { hasFilters: boolean }) {
       </h3>
       <p className="text-sm text-gray-500 text-center max-w-sm">
         {hasFilters
-          ? "Try adjusting your filters or enter a percentile to see matching cutoffs."
-          : "Enter your percentile score to find colleges and courses that match your score."}
+          ? "No cutoffs match your current filters. Clear a few filters or widen your percentile/rank range."
+          : "Enter your percentile or rank to see colleges and courses you can target."}
       </p>
     </div>
   );
@@ -369,6 +370,7 @@ export const DataTable = memo(function DataTable({
   perPage,
   loading,
   paginationLoading,
+  error,
   percentileTarget,
   density,
   visibleColumns,
@@ -765,9 +767,41 @@ export const DataTable = memo(function DataTable({
 
   // Show empty state if no records
   if (!loading && records.length === 0) {
+    const authError =
+      !!error &&
+      (error.toLowerCase().includes("auth") ||
+        error.toLowerCase().includes("log in"));
+
     return (
       <div className="border-2 border-gray-200 rounded-xl bg-white overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]">
-        <EmptyState hasFilters={!!percentileTarget} />
+        {authError ? (
+          <div className="flex flex-col items-center justify-center py-16 px-4">
+            <div className="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mb-4">
+              <svg
+                className="w-10 h-10 text-amber-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M12 11c0-2.761 2.239-5 5-5s5 2.239 5 5v6a2 2 0 01-2 2h-8a2 2 0 01-2-2v-6zM5 10V8a5 5 0 0110 0v2M5 10h10"
+                />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">
+              Login required
+            </h3>
+            <p className="text-sm text-gray-500 text-center max-w-sm">
+              Please log in to view state cutoff data, then run your search
+              again.
+            </p>
+          </div>
+        ) : (
+          <EmptyState hasFilters={!!percentileTarget} />
+        )}
       </div>
     );
   }

@@ -187,16 +187,24 @@ export function useCutoffData(): UseCutoffDataReturn {
         if (requestId !== requestIdRef.current) return;
 
         if (!result.success) {
+          const isAuthError = result.error === "Authentication required";
+          const userMessage = isAuthError
+            ? "Please log in to view cutoff data, then try again."
+            : result.message || result.error || "Failed to fetch data";
+
+          if (isMountedRef.current) {
+            setError(userMessage);
+          }
+
           if (result.error === "Data not available") {
             toast.error(
               `${getDisplayNameForRound(params.round)} data is not available yet.`,
             );
           } else {
-            toast.error(
-              result.message || result.error || "Failed to fetch data",
-            );
+            toast.error(userMessage);
           }
-          throw new Error(result.error || "Failed to fetch data");
+
+          return;
         }
 
         // Cache the result with timestamp
@@ -229,10 +237,22 @@ export function useCutoffData(): UseCutoffDataReturn {
         if (requestId !== requestIdRef.current) return;
         if (err.name === "AbortError") return;
 
-        console.error("Fetch error:", err);
-        setError(err.message);
+        const errorMessage = err?.message || "Something went wrong";
 
-        if (err.message.includes("network") || err.message.includes("fetch")) {
+        if (
+          errorMessage.includes("Authentication required") ||
+          errorMessage.toLowerCase().includes("log in")
+        ) {
+          console.info("Cutoff fetch blocked by authentication");
+        } else {
+          console.error("Fetch error:", err);
+        }
+        setError(errorMessage);
+
+        if (
+          errorMessage.includes("network") ||
+          errorMessage.includes("fetch")
+        ) {
           toast.error("Network error. Please check your connection.");
         }
       } finally {
