@@ -1,60 +1,30 @@
-# Auto-Cancellation Fix Summary
+# Batch Upload Concurrency Note
 
-## Problem
-The PocketBase SDK was auto-cancelling concurrent batch requests because it considered them duplicates. This caused the error:
-```
-ClientResponseError 0: The request was autocancelled
-```
+## Background
 
-## Solutions Applied
+The upload scripts in this repository still preserve a PocketBase-era mitigation for duplicate concurrent batch requests. The original issue surfaced as request auto-cancellation when multiple similar batch operations were in flight at the same time.
 
-### 1. Disabled Auto-Cancellation
-```typescript
-// In constructor
-this.pb.autoCancellation(false);
-```
+Even though the current repository now routes those operations through Supabase-backed compatibility wrappers, the same protective patterns were kept in place because the script interface still behaves like a batch-oriented PocketBase client.
 
-### 2. Added Unique Request Keys
-All batch operations now use unique request keys to prevent conflicts:
-```typescript
-// Create batch
-batch.send({ requestKey: `batch_create_${batchId}` });
+## Current Safeguards
 
-// Upsert batch
-batch.send({ requestKey: `batch_upsert_${batchId}` });
+The active upload scripts generally apply the same three controls:
 
-// Delete batch
-batch.send({ requestKey: `batch_delete_${page}_${Date.now()}` });
-```
+1. `autoCancellation(false)` is called on the compatibility client.
+2. each batch submission gets a unique `requestKey`.
+3. concurrency is capped at a conservative level, typically 500-record batches with 5 concurrent groups.
 
-### 3. Reduced Concurrency
-- **Batch Size**: 1000 → 500 records per batch
-- **Concurrent Batches**: 10 → 5 batches at once
+## Where This Still Matters
 
-This provides better reliability while still maintaining high performance.
+The pattern is still visible in scripts such as:
 
-### 4. Unique Batch IDs
-Each batch now gets a unique ID based on timestamp and index:
-```typescript
-const batchId = `${Date.now()}_${actualIndex}`;
-```
+- `batch-upload-mht-cet-cutoffs.ts`
+- `batch-upload-colleges.ts`
+- `batch-upload-seat-matrix.ts`
+- `batch-upload-all-india-rounds.ts`
 
-## Expected Performance
-- **Speed**: Still 2,500-5,000+ records/second
-- **Reliability**: Much more stable with no auto-cancellation errors
-- **Concurrency**: Controlled to prevent server overload
+## Why This Document Still Exists
 
-## Files Updated
-- `batch-upload-mht-cet-cutoffs.ts` - Main batch upload script
-- `test-batch-api.ts` - Test script with auto-cancellation disabled
+This note is now historical and operational rather than product-facing. It explains why the scripts still include explicit anti-collision logic even though the live database backend is no longer PocketBase.
 
-## Usage
-No changes to the command line usage:
-```bash
-npm run batch-upload create
-npm run batch-upload upsert
-npm run batch-upload clear
-npm run batch-upload replace
-```
-
-The script should now run smoothly without auto-cancellation errors!
+If those scripts are later rewritten to direct Supabase bulk operations with no PocketBase-shaped abstraction, this note can be retired.

@@ -1,201 +1,72 @@
-# MHT-CET Round 2 & 3 Support Implementation
+# MHT-CET State Cutoffs: Year and Round Support
 
 ## Overview
-This implementation adds comprehensive support for MHT-CET counseling Round 2 and Round 3 data alongside the existing Round 1 data. The system is designed to be robust, user-friendly, and handle all edge cases gracefully.
 
-## ✅ Features Implemented
+The state-cutoff module is no longer just a 2024 round-selector feature. In the current repository, year and round support are coupled:
 
-### 1. **Multi-Round Data Support**
-- **Round 1**: `2024_mht_cet_round_one_cutoffs_duplicate` (Primary allocation)
-- **Round 2**: `2024_mht_cet_round_two_cutoffs` (Secondary allocation) 
-- **Round 3**: `2024_mht_cet_round_three_cutoffs` (Final allocation)
+- 2024 supports rounds 1, 2, and 3
+- 2025 currently supports round 1 only
 
-### 2. **Enhanced Type System**
-- Added `round` parameter to `FilterState` and `PendingFilters` interfaces
-- Created `RoundOption` and `CollectionConfig` interfaces
-- Implemented `ValidRound` type with proper validation
+The authoritative configuration lives in `app/mht-cet/state-cutoffs/constants.ts`, with the page behavior driven from `app/mht-cet/state-cutoffs/page.tsx`.
 
-### 3. **Dynamic Collection Selection**
-- `getCollectionForRound()` - Safely gets collection name for round
-- `isValidRound()` - Validates round numbers (1-3)
-- `getDisplayNameForRound()` - Gets user-friendly round names
-- Fallback to Round 1 for invalid round numbers
+## Coverage Matrix
 
-### 4. **Robust Error Handling**
-- Collection not found detection
-- Authentication error handling
-- Network/connectivity error handling
-- User-friendly error messages for different error types
-- Graceful degradation when round data is unavailable
+| Year | Supported Rounds | Backing Table                                                                                                    |
+| ---- | ---------------- | ---------------------------------------------------------------------------------------------------------------- |
+| 2024 | 1, 2, 3          | `2024_mht_cet_round_one_cutoffs_duplicate`, `2024_mht_cet_round_two_cutoffs`, `2024_mht_cet_round_three_cutoffs` |
+| 2025 | 1                | `2025_mht_cet_round_one_cutoffs`                                                                                 |
 
-### 5. **Enhanced User Interface**
+## Current Behavior
 
-#### Round Selection Component
-- Dropdown selector with round descriptions
-- Tooltip with detailed round information:
-  - **Round 1**: Primary allocation round (Initial cutoffs)
-  - **Round 2**: Secondary allocation round (Lower cutoffs)
-  - **Round 3**: Final allocation round (Lowest cutoffs)
+### URL State
 
-#### Dynamic Page Title
-- Shows current round: "MHT-CET State Cutoffs 2024 - Round X"
-- Updates description based on selected round
+The state-cutoff page persists major filters in the URL with `nuqs`, including:
 
-#### Active Filters Display
-- Shows selected round when not Round 1
-- Color-coded badges for easy identification
+- year
+- round
+- percentile or rank mode
+- categories, courses, statuses, and universities
+- pagination, sorting, and density preferences
 
-#### Results Summary
-- Displays current round in summary cards
-- Export button shows round-specific filename
+This keeps the page shareable and makes filter state stable across navigation.
 
-### 6. **CSV Export Enhancement**
-- Round-specific export URLs with `round` parameter
-- Dynamic filenames: `mht_cet_state_cutoffs_2024_round_x.csv`
-- Maintains all current filters in export
-- Error handling for unavailable round data
+### Year and Round Rules
 
-### 7. **Caching & Performance**
-- Round-aware cache keys
-- Prevents unnecessary requests when switching rounds
-- Debounced filter changes
-- Request deduplication
+Current logic is intentionally explicit:
 
-### 8. **API Route Updates**
+- invalid round values fall back to round 1
+- when `year === 2025`, the page resets any non-round-one selection back to `1`
+- `getCollectionForRound(round, year)` is the canonical helper for table selection
 
-#### Main API Route (`/api/mht-cet/state-cutoffs`)
-- Accepts `round` parameter in request body
-- Validates and sanitizes round input
-- Dynamic collection selection
-- Enhanced error responses with round context
+### Collection Selection
 
-#### Export API Route (`/api/mht-cet/state-cutoffs/export`)
-- Accepts `round` query parameter
-- Round-specific collection queries
-- Dynamic filename generation
-- Collection existence validation
+The state-cutoff module uses `getCollectionForRound()` and related helpers from `constants.ts` rather than hardcoding tables in page logic. That is the primary contract to extend when a new year or round is added.
 
-### 9. **Server Action Enhancements**
-- `getCutoffRecords()` now accepts round parameter
-- Collection validation before querying
-- Round-aware error messages
-- Maintains backward compatibility
+## User-Facing Implications
 
-## 🛡️ Edge Cases Handled
+For 2024 users can switch across all three rounds. For 2025 the UI still exposes year selection, but round selection is constrained to the single dataset the repository currently has available.
 
-### 1. **Invalid Round Numbers**
-- Non-integer values → defaults to Round 1
-- Out of range (< 1 or > 3) → defaults to Round 1
-- Null/undefined → defaults to Round 1
-- Provides console warnings for debugging
+This means documentation, exports, and analytics around the state-cutoff module should always describe year coverage and round coverage together rather than treating them as independent dimensions.
 
-### 2. **Collection Availability**
-- Collection doesn't exist → user-friendly error message
-- Database connectivity issues → network error message
-- Fallback mechanisms in place
+## Implementation Notes
 
-### 3. **User Experience**
-- Maintains filter state when switching rounds
-- Clear feedback when round data is unavailable
-- Prevents confusion with appropriate error messages
+Important implementation anchors:
 
-### 4. **Data Integrity**
-- Validates collection exists before querying
-- Handles empty results gracefully
-- Maintains consistent data structure across rounds
+- `YEAR_OPTIONS` defines the supported year list
+- `ROUND_CONFIG` maps round numbers to 2024 tables
+- `getCollectionForRound()` applies the year-specific override for 2025
+- `getDisplayNameForRound()` centralizes round labels
+- the page-level `useEffect` in `page.tsx` enforces round 1 when 2025 is selected
 
-## 🔧 Configuration
+## Operational Guidance
 
-### Round Configuration (`constants.ts`)
-```typescript
-export const ROUND_CONFIG = {
-    1: { collection: '2024_mht_cet_round_one_cutoffs', ... },
-    2: { collection: '2024_mht_cet_round_two_cutoffs', ... },
-    3: { collection: '2024_mht_cet_round_three_cutoffs', ... }
-};
+If a new year is introduced, update at least the following in one pass:
 
-export const ROUND_OPTIONS = [
-    { value: 1, label: 'Round 1', ... },
-    { value: 2, label: 'Round 2', ... },
-    { value: 3, label: 'Round 3', ... }
-];
-```
+1. the collection mapping in `constants.ts`
+2. the year selector options
+3. any export routes or server actions that assume the old year table set
+4. the relevant batch-upload or import documentation
 
-### Default Behavior
-- Default round: **Round 1**
-- Invalid inputs fallback to Round 1
-- Round 1 remains the primary/default experience
+## Known Constraint
 
-## 📊 Data Flow
-
-1. **User selects round** → Updates pending filters
-2. **Apply filters** → Updates active filters with round
-3. **Fetch records** → Uses round to determine collection
-4. **API call** → Routes to correct PocketBase collection
-5. **Display results** → Shows round-specific data
-6. **Export** → Uses round-specific filename and collection
-
-## 🔒 Security Considerations
-
-- Input validation on round parameter
-- Sanitization of round values
-- Authentication maintained across all rounds
-- Collection access validation
-- SQL injection prevention through parameterized queries
-
-## 🎯 Backward Compatibility
-
-- Existing Round 1 functionality unchanged
-- API endpoints accept new parameters but maintain defaults
-- No breaking changes to existing integrations
-- Graceful degradation for missing round parameters
-
-## 🚀 Performance Optimizations
-
-- Efficient caching strategy with round-aware keys
-- Collection validation to prevent unnecessary queries
-- Optimized chunk queries for large filter sets
-- Request deduplication and abort controllers
-
-## 📱 Responsive Design
-
-- Round selector works on mobile and desktop
-- Export button adapts to screen size
-- Tooltip information accessible on all devices
-- Filter display responsive across breakpoints
-
-## 🧪 Testing Recommendations
-
-1. **Round Selection Testing**
-   - Test switching between all rounds
-   - Verify data loads correctly for each round
-   - Test with invalid round numbers
-
-2. **Export Testing**
-   - Export from each round
-   - Verify filenames are correct
-   - Test with various filter combinations
-
-3. **Error Handling Testing**
-   - Test with unavailable round data
-   - Test network disconnection scenarios
-   - Test authentication expiry
-
-4. **Performance Testing**
-   - Test with large filter sets
-   - Verify caching works correctly
-   - Test concurrent requests
-
-## 🔮 Future Enhancements
-
-- Add round comparison features
-- Implement round-specific statistics
-- Add trend analysis across rounds
-- Consider automated round detection
-- Add round availability indicators
-
----
-
-**Implementation Date**: January 2025  
-**Status**: ✅ Complete and Production Ready  
-**Compatibility**: Backward compatible with existing Round 1 functionality
+The module is architected for year-aware round selection, but the repository only contains a single 2025 round table at present. That is a data-availability constraint, not a limitation of the basic page-state model.

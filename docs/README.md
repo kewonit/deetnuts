@@ -1,30 +1,33 @@
 # Documentation
 
-This folder contains technical documentation for the Deetnuts project.
+This folder is the maintained documentation set for the DEETNUTS application, data pipelines, and platform operations.
 
-## Table of Contents
+## Core References
 
-### Implementation Guides
+- [ARCHITECTURE.md](./ARCHITECTURE.md): System layout, runtime boundaries, data domains, and deployment model
+- [JOSAA_IMPLEMENTATION.md](./JOSAA_IMPLEMENTATION.md): JoSAA module structure, data model, and ingestion notes
+- [ROUND_SUPPORT_IMPLEMENTATION.md](./ROUND_SUPPORT_IMPLEMENTATION.md): Current year and round behavior for MHT-CET state cutoffs
+- [VERCEL_BEST_PRACTICES.md](./VERCEL_BEST_PRACTICES.md): Platform, performance, and reliability conventions used in the repo
 
-- [JOSAA Implementation](./JOSAA_IMPLEMENTATION.md) - JoSAA cutoffs explorer implementation details
-- [Round Support](./ROUND_SUPPORT_IMPLEMENTATION.md) - Multi-round cutoff support implementation
+## Operational Guides
 
-### Data Upload Guides
+- [scripts-readme.md](./scripts-readme.md): Script inventory, execution patterns, and known maintenance drift
+- [BATCH_UPLOAD_README.md](./BATCH_UPLOAD_README.md): MHT-CET state cutoff batch uploader notes
+- [COLLEGE_UPLOADER_README.md](./COLLEGE_UPLOADER_README.md): College master data uploader notes
+- [SEAT_MATRIX_UPLOADER_README.md](./SEAT_MATRIX_UPLOADER_README.md): Seat matrix uploader notes
 
-- [Batch Upload](./BATCH_UPLOAD_README.md) - Bulk data upload procedures
-- [College Uploader](./COLLEGE_UPLOADER_README.md) - College data import guide
-- [Seat Matrix Upload](./SEAT_MATRIX_UPLOADER_README.md) - Seat matrix data import
+## Historical Notes
 
-### Fixes & Patches
+- [AUTO_CANCELLATION_FIX.md](./AUTO_CANCELLATION_FIX.md): Why the batch scripts still disable auto-cancellation and use unique request keys
 
-- [Auto Cancellation Fix](./AUTO_CANCELLATION_FIX.md) - PocketBase auto-cancellation fix
+## Feature-Local Documentation
 
-### Scripts Reference
+- [../app/predictions/README.md](../app/predictions/README.md): Prediction dataset explorer
+- [../app/mht-cet/all-india-cutoffs/README.md](../app/mht-cet/all-india-cutoffs/README.md): MHT-CET all-India cutoff module
+- [../app/mht-cet/all-india-cutoffs/TEST_GUIDE.md](../app/mht-cet/all-india-cutoffs/TEST_GUIDE.md): Smoke-test checklist for the all-India module
 
-- [Scripts Reference](./scripts-readme.md) - Available utility scripts
+## Suggested Reading Order
 
-## Quick Links
-
-- **Main README**: [../README.md](../README.md)
-- **Scripts folder**: [../scripts/](../scripts/)
-- **Data folder**: [../data/](../data/)
+1. Start with the repository [README](../README.md).
+2. Read [ARCHITECTURE.md](./ARCHITECTURE.md) for system context.
+3. Use the feature-specific or uploader guides only for the area you are touching.
