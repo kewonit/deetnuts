@@ -1,5 +1,6 @@
 import { createClient } from "@/app/lib/supabase/server";
 import { cookies } from "next/headers";
+import { unstable_rethrow } from "next/navigation";
 import { cache } from "react";
 
 export interface User {
@@ -46,6 +47,7 @@ export const getCurrentUser = cache(async (): Promise<User | null> => {
 
     return mappedUser;
   } catch (error) {
+    unstable_rethrow(error);
     console.error("Error getting current user:", error);
     return null;
   }
@@ -61,6 +63,7 @@ export const getAuthStatus = cache(
       const user = await getCurrentUser();
       return { isAuthenticated: user !== null, user };
     } catch (error) {
+      unstable_rethrow(error);
       console.error("Error checking auth status:", error);
       return { isAuthenticated: false, user: null };
     }

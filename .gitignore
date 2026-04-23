@@ -12,6 +12,7 @@
 # next.js
 /.next/
 /out/
+handoff
 
 # production
 /build
@@ -44,3 +45,4 @@ next-env.d.ts
 /data/josaa/
 /data/output/
 /.github/
+/.superpowers/

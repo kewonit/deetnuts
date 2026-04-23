@@ -27,6 +27,7 @@ import {
   HOME_UNIVERSITY_OPTIONS,
   ROUND_OPTIONS,
   YEAR_OPTIONS,
+  ROUNDS_BY_YEAR,
 } from "../constants";
 import { getPrecisePercentileRange } from "../utils";
 import { FilterState, PendingFilters } from "../types";
@@ -233,32 +234,45 @@ export function CutoffFilters({
                 <SelectValue placeholder="Choose a counseling round" />
               </SelectTrigger>
               <SelectContent className="border-blue-200 w-[calc(100vw-2rem)] sm:w-[380px] md:min-w-[400px] max-w-[500px]">
-                {ROUND_OPTIONS.map((option) => (
-                  <SelectItem
-                    key={option.value}
-                    value={option.value.toString()}
-                    className="font-abel hover:bg-blue-50 focus:bg-blue-50 py-3 md:py-4 cursor-pointer"
-                    disabled={isRoundSelectionDisabled && option.value !== 1}
-                  >
-                    <div className="flex items-center gap-2 md:gap-4 w-full">
-                      <div className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center border-2 border-blue-300">
-                        <span className="text-sm md:text-base font-bold text-blue-700">
-                          {option.value}
-                        </span>
+                {ROUND_OPTIONS.map((option) => {
+                  const allowedRounds = ROUNDS_BY_YEAR[pendingFilters.year] ?? [
+                    1,
+                  ];
+                  const isOptionDisabled = !allowedRounds.includes(
+                    option.value,
+                  );
+                  return (
+                    <SelectItem
+                      key={option.value}
+                      value={option.value.toString()}
+                      className="font-abel hover:bg-blue-50 focus:bg-blue-50 py-3 md:py-4 cursor-pointer"
+                      disabled={isOptionDisabled}
+                    >
+                      <div className="flex items-center gap-2 md:gap-4 w-full">
+                        <div className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center border-2 border-blue-300">
+                          <span className="text-sm md:text-base font-bold text-blue-700">
+                            {option.value}
+                          </span>
+                        </div>
+                        <div className="flex flex-col flex-1 text-left min-w-0">
+                          <span className="font-bold text-blue-900 text-sm md:text-base mb-0.5 md:mb-1 truncate">
+                            {option.label}
+                          </span>
+                        </div>
                       </div>
-                      <div className="flex flex-col flex-1 text-left min-w-0">
-                        <span className="font-bold text-blue-900 text-sm md:text-base mb-0.5 md:mb-1 truncate">
-                          {option.label}
-                        </span>
-                      </div>
-                    </div>
-                  </SelectItem>
-                ))}
+                    </SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
-            {isRoundSelectionDisabled && (
+            {pendingFilters.year === 2024 && (
               <p className="text-xs text-blue-600 font-abel">
-                Only Round 1 data is available for 2025.
+                Rounds 1&ndash;3 available for 2024.
+              </p>
+            )}
+            {pendingFilters.year === 2025 && (
+              <p className="text-xs text-emerald-600 font-abel">
+                Rounds 1&ndash;4 available for 2025.
               </p>
             )}
           </div>

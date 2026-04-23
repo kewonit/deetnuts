@@ -44,6 +44,7 @@ import {
   HOME_UNIVERSITY_OPTIONS,
   YEAR_OPTIONS,
   ROUND_OPTIONS,
+  ROUNDS_BY_YEAR,
 } from "../constants";
 
 interface FilterSidebarProps {
@@ -83,6 +84,7 @@ const YearRoundSelector = memo(function YearRoundSelector({
   onYearChange: (v: number) => void;
   onRoundChange: (v: number) => void;
 }) {
+  const allowedRounds = ROUNDS_BY_YEAR[year] ?? [1];
   const isRound2025 = year === 2025;
 
   return (
@@ -119,9 +121,9 @@ const YearRoundSelector = memo(function YearRoundSelector({
           <Layers className="h-3.5 w-3.5" />
           Round
         </Label>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-4 gap-2">
           {ROUND_OPTIONS.map((opt) => {
-            const isDisabled = isRound2025 && opt.value !== 1;
+            const isDisabled = !allowedRounds.includes(opt.value);
             return (
               <button
                 key={opt.value}
@@ -145,9 +147,14 @@ const YearRoundSelector = memo(function YearRoundSelector({
             );
           })}
         </div>
-        {isRound2025 && (
+        {year === 2024 && (
           <p className="text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded-md border border-amber-200">
-            Only Round 1 data available for 2025
+            Rounds 1–3 available for 2024
+          </p>
+        )}
+        {year === 2025 && (
+          <p className="text-xs text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md border border-emerald-200">
+            Rounds 1–4 available for 2025
           </p>
         )}
       </div>

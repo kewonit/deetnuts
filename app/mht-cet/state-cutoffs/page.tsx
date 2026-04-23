@@ -226,9 +226,9 @@ function StateCutoffsContent() {
     universities,
   ]);
 
-  // Ensure round is valid for 2025
+  // Ensure round is valid for the selected year.
   useEffect(() => {
-    if (year === 2025 && round !== 1) {
+    if (year === 2024 && round > 3) {
       setRound(1);
     }
   }, [year, round, setRound]);
