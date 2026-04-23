@@ -127,7 +127,19 @@ function parseFilterExpression(
     };
   };
 
-  const andGroups = splitTopLevel(trimOuterParens(filter), "&&");
+  const expandAndGroups = (input: string): string[] => {
+    const normalized = trimOuterParens(input);
+    const nestedGroups = splitTopLevel(normalized, "&&");
+
+    if (nestedGroups.length <= 1) {
+      return [normalized];
+    }
+
+    // Keep the script-side compatibility layer aligned with the runtime parser.
+    return nestedGroups.flatMap(expandAndGroups);
+  };
+
+  const andGroups = expandAndGroups(filter);
   return andGroups
     .map((group) => {
       const orTerms = splitTopLevel(trimOuterParens(group), "||")
