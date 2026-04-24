@@ -4,6 +4,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { toast } from "sonner";
 import { CutoffRecord } from "../types";
 import { getDisplayNameForRound } from "../constants";
+import { type SearchInsight } from "../search-insights";
 
 interface FetchParams {
   page: number;
@@ -25,6 +26,8 @@ interface UseCutoffDataReturn {
   totalItems: number;
   loading: boolean;
   paginationLoading: boolean;
+  hasFetched: boolean;
+  searchInsight: SearchInsight | null;
   error: string | null;
   fetchData: (params: FetchParams) => Promise<void>;
   prefetchNextPage: (params: FetchParams) => void;
@@ -39,11 +42,23 @@ export function useCutoffData(): UseCutoffDataReturn {
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(false);
   const [paginationLoading, setPaginationLoading] = useState(false);
+  const [hasFetched, setHasFetched] = useState(false);
+  const [searchInsight, setSearchInsight] = useState<SearchInsight | null>(
+    null,
+  );
   const [error, setError] = useState<string | null>(null);
 
   const abortControllerRef = useRef<AbortController | null>(null);
   const cacheRef = useRef<
-    Map<string, { data: CutoffRecord[]; totalItems: number; timestamp: number }>
+    Map<
+      string,
+      {
+        data: CutoffRecord[];
+        totalItems: number;
+        searchInsight: SearchInsight | null;
+        timestamp: number;
+      }
+    >
   >(new Map());
   const lastParamsRef = useRef<string>("");
   const requestIdRef = useRef<number>(0);
@@ -60,8 +75,9 @@ export function useCutoffData(): UseCutoffDataReturn {
 
   // Prefetch next page in background (silent, no state updates)
   const prefetchNextPage = useCallback((params: FetchParams) => {
-    // Use the current totalItems from state at time of call
-    const currentTotal = lastTotalItemsRef.current || totalItems;
+    const currentTotal = lastTotalItemsRef.current;
+    if (currentTotal <= 0) return;
+
     const totalPages = Math.ceil(currentTotal / params.perPage);
     if (params.page >= totalPages || !params.percentileInput) return;
 
@@ -104,6 +120,7 @@ export function useCutoffData(): UseCutoffDataReturn {
           cacheRef.current.set(cacheKey, {
             data: result.data,
             totalItems: result.totalItems,
+            searchInsight: result.searchInsight ?? null,
             timestamp: Date.now(),
           });
         }
@@ -111,7 +128,7 @@ export function useCutoffData(): UseCutoffDataReturn {
       .catch(() => {
         // Silently ignore prefetch errors
       });
-  }, []); // Remove totalItems dependency - use ref instead
+  }, []);
 
   const fetchData = useCallback(
     async (params: FetchParams) => {
@@ -119,6 +136,8 @@ export function useCutoffData(): UseCutoffDataReturn {
       if (!params.percentileInput || params.percentileInput.trim() === "") {
         setRecords([]);
         setTotalItems(0);
+        setHasFetched(false);
+        setSearchInsight(null);
         setLoading(false);
         setPaginationLoading(false);
         return;
@@ -141,6 +160,7 @@ export function useCutoffData(): UseCutoffDataReturn {
           lastTotalItemsRef.current = cached.totalItems;
           setRecords(cached.data);
           setTotalItems(cached.totalItems);
+          setSearchInsight(cached.searchInsight);
         }
         // Prefetch next page after cache hit
         prefetchNextPage(params);
@@ -193,6 +213,7 @@ export function useCutoffData(): UseCutoffDataReturn {
             : result.message || result.error || "Failed to fetch data";
 
           if (isMountedRef.current) {
+            setSearchInsight(null);
             setError(userMessage);
           }
 
@@ -220,6 +241,7 @@ export function useCutoffData(): UseCutoffDataReturn {
         cacheRef.current.set(cacheKey, {
           data: result.data,
           totalItems: result.totalItems,
+          searchInsight: result.searchInsight ?? null,
           timestamp: Date.now(),
         });
 
@@ -229,6 +251,8 @@ export function useCutoffData(): UseCutoffDataReturn {
           lastTotalItemsRef.current = result.totalItems;
           setRecords(result.data);
           setTotalItems(result.totalItems);
+          setSearchInsight(result.searchInsight ?? null);
+          setHasFetched(true);
         }
 
         // Prefetch next page after successful fetch
@@ -248,6 +272,7 @@ export function useCutoffData(): UseCutoffDataReturn {
           console.error("Fetch error:", err);
         }
         setError(errorMessage);
+        setSearchInsight(null);
 
         if (
           errorMessage.includes("network") ||
@@ -284,6 +309,8 @@ export function useCutoffData(): UseCutoffDataReturn {
     totalItems,
     loading,
     paginationLoading,
+    hasFetched,
+    searchInsight,
     error,
     fetchData,
     prefetchNextPage,

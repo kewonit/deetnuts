@@ -19,6 +19,7 @@ import {
 import { PredictionFilters } from "./types";
 import { usePredictions } from "./usePredictions";
 import { PredictionFiltersComponent } from "./filters";
+import { formatPercentChange } from "./formatters";
 
 // Dynamic import for heavy DataTable component - reduces initial bundle
 const PredictionsTable = dynamic(
@@ -197,7 +198,7 @@ export default function PredictionsPage() {
                 }`}
               >
                 {stats.averagePercentChange > 0 && "+"}
-                {stats.averagePercentChange.toFixed(2)}%
+                {formatPercentChange(stats.averagePercentChange)}%
               </p>
             </CardContent>
           </Card>

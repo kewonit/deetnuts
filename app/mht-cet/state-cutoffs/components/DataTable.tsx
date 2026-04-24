@@ -1,11 +1,10 @@
 "use client";
 
-import { memo, useMemo, useCallback, useRef, useEffect } from "react";
+import { memo, useMemo, useRef, useEffect } from "react";
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
-  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import {
@@ -33,9 +32,17 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { CutoffRecord } from "../types";
-import { calculatePercentileDistance } from "../utils";
+import {
+  formatSearchEmptyStateMessage,
+  type SearchInsight,
+} from "../search-insights";
+import {
+  calculatePercentileDistance,
+  formatPercentileDistance,
+} from "../utils";
 
 interface DataTableProps {
   records: CutoffRecord[];
@@ -45,6 +52,8 @@ interface DataTableProps {
   loading: boolean;
   paginationLoading: boolean;
   error?: string | null;
+  search: string;
+  searchInsight?: SearchInsight | null;
   percentileTarget: string;
   density: "compact" | "comfortable" | "spacious";
   visibleColumns: string[];
@@ -88,7 +97,7 @@ function PercentileDistanceBadge({
     >
       {isTarget
         ? "✓ TARGET"
-        : `${distance > 0 ? "-" : ""}${Math.abs(distance).toFixed(2)}%`}
+        : `${distance > 0 ? "-" : ""}${formatPercentileDistance(distance)}%`}
     </Badge>
   );
 }
@@ -135,12 +144,42 @@ function TableSkeleton({
 }
 
 // Empty state
-function EmptyState({ hasFilters }: { hasFilters: boolean }) {
+function EmptyState({
+  hasFilters,
+  search,
+  searchInsight,
+  percentileTarget,
+}: {
+  hasFilters: boolean;
+  search: string;
+  searchInsight?: SearchInsight | null;
+  percentileTarget: string;
+}) {
+  const message = formatSearchEmptyStateMessage({
+    hasFilters,
+    percentileTarget,
+    search,
+    searchInsight: searchInsight ?? null,
+  });
+
+  const hasSearchInsight =
+    !!searchInsight &&
+    searchInsight.totalMatchingRows > 0 &&
+    searchInsight.lowestMatchingCutoff !== null;
+
   return (
     <div className="flex flex-col items-center justify-center py-16 px-4">
-      <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+      <div
+        className={cn(
+          "w-20 h-20 rounded-full flex items-center justify-center mb-4",
+          hasSearchInsight ? "bg-amber-100" : "bg-gray-100",
+        )}
+      >
         <svg
-          className="w-10 h-10 text-gray-400"
+          className={cn(
+            "w-10 h-10",
+            hasSearchInsight ? "text-amber-600" : "text-gray-400",
+          )}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -154,13 +193,11 @@ function EmptyState({ hasFilters }: { hasFilters: boolean }) {
         </svg>
       </div>
       <h3 className="text-lg font-semibold text-gray-900 mb-1">
-        No results found
+        {hasSearchInsight
+          ? "Matches Found Above Your Target"
+          : "No results found"}
       </h3>
-      <p className="text-sm text-gray-500 text-center max-w-sm">
-        {hasFilters
-          ? "No cutoffs match your current filters. Clear a few filters or widen your percentile/rank range."
-          : "Enter your percentile or rank to see colleges and courses you can target."}
-      </p>
+      <p className="text-sm text-gray-500 text-center max-w-sm">{message}</p>
     </div>
   );
 }
@@ -185,6 +222,10 @@ function Pagination({
 }) {
   const startItem = (currentPage - 1) * perPage + 1;
   const endItem = Math.min(currentPage * perPage, totalItems);
+  const navButtonClassName =
+    "h-10 w-10 p-0 shadow-base hover:bg-main hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none sm:h-9 sm:w-9";
+  const pageButtonClassName =
+    "h-10 min-w-[40px] p-0 text-xs font-bold sm:h-9 sm:min-w-[36px]";
 
   // Generate smart page numbers (show first, last, current and neighbors)
   const getPageNumbers = () => {
@@ -236,42 +277,38 @@ function Pagination({
   const pageNumbers = getPageNumbers();
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-4 py-3 border-t-2 border-gray-200 bg-gray-50/80">
+    <div className="flex flex-col gap-3 border-t-2 border-black bg-main px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
       {/* Results info */}
-      <div className="text-sm text-gray-600">
-        Showing{" "}
-        <span className="font-bold text-gray-900">
-          {startItem.toLocaleString()}
-        </span>{" "}
-        to{" "}
-        <span className="font-bold text-gray-900">
-          {endItem.toLocaleString()}
-        </span>{" "}
-        of{" "}
-        <span className="font-bold text-gray-900">
-          {totalItems.toLocaleString()}
-        </span>{" "}
-        results
+      <div className="inline-flex flex-wrap items-center justify-center gap-1 rounded-base border-2 border-black bg-white px-3 py-2 text-center text-sm text-black shadow-base sm:justify-start sm:text-left">
+        <span className="text-black/70">Showing</span>
+        <span className="font-bold">{startItem.toLocaleString()}</span>
+        <span className="text-black/70">to</span>
+        <span className="font-bold">{endItem.toLocaleString()}</span>
+        <span className="text-black/70">of</span>
+        <span className="font-bold">{totalItems.toLocaleString()}</span>
+        <span className="text-black/70">results</span>
       </div>
 
       {/* Pagination controls */}
-      <div className="flex items-center gap-3">
+      <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:justify-end sm:gap-3">
         {/* Per page selector */}
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-600 hidden sm:inline">Rows:</span>
+        <div className="flex w-full items-center justify-between gap-2 rounded-base border-2 border-black bg-white px-2.5 py-1.5 shadow-base sm:w-auto sm:justify-normal">
+          <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-black/70">
+            Rows per page
+          </span>
           <Select
             value={perPage.toString()}
             onValueChange={(v) => onPerPageChange(parseInt(v))}
           >
-            <SelectTrigger className="w-[70px] h-8 text-xs border-2 border-gray-300 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <SelectTrigger className="h-9 w-[88px] shrink-0 border-2 border-black bg-main text-xs font-bold shadow-none focus:ring-0 focus:ring-offset-0">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="border-2 border-black shadow-base">
               {ITEMS_PER_PAGE_OPTIONS.map((opt) => (
                 <SelectItem
                   key={opt}
                   value={opt.toString()}
-                  className="text-xs"
+                  className="text-xs font-medium"
                 >
                   {opt}
                 </SelectItem>
@@ -281,12 +318,12 @@ function Pagination({
         </div>
 
         {/* Page navigation */}
-        <div className="flex items-center gap-1">
+        <div className="flex w-full items-center justify-between gap-2 sm:w-auto sm:justify-start sm:gap-1">
           {/* First & Previous */}
           <Button
             variant="neutral"
             size="sm"
-            className="h-8 w-8 p-0 border-2"
+            className={cn(navButtonClassName, "hidden sm:inline-flex")}
             onClick={() => onPageChange(1)}
             disabled={currentPage === 1 || loading}
             title="First page"
@@ -296,7 +333,7 @@ function Pagination({
           <Button
             variant="neutral"
             size="sm"
-            className="h-8 w-8 p-0 border-2"
+            className={navButtonClassName}
             onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage === 1 || loading}
             title="Previous page"
@@ -317,9 +354,9 @@ function Pagination({
                   variant={pageNum === currentPage ? "default" : "neutral"}
                   size="sm"
                   className={cn(
-                    "h-8 min-w-[32px] p-0 border-2 text-xs font-bold",
-                    pageNum === currentPage &&
-                      "bg-purple-600 text-white border-purple-700 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]",
+                    pageButtonClassName,
+                    pageNum !== currentPage &&
+                      "shadow-base hover:bg-main hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none",
                   )}
                   onClick={() => onPageChange(pageNum)}
                   disabled={loading}
@@ -331,15 +368,15 @@ function Pagination({
           </div>
 
           {/* Mobile page indicator */}
-          <span className="sm:hidden px-3 text-sm font-bold text-gray-700 min-w-[80px] text-center">
-            {currentPage} / {totalPages}
+          <span className="min-w-0 flex-1 rounded-base border-2 border-black bg-white px-3 py-2 text-center text-sm font-bold text-black shadow-base sm:hidden">
+            Page {currentPage} of {totalPages}
           </span>
 
           {/* Next & Last */}
           <Button
             variant="neutral"
             size="sm"
-            className="h-8 w-8 p-0 border-2"
+            className={navButtonClassName}
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage >= totalPages || loading}
             title="Next page"
@@ -349,7 +386,7 @@ function Pagination({
           <Button
             variant="neutral"
             size="sm"
-            className="h-8 w-8 p-0 border-2"
+            className={cn(navButtonClassName, "hidden sm:inline-flex")}
             onClick={() => onPageChange(totalPages)}
             disabled={currentPage >= totalPages || loading}
             title="Last page"
@@ -371,6 +408,8 @@ export const DataTable = memo(function DataTable({
   loading,
   paginationLoading,
   error,
+  search,
+  searchInsight,
   percentileTarget,
   density,
   visibleColumns,
@@ -426,7 +465,7 @@ export const DataTable = memo(function DataTable({
     if (visibleColumns.includes("college_name")) {
       cols.push({
         accessorKey: "college_name",
-        header: ({ column }) => (
+        header: () => (
           <button
             onClick={() =>
               onSortChange(
@@ -474,7 +513,7 @@ export const DataTable = memo(function DataTable({
     if (visibleColumns.includes("course_name")) {
       cols.push({
         accessorKey: "course_name",
-        header: ({ column }) => (
+        header: () => (
           <button
             onClick={() =>
               onSortChange(
@@ -539,7 +578,7 @@ export const DataTable = memo(function DataTable({
     if (visibleColumns.includes("last_rank")) {
       cols.push({
         accessorKey: "last_rank",
-        header: ({ column }) => (
+        header: () => (
           <button
             onClick={() =>
               onSortChange(
@@ -582,7 +621,7 @@ export const DataTable = memo(function DataTable({
     if (visibleColumns.includes("cutoff_score")) {
       cols.push({
         accessorKey: "cutoff_score",
-        header: ({ column }) => (
+        header: () => (
           <button
             onClick={() =>
               onSortChange(
@@ -634,7 +673,7 @@ export const DataTable = memo(function DataTable({
     if (visibleColumns.includes("total_admitted")) {
       cols.push({
         accessorKey: "total_admitted",
-        header: ({ column }) => (
+        header: () => (
           <button
             onClick={() =>
               onSortChange(
@@ -800,7 +839,12 @@ export const DataTable = memo(function DataTable({
             </p>
           </div>
         ) : (
-          <EmptyState hasFilters={!!percentileTarget} />
+          <EmptyState
+            hasFilters={!!percentileTarget}
+            search={search}
+            searchInsight={searchInsight}
+            percentileTarget={percentileTarget}
+          />
         )}
       </div>
     );
@@ -848,74 +892,76 @@ export const DataTable = memo(function DataTable({
             </div>
           </div>
         )}
-        <div
-          ref={parentRef}
-          className="overflow-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
-          style={{ maxHeight: "calc(100vh - 280px)", minHeight: "500px" }}
+        <ScrollArea
+          className="w-full"
+          style={{ height: "calc(100vh - 280px)", minHeight: "500px" }}
         >
-          <table className="w-full border-collapse">
-            {/* Header */}
-            <thead className="sticky top-0 z-10 bg-gray-50 border-b-2 border-gray-200">
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <th
-                      key={header.id}
-                      className={cn(
-                        "px-3 py-3 text-left text-xs uppercase tracking-wider",
-                        "border-r border-gray-200 last:border-r-0",
-                      )}
-                      style={{ width: header.getSize() }}
-                    >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-
-            {/* Body */}
-            <tbody className="divide-y divide-gray-100">
-              {loading && records.length === 0 ? (
-                // Only show skeletons on initial load, not pagination
-                <TableSkeleton rows={perPage} density={density} />
-              ) : (
-                rows.map((row, index) => (
-                  <tr
-                    key={row.id}
-                    className={cn(
-                      "hover:bg-purple-50/50 transition-colors",
-                      index % 2 === 0 ? "bg-white" : "bg-gray-50/30",
-                      paginationLoading && "opacity-60",
-                    )}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <td
-                        key={cell.id}
+          <div ref={parentRef} className="min-w-max">
+            <table className="w-full border-collapse">
+              {/* Header */}
+              <thead className="sticky top-0 z-10 bg-gray-50 border-b-2 border-gray-200">
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <tr key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <th
+                        key={header.id}
                         className={cn(
-                          "px-3 border-r border-gray-100 last:border-r-0",
-                          density === "compact"
-                            ? "py-1"
-                            : density === "spacious"
-                              ? "py-4"
-                              : "py-2",
+                          "px-3 py-3 text-left text-xs uppercase tracking-wider",
+                          "border-r border-gray-200 last:border-r-0",
                         )}
+                        style={{ width: header.getSize() }}
                       >
                         {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
+                          header.column.columnDef.header,
+                          header.getContext(),
                         )}
-                      </td>
+                      </th>
                     ))}
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                ))}
+              </thead>
+
+              {/* Body */}
+              <tbody className="divide-y divide-gray-100">
+                {loading && records.length === 0 ? (
+                  // Only show skeletons on initial load, not pagination
+                  <TableSkeleton rows={perPage} density={density} />
+                ) : (
+                  rows.map((row, index) => (
+                    <tr
+                      key={row.id}
+                      className={cn(
+                        "hover:bg-purple-50/50 transition-colors",
+                        index % 2 === 0 ? "bg-white" : "bg-gray-50/30",
+                        paginationLoading && "opacity-60",
+                      )}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <td
+                          key={cell.id}
+                          className={cn(
+                            "px-3 border-r border-gray-100 last:border-r-0",
+                            density === "compact"
+                              ? "py-1"
+                              : density === "spacious"
+                                ? "py-4"
+                                : "py-2",
+                          )}
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
       </div>
 
       {/* Pagination */}

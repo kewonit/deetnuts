@@ -1,4 +1,3 @@
-import { BsReddit } from "react-icons/bs";
 import Link from "next/link";
 import { Montserrat } from "next/font/google";
 
@@ -10,12 +9,6 @@ const lato = Montserrat({
 export default function Footer() {
   const legalLinks = [
     { name: "Good Being Terms", href: "/compliance/terms-and-conditions" },
-  ];
-
-  const socialLinks = [
-    {
-      /* name: "Reddit", href: "#", icon: BsReddit */
-    },
   ];
 
   const serviceLinks = [{ name: "MHT-CET", href: "/mht-cet" }];
@@ -38,21 +31,6 @@ export default function Footer() {
                 organizations. We do not own any of the data displayed on this
                 website. All data is sourced from official sources.
               </p>
-
-              <ul className="mt-8 flex gap-6">
-                {/*socialLinks.map((link, index) => (
-                <Link 
-                  key={index}
-                  href={link.href}
-                  rel="noreferrer"
-                  target="_blank"
-                  className="text-gray-700 transition hover:opacity-75"
-                >
-                  <span className="sr-only">{link.name}</span>
-                  <link.icon className="h-6 w-6" aria-hidden="true" />
-                </Link>
-              ))*/}
-              </ul>
             </div>
 
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-3">

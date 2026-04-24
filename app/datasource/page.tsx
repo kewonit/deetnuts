@@ -1,6 +1,4 @@
 "use client";
-import { useEffect } from "react";
-import { gsap } from "gsap";
 import Augillion from "next/font/local";
 const augillion = Augillion({
   src: "../../public/Augillion.otf",

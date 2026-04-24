@@ -30,11 +30,31 @@ export const calculatePercentileDistance = (
   currentPercentile: number,
   targetPercentile: number,
 ): number => {
-  return Math.round((targetPercentile - currentPercentile) * 100) / 100;
+  return (
+    Math.round((targetPercentile - currentPercentile) * 10000000000) /
+    10000000000
+  );
+};
+
+export const formatPercentileDistance = (distance: number): string => {
+  const absoluteDistance = Math.abs(distance);
+  const fractionDigits =
+    absoluteDistance === 0
+      ? 2
+      : absoluteDistance < 0.01
+        ? 4
+        : absoluteDistance < 1
+          ? 3
+          : 2;
+
+  return new Intl.NumberFormat("en", {
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  }).format(absoluteDistance);
 };
 
 // Debounce hook for performance optimization
-export const useDebounce = (value: any, delay: number) => {
+export const useDebounce = <T>(value: T, delay: number) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {

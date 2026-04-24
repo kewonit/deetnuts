@@ -25,8 +25,10 @@ import {
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { ArrowUpDown, TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { PredictionRecord, SEAT_TYPE_LABELS, QUOTA_LABELS } from "./types";
+import { formatPercentChange } from "./formatters";
 
 interface PredictionsTableProps {
   data: PredictionRecord[];
@@ -216,7 +218,6 @@ export function PredictionsTable({
           const pctChange = row.getValue("pct_change_from_2025") as number;
           const isPositive = pctChange > 0;
           const isNegative = pctChange < 0;
-          const isNeutral = pctChange === 0;
 
           return (
             <div
@@ -229,7 +230,7 @@ export function PredictionsTable({
               }`}
             >
               {isPositive && "+"}
-              {pctChange.toFixed(2)}%
+              {formatPercentChange(pctChange)}%
             </div>
           );
         },
@@ -287,46 +288,52 @@ export function PredictionsTable({
 
   return (
     <div className="rounded-lg border-2 border-black bg-white overflow-hidden shadow-base">
-      <div className="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow
-                key={headerGroup.id}
-                className="border-b-2 border-black"
-              >
-                {headerGroup.headers.map((header) => (
-                  <TableHead
-                    key={header.id}
-                    className="bg-main font-heading text-black"
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                className="border-b border-gray-200 hover:bg-gray-50"
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+      <ScrollArea className="w-full">
+        <div className="min-w-[980px]">
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow
+                  key={headerGroup.id}
+                  className="border-b-2 border-black"
+                >
+                  {headerGroup.headers.map((header) => (
+                    <TableHead
+                      key={header.id}
+                      className="bg-main font-heading text-black"
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                    </TableHead>
+                  ))}
+                </TableRow>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  className="border-b border-gray-200 hover:bg-gray-50"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
     </div>
   );
 }

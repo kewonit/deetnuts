@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useCallback, useMemo, useState } from "react";
-import { type ChangeEvent, type ElementType } from "react";
+import { type ChangeEvent, type ElementType, type ReactNode } from "react";
 import {
   ChevronDown,
   Filter,
@@ -14,7 +14,6 @@ import {
   Sparkles,
   Calendar,
   Layers,
-  X,
   Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -47,9 +46,8 @@ import {
   ROUNDS_BY_YEAR,
 } from "../constants";
 
-interface FilterSidebarProps {
+export interface FilterSidebarProps {
   percentile: string;
-  search: string;
   year: number;
   round: number;
   categories: string[];
@@ -59,7 +57,6 @@ interface FilterSidebarProps {
   scoreMode: "percentile" | "rank";
   rank: string;
   onPercentileChange: (value: string) => void;
-  onSearchChange: (value: string) => void;
   onYearChange: (value: number) => void;
   onRoundChange: (value: number) => void;
   onCategoriesChange: (value: string[]) => void;
@@ -70,6 +67,8 @@ interface FilterSidebarProps {
   onRankChange: (value: string) => void;
   onClearAll: () => void;
   activeFilterCount: number;
+  headerActions?: ReactNode;
+  footer?: ReactNode;
   className?: string;
 }
 
@@ -85,7 +84,6 @@ const YearRoundSelector = memo(function YearRoundSelector({
   onRoundChange: (v: number) => void;
 }) {
   const allowedRounds = ROUNDS_BY_YEAR[year] ?? [1];
-  const isRound2025 = year === 2025;
 
   return (
     <div className="space-y-4">
@@ -555,7 +553,6 @@ const FilterGroup = memo(function FilterGroup({
 
 export const FilterSidebar = memo(function FilterSidebar({
   percentile,
-  search,
   year,
   round,
   categories,
@@ -565,7 +562,6 @@ export const FilterSidebar = memo(function FilterSidebar({
   scoreMode,
   rank,
   onPercentileChange,
-  onSearchChange,
   onYearChange,
   onRoundChange,
   onCategoriesChange,
@@ -576,6 +572,8 @@ export const FilterSidebar = memo(function FilterSidebar({
   onRankChange,
   onClearAll,
   activeFilterCount,
+  headerActions,
+  footer,
   className,
 }: FilterSidebarProps) {
   return (
@@ -583,7 +581,7 @@ export const FilterSidebar = memo(function FilterSidebar({
       className={cn("flex flex-col h-full overflow-hidden bg-white", className)}
     >
       <div className="flex-shrink-0 px-5 py-4 border-b border-gray-200 bg-gray-50">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-purple-600 rounded-lg">
               <Filter className="h-5 w-5 text-white" />
@@ -593,17 +591,20 @@ export const FilterSidebar = memo(function FilterSidebar({
               <p className="text-xs text-gray-500">Refine your search</p>
             </div>
           </div>
-          {activeFilterCount > 0 && (
-            <Button
-              variant="neutral"
-              size="sm"
-              onClick={onClearAll}
-              className="h-8 px-3 text-xs font-medium text-red-600 hover:text-red-700 hover:bg-red-50 border border-red-200 gap-1.5 rounded-md"
-            >
-              <RotateCcw className="h-3 w-3" />
-              Reset
-            </Button>
-          )}
+          <div className="flex items-center gap-2">
+            {activeFilterCount > 0 && (
+              <Button
+                variant="neutral"
+                size="sm"
+                onClick={onClearAll}
+                className="h-8 px-3 text-xs font-medium text-red-600 hover:text-red-700 hover:bg-red-50 border border-red-200 gap-1.5 rounded-md"
+              >
+                <RotateCcw className="h-3 w-3" />
+                Reset
+              </Button>
+            )}
+            {headerActions}
+          </div>
         </div>
         {activeFilterCount > 0 && (
           <div className="mt-3">
@@ -691,6 +692,8 @@ export const FilterSidebar = memo(function FilterSidebar({
           </div>
         </div>
       </ScrollArea>
+
+      {footer ? <div className="flex-shrink-0">{footer}</div> : null}
     </div>
   );
 });

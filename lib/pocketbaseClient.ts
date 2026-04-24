@@ -18,6 +18,30 @@ function isMissingRelationError(error: SupabaseLikeError | null): boolean {
   );
 }
 
+export function isRequestedRangeNotSatisfiableError(
+  error: SupabaseLikeError | null,
+): boolean {
+  if (!error) return false;
+  return (
+    error.code === "PGRST103" ||
+    error.message.toLowerCase().includes("range not satisfiable")
+  );
+}
+
+export function createEmptyListResult<T>(
+  page: number,
+  perPage: number,
+  totalItems: number,
+): ListResult<T> {
+  return {
+    items: [],
+    page,
+    perPage,
+    totalItems,
+    totalPages: perPage > 0 ? Math.ceil(totalItems / perPage) : 0,
+  };
+}
+
 export class ClientResponseError extends Error {
   status: number;
   data: unknown;
@@ -331,18 +355,40 @@ export function getPocketBase(): PocketBaseLike {
         query = query.range(from, to);
 
         const { data, error, count } = await query;
+        if (isRequestedRangeNotSatisfiableError(error)) {
+          if (options?.skipTotal) {
+            return createEmptyListResult<T>(page, perPage, 0);
+          }
+
+          let countQuery = adminClient.from(name).select("id", {
+            count: "exact",
+            head: true,
+          });
+          countQuery = applyFilter(countQuery, options?.filter);
+
+          const { count: fallbackCount, error: fallbackError } =
+            await countQuery;
+          if (
+            fallbackError &&
+            !isMissingRelationError(fallbackError) &&
+            !isRequestedRangeNotSatisfiableError(fallbackError)
+          ) {
+            throw new ClientResponseError(
+              fallbackError.message,
+              400,
+              fallbackError,
+            );
+          }
+
+          return createEmptyListResult<T>(page, perPage, fallbackCount || 0);
+        }
+
         if (error && !isMissingRelationError(error)) {
           throw new ClientResponseError(error.message, 400, error);
         }
 
         if (isMissingRelationError(error)) {
-          return {
-            items: [],
-            page,
-            perPage,
-            totalItems: 0,
-            totalPages: 0,
-          };
+          return createEmptyListResult<T>(page, perPage, 0);
         }
 
         const totalItems = options?.skipTotal ? data?.length || 0 : count || 0;

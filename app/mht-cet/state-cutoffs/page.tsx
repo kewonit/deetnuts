@@ -25,21 +25,22 @@ import {
   Building2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 import { FilterSidebar } from "./components/FilterSidebar";
+import { MobileFilterToast } from "./components/MobileFilterToast";
 import { TopToolbar } from "./components/TopToolbar";
 import { useCutoffData } from "./hooks/use-cutoff-data";
 import { getDisplayNameForRound } from "./constants";
-import { CutoffRecord } from "./types";
+import { getClampedPage } from "./pagination";
+import {
+  closeMobileFilterToast,
+  getMobileFilterToastConfig,
+  openMobileFilterToast,
+  shouldAutoDismissMobileFilterToast,
+} from "./mobile-filter-toast-controller";
 
 // Dynamic import for heavy DataTable component - reduces initial bundle
 const DataTable = dynamic(
@@ -187,6 +188,8 @@ function StateCutoffsContent() {
     totalItems,
     loading,
     paginationLoading,
+    hasFetched,
+    searchInsight,
     error,
     fetchData,
     clearCache,
@@ -226,12 +229,27 @@ function StateCutoffsContent() {
     universities,
   ]);
 
+  const clampedPage = useMemo(
+    () => getClampedPage(page, perPage, totalItems),
+    [page, perPage, totalItems],
+  );
+
   // Ensure round is valid for the selected year.
   useEffect(() => {
     if (year === 2024 && round > 3) {
       setRound(1);
     }
   }, [year, round, setRound]);
+
+  useEffect(() => {
+    if (!hasFetched || loading || paginationLoading) {
+      return;
+    }
+
+    if (clampedPage !== page) {
+      setPage(clampedPage);
+    }
+  }, [clampedPage, hasFetched, loading, page, paginationLoading, setPage]);
 
   // Fetch data when filters change (debounced)
   useEffect(() => {
@@ -400,13 +418,6 @@ function StateCutoffsContent() {
     },
     [setPercentile, setPage],
   );
-  const handleSearchChange = useCallback(
-    (v: string) => {
-      setSearch(v || null);
-      setPage(1);
-    },
-    [setSearch, setPage],
-  );
   const handleYearChange = useCallback(
     (v: number) => {
       setYear(v);
@@ -481,7 +492,6 @@ function StateCutoffsContent() {
   const filterSidebarProps = useMemo(
     () => ({
       percentile,
-      search,
       year,
       round,
       categories,
@@ -491,7 +501,6 @@ function StateCutoffsContent() {
       scoreMode,
       rank,
       onPercentileChange: handlePercentileChange,
-      onSearchChange: handleSearchChange,
       onYearChange: handleYearChange,
       onRoundChange: handleRoundChange,
       onCategoriesChange: handleCategoriesChange,
@@ -507,7 +516,6 @@ function StateCutoffsContent() {
       percentile,
       scoreMode,
       rank,
-      search,
       year,
       round,
       categories,
@@ -515,7 +523,6 @@ function StateCutoffsContent() {
       statuses,
       universities,
       handlePercentileChange,
-      handleSearchChange,
       handleYearChange,
       handleRoundChange,
       handleCategoriesChange,
@@ -528,6 +535,77 @@ function StateCutoffsContent() {
       activeFilterCount,
     ],
   );
+
+  const handleCloseMobileFilterToast = useCallback(() => {
+    setMobileFilterOpen(false);
+    closeMobileFilterToast(toast.dismiss);
+  }, []);
+
+  const mobileFilterToastContent = useMemo(
+    () => (
+      <MobileFilterToast
+        {...filterSidebarProps}
+        onApply={handleCloseMobileFilterToast}
+        onClose={handleCloseMobileFilterToast}
+      />
+    ),
+    [filterSidebarProps, handleCloseMobileFilterToast],
+  );
+
+  const renderMobileFilterToast = useCallback(() => {
+    const config = getMobileFilterToastConfig();
+
+    return toast.custom(() => mobileFilterToastContent, {
+      ...config,
+      onDismiss: () => setMobileFilterOpen(false),
+    });
+  }, [mobileFilterToastContent]);
+
+  const handleOpenMobileFilterToast = useCallback(() => {
+    openMobileFilterToast(() => renderMobileFilterToast(), toast.dismiss);
+    setMobileFilterOpen(true);
+  }, [renderMobileFilterToast]);
+
+  const handleToggleMobileFilters = useCallback(() => {
+    if (mobileFilterOpen) {
+      handleCloseMobileFilterToast();
+      return;
+    }
+
+    handleOpenMobileFilterToast();
+  }, [
+    mobileFilterOpen,
+    handleCloseMobileFilterToast,
+    handleOpenMobileFilterToast,
+  ]);
+
+  useEffect(() => {
+    if (!mobileFilterOpen) {
+      return;
+    }
+
+    renderMobileFilterToast();
+  }, [mobileFilterOpen, renderMobileFilterToast]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (
+        mobileFilterOpen &&
+        shouldAutoDismissMobileFilterToast(window.innerWidth)
+      ) {
+        handleCloseMobileFilterToast();
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [mobileFilterOpen, handleCloseMobileFilterToast]);
+
+  useEffect(() => {
+    return () => {
+      closeMobileFilterToast(toast.dismiss);
+    };
+  }, []);
 
   // Active filters for toolbar - memoized
   const activeFilters = useMemo(
@@ -543,34 +621,38 @@ function StateCutoffsContent() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#E4DFF2] via-[#daf5f0] to-[#E4DFF2]">
       {/* Mobile Filter Toggle - Fixed at bottom */}
-      <div className="lg:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
-        <Sheet open={mobileFilterOpen} onOpenChange={setMobileFilterOpen}>
-          <SheetTrigger asChild>
-            <Button
-              className={cn(
-                "h-14 px-6 rounded-full font-bold text-base",
-                "bg-purple-600 text-white hover:bg-purple-700",
-                "shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]",
-                "border-2 border-black",
-                "flex items-center gap-2",
-              )}
-            >
-              <Menu className="h-5 w-5" />
-              Filters
-              {activeFilterCount > 0 && (
-                <Badge className="bg-white text-purple-700 border-0 ml-1">
-                  {activeFilterCount}
-                </Badge>
-              )}
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="w-[340px] p-0">
-            <SheetHeader className="sr-only">
-              <SheetTitle>Filters</SheetTitle>
-            </SheetHeader>
-            <FilterSidebar {...filterSidebarProps} className="h-full" />
-          </SheetContent>
-        </Sheet>
+      <div
+        className={cn(
+          "lg:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-200",
+          mobileFilterOpen && "pointer-events-none translate-y-3 opacity-0",
+        )}
+      >
+        <Button
+          aria-expanded={mobileFilterOpen}
+          aria-pressed={mobileFilterOpen}
+          className={cn(
+            "h-14 px-6 rounded-full font-bold text-base",
+            mobileFilterOpen
+              ? "bg-black text-white hover:bg-black/90"
+              : "bg-purple-600 text-white hover:bg-purple-700",
+            "shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]",
+            "border-2 border-black",
+            "flex items-center gap-2",
+          )}
+          onClick={handleToggleMobileFilters}
+        >
+          {mobileFilterOpen ? (
+            <X className="h-5 w-5" />
+          ) : (
+            <Menu className="h-5 w-5" />
+          )}
+          {mobileFilterOpen ? "Close filters" : "Filters"}
+          {activeFilterCount > 0 && (
+            <Badge className="bg-white text-purple-700 border-0 ml-1">
+              {activeFilterCount}
+            </Badge>
+          )}
+        </Button>
       </div>
 
       {/* Main Layout */}
@@ -670,6 +752,8 @@ function StateCutoffsContent() {
               loading={loading}
               paginationLoading={paginationLoading}
               error={error}
+              search={search}
+              searchInsight={searchInsight}
               percentileTarget={percentileForFetch}
               density={density}
               visibleColumns={visibleColumns}
@@ -693,7 +777,7 @@ function StateCutoffsContent() {
                       1
                     </span>
                     <span>
-                      Enter your MHT-CET percentile in the sidebar filter
+                      Enter your MHT-CET percentile in the filter panel
                     </span>
                   </li>
                   <li className="flex items-start gap-2">

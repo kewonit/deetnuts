@@ -6,9 +6,16 @@ import {
   getCollectionForRound,
   isValidRound,
   DEFAULT_ROUND,
-  ROUND_CONFIG,
-  COURSE_GROUPS,
 } from "./constants";
+import {
+  type SearchInsight,
+  summarizeSearchInsightRows,
+} from "./search-insights";
+import { runWithConcurrencyLimit } from "./concurrency";
+import {
+  buildStateCutoffSearchFilter,
+  escapeFilterValue,
+} from "./search-filter";
 
 export async function getCutoffRecords(
   page: number,
@@ -77,13 +84,17 @@ export async function getCutoffRecords(
       categoryChunk?: string[],
       statusChunk?: string[],
       homeUniversityChunk?: string[],
+      includePercentile = true,
     ) => {
       const filterParts: string[] = [];
+      const buildEqualsFilter = (field: string, values: string[]) => {
+        return values
+          .map((value: string) => `${field} = "${escapeFilterValue(value)}"`)
+          .join(" || ");
+      };
 
       if (search) {
-        filterParts.push(
-          `(college_name ~ "${search}" || course_name ~ "${search}")`,
-        );
+        filterParts.push(buildStateCutoffSearchFilter(search));
       }
 
       // Use chunked categories if provided, otherwise use all categories
@@ -94,9 +105,10 @@ export async function getCutoffRecords(
         Array.isArray(categoriesToFilter) &&
         categoriesToFilter.length > 0
       ) {
-        const categoryFilter = categoriesToFilter
-          .map((cat: string) => `category = "${cat}"`)
-          .join(" || ");
+        const categoryFilter = buildEqualsFilter(
+          "category",
+          categoriesToFilter,
+        );
         filterParts.push(`(${categoryFilter})`);
       }
 
@@ -107,9 +119,7 @@ export async function getCutoffRecords(
         Array.isArray(coursesToFilter) &&
         coursesToFilter.length > 0
       ) {
-        const courseFilter = coursesToFilter
-          .map((course: string) => `course_name = "${course}"`)
-          .join(" || ");
+        const courseFilter = buildEqualsFilter("course_name", coursesToFilter);
         filterParts.push(`(${courseFilter})`);
       }
 
@@ -120,9 +130,10 @@ export async function getCutoffRecords(
         Array.isArray(homeUniversitiesToFilter) &&
         homeUniversitiesToFilter.length > 0
       ) {
-        const homeUniversityFilter = homeUniversitiesToFilter
-          .map((uni: string) => `home_university = "${uni}"`)
-          .join(" || ");
+        const homeUniversityFilter = buildEqualsFilter(
+          "home_university",
+          homeUniversitiesToFilter,
+        );
         filterParts.push(`(${homeUniversityFilter})`);
       }
 
@@ -133,14 +144,16 @@ export async function getCutoffRecords(
         Array.isArray(statusesToFilter) &&
         statusesToFilter.length > 0
       ) {
-        const statusFilter = statusesToFilter
-          .map((status: string) => `status = "${status}"`)
-          .join(" || ");
+        const statusFilter = buildEqualsFilter("status", statusesToFilter);
         filterParts.push(`(${statusFilter})`);
       }
 
       // Percentile-based filtering (from target down to 0%) - filtering cutoff_score directly
-      if (percentileInput && !isNaN(parseFloat(percentileInput))) {
+      if (
+        includePercentile &&
+        percentileInput &&
+        !isNaN(parseFloat(percentileInput))
+      ) {
         const targetPercentile = parseFloat(percentileInput);
         // Use higher precision (10 decimal places) to avoid floating-point errors
         const minPercentile = 0; // Changed: show from 0% to target percentile
@@ -176,6 +189,24 @@ export async function getCutoffRecords(
       (homeUniversities?.length || 0);
     const shouldSplitQuery = totalFilterItems > 30; // If total filters exceed 30 items, use chunking
 
+    const chunkValues = (values?: string[]) =>
+      values && values.length > MAX_ITEMS_PER_CHUNK
+        ? Array.from(
+            { length: Math.ceil(values.length / MAX_ITEMS_PER_CHUNK) },
+            (_, index) =>
+              values.slice(
+                index * MAX_ITEMS_PER_CHUNK,
+                (index + 1) * MAX_ITEMS_PER_CHUNK,
+              ),
+          )
+        : [values || []];
+
+    const categoryChunks = chunkValues(categories);
+    const courseChunks = chunkValues(courses);
+    const statusChunks = chunkValues(statuses);
+    const homeUniversityChunks = chunkValues(homeUniversities);
+    const MAX_CONCURRENT_CHUNK_QUERIES = 8;
+
     console.log("Query strategy:", {
       totalCategories: categories?.length || 0,
       totalCourses: courses?.length || 0,
@@ -205,6 +236,105 @@ export async function getCutoffRecords(
       }
     };
 
+    const buildSearchInsight = async (): Promise<SearchInsight | null> => {
+      if (!search || !percentileInput || isNaN(parseFloat(percentileInput))) {
+        return null;
+      }
+
+      const loadRows = async (filter: string) => {
+        return pb.collection(collectionName).getFullList<{
+          id: string;
+          college_name: string | null;
+          cutoff_score: number | null;
+        }>({
+          filter,
+          sort: "cutoff_score",
+          fields: "id,college_name,cutoff_score",
+        });
+      };
+
+      try {
+        if (!shouldSplitQuery) {
+          const filterQuery = buildFilterParts(
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            false,
+          );
+          if (!filterQuery) {
+            return null;
+          }
+
+          return summarizeSearchInsightRows(await loadRows(filterQuery));
+        }
+
+        const chunkTasks: Array<
+          () => Promise<
+            Array<{
+              id: string;
+              college_name: string | null;
+              cutoff_score: number | null;
+            }>
+          >
+        > = [];
+        for (const categoryChunk of categoryChunks) {
+          for (const courseChunk of courseChunks) {
+            for (const statusChunk of statusChunks) {
+              for (const homeUniversityChunk of homeUniversityChunks) {
+                const chunkFilterQuery = buildFilterParts(
+                  courseChunk,
+                  categoryChunk,
+                  statusChunk,
+                  homeUniversityChunk,
+                  false,
+                );
+                if (!chunkFilterQuery) {
+                  continue;
+                }
+
+                chunkTasks.push(() =>
+                  loadRows(chunkFilterQuery).catch((error) => {
+                    console.error(
+                      `Search insight chunk failed for ${collectionName}:`,
+                      error,
+                    );
+                    return [];
+                  }),
+                );
+              }
+            }
+          }
+        }
+
+        const chunkResults = await runWithConcurrencyLimit(
+          chunkTasks,
+          MAX_CONCURRENT_CHUNK_QUERIES,
+        );
+        const uniqueRows = new Map<
+          string,
+          { college_name: string | null; cutoff_score: number | null }
+        >();
+
+        for (const rows of chunkResults) {
+          for (const row of rows) {
+            uniqueRows.set(row.id, {
+              college_name: row.college_name,
+              cutoff_score: row.cutoff_score,
+            });
+          }
+        }
+
+        return summarizeSearchInsightRows([...uniqueRows.values()]);
+      } catch (error) {
+        console.error(
+          `Search insight lookup failed for ${collectionName}:`,
+          error,
+        );
+        return null;
+      }
+    };
+
     if (shouldSplitQuery) {
       // When chunking queries, we need to be more careful about collection validation
       const collectionExists = await validateCollectionExists(
@@ -224,65 +354,20 @@ export async function getCutoffRecords(
         };
       }
 
-      // Create chunks for each filter type
-      const categoryChunks =
-        categories && categories.length > MAX_ITEMS_PER_CHUNK
-          ? Array.from(
-              { length: Math.ceil(categories.length / MAX_ITEMS_PER_CHUNK) },
-              (_, i) =>
-                categories.slice(
-                  i * MAX_ITEMS_PER_CHUNK,
-                  (i + 1) * MAX_ITEMS_PER_CHUNK,
-                ),
-            )
-          : [categories];
-
-      const courseChunks =
-        courses && courses.length > MAX_ITEMS_PER_CHUNK
-          ? Array.from(
-              { length: Math.ceil(courses.length / MAX_ITEMS_PER_CHUNK) },
-              (_, i) =>
-                courses.slice(
-                  i * MAX_ITEMS_PER_CHUNK,
-                  (i + 1) * MAX_ITEMS_PER_CHUNK,
-                ),
-            )
-          : [courses];
-
-      const statusChunks =
-        statuses && statuses.length > MAX_ITEMS_PER_CHUNK
-          ? Array.from(
-              { length: Math.ceil(statuses.length / MAX_ITEMS_PER_CHUNK) },
-              (_, i) =>
-                statuses.slice(
-                  i * MAX_ITEMS_PER_CHUNK,
-                  (i + 1) * MAX_ITEMS_PER_CHUNK,
-                ),
-            )
-          : [statuses];
-
-      const homeUniversityChunks =
-        homeUniversities && homeUniversities.length > MAX_ITEMS_PER_CHUNK
-          ? Array.from(
-              {
-                length: Math.ceil(
-                  homeUniversities.length / MAX_ITEMS_PER_CHUNK,
-                ),
-              },
-              (_, i) =>
-                homeUniversities.slice(
-                  i * MAX_ITEMS_PER_CHUNK,
-                  (i + 1) * MAX_ITEMS_PER_CHUNK,
-                ),
-            )
-          : [homeUniversities];
-
       console.log(
         `Splitting query into chunks - Categories: ${categoryChunks.length}, Courses: ${courseChunks.length}, Statuses: ${statusChunks.length}, Universities: ${homeUniversityChunks.length}`,
       );
 
       // Execute queries for all combinations of chunks
-      const chunkPromises = [];
+      const chunkTasks: Array<
+        () => Promise<{
+          items: any[];
+          totalItems: number;
+          totalPages: number;
+          page: number;
+          perPage: number;
+        }>
+      > = [];
       for (const categoryChunk of categoryChunks) {
         for (const courseChunk of courseChunks) {
           for (const statusChunk of statusChunks) {
@@ -294,7 +379,7 @@ export async function getCutoffRecords(
                 homeUniversityChunk,
               );
               if (chunkFilterQuery) {
-                chunkPromises.push(
+                chunkTasks.push(() =>
                   pb
                     .collection(collectionName)
                     .getList(
@@ -326,11 +411,13 @@ export async function getCutoffRecords(
       }
 
       console.log(
-        `Executing ${chunkPromises.length} chunk queries against ${collectionName}`,
+        `Executing ${chunkTasks.length} chunk queries against ${collectionName} with concurrency limit ${MAX_CONCURRENT_CHUNK_QUERIES}`,
       );
 
-      // Wait for all chunk queries to complete
-      const chunkResults = await Promise.all(chunkPromises);
+      const chunkResults = await runWithConcurrencyLimit(
+        chunkTasks,
+        MAX_CONCURRENT_CHUNK_QUERIES,
+      );
 
       // Combine all results
       const allItems = chunkResults.flatMap((chunkResult) => chunkResult.items);
@@ -423,6 +510,11 @@ export async function getCutoffRecords(
       }
     }
 
+    let searchInsight: SearchInsight | null = null;
+    if (search && percentileInput && result.totalItems === 0) {
+      searchInsight = await buildSearchInsight();
+    }
+
     console.log("Database result:", {
       collection: collectionName,
       round: sanitizedRound,
@@ -431,6 +523,7 @@ export async function getCutoffRecords(
       page: result.page,
       perPage: result.perPage,
       itemCount: result.items.length,
+      searchInsight,
     });
 
     return {
@@ -442,6 +535,7 @@ export async function getCutoffRecords(
       perPage: result.perPage,
       round: sanitizedRound,
       collection: collectionName,
+      searchInsight,
     };
   } catch (error: any) {
     console.error("Server Action Error:", error);
