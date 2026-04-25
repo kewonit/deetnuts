@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { FileCheck2, PlayCircle, TableProperties } from "lucide-react";
+import { FileCheck2, PlayCircle, UploadCloud } from "lucide-react";
 import Link from "next/link";
 
 const dashboardCards = [
@@ -10,16 +10,16 @@ const dashboardCards = [
     href: "/mht-cet/mock-tests/new",
   },
   {
-    title: "Source Review",
+    title: "Question Review",
     text: "Public mocks use approved imports only; fixtures stay separate.",
     icon: FileCheck2,
-    href: "/mht-cet/mock-tests/new",
+    href: "/mht-cet/admin/questions",
   },
   {
-    title: "Stats Tables",
-    text: "Results split score, accuracy, subject, and chapter performance.",
-    icon: TableProperties,
-    href: "/mht-cet/mock-tests/new",
+    title: "Import Batches",
+    text: "Validate source files and track accepted or rejected rows.",
+    icon: UploadCloud,
+    href: "/mht-cet/admin/imports",
   },
 ];
 
