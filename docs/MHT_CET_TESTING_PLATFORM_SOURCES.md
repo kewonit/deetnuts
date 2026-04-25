@@ -15,6 +15,10 @@ Public mocks may only use questions whose source row is approved and whose impor
 Candidate-login or time-window material must be imported only from files supplied by an authorized operator.
 Test fixtures must be marked with source_type `test_fixture` and must not be mixed with production mocks.
 
+## Original Practice Content
+
+`data/mht-cet/question-bank/practice-2026-original.json` contains DEETNUTS-authored practice questions for the 2026 practice bank. These rows use `sourceType: "manual_entry"` and are labeled as original syllabus-aligned practice content, not official MHT-CET past-paper or official mock content. Use `npm run seed:mht-cet-practice` to seed the practice rows into an environment with valid Supabase credentials.
+
 ## Product Boundary
 
 DEETNUTS should not label question content as official or year-wise unless a source URL, source file hash, or permission note proves it. The platform can automate validation, duplicate detection, rendering checks, and review workflows, but publication still requires source and question approval.

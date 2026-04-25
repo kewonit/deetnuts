@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
+import practiceRows from "../../../data/mht-cet/question-bank/practice-2026-original.json";
 import type { QuestionImportRow } from "./content-schema";
 import { validateQuestionImportRows } from "./validate-question-import";
 
@@ -129,4 +130,17 @@ test("approved test fixtures cannot be imported in production", () => {
     result.errors.some((error) => error.fieldName === "source.sourceType"),
   );
   assert.equal(result.validRows.length, 0);
+});
+
+test("original practice bank validates for production import", () => {
+  const result = validateQuestionImportRows(practiceRows, {
+    mode: "production",
+  });
+
+  assert.equal(
+    result.errors.filter((error) => error.severity === "error").length,
+    0,
+  );
+  assert.equal(result.validRows.length, practiceRows.length);
+  assert.equal(practiceRows.length, 30);
 });

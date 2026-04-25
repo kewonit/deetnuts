@@ -1,8 +1,12 @@
 import { createClient } from "@supabase/supabase-js";
 import * as dotenv from "dotenv";
 
+import practiceRows from "../data/mht-cet/question-bank/practice-2026-original.json";
 import sampleRows from "../data/mht-cet/question-bank/sample-fixture.json";
-import { validateQuestionImportRows } from "../lib/mht-cet/questions/validate-question-import";
+import {
+  validateQuestionImportRows,
+  type ValidatedQuestionImportRow,
+} from "../lib/mht-cet/questions/validate-question-import";
 
 dotenv.config({ path: ".env.local" });
 dotenv.config({ path: ".env" });
@@ -28,7 +32,8 @@ const supabase = createClient(supabaseUrl, serviceRoleKey, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 
-const validation = validateQuestionImportRows(sampleRows, {
+const seedRows = [...sampleRows, ...practiceRows];
+const validation = validateQuestionImportRows(seedRows, {
   mode: "development",
 });
 const errorCount = validation.errors.filter(
@@ -36,7 +41,7 @@ const errorCount = validation.errors.filter(
 ).length;
 
 if (errorCount > 0) {
-  console.error(`Sample fixture validation failed with ${errorCount} errors.`);
+  console.error(`Question bank validation failed with ${errorCount} errors.`);
   for (const issue of validation.errors) {
     console.error(
       `${issue.severity.toUpperCase()} row ${issue.rowNumber} ${issue.fieldName}: ${issue.message}`,
@@ -45,22 +50,21 @@ if (errorCount > 0) {
   process.exit(1);
 }
 
-async function seed() {
-  let seededQuestions = 0;
+async function upsertSource(row: ValidatedQuestionImportRow) {
+  const sourcePayload = {
+    source_type: row.source.sourceType,
+    title: row.source.title,
+    year: row.source.year ?? row.year,
+    exam_group: row.source.examGroup ?? row.examGroup ?? "pcm",
+    source_url: row.source.sourceUrl,
+    file_name: row.source.fileName,
+    file_sha256: row.source.fileSha256,
+    license_note: row.source.licenseNote,
+    verification_status: "approved",
+    reviewed_at: new Date().toISOString(),
+  };
 
-  for (const row of validation.validRows) {
-    const sourcePayload = {
-      source_type: row.source.sourceType,
-      title: row.source.title,
-      year: row.source.year ?? row.year,
-      exam_group: row.source.examGroup ?? row.examGroup ?? "pcm",
-      source_url: row.source.sourceUrl,
-      file_name: row.source.fileName,
-      file_sha256: row.source.fileSha256,
-      license_note: row.source.licenseNote,
-      verification_status: "approved",
-      reviewed_at: new Date().toISOString(),
-    };
+  if (row.source.fileSha256) {
     const { data: source, error: sourceError } = await supabase
       .from("mht_cet_question_sources")
       .upsert(sourcePayload, { onConflict: "file_sha256" })
@@ -70,6 +74,61 @@ async function seed() {
     if (sourceError || !source) {
       throw new Error(sourceError?.message ?? "Could not upsert source.");
     }
+
+    return (source as { id: string }).id;
+  }
+
+  if (!row.source.sourceUrl) {
+    throw new Error("Source URL or file SHA-256 is required.");
+  }
+
+  const { data: existingSource, error: lookupError } = await supabase
+    .from("mht_cet_question_sources")
+    .select("id")
+    .eq("source_url", row.source.sourceUrl)
+    .eq("title", row.source.title)
+    .eq("year", sourcePayload.year)
+    .eq("exam_group", sourcePayload.exam_group)
+    .limit(1)
+    .maybeSingle();
+
+  if (lookupError) {
+    throw new Error(lookupError.message);
+  }
+
+  if (existingSource) {
+    const { data: source, error: sourceError } = await supabase
+      .from("mht_cet_question_sources")
+      .update(sourcePayload)
+      .eq("id", (existingSource as { id: string }).id)
+      .select("id")
+      .single();
+
+    if (sourceError || !source) {
+      throw new Error(sourceError?.message ?? "Could not update source.");
+    }
+
+    return (source as { id: string }).id;
+  }
+
+  const { data: source, error: sourceError } = await supabase
+    .from("mht_cet_question_sources")
+    .insert(sourcePayload)
+    .select("id")
+    .single();
+
+  if (sourceError || !source) {
+    throw new Error(sourceError?.message ?? "Could not insert source.");
+  }
+
+  return (source as { id: string }).id;
+}
+
+async function seed() {
+  let seededQuestions = 0;
+
+  for (const row of validation.validRows) {
+    const sourceId = await upsertSource(row);
 
     const { data: chapter, error: chapterError } = await supabase
       .from("mht_cet_chapters")
@@ -86,7 +145,7 @@ async function seed() {
       .from("mht_cet_questions")
       .upsert(
         {
-          source_id: (source as { id: string }).id,
+          source_id: sourceId,
           chapter_id: (chapter as { id?: string } | null)?.id,
           year: row.year,
           exam_group: row.examGroup ?? "pcm",
@@ -173,7 +232,7 @@ async function seed() {
   }
 
   console.log(
-    `Seeded ${seededQuestions} approved sample fixture questions for local MHT-CET mock testing.`,
+    `Seeded ${seededQuestions} approved MHT-CET practice questions for mock testing.`,
   );
 }
 
