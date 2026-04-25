@@ -280,6 +280,11 @@ export function MockBuilder({
 
       <section className="grid gap-4 rounded-base border-2 border-black bg-white p-5 shadow-base">
         <h2 className="font-heading text-2xl">Mock Setup</h2>
+        <p className="font-base text-sm">
+          {availability.totalApprovedQuestions === 0
+            ? "No approved questions are available yet."
+            : `${selectedSubjectQuestionCount} approved questions available for the selected subjects.`}
+        </p>
         <div className="grid gap-3 sm:grid-cols-3">
           {Object.entries(subjectLabels).map(([subject, label]) => (
             <label
