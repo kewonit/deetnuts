@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Montserrat } from "next/font/google";
 
+import DiscordHeader from "./DiscordHeader";
+
 const lato = Montserrat({
   subsets: ["latin"],
   weight: ["400", "700", "900"],
@@ -87,6 +89,8 @@ export default function Footer() {
               {/* Company, Helpful Links, and Legal sections remain unchanged */}
             </div>
           </div>
+
+          <DiscordHeader />
         </div>
         <div className="border-y-[1px] border-y-black">
           <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">

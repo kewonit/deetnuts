@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import "katex/dist/katex.min.css";
 import "./globals.css";
+import "@/components/mht-cet/questions/question-content.css";
 
 import Navbar from "@/components/Navbar";
-import DiscordHeader from "@/components/DiscordHeader";
 import Footer from "@/components/footer";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import GrainEffect from "@/components/graineffect";
@@ -106,9 +107,7 @@ export default function RootLayout({
         className={`${inter.className} relative min-h-screen overflow-x-hidden`}
       >
         <NuqsAdapter>
-          <Navbar>
-            <DiscordHeader />
-          </Navbar>
+          <Navbar />
           <Suspense fallback={<Loading />}>
             <MotionWrapper>
               <NextTopLoader

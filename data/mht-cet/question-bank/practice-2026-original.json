@@ -1,0 +1,1173 @@
+[
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "physics",
+    "chapterSlug": "motion-in-a-plane",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "easy",
+    "marks": 1,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "A projectile is launched with speed 20 m/s at 30 degrees above the horizontal. Taking g = 10 m/s^2, what is its horizontal range?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "10 m" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "20 m" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "20sqrt(3) m" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "40 m" }] }
+    ],
+    "correctOptionIds": ["c"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "Range is u^2 sin(2theta) / g = 400 sin 60 / 10 = 20sqrt(3) m."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "physics",
+    "chapterSlug": "laws-of-motion",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "easy",
+    "marks": 1,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "A 4 kg block is pulled by a 20 N horizontal force. If friction is 4 N opposite to motion, what is the acceleration?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "2 m/s^2" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "3 m/s^2" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "4 m/s^2" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "5 m/s^2" }] }
+    ],
+    "correctOptionIds": ["c"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "Net force is 20 - 4 = 16 N, so acceleration is F/m = 16/4 = 4 m/s^2."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "physics",
+    "chapterSlug": "gravitation",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "easy",
+    "marks": 1,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "A body weighs W on Earth's surface. What is its weight at a height equal to Earth's radius above the surface?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "W" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "W/2" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "W/4" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "4W" }] }
+    ],
+    "correctOptionIds": ["c"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "At height R, distance from Earth's center is 2R, so gravitational force becomes W/(2^2) = W/4."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "physics",
+    "chapterSlug": "thermal-properties-of-matter",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "easy",
+    "marks": 1,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "How much heat is needed to raise the temperature of 0.5 kg of water by 10 degrees Celsius? Take specific heat of water as 4200 J kg^-1 K^-1."
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "2100 J" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "4200 J" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "21000 J" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "42000 J" }] }
+    ],
+    "correctOptionIds": ["c"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "Heat Q = mcDeltaT = 0.5 x 4200 x 10 = 21000 J."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "physics",
+    "chapterSlug": "sound",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "easy",
+    "marks": 1,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "A sound wave has frequency 500 Hz and wavelength 0.68 m. What is its speed?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "170 m/s" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "250 m/s" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "340 m/s" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "500 m/s" }] }
+    ],
+    "correctOptionIds": ["c"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "Wave speed is frequency times wavelength: v = 500 x 0.68 = 340 m/s."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "physics",
+    "chapterSlug": "optics",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "medium",
+    "marks": 1,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "A convex lens has focal length 20 cm. An object is placed 30 cm in front of it. What is the image distance?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "12 cm" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "30 cm" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "60 cm" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "90 cm" }] }
+    ],
+    "correctOptionIds": ["c"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "Using 1/f = 1/v - 1/u with f = 20 cm and u = -30 cm gives v = 60 cm."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "physics",
+    "chapterSlug": "electrostatics",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "medium",
+    "marks": 1,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "What is the electric field 0.30 m from a point charge of 2 microcoulomb? Take k = 9 x 10^9 N m^2 C^-2."
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "2 x 10^3 N/C" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "2 x 10^4 N/C" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "2 x 10^5 N/C" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "2 x 10^6 N/C" }] }
+    ],
+    "correctOptionIds": ["c"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "E = kq/r^2 = (9 x 10^9)(2 x 10^-6)/(0.30)^2 = 2 x 10^5 N/C."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "physics",
+    "chapterSlug": "semiconductors",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "easy",
+    "marks": 1,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "In an intrinsic semiconductor at thermal equilibrium, which statement is correct?"
+      }
+    ],
+    "options": [
+      {
+        "id": "a",
+        "body": [
+          { "type": "paragraph", "text": "Electron concentration is zero." }
+        ]
+      },
+      {
+        "id": "b",
+        "body": [{ "type": "paragraph", "text": "Hole concentration is zero." }]
+      },
+      {
+        "id": "c",
+        "body": [
+          {
+            "type": "paragraph",
+            "text": "Electron and hole concentrations are equal."
+          }
+        ]
+      },
+      {
+        "id": "d",
+        "body": [
+          {
+            "type": "paragraph",
+            "text": "Only impurity atoms conduct current."
+          }
+        ]
+      }
+    ],
+    "correctOptionIds": ["c"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "Intrinsic semiconductors generate electrons and holes in equal numbers."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "physics",
+    "chapterSlug": "motion-in-a-plane",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "easy",
+    "marks": 1,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "A vector of magnitude 10 units makes an angle of 60 degrees with the positive x-axis. What is its y-component?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "5" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "5sqrt(3)" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "10" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "10sqrt(3)" }] }
+    ],
+    "correctOptionIds": ["b"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "The y-component is A sin theta = 10 sin 60 = 5sqrt(3)."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "physics",
+    "chapterSlug": "laws-of-motion",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "easy",
+    "marks": 1,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "A constant force of 5 N acts on a body for 2 s. What impulse is delivered?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "2.5 N s" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "5 N s" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "10 N s" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "20 N s" }] }
+    ],
+    "correctOptionIds": ["c"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "Impulse equals force times time: J = Ft = 5 x 2 = 10 N s."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "chemistry",
+    "chapterSlug": "some-basic-concepts-of-chemistry",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "easy",
+    "marks": 1,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "What is the mass of 0.5 mol of CO2? Use molar mass of CO2 = 44 g/mol."
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "11 g" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "22 g" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "44 g" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "88 g" }] }
+    ],
+    "correctOptionIds": ["b"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "Mass = moles x molar mass = 0.5 x 44 = 22 g."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "chemistry",
+    "chapterSlug": "structure-of-atom",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "easy",
+    "marks": 1,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "What is the maximum number of electrons that can be present in the shell with principal quantum number n = 3?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "6" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "8" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "18" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "32" }] }
+    ],
+    "correctOptionIds": ["c"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "A shell can hold 2n^2 electrons. For n = 3, this is 2 x 9 = 18."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "chemistry",
+    "chapterSlug": "chemical-bonding",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "easy",
+    "marks": 1,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "Which type of bond is primarily present in magnesium chloride, MgCl2?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "Ionic bond" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "Metallic bond" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "Hydrogen bond" }] },
+      {
+        "id": "d",
+        "body": [{ "type": "paragraph", "text": "Coordinate covalent bond" }]
+      }
+    ],
+    "correctOptionIds": ["a"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "Magnesium forms Mg2+ and chlorine forms Cl-, so MgCl2 is mainly ionic."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "chemistry",
+    "chapterSlug": "redox-reactions",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "easy",
+    "marks": 1,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "What is the oxidation state of manganese in KMnO4?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "+2" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "+4" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "+6" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "+7" }] }
+    ],
+    "correctOptionIds": ["d"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "For neutral KMnO4, +1 + x + 4(-2) = 0, so x = +7."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "chemistry",
+    "chapterSlug": "elements-of-group-1-and-2",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "easy",
+    "marks": 1,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "Elements of group 2 commonly form which type of ions?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "+1 cations" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "+2 cations" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "-1 anions" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "-2 anions" }] }
+    ],
+    "correctOptionIds": ["b"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "Group 2 atoms have two valence electrons and commonly lose both to form +2 ions."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "chemistry",
+    "chapterSlug": "states-of-matter",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "easy",
+    "marks": 1,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "A gas occupies 3 L at 2 atm at constant temperature. What volume will it occupy at 1 atm?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "1.5 L" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "3 L" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "4 L" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "6 L" }] }
+    ],
+    "correctOptionIds": ["d"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "By Boyle's law, P1V1 = P2V2, so V2 = (2 x 3)/1 = 6 L."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "chemistry",
+    "chapterSlug": "adsorption-and-colloids",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "medium",
+    "marks": 1,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "For physisorption of a gas on a solid surface, what generally happens when temperature is increased?"
+      }
+    ],
+    "options": [
+      {
+        "id": "a",
+        "body": [
+          { "type": "paragraph", "text": "Adsorption generally decreases." }
+        ]
+      },
+      {
+        "id": "b",
+        "body": [
+          { "type": "paragraph", "text": "Adsorption always becomes infinite." }
+        ]
+      },
+      {
+        "id": "c",
+        "body": [{ "type": "paragraph", "text": "No desorption can occur." }]
+      },
+      {
+        "id": "d",
+        "body": [{ "type": "paragraph", "text": "Surface area becomes zero." }]
+      }
+    ],
+    "correctOptionIds": ["a"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "Physisorption is usually exothermic, so raising temperature tends to reduce adsorption."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "chemistry",
+    "chapterSlug": "hydrocarbons",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "easy",
+    "marks": 1,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "What is the molecular formula of ethene?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "C2H2" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "C2H4" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "C2H6" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "C3H6" }] }
+    ],
+    "correctOptionIds": ["b"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "Ethene is the two-carbon alkene, so its formula is C2H4."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "chemistry",
+    "chapterSlug": "basic-principles-of-organic-chemistry",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "medium",
+    "marks": 1,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "In organic chemistry, the inductive effect is best described as which phenomenon?"
+      }
+    ],
+    "options": [
+      {
+        "id": "a",
+        "body": [
+          {
+            "type": "paragraph",
+            "text": "Temporary electron movement only in pi bonds"
+          }
+        ]
+      },
+      {
+        "id": "b",
+        "body": [
+          {
+            "type": "paragraph",
+            "text": "Permanent electron displacement through sigma bonds"
+          }
+        ]
+      },
+      {
+        "id": "c",
+        "body": [
+          {
+            "type": "paragraph",
+            "text": "Complete breaking of all sigma bonds"
+          }
+        ]
+      },
+      {
+        "id": "d",
+        "body": [
+          {
+            "type": "paragraph",
+            "text": "Change of neutron number in a nucleus"
+          }
+        ]
+      }
+    ],
+    "correctOptionIds": ["b"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "The inductive effect is a permanent polarization transmitted through sigma bonds due to electronegativity differences."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "chemistry",
+    "chapterSlug": "redox-reactions",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "easy",
+    "marks": 1,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "In the reaction Zn + CuSO4 -> ZnSO4 + Cu, which species is oxidized?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "Zn" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "Cu2+" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "SO4^2-" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "Cu" }] }
+    ],
+    "correctOptionIds": ["a"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "Zinc changes from oxidation state 0 to +2, so zinc is oxidized."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "mathematics",
+    "chapterSlug": "trigonometry-ii",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "easy",
+    "marks": 2,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "What is the value of sin 30 degrees + cos 60 degrees?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "0" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "1/2" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "1" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "2" }] }
+    ],
+    "correctOptionIds": ["c"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "sin 30 degrees = 1/2 and cos 60 degrees = 1/2, so the sum is 1."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "mathematics",
+    "chapterSlug": "straight-line",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "easy",
+    "marks": 2,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "What is the slope of the line passing through points (1, 2) and (3, 6)?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "1" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "2" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "3" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "4" }] }
+    ],
+    "correctOptionIds": ["b"],
+    "explanation": [
+      { "type": "paragraph", "text": "Slope = (6 - 2)/(3 - 1) = 4/2 = 2." }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "mathematics",
+    "chapterSlug": "circle",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "medium",
+    "marks": 2,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "For the circle x^2 + y^2 - 4x + 6y - 12 = 0, what is its radius?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "3" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "4" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "5" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "6" }] }
+    ],
+    "correctOptionIds": ["c"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "Completing squares gives (x - 2)^2 + (y + 3)^2 = 25, so the radius is 5."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "mathematics",
+    "chapterSlug": "measures-of-dispersion",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "medium",
+    "marks": 2,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "What is the variance of the data set 2, 4, 6?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "2/3" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "4/3" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "8/3" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "4" }] }
+    ],
+    "correctOptionIds": ["c"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "Mean is 4. Squared deviations are 4, 0, and 4, so variance is 8/3."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "mathematics",
+    "chapterSlug": "probability",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "easy",
+    "marks": 2,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "Two fair coins are tossed. What is the probability of getting exactly one head?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "1/4" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "1/2" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "3/4" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "1" }] }
+    ],
+    "correctOptionIds": ["b"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "The outcomes with exactly one head are HT and TH, so probability is 2/4 = 1/2."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "mathematics",
+    "chapterSlug": "complex-numbers",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "easy",
+    "marks": 2,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "What is the modulus of the complex number 3 + 4i?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "1" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "5" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "7" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "25" }] }
+    ],
+    "correctOptionIds": ["b"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "Modulus is sqrt(3^2 + 4^2) = sqrt(25) = 5."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "mathematics",
+    "chapterSlug": "permutations-and-combinations",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "easy",
+    "marks": 2,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [{ "type": "paragraph", "text": "What is the value of 5P2?" }],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "10" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "20" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "25" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "120" }] }
+    ],
+    "correctOptionIds": ["b"],
+    "explanation": [
+      { "type": "paragraph", "text": "5P2 = 5! / 3! = 5 x 4 = 20." }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "mathematics",
+    "chapterSlug": "functions",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "easy",
+    "marks": 2,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "If f(x) = 2x - 1 and g(x) = x^2, what is f(g(3))?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "8" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "15" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "17" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "18" }] }
+    ],
+    "correctOptionIds": ["c"],
+    "explanation": [
+      { "type": "paragraph", "text": "g(3) = 9, and f(9) = 2(9) - 1 = 17." }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "mathematics",
+    "chapterSlug": "limits",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "easy",
+    "marks": 2,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "Evaluate the limit as x tends to 1 of (x^2 - 1)/(x - 1)."
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "0" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "1" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "2" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "Does not exist" }] }
+    ],
+    "correctOptionIds": ["c"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "Factor x^2 - 1 = (x - 1)(x + 1), so the limit is x + 1 at x = 1, which is 2."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "DEETNUTS Original MHT-CET Practice Set 2026",
+      "sourceType": "manual_entry",
+      "sourceUrl": "https://github.com/kewonit/deetnuts/blob/main/data/mht-cet/question-bank/practice-2026-original.json",
+      "licenseNote": "Original DEETNUTS practice questions authored for 2026 syllabus-aligned mock practice; not official MHT-CET question paper content.",
+      "year": 2026,
+      "examGroup": "pcm"
+    },
+    "subject": "mathematics",
+    "chapterSlug": "continuity",
+    "year": 2026,
+    "examGroup": "pcm",
+    "difficulty": "medium",
+    "marks": 2,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "The function f(x) = ax + 1 for x < 2 and f(x) = x^2 for x >= 2 is continuous at x = 2. What is a?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "1/2" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "1" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "3/2" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "2" }] }
+    ],
+    "correctOptionIds": ["c"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "Continuity at 2 requires 2a + 1 = 4, so a = 3/2."
+      }
+    ]
+  }
+]
