@@ -1,9 +1,19 @@
 import { createAdminClient } from "@/app/lib/supabase/admin";
+import { AdminAccessDenied } from "@/components/mht-cet/admin/AdminAccessDenied";
 import { ImportBatchTable } from "@/components/mht-cet/admin/ImportBatchTable";
-import { requireMhtCetAdmin } from "@/lib/mht-cet/admin/auth";
+import { MhtCetAdminError, requireMhtCetAdmin } from "@/lib/mht-cet/admin/auth";
 
 export default async function MhtCetAdminImportsPage() {
-  await requireMhtCetAdmin();
+  try {
+    await requireMhtCetAdmin();
+  } catch (error) {
+    if (error instanceof MhtCetAdminError) {
+      return <AdminAccessDenied error={error} />;
+    }
+
+    throw error;
+  }
+
   const supabase = createAdminClient();
   const { data } = await supabase
     .from("mht_cet_question_import_batches")

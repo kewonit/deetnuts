@@ -1,3 +1,8 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const projectRoot = path.dirname(fileURLToPath(import.meta.url));
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
@@ -6,7 +11,9 @@ const nextConfig = {
   reactCompiler: true, // Enable React Compiler for automatic memoization
 
   // Turbopack configuration
-  turbopack: {},
+  turbopack: {
+    root: projectRoot,
+  },
 
   // Production performance optimizations
   poweredByHeader: false, // Remove X-Powered-By header for security

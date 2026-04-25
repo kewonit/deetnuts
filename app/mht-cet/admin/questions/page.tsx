@@ -1,7 +1,8 @@
 import { createAdminClient } from "@/app/lib/supabase/admin";
+import { AdminAccessDenied } from "@/components/mht-cet/admin/AdminAccessDenied";
 import { QuestionContent } from "@/components/mht-cet/questions/QuestionContent";
 import { QuestionReviewPanel } from "@/components/mht-cet/admin/QuestionReviewPanel";
-import { requireMhtCetAdmin } from "@/lib/mht-cet/admin/auth";
+import { MhtCetAdminError, requireMhtCetAdmin } from "@/lib/mht-cet/admin/auth";
 import type { QuestionBlock } from "@/lib/mht-cet/questions/content-schema";
 
 type ReviewQuestion = {
@@ -13,7 +14,16 @@ type ReviewQuestion = {
 };
 
 export default async function MhtCetAdminQuestionsPage() {
-  await requireMhtCetAdmin();
+  try {
+    await requireMhtCetAdmin();
+  } catch (error) {
+    if (error instanceof MhtCetAdminError) {
+      return <AdminAccessDenied error={error} />;
+    }
+
+    throw error;
+  }
+
   const supabase = createAdminClient();
   const { data } = await supabase
     .from("mht_cet_questions")
