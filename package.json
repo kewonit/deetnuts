@@ -23,7 +23,8 @@
     "diagnose-pocketbase": "npx tsx scripts/diagnostic-pocketbase.ts",
     "upload-all-india-cutoffs": "npx tsx scripts/batch-upload-all-india-rounds.ts",
     "import-josaa": "npx tsx scripts/batch-import-josaa.ts",
-    "migrate:pocketbase-to-supabase": "npx tsx scripts/migrate-pocketbase-to-supabase.ts"
+    "migrate:pocketbase-to-supabase": "npx tsx scripts/migrate-pocketbase-to-supabase.ts",
+    "seed:mht-cet-fixtures": "npx tsx scripts/seed-mht-cet-sample-question-bank.ts"
   },
   "dependencies": {
     "@faker-js/faker": "^8.4.1",

@@ -8,6 +8,7 @@ import {
   type ScoreAttemptAnswer,
   type ScoreAttemptQuestion,
 } from "./score-attempt";
+import { SUBJECTS, type MhtCetSubject } from "../schema";
 import type {
   MockQuestionPoolItem,
   SelectedMockQuestion,
@@ -31,6 +32,22 @@ type AttemptResponseInput = {
   visited?: boolean;
   markedForReview?: boolean;
   timeSpentSeconds?: number;
+};
+
+export type MockTestAvailability = {
+  totalApprovedQuestions: number;
+  subjectCounts: Record<MhtCetSubject, number>;
+  yearCounts: Record<string, number>;
+};
+
+export const EMPTY_MOCK_TEST_AVAILABILITY: MockTestAvailability = {
+  totalApprovedQuestions: 0,
+  subjectCounts: {
+    mathematics: 0,
+    physics: 0,
+    chemistry: 0,
+  },
+  yearCounts: {},
 };
 
 function asRecord(value: unknown): UnknownRecord {
@@ -170,6 +187,46 @@ export async function loadApprovedQuestionPool(
         config.includeAllChapters ||
         config.chapterSlugs.includes(question.chapterSlug ?? ""),
     );
+}
+
+export async function loadMockTestAvailability(): Promise<MockTestAvailability> {
+  const supabase = createAdminClient();
+  const { data, error } = await supabase
+    .from("mht_cet_questions")
+    .select(
+      "id, subject, year, verification_status, source:mht_cet_question_sources(verification_status)",
+    )
+    .eq("verification_status", "approved");
+
+  if (error) {
+    throw new MhtCetMockTestError(
+      500,
+      "question_availability_failed",
+      "Could not load approved question availability.",
+    );
+  }
+
+  return ((data ?? []) as unknown[])
+    .filter((row) => hasApprovedSource(asRecord(row)))
+    .reduce<MockTestAvailability>((availability, row) => {
+      const record = asRecord(row);
+      const subject = asString(record.subject) as MhtCetSubject;
+
+      if (!SUBJECTS.includes(subject)) {
+        return availability;
+      }
+
+      availability.totalApprovedQuestions += 1;
+      availability.subjectCounts[subject] += 1;
+
+      if (typeof record.year === "number") {
+        const yearKey = String(record.year);
+        availability.yearCounts[yearKey] =
+          (availability.yearCounts[yearKey] ?? 0) + 1;
+      }
+
+      return availability;
+    }, structuredClone(EMPTY_MOCK_TEST_AVAILABILITY));
 }
 
 export async function createAttemptWithQuestions(

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import type { MhtCetMockMode } from "@/lib/mht-cet/mock-tests/config";
+import type { MockTestAvailability } from "@/lib/mht-cet/mock-tests/supabase";
 import type { MhtCetSubject } from "@/lib/mht-cet/schema";
 import { cn } from "@/lib/utils";
 import {
@@ -33,6 +34,8 @@ const subjectLabels: Record<MhtCetSubject, string> = {
   chemistry: "Chemistry",
 };
 
+const allSubjects = Object.keys(subjectLabels) as MhtCetSubject[];
+
 type ChapterSeed = {
   subject: MhtCetSubject;
   standard: number;
@@ -52,18 +55,106 @@ function subjectsForMode(mode: MhtCetMockMode): MhtCetSubject[] {
   return ["mathematics", "physics", "chemistry"];
 }
 
-export function MockBuilder() {
+function getSubjectQuestionCount(
+  availability: MockTestAvailability,
+  subjects: readonly MhtCetSubject[],
+) {
+  return subjects.reduce(
+    (total, subject) => total + availability.subjectCounts[subject],
+    0,
+  );
+}
+
+function canRunPresetMode(
+  availability: MockTestAvailability,
+  mode: MhtCetMockMode,
+) {
+  if (mode === "custom") {
+    return availability.totalApprovedQuestions > 0;
+  }
+
+  if (mode === "mathematics") {
+    return availability.subjectCounts.mathematics >= 50;
+  }
+
+  if (mode === "physics_chemistry") {
+    return (
+      availability.subjectCounts.physics >= 50 &&
+      availability.subjectCounts.chemistry >= 50
+    );
+  }
+
+  return allSubjects.every(
+    (subject) => availability.subjectCounts[subject] >= 50,
+  );
+}
+
+function getInitialState(availability: MockTestAvailability) {
+  if (canRunPresetMode(availability, "full_pcm")) {
+    return {
+      mode: "full_pcm" as MhtCetMockMode,
+      subjects: subjectsForMode("full_pcm"),
+      questionCount: 150,
+      durationMinutes: 180,
+    };
+  }
+
+  const availableSubjects = allSubjects.filter(
+    (subject) => availability.subjectCounts[subject] > 0,
+  );
+  const subjects =
+    availableSubjects.length > 0 ? availableSubjects : allSubjects;
+  const availableQuestionCount = getSubjectQuestionCount(
+    availability,
+    subjects,
+  );
+
+  return {
+    mode: "custom" as MhtCetMockMode,
+    subjects,
+    questionCount: Math.max(1, Math.min(30, availableQuestionCount)),
+    durationMinutes: availableQuestionCount <= 5 ? 15 : 60,
+  };
+}
+
+function getPreferredYear(availability: MockTestAvailability) {
+  const years = Object.entries(availability.yearCounts).sort(
+    ([, firstCount], [, secondCount]) => secondCount - firstCount,
+  );
+
+  return years[0]?.[0] ?? "";
+}
+
+export function MockBuilder({
+  availability,
+}: {
+  availability: MockTestAvailability;
+}) {
   const router = useRouter();
-  const [mode, setMode] = useState<MhtCetMockMode>("full_pcm");
+  const initialState = useMemo(
+    () => getInitialState(availability),
+    [availability],
+  );
+  const [mode, setMode] = useState<MhtCetMockMode>(initialState.mode);
   const [subjects, setSubjects] = useState<MhtCetSubject[]>(
-    subjectsForMode("full_pcm"),
+    initialState.subjects,
   );
   const [chapterSlugs, setChapterSlugs] = useState<string[]>([]);
-  const [questionCount, setQuestionCount] = useState(150);
-  const [durationMinutes, setDurationMinutes] = useState(180);
-  const [year, setYear] = useState(2025);
+  const [questionCount, setQuestionCount] = useState(
+    initialState.questionCount,
+  );
+  const [durationMinutes, setDurationMinutes] = useState(
+    initialState.durationMinutes,
+  );
+  const [year, setYear] = useState(getPreferredYear(availability));
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const selectedSubjectQuestionCount = getSubjectQuestionCount(
+    availability,
+    subjects,
+  );
+  const maxQuestionCount = Math.max(1, selectedSubjectQuestionCount);
 
   const visibleChapters = useMemo(
     () =>
@@ -74,6 +165,10 @@ export function MockBuilder() {
   );
 
   function updateMode(nextMode: MhtCetMockMode) {
+    if (!canRunPresetMode(availability, nextMode)) {
+      return;
+    }
+
     const nextSubjects = subjectsForMode(nextMode);
     setMode(nextMode);
     setSubjects(nextSubjects);
@@ -90,6 +185,12 @@ export function MockBuilder() {
       : [...subjects, subject];
     setSubjects(nextSubjects.length > 0 ? nextSubjects : [subject]);
     setMode("custom");
+    setQuestionCount((current) =>
+      Math.min(
+        current,
+        Math.max(1, getSubjectQuestionCount(availability, nextSubjects)),
+      ),
+    );
     setChapterSlugs((current) =>
       current.filter((slug) =>
         (chapters as ChapterSeed[]).some(
@@ -109,9 +210,15 @@ export function MockBuilder() {
   }
 
   async function startMock() {
+    if (availability.totalApprovedQuestions === 0) {
+      setError("No approved questions are available yet.");
+      return;
+    }
+
     setIsSubmitting(true);
     setError(null);
 
+    const parsedYear = year ? Number(year) : undefined;
     const response = await fetch("/api/mht-cet/mock-tests", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -121,7 +228,7 @@ export function MockBuilder() {
         chapterSlugs,
         questionCount,
         durationSeconds: durationMinutes * 60,
-        year,
+        year: Number.isFinite(parsedYear) ? parsedYear : undefined,
         examGroup: "pcm",
       }),
     });
@@ -133,7 +240,12 @@ export function MockBuilder() {
     setIsSubmitting(false);
 
     if (!response.ok || !payload.attemptId) {
-      setError(payload.error?.message ?? "Could not start this mock.");
+      setError(
+        payload.error?.message ===
+          "Not enough approved questions for this mock configuration."
+          ? `Only ${selectedSubjectQuestionCount} approved questions are available for this selection.`
+          : (payload.error?.message ?? "Could not start this mock."),
+      );
       return;
     }
 
@@ -145,12 +257,16 @@ export function MockBuilder() {
       <div className="grid gap-3 sm:grid-cols-4">
         {modeOptions.map((option) => {
           const Icon = option.icon;
+          const disabled = !canRunPresetMode(availability, option.mode);
           return (
             <button
               className={cn(
                 "flex items-center justify-center gap-2 rounded-base border-2 border-black bg-white px-3 py-3 font-base shadow-base transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none",
                 mode === option.mode && "bg-main",
+                disabled &&
+                  "cursor-not-allowed opacity-50 hover:translate-x-0 hover:translate-y-0 hover:shadow-base",
               )}
+              disabled={disabled}
               key={option.mode}
               onClick={() => updateMode(option.mode)}
               type="button"
@@ -182,9 +298,13 @@ export function MockBuilder() {
           <label className="grid gap-2">
             <span className="font-base">Questions</span>
             <Input
-              max={150}
+              max={maxQuestionCount}
               min={1}
-              onChange={(event) => setQuestionCount(Number(event.target.value))}
+              onChange={(event) =>
+                setQuestionCount(
+                  Math.min(maxQuestionCount, Number(event.target.value)),
+                )
+              }
               type="number"
               value={questionCount}
             />
@@ -206,7 +326,8 @@ export function MockBuilder() {
             <Input
               max={2100}
               min={2000}
-              onChange={(event) => setYear(Number(event.target.value))}
+              onChange={(event) => setYear(event.target.value)}
+              placeholder="Any"
               type="number"
               value={year}
             />
@@ -240,7 +361,7 @@ export function MockBuilder() {
 
       <Button
         className="h-12 text-base"
-        disabled={isSubmitting}
+        disabled={isSubmitting || availability.totalApprovedQuestions === 0}
         onClick={startMock}
       >
         {isSubmitting ? "Starting..." : "Start Mock"}

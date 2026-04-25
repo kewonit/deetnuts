@@ -1,6 +1,14 @@
 import { MockBuilder } from "@/components/mht-cet/mock-tests/MockBuilder";
+import {
+  EMPTY_MOCK_TEST_AVAILABILITY,
+  loadMockTestAvailability,
+} from "@/lib/mht-cet/mock-tests/supabase";
 
-export default function NewMhtCetMockPage() {
+export default async function NewMhtCetMockPage() {
+  const availability = await loadMockTestAvailability().catch(
+    () => EMPTY_MOCK_TEST_AVAILABILITY,
+  );
+
   return (
     <main className="mx-auto grid max-w-5xl gap-8 p-5 pt-24">
       <header className="grid gap-2">
@@ -9,7 +17,7 @@ export default function NewMhtCetMockPage() {
           Choose the exact mix for this attempt.
         </p>
       </header>
-      <MockBuilder />
+      <MockBuilder availability={availability} />
     </main>
   );
 }
