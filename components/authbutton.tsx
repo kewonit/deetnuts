@@ -22,12 +22,19 @@ export default async function AuthButton() {
       <div className="flex sm:hidden">
         <Drawer>
           <DrawerTrigger asChild>
-            <Avatar>
-              <AvatarImage src="/avatar.webp" />
-              <AvatarFallback>
-                {(user.name || "").charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
+            <Button
+              aria-label="Open account menu"
+              className="h-11 w-11 rounded-full bg-white p-0"
+              type="button"
+              variant="neutral"
+            >
+              <Avatar className="h-full w-full outline-0">
+                <AvatarImage src="/avatar.webp" />
+                <AvatarFallback>
+                  {(user.name || "").charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            </Button>
           </DrawerTrigger>
           <DrawerContent>
             <div className="mx-auto w-[300px]">

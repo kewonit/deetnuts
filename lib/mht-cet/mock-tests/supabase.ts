@@ -40,6 +40,23 @@ export type MockTestAvailability = {
   yearCounts: Record<string, number>;
 };
 
+export type MockAttemptSummary = {
+  id: string;
+  status: string;
+  displayStatus: "in_progress" | "submitted" | "expired" | "abandoned";
+  examGroup: string;
+  startedAt: string;
+  endsAt: string;
+  submittedAt?: string;
+  questionCount: number;
+  scoreRaw: number;
+  maxScore: number;
+  correctCount: number;
+  wrongCount: number;
+  unansweredCount: number;
+  timeSpentSeconds: number;
+};
+
 export const EMPTY_MOCK_TEST_AVAILABILITY: MockTestAvailability = {
   totalApprovedQuestions: 0,
   subjectCounts: {
@@ -59,7 +76,16 @@ function asString(value: unknown) {
 }
 
 function asNumber(value: unknown, fallback = 0) {
-  return typeof value === "number" ? value : fallback;
+  if (typeof value === "number") {
+    return value;
+  }
+
+  if (typeof value === "string") {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : fallback;
+  }
+
+  return fallback;
 }
 
 function asStringArray(value: unknown) {
@@ -227,6 +253,56 @@ export async function loadMockTestAvailability(): Promise<MockTestAvailability> 
 
       return availability;
     }, structuredClone(EMPTY_MOCK_TEST_AVAILABILITY));
+}
+
+export async function loadRecentMockAttempts(
+  userId: string,
+  limit = 8,
+): Promise<MockAttemptSummary[]> {
+  const supabase = createAdminClient();
+  const { data, error } = await supabase
+    .from("mht_cet_mock_attempts")
+    .select(
+      "id, status, exam_group, started_at, ends_at, submitted_at, question_count, score_raw, max_score, correct_count, wrong_count, unanswered_count, time_spent_seconds",
+    )
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    throw new MhtCetMockTestError(
+      500,
+      "attempt_summaries_failed",
+      "Could not load mock attempt summaries.",
+    );
+  }
+
+  return ((data ?? []) as unknown[]).map((row) => {
+    const record = asRecord(row);
+    const status = asString(record.status);
+    const endsAt = asString(record.ends_at);
+    const displayStatus =
+      status === "in_progress" && Date.now() > Date.parse(endsAt)
+        ? "expired"
+        : (status as MockAttemptSummary["displayStatus"]);
+
+    return {
+      id: asString(record.id),
+      status,
+      displayStatus,
+      examGroup: asString(record.exam_group),
+      startedAt: asString(record.started_at),
+      endsAt,
+      submittedAt: asString(record.submitted_at) || undefined,
+      questionCount: asNumber(record.question_count),
+      scoreRaw: asNumber(record.score_raw),
+      maxScore: asNumber(record.max_score),
+      correctCount: asNumber(record.correct_count),
+      wrongCount: asNumber(record.wrong_count),
+      unansweredCount: asNumber(record.unanswered_count),
+      timeSpentSeconds: asNumber(record.time_spent_seconds),
+    };
+  });
 }
 
 export async function createAttemptWithQuestions(
