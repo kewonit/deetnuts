@@ -1,0 +1,61 @@
+.mht-cet-question-content {
+  display: grid;
+  gap: 0.75rem;
+  overflow-wrap: anywhere;
+}
+
+.mht-cet-question-content__paragraph {
+  margin: 0;
+  line-height: 1.65;
+}
+
+.mht-cet-question-content__math {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.mht-cet-question-content__math--display {
+  display: block;
+  padding-block: 0.25rem;
+}
+
+.mht-cet-question-content__table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.mht-cet-question-content__table {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: collapse;
+}
+
+.mht-cet-question-content__table caption {
+  padding-block-end: 0.5rem;
+  text-align: left;
+}
+
+.mht-cet-question-content__table td {
+  border: 2px solid #000;
+  padding: 0.5rem 0.75rem;
+  vertical-align: top;
+}
+
+.mht-cet-question-content__list {
+  margin: 0;
+  padding-inline-start: 1.5rem;
+}
+
+.mht-cet-question-content__image {
+  display: block;
+  height: auto;
+  max-width: 100%;
+  border: 2px solid #000;
+}
+
+.mht-cet-question-content__warning {
+  margin: 0;
+  color: #9f1239;
+  font-weight: 700;
+}

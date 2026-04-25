@@ -1,0 +1,191 @@
+[
+  {
+    "subject": "physics",
+    "standard": 11,
+    "slug": "motion-in-a-plane",
+    "name": "Motion in a plane",
+    "official": true
+  },
+  {
+    "subject": "physics",
+    "standard": 11,
+    "slug": "laws-of-motion",
+    "name": "Laws of Motion",
+    "official": true
+  },
+  {
+    "subject": "physics",
+    "standard": 11,
+    "slug": "gravitation",
+    "name": "Gravitation",
+    "official": true
+  },
+  {
+    "subject": "physics",
+    "standard": 11,
+    "slug": "thermal-properties-of-matter",
+    "name": "Thermal properties of matter",
+    "official": true
+  },
+  {
+    "subject": "physics",
+    "standard": 11,
+    "slug": "sound",
+    "name": "Sound",
+    "official": true
+  },
+  {
+    "subject": "physics",
+    "standard": 11,
+    "slug": "optics",
+    "name": "Optics",
+    "official": true
+  },
+  {
+    "subject": "physics",
+    "standard": 11,
+    "slug": "electrostatics",
+    "name": "Electrostatics",
+    "official": true
+  },
+  {
+    "subject": "physics",
+    "standard": 11,
+    "slug": "semiconductors",
+    "name": "Semiconductors",
+    "official": true
+  },
+  {
+    "subject": "chemistry",
+    "standard": 11,
+    "slug": "some-basic-concepts-of-chemistry",
+    "name": "Some Basic concepts of chemistry",
+    "official": true
+  },
+  {
+    "subject": "chemistry",
+    "standard": 11,
+    "slug": "structure-of-atom",
+    "name": "Structure of atom",
+    "official": true
+  },
+  {
+    "subject": "chemistry",
+    "standard": 11,
+    "slug": "chemical-bonding",
+    "name": "Chemical Bonding",
+    "official": true
+  },
+  {
+    "subject": "chemistry",
+    "standard": 11,
+    "slug": "redox-reactions",
+    "name": "Redox reactions",
+    "official": true
+  },
+  {
+    "subject": "chemistry",
+    "standard": 11,
+    "slug": "elements-of-group-1-and-2",
+    "name": "Elements of group 1 and 2",
+    "official": true
+  },
+  {
+    "subject": "chemistry",
+    "standard": 11,
+    "slug": "states-of-matter",
+    "name": "States of Matter (Gaseous and Liquids)",
+    "official": true
+  },
+  {
+    "subject": "chemistry",
+    "standard": 11,
+    "slug": "adsorption-and-colloids",
+    "name": "Adsorption and colloids (Surface Chemistry)",
+    "official": true
+  },
+  {
+    "subject": "chemistry",
+    "standard": 11,
+    "slug": "hydrocarbons",
+    "name": "Hydrocarbons",
+    "official": true
+  },
+  {
+    "subject": "chemistry",
+    "standard": 11,
+    "slug": "basic-principles-of-organic-chemistry",
+    "name": "Basic principles of organic chemistry",
+    "official": true
+  },
+  {
+    "subject": "mathematics",
+    "standard": 11,
+    "slug": "trigonometry-ii",
+    "name": "Trigonometry II",
+    "official": true
+  },
+  {
+    "subject": "mathematics",
+    "standard": 11,
+    "slug": "straight-line",
+    "name": "Straight Line",
+    "official": true
+  },
+  {
+    "subject": "mathematics",
+    "standard": 11,
+    "slug": "circle",
+    "name": "Circle",
+    "official": true
+  },
+  {
+    "subject": "mathematics",
+    "standard": 11,
+    "slug": "measures-of-dispersion",
+    "name": "Measures of Dispersion",
+    "official": true
+  },
+  {
+    "subject": "mathematics",
+    "standard": 11,
+    "slug": "probability",
+    "name": "Probability",
+    "official": true
+  },
+  {
+    "subject": "mathematics",
+    "standard": 11,
+    "slug": "complex-numbers",
+    "name": "Complex Numbers",
+    "official": true
+  },
+  {
+    "subject": "mathematics",
+    "standard": 11,
+    "slug": "permutations-and-combinations",
+    "name": "Permutations and Combinations",
+    "official": true
+  },
+  {
+    "subject": "mathematics",
+    "standard": 11,
+    "slug": "functions",
+    "name": "Functions",
+    "official": true
+  },
+  {
+    "subject": "mathematics",
+    "standard": 11,
+    "slug": "limits",
+    "name": "Limits",
+    "official": true
+  },
+  {
+    "subject": "mathematics",
+    "standard": 11,
+    "slug": "continuity",
+    "name": "Continuity",
+    "official": true
+  }
+]

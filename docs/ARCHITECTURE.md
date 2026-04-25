@@ -123,6 +123,10 @@ Primary tables:
 
 The API surface supports all three rounds. The checked-in `app/mht-cet/all-india-cutoffs/page.tsx` currently renders a single visible round tab, while the API handlers and alternate `page-optimized.tsx` retain broader round support.
 
+### MHT-CET Mock Tests
+
+Testing-platform tables use Supabase-first access. Question imports are source-audited and reviewed before publication. Answer keys are stored separately from public question bodies so students cannot retrieve correct answers during active attempts.
+
 ### Predictions
 
 The predictions module is dataset-backed rather than model-backed at runtime.

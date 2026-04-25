@@ -21,8 +21,10 @@ export default function CommunityPartners() {
     <section className="border-y-2 border-y-black bg-white py-12 px-base lg:py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
-          <div className="inline-block mb-3 px-4 py-1.5 bg-purple-300 border-2 border-black rounded-md font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transform hover:-translate-y-0.5 transition-transform">
-            COMMUNITY PARTNERS
+          <div className="mb-3 flex justify-center">
+            <div className="inline-flex items-center justify-center px-4 py-1.5 text-center bg-purple-300 border-2 border-black rounded-md font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transform hover:-translate-y-0.5 transition-transform">
+              COMMUNITY PARTNERS
+            </div>
           </div>
           <h2 className="text-3xl font-heading tracking-tight sm:text-4xl mb-2">
             Get Advice From Real Students

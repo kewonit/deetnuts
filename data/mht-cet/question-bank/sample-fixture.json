@@ -1,0 +1,108 @@
+[
+  {
+    "source": {
+      "title": "Local MHT-CET Renderer Fixture",
+      "sourceType": "test_fixture",
+      "fileName": "sample-fixture.json",
+      "fileSha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "licenseNote": "Local test fixture for renderer and scoring development; not official MHT-CET content.",
+      "year": 2025,
+      "examGroup": "pcm"
+    },
+    "subject": "mathematics",
+    "chapterSlug": "functions",
+    "year": 2025,
+    "examGroup": "pcm",
+    "marks": 2,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "For a local fixture function f(x) = x + 3, what is f(2)?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "4" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "5" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "6" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "7" }] }
+    ],
+    "correctOptionIds": ["b"],
+    "explanation": [{ "type": "paragraph", "text": "Substitute x = 2." }]
+  },
+  {
+    "source": {
+      "title": "Local MHT-CET Renderer Fixture",
+      "sourceType": "test_fixture",
+      "fileName": "sample-fixture.json",
+      "fileSha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "licenseNote": "Local test fixture for renderer and scoring development; not official MHT-CET content.",
+      "year": 2025,
+      "examGroup": "pcm"
+    },
+    "subject": "physics",
+    "chapterSlug": "motion-in-a-plane",
+    "year": 2025,
+    "examGroup": "pcm",
+    "marks": 1,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "A local fixture object travels 20 m in 5 s. What is its average speed?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "2 m/s" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "4 m/s" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "5 m/s" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "10 m/s" }] }
+    ],
+    "correctOptionIds": ["b"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "Average speed is distance divided by time."
+      }
+    ]
+  },
+  {
+    "source": {
+      "title": "Local MHT-CET Renderer Fixture",
+      "sourceType": "test_fixture",
+      "fileName": "sample-fixture.json",
+      "fileSha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "licenseNote": "Local test fixture for renderer and scoring development; not official MHT-CET content.",
+      "year": 2025,
+      "examGroup": "pcm"
+    },
+    "subject": "chemistry",
+    "chapterSlug": "some-basic-concepts-of-chemistry",
+    "year": 2025,
+    "examGroup": "pcm",
+    "marks": 1,
+    "negativeMarks": 0,
+    "questionType": "single_correct",
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "In a local fixture sample, how many particles are in one mole?"
+      }
+    ],
+    "options": [
+      { "id": "a", "body": [{ "type": "paragraph", "text": "6.022 x 10^23" }] },
+      { "id": "b", "body": [{ "type": "paragraph", "text": "3.011 x 10^23" }] },
+      { "id": "c", "body": [{ "type": "paragraph", "text": "1.000 x 10^23" }] },
+      { "id": "d", "body": [{ "type": "paragraph", "text": "9.810 x 10^23" }] }
+    ],
+    "correctOptionIds": ["a"],
+    "explanation": [
+      {
+        "type": "paragraph",
+        "text": "One mole contains Avogadro's number of particles."
+      }
+    ]
+  }
+]

@@ -40,6 +40,13 @@ const LINKS: { [key: string]: Link } = {
       src: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1721510815/deetnuts/logos/MHT-CET_logo_wxbnlw-min_n5sbju.png",
     },
   },
+  link5: {
+    title: "Mock Tests",
+    link: "/mht-cet/mock-tests",
+    icon: {
+      src: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1721510815/deetnuts/logos/MHT-CET_logo_wxbnlw-min_n5sbju.png",
+    },
+  },
 };
 
 export const metadata: Metadata = {
