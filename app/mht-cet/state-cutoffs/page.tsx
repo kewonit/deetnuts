@@ -28,19 +28,16 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner";
+import { createClient } from "@/utils/supabase/client";
 import { FilterSidebar } from "./components/FilterSidebar";
+import { LoginRequiredDialog } from "./components/LoginRequiredDialog";
 import { MobileFilterToast } from "./components/MobileFilterToast";
 import { TopToolbar } from "./components/TopToolbar";
 import { useCutoffData } from "./hooks/use-cutoff-data";
+import { recordAnonymousStateCutoffAction } from "./anonymous-usage";
 import { getDisplayNameForRound } from "./constants";
 import { getClampedPage } from "./pagination";
-import {
-  closeMobileFilterToast,
-  getMobileFilterToastConfig,
-  openMobileFilterToast,
-  shouldAutoDismissMobileFilterToast,
-} from "./mobile-filter-toast-controller";
+import { shouldAutoDismissMobileFilterToast } from "./mobile-filter-toast-controller";
 
 // Dynamic import for heavy DataTable component - reduces initial bundle
 const DataTable = dynamic(
@@ -115,6 +112,11 @@ function StatsCard({
 // Main Page Content Component
 function StateCutoffsContent() {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const [loginGateOpen, setLoginGateOpen] = useState(false);
+  const [loginRedirectTo, setLoginRedirectTo] = useState(
+    "/mht-cet/state-cutoffs",
+  );
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   // URL State with nuqs
   const [percentile, setPercentile] = useQueryState(
@@ -198,6 +200,78 @@ function StateCutoffsContent() {
   // Debounce refs
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
   const lastFetchRef = useRef<string>("");
+  const pendingUserFetchActionRef = useRef(false);
+
+  useEffect(() => {
+    let isActive = true;
+    const supabase = createClient();
+
+    supabase.auth
+      .getUser()
+      .then(({ data }) => {
+        if (isActive) {
+          setIsAuthenticated(Boolean(data.user));
+        }
+      })
+      .catch(() => {
+        if (isActive) {
+          setIsAuthenticated(false);
+        }
+      });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (isActive) {
+        setIsAuthenticated(Boolean(session?.user));
+      }
+    });
+
+    return () => {
+      isActive = false;
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  const getCurrentRedirectPath = useCallback(() => {
+    if (typeof window === "undefined") {
+      return "/mht-cet/state-cutoffs";
+    }
+
+    return `${window.location.pathname}${window.location.search}${window.location.hash}`;
+  }, []);
+
+  const openLoginGate = useCallback(() => {
+    setLoginRedirectTo(getCurrentRedirectPath());
+    setLoginGateOpen(true);
+  }, [getCurrentRedirectPath]);
+
+  const guardAnonymousAction = useCallback(() => {
+    if (isAuthenticated !== false) {
+      return true;
+    }
+
+    const usage = recordAnonymousStateCutoffAction({
+      isAuthenticated: false,
+    });
+
+    if (!usage.allowed) {
+      openLoginGate();
+      return false;
+    }
+
+    return true;
+  }, [isAuthenticated, openLoginGate]);
+
+  const markResultAction = useCallback(() => {
+    pendingUserFetchActionRef.current = true;
+  }, []);
+
+  useEffect(() => {
+    if (error?.toLowerCase().includes("please login to continue")) {
+      openLoginGate();
+    }
+  }, [error, openLoginGate]);
 
   // Derive percentile to fetch based on mode
   const percentileForFetch = useMemo(() => {
@@ -270,9 +344,10 @@ function StateCutoffsContent() {
       sortOrder,
     });
 
+    const shouldCountUserAction = pendingUserFetchActionRef.current;
+
     // Don't refetch if params haven't changed
     if (fetchKey === lastFetchRef.current) return;
-    lastFetchRef.current = fetchKey;
 
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
@@ -281,22 +356,33 @@ function StateCutoffsContent() {
     debounceRef.current = setTimeout(() => {
       if (!percentileForFetch) {
         // require an input in rank or percentile mode
+        pendingUserFetchActionRef.current = false;
         return;
       }
-      fetchData({
-        percentileInput: percentileForFetch,
-        search,
-        year,
-        round,
-        categories,
-        courses,
-        statuses,
-        homeUniversities: universities,
-        page,
-        perPage,
-        sortBy,
-        sortOrder,
-      });
+      if (shouldCountUserAction && !guardAnonymousAction()) {
+        return;
+      }
+      pendingUserFetchActionRef.current = false;
+      lastFetchRef.current = fetchKey;
+      fetchData(
+        {
+          percentileInput: percentileForFetch,
+          search,
+          year,
+          round,
+          categories,
+          courses,
+          statuses,
+          homeUniversities: universities,
+          page,
+          perPage,
+          sortBy,
+          sortOrder,
+        },
+        {
+          prefetch: isAuthenticated === true,
+        },
+      );
     }, 300);
 
     return () => {
@@ -320,10 +406,13 @@ function StateCutoffsContent() {
     sortBy,
     sortOrder,
     fetchData,
+    guardAnonymousAction,
+    isAuthenticated,
   ]);
 
   // Handlers
   const handleClearAll = useCallback(async () => {
+    markResultAction();
     clearCache();
     await Promise.all([
       setPercentile(null),
@@ -351,29 +440,33 @@ function StateCutoffsContent() {
     setSortBy,
     setSortOrder,
     clearCache,
+    markResultAction,
   ]);
 
   const handlePageChange = useCallback(
     (newPage: number) => {
+      markResultAction();
       setPage(newPage);
     },
-    [setPage],
+    [markResultAction, setPage],
   );
 
   const handlePerPageChange = useCallback(
     (newPerPage: number) => {
+      markResultAction();
       setPerPage(newPerPage);
       setPage(1);
     },
-    [setPerPage, setPage],
+    [markResultAction, setPerPage, setPage],
   );
 
   const handleSortChange = useCallback(
     (newSortBy: string, newSortOrder: "asc" | "desc") => {
+      markResultAction();
       setSortBy(newSortBy);
       setSortOrder(newSortOrder);
     },
-    [setSortBy, setSortOrder],
+    [markResultAction, setSortBy, setSortOrder],
   );
 
   const handleRemoveFilter = useCallback(
@@ -381,6 +474,7 @@ function StateCutoffsContent() {
       type: "categories" | "courses" | "statuses" | "universities",
       value: string,
     ) => {
+      markResultAction();
       switch (type) {
         case "categories":
           setCategories(categories.filter((c) => c !== value));
@@ -407,81 +501,92 @@ function StateCutoffsContent() {
       setStatuses,
       setUniversities,
       setPage,
+      markResultAction,
     ],
   );
 
   // Memoized handlers for filter sidebar to prevent re-renders
   const handlePercentileChange = useCallback(
     (v: string) => {
+      markResultAction();
       setPercentile(v || null);
       setPage(1);
     },
-    [setPercentile, setPage],
+    [markResultAction, setPercentile, setPage],
   );
   const handleYearChange = useCallback(
     (v: number) => {
+      markResultAction();
       setYear(v);
       setPage(1);
       clearCache();
     },
-    [setYear, setPage, clearCache],
+    [markResultAction, setYear, setPage, clearCache],
   );
   const handleRoundChange = useCallback(
     (v: number) => {
+      markResultAction();
       setRound(v);
       setPage(1);
       clearCache();
     },
-    [setRound, setPage, clearCache],
+    [markResultAction, setRound, setPage, clearCache],
   );
   const handleCategoriesChange = useCallback(
     (v: string[]) => {
+      markResultAction();
       setCategories(v.length > 0 ? v : null);
       setPage(1);
     },
-    [setCategories, setPage],
+    [markResultAction, setCategories, setPage],
   );
   const handleCoursesChange = useCallback(
     (v: string[]) => {
+      markResultAction();
       setCourses(v.length > 0 ? v : null);
       setPage(1);
     },
-    [setCourses, setPage],
+    [markResultAction, setCourses, setPage],
   );
   const handleStatusesChange = useCallback(
     (v: string[]) => {
+      markResultAction();
       setStatuses(v.length > 0 ? v : null);
       setPage(1);
     },
-    [setStatuses, setPage],
+    [markResultAction, setStatuses, setPage],
   );
   const handleUniversitiesChange = useCallback(
     (v: string[]) => {
+      markResultAction();
       setUniversities(v.length > 0 ? v : null);
       setPage(1);
     },
-    [setUniversities, setPage],
+    [markResultAction, setUniversities, setPage],
   );
   const handleScoreModeChange = useCallback(
     (mode: "percentile" | "rank") => {
+      markResultAction();
       setScoreMode(mode);
       setPage(1);
     },
-    [setScoreMode, setPage],
+    [markResultAction, setScoreMode, setPage],
   );
   const handleRankChange = useCallback(
     (v: string) => {
+      markResultAction();
       setRank(v || null);
       setPage(1);
     },
-    [setRank, setPage],
+    [markResultAction, setRank, setPage],
   );
   const handleToolbarSearchChange = useCallback(
     (v: string) => {
+      markResultAction();
       setSearch(v || null);
       setPage(1);
     },
-    [setSearch, setPage],
+    [markResultAction, setSearch, setPage],
   );
   const handleDensityChange = useCallback(
     (v: "compact" | "comfortable" | "spacious") => setDensity(v),
@@ -538,8 +643,20 @@ function StateCutoffsContent() {
 
   const handleCloseMobileFilterToast = useCallback(() => {
     setMobileFilterOpen(false);
-    closeMobileFilterToast(toast.dismiss);
   }, []);
+
+  useEffect(() => {
+    if (!mobileFilterOpen) {
+      return;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [mobileFilterOpen]);
 
   const mobileFilterToastContent = useMemo(
     () => (
@@ -552,19 +669,13 @@ function StateCutoffsContent() {
     [filterSidebarProps, handleCloseMobileFilterToast],
   );
 
-  const renderMobileFilterToast = useCallback(() => {
-    const config = getMobileFilterToastConfig();
-
-    return toast.custom(() => mobileFilterToastContent, {
-      ...config,
-      onDismiss: () => setMobileFilterOpen(false),
-    });
-  }, [mobileFilterToastContent]);
-
   const handleOpenMobileFilterToast = useCallback(() => {
-    openMobileFilterToast(() => renderMobileFilterToast(), toast.dismiss);
+    if (!guardAnonymousAction()) {
+      return;
+    }
+
     setMobileFilterOpen(true);
-  }, [renderMobileFilterToast]);
+  }, [guardAnonymousAction]);
 
   const handleToggleMobileFilters = useCallback(() => {
     if (mobileFilterOpen) {
@@ -580,14 +691,6 @@ function StateCutoffsContent() {
   ]);
 
   useEffect(() => {
-    if (!mobileFilterOpen) {
-      return;
-    }
-
-    renderMobileFilterToast();
-  }, [mobileFilterOpen, renderMobileFilterToast]);
-
-  useEffect(() => {
     const handleResize = () => {
       if (
         mobileFilterOpen &&
@@ -600,12 +703,6 @@ function StateCutoffsContent() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [mobileFilterOpen, handleCloseMobileFilterToast]);
-
-  useEffect(() => {
-    return () => {
-      closeMobileFilterToast(toast.dismiss);
-    };
-  }, []);
 
   // Active filters for toolbar - memoized
   const activeFilters = useMemo(
@@ -620,6 +717,30 @@ function StateCutoffsContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#E4DFF2] via-[#daf5f0] to-[#E4DFF2]">
+      <LoginRequiredDialog
+        open={loginGateOpen}
+        redirectTo={loginRedirectTo}
+        onOpenChange={setLoginGateOpen}
+      />
+
+      {mobileFilterOpen ? (
+        <div
+          className="lg:hidden fixed inset-0 z-[120] bg-black/30"
+          role="presentation"
+          onClick={handleCloseMobileFilterToast}
+        >
+          <div
+            className="absolute inset-x-0 bottom-0 flex max-h-[calc(100dvh-0.75rem)] justify-center px-3 pb-3"
+            role="dialog"
+            aria-modal="true"
+            aria-label="State cutoff filters"
+            onClick={(event) => event.stopPropagation()}
+          >
+            {mobileFilterToastContent}
+          </div>
+        </div>
+      ) : null}
+
       {/* Mobile Filter Toggle - Fixed at bottom */}
       <div
         className={cn(
@@ -741,6 +862,7 @@ function StateCutoffsContent() {
               activeFilters={activeFilters}
               onRemoveFilter={handleRemoveFilter}
               records={records}
+              onBeforeAction={guardAnonymousAction}
             />
 
             {/* Data Table */}

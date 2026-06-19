@@ -4,18 +4,28 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/app/lib/supabase/server";
 import { cookies } from "next/headers";
+import {
+  buildAuthCallbackUrl,
+  DEFAULT_AUTH_REDIRECT,
+  sanitizeRedirectPath,
+} from "@/lib/auth-redirect";
+
+function addRedirectParam(params: URLSearchParams, redirectTo: string) {
+  if (redirectTo && redirectTo !== DEFAULT_AUTH_REDIRECT) {
+    params.set("redirect", redirectTo);
+  }
+}
 
 export async function login(formData: FormData) {
   const email = formData.get("email") as string;
-  const redirectTo = (formData.get("redirect") as string) || "/account";
+  const redirectTo = sanitizeRedirectPath(formData.get("redirect"));
 
   // Validate input
   if (!email || !email.includes("@")) {
     const params = new URLSearchParams({
       message: "Please enter a valid email address",
     });
-    if (redirectTo && redirectTo !== "/account")
-      params.set("redirect", redirectTo);
+    addRedirectParam(params, redirectTo);
     return redirect(`/login?${params.toString()}`);
   }
 
@@ -27,7 +37,7 @@ export async function login(formData: FormData) {
     email,
     options: {
       shouldCreateUser: false, // Only send OTP to existing users
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/callback?redirect=${redirectTo}`,
+      emailRedirectTo: buildAuthCallbackUrl(redirectTo),
     },
   });
 
@@ -41,16 +51,14 @@ export async function login(formData: FormData) {
       const params = new URLSearchParams({
         message: "No account found with that email. Please sign up first.",
       });
-      if (redirectTo && redirectTo !== "/account")
-        params.set("redirect", redirectTo);
+      addRedirectParam(params, redirectTo);
       return redirect(`/signup?${params.toString()}`);
     }
 
     const params = new URLSearchParams({
       message: `Could not authenticate user: ${error.message}`,
     });
-    if (redirectTo && redirectTo !== "/account")
-      params.set("redirect", redirectTo);
+    addRedirectParam(params, redirectTo);
     return redirect(`/login?${params.toString()}`);
   }
 
@@ -62,14 +70,13 @@ export async function login(formData: FormData) {
 export async function signup(formData: FormData) {
   const name = formData.get("name") as string;
   const email = formData.get("email") as string;
-  const redirectTo = (formData.get("redirect") as string) || "/account";
+  const redirectTo = sanitizeRedirectPath(formData.get("redirect"));
 
   if (!name || name.trim().length < 2) {
     const params = new URLSearchParams({
       message: "Name must be at least 2 characters long",
     });
-    if (redirectTo && redirectTo !== "/account")
-      params.set("redirect", redirectTo);
+    addRedirectParam(params, redirectTo);
     return redirect(`/signup?${params.toString()}`);
   }
 
@@ -77,8 +84,7 @@ export async function signup(formData: FormData) {
     const params = new URLSearchParams({
       message: "Please enter a valid email address",
     });
-    if (redirectTo && redirectTo !== "/account")
-      params.set("redirect", redirectTo);
+    addRedirectParam(params, redirectTo);
     return redirect(`/signup?${params.toString()}`);
   }
 
@@ -90,7 +96,7 @@ export async function signup(formData: FormData) {
     email,
     options: {
       shouldCreateUser: true,
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/callback?redirect=${redirectTo}`,
+      emailRedirectTo: buildAuthCallbackUrl(redirectTo),
       data: {
         full_name: name.trim(),
       },
@@ -104,16 +110,14 @@ export async function signup(formData: FormData) {
         message:
           "An account with this email already exists. Please log in instead.",
       });
-      if (redirectTo && redirectTo !== "/account")
-        params.set("redirect", redirectTo);
+      addRedirectParam(params, redirectTo);
       return redirect(`/login?${params.toString()}`);
     }
 
     const params = new URLSearchParams({
       message: `Could not create account: ${error.message}`,
     });
-    if (redirectTo && redirectTo !== "/account")
-      params.set("redirect", redirectTo);
+    addRedirectParam(params, redirectTo);
     return redirect(`/signup?${params.toString()}`);
   }
 
@@ -125,12 +129,15 @@ export async function signup(formData: FormData) {
 export async function verifyOtp(formData: FormData) {
   const email = formData.get("email") as string;
   const otp = formData.get("otp") as string;
-  const redirectTo = (formData.get("redirect") as string) || "/account";
+  const redirectTo = sanitizeRedirectPath(formData.get("redirect"));
 
   if (!email || !otp) {
-    return redirect(
-      `/auth/confirm?message=Invalid OTP&email=${encodeURIComponent(email)}&redirect=${encodeURIComponent(redirectTo)}`,
-    );
+    const params = new URLSearchParams({
+      message: "Invalid OTP",
+      email: email || "",
+      redirect: redirectTo,
+    });
+    return redirect(`/auth/confirm?${params.toString()}`);
   }
 
   const cookieStore = await cookies();
@@ -143,9 +150,12 @@ export async function verifyOtp(formData: FormData) {
   });
 
   if (error) {
-    return redirect(
-      `/auth/confirm?message=Invalid or expired OTP. Please try again. Error: ${error.message}&email=${encodeURIComponent(email)}&redirect=${encodeURIComponent(redirectTo)}`,
-    );
+    const params = new URLSearchParams({
+      message: `Invalid or expired OTP. Please try again. Error: ${error.message}`,
+      email,
+      redirect: redirectTo,
+    });
+    return redirect(`/auth/confirm?${params.toString()}`);
   }
 
   revalidatePath("/", "layout");

@@ -2,12 +2,13 @@ import { type EmailOtpType } from "@supabase/supabase-js";
 import { type NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { createClient } from "@/app/lib/supabase/server";
+import { sanitizeRedirectPath } from "@/lib/auth-redirect";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const token_hash = searchParams.get("token_hash");
   const type = searchParams.get("type") as EmailOtpType | null;
-  const next = searchParams.get("redirect") ?? "/account";
+  const next = sanitizeRedirectPath(searchParams.get("redirect"));
 
   if (token_hash && type) {
     const cookieStore = await cookies();
@@ -29,5 +30,6 @@ export async function GET(request: NextRequest) {
     "message",
     "There was an error verifying your email. Please try again.",
   );
+  errorUrl.searchParams.set("redirect", next);
   return NextResponse.redirect(errorUrl);
 }

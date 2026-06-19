@@ -1,17 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { sanitizeMhtCetRedirectPath } from "@/lib/auth-redirect";
 
 export default async function MHTCETLoginRequired({ searchParams }: any) {
   const params = await searchParams;
-  // Default to /mht-cet, but if redirect is pointing to login-required page, use /mht-cet instead
-  let redirectTo = params?.redirect || "/mht-cet";
-  if (
-    redirectTo === "/mht-cet-login-required" ||
-    redirectTo.startsWith("/mht-cet-login-required")
-  ) {
-    redirectTo = "/mht-cet";
-  }
+  const redirectTo = sanitizeMhtCetRedirectPath(params?.redirect);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 pt-32">

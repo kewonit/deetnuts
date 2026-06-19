@@ -18,8 +18,8 @@ export function MobileFilterToast({
   ...filterSidebarProps
 }: MobileFilterToastProps) {
   return (
-    <div className="mb-6 w-[min(92vw,420px)] overflow-hidden rounded-[28px] border-2 border-black bg-[#fffdf5] shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-      <div className="h-[min(74vh,680px)] min-h-[420px]">
+    <div className="w-full max-w-[420px] overflow-hidden rounded-[28px] border-2 border-black bg-[#fffdf5] shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+      <div className="h-[min(82dvh,680px)] max-h-[calc(100dvh-1.5rem)]">
         <FilterSidebar
           {...filterSidebarProps}
           activeFilterCount={activeFilterCount}

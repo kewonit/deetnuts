@@ -54,6 +54,7 @@ function Dropdown({ title, links }: DropdownProps) {
             key={index}
             className="text-left flex items-center rounded-t-base px-4 py-3 border-b-2 border-b-black hover:bg-main"
             href={link.href}
+            onClick={() => setIsOpen(false)}
           >
             <div className="flex flex-col">
               <span>{link.title}</span>

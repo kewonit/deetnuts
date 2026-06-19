@@ -13,7 +13,6 @@ import {
   Rows3,
   Share2,
   SlidersHorizontal,
-  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -72,6 +71,7 @@ interface TopToolbarProps {
 
   // Export
   records: CutoffRecord[];
+  onBeforeAction?: () => boolean;
 
   className?: string;
 }
@@ -116,10 +116,15 @@ export const TopToolbar = memo(function TopToolbar({
   activeFilters,
   onRemoveFilter,
   records,
+  onBeforeAction,
   className,
 }: TopToolbarProps) {
   // Export to CSV
   const handleExport = useCallback(() => {
+    if (onBeforeAction && !onBeforeAction()) {
+      return;
+    }
+
     if (records.length === 0) {
       toast.error("No data to export");
       return;
@@ -174,20 +179,24 @@ export const TopToolbar = memo(function TopToolbar({
       URL.revokeObjectURL(url);
 
       toast.success(`Exported ${records.length} records`);
-    } catch (error) {
+    } catch {
       toast.error("Failed to export data");
     }
-  }, [records, year, round, currentPage]);
+  }, [onBeforeAction, records, year, round, currentPage]);
 
   // Share URL
   const handleShare = useCallback(async () => {
+    if (onBeforeAction && !onBeforeAction()) {
+      return;
+    }
+
     try {
       await navigator.clipboard.writeText(window.location.href);
       toast.success("Link copied to clipboard!");
     } catch {
       toast.error("Failed to copy link");
     }
-  }, []);
+  }, [onBeforeAction]);
 
   // Count total active filter pills
   const totalFilterPills =

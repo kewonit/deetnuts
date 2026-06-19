@@ -21,6 +21,10 @@ interface FetchParams {
   sortOrder: "asc" | "desc";
 }
 
+interface FetchOptions {
+  prefetch?: boolean;
+}
+
 interface UseCutoffDataReturn {
   records: CutoffRecord[];
   totalItems: number;
@@ -29,7 +33,7 @@ interface UseCutoffDataReturn {
   hasFetched: boolean;
   searchInsight: SearchInsight | null;
   error: string | null;
-  fetchData: (params: FetchParams) => Promise<void>;
+  fetchData: (params: FetchParams, options?: FetchOptions) => Promise<void>;
   prefetchNextPage: (params: FetchParams) => void;
   clearCache: () => void;
 }
@@ -131,7 +135,9 @@ export function useCutoffData(): UseCutoffDataReturn {
   }, []);
 
   const fetchData = useCallback(
-    async (params: FetchParams) => {
+    async (params: FetchParams, options?: FetchOptions) => {
+      const shouldPrefetch = options?.prefetch ?? true;
+
       // Don't fetch if no percentile
       if (!params.percentileInput || params.percentileInput.trim() === "") {
         setRecords([]);
@@ -163,7 +169,9 @@ export function useCutoffData(): UseCutoffDataReturn {
           setSearchInsight(cached.searchInsight);
         }
         // Prefetch next page after cache hit
-        prefetchNextPage(params);
+        if (shouldPrefetch) {
+          prefetchNextPage(params);
+        }
         return;
       }
 
@@ -198,18 +206,34 @@ export function useCutoffData(): UseCutoffDataReturn {
 
         if (requestId !== requestIdRef.current) return;
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
         const result = await response.json();
 
         if (requestId !== requestIdRef.current) return;
 
+        if (!response.ok) {
+          if (result?.loginRequired) {
+            const userMessage =
+              result.message || "Please login to continue using state cutoffs.";
+            if (isMountedRef.current) {
+              setSearchInsight(null);
+              setError(userMessage);
+            }
+            toast.error(userMessage);
+            return;
+          }
+
+          throw new Error(
+            result?.message ||
+              result?.error ||
+              `HTTP error! status: ${response.status}`,
+          );
+        }
+
         if (!result.success) {
-          const isAuthError = result.error === "Authentication required";
+          const isAuthError =
+            result.error === "Authentication required" || result.loginRequired;
           const userMessage = isAuthError
-            ? "Please log in to view cutoff data, then try again."
+            ? result.message || "Please login to continue using state cutoffs."
             : result.message || result.error || "Failed to fetch data";
 
           if (isMountedRef.current) {
@@ -256,7 +280,9 @@ export function useCutoffData(): UseCutoffDataReturn {
         }
 
         // Prefetch next page after successful fetch
-        prefetchNextPage(params);
+        if (shouldPrefetch) {
+          prefetchNextPage(params);
+        }
       } catch (err: any) {
         if (requestId !== requestIdRef.current) return;
         if (err.name === "AbortError") return;

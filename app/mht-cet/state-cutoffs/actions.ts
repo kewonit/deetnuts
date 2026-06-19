@@ -1,11 +1,11 @@
 "use server";
 
 import { getPocketBase } from "@/lib/pocketbaseClient";
-import { ensureUserAuthenticated } from "@/lib/supabaseAuth";
 import {
   getCollectionForRound,
-  isValidRound,
+  isRoundAvailableForYear,
   DEFAULT_ROUND,
+  ROUNDS_BY_YEAR,
 } from "./constants";
 import {
   type SearchInsight,
@@ -47,9 +47,17 @@ export async function getCutoffRecords(
       sortOrder,
     });
 
+    const sanitizedYear =
+      Number.isInteger(year) && ROUNDS_BY_YEAR[year] ? year : 2025;
+    if (sanitizedYear !== year) {
+      console.warn(`Invalid year ${year} provided, using ${sanitizedYear}`);
+    }
+
     // Validate and sanitize round input
     const sanitizedRound =
-      Number.isInteger(round) && isValidRound(round) ? round : DEFAULT_ROUND;
+      Number.isInteger(round) && isRoundAvailableForYear(round, sanitizedYear)
+        ? round
+        : DEFAULT_ROUND;
     if (sanitizedRound !== round) {
       console.warn(
         `Invalid round ${round} provided, using default round ${sanitizedRound}`,
@@ -57,26 +65,12 @@ export async function getCutoffRecords(
     }
 
     // Get the collection name for the specified round and year
-    const collectionName = getCollectionForRound(sanitizedRound, year);
+    const collectionName = getCollectionForRound(sanitizedRound, sanitizedYear);
     console.log(
-      `Using collection: ${collectionName} for round ${sanitizedRound} and year ${year}`,
+      `Using collection: ${collectionName} for round ${sanitizedRound} and year ${sanitizedYear}`,
     );
 
     const pb = getPocketBase();
-
-    // Ensure user authentication using Supabase
-    try {
-      await ensureUserAuthenticated();
-    } catch (authError) {
-      console.error("User authentication failed:", authError);
-      return {
-        success: false,
-        error: "Authentication required",
-        message: "Please log in to access cutoff data",
-        details: "User authentication failed",
-        round: sanitizedRound,
-      };
-    }
 
     // Helper function to build filter query parts with chunked parameters
     const buildFilterParts = (
@@ -534,6 +528,7 @@ export async function getCutoffRecords(
       page: result.page,
       perPage: result.perPage,
       round: sanitizedRound,
+      year: sanitizedYear,
       collection: collectionName,
       searchInsight,
     };

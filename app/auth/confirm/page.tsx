@@ -8,11 +8,12 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { verifyOtp } from "@/app/login/actions";
+import { sanitizeRedirectPath } from "@/lib/auth-redirect";
 
 export default async function OtpForm({ searchParams }: any) {
   const params = await searchParams;
   const email = params?.email || "";
-  const redirectTo = params?.redirect || "/account";
+  const redirectTo = sanitizeRedirectPath(params?.redirect);
 
   return (
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2 mx-auto pt-28 min-h-screen">

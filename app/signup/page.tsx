@@ -2,10 +2,11 @@ import Link from "next/link";
 import { SubmitButton } from "./sumbit-button";
 import { Input } from "@/components/ui/input";
 import { signup } from "../login/actions";
+import { sanitizeRedirectPath } from "@/lib/auth-redirect";
 
 export default async function Signup({ searchParams }: any) {
   const params = await searchParams;
-  const redirectTo = params?.redirect || "/account";
+  const redirectTo = sanitizeRedirectPath(params?.redirect);
 
   return (
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2 mx-auto pt-28 min-h-screen">
