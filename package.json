@@ -25,6 +25,7 @@
     "import-josaa": "npx tsx scripts/batch-import-josaa.ts",
     "migrate:pocketbase-to-supabase": "npx tsx scripts/migrate-pocketbase-to-supabase.ts",
     "discord:register": "npx tsx scripts/register-discord-commands.ts",
+    "reddit:auth": "npx tsx scripts/reddit-refresh-token.ts",
     "bot:reddit": "npx tsx bot/reddit-worker.ts",
     "bot:build": "tsc -p tsconfig.bot.json",
     "bot:start": "node dist/bot/bot/reddit-worker.js",
