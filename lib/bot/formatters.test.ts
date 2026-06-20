@@ -14,7 +14,10 @@ const result: BotCutoffResult = {
     year: 2025,
     round: 1,
     roundLabel: "Round 1",
+    category: "open",
     categoryGroup: "Open Category (General)",
+    branch: "cs_it",
+    branchGroup: "Computer Science & IT",
   },
   rows: [
     {
@@ -42,6 +45,7 @@ test("formatRedditCutoffResponse includes escaped rows and disclaimer", () => {
   const text = formatRedditCutoffResponse(result);
 
   assert.match(text, /A\\_College/);
+  assert.match(text, /Computer Science & IT/);
   assert.match(text, /Verify official CAP data/i);
 });
 
@@ -50,4 +54,5 @@ test("formatDiscordCutoffResponse stays below Discord content limit", () => {
 
   assert.ok(text.length < 2000);
   assert.match(text, /MHT-CET state cutoffs/);
+  assert.match(text, /Computer Science & IT/);
 });

@@ -103,6 +103,23 @@ async function maybeReply(comment: RedditComment, text: string) {
   await comment.reply(text);
 }
 
+function getUserFacingQueryError(error: unknown) {
+  if (!(error instanceof Error)) return null;
+
+  if (
+    error.message.startsWith("Unsupported category") ||
+    error.message.startsWith("Unsupported branch/course") ||
+    error.message.startsWith("Use either branch or course") ||
+    /^Year \d+ is not supported$/.test(error.message) ||
+    /^Round \d+ is not available for \d+$/.test(error.message) ||
+    error.message === "Invalid cutoff query"
+  ) {
+    return error.message;
+  }
+
+  return null;
+}
+
 async function processComment({
   comment,
   subreddit,
@@ -223,13 +240,19 @@ async function handleClaimedComment({
     });
     await markEvent(eventId, "replied", { resultCount: result.rows.length });
   } catch (error) {
+    const userFacingError = getUserFacingQueryError(error);
+
+    if (userFacingError) {
+      await maybeReply(comment, `${userFacingError} ${CUTOFF_COMMAND_USAGE}`);
+    }
+
     await logWorkerEvent({
       requestId,
       externalId: requestId,
       platform: "reddit",
       source,
       eventName: "cutoff_request",
-      status: "failed",
+      status: userFacingError ? "rejected" : "failed",
       percentile: parsed.command.percentile,
       year: parsed.command.year,
       round: parsed.command.round,
@@ -237,7 +260,7 @@ async function handleClaimedComment({
       durationMs: Date.now() - startedAt,
       errorCode: error instanceof Error ? error.message : "UNKNOWN",
     });
-    await markEvent(eventId, "failed", {
+    await markEvent(eventId, userFacingError ? "skipped" : "failed", {
       error: error instanceof Error ? error.message : "Unknown error",
     });
   }

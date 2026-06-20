@@ -4,13 +4,22 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import {
   DEFAULT_ROUND,
   DEFAULT_YEAR,
-  OPEN_GENERAL_CATEGORY_CODES,
-  OPEN_GENERAL_CATEGORY_GROUP_NAME,
   getCollectionForRound,
   getDisplayNameForRound,
   isRoundAvailableForYear,
   isSupportedYear,
 } from "@/lib/mht-cet/state-cutoffs/config";
+import {
+  type BotCutoffCategoryGroup,
+  getSupportedBotCategoryLabels,
+  resolveBotCutoffCategoryGroup,
+} from "./categories";
+import {
+  type BotBranchGroup,
+  getSupportedBotBranchLabels,
+  matchesBotBranchGroup,
+  resolveBotBranchGroup,
+} from "./branch-groups";
 
 const DEFAULT_LIMIT = 5;
 const MAX_LIMIT = 10;
@@ -22,6 +31,9 @@ export const botCutoffQuerySchema = z.object({
   year: z.number().int().optional(),
   round: z.number().int().optional(),
   limit: z.number().int().min(1).max(MAX_LIMIT).optional(),
+  category: z.string().trim().optional(),
+  branch: z.string().trim().optional(),
+  course: z.string().trim().optional(),
 });
 
 export type BotCutoffQueryInput = z.input<typeof botCutoffQuerySchema>;
@@ -31,6 +43,8 @@ export interface NormalizedBotCutoffQuery {
   year: number;
   round: number;
   limit: number;
+  categoryGroup: BotCutoffCategoryGroup;
+  branchGroup: BotBranchGroup;
 }
 
 export interface RawStateCutoffRow {
@@ -60,7 +74,10 @@ export interface BotCutoffResult {
     year: number;
     round: number;
     roundLabel: string;
-    categoryGroup: typeof OPEN_GENERAL_CATEGORY_GROUP_NAME;
+    categoryGroup: string;
+    category: BotCutoffCategoryGroup["id"];
+    branchGroup: string;
+    branch: BotBranchGroup["id"];
   };
   rows: BotCutoffRow[];
   totalMatched: number;
@@ -100,6 +117,34 @@ export function normalizeBotCutoffQuery(
 
   const year = parsed.data.year ?? DEFAULT_YEAR;
   const round = parsed.data.round ?? DEFAULT_ROUND;
+  const categoryGroup = resolveBotCutoffCategoryGroup(parsed.data.category);
+  const branchGroup = resolveBotBranchGroup(
+    parsed.data.branch ?? parsed.data.course,
+  );
+
+  if (!categoryGroup) {
+    throw new BotCutoffError(
+      "INVALID_INPUT",
+      `Unsupported category. Use one of: ${getSupportedBotCategoryLabels()}`,
+    );
+  }
+
+  if (!branchGroup) {
+    throw new BotCutoffError(
+      "INVALID_INPUT",
+      `Unsupported branch/course. Use one of: ${getSupportedBotBranchLabels()}`,
+    );
+  }
+
+  if (parsed.data.branch && parsed.data.course) {
+    const courseGroup = resolveBotBranchGroup(parsed.data.course);
+    if (!courseGroup || courseGroup.id !== branchGroup.id) {
+      throw new BotCutoffError(
+        "INVALID_INPUT",
+        "Use either branch or course, or make both refer to the same branch group.",
+      );
+    }
+  }
 
   if (!isSupportedYear(year)) {
     throw new BotCutoffError(
@@ -120,6 +165,8 @@ export function normalizeBotCutoffQuery(
     year,
     round,
     limit: parsed.data.limit ?? DEFAULT_LIMIT,
+    categoryGroup,
+    branchGroup,
   };
 }
 
@@ -174,12 +221,17 @@ function dedupeKey(row: BotCutoffRow) {
 export function selectTopUniqueCutoffRows(
   rows: RawStateCutoffRow[],
   limit = DEFAULT_LIMIT,
+  branchGroup?: BotBranchGroup,
 ): BotCutoffRow[] {
   const selected = new Map<string, BotCutoffRow>();
 
   const normalizedRows = rows
     .map(normalizeRawRow)
     .filter((row): row is BotCutoffRow => Boolean(row))
+    .filter(
+      (row) =>
+        !branchGroup || matchesBotBranchGroup(row.courseName, branchGroup),
+    )
     .sort((a, b) => b.cutoffScore - a.cutoffScore);
 
   for (const row of normalizedRows) {
@@ -201,8 +253,12 @@ export function buildStateCutoffsUrl(query: NormalizedBotCutoffQuery) {
     percentile: String(query.percentile),
     year: String(query.year),
     round: String(query.round),
-    categories: OPEN_GENERAL_CATEGORY_CODES.join(","),
+    categories: query.categoryGroup.codes.join(","),
   });
+
+  if (query.branchGroup.courses.length > 0) {
+    params.set("courses", query.branchGroup.courses.join(","));
+  }
 
   return `https://deetnuts.com/mht-cet/state-cutoffs?${params.toString()}`;
 }
@@ -213,11 +269,11 @@ export async function fetchBotStateCutoffRows(
   const supabase = createAdminClient();
   const collectionName = getCollectionForRound(query.round, query.year);
   const overfetchLimit = Math.max(
-    query.limit * OPEN_GENERAL_CATEGORY_CODES.length * 2,
+    query.limit * query.categoryGroup.codes.length * 2,
     50,
   );
 
-  const { data, error, count } = await supabase
+  let request = supabase
     .from(collectionName)
     .select(
       "id,college_code,college_name,course_name,category,cutoff_score,last_rank,home_university",
@@ -225,9 +281,14 @@ export async function fetchBotStateCutoffRows(
     )
     .gte("cutoff_score", 0)
     .lte("cutoff_score", query.percentile)
-    .in("category", [...OPEN_GENERAL_CATEGORY_CODES])
-    .order("cutoff_score", { ascending: false })
-    .limit(overfetchLimit);
+    .in("category", [...query.categoryGroup.codes])
+    .order("cutoff_score", { ascending: false });
+
+  if (query.branchGroup.courses.length > 0) {
+    request = request.in("course_name", [...query.branchGroup.courses]);
+  }
+
+  const { data, error, count } = await request.limit(overfetchLimit);
 
   if (error) {
     const message = error.message || "Failed to query cutoff data";
@@ -258,9 +319,12 @@ export async function queryBotStateCutoffs(
       year: query.year,
       round: query.round,
       roundLabel: getDisplayNameForRound(query.round),
-      categoryGroup: OPEN_GENERAL_CATEGORY_GROUP_NAME,
+      categoryGroup: query.categoryGroup.label,
+      category: query.categoryGroup.id,
+      branchGroup: query.branchGroup.label,
+      branch: query.branchGroup.id,
     },
-    rows: selectTopUniqueCutoffRows(rows, query.limit),
+    rows: selectTopUniqueCutoffRows(rows, query.limit, query.branchGroup),
     totalMatched,
     sourceUrl: buildStateCutoffsUrl(query),
   };

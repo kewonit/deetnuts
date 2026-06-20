@@ -48,6 +48,16 @@ function getOptionNumber(
   return undefined;
 }
 
+function getOptionString(
+  options: DiscordCommandOption[] | undefined,
+  name: string,
+) {
+  const option = options?.find((item) => item.name === name);
+  return typeof option?.value === "string" && option.value.trim()
+    ? option.value.trim()
+    : undefined;
+}
+
 function interactionMessage(content: string, ephemeral = false) {
   const flags =
     DISCORD_MESSAGE_FLAG_SUPPRESS_EMBEDS |
@@ -166,6 +176,8 @@ export async function POST(request: NextRequest) {
   const percentile = getOptionNumber(options, "percentile");
   const year = getOptionNumber(options, "year");
   const round = getOptionNumber(options, "round");
+  const category = getOptionString(options, "category");
+  const branch = getOptionString(options, "branch");
 
   if (percentile === undefined) {
     await safeLogBotUsageEvent({
@@ -189,6 +201,8 @@ export async function POST(request: NextRequest) {
       percentile,
       year,
       round,
+      category,
+      branch,
     });
 
     await safeLogBotUsageEvent({

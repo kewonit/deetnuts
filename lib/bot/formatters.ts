@@ -21,14 +21,14 @@ export function escapeRedditMarkdown(value: string) {
 }
 
 export function formatCutoffSummaryHeader(result: BotCutoffResult) {
-  return `MHT-CET state cutoffs near ${result.query.percentile} percentile, ${result.query.year} ${result.query.roundLabel}, Open General`;
+  return `MHT-CET state cutoffs near ${result.query.percentile} percentile, ${result.query.year} ${result.query.roundLabel}, ${result.query.categoryGroup}, ${result.query.branchGroup}`;
 }
 
 export function formatDiscordCutoffResponse(result: BotCutoffResult) {
   const lines = [formatCutoffSummaryHeader(result), ""];
 
   if (result.rows.length === 0) {
-    lines.push("No matching Open General cutoff rows found for this query.");
+    lines.push("No matching cutoff rows found for this query.");
   } else {
     result.rows.forEach((row, index) => {
       lines.push(
@@ -43,12 +43,12 @@ export function formatDiscordCutoffResponse(result: BotCutoffResult) {
 
 export function formatRedditCutoffResponse(result: BotCutoffResult) {
   const lines = [
-    `MHT-CET state cutoffs near **${result.query.percentile} percentile**, **${result.query.year} ${result.query.roundLabel}**, Open General:`,
+    `MHT-CET state cutoffs near **${result.query.percentile} percentile**, **${result.query.year} ${result.query.roundLabel}**, **${escapeRedditMarkdown(result.query.categoryGroup)}**, **${escapeRedditMarkdown(result.query.branchGroup)}**:`,
     "",
   ];
 
   if (result.rows.length === 0) {
-    lines.push("No matching Open General cutoff rows found for this query.");
+    lines.push("No matching cutoff rows found for this query.");
   } else {
     result.rows.forEach((row, index) => {
       lines.push(
@@ -62,5 +62,5 @@ export function formatRedditCutoffResponse(result: BotCutoffResult) {
 }
 
 export function formatInvalidCommandResponse(error: string) {
-  return `${error} Try \`--percentile 95 --year 2025 --round 1\`.`;
+  return `${error} Try \`--percentile 95 --year 2025 --round 1 --category obc --branch cs-it\`.`;
 }

@@ -34,6 +34,13 @@ function getBotApiToken() {
   return token;
 }
 
+function getApiErrorMessage(payload: unknown, fallback: string) {
+  if (typeof payload !== "object" || !payload) return fallback;
+  if ("message" in payload) return String(payload.message);
+  if ("error" in payload) return String(payload.error);
+  return fallback;
+}
+
 async function postJson<T>(path: string, body: unknown): Promise<T> {
   const response = await fetch(`${getBotApiBaseUrl()}${path}`, {
     method: "POST",
@@ -46,11 +53,7 @@ async function postJson<T>(path: string, body: unknown): Promise<T> {
 
   const payload = (await response.json()) as T;
   if (!response.ok) {
-    const message =
-      typeof payload === "object" && payload && "error" in payload
-        ? String(payload.error)
-        : `HTTP ${response.status}`;
-    throw new Error(message);
+    throw new Error(getApiErrorMessage(payload, `HTTP ${response.status}`));
   }
 
   return payload;
@@ -68,11 +71,7 @@ async function patchJson<T>(path: string, body: unknown): Promise<T> {
 
   const payload = (await response.json()) as T;
   if (!response.ok) {
-    const message =
-      typeof payload === "object" && payload && "error" in payload
-        ? String(payload.error)
-        : `HTTP ${response.status}`;
-    throw new Error(message);
+    throw new Error(getApiErrorMessage(payload, `HTTP ${response.status}`));
   }
 
   return payload;

@@ -12,6 +12,8 @@ import {
   ROUNDS_BY_YEAR,
   YEAR_OPTIONS,
 } from "../lib/mht-cet/state-cutoffs/config";
+import { BOT_CUTOFF_CATEGORY_GROUPS } from "../lib/bot/categories";
+import { BOT_BRANCH_GROUPS } from "../lib/bot/branch-groups";
 
 const token = process.env.DISCORD_BOT_TOKEN;
 const applicationId = process.env.DISCORD_APPLICATION_ID;
@@ -34,7 +36,7 @@ const commands: RESTPutAPIApplicationCommandsJSONBody = [
   new SlashCommandBuilder()
     .setName("cutoff")
     .setDescription(
-      "Get top Open General MHT-CET state cutoffs near a percentile",
+      "Get top MHT-CET state cutoffs near a percentile",
     )
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
     .setContexts(InteractionContextType.Guild)
@@ -67,6 +69,30 @@ const commands: RESTPutAPIApplicationCommandsJSONBody = [
           ...supportedRounds.map((round) => ({
             name: `Round ${round}`,
             value: round,
+          })),
+        ),
+    )
+    .addStringOption((option) =>
+      option
+        .setName("category")
+        .setDescription("Reservation category group; defaults to Open General")
+        .setRequired(false)
+        .addChoices(
+          ...BOT_CUTOFF_CATEGORY_GROUPS.map((group) => ({
+            name: group.label,
+            value: group.id,
+          })),
+        ),
+    )
+    .addStringOption((option) =>
+      option
+        .setName("branch")
+        .setDescription("Branch or course group; defaults to all branches")
+        .setRequired(false)
+        .addChoices(
+          ...BOT_BRANCH_GROUPS.map((group) => ({
+            name: group.label,
+            value: group.id,
           })),
         ),
     )

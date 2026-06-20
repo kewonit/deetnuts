@@ -9,18 +9,85 @@ import {
 } from "./cutoff-query";
 
 test("normalizeBotCutoffQuery defaults year and round", () => {
-  assert.deepEqual(normalizeBotCutoffQuery({ percentile: 95 }), {
-    percentile: 95,
-    year: 2025,
-    round: 1,
-    limit: 5,
-  });
+  const query = normalizeBotCutoffQuery({ percentile: 95 });
+
+  assert.deepEqual(
+    {
+      percentile: query.percentile,
+      year: query.year,
+      round: query.round,
+      limit: query.limit,
+      category: query.categoryGroup.id,
+      branch: query.branchGroup.id,
+    },
+    {
+      percentile: 95,
+      year: 2025,
+      round: 1,
+      limit: 5,
+      category: "open",
+      branch: "all",
+    },
+  );
 });
 
 test("normalizeBotCutoffQuery accepts 2025 round 4", () => {
   assert.equal(
     normalizeBotCutoffQuery({ percentile: 95, year: 2025, round: 4 }).round,
     4,
+  );
+});
+
+test("normalizeBotCutoffQuery accepts category aliases", () => {
+  const query = normalizeBotCutoffQuery({
+    percentile: 95,
+    category: "SC/ST",
+  });
+
+  assert.equal(query.categoryGroup.id, "sc_st");
+  assert.deepEqual(query.categoryGroup.codes.slice(0, 3), [
+    "GSCH",
+    "GSCO",
+    "GSCS",
+  ]);
+});
+
+test("normalizeBotCutoffQuery accepts branch aliases", () => {
+  const query = normalizeBotCutoffQuery({
+    percentile: 95,
+    branch: "Electronics & Communication",
+  });
+
+  assert.equal(query.branchGroup.id, "electronics_comm");
+  assert.ok(query.branchGroup.courses.includes("Electronics Engineering"));
+});
+
+test("normalizeBotCutoffQuery rejects unsupported categories", () => {
+  assert.throws(
+    () => normalizeBotCutoffQuery({ percentile: 95, category: "banana" }),
+    (error) =>
+      error instanceof BotCutoffError && error.code === "INVALID_INPUT",
+  );
+});
+
+test("normalizeBotCutoffQuery rejects unsupported branch groups", () => {
+  assert.throws(
+    () => normalizeBotCutoffQuery({ percentile: 95, branch: "banana" }),
+    (error) =>
+      error instanceof BotCutoffError && error.code === "INVALID_INPUT",
+  );
+});
+
+test("normalizeBotCutoffQuery rejects conflicting branch and course values", () => {
+  assert.throws(
+    () =>
+      normalizeBotCutoffQuery({
+        percentile: 95,
+        branch: "cs-it",
+        course: "mechanical",
+      }),
+    (error) =>
+      error instanceof BotCutoffError && error.code === "INVALID_INPUT",
   );
 });
 
@@ -70,25 +137,50 @@ test("selectTopUniqueCutoffRows dedupes college-course rows", () => {
 
 test("queryBotStateCutoffs returns top unique rows and source URL", async () => {
   const result = await queryBotStateCutoffs(
-    { percentile: 95, year: 2025, round: 1 },
     {
-      fetchRows: async () => ({
-        totalMatched: 2,
-        rows: [
-          {
-            college_code: "1001",
-            college_name: "A College",
-            course_name: "Computer Engineering",
-            category: "GOPENS",
-            cutoff_score: "94.8",
-            last_rank: "1000",
-          },
-        ],
-      }),
+      percentile: 95,
+      year: 2025,
+      round: 1,
+      category: "obc",
+      branch: "AI & Data Science",
+    },
+    {
+      fetchRows: async (query) => {
+        assert.equal(query.categoryGroup.id, "obc");
+        assert.equal(query.branchGroup.id, "ai_ds");
+        return {
+          totalMatched: 3,
+          rows: [
+            {
+              college_code: "1001",
+              college_name: "A College",
+              course_name: "Artificial Intelligence and Data Science",
+              category: "GOBCS",
+              cutoff_score: "94.8",
+              last_rank: "1000",
+            },
+            {
+              college_code: "1002",
+              college_name: "B College",
+              course_name: "Mechanical Engineering",
+              category: "GOBCS",
+              cutoff_score: "94.9",
+              last_rank: "900",
+            },
+          ],
+        };
+      },
     },
   );
 
   assert.equal(result.rows.length, 1);
   assert.equal(result.query.roundLabel, "Round 1");
+  assert.equal(result.query.category, "obc");
+  assert.equal(result.query.categoryGroup, "OBC (Other Backward Classes)");
+  assert.equal(result.query.branch, "ai_ds");
+  assert.equal(result.query.branchGroup, "AI & Data Science");
+  assert.equal(result.rows[0].courseName, "Artificial Intelligence and Data Science");
   assert.match(result.sourceUrl, /percentile=95/);
+  assert.match(result.sourceUrl, /GOBCS/);
+  assert.match(result.sourceUrl, /Artificial\+Intelligence\+and\+Data\+Science/);
 });

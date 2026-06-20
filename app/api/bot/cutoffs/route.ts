@@ -15,6 +15,9 @@ const requestSchema = z.object({
   year: z.number().int().optional(),
   round: z.number().int().optional(),
   limit: z.number().int().optional(),
+  category: z.string().optional(),
+  branch: z.string().optional(),
+  course: z.string().optional(),
   platform: z.enum(["reddit", "discord", "api"]).optional(),
   source: z.string().optional(),
 });
@@ -70,6 +73,9 @@ export async function POST(request: NextRequest) {
       year: body.year,
       round: body.round,
       limit: body.limit,
+      category: body.category,
+      branch: body.branch,
+      course: body.course,
     });
 
     return NextResponse.json({
