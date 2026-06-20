@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "incremental": false,
+    "isolatedModules": false,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmit": false,
+    "outDir": "dist/bot",
+    "target": "ES2022"
+  },
+  "include": ["bot/**/*.ts", "lib/bot/**/*.ts"],
+  "exclude": ["node_modules"]
+}

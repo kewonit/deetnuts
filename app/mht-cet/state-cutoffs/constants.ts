@@ -1,14 +1,28 @@
+import { OPEN_GENERAL_CATEGORY_CODES } from "@/lib/mht-cet/state-cutoffs/config";
+
+export {
+  DEFAULT_ROUND,
+  DEFAULT_YEAR,
+  OPEN_GENERAL_CATEGORY_CODES,
+  OPEN_GENERAL_CATEGORY_GROUP_NAME,
+  ROUND_CONFIG,
+  ROUND_CONFIG_2025,
+  ROUND_OPTIONS,
+  ROUNDS_BY_YEAR,
+  VALID_ROUNDS,
+  YEAR_OPTIONS,
+  getCollectionForRound,
+  getDisplayNameForRound,
+  isRoundAvailableForYear,
+  isSupportedYear,
+  isValidRound,
+  type ValidRound,
+} from "@/lib/mht-cet/state-cutoffs/config";
+
 // Constants
-export const CATEGORY_GROUPS = {
+export const CATEGORY_GROUPS: Record<string, string[]> = {
   "All India (JEE Rank)": ["AI"],
-  "Open Category (General)": [
-    "GOPENS",
-    "GOPENH",
-    "GOPENO",
-    "LOPENS",
-    "LOPENH",
-    "LOPENO",
-  ],
+  "Open Category (General)": [...OPEN_GENERAL_CATEGORY_CODES],
   "OBC (Other Backward Classes)": [
     "GOBCS",
     "GOBCH",
@@ -379,116 +393,3 @@ export const HOME_UNIVERSITY_OPTIONS = [
 ];
 
 export const ITEMS_PER_PAGE_OPTIONS = [10, 25, 50, 100, 200];
-
-export const YEAR_OPTIONS = [
-  { value: 2025, label: "2025" },
-  { value: 2024, label: "2024" },
-];
-
-// Round Configuration (2024 tables; canonical display names).
-export const ROUND_CONFIG: Record<
-  number,
-  { collection: string; displayName: string }
-> = {
-  1: {
-    collection: "2024_mht_cet_round_one_cutoffs_duplicate",
-    displayName: "Round 1",
-  },
-  2: {
-    collection: "2024_mht_cet_round_two_cutoffs",
-    displayName: "Round 2",
-  },
-  3: {
-    collection: "2024_mht_cet_round_three_cutoffs",
-    displayName: "Round 3",
-  },
-  4: {
-    collection: "2025_mht_cet_round_four_cutoffs",
-    displayName: "Round 4",
-  },
-} as const;
-
-// 2025-specific round table map. Added when CAP 2025 rounds 2-4 data landed.
-export const ROUND_CONFIG_2025: Record<number, string> = {
-  1: "2025_mht_cet_round_one_cutoffs",
-  2: "2025_mht_cet_round_two_cutoffs",
-  3: "2025_mht_cet_round_three_cutoffs",
-  4: "2025_mht_cet_round_four_cutoffs",
-} as const;
-
-// Per-year allowed rounds.
-export const ROUNDS_BY_YEAR: Record<number, readonly number[]> = {
-  2024: [1, 2, 3],
-  2025: [1, 2, 3, 4],
-} as const;
-
-export const ROUND_OPTIONS = [
-  {
-    value: 1,
-    label: "Round 1",
-    collection: "2024_mht_cet_round_one_cutoffs_duplicate",
-  },
-  {
-    value: 2,
-    label: "Round 2",
-    collection: "2024_mht_cet_round_two_cutoffs",
-  },
-  {
-    value: 3,
-    label: "Round 3",
-    collection: "2024_mht_cet_round_three_cutoffs",
-  },
-  {
-    value: 4,
-    label: "Round 4",
-    collection: "2025_mht_cet_round_four_cutoffs",
-  },
-] as const;
-
-// Valid round numbers (any year).
-export const VALID_ROUNDS = [1, 2, 3, 4] as const;
-export type ValidRound = (typeof VALID_ROUNDS)[number];
-
-// Default round selection.
-export const DEFAULT_ROUND: ValidRound = 1;
-
-// Validate round number.
-export const isValidRound = (round: number): round is ValidRound => {
-  return VALID_ROUNDS.includes(round as ValidRound);
-};
-
-// Is round valid for a given year? (Round 4 only exists for 2025.)
-export const isRoundAvailableForYear = (
-  round: number,
-  year: number,
-): boolean => {
-  const allowed = ROUNDS_BY_YEAR[year];
-  return Array.isArray(allowed) && allowed.includes(round);
-};
-
-// Get collection name for round with fallback.
-export const getCollectionForRound = (round: number, year: number): string => {
-  if (year === 2025) {
-    const table = ROUND_CONFIG_2025[round];
-    if (table) return table;
-    console.warn(
-      `Invalid round ${round} for year 2025, falling back to Round 1`,
-    );
-    return ROUND_CONFIG_2025[1];
-  }
-  if (!isValidRound(round) || round === 4) {
-    console.warn(
-      `Invalid round ${round} for year ${year}, falling back to Round 1`,
-    );
-    return ROUND_CONFIG[1].collection;
-  }
-  return ROUND_CONFIG[round].collection;
-};
-
-// Get display name for round with fallback.
-export const getDisplayNameForRound = (round: number): string => {
-  if (!isValidRound(round)) {
-    return ROUND_CONFIG[1].displayName;
-  }
-  return ROUND_CONFIG[round].displayName;
-};
