@@ -13,6 +13,8 @@ import { safeLogBotUsageEvent } from "@/lib/bot/usage";
 
 export const runtime = "nodejs";
 
+const DISCORD_MESSAGE_FLAG_SUPPRESS_EMBEDS = 1 << 2;
+
 type DiscordCommandOption = {
   name: string;
   value?: string | number | boolean;
@@ -47,11 +49,15 @@ function getOptionNumber(
 }
 
 function interactionMessage(content: string, ephemeral = false) {
+  const flags =
+    DISCORD_MESSAGE_FLAG_SUPPRESS_EMBEDS |
+    (ephemeral ? InteractionResponseFlags.EPHEMERAL : 0);
+
   return {
     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
     data: {
       content,
-      flags: ephemeral ? InteractionResponseFlags.EPHEMERAL : undefined,
+      flags,
       allowed_mentions: { parse: [] },
     },
   };
