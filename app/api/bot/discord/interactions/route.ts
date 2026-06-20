@@ -178,6 +178,7 @@ export async function POST(request: NextRequest) {
   const round = getOptionNumber(options, "round");
   const category = getOptionString(options, "category");
   const branch = getOptionString(options, "branch");
+  const course = getOptionString(options, "course");
 
   if (percentile === undefined) {
     await safeLogBotUsageEvent({
@@ -203,6 +204,7 @@ export async function POST(request: NextRequest) {
       round,
       category,
       branch,
+      course,
     });
 
     await safeLogBotUsageEvent({
