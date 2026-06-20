@@ -24,13 +24,10 @@ async function main() {
   const commands = buildDiscordBotCommands();
   const guildIds = getDiscordRegistrationGuildIds();
 
-  if (guildIds.length === 0) {
-    await rest.put(Routes.applicationCommands(discordApplicationId), {
-      body: commands,
-    });
-    console.log(`Registered ${commands.length} Discord command(s) globally`);
-    return;
-  }
+  await rest.put(Routes.applicationCommands(discordApplicationId), {
+    body: commands,
+  });
+  console.log(`Registered ${commands.length} Discord command(s) globally`);
 
   for (const guildId of guildIds) {
     await rest.put(
