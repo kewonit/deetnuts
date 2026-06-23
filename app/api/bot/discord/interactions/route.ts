@@ -177,6 +177,7 @@ export async function POST(request: NextRequest) {
   const year = getOptionNumber(options, "year");
   const round = getOptionNumber(options, "round");
   const category = getOptionString(options, "category");
+  const subcategory = getOptionString(options, "subcategory");
   const branch = getOptionString(options, "branch");
   const course = getOptionString(options, "course");
 
@@ -203,6 +204,7 @@ export async function POST(request: NextRequest) {
       year,
       round,
       category,
+      subcategory,
       branch,
       course,
     });

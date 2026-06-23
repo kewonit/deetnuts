@@ -16,6 +16,7 @@ const requestSchema = z.object({
   round: z.number().int().optional(),
   limit: z.number().int().optional(),
   category: z.string().optional(),
+  subcategory: z.string().optional(),
   branch: z.string().optional(),
   course: z.string().optional(),
   platform: z.enum(["reddit", "discord", "api"]).optional(),
@@ -74,6 +75,7 @@ export async function POST(request: NextRequest) {
       round: body.round,
       limit: body.limit,
       category: body.category,
+      subcategory: body.subcategory,
       branch: body.branch,
       course: body.course,
     });

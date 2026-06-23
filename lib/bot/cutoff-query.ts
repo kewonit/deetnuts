@@ -20,6 +20,12 @@ import {
   matchesBotBranchGroup,
   resolveBotBranchGroup,
 } from "./branch-groups";
+import {
+  type BotCutoffSubcategoryGroup,
+  filterBotCategoryCodesBySubcategory,
+  getSupportedBotSubcategoryLabels,
+  resolveBotCutoffSubcategoryGroup,
+} from "./subcategories";
 
 const DEFAULT_LIMIT = 5;
 const MAX_LIMIT = 10;
@@ -32,6 +38,7 @@ export const botCutoffQuerySchema = z.object({
   round: z.number().int().optional(),
   limit: z.number().int().min(1).max(MAX_LIMIT).optional(),
   category: z.string().trim().optional(),
+  subcategory: z.string().trim().optional(),
   branch: z.string().trim().optional(),
   course: z.string().trim().optional(),
 });
@@ -44,6 +51,8 @@ export interface NormalizedBotCutoffQuery {
   round: number;
   limit: number;
   categoryGroup: BotCutoffCategoryGroup;
+  subcategoryGroup: BotCutoffSubcategoryGroup;
+  categoryCodes: readonly string[];
   branchGroup: BotBranchGroup;
 }
 
@@ -76,6 +85,10 @@ export interface BotCutoffResult {
     roundLabel: string;
     categoryGroup: string;
     category: BotCutoffCategoryGroup["id"];
+    subcategoryGroup: string;
+    subcategory: BotCutoffSubcategoryGroup["id"];
+    courseGroup: string;
+    course: BotBranchGroup["id"];
     branchGroup: string;
     branch: BotBranchGroup["id"];
   };
@@ -118,6 +131,9 @@ export function normalizeBotCutoffQuery(
   const year = parsed.data.year ?? DEFAULT_YEAR;
   const round = parsed.data.round ?? DEFAULT_ROUND;
   const categoryGroup = resolveBotCutoffCategoryGroup(parsed.data.category);
+  const subcategoryGroup = resolveBotCutoffSubcategoryGroup(
+    parsed.data.subcategory,
+  );
   const branchGroup = resolveBotBranchGroup(
     parsed.data.branch ?? parsed.data.course,
   );
@@ -126,6 +142,25 @@ export function normalizeBotCutoffQuery(
     throw new BotCutoffError(
       "INVALID_INPUT",
       `Unsupported category. Use one of: ${getSupportedBotCategoryLabels()}`,
+    );
+  }
+
+  if (!subcategoryGroup) {
+    throw new BotCutoffError(
+      "INVALID_INPUT",
+      `Unsupported subcategory. Use one of: ${getSupportedBotSubcategoryLabels()}`,
+    );
+  }
+
+  const categoryCodes = filterBotCategoryCodesBySubcategory(
+    categoryGroup,
+    subcategoryGroup,
+  );
+
+  if (categoryCodes.length === 0) {
+    throw new BotCutoffError(
+      "INVALID_INPUT",
+      `${subcategoryGroup.label} is not available for ${categoryGroup.label}. Try All subcategories.`,
     );
   }
 
@@ -166,6 +201,8 @@ export function normalizeBotCutoffQuery(
     round,
     limit: parsed.data.limit ?? DEFAULT_LIMIT,
     categoryGroup,
+    subcategoryGroup,
+    categoryCodes,
     branchGroup,
   };
 }
@@ -253,7 +290,7 @@ export function buildStateCutoffsUrl(query: NormalizedBotCutoffQuery) {
     percentile: String(query.percentile),
     year: String(query.year),
     round: String(query.round),
-    categories: query.categoryGroup.codes.join(","),
+    categories: query.categoryCodes.join(","),
   });
 
   if (query.branchGroup.courses.length > 0) {
@@ -269,7 +306,7 @@ export async function fetchBotStateCutoffRows(
   const supabase = createAdminClient();
   const collectionName = getCollectionForRound(query.round, query.year);
   const overfetchLimit = Math.max(
-    query.limit * query.categoryGroup.codes.length * 2,
+    query.limit * query.categoryCodes.length * 2,
     50,
   );
 
@@ -281,7 +318,7 @@ export async function fetchBotStateCutoffRows(
     )
     .gte("cutoff_score", 0)
     .lte("cutoff_score", query.percentile)
-    .in("category", [...query.categoryGroup.codes])
+    .in("category", [...query.categoryCodes])
     .order("cutoff_score", { ascending: false });
 
   if (query.branchGroup.courses.length > 0) {
@@ -321,6 +358,10 @@ export async function queryBotStateCutoffs(
       roundLabel: getDisplayNameForRound(query.round),
       categoryGroup: query.categoryGroup.label,
       category: query.categoryGroup.id,
+      subcategoryGroup: query.subcategoryGroup.label,
+      subcategory: query.subcategoryGroup.id,
+      courseGroup: query.branchGroup.label,
+      course: query.branchGroup.id,
       branchGroup: query.branchGroup.label,
       branch: query.branchGroup.id,
     },

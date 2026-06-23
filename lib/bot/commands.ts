@@ -5,15 +5,21 @@ export interface ParsedCutoffCommand {
   year?: number;
   round?: number;
   category?: string;
+  subcategory?: string;
   branch?: string;
+  course?: string;
 }
 
 export type ParseCutoffCommandResult =
   | { ok: true; command: ParsedCutoffCommand }
   | { ok: false; error: string };
 
-const FLAG_PATTERN =
-  /--(?<name>percentile|year|round|category|branch|course)(?:=|\s+)(?<value>.*?)(?=\s+--(?:percentile|year|round|category|branch|course)(?:=|\s+)|$)/gis;
+const FLAG_NAMES =
+  "percentile|year|round|category|subcategory|sub-category|sub_category|seat|seat-type|seat_type|branch|course";
+const FLAG_PATTERN = new RegExp(
+  `--(?<name>${FLAG_NAMES})(?:=|\\s+)(?<value>.*?)(?=\\s+--(?:${FLAG_NAMES})(?:=|\\s+)|$)`,
+  "gis",
+);
 
 function cleanFlagValue(value: string) {
   const trimmed = value.trim();
@@ -22,7 +28,17 @@ function cleanFlagValue(value: string) {
 }
 
 function canonicalFlagName(name: string) {
-  return name === "course" ? "branch" : name;
+  if (name === "branch" || name === "course") return "course";
+  if (
+    name === "sub-category" ||
+    name === "sub_category" ||
+    name === "seat" ||
+    name === "seat-type" ||
+    name === "seat_type"
+  ) {
+    return "subcategory";
+  }
+  return name;
 }
 
 export function parseCutoffFlagCommand(text: string): ParseCutoffCommandResult {
@@ -47,8 +63,8 @@ export function parseCutoffFlagCommand(text: string): ParseCutoffCommandResult {
       return {
         ok: false,
         error:
-          name === "branch"
-            ? "Only one branch/course value is supported per comment."
+          name === "course"
+            ? "Only one course value is supported per comment."
             : `Only one --${name} value is supported per comment.`,
       };
     }
@@ -83,13 +99,18 @@ export function parseCutoffFlagCommand(text: string): ParseCutoffCommandResult {
     parsed.category = category;
   }
 
-  const branch = values.get("branch");
-  if (branch) {
-    parsed.branch = branch;
+  const subcategory = values.get("subcategory");
+  if (subcategory) {
+    parsed.subcategory = subcategory;
+  }
+
+  const course = values.get("course");
+  if (course) {
+    parsed.course = course;
   }
 
   return { ok: true, command: parsed };
 }
 
 export const CUTOFF_COMMAND_USAGE =
-  "Try `--percentile 95 --year 2025 --round 1 --category obc --branch cs-it`.";
+  "Try `--percentile 95 --year 2025 --round 1 --category obc --subcategory home --course cs-it`.";

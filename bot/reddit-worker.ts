@@ -108,7 +108,9 @@ function getUserFacingQueryError(error: unknown) {
 
   if (
     error.message.startsWith("Unsupported category") ||
+    error.message.startsWith("Unsupported subcategory") ||
     error.message.startsWith("Unsupported branch/course") ||
+    error.message.includes("is not available for") ||
     error.message.startsWith("Use either branch or course") ||
     /^Year \d+ is not supported$/.test(error.message) ||
     /^Round \d+ is not available for \d+$/.test(error.message) ||

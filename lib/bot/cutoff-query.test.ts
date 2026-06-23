@@ -18,6 +18,8 @@ test("normalizeBotCutoffQuery defaults year and round", () => {
       round: query.round,
       limit: query.limit,
       category: query.categoryGroup.id,
+      subcategory: query.subcategoryGroup.id,
+      categoryCodes: query.categoryCodes,
       branch: query.branchGroup.id,
     },
     {
@@ -26,6 +28,15 @@ test("normalizeBotCutoffQuery defaults year and round", () => {
       round: 1,
       limit: 5,
       category: "open",
+      subcategory: "all",
+      categoryCodes: [
+        "GOPENS",
+        "GOPENH",
+        "GOPENO",
+        "LOPENS",
+        "LOPENH",
+        "LOPENO",
+      ],
       branch: "all",
     },
   );
@@ -45,6 +56,7 @@ test("normalizeBotCutoffQuery accepts category aliases", () => {
   });
 
   assert.equal(query.categoryGroup.id, "sc_st");
+  assert.equal(query.subcategoryGroup.id, "all");
   assert.deepEqual(query.categoryGroup.codes.slice(0, 3), [
     "GSCH",
     "GSCO",
@@ -52,13 +64,29 @@ test("normalizeBotCutoffQuery accepts category aliases", () => {
   ]);
 });
 
-test("normalizeBotCutoffQuery accepts branch aliases", () => {
+test("normalizeBotCutoffQuery accepts subcategory aliases", () => {
   const query = normalizeBotCutoffQuery({
+    percentile: 95,
+    category: "OBC",
+    subcategory: "ladies home",
+  });
+
+  assert.equal(query.subcategoryGroup.id, "ladies_home");
+  assert.deepEqual(query.categoryCodes, ["LOBCH"]);
+});
+
+test("normalizeBotCutoffQuery accepts course and legacy branch aliases", () => {
+  const query = normalizeBotCutoffQuery({
+    percentile: 95,
+    course: "Electronics & Communication",
+  });
+  const legacyQuery = normalizeBotCutoffQuery({
     percentile: 95,
     branch: "Electronics & Communication",
   });
 
   assert.equal(query.branchGroup.id, "electronics_comm");
+  assert.equal(legacyQuery.branchGroup.id, "electronics_comm");
   assert.ok(query.branchGroup.courses.includes("Electronics Engineering"));
 });
 
@@ -70,9 +98,32 @@ test("normalizeBotCutoffQuery rejects unsupported categories", () => {
   );
 });
 
+test("normalizeBotCutoffQuery rejects unsupported subcategories", () => {
+  assert.throws(
+    () => normalizeBotCutoffQuery({ percentile: 95, subcategory: "banana" }),
+    (error) =>
+      error instanceof BotCutoffError && error.code === "INVALID_INPUT",
+  );
+});
+
+test("normalizeBotCutoffQuery rejects subcategories unavailable for category", () => {
+  assert.throws(
+    () =>
+      normalizeBotCutoffQuery({
+        percentile: 95,
+        category: "ews",
+        subcategory: "home",
+      }),
+    (error) =>
+      error instanceof BotCutoffError &&
+      error.code === "INVALID_INPUT" &&
+      error.message.includes("not available"),
+  );
+});
+
 test("normalizeBotCutoffQuery rejects unsupported branch groups", () => {
   assert.throws(
-    () => normalizeBotCutoffQuery({ percentile: 95, branch: "banana" }),
+    () => normalizeBotCutoffQuery({ percentile: 95, course: "banana" }),
     (error) =>
       error instanceof BotCutoffError && error.code === "INVALID_INPUT",
   );
@@ -142,11 +193,14 @@ test("queryBotStateCutoffs returns top unique rows and source URL", async () => 
       year: 2025,
       round: 1,
       category: "obc",
-      branch: "AI & Data Science",
+      subcategory: "gender neutral state",
+      course: "AI & Data Science",
     },
     {
       fetchRows: async (query) => {
         assert.equal(query.categoryGroup.id, "obc");
+        assert.equal(query.subcategoryGroup.id, "gender_neutral_state");
+        assert.deepEqual(query.categoryCodes, ["GOBCS"]);
         assert.equal(query.branchGroup.id, "ai_ds");
         return {
           totalMatched: 3,
@@ -177,10 +231,20 @@ test("queryBotStateCutoffs returns top unique rows and source URL", async () => 
   assert.equal(result.query.roundLabel, "Round 1");
   assert.equal(result.query.category, "obc");
   assert.equal(result.query.categoryGroup, "OBC (Other Backward Classes)");
+  assert.equal(result.query.subcategory, "gender_neutral_state");
+  assert.equal(result.query.subcategoryGroup, "Gender-neutral + State Level");
+  assert.equal(result.query.course, "ai_ds");
+  assert.equal(result.query.courseGroup, "AI & Data Science");
   assert.equal(result.query.branch, "ai_ds");
   assert.equal(result.query.branchGroup, "AI & Data Science");
-  assert.equal(result.rows[0].courseName, "Artificial Intelligence and Data Science");
+  assert.equal(
+    result.rows[0].courseName,
+    "Artificial Intelligence and Data Science",
+  );
   assert.match(result.sourceUrl, /percentile=95/);
   assert.match(result.sourceUrl, /GOBCS/);
-  assert.match(result.sourceUrl, /Artificial\+Intelligence\+and\+Data\+Science/);
+  assert.match(
+    result.sourceUrl,
+    /Artificial\+Intelligence\+and\+Data\+Science/,
+  );
 });

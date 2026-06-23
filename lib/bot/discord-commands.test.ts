@@ -6,7 +6,7 @@ import {
   getDiscordRegistrationGuildIds,
 } from "./discord-commands";
 
-test("buildDiscordBotCommands includes category, branch, and course options", () => {
+test("buildDiscordBotCommands includes category, subcategory, and course options", () => {
   const [command] = buildDiscordBotCommands();
   const options = command.options ?? [];
   const optionNames = options.map((option) => option.name);
@@ -16,20 +16,35 @@ test("buildDiscordBotCommands includes category, branch, and course options", ()
     "year",
     "round",
     "category",
-    "branch",
+    "subcategory",
     "course",
   ]);
 
-  for (const optionName of ["branch", "course"]) {
-    const option = options.find((item) => item.name === optionName) as
-      | { choices?: { value: string | number }[] }
-      | undefined;
-    const choices = option?.choices ?? [];
+  const subcategoryOption = options.find(
+    (item) => item.name === "subcategory",
+  ) as { choices?: { value: string | number }[] } | undefined;
+  const subcategoryChoices = subcategoryOption?.choices ?? [];
 
-    assert.ok(choices.some((choice) => choice.value === "cs_it"));
-    assert.ok(choices.some((choice) => choice.value === "ai_ds"));
-    assert.ok(choices.some((choice) => choice.value === "electronics_comm"));
-  }
+  assert.ok(subcategoryChoices.some((choice) => choice.value === "all"));
+  assert.ok(
+    subcategoryChoices.some((choice) => choice.value === "ladies_home"),
+  );
+  assert.ok(
+    subcategoryChoices.some(
+      (choice) => choice.value === "gender_neutral_state",
+    ),
+  );
+
+  const courseOption = options.find((item) => item.name === "course") as
+    | { choices?: { value: string | number }[] }
+    | undefined;
+  const courseChoices = courseOption?.choices ?? [];
+
+  assert.ok(courseChoices.some((choice) => choice.value === "cs_it"));
+  assert.ok(courseChoices.some((choice) => choice.value === "ai_ds"));
+  assert.ok(
+    courseChoices.some((choice) => choice.value === "electronics_comm"),
+  );
 });
 
 test("getDiscordRegistrationGuildIds combines legacy and allowed guild envs", () => {

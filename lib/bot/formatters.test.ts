@@ -16,6 +16,10 @@ const result: BotCutoffResult = {
     roundLabel: "Round 1",
     category: "open",
     categoryGroup: "Open Category (General)",
+    subcategory: "gender_neutral_state",
+    subcategoryGroup: "Gender-neutral + State Level",
+    course: "cs_it",
+    courseGroup: "Computer Science & IT",
     branch: "cs_it",
     branchGroup: "Computer Science & IT",
   },
@@ -46,6 +50,7 @@ test("formatRedditCutoffResponse includes escaped rows and disclaimer", () => {
 
   assert.match(text, /A\\_College/);
   assert.match(text, /Computer Science & IT/);
+  assert.match(text, /Gender\\-neutral/);
   assert.match(text, /Verify official CAP data/i);
 });
 
@@ -55,4 +60,5 @@ test("formatDiscordCutoffResponse stays below Discord content limit", () => {
   assert.ok(text.length < 2000);
   assert.match(text, /MHT-CET state cutoffs/);
   assert.match(text, /Computer Science & IT/);
+  assert.match(text, /Gender-neutral/);
 });

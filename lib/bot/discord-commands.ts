@@ -11,6 +11,7 @@ import {
 } from "@/lib/mht-cet/state-cutoffs/config";
 import { BOT_BRANCH_GROUPS } from "./branch-groups";
 import { BOT_CUTOFF_CATEGORY_GROUPS } from "./categories";
+import { BOT_CUTOFF_SUBCATEGORY_GROUPS } from "./subcategories";
 
 const DISCORD_GUILD_ID_ENV_KEYS = [
   "DISCORD_GUILD_ID",
@@ -84,7 +85,9 @@ export function buildDiscordBotCommands(): RESTPutAPIApplicationCommandsJSONBody
       .addStringOption((option) =>
         option
           .setName("category")
-          .setDescription("Reservation category group; defaults to Open General")
+          .setDescription(
+            "Reservation category group; defaults to Open General",
+          )
           .setRequired(false)
           .addChoices(
             ...BOT_CUTOFF_CATEGORY_GROUPS.map((group) => ({
@@ -95,11 +98,13 @@ export function buildDiscordBotCommands(): RESTPutAPIApplicationCommandsJSONBody
       )
       .addStringOption((option) =>
         option
-          .setName("branch")
-          .setDescription("Branch group; defaults to all branches")
+          .setName("subcategory")
+          .setDescription(
+            "Seat pool/gender filter; defaults to all subcategories",
+          )
           .setRequired(false)
           .addChoices(
-            ...BOT_BRANCH_GROUPS.map((group) => ({
+            ...BOT_CUTOFF_SUBCATEGORY_GROUPS.map((group) => ({
               name: group.label,
               value: group.id,
             })),
@@ -108,7 +113,7 @@ export function buildDiscordBotCommands(): RESTPutAPIApplicationCommandsJSONBody
       .addStringOption((option) =>
         option
           .setName("course")
-          .setDescription("Course group; same choices as branch")
+          .setDescription("Course group; defaults to all courses")
           .setRequired(false)
           .addChoices(
             ...BOT_BRANCH_GROUPS.map((group) => ({

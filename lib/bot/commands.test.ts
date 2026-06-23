@@ -5,7 +5,7 @@ import { parseCutoffFlagCommand } from "./commands";
 
 test("parseCutoffFlagCommand parses flags in any order", () => {
   const result = parseCutoffFlagCommand(
-    "please check --round 2 --percentile 95.5 --category obc --year 2025",
+    "please check --round 2 --percentile 95.5 --category obc --subcategory home --year 2025",
   );
 
   assert.equal(result.ok, true);
@@ -15,6 +15,7 @@ test("parseCutoffFlagCommand parses flags in any order", () => {
       year: 2025,
       round: 2,
       category: "obc",
+      subcategory: "home",
     });
   }
 });
@@ -41,23 +42,32 @@ test("parseCutoffFlagCommand parses sc/st category values", () => {
   }
 });
 
-test("parseCutoffFlagCommand parses branch and course aliases", () => {
+test("parseCutoffFlagCommand parses legacy branch and course aliases", () => {
   const branchResult = parseCutoffFlagCommand(
     '--percentile 95 --branch "Computer Science & IT"',
   );
-  const courseResult = parseCutoffFlagCommand(
-    "--percentile=95 --course=ai-ds",
-  );
+  const courseResult = parseCutoffFlagCommand("--percentile=95 --course=ai-ds");
 
   assert.equal(branchResult.ok, true);
   assert.equal(courseResult.ok, true);
 
   if (branchResult.ok) {
-    assert.equal(branchResult.command.branch, "Computer Science & IT");
+    assert.equal(branchResult.command.course, "Computer Science & IT");
   }
 
   if (courseResult.ok) {
-    assert.equal(courseResult.command.branch, "ai-ds");
+    assert.equal(courseResult.command.course, "ai-ds");
+  }
+});
+
+test("parseCutoffFlagCommand parses subcategory aliases", () => {
+  const result = parseCutoffFlagCommand(
+    "--percentile 95 --seat-type ladies-home",
+  );
+
+  assert.equal(result.ok, true);
+  if (result.ok) {
+    assert.equal(result.command.subcategory, "ladies-home");
   }
 });
 

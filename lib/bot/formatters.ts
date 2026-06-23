@@ -16,12 +16,23 @@ function truncate(value: string, maxLength: number) {
   return `${value.slice(0, Math.max(0, maxLength - 1)).trimEnd()}…`;
 }
 
+function getQueryFilterLabels(result: BotCutoffResult) {
+  const labels = [result.query.categoryGroup];
+
+  if (result.query.subcategory !== "all") {
+    labels.push(result.query.subcategoryGroup);
+  }
+
+  labels.push(result.query.courseGroup);
+  return labels;
+}
+
 export function escapeRedditMarkdown(value: string) {
   return value.replace(/([\\`*_{}\[\]()#+\-.!|>])/g, "\\$1");
 }
 
 export function formatCutoffSummaryHeader(result: BotCutoffResult) {
-  return `MHT-CET state cutoffs near ${result.query.percentile} percentile, ${result.query.year} ${result.query.roundLabel}, ${result.query.categoryGroup}, ${result.query.branchGroup}`;
+  return `MHT-CET state cutoffs near ${result.query.percentile} percentile, ${result.query.year} ${result.query.roundLabel}, ${getQueryFilterLabels(result).join(", ")}`;
 }
 
 export function formatDiscordCutoffResponse(result: BotCutoffResult) {
@@ -42,8 +53,11 @@ export function formatDiscordCutoffResponse(result: BotCutoffResult) {
 }
 
 export function formatRedditCutoffResponse(result: BotCutoffResult) {
+  const filterLabels = getQueryFilterLabels(result)
+    .map((label) => `**${escapeRedditMarkdown(label)}**`)
+    .join(", ");
   const lines = [
-    `MHT-CET state cutoffs near **${result.query.percentile} percentile**, **${result.query.year} ${result.query.roundLabel}**, **${escapeRedditMarkdown(result.query.categoryGroup)}**, **${escapeRedditMarkdown(result.query.branchGroup)}**:`,
+    `MHT-CET state cutoffs near **${result.query.percentile} percentile**, **${result.query.year} ${result.query.roundLabel}**, ${filterLabels}:`,
     "",
   ];
 
@@ -62,5 +76,5 @@ export function formatRedditCutoffResponse(result: BotCutoffResult) {
 }
 
 export function formatInvalidCommandResponse(error: string) {
-  return `${error} Try \`--percentile 95 --year 2025 --round 1 --category obc --branch cs-it\`.`;
+  return `${error} Try \`--percentile 95 --year 2025 --round 1 --category obc --subcategory home --course cs-it\`.`;
 }
