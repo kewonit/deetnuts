@@ -65,8 +65,7 @@ export function ChartContainer({
           "[&_.recharts-surface]:outline-hidden",
           "[&_.recharts-layer_path]:[fill-opacity:1]",
           "[&_.recharts-layer_path]:[stroke-width:2]",
-          "[&_.recharts-layer_path]:[stroke:var(--color-border)]",
-          className
+          className,
         )}
         {...props}
       >
@@ -81,7 +80,7 @@ export function ChartContainer({
 
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   const colorConfig = Object.entries(config).filter(
-    ([, config]) => config.theme || config.color
+    ([, config]) => config.theme || config.color,
   );
 
   if (!colorConfig.length) {
@@ -104,7 +103,7 @@ ${colorConfig
   })
   .join("\n")}
 }
-`
+`,
           )
           .join("\n"),
       }}
@@ -184,7 +183,7 @@ export function ChartTooltipContent({
     <div
       className={cn(
         "border-border bg-background grid min-w-[8rem] items-start gap-1.5 rounded-lg border-2 border-black px-2.5 py-1.5 text-xs shadow-base",
-        className
+        className,
       )}
     >
       {!nestLabel ? tooltipLabel : null}
@@ -199,7 +198,7 @@ export function ChartTooltipContent({
               key={item.dataKey}
               className={cn(
                 "[&>svg]:text-foreground flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5",
-                indicator === "dot" && "items-center"
+                indicator === "dot" && "items-center",
               )}
             >
               {formatter && item?.value !== undefined && item.name ? (
@@ -232,7 +231,7 @@ export function ChartTooltipContent({
                   <div
                     className={cn(
                       "flex flex-1 justify-between leading-none",
-                      nestLabel ? "items-end" : "items-center"
+                      nestLabel ? "items-end" : "items-center",
                     )}
                   >
                     <div className="grid gap-1.5">
@@ -262,7 +261,7 @@ export function ChartTooltipContent({
 function getPayloadConfigFromPayload(
   config: ChartConfig,
   payload: unknown,
-  key: string
+  key: string,
 ) {
   if (typeof payload !== "object" || payload === null) {
     return undefined;

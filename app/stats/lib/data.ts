@@ -20,7 +20,7 @@ export interface StatusStat {
 
 export interface DurationStat {
   date: string;
-  avgDurationMs: number;
+  avgDurationMs: number | null;
 }
 
 export interface EventProcessingStat {
@@ -178,13 +178,13 @@ export async function fetchBotStats(): Promise<BotStats> {
     d.setUTCDate(d.getUTCDate() - i);
     const key = d.toISOString().slice(0, 10);
     const vals = durationMap.get(key) ?? [];
-    const avg =
+    const avgDurationMs =
       vals.length > 0
         ? Math.round(vals.reduce((a, b) => a + b, 0) / vals.length)
-        : 0;
+        : null;
     durations.push({
       date: formatDateLabel(key),
-      avgDurationMs: avg,
+      avgDurationMs,
     });
   }
 
@@ -201,13 +201,18 @@ export async function fetchBotStats(): Promise<BotStats> {
   const totalFailed = totalsRows.filter((r) => r.status === "failed").length;
 
   const validDurations = totalsRows
-    .filter((r) => typeof r.duration_ms === "number" && r.duration_ms > 0 && r.duration_ms < 30000)
+    .filter(
+      (r) =>
+        typeof r.duration_ms === "number" &&
+        r.duration_ms > 0 &&
+        r.duration_ms < 30000,
+    )
     .map((r) => r.duration_ms as number);
 
   const avgResponseTimeMs =
     validDurations.length > 0
       ? Math.round(
-          validDurations.reduce((a, b) => a + b, 0) / validDurations.length
+          validDurations.reduce((a, b) => a + b, 0) / validDurations.length,
         )
       : 0;
 
@@ -224,26 +229,30 @@ export async function fetchBotStats(): Promise<BotStats> {
         1,
         Math.round(
           (Date.now() - new Date(firstEvent.created_at).getTime()) /
-            (1000 * 60 * 60 * 24)
-        )
+            (1000 * 60 * 60 * 24),
+        ),
       )
     : 0;
 
   return {
     daily: Array.from(dailyMap.values()),
-    platforms: Array.from(platformCounts.entries()).map(([platform, count]) => ({
-      platform: platform.charAt(0).toUpperCase() + platform.slice(1),
-      count,
-    })),
+    platforms: Array.from(platformCounts.entries()).map(
+      ([platform, count]) => ({
+        platform: platform.charAt(0).toUpperCase() + platform.slice(1),
+        count,
+      }),
+    ),
     statuses: Array.from(statusCounts.entries()).map(([status, count]) => ({
       status: status.charAt(0).toUpperCase() + status.slice(1),
       count,
     })),
     durations,
-    eventsProcessed: Array.from(eventCounts.entries()).map(([status, count]) => ({
-      status: status.charAt(0).toUpperCase() + status.slice(1),
-      count,
-    })),
+    eventsProcessed: Array.from(eventCounts.entries()).map(
+      ([status, count]) => ({
+        status: status.charAt(0).toUpperCase() + status.slice(1),
+        count,
+      }),
+    ),
     totals: {
       totalRequests,
       totalServed,

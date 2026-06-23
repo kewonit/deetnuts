@@ -10,12 +10,7 @@ import {
   LineChart,
 } from "recharts";
 import { Zap, Activity, Clock, Server } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
@@ -178,7 +173,9 @@ export default function StatsDashboard({ stats }: { stats: BotStats }) {
                     type="monotone"
                     stroke="var(--color-avgDurationMs)"
                     strokeWidth={2}
-                    dot={false}
+                    connectNulls={false}
+                    dot={{ r: 3, strokeWidth: 2 }}
+                    activeDot={{ r: 5, strokeWidth: 2 }}
                   />
                 </LineChart>
               </ChartContainer>
