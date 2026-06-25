@@ -24,10 +24,6 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "cloudinary.com",
-      },
-      {
-        protocol: "https",
         hostname: "res.cloudinary.com",
       },
       {
@@ -42,8 +38,6 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    DATABASE_URL: process.env.DATABASE_URL,
-    DIRECT_URL: process.env.DIRECT_URL,
   },
   webpack(config) {
     config.module.rules.push({
@@ -86,6 +80,11 @@ const nextConfig = {
             key: "Permissions-Policy",
             value:
               "camera=(), microphone=(), geolocation=(), interest-cohort=()",
+          },
+          {
+            key: "Content-Security-Policy",
+            value:
+              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https://res.cloudinary.com https://external-preview.redd.it; font-src 'self'; connect-src 'self' https://*.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self';",
           },
         ],
       },

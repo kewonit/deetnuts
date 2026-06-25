@@ -545,10 +545,8 @@ export function getPocketBase(): PocketBaseLike {
  */
 export async function ensureUserAuthenticated(): Promise<void> {
   try {
-    const { cookies } = await import("next/headers");
-    const cookieStore = await cookies();
     const { createClient } = await import("@/app/lib/supabase/server");
-    const supabase = createClient(cookieStore);
+    const supabase = await createClient();
     const {
       data: { user },
       error,

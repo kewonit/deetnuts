@@ -278,14 +278,7 @@ export async function getAllInstitutes(): Promise<
         }),
     ]);
 
-    if (process.env.NODE_ENV === "development") {
-      console.log("[JoSAA] getAllInstitutes - institutes:", institutes.length);
-      console.log("[JoSAA] getAllInstitutes - branches:", allBranches.length);
-      console.log(
-        "[JoSAA] getAllInstitutes - cutoff sample:",
-        cutoffSample.items?.length || 0,
-      );
-    }
+
 
     // Create branch lookup - map both original_id AND PocketBase id
     const branchLookup = new Map<string, JosaaBranch>();
@@ -311,23 +304,7 @@ export async function getAllInstitutes(): Promise<
       instituteBranches.set(c.institute_id, branches);
     });
 
-    if (process.env.NODE_ENV === "development") {
-      console.log(
-        "[JoSAA] getAllInstitutes - unique institutes in cutoffs:",
-        instituteBranches.size,
-      );
-      // Log sample to debug
-      const sampleInst = institutes.slice(0, 3);
-      sampleInst.forEach((inst: any) => {
-        console.log(
-          `[JoSAA] Sample institute: id=${inst.id}, original_id=${inst.original_id}, name=${inst.name}`,
-        );
-        const branchSet =
-          instituteBranches.get(inst.original_id) ||
-          instituteBranches.get(inst.id);
-        console.log(`[JoSAA]   -> Found ${branchSet?.size || 0} branches`);
-      });
-    }
+
 
     // Build result
     const result = institutes.map((inst: any) => {
@@ -355,12 +332,7 @@ export async function getAllInstitutes(): Promise<
     institutesCache = result;
     institutesCacheTime = Date.now();
 
-    if (process.env.NODE_ENV === "development") {
-      const withBranches = result.filter((i) => i.branches.length > 0).length;
-      console.log(
-        `[JoSAA] getAllInstitutes - ${withBranches}/${result.length} institutes have branches`,
-      );
-    }
+
 
     return result;
   } catch (error) {
@@ -667,12 +639,7 @@ export async function getBranchDetails(
 
     // Last resort: try all branches and find similar name
     // This helps with URL-encoded or transformed branch codes
-    if (process.env.NODE_ENV === "development") {
-      console.log(
-        "[JoSAA] getBranchDetails - No match found for:",
-        branchIdOrCode,
-      );
-    }
+
 
     return null;
   } catch (error) {

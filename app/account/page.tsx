@@ -1,11 +1,8 @@
 import AccountForm from "./account-form";
 import { createClient } from "@/app/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
-
 export default async function Account({ searchParams }: any) {
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = await createClient();
 
   const {
     data: { user },

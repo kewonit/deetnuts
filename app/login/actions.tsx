@@ -3,7 +3,6 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/app/lib/supabase/server";
-import { cookies } from "next/headers";
 import {
   buildAuthCallbackUrl,
   DEFAULT_AUTH_REDIRECT,
@@ -29,8 +28,7 @@ export async function login(formData: FormData) {
     return redirect(`/login?${params.toString()}`);
   }
 
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = await createClient();
 
   // Try to sign in with OTP - let Supabase handle whether user exists
   const { error } = await supabase.auth.signInWithOtp({
@@ -88,8 +86,7 @@ export async function signup(formData: FormData) {
     return redirect(`/signup?${params.toString()}`);
   }
 
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = await createClient();
 
   // Try to create account with OTP - Supabase will handle if user already exists
   const { error } = await supabase.auth.signInWithOtp({
@@ -140,8 +137,7 @@ export async function verifyOtp(formData: FormData) {
     return redirect(`/auth/confirm?${params.toString()}`);
   }
 
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = await createClient();
 
   const { error } = await supabase.auth.verifyOtp({
     email,
@@ -163,8 +159,7 @@ export async function verifyOtp(formData: FormData) {
 }
 
 export async function signOut() {
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = await createClient();
   await supabase.auth.signOut();
   revalidatePath("/", "layout");
   redirect("/");
@@ -177,8 +172,7 @@ export async function updateProfile(formData: FormData) {
     redirect("/account?message=Name must be at least 2 characters long");
   }
 
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = await createClient();
 
   const {
     data: { user },

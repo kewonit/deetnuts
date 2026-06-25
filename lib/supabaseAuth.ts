@@ -1,10 +1,7 @@
 import { createClient } from "@/app/lib/supabase/server";
-import { cookies } from "next/headers";
-
 export async function ensureUserAuthenticated() {
   try {
-    const cookieStore = await cookies();
-    const supabase = createClient(cookieStore);
+    const supabase = await createClient();
     const {
       data: { user },
       error,
@@ -28,8 +25,7 @@ export async function ensureUserAuthenticated() {
 
 export async function getAuthenticatedSupabaseClient() {
   try {
-    const cookieStore = await cookies();
-    const supabase = createClient(cookieStore);
+    const supabase = await createClient();
     const {
       data: { user },
       error,

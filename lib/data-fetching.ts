@@ -1,17 +1,5 @@
-/**
- * Data fetching utilities following Vercel best practices
- * - Proper error handling
- * - Typed responses
- * - Revalidation strategies
- * - Cache tags for on-demand revalidation
- */
-
 import { unstable_cache } from "next/cache";
 
-/**
- * Fetch with automatic retry logic
- * Best Practice: Handles transient network errors
- */
 export async function fetchWithRetry<T>(
   url: string,
   options: RequestInit = {},
@@ -47,10 +35,6 @@ export async function fetchWithRetry<T>(
   throw lastError || new Error("Failed to fetch after retries");
 }
 
-/**
- * Create a cached data fetcher with tags
- * Best Practice: Enables granular cache invalidation
- */
 export function createCachedFetcher<T>(
   key: string,
   tags: string[],
@@ -58,9 +42,8 @@ export function createCachedFetcher<T>(
 ) {
   return unstable_cache(
     async (params?: Record<string, any>) => {
-      // Your data fetching logic here
-      // This is a placeholder that should be replaced
-      return {} as T;
+      void params;
+      throw new Error("createCachedFetcher: fetcher implementation required");
     },
     [key],
     {
@@ -70,10 +53,6 @@ export function createCachedFetcher<T>(
   );
 }
 
-/**
- * Parallel data fetching helper
- * Best Practice: Reduces total loading time
- */
 export async function fetchParallel<T extends Record<string, any>>(
   fetchers: Record<keyof T, () => Promise<any>>,
 ): Promise<T> {
@@ -93,10 +72,6 @@ export async function fetchParallel<T extends Record<string, any>>(
   return Object.fromEntries(results) as T;
 }
 
-/**
- * Type-safe error wrapper for data fetching
- * Best Practice: Provides consistent error handling
- */
 export interface DataResult<T> {
   data: T | null;
   error: Error | null;
@@ -118,10 +93,6 @@ export async function safeFetch<T>(
   }
 }
 
-/**
- * Fetch with timeout
- * Best Practice: Prevents hanging requests
- */
 export async function fetchWithTimeout<T>(
   url: string,
   options: RequestInit = {},
@@ -146,10 +117,6 @@ export async function fetchWithTimeout<T>(
   }
 }
 
-/**
- * Batch multiple requests with deduplication
- * Best Practice: Reduces redundant network calls
- */
 const requestCache = new Map<string, Promise<any>>();
 
 export async function fetchWithDeduplication<T>(
@@ -161,7 +128,6 @@ export async function fetchWithDeduplication<T>(
   }
 
   const promise = fetcher().finally(() => {
-    // Clean up after request completes
     setTimeout(() => requestCache.delete(key), 1000);
   });
 
@@ -169,34 +135,25 @@ export async function fetchWithDeduplication<T>(
   return promise;
 }
 
-/**
- * Cache configuration presets
- * Best Practice: Standardized caching strategies
- */
 export const CachePresets = {
-  // Static data that rarely changes
   STATIC: {
-    revalidate: 3600, // 1 hour
+    revalidate: 3600,
     tags: ["static"],
   },
-  // Dynamic data that changes frequently
   DYNAMIC: {
-    revalidate: 60, // 1 minute
+    revalidate: 60,
     tags: ["dynamic"],
   },
-  // User-specific data
   USER: {
-    revalidate: 0, // No caching
+    revalidate: 0,
     tags: ["user"],
   },
-  // Institute data
   INSTITUTE: {
-    revalidate: 900, // 15 minutes
+    revalidate: 900,
     tags: ["institute", "josaa"],
   },
-  // Cutoffs data
   CUTOFFS: {
-    revalidate: 1800, // 30 minutes
+    revalidate: 1800,
     tags: ["cutoffs", "josaa"],
   },
 } as const;

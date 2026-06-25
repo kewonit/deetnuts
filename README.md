@@ -23,7 +23,7 @@ The current codebase covers the following data domains:
 
 Runtime architecture:
 
-- Next.js 16.1.4 with the App Router
+- Next.js 16.2.9 with the App Router
 - React 19.2.3 with React Compiler enabled
 - TypeScript across application and scripts
 - Supabase Auth and Supabase Postgres as the live backend

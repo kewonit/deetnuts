@@ -118,17 +118,9 @@ export default function JosaaCutoffChart({
   const fetchTrendData = useCallback(
     async (branchId: string, cat: string, gen: string) => {
       if (!branchId) {
-        console.log("[CutoffChart] No branchId provided, skipping fetch");
         setLoading(false);
         return;
       }
-
-      console.log("[CutoffChart] Fetching trends for:", {
-        instituteId,
-        branchId,
-        cat,
-        gen,
-      });
       setLoading(true);
       try {
         // Use API route instead of direct server function call
@@ -150,7 +142,6 @@ export default function JosaaCutoffChart({
         }
 
         const data = await response.json();
-        console.log("[CutoffChart] Received data:", data.length, "items");
         // Convert snake_case to camelCase for chart compatibility
         const convertedData = data.map((item: any) => ({
           year: item.year,
@@ -194,11 +185,6 @@ export default function JosaaCutoffChart({
 
   // Prepare chart data - group by year, take last round
   const chartData = useMemo(() => {
-    console.log(
-      "[CutoffChart] Processing trendData:",
-      trendData.length,
-      "items",
-    );
     const yearMap = new Map<number, (typeof trendData)[0]>();
 
     trendData.forEach((item) => {
@@ -209,12 +195,6 @@ export default function JosaaCutoffChart({
     });
 
     const result = Array.from(yearMap.values()).sort((a, b) => a.year - b.year);
-    console.log(
-      "[CutoffChart] chartData result:",
-      result.length,
-      "years",
-      result,
-    );
     return result;
   }, [trendData]);
 
@@ -443,7 +423,7 @@ export default function JosaaCutoffChart({
 
       {/* Legend explanation */}
       <div className="text-sm text-gray-600 bg-gray-50 p-4 rounded-lg border-2 border-gray-200">
-        <p className="font-semibold mb-1">📊 How to read this chart:</p>
+        <p className="font-semibold mb-1">How to read this chart:</p>
         <ul className="list-disc list-inside space-y-1">
           <li>
             <span className="text-green-600 font-semibold">Opening Rank</span> -
@@ -604,7 +584,7 @@ export function CutoffChart({ trends, title }: SimpleCutoffChartProps) {
         </ResponsiveContainer>
 
         <p className="text-sm text-muted-foreground text-center mt-4">
-          📈 Lower rank = Harder to get in | Y-axis is reversed
+          Lower rank = Harder to get in | Y-axis is reversed
         </p>
       </CardContent>
     </Card>

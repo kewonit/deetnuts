@@ -107,44 +107,17 @@ export default function JosaaBranchComparison({
       }
       map.set(b.id, b);
     });
-    // Debug logging
-    if (process.env.NODE_ENV === "development" && branches.length > 0) {
-      console.log(
-        "[BranchComparison] branchMap size:",
-        map.size,
-        "branches:",
-        branches.length,
-      );
-    }
     return map;
   }, [branches]);
 
   // Process data for chart
   const chartData = useMemo(() => {
-    // Debug logging
-    if (process.env.NODE_ENV === "development") {
-      console.log("[BranchComparison] cutoffs received:", cutoffs.length);
-      if (cutoffs.length > 0) {
-        console.log("[BranchComparison] sample cutoff:", {
-          branch_id: (cutoffs[0] as any).branch_id,
-          branch: cutoffs[0].branch,
-          opening_rank: cutoffs[0].opening_rank,
-          closing_rank: cutoffs[0].closing_rank,
-        });
-      }
-    }
 
     return cutoffs
       .map((c) => {
         const branchId = (c as any).branch_id || c.branch;
         const branch = branchMap.get(branchId);
         if (!branch) {
-          if (process.env.NODE_ENV === "development") {
-            console.log(
-              "[BranchComparison] No branch found for branchId:",
-              branchId,
-            );
-          }
           return null;
         }
         return {

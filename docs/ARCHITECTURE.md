@@ -48,7 +48,7 @@ The codebase still carries compatibility layers that preserve PocketBase-like in
 
 | Layer              | Current Choice          | Notes                                                 |
 | ------------------ | ----------------------- | ----------------------------------------------------- |
-| Framework          | Next.js 16.1.4          | App Router, standalone output                         |
+| Framework          | Next.js 16.2.9          | App Router, standalone output                         |
 | UI runtime         | React 19.2.3            | React Compiler enabled                                |
 | Language           | TypeScript              | Used across app and scripts                           |
 | Styling            | Tailwind CSS            | Shared UI primitives plus project-specific components |

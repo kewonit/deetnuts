@@ -1,6 +1,5 @@
 import { type EmailOtpType } from "@supabase/supabase-js";
 import { type NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { createClient } from "@/app/lib/supabase/server";
 import { sanitizeRedirectPath } from "@/lib/auth-redirect";
 
@@ -11,8 +10,7 @@ export async function GET(request: NextRequest) {
   const next = sanitizeRedirectPath(searchParams.get("redirect"));
 
   if (token_hash && type) {
-    const cookieStore = await cookies();
-    const supabase = createClient(cookieStore);
+    const supabase = await createClient();
 
     const { error } = await supabase.auth.verifyOtp({
       type,

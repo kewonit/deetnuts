@@ -1,5 +1,4 @@
 import { createClient } from "@/app/lib/supabase/server";
-import { cookies } from "next/headers";
 import { unstable_rethrow } from "next/navigation";
 import { cache } from "react";
 
@@ -19,8 +18,7 @@ export interface User {
  */
 export const getCurrentUser = cache(async (): Promise<User | null> => {
   try {
-    const cookieStore = await cookies();
-    const supabase = createClient(cookieStore);
+    const supabase = await createClient();
     const {
       data: { user },
       error,

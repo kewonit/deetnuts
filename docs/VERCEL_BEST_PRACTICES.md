@@ -8,7 +8,7 @@ This repository follows a set of practical platform conventions aligned with mod
 
 The current repository uses:
 
-- Next.js 16.1.4
+- Next.js 16.2.9
 - React 19.2.3
 - standalone output for deployment
 - React Compiler enabled in `next.config.mjs`

@@ -1,11 +1,3 @@
-/**
- * Performance monitoring utilities
- * Best Practice: Track and optimize performance metrics
- */
-
-/**
- * Measure component render time
- */
 export function measureRenderTime(componentName: string) {
   const start = performance.now();
 
@@ -18,21 +10,9 @@ export function measureRenderTime(componentName: string) {
         `[Performance] ${componentName} rendered in ${duration.toFixed(2)}ms`,
       );
     }
-
-    // Send to analytics in production
-    if (
-      process.env.NODE_ENV === "production" &&
-      typeof window !== "undefined"
-    ) {
-      // Example: window.analytics?.track('component_render', { component: componentName, duration })
-    }
   };
 }
 
-/**
- * Report Web Vitals to analytics
- * Best Practice: Monitor Core Web Vitals
- */
 export function reportWebVitals(metric: {
   name: string;
   value: number;
@@ -40,18 +20,10 @@ export function reportWebVitals(metric: {
 }) {
   if (process.env.NODE_ENV === "production") {
     const { name, value, id } = metric;
-
-    // Send to analytics service (e.g., Vercel Analytics, Google Analytics)
-    // window.gtag?.('event', name, { value, metric_id: id })
-
-    // Note: Console logging removed for production. Enable analytics integration above.
-    void { name, value, id }; // Prevent unused variable warnings
+    void { name, value, id };
   }
 }
 
-/**
- * Log slow queries for optimization
- */
 export async function trackQueryPerformance<T>(
   queryName: string,
   query: () => Promise<T>,

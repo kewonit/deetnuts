@@ -1,0 +1,21 @@
+{
+  "name": "deetnuts-bot",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "reddit": "tsx ../bot/reddit-worker.ts",
+    "reddit:auth": "tsx ../scripts/reddit-refresh-token.ts",
+    "discord:register": "tsx ../scripts/register-discord-commands.ts",
+    "build": "tsc -p ../tsconfig.bot.json",
+    "start": "node ../dist/bot/bot/reddit-worker.js",
+    "usage": "tsx ../scripts/bot-usage.ts",
+    "test": "node --import tsx --test \"../lib/bot/*.test.ts\""
+  },
+  "dependencies": {
+    "discord-interactions": "^4.4.0",
+    "discord.js": "^14.26.4",
+    "dotenv": "^17.4.2",
+    "snoowrap": "^1.23.0",
+    "tsx": "^4.22.4"
+  }
+}

@@ -23,8 +23,7 @@ const ANONYMOUS_API_COOKIE_OPTIONS = {
 
 async function isRequestAuthenticated(): Promise<boolean> {
   try {
-    const cookieStore = await cookies();
-    const supabase = createClient(cookieStore);
+    const supabase = await createClient();
     const {
       data: { user },
       error,
