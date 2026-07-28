@@ -1,29 +1,15 @@
-import { type EmailOtpType } from "@supabase/supabase-js";
 import { type NextRequest, NextResponse } from "next/server";
 
-import { createClient } from "@/utils/supabase/server";
 import { sanitizeRedirectPath } from "@/lib/auth-redirect";
 
-// Creating a handler to a GET request to route /auth/confirm
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const token_hash = searchParams.get("token_hash");
-  const type = searchParams.get("type") as EmailOtpType | null;
   const next = sanitizeRedirectPath(searchParams.get("redirect"));
-  const redirectTo = new URL(next, request.url);
-
-  if (token_hash && type) {
-    const supabase = await createClient();
-
-    const { error } = await supabase.auth.verifyOtp({
-      type,
-      token_hash,
-    });
-    if (!error) {
-      return NextResponse.redirect(redirectTo);
-    }
-  }
-
-  // return the user to an error page with some instructions
-  return NextResponse.redirect(new URL("/error", request.url));
+  const loginUrl = new URL("/login", request.url);
+  loginUrl.searchParams.set(
+    "message",
+    "Email code sign-in has been replaced by Google sign-in.",
+  );
+  loginUrl.searchParams.set("redirect", next);
+  return NextResponse.redirect(loginUrl);
 }

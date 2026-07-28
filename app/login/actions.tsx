@@ -5,157 +5,33 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/app/lib/supabase/server";
 import {
   buildAuthCallbackUrl,
-  DEFAULT_AUTH_REDIRECT,
   sanitizeRedirectPath,
 } from "@/lib/auth-redirect";
 
-function addRedirectParam(params: URLSearchParams, redirectTo: string) {
-  if (redirectTo && redirectTo !== DEFAULT_AUTH_REDIRECT) {
-    params.set("redirect", redirectTo);
-  }
-}
-
-export async function login(formData: FormData) {
-  const email = formData.get("email") as string;
+export async function signInWithGoogle(formData: FormData) {
   const redirectTo = sanitizeRedirectPath(formData.get("redirect"));
-
-  // Validate input
-  if (!email || !email.includes("@")) {
-    const params = new URLSearchParams({
-      message: "Please enter a valid email address",
-    });
-    addRedirectParam(params, redirectTo);
-    return redirect(`/login?${params.toString()}`);
-  }
-
   const supabase = await createClient();
 
-  // Try to sign in with OTP - let Supabase handle whether user exists
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
     options: {
-      shouldCreateUser: false, // Only send OTP to existing users
-      emailRedirectTo: buildAuthCallbackUrl(redirectTo),
-    },
-  });
-
-  if (error) {
-    // Check if the error suggests the user doesn't exist
-    if (
-      error.message.includes("Signups not allowed") ||
-      error.message.includes("Email not confirmed") ||
-      error.message.includes("Invalid login credentials")
-    ) {
-      const params = new URLSearchParams({
-        message: "No account found with that email. Please sign up first.",
-      });
-      addRedirectParam(params, redirectTo);
-      return redirect(`/signup?${params.toString()}`);
-    }
-
-    const params = new URLSearchParams({
-      message: `Could not authenticate user: ${error.message}`,
-    });
-    addRedirectParam(params, redirectTo);
-    return redirect(`/login?${params.toString()}`);
-  }
-
-  redirect(
-    `/auth/confirm?email=${encodeURIComponent(email)}&redirect=${encodeURIComponent(redirectTo)}`,
-  );
-}
-
-export async function signup(formData: FormData) {
-  const name = formData.get("name") as string;
-  const email = formData.get("email") as string;
-  const redirectTo = sanitizeRedirectPath(formData.get("redirect"));
-
-  if (!name || name.trim().length < 2) {
-    const params = new URLSearchParams({
-      message: "Name must be at least 2 characters long",
-    });
-    addRedirectParam(params, redirectTo);
-    return redirect(`/signup?${params.toString()}`);
-  }
-
-  if (!email || !email.includes("@")) {
-    const params = new URLSearchParams({
-      message: "Please enter a valid email address",
-    });
-    addRedirectParam(params, redirectTo);
-    return redirect(`/signup?${params.toString()}`);
-  }
-
-  const supabase = await createClient();
-
-  // Try to create account with OTP - Supabase will handle if user already exists
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
-    options: {
-      shouldCreateUser: true,
-      emailRedirectTo: buildAuthCallbackUrl(redirectTo),
-      data: {
-        full_name: name.trim(),
+      redirectTo: buildAuthCallbackUrl(redirectTo),
+      skipBrowserRedirect: true,
+      queryParams: {
+        prompt: "select_account",
       },
     },
   });
 
-  if (error) {
-    // Check if the error suggests the user already exists
-    if (error.message.includes("User already registered")) {
-      const params = new URLSearchParams({
-        message:
-          "An account with this email already exists. Please log in instead.",
-      });
-      addRedirectParam(params, redirectTo);
-      return redirect(`/login?${params.toString()}`);
-    }
-
+  if (error || !data.url) {
     const params = new URLSearchParams({
-      message: `Could not create account: ${error.message}`,
-    });
-    addRedirectParam(params, redirectTo);
-    return redirect(`/signup?${params.toString()}`);
-  }
-
-  redirect(
-    `/auth/confirm?email=${encodeURIComponent(email)}&redirect=${encodeURIComponent(redirectTo)}`,
-  );
-}
-
-export async function verifyOtp(formData: FormData) {
-  const email = formData.get("email") as string;
-  const otp = formData.get("otp") as string;
-  const redirectTo = sanitizeRedirectPath(formData.get("redirect"));
-
-  if (!email || !otp) {
-    const params = new URLSearchParams({
-      message: "Invalid OTP",
-      email: email || "",
+      message: "Google sign-in could not be started. Please try again.",
       redirect: redirectTo,
     });
-    return redirect(`/auth/confirm?${params.toString()}`);
+    return redirect(`/login?${params.toString()}`);
   }
 
-  const supabase = await createClient();
-
-  const { error } = await supabase.auth.verifyOtp({
-    email,
-    token: otp,
-    type: "email",
-  });
-
-  if (error) {
-    const params = new URLSearchParams({
-      message: `Invalid or expired OTP. Please try again. Error: ${error.message}`,
-      email,
-      redirect: redirectTo,
-    });
-    return redirect(`/auth/confirm?${params.toString()}`);
-  }
-
-  revalidatePath("/", "layout");
-  redirect(redirectTo);
+  redirect(data.url);
 }
 
 export async function signOut() {
