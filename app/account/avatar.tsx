@@ -2,6 +2,15 @@
 import React, { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import Image from "next/image";
+import { toast } from "sonner";
+
+const MAX_AVATAR_SIZE = 2 * 1024 * 1024;
+const AVATAR_EXTENSIONS: Record<string, string> = {
+  "image/gif": "gif",
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp",
+};
 
 export default function Avatar({
   uid,
@@ -31,7 +40,7 @@ export default function Avatar({
         const url = URL.createObjectURL(data);
         setAvatarUrl(url);
       } catch (error) {
-        console.log("Error downloading image: ", error);
+        console.error("Error downloading image: ", error);
       }
     }
 
@@ -49,8 +58,21 @@ export default function Avatar({
       }
 
       const file = event.target.files[0];
-      const fileExt = file.name.split(".").pop();
-      const filePath = `${uid}-${Math.random()}.${fileExt}`;
+      const fileExt = AVATAR_EXTENSIONS[file.type];
+
+      if (!uid) {
+        throw new Error("You must be signed in to upload an avatar.");
+      }
+
+      if (!fileExt) {
+        throw new Error("Avatar must be a GIF, JPEG, PNG, or WebP image.");
+      }
+
+      if (file.size > MAX_AVATAR_SIZE) {
+        throw new Error("Avatar must be smaller than 2 MB.");
+      }
+
+      const filePath = `${uid}/${crypto.randomUUID()}.${fileExt}`;
 
       const { error: uploadError } = await supabase.storage
         .from("avatars")
@@ -61,8 +83,8 @@ export default function Avatar({
       }
 
       onUpload(filePath);
-    } catch (error) {
-      alert("Error uploading avatar!");
+    } catch {
+      toast.error("Error uploading avatar!");
     } finally {
       setUploading(false);
     }
@@ -96,7 +118,7 @@ export default function Avatar({
           }}
           type="file"
           id="single"
-          accept="image/*"
+          accept="image/gif,image/jpeg,image/png,image/webp"
           onChange={uploadAvatar}
           disabled={uploading}
         />

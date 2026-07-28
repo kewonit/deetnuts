@@ -32,43 +32,17 @@ export async function getCutoffRecords(
   sortOrder: string,
 ) {
   try {
-    console.log("Server Action called with:", {
-      page,
-      perPage,
-      search,
-      categories,
-      courses,
-      statuses,
-      homeUniversities,
-      percentileInput,
-      round,
-      year,
-      sortBy,
-      sortOrder,
-    });
-
     const sanitizedYear =
       Number.isInteger(year) && ROUNDS_BY_YEAR[year] ? year : 2025;
-    if (sanitizedYear !== year) {
-      console.warn(`Invalid year ${year} provided, using ${sanitizedYear}`);
-    }
 
     // Validate and sanitize round input
     const sanitizedRound =
       Number.isInteger(round) && isRoundAvailableForYear(round, sanitizedYear)
         ? round
         : DEFAULT_ROUND;
-    if (sanitizedRound !== round) {
-      console.warn(
-        `Invalid round ${round} provided, using default round ${sanitizedRound}`,
-      );
-    }
 
     // Get the collection name for the specified round and year
     const collectionName = getCollectionForRound(sanitizedRound, sanitizedYear);
-    console.log(
-      `Using collection: ${collectionName} for round ${sanitizedRound} and year ${sanitizedYear}`,
-    );
 
     const pb = getPocketBase();
 
@@ -200,16 +174,6 @@ export async function getCutoffRecords(
     const statusChunks = chunkValues(statuses);
     const homeUniversityChunks = chunkValues(homeUniversities);
     const MAX_CONCURRENT_CHUNK_QUERIES = 8;
-
-    console.log("Query strategy:", {
-      totalCategories: categories?.length || 0,
-      totalCourses: courses?.length || 0,
-      totalStatuses: statuses?.length || 0,
-      totalHomeUniversities: homeUniversities?.length || 0,
-      totalFilterItems,
-      shouldSplitQuery,
-      maxItemsPerChunk: MAX_ITEMS_PER_CHUNK,
-    });
 
     let result;
 
@@ -348,10 +312,6 @@ export async function getCutoffRecords(
         };
       }
 
-      console.log(
-        `Splitting query into chunks - Categories: ${categoryChunks.length}, Courses: ${courseChunks.length}, Statuses: ${statusChunks.length}, Universities: ${homeUniversityChunks.length}`,
-      );
-
       // Execute queries for all combinations of chunks
       const chunkTasks: Array<
         () => Promise<{
@@ -404,10 +364,6 @@ export async function getCutoffRecords(
         }
       }
 
-      console.log(
-        `Executing ${chunkTasks.length} chunk queries against ${collectionName} with concurrency limit ${MAX_CONCURRENT_CHUNK_QUERIES}`,
-      );
-
       const chunkResults = await runWithConcurrencyLimit(
         chunkTasks,
         MAX_CONCURRENT_CHUNK_QUERIES,
@@ -456,22 +412,9 @@ export async function getCutoffRecords(
         perPage: perPage,
       };
 
-      console.log("Combined query result:", {
-        collection: collectionName,
-        chunksExecuted: chunkResults.length,
-        totalItemsFound: totalItems,
-        finalPaginatedItems: paginatedItems.length,
-      });
     } else {
       // Execute single query for smaller course lists
       const filterQuery = buildFilterParts();
-      console.log("Executing single query:", {
-        collection: collectionName,
-        filterQuery:
-          filterQuery.substring(0, 200) +
-          (filterQuery.length > 200 ? "..." : ""),
-        filterLength: filterQuery.length,
-      });
 
       // This query uses the authenticated user's credentials and respects collection permissions
       try {
@@ -508,17 +451,6 @@ export async function getCutoffRecords(
     if (search && percentileInput && result.totalItems === 0) {
       searchInsight = await buildSearchInsight();
     }
-
-    console.log("Database result:", {
-      collection: collectionName,
-      round: sanitizedRound,
-      totalItems: result.totalItems,
-      totalPages: result.totalPages,
-      page: result.page,
-      perPage: result.perPage,
-      itemCount: result.items.length,
-      searchInsight,
-    });
 
     return {
       success: true,

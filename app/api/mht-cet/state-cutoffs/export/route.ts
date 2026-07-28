@@ -38,10 +38,6 @@ export async function GET(request: NextRequest) {
     const collectionName = getCollectionForRound(sanitizedRound, year);
     const roundDisplayName = getDisplayNameForRound(sanitizedRound);
 
-    console.log(
-      `Export: Using collection ${collectionName} for ${roundDisplayName}`,
-    );
-
     const pb = getPocketBase();
 
     let allRecords;
@@ -125,10 +121,6 @@ export async function GET(request: NextRequest) {
         (homeUniversities?.length || 0);
       const shouldChunkQuery = totalFilterItems > 30; // If total filters exceed 30 items, use chunking
 
-      console.log(
-        `Export: Total filter items: ${totalFilterItems}, shouldChunk: ${shouldChunkQuery}`,
-      );
-
       if (shouldChunkQuery) {
         // Create chunks for each filter type
         const categoryChunks =
@@ -183,10 +175,6 @@ export async function GET(request: NextRequest) {
               )
             : [homeUniversities];
 
-        console.log(
-          `Export: Creating chunks - Categories: ${categoryChunks.length}, Courses: ${courseChunks.length}, Statuses: ${statusChunks.length}, Universities: ${homeUniversityChunks.length}`,
-        );
-
         // Execute queries for all combinations of chunks
         const chunkPromises = [];
         for (const categoryChunk of categoryChunks) {
@@ -221,10 +209,6 @@ export async function GET(request: NextRequest) {
           }
         }
 
-        console.log(
-          `Export: Executing ${chunkPromises.length} chunk queries against ${collectionName}`,
-        );
-
         // Wait for all chunk queries to complete and combine results
         const chunkResults = await Promise.all(chunkPromises);
         allRecords = chunkResults.flatMap((result) => result);
@@ -236,15 +220,9 @@ export async function GET(request: NextRequest) {
         });
         allRecords = Array.from(uniqueRecords.values());
 
-        console.log(
-          `Export: Combined ${chunkResults.length} chunks into ${allRecords.length} unique records from ${collectionName}`,
-        );
       } else {
         // Execute single query for smaller filter lists
         const filterQuery = buildFilterParts();
-        console.log(
-          `Export: Executing single query with filter length: ${filterQuery.length} against ${collectionName}`,
-        );
 
         try {
           allRecords = await pb.collection(collectionName).getFullList({

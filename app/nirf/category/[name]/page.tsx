@@ -65,7 +65,6 @@ export async function generateMetadata(props: any) {
 
 export default async function FieldPage(props: any) {
   const params = await props.params;
-  console.log("Params received:", params); // Debugging line
 
   const decodedField = params.name.replace(/-/g, " ");
   const fieldTitle = decodedField

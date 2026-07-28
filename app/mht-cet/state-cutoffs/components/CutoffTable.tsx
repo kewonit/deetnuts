@@ -146,7 +146,6 @@ export function CutoffTable({
         "Status",
         "Home University",
       ];
-      console.log(records);
       // Convert records to CSV rows
       const csvRows = records.map((record) => [
         `"${record.college_name || ""}"`,
@@ -825,10 +824,7 @@ export function CutoffTable({
             <Button
               variant="neutral"
               className="hidden md:flex h-8 w-8 p-0"
-              onClick={() => {
-                console.log("First page button clicked!");
-                handlePageChange(1);
-              }}
+              onClick={() => handlePageChange(1)}
               disabled={
                 currentPage === 1 ||
                 loading ||
@@ -842,10 +838,7 @@ export function CutoffTable({
             <Button
               variant="neutral"
               className="h-8 w-8 p-0"
-              onClick={() => {
-                console.log("Previous button clicked!");
-                handlePageChange(Math.max(1, currentPage - 1));
-              }}
+              onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
               disabled={
                 currentPage === 1 ||
                 loading ||
@@ -860,7 +853,6 @@ export function CutoffTable({
               variant="neutral"
               className="h-8 w-8 p-0"
               onClick={() => {
-                console.log("Next button clicked!");
                 const totalPages = Math.ceil(totalItems / itemsPerPage);
                 handlePageChange(Math.min(totalPages, currentPage + 1));
               }}
@@ -878,7 +870,6 @@ export function CutoffTable({
               variant="neutral"
               className="hidden md:flex h-8 w-8 p-0"
               onClick={() => {
-                console.log("Last page button clicked!");
                 const totalPages = Math.ceil(totalItems / itemsPerPage);
                 handlePageChange(totalPages);
               }}
