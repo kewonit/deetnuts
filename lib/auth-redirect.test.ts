@@ -20,21 +20,21 @@ test("sanitizeRedirectPath preserves hashes", () => {
 });
 
 test("sanitizeRedirectPath rejects external and protocol-relative URLs", () => {
-  assert.equal(sanitizeRedirectPath("https://example.com/phish"), "/account");
-  assert.equal(sanitizeRedirectPath("//example.com/phish"), "/account");
+  assert.equal(sanitizeRedirectPath("https://example.com/phish"), "/");
+  assert.equal(sanitizeRedirectPath("//example.com/phish"), "/");
 });
 
 test("sanitizeRedirectPath rejects blank values and auth loops", () => {
-  assert.equal(sanitizeRedirectPath(""), "/account");
-  assert.equal(sanitizeRedirectPath("/login"), "/account");
-  assert.equal(sanitizeRedirectPath("/signup?redirect=/account"), "/account");
+  assert.equal(sanitizeRedirectPath(""), "/");
+  assert.equal(sanitizeRedirectPath("/login"), "/");
+  assert.equal(sanitizeRedirectPath("/signup?redirect=/account"), "/");
   assert.equal(
     sanitizeRedirectPath("/auth/callback?redirect=/account"),
-    "/account",
+    "/",
   );
   assert.equal(
     sanitizeRedirectPath("/mht-cet-login-required?redirect=/mht-cet"),
-    "/account",
+    "/",
   );
 });
 

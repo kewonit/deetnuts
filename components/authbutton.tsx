@@ -1,6 +1,6 @@
 import { getCurrentUser } from "@/lib/auth";
 import { signOut } from "@/app/login/actions";
-import Link from "next/link";
+import { LoginLink } from "@/components/login-link";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -100,11 +100,8 @@ export default async function AuthButton() {
       </div>
     </div>
   ) : (
-    <Link
-      href="/login"
+    <LoginLink
       className="py-2 px-3 flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover"
-    >
-      Login
-    </Link>
+    />
   );
 }

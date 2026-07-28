@@ -11,7 +11,7 @@ export default async function Account({ searchParams }: any) {
   const params = await searchParams;
 
   if (!user) {
-    redirect("/login");
+    redirect("/login?redirect=/account");
   }
 
   const accountFormUser = {

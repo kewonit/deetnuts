@@ -1,6 +1,6 @@
 const LOCAL_REDIRECT_ORIGIN = "https://deetnuts.local";
 
-export const DEFAULT_AUTH_REDIRECT = "/account";
+export const DEFAULT_AUTH_REDIRECT = "/";
 export const DEFAULT_MHT_CET_REDIRECT = "/mht-cet";
 
 const BLOCKED_REDIRECT_PREFIXES = [
