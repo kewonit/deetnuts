@@ -75,7 +75,10 @@ function getBaseUrl(): string {
     "http://localhost:3000";
 
   try {
-    return new URL(candidate).origin;
+    const origin = new URL(candidate).origin;
+    return origin === "https://deetnuts.com"
+      ? "https://www.deetnuts.com"
+      : origin;
   } catch {
     return "http://localhost:3000";
   }
