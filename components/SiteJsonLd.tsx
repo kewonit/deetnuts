@@ -1,8 +1,11 @@
 // components/SiteJsonLd.tsx
 // Site-wide structured data for Organization and WebSite schema
+import { serializeJsonLd } from "@/lib/json-ld";
 
 export default function SiteJsonLd() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://deetnuts.com";
+  const baseUrl = (
+    process.env.NEXT_PUBLIC_APP_URL || "https://deetnuts.com"
+  ).replace(/\/+$/, "");
 
   // Organization schema
   const organizationData = {
@@ -17,11 +20,7 @@ export default function SiteJsonLd() {
       width: 48,
       height: 48,
     },
-    sameAs: [
-      // Add social media URLs here when available
-      // 'https://twitter.com/deetnuts',
-      // 'https://discord.gg/deetnuts',
-    ],
+    sameAs: ["https://x.com/kewonit", "https://discord.gg/xbtqGcQ6SF"],
     description:
       "Mildly important data related to colleges simplified. Comprehensive JoSAA, MHT-CET cutoffs, seat matrix, and admission data for engineering colleges in India.",
     contactPoint: {
@@ -31,7 +30,7 @@ export default function SiteJsonLd() {
     },
   };
 
-  // WebSite schema with SearchAction for sitelinks search box
+  // WebSite schema
   const websiteData = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -39,16 +38,9 @@ export default function SiteJsonLd() {
     url: baseUrl,
     name: "DEETNUTS",
     description: "Mildly important data related to colleges simplified",
+    inLanguage: "en-IN",
     publisher: {
       "@id": `${baseUrl}/#organization`,
-    },
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${baseUrl}/josaa/search?q={search_term_string}`,
-      },
-      "query-input": "required name=search_term_string",
     },
   };
 
@@ -56,11 +48,11 @@ export default function SiteJsonLd() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(organizationData) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(websiteData) }}
       />
     </>
   );

@@ -10,11 +10,14 @@ import SparklesText from "@/components/magicui/sparkles-text";
 import CommunityPartners from "@/components/ui/community-partners";
 
 export const metadata: Metadata = {
-  title: "DEETNUTS - JoSAA & MHT-CET Cutoffs | College Data Simplified",
+  title: "2026 Engineering Admission Tools | JoSAA & MHT-CET Cutoffs",
   description:
-    "Explore comprehensive JoSAA cutoffs for IITs, NITs, IIITs, and GFTIs. View MHT-CET cutoffs, NIRF rankings, seat matrix, and admission trends. Mildly important college data simplified.",
+    "Plan 2026 engineering admissions with JoSAA cutoff data through 2025, historical MHT-CET cutoffs, NIRF rankings, seat matrices, and admission trends.",
   keywords: [
+    "engineering admission 2026",
+    "JoSAA 2026 counselling",
     "JoSAA cutoffs",
+    "JoSAA 2025 cutoffs",
     "JEE Advanced cutoffs",
     "JEE Main cutoffs",
     "IIT admission",
@@ -27,9 +30,9 @@ export const metadata: Metadata = {
     "admission trends",
   ],
   openGraph: {
-    title: "DEETNUTS - JoSAA & MHT-CET Cutoffs | College Data Simplified",
+    title: "2026 Engineering Admission Tools | DEETNUTS",
     description:
-      "Explore comprehensive JoSAA cutoffs for IITs, NITs, IIITs. View MHT-CET cutoffs, NIRF rankings, and admission trends.",
+      "Plan 2026 engineering admissions with JoSAA data through 2025, historical MHT-CET cutoffs, NIRF rankings, and admission trends.",
     url: "https://deetnuts.com",
     type: "website",
   },

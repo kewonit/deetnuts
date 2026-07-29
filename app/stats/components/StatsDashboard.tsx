@@ -58,7 +58,7 @@ export default function StatsDashboard({ stats }: { stats: BotStats }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
         <StatCard
           title="Requests"
           value={stats.totals.totalRequests.toLocaleString()}
@@ -73,11 +73,6 @@ export default function StatsDashboard({ stats }: { stats: BotStats }) {
           title="Avg Time"
           value={`${stats.totals.avgResponseTimeMs}ms`}
           icon={Clock}
-        />
-        <StatCard
-          title="Uptime"
-          value={`${stats.totals.uptimeDays}d`}
-          icon={Activity}
         />
       </div>
 

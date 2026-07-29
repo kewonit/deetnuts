@@ -49,7 +49,7 @@ class MHTCETCutoffUploader {
     const adminEmail = process.env.POCKETBASE_ADMIN_EMAIL;
     const adminPassword = process.env.POCKETBASE_ADMIN_PASSWORD;
 
-    console.log("🔍 Debug info:");
+    console.log(" Debug info:");
     console.log(
       `   Email: ${adminEmail ? adminEmail.substring(0, 3) + "***" : "NOT SET"}`,
     );
@@ -91,7 +91,7 @@ class MHTCETCutoffUploader {
       try {
         console.log(`🔑 Attempting ${authMethod.name} authentication...`);
         await authMethod.method();
-        console.log(`✅ Successfully authenticated via ${authMethod.name}`);
+        console.log(` Successfully authenticated via ${authMethod.name}`);
         return true;
       } catch (error: any) {
         console.log(
@@ -120,7 +120,7 @@ class MHTCETCutoffUploader {
   }
 
   async readCSVFile(): Promise<CutoffRecord[]> {
-    console.log(`📂 Reading CSV file: ${this.csvFilePath}`);
+    console.log(` Reading CSV file: ${this.csvFilePath}`);
 
     return new Promise((resolve, reject) => {
       const records: CutoffRecord[] = [];
@@ -142,7 +142,7 @@ class MHTCETCutoffUploader {
           records.push(record);
         })
         .on("end", () => {
-          console.log(`📊 Read ${records.length} records from CSV`);
+          console.log(` Read ${records.length} records from CSV`);
           resolve(records);
         })
         .on("error", (error) => {
@@ -153,7 +153,7 @@ class MHTCETCutoffUploader {
   }
 
   async uploadRecords(records: CutoffRecord[]) {
-    console.log(`🚀 Starting upload of ${records.length} records...`);
+    console.log(` Starting upload of ${records.length} records...`);
 
     let successCount = 0;
     let errorCount = 0;
@@ -162,7 +162,7 @@ class MHTCETCutoffUploader {
     for (let i = 0; i < records.length; i += batchSize) {
       const batch = records.slice(i, i + batchSize);
       console.log(
-        `📦 Processing batch ${Math.floor(i / batchSize) + 1} (records ${i + 1}-${Math.min(i + batchSize, records.length)})`,
+        ` Processing batch ${Math.floor(i / batchSize) + 1} (records ${i + 1}-${Math.min(i + batchSize, records.length)})`,
       );
 
       const uploadPromises = batch.map((record, j) => {
@@ -173,7 +173,7 @@ class MHTCETCutoffUploader {
           .then(() => {
             successCount++;
             if (successCount % 100 === 0) {
-              console.log(`✅ Uploaded ${successCount} records...`);
+              console.log(` Uploaded ${successCount} records...`);
             }
           })
           .catch((error: any) => {
@@ -195,13 +195,13 @@ class MHTCETCutoffUploader {
       await Promise.all(uploadPromises);
     }
 
-    console.log(`\n📈 Upload Summary:`);
-    console.log(`✅ Successfully uploaded: ${successCount} records`);
+    console.log(`\n Upload Summary:`);
+    console.log(` Successfully uploaded: ${successCount} records`);
     console.log(`❌ Failed uploads: ${errorCount} records`);
-    console.log(`📊 Total processed: ${records.length} records`);
+    console.log(` Total processed: ${records.length} records`);
 
     if (errorCount > 0) {
-      console.log(`\n💡 If there were errors, they might be due to:`);
+      console.log(`\n If there were errors, they might be due to:`);
       console.log(`   - Duplicate records (if unique constraints exist)`);
       console.log(`   - Invalid data format`);
       console.log(`   - Network timeouts`);
@@ -223,7 +223,7 @@ class MHTCETCutoffUploader {
   }
 
   async testCollectionAccess() {
-    console.log(`🔍 Testing collection "${this.collectionName}" access...`);
+    console.log(` Testing collection "${this.collectionName}" access...`);
 
     try {
       // Try to get collection info
@@ -231,7 +231,7 @@ class MHTCETCutoffUploader {
         .collection(this.collectionName)
         .getList(1, 1);
       console.log(
-        `✅ Collection accessible - found ${result.totalItems} existing records`,
+        ` Collection accessible - found ${result.totalItems} existing records`,
       );
       return true;
     } catch (error: any) {
@@ -243,7 +243,7 @@ class MHTCETCutoffUploader {
       // Try to list all collections to see what's available
       try {
         const collections = await this.pb.collections.getList();
-        console.log(`📋 Available collections:`);
+        console.log(` Available collections:`);
         collections.items.forEach((c) => {
           console.log(`   - ${c.name} (${c.id})`);
         });
@@ -260,14 +260,14 @@ class MHTCETCutoffUploader {
 
   async run() {
     try {
-      console.log("🚀 Starting MHT-CET Cutoffs Upload Process...\n");
+      console.log(" Starting MHT-CET Cutoffs Upload Process...\n");
 
       // Step 1: Authenticate
-      console.log("🔐 Authenticating...");
+      console.log(" Authenticating...");
       await this.authenticate();
 
       // Step 2: Test collection access
-      console.log("🔍 Testing collection access...");
+      console.log(" Testing collection access...");
       const canAccess = await this.testCollectionAccess();
       if (!canAccess) {
         console.error(
@@ -284,10 +284,10 @@ class MHTCETCutoffUploader {
       const records = await this.readCSVFile();
 
       // Step 4: Upload records
-      console.log("⬆️  Starting upload...");
+      console.log("⬆  Starting upload...");
       await this.uploadRecords(records);
 
-      console.log("\n🎉 Upload process completed!");
+      console.log("\n Upload process completed!");
     } catch (error) {
       console.error("💥 Fatal error during upload process:", error);
       process.exit(1);

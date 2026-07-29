@@ -17,13 +17,13 @@ const lato = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "NIRF Rankings | National Institutional Ranking Framework | DEETNUTS",
+  title: "NIRF Rankings | National Institutional Ranking Framework",
   description:
-    "Explore NIRF Rankings 2024 for Engineering, Medical, Management, Law, and other categories. View rankings for IITs, NITs, IIITs, and top Indian universities.",
+    "Explore the available NIRF ranking data for Engineering, Medical, Management, Law, and other categories across IITs, NITs and Indian universities.",
   keywords: [
     "NIRF",
     "NIRF Rankings",
-    "NIRF 2024",
+    "NIRF ranking data",
     "National Institutional Ranking Framework",
     "IIT ranking",
     "NIT ranking",

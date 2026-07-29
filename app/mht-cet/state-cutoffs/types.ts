@@ -12,8 +12,17 @@ export interface CutoffRecord {
   total_admitted: number;
   status: string;
   home_university: string;
+  institute_home_university_id?: string | null;
+  affiliating_university_id?: string | null;
+  minority_community_id?: string | null;
   created: string;
   updated: string;
+}
+
+export interface CandidateProfileMetadata {
+  ignoredRequestedCodes: string[];
+  excludedUnmappedRows: number;
+  stageSemanticsAvailable: false;
 }
 
 export interface FilterState {

@@ -3,12 +3,8 @@ import Link from "next/link";
 import MobileDrawer from "@/components/MobileDrawer";
 import NavDropdown from "@/components/NavDropdown";
 import AuthButton from "./authbutton";
-import React from "react";
 import { AiFillGithub } from "react-icons/ai";
-
-type NavbarProps = {
-  children?: React.ReactNode;
-};
+import EjamHeader from "./EjamHeader";
 
 const GITHUB_REPO_URL = "https://github.com/kewonit/deetnuts";
 const GITHUB_REPO_API_URL = "https://api.github.com/repos/kewonit/deetnuts";
@@ -52,18 +48,19 @@ function formatStarCount(count: number | null): string | null {
   }).format(count);
 }
 
-const Navbar = async ({ children }: NavbarProps) => {
+const Navbar = async () => {
   const starCount = await getGitHubStarCount();
   const formattedStarCount = formatStarCount(starCount);
 
   return (
     <>
-      {children}
-      <nav className="fixed sm:relative left-0 top-0 z-20 mx-auto flex h-[88px] w-full items-center border-b-4 border-black bg-white px-5 m500:h-16 ">
+      <EjamHeader />
+      <div className="h-9" aria-hidden="true" />
+      <nav className="fixed sm:relative left-0 top-9 sm:top-auto z-20 mx-auto flex h-[88px] w-full items-center border-b-4 border-black bg-white px-5 m500:h-16 ">
         <div className="mx-auto flex w-[1300px] max-w-full items-center justify-between">
           <MobileDrawer githubStarCount={formattedStarCount} />
 
-          <div className="flex items-center gap-10 pl-5 m400:flex-1 m400:pl-5">
+          <div className="flex items-center pl-5 m400:flex-1 m400:pl-5">
             <Link
               className="relative text-4xl font-heading m500:text-xl"
               href={"/"}
@@ -73,10 +70,9 @@ const Navbar = async ({ children }: NavbarProps) => {
                 BETA
               </span>
             </Link>
-          </div>
-
-          <div className="flex items-center gap-10 m900:hidden">
-            <NavDropdown />
+            <div className="ml-16 flex items-center m900:hidden">
+              <NavDropdown />
+            </div>
           </div>
 
           <div className="flex w-[320px] items-center justify-end gap-4 m900:w-[unset] m800:w-[unset] m400:gap-3">

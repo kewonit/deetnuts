@@ -34,7 +34,7 @@ export const metadata: Metadata = {
       "Predict your chances of admission to IITs, NITs, IIITs with AI-powered JEE Main 2026 cutoff predictions. Compare with 2025 data and make informed decisions.",
     url: "https://deetnuts.com/predictions",
     siteName: "DEETNUTS",
-    locale: "en_US",
+    locale: "en_IN",
     type: "website",
     images: [
       {
@@ -53,6 +53,7 @@ export const metadata: Metadata = {
     images: [
       "https://res.cloudinary.com/dfyrk32ua/image/upload/v1722072593/deetnuts/2_m51gsx.png",
     ],
+    creator: "@kewonit",
   },
   robots: {
     index: true,

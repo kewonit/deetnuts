@@ -67,7 +67,7 @@ export function generatePageMetadata({
           alt: title,
         },
       ],
-      locale: "en_US",
+      locale: "en_IN",
       type,
     },
     twitter: {
@@ -75,7 +75,7 @@ export function generatePageMetadata({
       title: fullTitle,
       description,
       images: [imageUrl],
-      creator: "@deetnuts",
+      creator: "@kewonit",
     },
     alternates: {
       canonical: url,

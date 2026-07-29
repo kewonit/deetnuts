@@ -63,11 +63,11 @@ function Dropdown({ title, links }: DropdownProps) {
               </span>
             </div>
             <Image
-              className="ml-[15px] w-[18px] m400:ml-4 m400:w-[15px]"
+              className="ml-[15px] h-auto w-[18px] m400:ml-4 m400:w-[15px]"
               src={arrow}
               alt="arrow"
-              width={18}
-              height={18}
+              width={21}
+              height={20}
             />
           </Link>
         ))}
@@ -81,9 +81,6 @@ export default function NavDropdowns() {
     <div className="flex gap-6">
       <Dropdown title="Cutoffs" links={cutoffLinks} />
       <Dropdown title="Tools" links={toolLinks} />
-      <Link className="text-xl font-base" href="/datasource">
-        Data Source
-      </Link>
     </div>
   );
 }

@@ -8,83 +8,106 @@ const lato = Montserrat({
 
 export default function Footer() {
   const legalLinks = [
-    { name: "Good Being Terms", href: "/compliance/terms-and-conditions" },
+    { name: "Terms & Conditions", href: "/compliance/terms-and-conditions" },
+    { name: "Privacy Policy", href: "/compliance/privacy-policy" },
+    { name: "Cookie Policy", href: "/compliance/cookie-policy" },
   ];
 
-  const serviceLinks = [{ name: "MHT-CET", href: "/mht-cet" }];
+  const serviceLinks = [
+    { name: "JoSAA Cutoffs", href: "/josaa" },
+    { name: "MHT-CET Cutoffs", href: "/mht-cet" },
+    { name: "NIRF Rankings", href: "/nirf" },
+    { name: "Predictions", href: "/predictions" },
+  ];
 
-  const Tools = [{ name: "/", href: "#" }];
+  const Tools = [
+    { name: "Home", href: "/" },
+    { name: "All Colleges", href: "/josaa/all-colleges" },
+    { name: "Institute Search", href: "/josaa/search" },
+    { name: "Compare Institutes", href: "/josaa/compare" },
+    { name: "Trends Analysis", href: "/josaa/trends" },
+    { name: "MHT-CET Colleges", href: "/mht-cet/colleges" },
+  ];
 
-  const Contribute = [{ name: "/", href: "#" }];
+  const Contribute = [
+    { name: "Data Sources", href: "/datasource" },
+    { name: "Creators", href: "/creators" },
+    { name: "GitHub", href: "https://github.com/kewonit/deetnuts" },
+  ];
 
   return (
     <footer className="bg-gradient-to-b from-purple-300 to-yellow-100 border-t-2 border-t-black">
       <div className={lato.className}>
         <div className="mx-auto max-w-screen-xl space-y-8 px-4 py-16 sm:px-6 lg:space-y-16 lg:px-8">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-            <div>
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-x-8">
+            <div className="lg:col-span-6">
               <div className="text-black text-4xl font-heading">DeetNuts</div>
 
-              <p className="mt-4 max-w-xs text-gray-500 leading-snug">
+              <p className="mt-4 max-w-xl text-gray-500 leading-snug">
                 deetnuts.com does not own any of the logos of organizations
                 displayed on this website. We do not represent any of these
                 organizations. We do not own any of the data displayed on this
                 website. All data is sourced from official sources.
               </p>
+              <a
+                href="https://discord.gg/xbtqGcQ6SF"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 inline-block text-sm font-bold text-gray-800 transition hover:underline"
+              >
+                Join our Discord for updates &amp; support
+              </a>
             </div>
 
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-3">
-              <div>
-                <p className="font-bold text-gray-900">Cutoffs</p>
+            <div className="lg:col-span-2">
+              <p className="font-bold text-gray-900">Cutoffs</p>
 
-                <ul className="mt-6 space-y-4 text-sm">
-                  {serviceLinks.map((link, index) => (
-                    <li key={index}>
-                      <Link
-                        href={link.href}
-                        className="text-gray-700 transition hover:opacity-75"
-                      >
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <p className="font-bold text-gray-900">Tools</p>
+              <ul className="mt-6 space-y-4 text-sm">
+                {serviceLinks.map((link, index) => (
+                  <li key={index}>
+                    <Link
+                      href={link.href}
+                      className="text-gray-700 transition hover:opacity-75"
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-                <ul className="mt-6 space-y-4 text-sm">
-                  {Tools.map((link, index) => (
-                    <li key={index}>
-                      <Link
-                        href={link.href}
-                        className="text-gray-700 transition hover:opacity-75"
-                      >
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div className="lg:col-span-2">
+              <p className="font-bold text-gray-900">Tools</p>
 
-              <div>
-                <p className="font-bold text-gray-900">Contribute</p>
+              <ul className="mt-6 space-y-4 text-sm">
+                {Tools.map((link, index) => (
+                  <li key={index}>
+                    <Link
+                      href={link.href}
+                      className="text-gray-700 transition hover:opacity-75"
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-                <ul className="mt-6 space-y-4 text-sm">
-                  {Contribute.map((link, index) => (
-                    <li key={index}>
-                      <Link
-                        href={link.href}
-                        className="text-gray-700 transition hover:opacity-75"
-                      >
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div className="lg:col-span-2">
+              <p className="font-bold text-gray-900">Contribute</p>
 
-              {/* Company, Helpful Links, and Legal sections remain unchanged */}
+              <ul className="mt-6 space-y-4 text-sm">
+                {Contribute.map((link, index) => (
+                  <li key={index}>
+                    <Link
+                      href={link.href}
+                      className="text-gray-700 transition hover:opacity-75"
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
@@ -105,12 +128,9 @@ export default function Footer() {
                   Meow 👋! I&apos;m Kartik, the creator. You can follow me on{" "}
                   <a
                     target="_blank"
-                    href="https://www.reddit.com/user/kewkartik/"
+                    rel="noopener noreferrer"
+                    href="https://x.com/kewonit"
                   >
-                    Reddit
-                  </a>{" "}
-                  or{" "}
-                  <a target="_blank" href="https://x.com/kewonit">
                     Twitter
                   </a>
                   !

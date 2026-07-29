@@ -11,9 +11,9 @@ import { DirectoryJsonLd } from "@/components/josaa/InstituteJsonLd";
 
 export const metadata: Metadata = {
   title:
-    "All JoSAA Colleges & Branches Directory 2024 | Complete IIT, NIT, IIIT List | DEETNUTS",
+    "JoSAA Colleges & Branches Directory | IIT, NIT, IIIT, GFTI",
   description:
-    "Complete directory of all JoSAA colleges including IITs, NITs, IIITs and GFTIs with their branches. Browse 150+ engineering institutes with 1000+ programs and cutoff data from 2016-2024.",
+    "Browse the 2024 JoSAA institute directory with IITs, NITs, IIITs, GFTIs and their branches, then explore historical cutoff data through 2025.",
   keywords: [
     "JoSAA colleges list",
     "IIT branches list",
@@ -22,6 +22,8 @@ export const metadata: Metadata = {
     "GFTI colleges",
     "JEE colleges directory",
     "engineering colleges India",
+    "JoSAA 2026 counselling",
+    "JoSAA 2025 cutoffs",
     "JoSAA 2024 colleges",
     "IIT JEE colleges",
     "NIT JEE colleges",

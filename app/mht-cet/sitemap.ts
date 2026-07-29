@@ -7,33 +7,25 @@ export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://deetnuts.com";
-  const currentDate = new Date();
+  const seoLastUpdated = new Date("2026-07-29T00:00:00.000Z");
 
   // Static MHT-CET pages
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: `${baseUrl}/mht-cet`,
-      lastModified: currentDate,
-      changeFrequency: "weekly",
-      priority: 1,
+      lastModified: seoLastUpdated,
     },
     {
       url: `${baseUrl}/mht-cet/colleges`,
-      lastModified: currentDate,
-      changeFrequency: "weekly",
-      priority: 0.95,
+      lastModified: seoLastUpdated,
     },
     {
       url: `${baseUrl}/mht-cet/all-india-cutoffs`,
-      lastModified: currentDate,
-      changeFrequency: "weekly",
-      priority: 0.9,
+      lastModified: seoLastUpdated,
     },
     {
       url: `${baseUrl}/mht-cet/state-cutoffs`,
-      lastModified: currentDate,
-      changeFrequency: "weekly",
-      priority: 0.9,
+      lastModified: seoLastUpdated,
     },
   ];
 
@@ -43,9 +35,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const collegePages: MetadataRoute.Sitemap = colleges.map((college) => ({
       url: `${baseUrl}/mht-cet/colleges/${createCollegeSlug(college.college_name, college.college_id)}`,
-      lastModified: currentDate,
-      changeFrequency: "weekly" as const,
-      priority: 0.8,
     }));
 
     return [...staticPages, ...collegePages];

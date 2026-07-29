@@ -62,7 +62,7 @@ class BatchMHTCETCutoffUploader {
     try {
       console.log("🔑 Authenticating with credentials...");
       await this.pb.admins.authWithPassword(adminEmail, adminPassword);
-      console.log("✅ Successfully authenticated as admin");
+      console.log(" Successfully authenticated as admin");
       return true;
     } catch (error) {
       console.error("❌ Authentication failed:", error);
@@ -100,7 +100,7 @@ class BatchMHTCETCutoffUploader {
           records.push(record);
         })
         .on("end", () => {
-          console.log(`📊 Read ${records.length} records from CSV`);
+          console.log(` Read ${records.length} records from CSV`);
           resolve(records);
         })
         .on("error", reject);
@@ -162,7 +162,7 @@ class BatchMHTCETCutoffUploader {
 
           completedBatches++;
           console.log(
-            `✅ Batch ${actualIndex + 1} completed in ${duration}ms (${batch.length} records) - ${completedBatches}/${batches.length} batches done`,
+            ` Batch ${actualIndex + 1} completed in ${duration}ms (${batch.length} records) - ${completedBatches}/${batches.length} batches done`,
           );
 
           return result;
@@ -178,7 +178,7 @@ class BatchMHTCETCutoffUploader {
 
   async uploadData(operation: "create" | "upsert" = "create"): Promise<void> {
     try {
-      console.log("🚀 Starting batch upload process...");
+      console.log(" Starting batch upload process...");
 
       // Authenticate
       const authenticated =
@@ -192,7 +192,7 @@ class BatchMHTCETCutoffUploader {
       const records = await this.readCSVData();
 
       if (records.length === 0) {
-        console.log("⚠️  No records found in CSV file");
+        console.log("  No records found in CSV file");
         return;
       }
 
@@ -203,10 +203,10 @@ class BatchMHTCETCutoffUploader {
       }
 
       console.log(
-        `📦 Created ${batches.length} batches of ${this.batchSize} records each`,
+        ` Created ${batches.length} batches of ${this.batchSize} records each`,
       );
       console.log(
-        `⚡ Processing ${this.maxConcurrentBatches} batches concurrently for maximum speed`,
+        ` Processing ${this.maxConcurrentBatches} batches concurrently for maximum speed`,
       );
 
       const startTime = Date.now();
@@ -221,12 +221,12 @@ class BatchMHTCETCutoffUploader {
       );
 
       console.log(
-        `🎉 Successfully ${operation === "upsert" ? "upserted" : "created"} ${records.length} records!`,
+        ` Successfully ${operation === "upsert" ? "upserted" : "created"} ${records.length} records!`,
       );
       console.log(
-        `⏱️  Total time: ${totalDuration}ms (${Math.round(totalDuration / 1000)}s)`,
+        `  Total time: ${totalDuration}ms (${Math.round(totalDuration / 1000)}s)`,
       );
-      console.log(`🚀 Speed: ${recordsPerSecond} records/second`);
+      console.log(` Speed: ${recordsPerSecond} records/second`);
     } catch (error) {
       console.error("❌ Upload failed:", error);
       throw error;
@@ -235,7 +235,7 @@ class BatchMHTCETCutoffUploader {
 
   async clearCollection(): Promise<void> {
     try {
-      console.log("🧹 Clearing existing records...");
+      console.log(" Clearing existing records...");
 
       // Authenticate
       const authenticated =
@@ -269,14 +269,14 @@ class BatchMHTCETCutoffUploader {
         await batch.send({ requestKey: `batch_delete_${page}_${Date.now()}` });
         totalDeleted += result.items.length;
         console.log(
-          `🗑️  Deleted ${result.items.length} records (${totalDeleted} total)`,
+          `  Deleted ${result.items.length} records (${totalDeleted} total)`,
         );
 
         page++;
         hasMore = result.items.length === 500; // Continue if we got a full page
       }
 
-      console.log(`✅ Successfully deleted ${totalDeleted} records`);
+      console.log(` Successfully deleted ${totalDeleted} records`);
     } catch (error) {
       console.error("❌ Clear collection failed:", error);
       throw error;
@@ -292,28 +292,28 @@ async function main() {
 
   switch (command) {
     case "create":
-      console.log("📝 Creating new records...");
+      console.log(" Creating new records...");
       await uploader.uploadData("create");
       break;
 
     case "upsert":
-      console.log("🔄 Upserting records...");
+      console.log(" Upserting records...");
       await uploader.uploadData("upsert");
       break;
 
     case "clear":
-      console.log("🧹 Clearing collection...");
+      console.log(" Clearing collection...");
       await uploader.clearCollection();
       break;
 
     case "replace":
-      console.log("🔄 Replacing all records (clear + create)...");
+      console.log(" Replacing all records (clear + create)...");
       await uploader.clearCollection();
       await uploader.uploadData("create");
       break;
 
     default:
-      console.log("📋 Usage:");
+      console.log(" Usage:");
       console.log("  npm run batch-upload create  - Create new records");
       console.log(
         "  npm run batch-upload upsert  - Upsert records (create or update)",

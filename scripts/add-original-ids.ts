@@ -12,14 +12,14 @@ const pb = new PocketBase(
 pb.autoCancellation(false);
 
 async function main() {
-  console.log("🔐 Authenticating...");
+  console.log(" Authenticating...");
   await pb
     .collection("_superusers")
     .authWithPassword(
       process.env.POCKETBASE_ADMIN_EMAIL!,
       process.env.POCKETBASE_ADMIN_PASSWORD!,
     );
-  console.log("✓ Auth OK\n");
+  console.log(" Auth OK\n");
 
   // Load ID maps
   const instituteMap = JSON.parse(
@@ -36,7 +36,7 @@ async function main() {
   );
 
   // Update institutes with original_id
-  console.log("📝 Updating institutes with original_id...");
+  console.log(" Updating institutes with original_id...");
   let updated = 0;
   for (const [originalId, newId] of Object.entries(instituteMap)) {
     try {
@@ -51,10 +51,10 @@ async function main() {
       console.error(`  Failed to update institute ${newId}: ${e.message}`);
     }
   }
-  console.log(`✓ Updated ${updated} institutes\n`);
+  console.log(` Updated ${updated} institutes\n`);
 
   // Update branches with original_id
-  console.log("📝 Updating branches with original_id...");
+  console.log(" Updating branches with original_id...");
   updated = 0;
   for (const [originalId, newId] of Object.entries(branchMap)) {
     try {
@@ -69,9 +69,9 @@ async function main() {
       console.error(`  Failed to update branch ${newId}: ${e.message}`);
     }
   }
-  console.log(`✓ Updated ${updated} branches\n`);
+  console.log(` Updated ${updated} branches\n`);
 
-  console.log("🎉 Done!");
+  console.log(" Done!");
 }
 
 main().catch(console.error);

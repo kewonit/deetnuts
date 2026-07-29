@@ -90,7 +90,7 @@ class BatchSeatMatrixUploader {
     try {
       console.log("🔑 Authenticating with credentials...");
       await this.pb.admins.authWithPassword(adminEmail, adminPassword);
-      console.log("✅ Successfully authenticated as admin");
+      console.log(" Successfully authenticated as admin");
       return true;
     } catch (error) {
       console.error("❌ Authentication failed:", error);
@@ -140,7 +140,7 @@ class BatchSeatMatrixUploader {
               !row.course_name
             ) {
               console.warn(
-                `⚠️  Skipping line ${lineNumber}: Missing required fields`,
+                `  Skipping line ${lineNumber}: Missing required fields`,
               );
               skippedRecords++;
               return;
@@ -195,7 +195,7 @@ class BatchSeatMatrixUploader {
             // Additional validation
             if (!record.college_code || !record.choice_code) {
               console.warn(
-                `⚠️  Skipping line ${lineNumber}: Invalid college_code or choice_code`,
+                `  Skipping line ${lineNumber}: Invalid college_code or choice_code`,
               );
               skippedRecords++;
               return;
@@ -203,14 +203,14 @@ class BatchSeatMatrixUploader {
 
             records.push(record);
           } catch (error) {
-            console.warn(`⚠️  Error processing line ${lineNumber}:`, error);
+            console.warn(`  Error processing line ${lineNumber}:`, error);
             skippedRecords++;
           }
         })
         .on("end", () => {
-          console.log(`📊 Read ${records.length} seat matrix records from CSV`);
+          console.log(` Read ${records.length} seat matrix records from CSV`);
           if (skippedRecords > 0) {
-            console.log(`⚠️  Skipped ${skippedRecords} invalid records`);
+            console.log(`  Skipped ${skippedRecords} invalid records`);
           }
           resolve(records);
         })
@@ -285,7 +285,7 @@ class BatchSeatMatrixUploader {
 
           completedBatches++;
           console.log(
-            `✅ Batch ${actualIndex + 1} completed in ${duration}ms (${batch.length} records) - ${completedBatches}/${batches.length} batches done`,
+            ` Batch ${actualIndex + 1} completed in ${duration}ms (${batch.length} records) - ${completedBatches}/${batches.length} batches done`,
           );
 
           return result;
@@ -301,7 +301,7 @@ class BatchSeatMatrixUploader {
 
   async uploadData(operation: "create" | "upsert" = "create"): Promise<void> {
     try {
-      console.log("🚀 Starting seat matrix batch upload process...");
+      console.log(" Starting seat matrix batch upload process...");
 
       // Authenticate
       const authenticated =
@@ -315,7 +315,7 @@ class BatchSeatMatrixUploader {
       const records = await this.readCSVData();
 
       if (records.length === 0) {
-        console.log("⚠️  No seat matrix records found in CSV file");
+        console.log("  No seat matrix records found in CSV file");
         return;
       }
 
@@ -325,7 +325,7 @@ class BatchSeatMatrixUploader {
       );
       if (invalidRecords.length > 0) {
         console.warn(
-          `⚠️  Found ${invalidRecords.length} records with missing college_code or choice_code`,
+          `  Found ${invalidRecords.length} records with missing college_code or choice_code`,
         );
       }
 
@@ -336,10 +336,10 @@ class BatchSeatMatrixUploader {
       }
 
       console.log(
-        `📦 Created ${batches.length} batches of ${this.batchSize} records each`,
+        ` Created ${batches.length} batches of ${this.batchSize} records each`,
       );
       console.log(
-        `⚡ Processing ${this.maxConcurrentBatches} batches concurrently for maximum speed`,
+        ` Processing ${this.maxConcurrentBatches} batches concurrently for maximum speed`,
       );
 
       const startTime = Date.now();
@@ -354,12 +354,12 @@ class BatchSeatMatrixUploader {
       );
 
       console.log(
-        `🎉 Successfully ${operation === "upsert" ? "upserted" : "created"} ${records.length} seat matrix records!`,
+        ` Successfully ${operation === "upsert" ? "upserted" : "created"} ${records.length} seat matrix records!`,
       );
       console.log(
-        `⏱️  Total time: ${totalDuration}ms (${Math.round(totalDuration / 1000)}s)`,
+        `  Total time: ${totalDuration}ms (${Math.round(totalDuration / 1000)}s)`,
       );
-      console.log(`🚀 Speed: ${recordsPerSecond} records/second`);
+      console.log(` Speed: ${recordsPerSecond} records/second`);
     } catch (error) {
       console.error("❌ Seat matrix upload failed:", error);
       throw error;
@@ -368,7 +368,7 @@ class BatchSeatMatrixUploader {
 
   async clearCollection(): Promise<void> {
     try {
-      console.log("🧹 Clearing existing seat matrix records...");
+      console.log(" Clearing existing seat matrix records...");
 
       // Authenticate
       const authenticated =
@@ -404,7 +404,7 @@ class BatchSeatMatrixUploader {
         });
         totalDeleted += result.items.length;
         console.log(
-          `🗑️  Deleted ${result.items.length} seat matrix records (${totalDeleted} total)`,
+          `  Deleted ${result.items.length} seat matrix records (${totalDeleted} total)`,
         );
 
         page++;
@@ -412,7 +412,7 @@ class BatchSeatMatrixUploader {
       }
 
       console.log(
-        `✅ Successfully deleted ${totalDeleted} seat matrix records`,
+        ` Successfully deleted ${totalDeleted} seat matrix records`,
       );
     } catch (error) {
       console.error("❌ Clear seat matrix collection failed:", error);
@@ -422,7 +422,7 @@ class BatchSeatMatrixUploader {
 
   async validateCSV(): Promise<void> {
     try {
-      console.log("🔍 Validating CSV file...");
+      console.log(" Validating CSV file...");
 
       // Check if file exists
       const fs = require("fs");
@@ -434,15 +434,15 @@ class BatchSeatMatrixUploader {
       const records = await this.readCSVData();
 
       if (records.length === 0) {
-        console.log("⚠️  No valid records found in CSV file");
+        console.log("  No valid records found in CSV file");
         return;
       }
 
       // Show sample of data
       console.log(
-        `✅ Validation successful! Found ${records.length} valid records`,
+        ` Validation successful! Found ${records.length} valid records`,
       );
-      console.log("\n📋 Sample records:");
+      console.log("\n Sample records:");
 
       const sampleSize = Math.min(3, records.length);
       for (let i = 0; i < sampleSize; i++) {
@@ -475,19 +475,19 @@ class BatchSeatMatrixUploader {
         {} as Record<string, number>,
       );
 
-      console.log("📊 Statistics:");
+      console.log(" Statistics:");
       console.log(`   Total colleges: ${Object.keys(collegeCounts).length}`);
       console.log(`   Total courses: ${records.length}`);
       console.log(
         `   Total seats: ${records.reduce((sum, r) => sum + r.Total, 0)}`,
       );
 
-      console.log("\n📊 Seat type distribution:");
+      console.log("\n Seat type distribution:");
       Object.entries(seatTypeCounts).forEach(([type, count]) => {
         console.log(`   ${type}: ${count} courses`);
       });
 
-      console.log("\n📊 Top 5 colleges by course count:");
+      console.log("\n Top 5 colleges by course count:");
       const topColleges = Object.entries(collegeCounts)
         .sort(([, a], [, b]) => b - a)
         .slice(0, 5);
@@ -506,7 +506,7 @@ class BatchSeatMatrixUploader {
 
   async listRecords(limit: number = 10): Promise<void> {
     try {
-      console.log(`📋 Listing first ${limit} seat matrix records...`);
+      console.log(` Listing first ${limit} seat matrix records...`);
 
       // Authenticate
       const authenticated =
@@ -522,7 +522,7 @@ class BatchSeatMatrixUploader {
           sort: "page_number,college_code,choice_code",
         });
 
-      console.log(`📊 Found ${result.totalItems} total seat matrix records`);
+      console.log(` Found ${result.totalItems} total seat matrix records`);
       console.log(`📄 Showing first ${result.items.length} records:\n`);
 
       result.items.forEach((record, index) => {
@@ -544,7 +544,7 @@ class BatchSeatMatrixUploader {
 
   async getStatistics(): Promise<void> {
     try {
-      console.log("📊 Getting seat matrix statistics...");
+      console.log(" Getting seat matrix statistics...");
 
       // Authenticate
       const authenticated =
@@ -558,7 +558,7 @@ class BatchSeatMatrixUploader {
       const totalResult = await this.pb
         .collection(this.collectionName)
         .getList(1, 1);
-      console.log(`📈 Total records: ${totalResult.totalItems}`);
+      console.log(` Total records: ${totalResult.totalItems}`);
 
       // Get sample of records for statistics
       const sampleResult = await this.pb
@@ -567,7 +567,7 @@ class BatchSeatMatrixUploader {
       const records = sampleResult.items;
 
       if (records.length === 0) {
-        console.log("⚠️  No records found in collection");
+        console.log("  No records found in collection");
         return;
       }
 
@@ -589,13 +589,13 @@ class BatchSeatMatrixUploader {
         {} as Record<string, number>,
       );
 
-      console.log(`📊 Statistics (based on ${records.length} records):`);
+      console.log(` Statistics (based on ${records.length} records):`);
       console.log(`   Total seats: ${totalSeats.toLocaleString()}`);
       console.log(`   Total CAP seats: ${totalCAPSeats.toLocaleString()}`);
       console.log(`   Unique colleges: ${uniqueColleges}`);
       console.log(`   Total courses: ${uniqueCourses}`);
 
-      console.log("\n📊 Seat type distribution:");
+      console.log("\n Seat type distribution:");
       Object.entries(seatTypeStats).forEach(([type, count]) => {
         console.log(`   ${type}: ${count} courses`);
       });
@@ -615,22 +615,22 @@ async function main() {
 
   switch (command) {
     case "create":
-      console.log("📝 Creating new seat matrix records...");
+      console.log(" Creating new seat matrix records...");
       await uploader.uploadData("create");
       break;
 
     case "upsert":
-      console.log("🔄 Upserting seat matrix records...");
+      console.log(" Upserting seat matrix records...");
       await uploader.uploadData("upsert");
       break;
 
     case "clear":
-      console.log("🧹 Clearing seat matrix collection...");
+      console.log(" Clearing seat matrix collection...");
       await uploader.clearCollection();
       break;
 
     case "replace":
-      console.log("🔄 Replacing all seat matrix records (clear + create)...");
+      console.log(" Replacing all seat matrix records (clear + create)...");
       await uploader.clearCollection();
       await uploader.uploadData("create");
       break;
@@ -648,7 +648,7 @@ async function main() {
       break;
 
     default:
-      console.log("📋 Usage:");
+      console.log(" Usage:");
       console.log(
         "  npm run batch-upload-seat-matrix create    - Create new seat matrix records",
       );

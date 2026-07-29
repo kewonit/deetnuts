@@ -158,7 +158,7 @@ async function main() {
     await pb
       .collection("_superusers")
       .authWithPassword(ADMIN_EMAIL, ADMIN_PASSWORD);
-    console.log("✓ Authenticated as superuser");
+    console.log(" Authenticated as superuser");
     console.log("");
 
     // =====================
@@ -211,7 +211,7 @@ async function main() {
     }
 
     console.log(
-      `✓ Institutes: ${institutesCreated} created, ${institutesSkipped} skipped, ${institutesErrors} errors`,
+      ` Institutes: ${institutesCreated} created, ${institutesSkipped} skipped, ${institutesErrors} errors`,
     );
     console.log("");
 
@@ -267,7 +267,7 @@ async function main() {
     }
 
     console.log(
-      `✓ Branches: ${branchesCreated} created, ${branchesSkipped} skipped, ${branchesErrors} errors`,
+      ` Branches: ${branchesCreated} created, ${branchesSkipped} skipped, ${branchesErrors} errors`,
     );
     console.log("");
 
@@ -361,7 +361,7 @@ async function main() {
 
     const totalTime = Math.round((Date.now() - startTime) / 1000);
     console.log(
-      `✓ Cutoffs: ${cutoffsCreated.toLocaleString()} created, ${cutoffsErrors.toLocaleString()} errors in ${totalTime}s`,
+      ` Cutoffs: ${cutoffsCreated.toLocaleString()} created, ${cutoffsErrors.toLocaleString()} errors in ${totalTime}s`,
     );
     console.log("");
 

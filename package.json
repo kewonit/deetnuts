@@ -30,11 +30,13 @@
     "bot:build": "tsc -p tsconfig.bot.json",
     "bot:start": "node dist/bot/bot/reddit-worker.js",
     "bot:usage": "npx tsx scripts/bot-usage.ts",
-    "test:bot": "node --import tsx --test \"lib/bot/*.test.ts\""
+    "test:bot": "node --import tsx --test \"lib/bot/*.test.ts\"",
+    "generate:mht-cet-eligibility-map": "tsx scripts/generate-mht-cet-eligibility-map.ts",
+    "test:mht-cet-profile": "node --import tsx --test lib/mht-cet/state-cutoffs/candidate-profile.test.ts"
   },
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
-    "@next/third-parties": "^16.2.9",
+    "@next/third-parties": "^16.2.12",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-checkbox": "^1.0.4",
@@ -74,11 +76,11 @@
     "gsap": "^3.12.5",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.563.0",
-    "next": "^16.2.9",
+    "next": "^16.2.12",
     "nextjs-toploader": "^1.6.12",
-    "nuqs": "^2.8.5",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
+    "nuqs": "^2.9.2",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "react-fast-marquee": "^1.6.4",
     "react-icons": "^5.2.1",
     "reactflow": "^11.11.4",
@@ -101,17 +103,20 @@
     "babel-plugin-react-compiler": "^1.0.0",
     "dotenv-cli": "^8.0.0",
     "eslint": "^9.39.2",
-    "eslint-config-next": "^16.2.9",
+    "eslint-config-next": "^16.2.12",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
-    "postcss": "^8.5.10",
+    "postcss": "^8.5.24",
     "supabase": "^2.108.0",
     "tailwindcss": "^3.4.1",
     "tsx": "^4.22.4",
     "typescript": "^5",
-    "typescript-eslint": "^8.54.0"
+    "typescript-eslint": "^8.65.0"
   },
   "overrides": {
-    "postcss": "^8.5.10"
+    "postcss": "^8.5.24",
+    "sharp": "^0.35.3",
+    "minimatch": "^10.2.6",
+    "brace-expansion": "^5.0.8"
   }
 }

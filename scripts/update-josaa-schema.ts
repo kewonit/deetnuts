@@ -30,7 +30,7 @@ async function main() {
         process.env.POCKETBASE_ADMIN_EMAIL!,
         process.env.POCKETBASE_ADMIN_PASSWORD!,
       );
-    console.log("✓ Auth OK\n");
+    console.log(" Auth OK\n");
 
     // Get current collections
     const collections = await pb.collections.getFullList();
@@ -53,7 +53,7 @@ async function main() {
         listRule: "",
         viewRule: "",
       });
-      console.log("✓ josaa_institutes updated");
+      console.log(" josaa_institutes updated");
     }
 
     // Update josaa_branches
@@ -72,7 +72,7 @@ async function main() {
         listRule: "",
         viewRule: "",
       });
-      console.log("✓ josaa_branches updated");
+      console.log(" josaa_branches updated");
     }
 
     // Update josaa_cutoffs
@@ -96,7 +96,7 @@ async function main() {
         listRule: "",
         viewRule: "",
       });
-      console.log("✓ josaa_cutoffs updated");
+      console.log(" josaa_cutoffs updated");
     }
 
     // Also set public read for josaa_institute_aliases
@@ -114,10 +114,10 @@ async function main() {
         listRule: "",
         viewRule: "",
       });
-      console.log("✓ josaa_institute_aliases updated");
+      console.log(" josaa_institute_aliases updated");
     }
 
-    console.log("\n✓ All schemas updated successfully!");
+    console.log("\n All schemas updated successfully!");
     console.log("\nNext step: Run the import script to populate the data.");
   } catch (e: any) {
     console.error("\nError:", e.message);

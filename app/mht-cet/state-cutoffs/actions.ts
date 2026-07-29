@@ -1,6 +1,12 @@
 "use server";
 
 import { getPocketBase } from "@/lib/pocketbaseClient";
+import { createAdminClient } from "@/lib/supabase/admin";
+import {
+  MhtCetCandidateProfileSchema,
+  buildAllocationOrFilter,
+  deriveEligibleSeatPools,
+} from "@/lib/mht-cet/state-cutoffs/candidate-profile";
 import {
   getCollectionForRound,
   isRoundAvailableForYear,
@@ -16,6 +22,263 @@ import {
   buildStateCutoffSearchFilter,
   escapeFilterValue,
 } from "./search-filter";
+
+interface ProfiledCutoffQuery {
+  page: number;
+  perPage: number;
+  search: string;
+  categories: string[];
+  courses: string[];
+  statuses: string[];
+  homeUniversities: string[];
+  scoreMode: "percentile" | "rank";
+  scoreValue: string;
+  round: number;
+  year: number;
+  profile: unknown;
+}
+
+interface ProfiledQueryBuilder {
+  in(column: string, values: readonly string[]): ProfiledQueryBuilder;
+  not(column: string, operator: string, value: unknown): ProfiledQueryBuilder;
+  or(filter: string): ProfiledQueryBuilder;
+  gt(column: string, value: number): ProfiledQueryBuilder;
+  gte(column: string, value: number): ProfiledQueryBuilder;
+  lte(column: string, value: number): ProfiledQueryBuilder;
+  eq(column: string, value: string): ProfiledQueryBuilder;
+  order(
+    column: string,
+    options: { ascending: boolean },
+  ): ProfiledQueryBuilder;
+  range(
+    from: number,
+    to: number,
+  ): PromiseLike<{
+    data: unknown[] | null;
+    error: { code?: string; message: string } | null;
+    count: number | null;
+  }>;
+}
+
+const tokenizeProfileSearch = (search: string): string[] => {
+  const tokens = search.slice(0, 200).toLowerCase().match(/[a-z0-9]+/g) ?? [];
+  return [...new Set(tokens)].slice(0, 8);
+};
+
+const sanitizeProfileStringArray = (value: unknown): string[] =>
+  Array.isArray(value)
+    ? value.slice(0, 200).filter(
+        (item): item is string =>
+          typeof item === "string" &&
+          item.length > 0 &&
+          item.length <= 240,
+      )
+    : [];
+
+export async function getProfiledCutoffRecords(
+  input: ProfiledCutoffQuery,
+) {
+  const parsedProfile = MhtCetCandidateProfileSchema.safeParse(input.profile);
+  if (!parsedProfile.success) {
+    return {
+      success: false,
+      error: "Invalid candidate profile",
+      message: "Please correct the highlighted candidate profile fields.",
+      fieldErrors: Object.fromEntries(
+        parsedProfile.error.issues.map((issue) => [
+          issue.path.join("."),
+          issue.message,
+        ]),
+      ),
+    };
+  }
+
+  const sanitizedYear =
+    Number.isInteger(input.year) && ROUNDS_BY_YEAR[input.year]
+      ? input.year
+      : 2025;
+  const sanitizedRound =
+    Number.isInteger(input.round) &&
+    isRoundAvailableForYear(input.round, sanitizedYear)
+      ? input.round
+      : DEFAULT_ROUND;
+  const collectionName = getCollectionForRound(
+    sanitizedRound,
+    sanitizedYear,
+  );
+  const page = Number.isInteger(input.page) && input.page > 0 ? input.page : 1;
+  const perPage =
+    Number.isInteger(input.perPage) &&
+    input.perPage > 0 &&
+    input.perPage <= 200
+      ? input.perPage
+      : 25;
+  const score = Number(input.scoreValue);
+  const requestedCodes = sanitizeProfileStringArray(input.categories);
+  const courses = sanitizeProfileStringArray(input.courses);
+  const statuses = sanitizeProfileStringArray(input.statuses);
+  const homeUniversities = sanitizeProfileStringArray(
+    input.homeUniversities,
+  );
+  const search = typeof input.search === "string" ? input.search : "";
+
+  if (
+    typeof input.scoreValue !== "string" ||
+    input.scoreValue.trim() === "" ||
+    !Number.isFinite(score) ||
+    (input.scoreMode === "percentile" && (score < 0 || score > 100)) ||
+    (input.scoreMode === "rank" &&
+      (!Number.isInteger(score) || score < 1 || score > 1_000_000))
+  ) {
+    return {
+      success: false,
+      error: "Invalid score",
+      message:
+        input.scoreMode === "rank"
+          ? "Enter a valid MHT-CET merit rank from 1 to 1,000,000."
+          : "Enter a percentile from 0 to 100.",
+      fieldErrors: { scoreValue: ["Invalid score value"] },
+    };
+  }
+
+  const derived = deriveEligibleSeatPools(
+    parsedProfile.data,
+    requestedCodes,
+  );
+  if (derived.categoryCodes.length === 0) {
+    return {
+      success: true,
+      data: [],
+      totalItems: 0,
+      totalPages: 0,
+      page,
+      perPage,
+      round: sanitizedRound,
+      year: sanitizedYear,
+      collection: collectionName,
+      searchInsight: null,
+      profileMetadata: {
+        ignoredRequestedCodes: derived.ignoredRequestedCodes,
+        excludedUnmappedRows: 0,
+        stageSemanticsAvailable: false,
+      },
+    };
+  }
+
+  try {
+    const supabase = createAdminClient();
+    let query = supabase
+      .from(collectionName)
+      .select(
+        "id,college_code,college_name,course_code,course_name,category,seat_allocation_section,cutoff_score,last_rank,total_admitted,status,home_university,institute_home_university_id,affiliating_university_id,minority_community_id",
+        { count: "exact" },
+      )
+      .in("category", derived.categoryCodes)
+      .not("institute_home_university_id", "is", null)
+      .or(
+        buildAllocationOrFilter(parsedProfile.data),
+      ) as unknown as ProfiledQueryBuilder;
+
+    if (input.scoreMode === "rank") {
+      query = query
+        .not("last_rank", "is", null)
+        .gt("last_rank", 0)
+        .gte("last_rank", score)
+        .order("last_rank", { ascending: true })
+        .order("id", { ascending: true });
+    } else {
+      query = query
+        .gte("cutoff_score", 0)
+        .lte("cutoff_score", score)
+        .order("cutoff_score", { ascending: false })
+        .order("id", { ascending: true });
+    }
+
+    if (courses.length > 0) {
+      query = query.in("course_name", courses);
+    }
+    if (statuses.length > 0) {
+      query = query.in("status", statuses);
+    }
+    if (homeUniversities.length > 0) {
+      query = query.in("home_university", homeUniversities);
+    }
+
+    for (const token of tokenizeProfileSearch(search)) {
+      if (/^\d+$/.test(token)) {
+        query = query.eq("college_code", token.replace(/^0+(?=\d)/, ""));
+      } else {
+        query = query.or(
+          `college_name.ilike.%${token}%,course_name.ilike.%${token}%`,
+        );
+      }
+    }
+
+    if (
+      derived.categoryCodes.includes("MI") &&
+      derived.minorityInstituteIds.length > 0
+    ) {
+      query = query.or(
+        `category.neq.MI,and(category.eq.MI,minority_community_id.in.(${derived.minorityInstituteIds.join(",")}))`,
+      );
+    }
+
+    const from = (page - 1) * perPage;
+    const to = from + perPage - 1;
+    const { data, error, count } = await query.range(from, to);
+
+    if (error) {
+      console.error("Profiled cutoff query failed", {
+        collectionName,
+        code: error.code,
+        message: error.message,
+      });
+      const missingTable = error.code === "42P01";
+      const missingProfileColumns =
+        error.code === "42703" ||
+        error.message.includes("institute_home_university_id");
+      return {
+        success: false,
+        error: missingTable
+          ? "Data not available"
+          : missingProfileColumns
+            ? "Profiled cutoff data is not ready"
+            : "Failed to fetch cutoff data",
+        message: missingTable
+          ? `Cutoff data is unavailable for ${sanitizedYear} round ${sanitizedRound}.`
+          : missingProfileColumns
+            ? "The candidate eligibility migration must be applied before using guided results."
+            : "The cutoff data could not be loaded. Try again.",
+      };
+    }
+
+    const totalItems = count ?? 0;
+    return {
+      success: true,
+      data: data ?? [],
+      totalItems,
+      totalPages: Math.ceil(totalItems / perPage),
+      page,
+      perPage,
+      round: sanitizedRound,
+      year: sanitizedYear,
+      collection: collectionName,
+      searchInsight: null,
+      profileMetadata: {
+        ignoredRequestedCodes: derived.ignoredRequestedCodes,
+        excludedUnmappedRows: 0,
+        stageSemanticsAvailable: false,
+      },
+    };
+  } catch (error) {
+    console.error("Profiled cutoff request failed", error);
+    return {
+      success: false,
+      error: "Failed to fetch cutoff data",
+      message: "The cutoff data could not be loaded. Try again.",
+    };
+  }
+}
 
 export async function getCutoffRecords(
   page: number,

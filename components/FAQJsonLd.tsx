@@ -1,5 +1,6 @@
 // components/FAQJsonLd.tsx
 // FAQ Schema for pages with frequently asked questions
+import { serializeJsonLd } from "@/lib/json-ld";
 
 interface FAQItem {
   question: string;
@@ -29,7 +30,7 @@ export default function FAQJsonLd({ faqs }: FAQJsonLdProps) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }}
     />
   );
 }

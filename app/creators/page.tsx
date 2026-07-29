@@ -8,7 +8,7 @@ const augillion = Augillion({
 });
 
 export const metadata: Metadata = {
-  title: "Creators | DEETNUTS",
+  title: "Creators",
   description:
     "Meet the team behind DEETNUTS - the platform simplifying college data for engineering aspirants.",
   openGraph: {

@@ -6,44 +6,33 @@ export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://deetnuts.com";
+  const seoLastUpdated = new Date("2026-07-29T00:00:00.000Z");
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: `${baseUrl}/josaa`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1,
+      lastModified: seoLastUpdated,
     },
     {
       url: `${baseUrl}/josaa/institutes`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9,
+      lastModified: seoLastUpdated,
     },
     {
       url: `${baseUrl}/josaa/all-colleges`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.95,
+      lastModified: seoLastUpdated,
     },
     {
       url: `${baseUrl}/josaa/search`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9,
+      lastModified: seoLastUpdated,
     },
     {
       url: `${baseUrl}/josaa/compare`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.8,
+      lastModified: seoLastUpdated,
     },
     {
       url: `${baseUrl}/josaa/trends`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.8,
+      lastModified: seoLastUpdated,
     },
   ];
 
@@ -53,18 +42,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const institutePages: MetadataRoute.Sitemap = institutes.map((inst) => ({
       url: `${baseUrl}/josaa/institutes/${inst.slug}`,
-      lastModified: new Date(),
-      changeFrequency: "weekly" as const,
-      priority: 0.8,
     }));
 
     // Generate branch pages for each institute
     const branchPages: MetadataRoute.Sitemap = institutes.flatMap((inst) =>
       inst.branches.map((branch) => ({
         url: `${baseUrl}/josaa/institutes/${inst.slug}/${branch.short_code || branch.id}`,
-        lastModified: new Date(),
-        changeFrequency: "weekly" as const,
-        priority: 0.7,
       })),
     );
 

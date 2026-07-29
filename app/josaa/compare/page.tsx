@@ -11,6 +11,7 @@ import type { ComponentType } from "react";
 import { useQueryStates, parseAsString, parseAsArrayOf } from "nuqs";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { toast } from "sonner";
 import { useJosaaInstitutes } from "@/lib/hooks/use-swr-fetch";
 
 // Dynamic import for recharts - reduces initial bundle size
@@ -582,7 +583,7 @@ export default function ComparePage() {
   const handleAddInstitute = (institute: JosaaInstitute) => {
     if (searchParams.institutes.includes(institute.id)) return;
     if (searchParams.institutes.length >= 5) {
-      alert("Maximum 5 institutes can be compared");
+      toast.error("Maximum 5 institutes can be compared");
       return;
     }
     setSearchParams({
@@ -1259,7 +1260,7 @@ export default function ComparePage() {
 
               <Card className="border-4 border-black bg-green-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                 <CardContent className="p-6">
-                  <h3 className="font-bold text-lg mb-2">📊 Pro Tip</h3>
+                  <h3 className="font-bold text-lg mb-2">Pro Tip</h3>
                   <p className="text-sm text-gray-700">
                     Use the category filter to focus on specific fields (e.g.,
                     &quot;Computer Science&quot; or &quot;Mechanical

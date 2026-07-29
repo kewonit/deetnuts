@@ -4,14 +4,12 @@ import { memo, useCallback, useMemo, useState } from "react";
 import { type ChangeEvent, type ElementType, type ReactNode } from "react";
 import {
   ChevronDown,
-  Filter,
   GraduationCap,
   Building2,
   Users,
   MapPin,
   Percent,
   RotateCcw,
-  Sparkles,
   Calendar,
   Layers,
   Check,
@@ -22,6 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -35,9 +34,24 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import {
-  CATEGORY_GROUPS,
+  MHT_CET_CANDIDATURE_OPTIONS,
+  MHT_CET_CATEGORY_OPTIONS,
+  MHT_CET_HOME_UNIVERSITIES,
+  MHT_CET_MINORITY_OPTIONS,
+  type MhtCetCandidatureType,
+  type MhtCetCategoryId,
+  type MhtCetHomeUniversityId,
+  type MhtCetMinorityCommunityId,
+} from "@/lib/mht-cet/state-cutoffs/candidate-profile";
+import {
   COURSE_GROUPS,
   STATUS_OPTIONS,
   HOME_UNIVERSITY_OPTIONS,
@@ -56,6 +70,16 @@ export interface FilterSidebarProps {
   universities: string[];
   scoreMode: "percentile" | "rank";
   rank: string;
+  candidateHomeUniversity: MhtCetHomeUniversityId | "type-e" | "";
+  candidatureType: MhtCetCandidatureType | "";
+  candidateCategory: MhtCetCategoryId | "";
+  ladiesSeatEligible: boolean | null;
+  ewsEligible: boolean;
+  tfwsEligible: boolean;
+  pwdEligible: boolean;
+  orphanEligible: boolean;
+  minorityCommunity: MhtCetMinorityCommunityId | "";
+  eligibleSeatPoolGroups: Record<string, string[]>;
   onPercentileChange: (value: string) => void;
   onYearChange: (value: number) => void;
   onRoundChange: (value: number) => void;
@@ -65,6 +89,19 @@ export interface FilterSidebarProps {
   onUniversitiesChange: (value: string[]) => void;
   onScoreModeChange: (value: "percentile" | "rank") => void;
   onRankChange: (value: string) => void;
+  onCandidateHomeUniversityChange: (
+    value: MhtCetHomeUniversityId | "type-e",
+  ) => void;
+  onCandidatureChange: (value: MhtCetCandidatureType) => void;
+  onCandidateCategoryChange: (value: MhtCetCategoryId) => void;
+  onLadiesSeatEligibleChange: (value: boolean) => void;
+  onEwsEligibleChange: (value: boolean) => void;
+  onTfwsEligibleChange: (value: boolean) => void;
+  onPwdEligibleChange: (value: boolean) => void;
+  onOrphanEligibleChange: (value: boolean) => void;
+  onMinorityCommunityChange: (
+    value: MhtCetMinorityCommunityId | "",
+  ) => void;
   onClearAll: () => void;
   activeFilterCount: number;
   headerActions?: ReactNode;
@@ -251,7 +288,12 @@ const RankInput = memo(function RankInput({
         return;
       }
       const regex = /^\d{0,7}$/;
-      if (regex.test(val)) {
+      const numericRank = Number(val);
+      if (
+        regex.test(val) &&
+        numericRank >= 1 &&
+        numericRank <= 1_000_000
+      ) {
         onChange(val);
       }
     },
@@ -262,23 +304,18 @@ const RankInput = memo(function RankInput({
     <div className="space-y-3">
       <Label className="text-xs font-medium text-gray-500 uppercase tracking-wider flex items-center gap-2">
         <Layers className="h-3.5 w-3.5" />
-        Your Rank
+        Your MHT-CET Merit Rank
       </Label>
       <Input
         type="text"
         inputMode="numeric"
         pattern="[0-9]*"
-        placeholder="Enter AIR (e.g., 1234)"
+        placeholder="Enter merit rank (e.g., 1234)"
         value={value}
         onChange={handleInputChange}
         className="h-11 text-base font-semibold text-center border border-gray-300 focus:border-blue-500 rounded-lg"
         maxLength={7}
       />
-      {value && (
-        <p className="text-xs text-gray-600 bg-gray-50 rounded-md px-3 py-2 border border-gray-200">
-          Filtering results using an approximate percentile conversion.
-        </p>
-      )}
     </div>
   );
 });
@@ -293,8 +330,8 @@ const ScoreModeTabs = memo(function ScoreModeTabs({
   return (
     <div className="grid grid-cols-2 gap-2 bg-gray-100 p-1 rounded-lg border border-gray-200">
       {[
-        { value: "percentile" as const, label: "Percentile" },
         { value: "rank" as const, label: "Rank" },
+        { value: "percentile" as const, label: "Percentile" },
       ].map((opt) => (
         <button
           key={opt.value}
@@ -309,6 +346,407 @@ const ScoreModeTabs = memo(function ScoreModeTabs({
           {opt.label}
         </button>
       ))}
+    </div>
+  );
+});
+
+const profileSelectTriggerClassName =
+  "h-auto min-h-11 items-start gap-3 bg-white py-3 text-left text-gray-950 [&>span]:line-clamp-none [&>span]:whitespace-normal [&>span]:break-words [&>span]:leading-5";
+const profileSelectContentClassName =
+  "max-w-[calc(100vw-2rem)] bg-white text-gray-950";
+const profileSelectItemClassName =
+  "items-start py-2.5 pr-3 text-gray-950 focus:bg-purple-100 focus:text-gray-950 [&>span:last-child]:whitespace-normal [&>span:last-child]:break-words [&>span:last-child]:leading-5";
+
+const CandidateProfileSetup = memo(function CandidateProfileSetup({
+  candidateHomeUniversity,
+  candidatureType,
+  candidateCategory,
+  ladiesSeatEligible,
+  ewsEligible,
+  tfwsEligible,
+  pwdEligible,
+  orphanEligible,
+  minorityCommunity,
+  onCandidateHomeUniversityChange,
+  onCandidatureChange,
+  onCandidateCategoryChange,
+  onLadiesSeatEligibleChange,
+  onEwsEligibleChange,
+  onTfwsEligibleChange,
+  onPwdEligibleChange,
+  onOrphanEligibleChange,
+  onMinorityCommunityChange,
+}: Pick<
+  FilterSidebarProps,
+  | "candidateHomeUniversity"
+  | "candidatureType"
+  | "candidateCategory"
+  | "ladiesSeatEligible"
+  | "ewsEligible"
+  | "tfwsEligible"
+  | "pwdEligible"
+  | "orphanEligible"
+  | "minorityCommunity"
+  | "onCandidateHomeUniversityChange"
+  | "onCandidatureChange"
+  | "onCandidateCategoryChange"
+  | "onLadiesSeatEligibleChange"
+  | "onEwsEligibleChange"
+  | "onTfwsEligibleChange"
+  | "onPwdEligibleChange"
+  | "onOrphanEligibleChange"
+  | "onMinorityCommunityChange"
+>) {
+  const hasUniversity = candidateHomeUniversity !== "";
+  const hasCandidature =
+    candidateHomeUniversity === "type-e" ||
+    (candidatureType !== "" && candidatureType !== "type-e");
+  const hasCategory = candidateCategory !== "";
+  const hasLadiesChoice = ladiesSeatEligible !== null;
+  const canUseMinority =
+    candidatureType === "type-a" || candidatureType === "type-b";
+  const selectedHomeUniversityLabel =
+    candidateHomeUniversity === "type-e"
+      ? "Type E — no home university"
+      : MHT_CET_HOME_UNIVERSITIES.find(
+          ({ id }) => id === candidateHomeUniversity,
+        )?.label;
+  const selectedCandidatureLabel = MHT_CET_CANDIDATURE_OPTIONS.find(
+    ({ value }) => value === candidatureType,
+  )?.label;
+  const selectedCategoryLabel = MHT_CET_CATEGORY_OPTIONS.find(
+    ({ value }) => value === candidateCategory,
+  )?.label;
+  const selectedMinorityLabel = minorityCommunity
+    ? MHT_CET_MINORITY_OPTIONS.find(
+        ({ value }) => value === minorityCommunity,
+      )?.label
+    : "Not applicable";
+
+  const eligibilityRows = [
+    {
+      id: "ews",
+      label: "EWS certificate",
+      description:
+        candidateCategory === "open"
+          ? "Include EWS source pools"
+          : "Available only with Open category",
+      checked: ewsEligible,
+      disabled: candidateCategory !== "open",
+      onChange: onEwsEligibleChange,
+    },
+    {
+      id: "tfws",
+      label: "TFWS eligible",
+      description: "Include Tuition Fee Waiver Scheme pools",
+      checked: tfwsEligible,
+      disabled: false,
+      onChange: onTfwsEligibleChange,
+    },
+    {
+      id: "pwd",
+      label: "PwD eligible",
+      description:
+        candidatureType === "type-e"
+          ? "Unavailable to Type E candidature"
+          : "Include supported PwD source pools",
+      checked: pwdEligible,
+      disabled: candidatureType === "type-e",
+      onChange: onPwdEligibleChange,
+    },
+    {
+      id: "orphan",
+      label: "Orphan certificate",
+      description: "Include orphan source pools",
+      checked: orphanEligible,
+      disabled: false,
+      onChange: onOrphanEligibleChange,
+    },
+  ];
+
+  return (
+    <div className="space-y-5">
+      <div className="space-y-2">
+        <Label
+          htmlFor="candidate-home-university"
+          className="text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
+          1. Home university
+        </Label>
+        <Select
+          value={candidateHomeUniversity}
+          onValueChange={(value) =>
+            onCandidateHomeUniversityChange(
+              value as MhtCetHomeUniversityId | "type-e",
+            )
+          }
+        >
+          <SelectTrigger
+            id="candidate-home-university"
+            className={profileSelectTriggerClassName}
+            title={selectedHomeUniversityLabel}
+          >
+            <span
+              className={cn(
+                "block",
+                !selectedHomeUniversityLabel && "text-gray-500",
+              )}
+            >
+              {selectedHomeUniversityLabel || "Select your home university"}
+            </span>
+          </SelectTrigger>
+          <SelectContent className={profileSelectContentClassName}>
+            {MHT_CET_HOME_UNIVERSITIES.map((option) => (
+              <SelectItem
+                key={option.id}
+                value={option.id}
+                textValue={option.label}
+                className={profileSelectItemClassName}
+              >
+                {option.label}
+              </SelectItem>
+            ))}
+            <SelectItem
+              value="type-e"
+              className={profileSelectItemClassName}
+            >
+              Type E — no home university
+            </SelectItem>
+          </SelectContent>
+        </Select>
+        <p className="text-xs text-gray-500">
+          This is your CAP geographic home university, not a college&apos;s
+          affiliating university.
+        </p>
+      </div>
+
+      {hasUniversity && candidateHomeUniversity !== "type-e" ? (
+        <div className="space-y-2">
+          <Label
+            htmlFor="candidate-candidature"
+            className="text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            2. CAP candidature
+          </Label>
+          <Select
+            value={candidatureType}
+            onValueChange={(value) =>
+              onCandidatureChange(value as MhtCetCandidatureType)
+            }
+          >
+            <SelectTrigger
+              id="candidate-candidature"
+              className={profileSelectTriggerClassName}
+              title={selectedCandidatureLabel}
+            >
+              <span
+                className={cn(
+                  "block",
+                  !selectedCandidatureLabel && "text-gray-500",
+                )}
+              >
+                {selectedCandidatureLabel || "Select candidature type"}
+              </span>
+            </SelectTrigger>
+            <SelectContent className={profileSelectContentClassName}>
+              {MHT_CET_CANDIDATURE_OPTIONS.filter(
+                ({ value }) => value !== "type-e",
+              ).map((option) => (
+                <SelectItem
+                  key={option.value}
+                  value={option.value}
+                  textValue={`${option.label} ${option.description}`}
+                  className={profileSelectItemClassName}
+                >
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      ) : null}
+
+      {hasCandidature ? (
+        <div className="space-y-2">
+          <Label
+            htmlFor="candidate-category"
+            className="text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            {candidateHomeUniversity === "type-e" ? "2" : "3"}. Base category
+          </Label>
+          <Select
+            value={candidateCategory}
+            onValueChange={(value) =>
+              onCandidateCategoryChange(value as MhtCetCategoryId)
+            }
+          >
+            <SelectTrigger
+              id="candidate-category"
+              className={profileSelectTriggerClassName}
+              title={selectedCategoryLabel}
+            >
+              <span
+                className={cn(
+                  "block",
+                  !selectedCategoryLabel && "text-gray-500",
+                )}
+              >
+                {selectedCategoryLabel || "Select base category"}
+              </span>
+            </SelectTrigger>
+            <SelectContent className={profileSelectContentClassName}>
+              {MHT_CET_CATEGORY_OPTIONS.map((option) => (
+                <SelectItem
+                  key={option.value}
+                  value={option.value}
+                  className={profileSelectItemClassName}
+                >
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {candidateCategory && candidateCategory !== "open" ? (
+            <p className="text-xs text-gray-500">
+              Open pools are included together with your reserved category.
+            </p>
+          ) : null}
+        </div>
+      ) : null}
+
+      {hasCategory ? (
+        <fieldset className="space-y-2">
+          <legend className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+            {candidateHomeUniversity === "type-e" ? "3" : "4"}. Ladies-seat
+            eligibility
+          </legend>
+          <div
+            className="grid grid-cols-2 gap-1 rounded-lg border border-gray-200 bg-gray-100 p-1"
+            role="radiogroup"
+            aria-label="Ladies-seat eligibility"
+          >
+            {[
+              { value: false, label: "Not eligible" },
+              { value: true, label: "Eligible" },
+            ].map((option) => (
+              <button
+                key={String(option.value)}
+                type="button"
+                role="radio"
+                aria-checked={ladiesSeatEligible === option.value}
+                onClick={() => onLadiesSeatEligibleChange(option.value)}
+                className={cn(
+                  "h-10 rounded-md text-sm font-semibold transition-colors",
+                  ladiesSeatEligible === option.value
+                    ? "border border-purple-300 bg-white text-purple-700 shadow-sm"
+                    : "text-gray-600 hover:text-gray-900",
+                )}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+          <p className="text-xs text-gray-500">
+            Eligible candidates see both general and ladies source pools.
+          </p>
+        </fieldset>
+      ) : null}
+
+      {hasLadiesChoice ? (
+        <Collapsible>
+          <CollapsibleTrigger className="flex w-full items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 py-3 text-left">
+            <span>
+              <span className="block text-sm font-semibold text-gray-800">
+                Additional reservations
+              </span>
+              <span className="block text-xs text-gray-500">
+                EWS, TFWS, PwD, orphan and minority
+              </span>
+            </span>
+            <ChevronDown className="h-4 w-4 text-gray-500" />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-4 pt-4">
+            {eligibilityRows.map((option) => (
+              <div
+                key={option.id}
+                className={cn(
+                  "flex items-center justify-between gap-4 rounded-lg border px-3 py-3",
+                  option.disabled
+                    ? "border-gray-100 bg-gray-50 opacity-60"
+                    : "border-gray-200 bg-white",
+                )}
+              >
+                <Label htmlFor={`candidate-${option.id}`} className="min-w-0">
+                  <span className="block text-sm font-medium text-gray-800">
+                    {option.label}
+                  </span>
+                  <span className="block text-xs font-normal text-gray-500">
+                    {option.description}
+                  </span>
+                </Label>
+                <Switch
+                  id={`candidate-${option.id}`}
+                  checked={option.checked}
+                  disabled={option.disabled}
+                  onCheckedChange={option.onChange}
+                />
+              </div>
+            ))}
+
+            <div className="space-y-2">
+              <Label htmlFor="candidate-minority" className="text-sm">
+                Minority community
+              </Label>
+              <Select
+                value={minorityCommunity || "none"}
+                disabled={!canUseMinority}
+                onValueChange={(value) =>
+                  onMinorityCommunityChange(
+                    value === "none"
+                      ? ""
+                      : (value as MhtCetMinorityCommunityId),
+                  )
+                }
+              >
+                <SelectTrigger
+                  id="candidate-minority"
+                  className={profileSelectTriggerClassName}
+                  title={selectedMinorityLabel}
+                >
+                  <span className="block">{selectedMinorityLabel}</span>
+                </SelectTrigger>
+                <SelectContent className={profileSelectContentClassName}>
+                  <SelectItem
+                    value="none"
+                    className={profileSelectItemClassName}
+                  >
+                    Not applicable
+                  </SelectItem>
+                  {MHT_CET_MINORITY_OPTIONS.map((option) => (
+                    <SelectItem
+                      key={option.value}
+                      value={option.value}
+                      className={profileSelectItemClassName}
+                    >
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {!canUseMinority ? (
+                <p className="text-xs text-gray-500">
+                  Minority reservation requires Type A or Type B candidature.
+                </p>
+              ) : null}
+            </div>
+
+            <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 px-3 py-2 text-xs text-gray-500">
+              Defence and stage-converted pools are disabled because the
+              historical rows do not contain CAP stage semantics.
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+      ) : null}
     </div>
   );
 });
@@ -561,6 +999,16 @@ export const FilterSidebar = memo(function FilterSidebar({
   universities,
   scoreMode,
   rank,
+  candidateHomeUniversity,
+  candidatureType,
+  candidateCategory,
+  ladiesSeatEligible,
+  ewsEligible,
+  tfwsEligible,
+  pwdEligible,
+  orphanEligible,
+  minorityCommunity,
+  eligibleSeatPoolGroups,
   onPercentileChange,
   onYearChange,
   onRoundChange,
@@ -570,6 +1018,15 @@ export const FilterSidebar = memo(function FilterSidebar({
   onUniversitiesChange,
   onScoreModeChange,
   onRankChange,
+  onCandidateHomeUniversityChange,
+  onCandidatureChange,
+  onCandidateCategoryChange,
+  onLadiesSeatEligibleChange,
+  onEwsEligibleChange,
+  onTfwsEligibleChange,
+  onPwdEligibleChange,
+  onOrphanEligibleChange,
+  onMinorityCommunityChange,
   onClearAll,
   activeFilterCount,
   headerActions,
@@ -582,15 +1039,9 @@ export const FilterSidebar = memo(function FilterSidebar({
     >
       <div className="flex-shrink-0 px-5 py-4 border-b border-gray-200 bg-gray-50">
         <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-purple-600 rounded-lg">
-              <Filter className="h-5 w-5 text-white" />
-            </div>
-            <div>
-              <h2 className="font-bold text-base text-gray-900">Filters</h2>
-              <p className="text-xs text-gray-500">Refine your search</p>
-            </div>
-          </div>
+          <h1 className="font-bold text-base text-gray-900">
+            MHT-CET State Cutoffs
+          </h1>
           <div className="flex items-center gap-2">
             {activeFilterCount > 0 && (
               <Button
@@ -606,30 +1057,10 @@ export const FilterSidebar = memo(function FilterSidebar({
             {headerActions}
           </div>
         </div>
-        {activeFilterCount > 0 && (
-          <div className="mt-3">
-            <Badge
-              variant="neutral"
-              className="bg-purple-100 text-purple-700 border-purple-200 px-2 py-1 text-xs"
-            >
-              <Sparkles className="h-3 w-3 mr-1" />
-              {activeFilterCount} active
-            </Badge>
-          </div>
-        )}
       </div>
 
       <ScrollArea className="flex-1">
         <div className="px-5 py-5 space-y-6">
-          <YearRoundSelector
-            year={year}
-            round={round}
-            onYearChange={onYearChange}
-            onRoundChange={onRoundChange}
-          />
-
-          <Separator className="bg-gray-200" />
-
           <div className="space-y-4">
             <ScoreModeTabs mode={scoreMode} onChange={onScoreModeChange} />
             {scoreMode === "percentile" ? (
@@ -644,52 +1075,91 @@ export const FilterSidebar = memo(function FilterSidebar({
 
           <Separator className="bg-gray-200" />
 
-          <div className="space-y-3">
-            <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-              Advanced Filters
-            </h3>
-            <Accordion
-              type="multiple"
-              className="space-y-2"
-              defaultValue={["Categories", "Courses"]}
-            >
-              <FilterGroup
-                title="Categories"
-                icon={Users}
-                groups={CATEGORY_GROUPS}
-                selected={categories}
-                onChange={onCategoriesChange}
-                isGrouped
-              />
+          <CandidateProfileSetup
+            candidateHomeUniversity={candidateHomeUniversity}
+            candidatureType={candidatureType}
+            candidateCategory={candidateCategory}
+            ladiesSeatEligible={ladiesSeatEligible}
+            ewsEligible={ewsEligible}
+            tfwsEligible={tfwsEligible}
+            pwdEligible={pwdEligible}
+            orphanEligible={orphanEligible}
+            minorityCommunity={minorityCommunity}
+            onCandidateHomeUniversityChange={
+              onCandidateHomeUniversityChange
+            }
+            onCandidatureChange={onCandidatureChange}
+            onCandidateCategoryChange={onCandidateCategoryChange}
+            onLadiesSeatEligibleChange={onLadiesSeatEligibleChange}
+            onEwsEligibleChange={onEwsEligibleChange}
+            onTfwsEligibleChange={onTfwsEligibleChange}
+            onPwdEligibleChange={onPwdEligibleChange}
+            onOrphanEligibleChange={onOrphanEligibleChange}
+            onMinorityCommunityChange={onMinorityCommunityChange}
+          />
 
-              <FilterGroup
-                title="Courses"
-                icon={GraduationCap}
-                groups={COURSE_GROUPS}
-                selected={courses}
-                onChange={onCoursesChange}
-                isGrouped
-              />
+          <Separator className="bg-gray-200" />
 
-              <FilterGroup
-                title="College Status"
-                icon={Building2}
-                groups={STATUS_OPTIONS}
-                selected={statuses}
-                onChange={onStatusesChange}
-                isGrouped={false}
+          <Collapsible>
+            <CollapsibleTrigger className="flex w-full items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 py-3 text-left">
+              <span>
+                <span className="block text-sm font-semibold text-gray-800">
+                  Advanced filters
+                </span>
+                <span className="block text-xs text-gray-500">
+                  Year, round, courses and raw refinement
+                </span>
+              </span>
+              <ChevronDown className="h-4 w-4 text-gray-500" />
+            </CollapsibleTrigger>
+            <CollapsibleContent className="space-y-5 pt-5">
+              <YearRoundSelector
+                year={year}
+                round={round}
+                onYearChange={onYearChange}
+                onRoundChange={onRoundChange}
               />
+              <Accordion type="multiple" className="space-y-2">
+                {Object.keys(eligibleSeatPoolGroups).length > 0 ? (
+                  <FilterGroup
+                    title="Eligible seat-pool refinement"
+                    icon={Users}
+                    groups={eligibleSeatPoolGroups}
+                    selected={categories}
+                    onChange={onCategoriesChange}
+                    isGrouped
+                  />
+                ) : null}
 
-              <FilterGroup
-                title="University"
-                icon={MapPin}
-                groups={HOME_UNIVERSITY_OPTIONS}
-                selected={universities}
-                onChange={onUniversitiesChange}
-                isGrouped={false}
-              />
-            </Accordion>
-          </div>
+                <FilterGroup
+                  title="Courses"
+                  icon={GraduationCap}
+                  groups={COURSE_GROUPS}
+                  selected={courses}
+                  onChange={onCoursesChange}
+                  isGrouped
+                />
+
+                <FilterGroup
+                  title="College Status"
+                  icon={Building2}
+                  groups={STATUS_OPTIONS}
+                  selected={statuses}
+                  onChange={onStatusesChange}
+                  isGrouped={false}
+                />
+
+                <FilterGroup
+                  title="Affiliating University"
+                  icon={MapPin}
+                  groups={HOME_UNIVERSITY_OPTIONS}
+                  selected={universities}
+                  onChange={onUniversitiesChange}
+                  isGrouped={false}
+                />
+              </Accordion>
+            </CollapsibleContent>
+          </Collapsible>
         </div>
       </ScrollArea>
 

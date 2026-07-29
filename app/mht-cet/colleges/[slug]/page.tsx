@@ -85,8 +85,8 @@ export async function generateMetadata(props: {
     };
   }
 
-  const title = `${college.college_name} MHT-CET 2025: Cutoffs, Fees, Seats & Admission`;
-  const description = `Find all details for ${college.college_name} for MHT-CET 2025 admissions. Get the latest cutoffs, fee structure, seat matrix, and admission process. Your complete guide to securing admission in ${college.college_name}.`;
+  const title = `${college.college_name} MHT-CET 2024 Cutoffs & Seats`;
+  const description = `Plan MHT-CET 2026 admission to ${college.college_name} using the available 2024 cutoffs, fee structure, seat matrix, and college details.`;
   const canonicalUrl = `https://deetnuts.com/mht-cet/colleges/${slug}`;
 
   return {
@@ -95,7 +95,8 @@ export async function generateMetadata(props: {
     keywords: [
       college.college_name,
       "MHT-CET",
-      "MHT-CET 2025",
+      "MHT-CET 2026 admissions",
+      "MHT-CET 2024 cutoffs",
       "Engineering Admissions",
       "College Cutoffs",
       "Fee Structure",
@@ -116,7 +117,7 @@ export async function generateMetadata(props: {
           alt: `Logo of ${college.college_name}`,
         },
       ],
-      locale: "en_US",
+      locale: "en_IN",
       type: "website",
     },
     alternates: {

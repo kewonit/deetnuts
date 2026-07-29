@@ -12,6 +12,7 @@ import type { ComponentType } from "react";
 import { useQueryStates, parseAsString } from "nuqs";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { toast } from "sonner";
 import { useJosaaInstitutes } from "@/lib/hooks/use-swr-fetch";
 
 // Dynamic import for recharts - reduces initial bundle size by ~50KB
@@ -352,7 +353,7 @@ export default function TrendsPage() {
       }
 
       if (selectedBranches.length >= 8) {
-        alert("Maximum 8 branches can be tracked");
+        toast.error("Maximum 8 branches can be tracked");
         return;
       }
 
@@ -775,7 +776,7 @@ export default function TrendsPage() {
             </p>
           </div>
         ) : (
-          <div className="border-4 border-dashed border-gray-400 bg-gray-50 p-12 text-center">
+            <div className="border-4 border-dashed border-gray-400 bg-gray-50 p-12 text-center">
             <div className="text-6xl mb-4">📈</div>
             <h3 className="text-xl font-bold mb-2">
               Compare Cutoff Trends Over Time

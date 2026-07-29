@@ -17,7 +17,7 @@ import {
 import InstitutesFilter from "@/components/josaa/InstitutesFilter";
 
 export const metadata: Metadata = {
-  title: "All Institutes | JoSAA Cutoffs | DEETNUTS",
+  title: "All Institutes | JoSAA Cutoffs",
   description:
     "Browse all IITs, NITs, IIITs, and GFTIs participating in JoSAA counseling. View cutoffs and branch details.",
   keywords: [

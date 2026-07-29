@@ -10,19 +10,19 @@ const pb = new PocketBase(
 pb.autoCancellation(false);
 
 async function main() {
-  console.log("🔐 Authenticating...");
+  console.log(" Authenticating...");
   await pb
     .collection("_superusers")
     .authWithPassword(
       process.env.POCKETBASE_ADMIN_EMAIL!,
       process.env.POCKETBASE_ADMIN_PASSWORD!,
     );
-  console.log("✓ Auth OK\n");
+  console.log(" Auth OK\n");
 
   // Delete duplicate institute
   try {
     await pb.collection("josaa_institutes").delete("80fc4rmlwmrj800");
-    console.log("✓ Deleted duplicate institute");
+    console.log(" Deleted duplicate institute");
   } catch (e) {
     console.log("Institute already deleted or not found");
   }
@@ -32,7 +32,7 @@ async function main() {
   const branches = await pb.collection("josaa_branches").getList(1, 1);
   const cutoffs = await pb.collection("josaa_cutoffs").getList(1, 1);
 
-  console.log("\n📊 Final counts:");
+  console.log("\n Final counts:");
   console.log("  Institutes:", institutes.totalItems);
   console.log("  Branches:", branches.totalItems);
   console.log("  Cutoffs:", cutoffs.totalItems);

@@ -872,7 +872,7 @@ async function migrateCollection(
   saveCheckpoint(checkpoint);
 
   console.log(
-    `✓ Completed ${migration.supabaseTable} (source=${sourceCount}, destination=${destinationCount}, migratedRows=${migratedRows})`,
+    ` Completed ${migration.supabaseTable} (source=${sourceCount}, destination=${destinationCount}, migratedRows=${migratedRows})`,
   );
 
   if (destinationCount < sourceCount) {

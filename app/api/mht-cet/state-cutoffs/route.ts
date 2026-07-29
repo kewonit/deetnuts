@@ -1,6 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { getCutoffRecords } from "../../../mht-cet/state-cutoffs/actions";
+import { after, NextRequest, NextResponse } from "next/server";
+import {
+  getCutoffRecords,
+  getProfiledCutoffRecords,
+} from "../../../mht-cet/state-cutoffs/actions";
 import { createClient } from "@/app/lib/supabase/server";
 import {
   ANONYMOUS_STATE_CUTOFF_API_COOKIE,
@@ -12,6 +14,16 @@ import {
   isRoundAvailableForYear,
   ROUNDS_BY_YEAR,
 } from "@/app/mht-cet/state-cutoffs/constants";
+import {
+  buildStateCutoffSearchUsageEvent,
+  scheduleStateCutoffSearchUsage,
+} from "@/lib/mht-cet/state-cutoffs/search-usage";
+import {
+  getUtf8ByteLength,
+  STATE_CUTOFF_MAX_REQUEST_BYTES,
+  StateCutoffApiRequestSchema,
+} from "@/lib/mht-cet/state-cutoffs/api-request";
+import { safeLogBotUsageEvent } from "@/lib/bot/usage";
 
 const ANONYMOUS_API_COOKIE_OPTIONS = {
   httpOnly: true,
@@ -20,6 +32,31 @@ const ANONYMOUS_API_COOKIE_OPTIONS = {
   path: "/",
   maxAge: 60 * 60 * 24 * 7,
 };
+
+const RESPONSE_HEADERS = {
+  "Cache-Control": "private, no-store",
+  "X-Content-Type-Options": "nosniff",
+};
+
+function jsonResponse(
+  body: unknown,
+  init?: { status?: number },
+): NextResponse {
+  return NextResponse.json(body, {
+    ...init,
+    headers: RESPONSE_HEADERS,
+  });
+}
+
+function stripPrivateErrorDetails(value: unknown): unknown {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return value;
+  }
+
+  const publicValue = { ...(value as Record<string, unknown>) };
+  delete publicValue.details;
+  return publicValue;
+}
 
 async function isRequestAuthenticated(): Promise<boolean> {
   try {
@@ -40,8 +77,102 @@ async function isRequestAuthenticated(): Promise<boolean> {
 }
 
 export async function POST(request: NextRequest) {
+  const startedAt = performance.now();
+  const requestId = crypto.randomUUID();
+  let shouldLogUsage = false;
+
+  const scheduleUsage = (status: "served" | "rejected" | "failed") => {
+    if (!shouldLogUsage) {
+      return;
+    }
+
+    scheduleStateCutoffSearchUsage(
+      buildStateCutoffSearchUsageEvent({
+        requestId,
+        status,
+        durationMs: performance.now() - startedAt,
+      }),
+      after,
+      safeLogBotUsageEvent,
+    );
+  };
+
   try {
-    const body = await request.json();
+    const contentLength = Number(request.headers.get("content-length"));
+    if (
+      Number.isFinite(contentLength) &&
+      contentLength > STATE_CUTOFF_MAX_REQUEST_BYTES
+    ) {
+      return jsonResponse(
+        {
+          success: false,
+          error: "Request too large",
+          message: "The state cutoff request is too large.",
+        },
+        { status: 413 },
+      );
+    }
+
+    const rawBody = await request.text();
+    if (getUtf8ByteLength(rawBody) > STATE_CUTOFF_MAX_REQUEST_BYTES) {
+      return jsonResponse(
+        {
+          success: false,
+          error: "Request too large",
+          message: "The state cutoff request is too large.",
+        },
+        { status: 413 },
+      );
+    }
+
+    let untrustedBody: unknown;
+    try {
+      untrustedBody = JSON.parse(rawBody);
+    } catch {
+      return jsonResponse(
+        {
+          success: false,
+          error: "Invalid request",
+          message: "Send a valid JSON request body.",
+        },
+        { status: 400 },
+      );
+    }
+
+    const parsedBody = StateCutoffApiRequestSchema.safeParse(untrustedBody);
+    if (!parsedBody.success) {
+      return jsonResponse(
+        {
+          success: false,
+          error: "Invalid request",
+          message: "Check the submitted cutoff filters and try again.",
+          fieldErrors: parsedBody.error.flatten().fieldErrors,
+        },
+        { status: 400 },
+      );
+    }
+
+    const {
+      page,
+      perPage,
+      search,
+      categories,
+      courses,
+      statuses,
+      homeUniversities,
+      percentileInput,
+      scoreMode,
+      scoreValue,
+      profile,
+      round,
+      year,
+      sortBy,
+      sortOrder,
+      requestKind,
+    } = parsedBody.data;
+
+    shouldLogUsage = requestKind === "search";
+
     const isAuthenticated = await isRequestAuthenticated();
     const currentAnonymousRequestCount = parseAnonymousUsageCount(
       request.cookies.get(ANONYMOUS_STATE_CUTOFF_API_COOKIE)?.value,
@@ -52,43 +183,23 @@ export async function POST(request: NextRequest) {
       !isAuthenticated &&
       currentAnonymousRequestCount >= ANONYMOUS_STATE_CUTOFF_API_REQUEST_LIMIT
     ) {
-      const response = NextResponse.json(
+      const response = jsonResponse(
         {
           success: false,
           error: "Authentication required",
           loginRequired: true,
           message: "Please login to continue using state cutoffs.",
         },
-        {
-          status: 401,
-          headers: {
-            "Cache-Control": "no-store",
-            "X-Content-Type-Options": "nosniff",
-          },
-        },
+        { status: 401 },
       );
       response.cookies.set(
         ANONYMOUS_STATE_CUTOFF_API_COOKIE,
         String(currentAnonymousRequestCount),
         ANONYMOUS_API_COOKIE_OPTIONS,
       );
+      scheduleUsage("rejected");
       return response;
     }
-
-    const {
-      page = 1,
-      perPage = 25,
-      search = "",
-      categories = [],
-      courses = [],
-      statuses = [],
-      homeUniversities = [],
-      percentileInput = "",
-      round = 1,
-      year = 2025, // Add year to destructuring
-      sortBy = "last_rank",
-      sortOrder = "desc",
-    } = body;
 
     const sanitizedYear =
       Number.isInteger(year) && ROUNDS_BY_YEAR[year] ? year : 2025;
@@ -104,30 +215,49 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Call the server action
-    const result = await getCutoffRecords(
-      page,
-      perPage,
-      search,
-      categories,
-      courses,
-      statuses,
-      homeUniversities,
-      percentileInput,
-      sanitizedRound,
-      sanitizedYear,
-      sortBy,
-      sortOrder,
-    );
+    const result = profile
+      ? await getProfiledCutoffRecords({
+          page,
+          perPage,
+          search,
+          categories,
+          courses,
+          statuses,
+          homeUniversities,
+          scoreMode: scoreMode === "rank" ? "rank" : "percentile",
+          scoreValue: scoreValue || percentileInput,
+          round: sanitizedRound,
+          year: sanitizedYear,
+          profile,
+        })
+      : await getCutoffRecords(
+          page,
+          perPage,
+          search,
+          categories,
+          courses,
+          statuses,
+          homeUniversities,
+          percentileInput,
+          sanitizedRound,
+          sanitizedYear,
+          sortBy,
+          sortOrder,
+        );
 
-    const response = NextResponse.json(result);
+    const response = jsonResponse(stripPrivateErrorDetails(result), {
+      status:
+        !result.success && "fieldErrors" in result
+          ? 400
+          : 200,
+    });
 
     if (isAuthenticated) {
       response.cookies.set(ANONYMOUS_STATE_CUTOFF_API_COOKIE, "", {
         ...ANONYMOUS_API_COOKIE_OPTIONS,
         maxAge: 0,
       });
-    } else {
+    } else if (requestKind === "search") {
       response.cookies.set(
         ANONYMOUS_STATE_CUTOFF_API_COOKIE,
         String(currentAnonymousRequestCount + 1),
@@ -135,14 +265,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    scheduleUsage(result.success ? "served" : "failed");
     return response;
   } catch (error: unknown) {
     console.error("API Route Error:", error);
-    return NextResponse.json(
+    scheduleUsage("failed");
+    return jsonResponse(
       {
         success: false,
         error: "Failed to fetch cutoff data",
-        details: error instanceof Error ? error.message : "Unknown error",
+        message: "The cutoff request could not be completed. Try again.",
       },
       { status: 500 },
     );

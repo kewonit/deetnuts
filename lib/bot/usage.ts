@@ -4,6 +4,7 @@ export const BOT_USAGE_EVENT_NAMES = [
   "cutoff_request",
   "cutoff_query",
   "worker_heartbeat",
+  "state_cutoff_search",
 ] as const;
 
 export const BOT_USAGE_STATUSES = [
@@ -21,11 +22,13 @@ export type BotUsageStatus = (typeof BOT_USAGE_STATUSES)[number];
 export interface BotUsageEvent {
   requestId: string;
   externalId?: string | null;
-  platform: "discord" | "reddit" | "api" | "worker";
+  platform: "discord" | "reddit" | "api" | "worker" | "web";
   source?: string | null;
   eventName: BotUsageEventName;
   status: BotUsageStatus;
   percentile?: number | null;
+  scoreMode?: "rank" | "percentile" | null;
+  scoreValue?: number | null;
   year?: number | null;
   round?: number | null;
   resultCount?: number | null;
@@ -51,6 +54,8 @@ export async function logBotUsageEvent(event: BotUsageEvent) {
     event_name: event.eventName,
     status: event.status,
     percentile: event.percentile ?? null,
+    score_mode: event.scoreMode ?? null,
+    score_value: event.scoreValue ?? null,
     year: event.year ?? null,
     round: event.round ?? null,
     result_count: event.resultCount ?? null,

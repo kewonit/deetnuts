@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 
 import Navbar from "@/components/Navbar";
-import DiscordHeader from "@/components/DiscordHeader";
 import Footer from "@/components/footer";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import GrainEffect from "@/components/graineffect";
@@ -19,6 +18,7 @@ import SiteJsonLd from "@/components/SiteJsonLd";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  applicationName: "DEETNUTS",
   title: {
     default: "DEETNUTS - College Data Simplified",
     template: "%s | DEETNUTS",
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
         alt: "DEETNUTS - Mildly important college data simplified",
       },
     ],
-    locale: "en_US",
+    locale: "en_IN",
     type: "website",
   },
   twitter: {
@@ -78,7 +78,7 @@ export const metadata: Metadata = {
     images: [
       "https://res.cloudinary.com/dfyrk32ua/image/upload/v1722186653/deetnuts/preview_o5ykn7.png",
     ],
-    creator: "@deetnuts",
+    creator: "@kewonit",
   },
   alternates: {
     canonical: "https://deetnuts.com",
@@ -106,9 +106,7 @@ export default function RootLayout({
         className={`${inter.className} relative min-h-screen overflow-x-hidden`}
       >
         <NuqsAdapter>
-          <Navbar>
-            <DiscordHeader />
-          </Navbar>
+          <Navbar />
           <Suspense fallback={<Loading />}>
             <MotionWrapper>
               <NextTopLoader

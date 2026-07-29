@@ -10,14 +10,14 @@ const pb = new PocketBase(
 pb.autoCancellation(false);
 
 async function main() {
-  console.log("🔐 Authenticating...");
+  console.log(" Authenticating...");
   await pb
     .collection("_superusers")
     .authWithPassword(
       process.env.POCKETBASE_ADMIN_EMAIL!,
       process.env.POCKETBASE_ADMIN_PASSWORD!,
     );
-  console.log("✓ Auth OK\n");
+  console.log(" Auth OK\n");
 
   // Get cutoff schema
   const cutoffCollection = await pb.collections.getOne("josaa_cutoffs");

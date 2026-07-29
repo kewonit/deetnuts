@@ -3,6 +3,8 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { toast } from "sonner";
 import { CutoffRecord } from "../types";
+import type { CandidateProfileMetadata } from "../types";
+import type { MhtCetCandidateProfile } from "@/lib/mht-cet/state-cutoffs/candidate-profile";
 import { getDisplayNameForRound } from "../constants";
 import { type SearchInsight } from "../search-insights";
 
@@ -15,6 +17,9 @@ interface FetchParams {
   statuses: string[];
   homeUniversities: string[];
   percentileInput: string;
+  scoreMode?: "percentile" | "rank";
+  scoreValue?: string;
+  profile?: MhtCetCandidateProfile;
   round: number;
   year: number;
   sortBy: string;
@@ -32,6 +37,7 @@ interface UseCutoffDataReturn {
   paginationLoading: boolean;
   hasFetched: boolean;
   searchInsight: SearchInsight | null;
+  profileMetadata: CandidateProfileMetadata | null;
   error: string | null;
   fetchData: (params: FetchParams, options?: FetchOptions) => Promise<void>;
   prefetchNextPage: (params: FetchParams) => void;
@@ -50,6 +56,8 @@ export function useCutoffData(): UseCutoffDataReturn {
   const [searchInsight, setSearchInsight] = useState<SearchInsight | null>(
     null,
   );
+  const [profileMetadata, setProfileMetadata] =
+    useState<CandidateProfileMetadata | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -60,6 +68,7 @@ export function useCutoffData(): UseCutoffDataReturn {
         data: CutoffRecord[];
         totalItems: number;
         searchInsight: SearchInsight | null;
+        profileMetadata: CandidateProfileMetadata | null;
         timestamp: number;
       }
     >
@@ -104,9 +113,9 @@ export function useCutoffData(): UseCutoffDataReturn {
       signal: prefetchControllerRef.current.signal,
       headers: {
         "Content-Type": "application/json",
-        "Cache-Control": "public, max-age=300",
+        Accept: "application/json",
       },
-      body: JSON.stringify(nextParams),
+      body: JSON.stringify({ ...nextParams, requestKind: "prefetch" }),
     })
       .then((res) => res.json())
       .then((result) => {
@@ -125,6 +134,7 @@ export function useCutoffData(): UseCutoffDataReturn {
             data: result.data,
             totalItems: result.totalItems,
             searchInsight: result.searchInsight ?? null,
+            profileMetadata: result.profileMetadata ?? null,
             timestamp: Date.now(),
           });
         }
@@ -138,36 +148,49 @@ export function useCutoffData(): UseCutoffDataReturn {
     async (params: FetchParams, options?: FetchOptions) => {
       const shouldPrefetch = options?.prefetch ?? true;
 
-      // Don't fetch if no percentile
+      // The legacy API uses percentileInput; profiled queries use it as the
+      // required score-value guard for either score mode.
       if (!params.percentileInput || params.percentileInput.trim() === "") {
+        abortControllerRef.current?.abort();
+        prefetchControllerRef.current?.abort();
+        requestIdRef.current += 1;
+        lastParamsRef.current = "";
+        lastRecordsRef.current = [];
+        lastTotalItemsRef.current = 0;
         setRecords([]);
         setTotalItems(0);
         setHasFetched(false);
         setSearchInsight(null);
+        setProfileMetadata(null);
+        setError(null);
         setLoading(false);
         setPaginationLoading(false);
         return;
       }
 
       const cacheKey = JSON.stringify(params);
-      const paramsKey = `${params.search}-${params.categories.join(",")}-${params.courses.join(",")}-${params.statuses.join(",")}-${params.homeUniversities.join(",")}-${params.percentileInput}-${params.round}-${params.year}`;
+      const paramsKey = JSON.stringify({
+        ...params,
+        page: undefined,
+        perPage: undefined,
+      });
       const isOnlyPaginationChange = lastParamsRef.current === paramsKey;
 
       // Check cache first
       if (cacheRef.current.has(cacheKey)) {
+        abortControllerRef.current?.abort();
+        requestIdRef.current += 1;
         const cached = cacheRef.current.get(cacheKey)!;
-        // Only update if data actually changed
-        if (
-          JSON.stringify(cached.data) !==
-            JSON.stringify(lastRecordsRef.current) ||
-          cached.totalItems !== lastTotalItemsRef.current
-        ) {
-          lastRecordsRef.current = cached.data;
-          lastTotalItemsRef.current = cached.totalItems;
-          setRecords(cached.data);
-          setTotalItems(cached.totalItems);
-          setSearchInsight(cached.searchInsight);
-        }
+        lastRecordsRef.current = cached.data;
+        lastTotalItemsRef.current = cached.totalItems;
+        setRecords(cached.data);
+        setTotalItems(cached.totalItems);
+        setSearchInsight(cached.searchInsight);
+        setProfileMetadata(cached.profileMetadata);
+        setHasFetched(true);
+        setError(null);
+        setLoading(false);
+        setPaginationLoading(false);
         // Prefetch next page after cache hit
         if (shouldPrefetch) {
           prefetchNextPage(params);
@@ -175,10 +198,8 @@ export function useCutoffData(): UseCutoffDataReturn {
         return;
       }
 
-      // Abort previous request if filter params changed
-      if (abortControllerRef.current && !isOnlyPaginationChange) {
-        abortControllerRef.current.abort();
-      }
+      // Every request supersedes the previous one, including pagination.
+      abortControllerRef.current?.abort();
 
       lastParamsRef.current = paramsKey;
       const requestId = ++requestIdRef.current;
@@ -199,9 +220,12 @@ export function useCutoffData(): UseCutoffDataReturn {
           signal: abortControllerRef.current.signal,
           headers: {
             "Content-Type": "application/json",
-            "Cache-Control": "public, max-age=300",
+            Accept: "application/json",
           },
-          body: JSON.stringify(params),
+          body: JSON.stringify({
+            ...params,
+            requestKind: isOnlyPaginationChange ? "pagination" : "search",
+          }),
         });
 
         if (requestId !== requestIdRef.current) return;
@@ -216,6 +240,7 @@ export function useCutoffData(): UseCutoffDataReturn {
               result.message || "Please login to continue using state cutoffs.";
             if (isMountedRef.current) {
               setSearchInsight(null);
+              setProfileMetadata(null);
               setError(userMessage);
             }
             toast.error(userMessage);
@@ -238,6 +263,7 @@ export function useCutoffData(): UseCutoffDataReturn {
 
           if (isMountedRef.current) {
             setSearchInsight(null);
+            setProfileMetadata(null);
             setError(userMessage);
           }
 
@@ -266,6 +292,7 @@ export function useCutoffData(): UseCutoffDataReturn {
           data: result.data,
           totalItems: result.totalItems,
           searchInsight: result.searchInsight ?? null,
+          profileMetadata: result.profileMetadata ?? null,
           timestamp: Date.now(),
         });
 
@@ -276,6 +303,7 @@ export function useCutoffData(): UseCutoffDataReturn {
           setRecords(result.data);
           setTotalItems(result.totalItems);
           setSearchInsight(result.searchInsight ?? null);
+          setProfileMetadata(result.profileMetadata ?? null);
           setHasFetched(true);
         }
 
@@ -283,11 +311,12 @@ export function useCutoffData(): UseCutoffDataReturn {
         if (shouldPrefetch) {
           prefetchNextPage(params);
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         if (requestId !== requestIdRef.current) return;
-        if (err.name === "AbortError") return;
+        if (err instanceof Error && err.name === "AbortError") return;
 
-        const errorMessage = err?.message || "Something went wrong";
+        const errorMessage =
+          err instanceof Error ? err.message : "Something went wrong";
 
         if (
           errorMessage.includes("Authentication required") ||
@@ -299,6 +328,7 @@ export function useCutoffData(): UseCutoffDataReturn {
         }
         setError(errorMessage);
         setSearchInsight(null);
+        setProfileMetadata(null);
 
         if (
           errorMessage.includes("network") ||
@@ -337,6 +367,7 @@ export function useCutoffData(): UseCutoffDataReturn {
     paginationLoading,
     hasFetched,
     searchInsight,
+    profileMetadata,
     error,
     fetchData,
     prefetchNextPage,

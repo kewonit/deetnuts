@@ -10,14 +10,14 @@ const pb = new PocketBase(
 pb.autoCancellation(false);
 
 async function main() {
-  console.log("🔐 Authenticating...");
+  console.log(" Authenticating...");
   await pb
     .collection("_superusers")
     .authWithPassword(
       process.env.POCKETBASE_ADMIN_EMAIL!,
       process.env.POCKETBASE_ADMIN_PASSWORD!,
     );
-  console.log("✓ Auth OK\n");
+  console.log(" Auth OK\n");
 
   // Get institutes with original_id set
   const institutes = await pb.collection("josaa_institutes").getList(1, 5, {
@@ -43,7 +43,7 @@ async function main() {
   // Test lookup: Get cutoffs for first institute with original_id
   if (institutes.items.length > 0) {
     const originalId = (institutes.items[0] as any).original_id;
-    console.log("\n📊 Looking up cutoffs for original_id:", originalId);
+    console.log("\n Looking up cutoffs for original_id:", originalId);
     const cutoffs = await pb.collection("josaa_cutoffs").getList(1, 3, {
       filter: `institute_id = '${originalId}'`,
     });

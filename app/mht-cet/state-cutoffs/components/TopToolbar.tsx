@@ -27,7 +27,11 @@ import {
   DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { getDisplayNameForRound } from "../constants";
+import {
+  getDisplayNameForRound,
+  ROUNDS_BY_YEAR,
+  YEAR_OPTIONS,
+} from "../constants";
 import { toast } from "sonner";
 import { CutoffRecord } from "../types";
 
@@ -39,6 +43,9 @@ interface TopToolbarProps {
   year: number;
   round: number;
   loading: boolean;
+  queryReady: boolean;
+  onYearChange: (year: number) => void;
+  onRoundChange: (round: number) => void;
 
   // Search
   search: string;
@@ -64,6 +71,8 @@ interface TopToolbarProps {
     statuses: string[];
     universities: string[];
   };
+  profileLabel?: string;
+  fixedSortLabel?: string;
   onRemoveFilter: (
     type: "categories" | "courses" | "statuses" | "universities",
     value: string,
@@ -104,6 +113,9 @@ export const TopToolbar = memo(function TopToolbar({
   year,
   round,
   loading,
+  queryReady,
+  onYearChange,
+  onRoundChange,
   search,
   onSearchChange,
   sortBy,
@@ -114,11 +126,15 @@ export const TopToolbar = memo(function TopToolbar({
   visibleColumns,
   onColumnVisibilityChange,
   activeFilters,
+  profileLabel,
+  fixedSortLabel,
   onRemoveFilter,
   records,
   onBeforeAction,
   className,
 }: TopToolbarProps) {
+  const allowedRounds = ROUNDS_BY_YEAR[year] ?? [1];
+
   // Export to CSV
   const handleExport = useCallback(() => {
     if (onBeforeAction && !onBeforeAction()) {
@@ -198,13 +214,6 @@ export const TopToolbar = memo(function TopToolbar({
     }
   }, [onBeforeAction]);
 
-  // Count total active filter pills
-  const totalFilterPills =
-    activeFilters.categories.length +
-    activeFilters.courses.length +
-    activeFilters.statuses.length +
-    activeFilters.universities.length;
-
   const startItem = (currentPage - 1) * perPage + 1;
   const endItem = Math.min(currentPage * perPage, totalItems);
 
@@ -233,7 +242,7 @@ export const TopToolbar = memo(function TopToolbar({
                 <div className="h-4 w-4 border-2 border-purple-600 border-t-transparent rounded-full animate-spin" />
                 <span className="text-sm text-gray-500">Loading...</span>
               </div>
-            ) : (
+            ) : queryReady ? (
               <>
                 <span className="text-sm font-medium text-gray-700">
                   {totalItems > 0 ? (
@@ -250,14 +259,8 @@ export const TopToolbar = memo(function TopToolbar({
                     <span className="text-gray-500">No results</span>
                   )}
                 </span>
-                <Badge
-                  variant="neutral"
-                  className="bg-gray-100 text-gray-600 border-gray-200 text-xs"
-                >
-                  {year} {getDisplayNameForRound(round)}
-                </Badge>
               </>
-            )}
+            ) : null}
           </div>
         </div>
 
@@ -283,42 +286,52 @@ export const TopToolbar = memo(function TopToolbar({
           </div>
 
           {/* Sort Dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="neutral" size="sm" className="h-9 gap-2">
-                <ArrowUpDown className="h-4 w-4" />
-                <span className="hidden sm:inline">Sort</span>
-                <ChevronDown className="h-3 w-3" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuLabel>Sort by</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {SORT_OPTIONS.map((option) => (
-                <DropdownMenuItem
-                  key={option.value}
-                  onClick={() =>
-                    onSortChange(
-                      option.value,
-                      sortBy === option.value
-                        ? sortOrder === "asc"
-                          ? "desc"
-                          : "asc"
-                        : "desc",
-                    )
-                  }
-                  className="flex items-center justify-between"
-                >
-                  <span>{option.label}</span>
-                  {sortBy === option.value && (
-                    <Badge variant="neutral" className="text-xs">
-                      {sortOrder === "asc" ? "↑" : "↓"}
-                    </Badge>
-                  )}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {fixedSortLabel ? (
+            <Badge
+              variant="neutral"
+              className="h-9 border-gray-300 bg-white px-3 text-gray-600"
+            >
+              <ArrowUpDown className="mr-1.5 h-4 w-4" />
+              {fixedSortLabel}
+            </Badge>
+          ) : (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="neutral" size="sm" className="h-9 gap-2">
+                  <ArrowUpDown className="h-4 w-4" />
+                  <span className="hidden sm:inline">Sort</span>
+                  <ChevronDown className="h-3 w-3" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuLabel>Sort by</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {SORT_OPTIONS.map((option) => (
+                  <DropdownMenuItem
+                    key={option.value}
+                    onClick={() =>
+                      onSortChange(
+                        option.value,
+                        sortBy === option.value
+                          ? sortOrder === "asc"
+                            ? "desc"
+                            : "asc"
+                          : "desc",
+                      )
+                    }
+                    className="flex items-center justify-between"
+                  >
+                    <span>{option.label}</span>
+                    {sortBy === option.value && (
+                      <Badge variant="neutral" className="text-xs">
+                        {sortOrder === "asc" ? "↑" : "↓"}
+                      </Badge>
+                    )}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
 
           {/* Density Toggle */}
           <DropdownMenu>
@@ -410,62 +423,103 @@ export const TopToolbar = memo(function TopToolbar({
       </div>
 
       {/* Active Filter Pills */}
-      {totalFilterPills > 0 && (
-        <div className="flex flex-wrap gap-2 items-center">
-          <span className="text-xs text-gray-500 font-medium flex items-center gap-1">
-            <SlidersHorizontal className="h-3 w-3" />
-            Filters:
-          </span>
+      <div className="flex min-h-7 flex-wrap items-center gap-2">
+        <span className="text-xs text-gray-500 font-medium flex items-center gap-1">
+          <SlidersHorizontal className="h-3 w-3" />
+          Filters:
+        </span>
 
-          {activeFilters.categories.map((cat) => (
-            <Badge
-              key={`cat-${cat}`}
-              variant="neutral"
-              className="bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 cursor-pointer gap-1 pr-1"
-              onClick={() => onRemoveFilter("categories", cat)}
-            >
-              {cat}
-              <X className="h-3 w-3 hover:bg-blue-200 rounded" />
-            </Badge>
-          ))}
+        {profileLabel ? (
+          <Badge
+            variant="neutral"
+            className="bg-purple-100 text-purple-800 border-purple-300"
+          >
+            Candidate: {profileLabel}
+          </Badge>
+        ) : null}
 
-          {activeFilters.courses.map((course) => (
-            <Badge
-              key={`course-${course}`}
-              variant="neutral"
-              className="bg-green-50 text-green-700 border-green-200 hover:bg-green-100 cursor-pointer gap-1 pr-1"
-              onClick={() => onRemoveFilter("courses", course)}
-            >
-              {course.length > 25 ? course.slice(0, 25) + "..." : course}
-              <X className="h-3 w-3 hover:bg-green-200 rounded" />
-            </Badge>
-          ))}
+        {activeFilters.categories.map((cat) => (
+          <Badge
+            key={`cat-${cat}`}
+            variant="neutral"
+            className="bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 cursor-pointer gap-1 pr-1"
+            onClick={() => onRemoveFilter("categories", cat)}
+          >
+            {cat}
+            <X className="h-3 w-3 hover:bg-blue-200 rounded" />
+          </Badge>
+        ))}
 
-          {activeFilters.statuses.map((status) => (
-            <Badge
-              key={`status-${status}`}
-              variant="neutral"
-              className="bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100 cursor-pointer gap-1 pr-1"
-              onClick={() => onRemoveFilter("statuses", status)}
-            >
-              {status.length > 20 ? status.slice(0, 20) + "..." : status}
-              <X className="h-3 w-3 hover:bg-orange-200 rounded" />
-            </Badge>
-          ))}
+        {activeFilters.courses.map((course) => (
+          <Badge
+            key={`course-${course}`}
+            variant="neutral"
+            className="bg-green-50 text-green-700 border-green-200 hover:bg-green-100 cursor-pointer gap-1 pr-1"
+            onClick={() => onRemoveFilter("courses", course)}
+          >
+            {course.length > 25 ? course.slice(0, 25) + "..." : course}
+            <X className="h-3 w-3 hover:bg-green-200 rounded" />
+          </Badge>
+        ))}
 
-          {activeFilters.universities.map((uni) => (
-            <Badge
-              key={`uni-${uni}`}
-              variant="neutral"
-              className="bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100 cursor-pointer gap-1 pr-1"
-              onClick={() => onRemoveFilter("universities", uni)}
-            >
-              {uni.length > 20 ? uni.slice(0, 20) + "..." : uni}
-              <X className="h-3 w-3 hover:bg-purple-200 rounded" />
-            </Badge>
-          ))}
+        {activeFilters.statuses.map((status) => (
+          <Badge
+            key={`status-${status}`}
+            variant="neutral"
+            className="bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100 cursor-pointer gap-1 pr-1"
+            onClick={() => onRemoveFilter("statuses", status)}
+          >
+            {status.length > 20 ? status.slice(0, 20) + "..." : status}
+            <X className="h-3 w-3 hover:bg-orange-200 rounded" />
+          </Badge>
+        ))}
+
+        {activeFilters.universities.map((uni) => (
+          <Badge
+            key={`uni-${uni}`}
+            variant="neutral"
+            className="bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100 cursor-pointer gap-1 pr-1"
+            onClick={() => onRemoveFilter("universities", uni)}
+          >
+            {uni.length > 20 ? uni.slice(0, 20) + "..." : uni}
+            <X className="h-3 w-3 hover:bg-purple-200 rounded" />
+          </Badge>
+        ))}
+
+        <div className="ml-auto flex items-center gap-1">
+          <label htmlFor="toolbar-cutoff-year" className="sr-only">
+            Cutoff year
+          </label>
+          <select
+            id="toolbar-cutoff-year"
+            value={year}
+            onChange={(event) => onYearChange(Number(event.target.value))}
+            className="h-7 w-[68px] rounded-md border border-gray-300 bg-white px-1.5 text-xs font-medium text-gray-800 outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+          >
+            {YEAR_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+
+          <label htmlFor="toolbar-cutoff-round" className="sr-only">
+            CAP round
+          </label>
+          <select
+            id="toolbar-cutoff-round"
+            value={round}
+            onChange={(event) => onRoundChange(Number(event.target.value))}
+            className="h-7 w-[50px] rounded-md border border-gray-300 bg-white px-1.5 text-xs font-medium text-gray-800 outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+          >
+            {allowedRounds.map((availableRound) => (
+              <option key={availableRound} value={availableRound}>
+                R{availableRound}
+              </option>
+            ))}
+          </select>
         </div>
-      )}
+      </div>
     </div>
   );
 });

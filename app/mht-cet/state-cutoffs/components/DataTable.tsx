@@ -55,6 +55,7 @@ interface DataTableProps {
   search: string;
   searchInsight?: SearchInsight | null;
   percentileTarget: string;
+  hasActiveQuery: boolean;
   density: "compact" | "comfortable" | "spacious";
   visibleColumns: string[];
   sortBy: string;
@@ -411,6 +412,7 @@ export const DataTable = memo(function DataTable({
   search,
   searchInsight,
   percentileTarget,
+  hasActiveQuery,
   density,
   visibleColumns,
   sortBy,
@@ -804,8 +806,12 @@ export const DataTable = memo(function DataTable({
   const { rows } = table.getRowModel();
   const totalPages = Math.ceil(totalItems / perPage);
 
-  // Show empty state if no records
-  if (!loading && records.length === 0) {
+  if (!hasActiveQuery && !loading && !error) {
+    return null;
+  }
+
+  // Show errors before stale records, or the normal empty state.
+  if (!loading && (error || records.length === 0)) {
     const authError =
       !!error &&
       (error.toLowerCase().includes("auth") ||
@@ -813,7 +819,7 @@ export const DataTable = memo(function DataTable({
 
     return (
       <div className="border-2 border-gray-200 rounded-xl bg-white overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]">
-        {authError ? (
+        {error ? (
           <div className="flex flex-col items-center justify-center py-16 px-4">
             <div className="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mb-4">
               <svg
@@ -831,16 +837,17 @@ export const DataTable = memo(function DataTable({
               </svg>
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-1">
-              Login required
+              {authError ? "Login required" : "Unable to load cutoffs"}
             </h3>
             <p className="text-sm text-gray-500 text-center max-w-sm">
-              Please log in to view state cutoff data, then run your search
-              again.
+              {authError
+                ? "Please log in to view state cutoff data, then run your search again."
+                : error}
             </p>
           </div>
         ) : (
           <EmptyState
-            hasFilters={!!percentileTarget}
+            hasFilters={hasActiveQuery}
             search={search}
             searchInsight={searchInsight}
             percentileTarget={percentileTarget}

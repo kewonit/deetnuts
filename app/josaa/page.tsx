@@ -16,11 +16,13 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "JoSAA Cutoffs Explorer | DEETNUTS",
+  title: "JoSAA 2026 Counselling | 2018–2025 Cutoff Explorer",
   description:
-    "Explore JEE Main & Advanced cutoffs for IITs, NITs, IIITs and GFTIs. View historical trends, compare branches, and find your best college options.",
+    "Plan JoSAA 2026 counselling with JEE Main and Advanced cutoffs from 2018–2025 for IITs, NITs, IIITs and GFTIs. Compare branches and historical trends.",
   keywords: [
     "JoSAA",
+    "JoSAA 2026 counselling",
+    "JoSAA 2025 cutoffs",
     "JEE Advanced cutoffs",
     "JEE Main cutoffs",
     "IIT cutoffs",
@@ -31,9 +33,9 @@ export const metadata: Metadata = {
     "engineering admission",
   ],
   openGraph: {
-    title: "JoSAA Cutoffs Explorer | DEETNUTS",
+    title: "JoSAA 2026 Counselling | 2018–2025 Cutoff Explorer",
     description:
-      "Comprehensive JoSAA cutoff data for IITs, NITs, IIITs and GFTIs with trend analysis.",
+      "Plan JoSAA 2026 counselling with historical 2018–2025 cutoff data for IITs, NITs, IIITs and GFTIs.",
     url: "https://deetnuts.com/josaa",
     type: "website",
   },

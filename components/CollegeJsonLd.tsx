@@ -1,6 +1,7 @@
 // components/CollegeJsonLd.tsx
 // Enhanced structured data for MHT-CET college pages
 import { College } from "@/lib/college-data";
+import { serializeJsonLd } from "@/lib/json-ld";
 import { createCollegeSlug } from "@/lib/slugify";
 
 interface CollegeJsonLdProps {
@@ -26,7 +27,7 @@ export default function CollegeJsonLd({ college, slug }: CollegeJsonLdProps) {
       addressRegion: "Maharashtra",
       addressCountry: "IN",
     },
-    description: `${college.college_name} - View MHT-CET cutoffs, seat matrix, and admission data for 2025.`,
+    description: `${college.college_name} - Use available 2024 MHT-CET cutoffs and seat data to plan 2026 admissions.`,
     ...(college.home_university && {
       parentOrganization: {
         "@type": "EducationalOrganization",
@@ -65,11 +66,11 @@ export default function CollegeJsonLd({ college, slug }: CollegeJsonLdProps) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbData) }}
       />
     </>
   );

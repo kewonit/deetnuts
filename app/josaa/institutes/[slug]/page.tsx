@@ -55,7 +55,7 @@ export async function generateMetadata({
   const canonicalUrl = `https://deetnuts.com/josaa/institutes/${slug}`;
 
   return {
-    title: `${institute.short_name} Cutoffs | JoSAA | DEETNUTS`,
+    title: `${institute.short_name} Cutoffs | JoSAA`,
     description: `View JoSAA cutoffs, branch comparisons, and historical trends for ${institute.name}. Find opening and closing ranks for all categories.`,
     keywords: [
       institute.short_name,

@@ -10,32 +10,48 @@ import {
 } from "react";
 import {
   useQueryState,
+  useQueryStates,
+  parseAsBoolean,
   parseAsInteger,
   parseAsString,
   parseAsArrayOf,
   parseAsStringLiteral,
 } from "nuqs";
 import dynamic from "next/dynamic";
-import {
-  Menu,
-  X,
-  Sparkles,
-  TrendingUp,
-  GraduationCap,
-  Building2,
-} from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/utils/supabase/client";
-import { FilterSidebar } from "./components/FilterSidebar";
+import {
+  FilterSidebar,
+  type FilterSidebarProps,
+} from "./components/FilterSidebar";
 import { LoginRequiredDialog } from "./components/LoginRequiredDialog";
 import { MobileFilterToast } from "./components/MobileFilterToast";
 import { TopToolbar } from "./components/TopToolbar";
 import { useCutoffData } from "./hooks/use-cutoff-data";
 import { recordAnonymousStateCutoffAction } from "./anonymous-usage";
-import { getDisplayNameForRound } from "./constants";
+import { ROUNDS_BY_YEAR } from "./constants";
+import {
+  MHT_CET_CANDIDATURE_OPTIONS,
+  MHT_CET_CATEGORY_OPTIONS,
+  MHT_CET_HOME_UNIVERSITIES,
+  MHT_CET_CANDIDATURE_IDS,
+  MHT_CET_CATEGORY_IDS,
+  MHT_CET_HOME_UNIVERSITY_IDS,
+  MHT_CET_MINORITY_IDS,
+  MhtCetCandidateProfileSchema,
+  deriveEligibleSeatPools,
+  groupEligibleSeatPoolCodes,
+  isCandidateScoreValid,
+  type MhtCetCandidatureType,
+  type MhtCetCategoryId,
+  type MhtCetHomeUniversityId,
+  type MhtCetMinorityCommunityId,
+} from "@/lib/mht-cet/state-cutoffs/candidate-profile";
 import { getClampedPage } from "./pagination";
 import { shouldAutoDismissMobileFilterToast } from "./mobile-filter-toast-controller";
 
@@ -64,53 +80,9 @@ const DEFAULT_COLUMNS = [
   "total_admitted",
 ];
 
-const ESTIMATED_MAX_RANK = 300000; // used to approximate percentile from rank
-
-function rankToPercentile(rank: string) {
-  const n = parseFloat(rank);
-  if (isNaN(n) || n <= 0) return "";
-  const pct = 100 - (n / ESTIMATED_MAX_RANK) * 100;
-  return Math.max(0, Math.min(100, pct)).toFixed(6);
-}
-
-// Stats Card Component
-function StatsCard({
-  icon: Icon,
-  label,
-  value,
-  color,
-}: {
-  icon: React.ElementType;
-  label: string;
-  value: string | number;
-  color: string;
-}) {
-  return (
-    <div
-      className={cn(
-        "flex items-center gap-3 px-4 py-3 rounded-xl border-2",
-        "bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]",
-        color,
-      )}
-    >
-      <div
-        className={cn(
-          "p-2 rounded-lg",
-          color.replace("border-", "bg-").replace("-500", "-100"),
-        )}
-      >
-        <Icon className={cn("h-4 w-4", color.replace("border-", "text-"))} />
-      </div>
-      <div>
-        <p className="text-xs text-gray-500 font-medium">{label}</p>
-        <p className="text-lg font-bold text-gray-900">{value}</p>
-      </div>
-    </div>
-  );
-}
-
 // Main Page Content Component
 function StateCutoffsContent() {
+  const searchParams = useSearchParams();
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [loginGateOpen, setLoginGateOpen] = useState(false);
   const [loginRedirectTo, setLoginRedirectTo] = useState(
@@ -119,25 +91,9 @@ function StateCutoffsContent() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   // URL State with nuqs
-  const [percentile, setPercentile] = useQueryState(
-    "percentile",
-    parseAsString.withDefault(""),
-  );
   const [search, setSearch] = useQueryState(
     "search",
     parseAsString.withDefault(""),
-  );
-  const [year, setYear] = useQueryState(
-    "year",
-    parseAsInteger.withDefault(2025),
-  );
-  const [round, setRound] = useQueryState(
-    "round",
-    parseAsInteger.withDefault(1),
-  );
-  const [categories, setCategories] = useQueryState(
-    "categories",
-    parseAsArrayOf(parseAsString, ",").withDefault([]),
   );
   const [courses, setCourses] = useQueryState(
     "courses",
@@ -151,14 +107,52 @@ function StateCutoffsContent() {
     "universities",
     parseAsArrayOf(parseAsString, ",").withDefault([]),
   );
-  const [scoreMode, setScoreMode] = useQueryState(
-    "scoreMode",
-    parseAsStringLiteral(["percentile", "rank"] as const).withDefault(
-      "percentile",
-    ),
+  const [profileParams, setProfileParams] = useQueryStates(
+    {
+      percentile: parseAsString.withDefault(""),
+      scoreMode: parseAsStringLiteral([
+        "percentile",
+        "rank",
+      ] as const).withDefault("rank"),
+      rank: parseAsString.withDefault(""),
+      year: parseAsInteger.withDefault(2025),
+      round: parseAsInteger.withDefault(1),
+      mht_candidature: parseAsStringLiteral(
+        MHT_CET_CANDIDATURE_IDS,
+      ),
+      mht_home_university: parseAsStringLiteral(
+        MHT_CET_HOME_UNIVERSITY_IDS,
+      ),
+      mht_category: parseAsStringLiteral(
+        MHT_CET_CATEGORY_IDS,
+      ),
+      mht_ladies: parseAsBoolean,
+      ews: parseAsBoolean.withDefault(false),
+      mht_tfws: parseAsBoolean.withDefault(false),
+      mht_pwd: parseAsBoolean.withDefault(false),
+      mht_orphan: parseAsBoolean.withDefault(false),
+      mht_minority: parseAsStringLiteral(
+        MHT_CET_MINORITY_IDS,
+      ),
+      categories: parseAsArrayOf(parseAsString, ",").withDefault([]),
+      page: parseAsInteger.withDefault(1),
+    },
+    { history: "replace" },
   );
-  const [rank, setRank] = useQueryState("rank", parseAsString.withDefault(""));
-  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
+  const year = profileParams.year;
+  const round = profileParams.round;
+  const percentile = profileParams.percentile;
+  const scoreMode =
+    !searchParams.has("scoreMode") && percentile
+      ? "percentile"
+      : profileParams.scoreMode;
+  const rank = profileParams.rank;
+  const categories = profileParams.categories;
+  const page = profileParams.page;
+  const setPage = useCallback(
+    (value: number | null) => setProfileParams({ page: value }),
+    [setProfileParams],
+  );
   const [perPage, setPerPage] = useQueryState(
     "perPage",
     parseAsInteger.withDefault(25),
@@ -192,6 +186,7 @@ function StateCutoffsContent() {
     paginationLoading,
     hasFetched,
     searchInsight,
+    profileMetadata,
     error,
     fetchData,
     clearCache,
@@ -273,19 +268,106 @@ function StateCutoffsContent() {
     }
   }, [error, openLoginGate]);
 
-  // Derive percentile to fetch based on mode
-  const percentileForFetch = useMemo(() => {
-    if (scoreMode === "rank") {
-      if (!rank) return "";
-      return rankToPercentile(rank);
+  const scoreValue = scoreMode === "rank" ? rank : percentile;
+  const scoreIsValid = useMemo(
+    () => isCandidateScoreValid(scoreMode, scoreValue),
+    [scoreMode, scoreValue],
+  );
+  const parsedCandidateProfile = useMemo(
+    () =>
+      MhtCetCandidateProfileSchema.safeParse({
+        candidatureType: profileParams.mht_candidature,
+        homeUniversityId:
+          profileParams.mht_candidature === "type-e"
+            ? undefined
+            : profileParams.mht_home_university ?? undefined,
+        categoryId: profileParams.mht_category,
+        ladiesSeatEligible: profileParams.mht_ladies,
+        eligibilities: {
+          ewsCertificate: profileParams.ews,
+          tfwsEligible: profileParams.mht_tfws,
+          pwd: profileParams.mht_pwd,
+          orphanCertificate: profileParams.mht_orphan,
+          minorityCommunityId: profileParams.mht_minority ?? undefined,
+        },
+      }),
+    [profileParams],
+  );
+  const candidateProfile = parsedCandidateProfile.success
+    ? parsedCandidateProfile.data
+    : null;
+  const profileReady = candidateProfile !== null;
+  const derivedSeatPools = useMemo(
+    () =>
+      candidateProfile
+        ? deriveEligibleSeatPools(candidateProfile, categories)
+        : null,
+    [candidateProfile, categories],
+  );
+  const eligibleSeatPoolGroups = useMemo(
+    () =>
+      candidateProfile
+        ? groupEligibleSeatPoolCodes(
+            deriveEligibleSeatPools(candidateProfile).categoryCodes,
+          )
+        : {},
+    [candidateProfile],
+  );
+
+  useEffect(() => {
+    const incompatibleProfileValues: {
+      year?: number;
+      round?: number;
+      mht_home_university?: null;
+      mht_pwd?: false;
+      mht_minority?: null;
+      ews?: false;
+      categories?: null;
+      page?: number;
+    } = {};
+
+    if (!ROUNDS_BY_YEAR[year]) {
+      incompatibleProfileValues.year = 2025;
+      incompatibleProfileValues.round = 1;
+    } else if (!ROUNDS_BY_YEAR[year].includes(round)) {
+      incompatibleProfileValues.round = 1;
     }
-    return percentile;
-  }, [scoreMode, rank, percentile]);
+    if (profileParams.mht_candidature === "type-e") {
+      if (profileParams.mht_home_university) {
+        incompatibleProfileValues.mht_home_university = null;
+      }
+      if (profileParams.mht_pwd) {
+        incompatibleProfileValues.mht_pwd = false;
+      }
+    }
+    if (
+      profileParams.mht_candidature &&
+      profileParams.mht_candidature !== "type-a" &&
+      profileParams.mht_candidature !== "type-b" &&
+      profileParams.mht_minority
+    ) {
+      incompatibleProfileValues.mht_minority = null;
+    }
+    if (
+      profileParams.mht_category &&
+      profileParams.mht_category !== "open" &&
+      profileParams.ews
+    ) {
+      incompatibleProfileValues.ews = false;
+    }
+
+    if (Object.keys(incompatibleProfileValues).length > 0) {
+      incompatibleProfileValues.categories = null;
+      incompatibleProfileValues.page = 1;
+      void setProfileParams(incompatibleProfileValues);
+    }
+  }, [profileParams, round, setProfileParams, year]);
 
   // Computed values
   const activeFilterCount = useMemo(() => {
     let count = 0;
-    if (scoreMode === "rank" ? rank : percentile) count++;
+    if (scoreValue) count++;
+    if (profileReady) count++;
     if (search) count++;
     if (categories.length > 0) count++;
     if (courses.length > 0) count++;
@@ -293,9 +375,8 @@ function StateCutoffsContent() {
     if (universities.length > 0) count++;
     return count;
   }, [
-    scoreMode,
-    rank,
-    percentile,
+    scoreValue,
+    profileReady,
     search,
     categories,
     courses,
@@ -307,13 +388,6 @@ function StateCutoffsContent() {
     () => getClampedPage(page, perPage, totalItems),
     [page, perPage, totalItems],
   );
-
-  // Ensure round is valid for the selected year.
-  useEffect(() => {
-    if (year === 2024 && round > 3) {
-      setRound(1);
-    }
-  }, [year, round, setRound]);
 
   useEffect(() => {
     if (!hasFetched || loading || paginationLoading) {
@@ -328,9 +402,9 @@ function StateCutoffsContent() {
   // Fetch data when filters change (debounced)
   useEffect(() => {
     const fetchKey = JSON.stringify({
-      percentileForFetch,
+      scoreValue,
       scoreMode,
-      rank,
+      candidateProfile,
       search,
       year,
       round,
@@ -353,12 +427,27 @@ function StateCutoffsContent() {
       clearTimeout(debounceRef.current);
     }
 
+    if (!candidateProfile || !scoreIsValid) {
+      pendingUserFetchActionRef.current = false;
+      lastFetchRef.current = "";
+      void fetchData({
+        percentileInput: "",
+        search,
+        year,
+        round,
+        categories,
+        courses,
+        statuses,
+        homeUniversities: universities,
+        page: 1,
+        perPage,
+        sortBy,
+        sortOrder,
+      });
+      return;
+    }
+
     debounceRef.current = setTimeout(() => {
-      if (!percentileForFetch) {
-        // require an input in rank or percentile mode
-        pendingUserFetchActionRef.current = false;
-        return;
-      }
       if (shouldCountUserAction && !guardAnonymousAction()) {
         return;
       }
@@ -366,7 +455,10 @@ function StateCutoffsContent() {
       lastFetchRef.current = fetchKey;
       fetchData(
         {
-          percentileInput: percentileForFetch,
+          percentileInput: scoreValue,
+          scoreMode,
+          scoreValue,
+          profile: candidateProfile,
           search,
           year,
           round,
@@ -391,9 +483,10 @@ function StateCutoffsContent() {
       }
     };
   }, [
-    percentileForFetch,
+    scoreValue,
+    scoreIsValid,
     scoreMode,
-    rank,
+    candidateProfile,
     search,
     year,
     round,
@@ -415,28 +508,20 @@ function StateCutoffsContent() {
     markResultAction();
     clearCache();
     await Promise.all([
-      setPercentile(null),
-      setRank(null),
-      setScoreMode("percentile"),
+      setProfileParams(null),
       setSearch(null),
-      setCategories(null),
       setCourses(null),
       setStatuses(null),
       setUniversities(null),
-      setPage(1),
       setSortBy("cutoff_score"),
       setSortOrder("desc"),
     ]);
   }, [
-    setPercentile,
-    setRank,
-    setScoreMode,
+    setProfileParams,
     setSearch,
-    setCategories,
     setCourses,
     setStatuses,
     setUniversities,
-    setPage,
     setSortBy,
     setSortOrder,
     clearCache,
@@ -477,7 +562,10 @@ function StateCutoffsContent() {
       markResultAction();
       switch (type) {
         case "categories":
-          setCategories(categories.filter((c) => c !== value));
+          void setProfileParams({
+            categories: categories.filter((c) => c !== value),
+            page: 1,
+          });
           break;
         case "courses":
           setCourses(courses.filter((c) => c !== value));
@@ -489,17 +577,19 @@ function StateCutoffsContent() {
           setUniversities(universities.filter((u) => u !== value));
           break;
       }
-      setPage(1);
+      if (type !== "categories") {
+        setPage(1);
+      }
     },
     [
       categories,
       courses,
       statuses,
       universities,
-      setCategories,
       setCourses,
       setStatuses,
       setUniversities,
+      setProfileParams,
       setPage,
       markResultAction,
     ],
@@ -509,36 +599,36 @@ function StateCutoffsContent() {
   const handlePercentileChange = useCallback(
     (v: string) => {
       markResultAction();
-      setPercentile(v || null);
-      setPage(1);
+      void setProfileParams({ percentile: v || null, page: 1 });
     },
-    [markResultAction, setPercentile, setPage],
+    [markResultAction, setProfileParams],
   );
   const handleYearChange = useCallback(
     (v: number) => {
       markResultAction();
-      setYear(v);
-      setPage(1);
+      const nextRound = ROUNDS_BY_YEAR[v]?.includes(round) ? round : 1;
+      void setProfileParams({ year: v, round: nextRound, page: 1 });
       clearCache();
     },
-    [markResultAction, setYear, setPage, clearCache],
+    [markResultAction, round, setProfileParams, clearCache],
   );
   const handleRoundChange = useCallback(
     (v: number) => {
       markResultAction();
-      setRound(v);
-      setPage(1);
+      void setProfileParams({ round: v, page: 1 });
       clearCache();
     },
-    [markResultAction, setRound, setPage, clearCache],
+    [markResultAction, setProfileParams, clearCache],
   );
   const handleCategoriesChange = useCallback(
     (v: string[]) => {
       markResultAction();
-      setCategories(v.length > 0 ? v : null);
-      setPage(1);
+      void setProfileParams({
+        categories: v.length > 0 ? v : null,
+        page: 1,
+      });
     },
-    [markResultAction, setCategories, setPage],
+    [markResultAction, setProfileParams],
   );
   const handleCoursesChange = useCallback(
     (v: string[]) => {
@@ -567,18 +657,26 @@ function StateCutoffsContent() {
   const handleScoreModeChange = useCallback(
     (mode: "percentile" | "rank") => {
       markResultAction();
-      setScoreMode(mode);
-      setPage(1);
+      void setProfileParams({
+        scoreMode: mode,
+        percentile: mode === "rank" ? null : profileParams.percentile,
+        rank: mode === "percentile" ? null : profileParams.rank,
+        page: 1,
+      });
     },
-    [markResultAction, setScoreMode, setPage],
+    [
+      markResultAction,
+      profileParams.percentile,
+      profileParams.rank,
+      setProfileParams,
+    ],
   );
   const handleRankChange = useCallback(
     (v: string) => {
       markResultAction();
-      setRank(v || null);
-      setPage(1);
+      void setProfileParams({ rank: v || null, page: 1 });
     },
-    [markResultAction, setRank, setPage],
+    [markResultAction, setProfileParams],
   );
   const handleToolbarSearchChange = useCallback(
     (v: string) => {
@@ -592,9 +690,99 @@ function StateCutoffsContent() {
     (v: "compact" | "comfortable" | "spacious") => setDensity(v),
     [setDensity],
   );
+  const handleCandidateHomeUniversityChange = useCallback(
+    (value: MhtCetHomeUniversityId | "type-e") => {
+      markResultAction();
+      if (value === "type-e") {
+        void setProfileParams({
+          mht_candidature: "type-e",
+          mht_home_university: null,
+          mht_pwd: false,
+          mht_minority: null,
+          categories: null,
+          page: 1,
+        });
+      } else {
+        void setProfileParams({
+          mht_home_university: value,
+          mht_candidature:
+            profileParams.mht_candidature === "type-e"
+              ? null
+              : profileParams.mht_candidature,
+          categories: null,
+          page: 1,
+        });
+      }
+    },
+    [
+      markResultAction,
+      profileParams.mht_candidature,
+      setProfileParams,
+    ],
+  );
+  const handleCandidatureChange = useCallback(
+    (value: MhtCetCandidatureType) => {
+      markResultAction();
+      void setProfileParams({
+        mht_candidature: value,
+        mht_home_university:
+          value === "type-e" ? null : profileParams.mht_home_university,
+        mht_pwd: value === "type-e" ? false : profileParams.mht_pwd,
+        mht_minority:
+          value === "type-a" || value === "type-b"
+            ? profileParams.mht_minority
+            : null,
+        categories: null,
+        page: 1,
+      });
+    },
+    [
+      markResultAction,
+      profileParams.mht_home_university,
+      profileParams.mht_minority,
+      profileParams.mht_pwd,
+      setProfileParams,
+    ],
+  );
+  const handleCandidateCategoryChange = useCallback(
+    (value: MhtCetCategoryId) => {
+      markResultAction();
+      void setProfileParams({
+        mht_category: value,
+        ews: value === "open" ? profileParams.ews : false,
+        categories: null,
+        page: 1,
+      });
+    },
+    [markResultAction, profileParams.ews, setProfileParams],
+  );
+  const handleLadiesEligibilityChange = useCallback(
+    (value: boolean) => {
+      markResultAction();
+      void setProfileParams({ mht_ladies: value, page: 1 });
+    },
+    [markResultAction, setProfileParams],
+  );
+  const handleEligibilityChange = useCallback(
+    (
+      key: "ews" | "mht_tfws" | "mht_pwd" | "mht_orphan",
+      value: boolean,
+    ) => {
+      markResultAction();
+      void setProfileParams({ [key]: value, page: 1 });
+    },
+    [markResultAction, setProfileParams],
+  );
+  const handleMinorityChange = useCallback(
+    (value: MhtCetMinorityCommunityId | "") => {
+      markResultAction();
+      void setProfileParams({ mht_minority: value || null, page: 1 });
+    },
+    [markResultAction, setProfileParams],
+  );
 
   // Filter sidebar props - memoized
-  const filterSidebarProps = useMemo(
+  const filterSidebarProps = useMemo<FilterSidebarProps>(
     () => ({
       percentile,
       year,
@@ -605,6 +793,19 @@ function StateCutoffsContent() {
       universities,
       scoreMode,
       rank,
+      candidateHomeUniversity:
+        profileParams.mht_candidature === "type-e"
+          ? ("type-e" as const)
+          : profileParams.mht_home_university ?? "",
+      candidatureType: profileParams.mht_candidature ?? "",
+      candidateCategory: profileParams.mht_category ?? "",
+      ladiesSeatEligible: profileParams.mht_ladies,
+      ewsEligible: profileParams.ews,
+      tfwsEligible: profileParams.mht_tfws,
+      pwdEligible: profileParams.mht_pwd,
+      orphanEligible: profileParams.mht_orphan,
+      minorityCommunity: profileParams.mht_minority ?? "",
+      eligibleSeatPoolGroups,
       onPercentileChange: handlePercentileChange,
       onYearChange: handleYearChange,
       onRoundChange: handleRoundChange,
@@ -614,6 +815,20 @@ function StateCutoffsContent() {
       onUniversitiesChange: handleUniversitiesChange,
       onScoreModeChange: handleScoreModeChange,
       onRankChange: handleRankChange,
+      onCandidateHomeUniversityChange:
+        handleCandidateHomeUniversityChange,
+      onCandidatureChange: handleCandidatureChange,
+      onCandidateCategoryChange: handleCandidateCategoryChange,
+      onLadiesSeatEligibleChange: handleLadiesEligibilityChange,
+      onEwsEligibleChange: (value: boolean) =>
+        handleEligibilityChange("ews", value),
+      onTfwsEligibleChange: (value: boolean) =>
+        handleEligibilityChange("mht_tfws", value),
+      onPwdEligibleChange: (value: boolean) =>
+        handleEligibilityChange("mht_pwd", value),
+      onOrphanEligibleChange: (value: boolean) =>
+        handleEligibilityChange("mht_orphan", value),
+      onMinorityCommunityChange: handleMinorityChange,
       onClearAll: handleClearAll,
       activeFilterCount,
     }),
@@ -627,6 +842,8 @@ function StateCutoffsContent() {
       courses,
       statuses,
       universities,
+      profileParams,
+      eligibleSeatPoolGroups,
       handlePercentileChange,
       handleYearChange,
       handleRoundChange,
@@ -636,6 +853,12 @@ function StateCutoffsContent() {
       handleUniversitiesChange,
       handleScoreModeChange,
       handleRankChange,
+      handleCandidateHomeUniversityChange,
+      handleCandidatureChange,
+      handleCandidateCategoryChange,
+      handleLadiesEligibilityChange,
+      handleEligibilityChange,
+      handleMinorityChange,
       handleClearAll,
       activeFilterCount,
     ],
@@ -670,12 +893,8 @@ function StateCutoffsContent() {
   );
 
   const handleOpenMobileFilterToast = useCallback(() => {
-    if (!guardAnonymousAction()) {
-      return;
-    }
-
     setMobileFilterOpen(true);
-  }, [guardAnonymousAction]);
+  }, []);
 
   const handleToggleMobileFilters = useCallback(() => {
     if (mobileFilterOpen) {
@@ -714,6 +933,23 @@ function StateCutoffsContent() {
     }),
     [categories, courses, statuses, universities],
   );
+  const candidateProfileLabel = useMemo(() => {
+    if (!candidateProfile) return undefined;
+    const category = MHT_CET_CATEGORY_OPTIONS.find(
+      ({ value }) => value === candidateProfile.categoryId,
+    )?.label;
+    const candidature = MHT_CET_CANDIDATURE_OPTIONS.find(
+      ({ value }) => value === candidateProfile.candidatureType,
+    )?.label;
+    const homeUniversity = candidateProfile.homeUniversityId
+      ? MHT_CET_HOME_UNIVERSITIES.find(
+          ({ id }) => id === candidateProfile.homeUniversityId,
+        )?.label
+      : "No HU";
+    return `${candidature} · ${category} · ${homeUniversity}${
+      candidateProfile.ladiesSeatEligible ? " · Ladies eligible" : ""
+    }`;
+  }, [candidateProfile]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#E4DFF2] via-[#daf5f0] to-[#E4DFF2]">
@@ -788,59 +1024,24 @@ function StateCutoffsContent() {
         {/* Main Content */}
         <main className="flex-1 min-w-0 px-4 lg:px-8 pb-24 lg:pb-8 overflow-x-hidden">
           <div className="max-w-[1600px] mx-auto space-y-5 py-5">
-            {/* Header */}
-            <div className="space-y-2">
-              <div className="flex items-center gap-3 flex-wrap">
-                <h1 className="text-2xl lg:text-3xl xl:text-4xl font-black text-gray-900 tracking-tight">
-                  MHT-CET State Cutoffs
-                </h1>
-                <Badge className="bg-purple-100 text-purple-700 border-purple-300 font-bold text-sm">
-                  {year} {getDisplayNameForRound(round)}
-                </Badge>
+            {derivedSeatPools?.ignoredRequestedCodes.length ||
+            profileMetadata?.excludedUnmappedRows ? (
+              <div className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                {derivedSeatPools &&
+                derivedSeatPools.ignoredRequestedCodes.length > 0 ? (
+                  <span className="block font-medium">
+                    Ignored unavailable refinements:{" "}
+                    {derivedSeatPools.ignoredRequestedCodes.join(", ")}.
+                  </span>
+                ) : null}
+                {profileMetadata?.excludedUnmappedRows ? (
+                  <span className="block font-medium">
+                    {profileMetadata.excludedUnmappedRows} unmapped historical
+                    rows were excluded.
+                  </span>
+                ) : null}
               </div>
-              <p className="text-gray-600 text-sm lg:text-base">
-                Find colleges and courses matching your percentile. Enter your
-                score to discover admission opportunities.
-              </p>
-            </div>
-
-            {/* Quick Stats */}
-            {totalItems > 0 && (
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                <StatsCard
-                  icon={TrendingUp}
-                  label="Total Results"
-                  value={totalItems.toLocaleString()}
-                  color="border-purple-500"
-                />
-                <StatsCard
-                  icon={GraduationCap}
-                  label="Courses"
-                  value={new Set(records.map((r) => r.course_name)).size}
-                  color="border-blue-500"
-                />
-                <StatsCard
-                  icon={Building2}
-                  label="Colleges"
-                  value={new Set(records.map((r) => r.college_name)).size}
-                  color="border-green-500"
-                />
-                <StatsCard
-                  icon={Sparkles}
-                  label="Target"
-                  value={
-                    scoreMode === "rank"
-                      ? rank
-                        ? `Rank ${rank}`
-                        : "Not set"
-                      : percentile
-                        ? `${percentile}%`
-                        : "Not set"
-                  }
-                  color="border-orange-500"
-                />
-              </div>
-            )}
+            ) : null}
 
             {/* Toolbar */}
             <TopToolbar
@@ -850,6 +1051,9 @@ function StateCutoffsContent() {
               year={year}
               round={round}
               loading={loading}
+              queryReady={profileReady && scoreIsValid}
+              onYearChange={handleYearChange}
+              onRoundChange={handleRoundChange}
               search={search}
               onSearchChange={handleToolbarSearchChange}
               sortBy={sortBy}
@@ -860,9 +1064,14 @@ function StateCutoffsContent() {
               visibleColumns={visibleColumns}
               onColumnVisibilityChange={setVisibleColumns}
               activeFilters={activeFilters}
+              profileLabel={candidateProfileLabel}
+              fixedSortLabel={
+                scoreMode === "rank"
+                  ? "Closest closing rank first"
+                  : "Closest percentile first"
+              }
               onRemoveFilter={handleRemoveFilter}
               records={records}
-              onBeforeAction={guardAnonymousAction}
             />
 
             {/* Data Table */}
@@ -876,7 +1085,10 @@ function StateCutoffsContent() {
               error={error}
               search={search}
               searchInsight={searchInsight}
-              percentileTarget={percentileForFetch}
+              percentileTarget={
+                scoreMode === "percentile" ? percentile : ""
+              }
+              hasActiveQuery={profileReady && scoreIsValid}
               density={density}
               visibleColumns={visibleColumns}
               sortBy={sortBy}
@@ -885,53 +1097,6 @@ function StateCutoffsContent() {
               onPerPageChange={handlePerPageChange}
               onSortChange={handleSortChange}
             />
-
-            {/* Help Section */}
-            {!percentile && records.length === 0 && (
-              <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl border-2 border-purple-200 p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]">
-                <h3 className="font-bold text-lg text-gray-900 mb-2 flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-purple-600" />
-                  How to use this tool
-                </h3>
-                <ol className="space-y-2 text-sm text-gray-700">
-                  <li className="flex items-start gap-2">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-600 text-white text-xs font-bold flex items-center justify-center">
-                      1
-                    </span>
-                    <span>
-                      Enter your MHT-CET percentile in the filter panel
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-600 text-white text-xs font-bold flex items-center justify-center">
-                      2
-                    </span>
-                    <span>
-                      Optionally filter by category, course, college type, or
-                      university
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-600 text-white text-xs font-bold flex items-center justify-center">
-                      3
-                    </span>
-                    <span>
-                      Browse results to find colleges where you have admission
-                      chances
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-600 text-white text-xs font-bold flex items-center justify-center">
-                      4
-                    </span>
-                    <span>
-                      Export results or share the URL with your filters
-                      preserved
-                    </span>
-                  </li>
-                </ol>
-              </div>
-            )}
           </div>
         </main>
       </div>

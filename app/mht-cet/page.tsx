@@ -43,12 +43,14 @@ const LINKS: { [key: string]: Link } = {
 };
 
 export const metadata: Metadata = {
-  title: "MHT-CET 2025 Cutoffs | Maharashtra Engineering Admission | DEETNUTS",
+  title: "MHT-CET 2026 Admission Planning | Historical Cutoffs",
   description:
-    "Explore MHT-CET 2025 cutoffs, seat matrix, all India cutoffs, and state level cutoffs for Maharashtra engineering colleges. Get comprehensive admission data.",
+    "Plan for MHT-CET 2026 admissions using historical 2024–2025 CAP cutoffs, 2024 All India cutoffs, college details, seat matrices, and category filters.",
   keywords: [
     "MHT-CET",
-    "MHT-CET 2025",
+    "MHT-CET 2026 admissions",
+    "MHT-CET 2025 cutoffs",
+    "MHT-CET 2024 cutoffs",
     "Maharashtra CET",
     "engineering cutoffs",
     "Maharashtra colleges",
@@ -56,9 +58,9 @@ export const metadata: Metadata = {
     "CAP rounds",
   ],
   openGraph: {
-    title: "MHT-CET 2025 Cutoffs | Maharashtra Engineering Admission",
+    title: "MHT-CET 2026 Admission Planning | Historical Cutoffs",
     description:
-      "Explore MHT-CET 2025 cutoffs, seat matrix, and admission data for Maharashtra engineering colleges.",
+      "Use historical 2024–2025 MHT-CET cutoffs and college data to plan Maharashtra engineering admissions for 2026.",
     url: "https://deetnuts.com/mht-cet",
     type: "website",
   },

@@ -55,7 +55,7 @@ class BatchCollegeUploader {
     try {
       console.log("🔑 Authenticating with credentials...");
       await this.pb.admins.authWithPassword(adminEmail, adminPassword);
-      console.log("✅ Successfully authenticated as admin");
+      console.log(" Successfully authenticated as admin");
       return true;
     } catch (error) {
       console.error("❌ Authentication failed:", error);
@@ -85,7 +85,7 @@ class BatchCollegeUploader {
             // Validate required fields
             if (!row.college_id || !row.college_name) {
               console.warn(
-                `⚠️  Skipping line ${lineNumber}: Missing college_id or college_name`,
+                `  Skipping line ${lineNumber}: Missing college_id or college_name`,
               );
               skippedRecords++;
               return;
@@ -101,7 +101,7 @@ class BatchCollegeUploader {
             // Additional validation
             if (record.college_id === 0) {
               console.warn(
-                `⚠️  Skipping line ${lineNumber}: Invalid college_id`,
+                `  Skipping line ${lineNumber}: Invalid college_id`,
               );
               skippedRecords++;
               return;
@@ -109,14 +109,14 @@ class BatchCollegeUploader {
 
             records.push(record);
           } catch (error) {
-            console.warn(`⚠️  Error processing line ${lineNumber}:`, error);
+            console.warn(`  Error processing line ${lineNumber}:`, error);
             skippedRecords++;
           }
         })
         .on("end", () => {
-          console.log(`📊 Read ${records.length} college records from CSV`);
+          console.log(` Read ${records.length} college records from CSV`);
           if (skippedRecords > 0) {
-            console.log(`⚠️  Skipped ${skippedRecords} invalid records`);
+            console.log(`  Skipped ${skippedRecords} invalid records`);
           }
           resolve(records);
         })
@@ -181,7 +181,7 @@ class BatchCollegeUploader {
 
           completedBatches++;
           console.log(
-            `✅ Batch ${actualIndex + 1} completed in ${duration}ms (${batch.length} records) - ${completedBatches}/${batches.length} batches done`,
+            ` Batch ${actualIndex + 1} completed in ${duration}ms (${batch.length} records) - ${completedBatches}/${batches.length} batches done`,
           );
 
           return result;
@@ -197,7 +197,7 @@ class BatchCollegeUploader {
 
   async uploadData(operation: "create" | "upsert" = "create"): Promise<void> {
     try {
-      console.log("🚀 Starting college batch upload process...");
+      console.log(" Starting college batch upload process...");
 
       // Authenticate
       const authenticated =
@@ -211,7 +211,7 @@ class BatchCollegeUploader {
       const records = await this.readCSVData();
 
       if (records.length === 0) {
-        console.log("⚠️  No college records found in CSV file");
+        console.log("  No college records found in CSV file");
         return;
       }
 
@@ -221,7 +221,7 @@ class BatchCollegeUploader {
       );
       if (invalidRecords.length > 0) {
         console.warn(
-          `⚠️  Found ${invalidRecords.length} records with missing college_id or college_name`,
+          `  Found ${invalidRecords.length} records with missing college_id or college_name`,
         );
       }
 
@@ -232,10 +232,10 @@ class BatchCollegeUploader {
       }
 
       console.log(
-        `📦 Created ${batches.length} batches of ${this.batchSize} records each`,
+        ` Created ${batches.length} batches of ${this.batchSize} records each`,
       );
       console.log(
-        `⚡ Processing ${this.maxConcurrentBatches} batches concurrently for maximum speed`,
+        ` Processing ${this.maxConcurrentBatches} batches concurrently for maximum speed`,
       );
 
       const startTime = Date.now();
@@ -250,12 +250,12 @@ class BatchCollegeUploader {
       );
 
       console.log(
-        `🎉 Successfully ${operation === "upsert" ? "upserted" : "created"} ${records.length} college records!`,
+        ` Successfully ${operation === "upsert" ? "upserted" : "created"} ${records.length} college records!`,
       );
       console.log(
-        `⏱️  Total time: ${totalDuration}ms (${Math.round(totalDuration / 1000)}s)`,
+        `  Total time: ${totalDuration}ms (${Math.round(totalDuration / 1000)}s)`,
       );
-      console.log(`🚀 Speed: ${recordsPerSecond} records/second`);
+      console.log(` Speed: ${recordsPerSecond} records/second`);
     } catch (error) {
       console.error("❌ College upload failed:", error);
       throw error;
@@ -264,7 +264,7 @@ class BatchCollegeUploader {
 
   async clearCollection(): Promise<void> {
     try {
-      console.log("🧹 Clearing existing college records...");
+      console.log(" Clearing existing college records...");
 
       // Authenticate
       const authenticated =
@@ -300,14 +300,14 @@ class BatchCollegeUploader {
         });
         totalDeleted += result.items.length;
         console.log(
-          `🗑️  Deleted ${result.items.length} college records (${totalDeleted} total)`,
+          `  Deleted ${result.items.length} college records (${totalDeleted} total)`,
         );
 
         page++;
         hasMore = result.items.length === 500; // Continue if we got a full page
       }
 
-      console.log(`✅ Successfully deleted ${totalDeleted} college records`);
+      console.log(` Successfully deleted ${totalDeleted} college records`);
     } catch (error) {
       console.error("❌ Clear college collection failed:", error);
       throw error;
@@ -316,7 +316,7 @@ class BatchCollegeUploader {
 
   async validateCSV(): Promise<void> {
     try {
-      console.log("🔍 Validating CSV file...");
+      console.log(" Validating CSV file...");
 
       // Check if file exists
       const fs = require("fs");
@@ -328,15 +328,15 @@ class BatchCollegeUploader {
       const records = await this.readCSVData();
 
       if (records.length === 0) {
-        console.log("⚠️  No valid records found in CSV file");
+        console.log("  No valid records found in CSV file");
         return;
       }
 
       // Show sample of data
       console.log(
-        `✅ Validation successful! Found ${records.length} valid records`,
+        ` Validation successful! Found ${records.length} valid records`,
       );
-      console.log("\n📋 Sample records:");
+      console.log("\n Sample records:");
 
       const sampleSize = Math.min(5, records.length);
       for (let i = 0; i < sampleSize; i++) {
@@ -358,7 +358,7 @@ class BatchCollegeUploader {
         {} as Record<string, number>,
       );
 
-      console.log("📊 Status distribution:");
+      console.log(" Status distribution:");
       Object.entries(statusCounts).forEach(([status, count]) => {
         console.log(`   ${status}: ${count} colleges`);
       });
@@ -368,7 +368,7 @@ class BatchCollegeUploader {
       ).length;
       if (missingUniversity > 0) {
         console.log(
-          `⚠️  ${missingUniversity} records have missing home_university`,
+          `  ${missingUniversity} records have missing home_university`,
         );
       }
     } catch (error) {
@@ -379,7 +379,7 @@ class BatchCollegeUploader {
 
   async listColleges(limit: number = 10): Promise<void> {
     try {
-      console.log(`📋 Listing first ${limit} college records...`);
+      console.log(` Listing first ${limit} college records...`);
 
       // Authenticate
       const authenticated =
@@ -395,7 +395,7 @@ class BatchCollegeUploader {
           sort: "college_id",
         });
 
-      console.log(`📊 Found ${result.totalItems} total college records`);
+      console.log(` Found ${result.totalItems} total college records`);
       console.log(`📄 Showing first ${result.items.length} records:\n`);
 
       result.items.forEach((record, index) => {
@@ -421,22 +421,22 @@ async function main() {
 
   switch (command) {
     case "create":
-      console.log("📝 Creating new college records...");
+      console.log(" Creating new college records...");
       await uploader.uploadData("create");
       break;
 
     case "upsert":
-      console.log("🔄 Upserting college records...");
+      console.log(" Upserting college records...");
       await uploader.uploadData("upsert");
       break;
 
     case "clear":
-      console.log("🧹 Clearing college collection...");
+      console.log(" Clearing college collection...");
       await uploader.clearCollection();
       break;
 
     case "replace":
-      console.log("🔄 Replacing all college records (clear + create)...");
+      console.log(" Replacing all college records (clear + create)...");
       await uploader.clearCollection();
       await uploader.uploadData("create");
       break;
@@ -450,7 +450,7 @@ async function main() {
       break;
 
     default:
-      console.log("📋 Usage:");
+      console.log(" Usage:");
       console.log(
         "  npm run batch-upload-colleges create    - Create new college records",
       );

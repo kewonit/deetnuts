@@ -1,5 +1,6 @@
 // components/josaa/InstituteJsonLd.tsx
 // Structured data for JOSAA institutes for better SEO
+import { serializeJsonLd } from "@/lib/json-ld";
 
 interface InstituteJsonLdProps {
   institute: {
@@ -93,11 +94,11 @@ export default function InstituteJsonLd({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbData) }}
       />
     </>
   );
@@ -151,7 +152,7 @@ export function DirectoryJsonLd({
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }}
     />
   );
 }
@@ -227,11 +228,11 @@ export function BranchJsonLd({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbData) }}
       />
     </>
   );
