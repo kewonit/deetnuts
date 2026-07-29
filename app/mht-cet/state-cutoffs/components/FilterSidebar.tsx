@@ -353,7 +353,7 @@ const ScoreModeTabs = memo(function ScoreModeTabs({
 const profileSelectTriggerClassName =
   "h-auto min-h-11 items-start gap-3 bg-white py-3 text-left text-gray-950 [&>span]:line-clamp-none [&>span]:whitespace-normal [&>span]:break-words [&>span]:leading-5";
 const profileSelectContentClassName =
-  "max-w-[calc(100vw-2rem)] bg-white text-gray-950";
+  "z-[140] max-w-[calc(100vw-2rem)] bg-white text-gray-950";
 const profileSelectItemClassName =
   "items-start py-2.5 pr-3 text-gray-950 focus:bg-purple-100 focus:text-gray-950 [&>span:last-child]:whitespace-normal [&>span:last-child]:break-words [&>span:last-child]:leading-5";
 
