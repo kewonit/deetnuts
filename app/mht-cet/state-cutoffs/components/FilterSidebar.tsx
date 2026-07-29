@@ -411,9 +411,13 @@ const CandidateProfileSetup = memo(function CandidateProfileSetup({
       : MHT_CET_HOME_UNIVERSITIES.find(
           ({ id }) => id === candidateHomeUniversity,
         )?.label;
-  const selectedCandidatureLabel = MHT_CET_CANDIDATURE_OPTIONS.find(
+  const selectedCandidature = MHT_CET_CANDIDATURE_OPTIONS.find(
     ({ value }) => value === candidatureType,
-  )?.label;
+  );
+  const typeECandidature = MHT_CET_CANDIDATURE_OPTIONS.find(
+    ({ value }) => value === "type-e",
+  );
+  const selectedCandidatureLabel = selectedCandidature?.label;
   const selectedCategoryLabel = MHT_CET_CATEGORY_OPTIONS.find(
     ({ value }) => value === candidateCategory,
   )?.label;
@@ -508,15 +512,26 @@ const CandidateProfileSetup = memo(function CandidateProfileSetup({
             ))}
             <SelectItem
               value="type-e"
+              textValue={`Type E no home university ${typeECandidature?.description ?? ""}`}
               className={profileSelectItemClassName}
             >
-              Type E — no home university
+              <span className="block">
+                <span className="block font-medium">
+                  Type E — no home university
+                </span>
+                {typeECandidature ? (
+                  <span className="mt-0.5 block text-xs leading-4 text-gray-600">
+                    {typeECandidature.description}
+                  </span>
+                ) : null}
+              </span>
             </SelectItem>
           </SelectContent>
         </Select>
         <p className="text-xs text-gray-500">
-          This is your CAP geographic home university, not a college&apos;s
-          affiliating university.
+          {candidateHomeUniversity === "type-e"
+            ? "Type E is for Maharashtra–Karnataka border-area candidates and does not use a home university."
+            : "This is your CAP geographic home university, not a college’s affiliating university."}
         </p>
       </div>
 
@@ -537,15 +552,26 @@ const CandidateProfileSetup = memo(function CandidateProfileSetup({
             <SelectTrigger
               id="candidate-candidature"
               className={profileSelectTriggerClassName}
-              title={selectedCandidatureLabel}
+              title={
+                selectedCandidature
+                  ? `${selectedCandidature.label} — ${selectedCandidature.description}`
+                  : undefined
+              }
             >
               <span
                 className={cn(
-                  "block",
+                  "block min-w-0 flex-1",
                   !selectedCandidatureLabel && "text-gray-500",
                 )}
               >
-                {selectedCandidatureLabel || "Select candidature type"}
+                <span className="block font-medium">
+                  {selectedCandidatureLabel || "Select candidature type"}
+                </span>
+                {selectedCandidature ? (
+                  <span className="mt-0.5 block text-xs leading-4 text-gray-600">
+                    {selectedCandidature.description}
+                  </span>
+                ) : null}
               </span>
             </SelectTrigger>
             <SelectContent className={profileSelectContentClassName}>
@@ -558,7 +584,12 @@ const CandidateProfileSetup = memo(function CandidateProfileSetup({
                   textValue={`${option.label} ${option.description}`}
                   className={profileSelectItemClassName}
                 >
-                  {option.label}
+                  <span className="block">
+                    <span className="block font-medium">{option.label}</span>
+                    <span className="mt-0.5 block text-xs leading-4 text-gray-600">
+                      {option.description}
+                    </span>
+                  </span>
                 </SelectItem>
               ))}
             </SelectContent>
