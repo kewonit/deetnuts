@@ -4,6 +4,7 @@ import { REST, Routes } from "discord.js";
 import {
   buildDiscordBotCommands,
   getDiscordRegistrationGuildIds,
+  requireDiscordSnowflake,
 } from "../lib/bot/discord-commands";
 
 const token = process.env.DISCORD_BOT_TOKEN;
@@ -16,7 +17,10 @@ if (!token || !applicationId) {
 }
 
 const discordToken = token;
-const discordApplicationId = applicationId;
+const discordApplicationId = requireDiscordSnowflake(
+  applicationId,
+  "DISCORD_APPLICATION_ID",
+);
 
 const rest = new REST({ version: "10" }).setToken(discordToken);
 

@@ -10,9 +10,20 @@ create table if not exists public.bot_processed_events (
   unique (platform, external_id)
 );
 
-alter table public.bot_processed_events
-  add constraint bot_processed_events_status_check
-  check (status in ('processing', 'replied', 'skipped', 'failed'));
+do $constraints$
+begin
+  if not exists (
+    select 1
+    from pg_constraint
+    where conrelid = 'public.bot_processed_events'::regclass
+      and conname = 'bot_processed_events_status_check'
+  ) then
+    alter table public.bot_processed_events
+      add constraint bot_processed_events_status_check
+      check (status in ('processing', 'replied', 'skipped', 'failed'));
+  end if;
+end
+$constraints$;
 
 create index if not exists idx_bot_processed_events_created_at
   on public.bot_processed_events (created_at desc);
@@ -39,13 +50,31 @@ create table if not exists public.bot_usage_events (
   created_at timestamptz not null default now()
 );
 
-alter table public.bot_usage_events
-  add constraint bot_usage_events_event_name_check
-  check (event_name in ('cutoff_request', 'cutoff_query', 'worker_heartbeat'));
+do $constraints$
+begin
+  if not exists (
+    select 1
+    from pg_constraint
+    where conrelid = 'public.bot_usage_events'::regclass
+      and conname = 'bot_usage_events_event_name_check'
+  ) then
+    alter table public.bot_usage_events
+      add constraint bot_usage_events_event_name_check
+      check (event_name in ('cutoff_request', 'cutoff_query', 'worker_heartbeat'));
+  end if;
 
-alter table public.bot_usage_events
-  add constraint bot_usage_events_status_check
-  check (status in ('served', 'rejected', 'failed', 'duplicate', 'skipped', 'heartbeat'));
+  if not exists (
+    select 1
+    from pg_constraint
+    where conrelid = 'public.bot_usage_events'::regclass
+      and conname = 'bot_usage_events_status_check'
+  ) then
+    alter table public.bot_usage_events
+      add constraint bot_usage_events_status_check
+      check (status in ('served', 'rejected', 'failed', 'duplicate', 'skipped', 'heartbeat'));
+  end if;
+end
+$constraints$;
 
 create index if not exists idx_bot_usage_events_created_at
   on public.bot_usage_events (created_at desc);

@@ -155,6 +155,18 @@ There are two active access patterns in the repository:
 
 This split is intentional for now, but it is the primary architectural compromise still visible in the codebase.
 
+### Row-Level Security
+
+All tables in the exposed `public` schema have RLS enabled. Access is split by data class:
+
+- Public reference datasets grant `SELECT` only to `anon` and `authenticated`; client writes are revoked.
+- Profiles, todos, mock attempts, and mock responses use authenticated owner-scoped policies. Updates include both `USING` and `WITH CHECK` ownership predicates.
+- Approved question content is readable, while answer keys, review metadata, import batches, and import errors remain backend-only.
+- State-cutoff tables used by server actions, eligibility mappings, and bot telemetry are service-role-only unless a table has an explicit public reference-data policy.
+- Avatar reads are public, but uploads and updates require authentication, the caller's UUID folder, ownership on updates, an allowed image extension, and the bucket size/MIME limits.
+
+The RLS hardening migration revokes legacy automatic Data API grants before restoring this allowlist and verifies the resulting catalog state before committing. Service-only tables intentionally have no client policy; with client grants revoked, RLS therefore denies access by default.
+
 ## Compatibility Layer
 
 Two files define the compatibility boundary:

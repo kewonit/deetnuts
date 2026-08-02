@@ -6,6 +6,9 @@ import {
 } from "discord.js";
 
 import {
+  DEFAULT_ROUND,
+  DEFAULT_YEAR,
+  getDisplayNameForRound,
   ROUNDS_BY_YEAR,
   YEAR_OPTIONS,
 } from "@/lib/mht-cet/state-cutoffs/config";
@@ -17,12 +20,20 @@ const DISCORD_GUILD_ID_ENV_KEYS = [
   "DISCORD_GUILD_ID",
   "DISCORD_ALLOWED_GUILD_IDS",
 ] as const;
+const DISCORD_SNOWFLAKE_PATTERN = /^\d{17,20}$/;
 
 function splitCsv(value: string | undefined) {
   return (value ?? "")
     .split(",")
     .map((item) => item.trim())
     .filter(Boolean);
+}
+
+export function requireDiscordSnowflake(value: string, label: string) {
+  if (!DISCORD_SNOWFLAKE_PATTERN.test(value)) {
+    throw new Error(`${label} must be a 17-20 digit Discord ID`);
+  }
+  return value;
 }
 
 export function getDiscordRegistrationGuildIds(
@@ -32,7 +43,7 @@ export function getDiscordRegistrationGuildIds(
 
   for (const key of DISCORD_GUILD_ID_ENV_KEYS) {
     for (const guildId of splitCsv(env[key])) {
-      guildIds.add(guildId);
+      guildIds.add(requireDiscordSnowflake(guildId, key));
     }
   }
 
@@ -47,7 +58,9 @@ export function buildDiscordBotCommands(): RESTPutAPIApplicationCommandsJSONBody
   return [
     new SlashCommandBuilder()
       .setName("cutoff")
-      .setDescription("Get top MHT-CET state cutoffs near a percentile")
+      .setDescription(
+        `Find MHT-CET state cutoffs (defaults to ${DEFAULT_YEAR} ${getDisplayNameForRound(DEFAULT_ROUND)})`,
+      )
       .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
       .setContexts(InteractionContextType.Guild)
       .addNumberOption((option) =>
@@ -61,7 +74,7 @@ export function buildDiscordBotCommands(): RESTPutAPIApplicationCommandsJSONBody
       .addIntegerOption((option) =>
         option
           .setName("year")
-          .setDescription("CAP year")
+          .setDescription(`CAP year; defaults to ${DEFAULT_YEAR}`)
           .setRequired(false)
           .addChoices(
             ...YEAR_OPTIONS.map((year) => ({
@@ -73,7 +86,9 @@ export function buildDiscordBotCommands(): RESTPutAPIApplicationCommandsJSONBody
       .addIntegerOption((option) =>
         option
           .setName("round")
-          .setDescription("CAP round")
+          .setDescription(
+            `CAP round; defaults to ${getDisplayNameForRound(DEFAULT_ROUND)}`,
+          )
           .setRequired(false)
           .addChoices(
             ...supportedRounds.map((round) => ({
