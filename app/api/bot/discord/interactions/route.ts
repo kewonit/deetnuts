@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { after, NextRequest, NextResponse } from "next/server";
 import {
   InteractionResponseFlags,
   InteractionResponseType,
@@ -8,10 +8,18 @@ import {
 
 import { isDiscordGuildAllowed } from "@/lib/bot/allowlist";
 import { BotCutoffError, queryBotStateCutoffs } from "@/lib/bot/cutoff-query";
+import {
+  deferredInteractionResponse,
+  editOriginalDiscordInteraction,
+} from "@/lib/bot/discord-interaction-response";
 import { formatDiscordCutoffResponse } from "@/lib/bot/formatters";
-import { safeLogBotUsageEvent } from "@/lib/bot/usage";
+import {
+  type BotUsageEvent,
+  safeLogBotUsageEvent,
+} from "@/lib/bot/usage";
 
 export const runtime = "nodejs";
+export const maxDuration = 30;
 
 const DISCORD_MESSAGE_FLAG_SUPPRESS_EMBEDS = 1 << 2;
 
@@ -22,6 +30,8 @@ type DiscordCommandOption = {
 
 type DiscordInteraction = {
   id: string;
+  application_id?: string;
+  token?: string;
   type: number;
   guild_id?: string;
   channel_id?: string;
@@ -85,6 +95,113 @@ async function verifyDiscordRequest(request: NextRequest, rawBody: string) {
   return verifyKey(rawBody, signature, timestamp, publicKey);
 }
 
+function logAfterResponse(event: BotUsageEvent) {
+  after(() => safeLogBotUsageEvent(event));
+}
+
+async function completeCutoffInteraction({
+  applicationId,
+  interactionToken,
+  requestId,
+  source,
+  startedAt,
+  percentile,
+  year,
+  round,
+  category,
+  subcategory,
+  branch,
+  course,
+}: {
+  applicationId: string;
+  interactionToken: string;
+  requestId: string;
+  source: string | null;
+  startedAt: number;
+  percentile: number;
+  year?: number;
+  round?: number;
+  category?: string;
+  subcategory?: string;
+  branch?: string;
+  course?: string;
+}) {
+  let message: string;
+  let usageEvent: BotUsageEvent;
+
+  try {
+    const result = await queryBotStateCutoffs({
+      percentile,
+      year,
+      round,
+      category,
+      subcategory,
+      branch,
+      course,
+    });
+
+    message = formatDiscordCutoffResponse(result);
+    usageEvent = {
+      requestId,
+      externalId: requestId,
+      platform: "discord",
+      source,
+      eventName: "cutoff_request",
+      status: "served",
+      percentile: result.query.percentile,
+      year: result.query.year,
+      round: result.query.round,
+      resultCount: result.rows.length,
+      durationMs: Date.now() - startedAt,
+    };
+  } catch (error) {
+    const isUserError =
+      error instanceof BotCutoffError &&
+      (error.code === "INVALID_INPUT" ||
+        error.code === "UNSUPPORTED_YEAR" ||
+        error.code === "UNSUPPORTED_ROUND");
+
+    message = isUserError
+      ? error.message
+      : "Unable to fetch cutoff data right now.";
+    usageEvent = {
+      requestId,
+      externalId: requestId,
+      platform: "discord",
+      source,
+      eventName: "cutoff_request",
+      status: isUserError ? "rejected" : "failed",
+      percentile,
+      year,
+      round,
+      resultCount: 0,
+      durationMs: Date.now() - startedAt,
+      errorCode: error instanceof BotCutoffError ? error.code : "UNKNOWN",
+    };
+  }
+
+  try {
+    await editOriginalDiscordInteraction({
+      applicationId,
+      interactionToken,
+      content: message,
+    });
+  } catch (error) {
+    console.error("Failed to update Discord interaction response", {
+      requestId,
+      errorType: error instanceof Error ? error.name : "UnknownError",
+    });
+    usageEvent = {
+      ...usageEvent,
+      status: "failed",
+      errorCode: "DISCORD_RESPONSE_FAILED",
+      durationMs: Date.now() - startedAt,
+    };
+  }
+
+  await safeLogBotUsageEvent(usageEvent);
+}
+
 export async function POST(request: NextRequest) {
   const startedAt = Date.now();
   const rawBody = await request.text();
@@ -119,7 +236,7 @@ export async function POST(request: NextRequest) {
   const commandName = interaction.data?.name;
 
   if (commandName !== "cutoff") {
-    await safeLogBotUsageEvent({
+    logAfterResponse({
       requestId,
       externalId: interaction.id,
       platform: "discord",
@@ -136,7 +253,7 @@ export async function POST(request: NextRequest) {
   }
 
   if (!interaction.guild_id) {
-    await safeLogBotUsageEvent({
+    logAfterResponse({
       requestId,
       externalId: interaction.id,
       platform: "discord",
@@ -153,7 +270,7 @@ export async function POST(request: NextRequest) {
   }
 
   if (!isDiscordGuildAllowed(interaction.guild_id)) {
-    await safeLogBotUsageEvent({
+    logAfterResponse({
       requestId,
       externalId: interaction.id,
       platform: "discord",
@@ -182,7 +299,7 @@ export async function POST(request: NextRequest) {
   const course = getOptionString(options, "course");
 
   if (percentile === undefined) {
-    await safeLogBotUsageEvent({
+    logAfterResponse({
       requestId,
       externalId: interaction.id,
       platform: "discord",
@@ -198,8 +315,36 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  try {
-    const result = await queryBotStateCutoffs({
+  const applicationId = interaction.application_id;
+  const interactionToken = interaction.token;
+
+  if (!applicationId || !interactionToken) {
+    logAfterResponse({
+      requestId,
+      externalId: interaction.id,
+      platform: "discord",
+      source,
+      eventName: "cutoff_request",
+      status: "rejected",
+      percentile,
+      year,
+      round,
+      durationMs: Date.now() - startedAt,
+      errorCode: "INVALID_INTERACTION_TOKEN",
+    });
+
+    return jsonInteractionResponse(
+      interactionMessage("Invalid Discord interaction payload.", true),
+    );
+  }
+
+  after(() =>
+    completeCutoffInteraction({
+      applicationId,
+      interactionToken,
+      requestId,
+      source,
+      startedAt,
       percentile,
       year,
       round,
@@ -207,52 +352,8 @@ export async function POST(request: NextRequest) {
       subcategory,
       branch,
       course,
-    });
+    }),
+  );
 
-    await safeLogBotUsageEvent({
-      requestId,
-      externalId: interaction.id,
-      platform: "discord",
-      source,
-      eventName: "cutoff_request",
-      status: "served",
-      percentile: result.query.percentile,
-      year: result.query.year,
-      round: result.query.round,
-      resultCount: result.rows.length,
-      durationMs: Date.now() - startedAt,
-    });
-
-    return jsonInteractionResponse(
-      interactionMessage(formatDiscordCutoffResponse(result)),
-    );
-  } catch (error) {
-    const isUserError =
-      error instanceof BotCutoffError &&
-      (error.code === "INVALID_INPUT" ||
-        error.code === "UNSUPPORTED_YEAR" ||
-        error.code === "UNSUPPORTED_ROUND");
-
-    await safeLogBotUsageEvent({
-      requestId,
-      externalId: interaction.id,
-      platform: "discord",
-      source,
-      eventName: "cutoff_request",
-      status: isUserError ? "rejected" : "failed",
-      percentile,
-      year,
-      round,
-      resultCount: 0,
-      durationMs: Date.now() - startedAt,
-      errorCode: error instanceof BotCutoffError ? error.code : "UNKNOWN",
-    });
-
-    const message =
-      error instanceof BotCutoffError
-        ? error.message
-        : "Unable to fetch cutoff data right now.";
-
-    return jsonInteractionResponse(interactionMessage(message, true));
-  }
+  return jsonInteractionResponse(deferredInteractionResponse());
 }
