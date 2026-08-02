@@ -1,6 +1,10 @@
 import "dotenv/config";
 import crypto from "node:crypto";
-import snoowrap from "snoowrap";
+import {
+  createRedditAuthorizationUrl,
+  exchangeRedditAuthorizationCode,
+  getRedditIdentity,
+} from "../lib/bot/reddit-client";
 
 const DEFAULT_REDIRECT_URI = "http://localhost:8080/reddit/callback";
 const REQUIRED_SCOPES = ["identity", "read", "submit"];
@@ -26,12 +30,11 @@ function printAuthorizationInstructions({
   redirectUri: string;
 }) {
   const state = readEnv("REDDIT_AUTH_STATE") ?? crypto.randomBytes(16).toString("hex");
-  const authUrl = snoowrap.getAuthUrl({
+  const authUrl = createRedditAuthorizationUrl({
     clientId,
     redirectUri,
-    scope: REQUIRED_SCOPES,
-    permanent: true,
     state,
+    scopes: REQUIRED_SCOPES,
   });
 
   console.log("Create or edit the Reddit app here:");
@@ -60,7 +63,7 @@ async function exchangeCodeForRefreshToken({
   userAgent: string;
   code: string;
 }) {
-  const requester = await snoowrap.fromAuthCode({
+  const tokens = await exchangeRedditAuthorizationCode({
     code,
     userAgent,
     clientId,
@@ -68,12 +71,15 @@ async function exchangeCodeForRefreshToken({
     redirectUri,
   });
 
-  const username = await requester.getMe().then((user) => user.name);
+  const username = await getRedditIdentity({
+    accessToken: tokens.accessToken,
+    userAgent,
+  }).then((user) => user.name);
 
   console.log(`Authorized Reddit user: ${username}`);
   console.log("");
   console.log("Add this to the worker environment:");
-  console.log(`REDDIT_REFRESH_TOKEN=${requester.refreshToken}`);
+  console.log(`REDDIT_REFRESH_TOKEN=${tokens.refreshToken}`);
 }
 
 async function main() {

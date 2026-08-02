@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://deetnuts.com";
-  const seoLastUpdated = new Date("2026-07-29T00:00:00.000Z");
+  const seoLastUpdated = new Date("2026-08-03T00:00:00.000Z");
 
   // Static MHT-CET pages
   const staticPages: MetadataRoute.Sitemap = [

@@ -10,6 +10,7 @@ export const OPEN_GENERAL_CATEGORY_CODES = [
 ] as const;
 
 export const YEAR_OPTIONS = [
+  { value: 2026, label: "2026" },
   { value: 2025, label: "2025" },
   { value: 2024, label: "2024" },
 ] as const;
@@ -44,7 +45,12 @@ export const ROUND_CONFIG_2025: Record<number, string> = {
   4: "2025_mht_cet_round_four_cutoffs",
 } as const;
 
+export const ROUND_CONFIG_2026: Record<number, string> = {
+  1: "2026_mht_cet_round_one_cutoffs",
+} as const;
+
 export const ROUNDS_BY_YEAR: Record<number, readonly number[]> = {
+  2026: [1],
   2024: [1, 2, 3],
   2025: [1, 2, 3, 4],
 } as const;
@@ -75,7 +81,7 @@ export const ROUND_OPTIONS = [
 export const VALID_ROUNDS = [1, 2, 3, 4] as const;
 export type ValidRound = (typeof VALID_ROUNDS)[number];
 
-export const DEFAULT_YEAR = 2025;
+export const DEFAULT_YEAR = 2026;
 export const DEFAULT_ROUND: ValidRound = 1;
 
 export const isValidRound = (round: number): round is ValidRound => {
@@ -97,23 +103,31 @@ export const isRoundAvailableForYear = (
 };
 
 export const getCollectionForRound = (round: number, year: number): string => {
-  if (year === 2025) {
-    const table = ROUND_CONFIG_2025[round];
-    if (table) return table;
+  if (!isSupportedYear(year)) {
     console.warn(
-      `Invalid round ${round} for year 2025, falling back to Round 1`,
+      `Invalid year ${year}, falling back to ${DEFAULT_YEAR} Round 1`,
     );
-    return ROUND_CONFIG_2025[1];
+    return ROUND_CONFIG_2026[1];
   }
-
-  if (!isValidRound(round) || round === 4) {
+  const configuredTables: Record<number, string> =
+    year === 2026
+      ? ROUND_CONFIG_2026
+      : year === 2025
+        ? ROUND_CONFIG_2025
+        : Object.fromEntries(
+            Object.entries(ROUND_CONFIG).map(([key, value]) => [
+              key,
+              value.collection,
+            ]),
+          );
+  const table = configuredTables[round];
+  if (!table) {
     console.warn(
       `Invalid round ${round} for year ${year}, falling back to Round 1`,
     );
-    return ROUND_CONFIG[1].collection;
+    return configuredTables[1];
   }
-
-  return ROUND_CONFIG[round].collection;
+  return table;
 };
 
 export const getDisplayNameForRound = (round: number): string => {

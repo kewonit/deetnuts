@@ -8,6 +8,7 @@ import {
   parseAsArrayOf,
   parseAsStringLiteral,
 } from "nuqs";
+import { DEFAULT_YEAR } from "../constants";
 
 // Custom hook for managing all filter state via URL
 export function useCutoffFilters() {
@@ -22,7 +23,7 @@ export function useCutoffFilters() {
   );
   const [year, setYear] = useQueryState(
     "year",
-    parseAsInteger.withDefault(2025),
+    parseAsInteger.withDefault(DEFAULT_YEAR),
   );
   const [round, setRound] = useQueryState(
     "round",
@@ -111,7 +112,7 @@ export function useCutoffFilters() {
     await Promise.all([
       setPercentile(null),
       setSearch(null),
-      setYear(2025),
+      setYear(DEFAULT_YEAR),
       setRound(1),
       setCategories(null),
       setCourses(null),

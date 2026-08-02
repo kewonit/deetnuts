@@ -10,21 +10,21 @@ Live properties:
 
 The current codebase covers the following data domains:
 
-| Domain                      | Coverage in Repository                 | Notes                                                       |
-| --------------------------- | -------------------------------------- | ----------------------------------------------------------- |
-| JoSAA cutoffs               | 2018-2024                              | IIT, NIT, IIIT, and GFTI institute, branch, and cutoff data |
-| MHT-CET state cutoffs       | 2024 rounds 1-3, 2025 round 1          | Round selection is year-aware in the state cutoffs module   |
-| MHT-CET all-India cutoffs   | 2024 rounds 1-3                        | API handlers exist for all three rounds                     |
-| MHT-CET seat matrix         | 2024                                   | Batch-ingested from CSV                                     |
-| MHT-CET college master data | 2024                                   | Used for directory and detail pages                         |
-| JEE Main predictions        | 2026 predictions compared against 2025 | Served from a precomputed CSV-backed dataset                |
+| Domain                      | Coverage in Repository                         | Notes                                                       |
+| --------------------------- | ---------------------------------------------- | ----------------------------------------------------------- |
+| JoSAA cutoffs               | 2018-2024                                      | IIT, NIT, IIIT, and GFTI institute, branch, and cutoff data |
+| MHT-CET state cutoffs       | 2024 rounds 1-3, 2025 rounds 1-4, 2026 round 1 | Profile-aware cutoffs derived from official CAP data        |
+| MHT-CET all-India cutoffs   | 2024 rounds 1-3                                | API handlers exist for all three rounds                     |
+| MHT-CET seat matrix         | 2024                                           | Batch-ingested from CSV                                     |
+| MHT-CET college master data | 2024                                           | Used for directory and detail pages                         |
+| JEE Main predictions        | 2026 predictions compared against 2025         | Served from a precomputed CSV-backed dataset                |
 
 ## Architecture Summary
 
 Runtime architecture:
 
-- Next.js 16.2.9 with the App Router
-- React 19.2.3 with React Compiler enabled
+- Next.js 16.2.12 with the App Router
+- React 19.2.8 with React Compiler enabled
 - TypeScript across application and scripts
 - Supabase Auth and Supabase Postgres as the live backend
 - PocketBase-compatible adapters retained for legacy helpers and ingestion workflows
@@ -142,13 +142,6 @@ The repository is in a post-migration state:
 If you need to replay the legacy migration flow, apply the SQL in `supabase/migrations/20260304_pocketbase_to_supabase.sql` before running the migration script.
 
 ## Documentation
-
-Start with:
-
-- [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)
-- [docs/JOSAA_IMPLEMENTATION.md](./docs/JOSAA_IMPLEMENTATION.md)
-- [docs/ROUND_SUPPORT_IMPLEMENTATION.md](./docs/ROUND_SUPPORT_IMPLEMENTATION.md)
-- [docs/scripts-readme.md](./docs/scripts-readme.md)
 
 Feature-local documentation is also available in:
 

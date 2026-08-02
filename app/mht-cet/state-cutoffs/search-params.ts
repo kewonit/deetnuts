@@ -5,13 +5,14 @@ import {
   parseAsArrayOf,
   parseAsStringLiteral,
 } from "nuqs/server";
+import { DEFAULT_YEAR } from "./constants";
 
 // Define all search params for the state cutoffs page
 export const searchParamsParser = {
   // Core filters
   percentile: parseAsString.withDefault(""),
   search: parseAsString.withDefault(""),
-  year: parseAsInteger.withDefault(2025),
+  year: parseAsInteger.withDefault(DEFAULT_YEAR),
   round: parseAsInteger.withDefault(1),
 
   // Multi-select filters (stored as comma-separated)

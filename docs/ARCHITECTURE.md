@@ -101,8 +101,12 @@ Current tables referenced by code:
 - `2024_mht_cet_round_two_cutoffs`
 - `2024_mht_cet_round_three_cutoffs`
 - `2025_mht_cet_round_one_cutoffs`
+- `2025_mht_cet_round_two_cutoffs`
+- `2025_mht_cet_round_three_cutoffs`
+- `2025_mht_cet_round_four_cutoffs`
+- `2026_mht_cet_round_one_cutoffs`
 
-The state-cutoff UI is year-aware. For 2024, rounds 1-3 are selectable. For 2025, the current implementation forces round 1.
+The state-cutoff UI is year-aware. It exposes rounds 1-3 for 2024, rounds 1-4 for 2025, and the currently available Round 1 dataset for 2026. Candidate-profile filtering maps candidature, home-university, category, ladies, and supported special-reservation eligibility to the source seat pools before querying cutoff rows.
 
 ### MHT-CET College and Seat Data
 

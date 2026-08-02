@@ -76,5 +76,5 @@ export function formatRedditCutoffResponse(result: BotCutoffResult) {
 }
 
 export function formatInvalidCommandResponse(error: string) {
-  return `${error} Try \`--percentile 95 --year 2025 --round 1 --category obc --subcategory home --course cs-it\`.`;
+  return `${error} Try \`--percentile 95 --year 2026 --round 1 --category obc --subcategory home --course cs-it\`.`;
 }

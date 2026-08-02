@@ -11,6 +11,7 @@ import {
   getCollectionForRound,
   isRoundAvailableForYear,
   DEFAULT_ROUND,
+  DEFAULT_YEAR,
   ROUNDS_BY_YEAR,
 } from "./constants";
 import {
@@ -96,7 +97,7 @@ export async function getProfiledCutoffRecords(
   const sanitizedYear =
     Number.isInteger(input.year) && ROUNDS_BY_YEAR[input.year]
       ? input.year
-      : 2025;
+      : DEFAULT_YEAR;
   const sanitizedRound =
     Number.isInteger(input.round) &&
     isRoundAvailableForYear(input.round, sanitizedYear)
@@ -296,7 +297,7 @@ export async function getCutoffRecords(
 ) {
   try {
     const sanitizedYear =
-      Number.isInteger(year) && ROUNDS_BY_YEAR[year] ? year : 2025;
+      Number.isInteger(year) && ROUNDS_BY_YEAR[year] ? year : DEFAULT_YEAR;
 
     // Validate and sanitize round input
     const sanitizedRound =

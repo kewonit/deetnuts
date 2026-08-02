@@ -24,7 +24,7 @@ test("normalizeBotCutoffQuery defaults year and round", () => {
     },
     {
       percentile: 95,
-      year: 2025,
+      year: 2026,
       round: 1,
       limit: 5,
       category: "open",

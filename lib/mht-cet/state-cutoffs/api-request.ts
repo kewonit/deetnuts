@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { DEFAULT_YEAR } from "./config";
 
 export const STATE_CUTOFF_MAX_REQUEST_BYTES = 64 * 1024;
 
@@ -20,7 +21,7 @@ export const StateCutoffApiRequestSchema = z.object({
   scoreValue: scoreInput.default(""),
   profile: z.unknown().optional(),
   round: z.number().int().min(1).max(10).default(1),
-  year: z.number().int().min(2020).max(2100).default(2025),
+  year: z.number().int().min(2020).max(2100).default(DEFAULT_YEAR),
   sortBy: z
     .enum([
       "college_name",

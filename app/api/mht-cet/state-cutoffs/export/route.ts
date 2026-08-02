@@ -3,10 +3,37 @@ import { ensureUserAuthenticated } from "@/lib/supabaseAuth";
 import { getPocketBase } from "@/lib/pocketbaseClient";
 import {
   getCollectionForRound,
-  isValidRound,
+  isRoundAvailableForYear,
+  isSupportedYear,
   DEFAULT_ROUND,
+  DEFAULT_YEAR,
   getDisplayNameForRound,
 } from "@/app/mht-cet/state-cutoffs/constants";
+import {
+  buildStateCutoffSearchFilter,
+  escapeFilterValue,
+} from "@/app/mht-cet/state-cutoffs/search-filter";
+
+const MAX_EXPORT_FILTER_VALUES = 40;
+const MAX_FILTER_VALUE_LENGTH = 240;
+const RESPONSE_HEADERS = {
+  "Cache-Control": "private, no-store",
+  "X-Content-Type-Options": "nosniff",
+};
+
+const invalidRequest = (message: string) =>
+  NextResponse.json(
+    { success: false, error: "Invalid request", message },
+    { status: 400, headers: RESPONSE_HEADERS },
+  );
+
+const escapeCsvText = (value: unknown): string => {
+  let text = String(value ?? "");
+  if (/^[=+\-@]/.test(text)) {
+    text = `'${text}`;
+  }
+  return `"${text.replace(/"/g, '""')}"`;
+};
 
 export async function GET(request: NextRequest) {
   try {
@@ -14,7 +41,7 @@ export async function GET(request: NextRequest) {
     const searchParams = url.searchParams;
 
     // Parse query parameters for filtering
-    const search = searchParams.get("search") || "";
+    const search = (searchParams.get("search") || "").trim();
     const categories = searchParams.getAll("categories");
     const courses = searchParams.getAll("courses");
     const statuses = searchParams.getAll("statuses");
@@ -23,20 +50,44 @@ export async function GET(request: NextRequest) {
     const roundParam = searchParams.get("round");
     const yearParam = searchParams.get("year");
 
-    // Validate and sanitize round parameter
-    const round = roundParam ? parseInt(roundParam, 10) : DEFAULT_ROUND;
-    const sanitizedRound =
-      Number.isInteger(round) && isValidRound(round) ? round : DEFAULT_ROUND;
-    if (sanitizedRound !== round) {
-      console.warn(
-        `Invalid round ${round} provided in export, using round ${sanitizedRound}`,
-      );
+    const allFilterValues = [
+      ...categories,
+      ...courses,
+      ...statuses,
+      ...homeUniversities,
+    ];
+    if (search.length > 200) {
+      return invalidRequest("Search text is too long.");
     }
-    const year = yearParam ? parseInt(yearParam, 10) : 2024;
+    if (
+      allFilterValues.length > MAX_EXPORT_FILTER_VALUES ||
+      allFilterValues.some(
+        (value) =>
+          value.trim().length === 0 ||
+          value.length > MAX_FILTER_VALUE_LENGTH,
+      )
+    ) {
+      return invalidRequest("Export filters are missing or too large.");
+    }
+    if (percentileInput) {
+      const percentile = Number(percentileInput);
+      if (!Number.isFinite(percentile) || percentile < 0 || percentile > 100) {
+        return invalidRequest("Percentile must be between 0 and 100.");
+      }
+    }
 
+    // Validate and sanitize round parameter
+    const year = yearParam === null ? DEFAULT_YEAR : Number(yearParam);
+    if (!Number.isInteger(year) || !isSupportedYear(year)) {
+      return invalidRequest("The requested cutoff year is unavailable.");
+    }
+    const round = roundParam === null ? DEFAULT_ROUND : Number(roundParam);
+    if (!Number.isInteger(round) || !isRoundAvailableForYear(round, year)) {
+      return invalidRequest("The requested CAP round is unavailable.");
+    }
     // Get collection name for the round
-    const collectionName = getCollectionForRound(sanitizedRound, year);
-    const roundDisplayName = getDisplayNameForRound(sanitizedRound);
+    const collectionName = getCollectionForRound(round, year);
+    const roundDisplayName = getDisplayNameForRound(round);
 
     const pb = getPocketBase();
 
@@ -56,16 +107,17 @@ export async function GET(request: NextRequest) {
         const filterParts: string[] = [];
 
         if (search) {
-          filterParts.push(
-            `(college_name ~ "${search}" || course_name ~ "${search}")`,
-          );
+          filterParts.push(buildStateCutoffSearchFilter(search));
         }
 
         // Use chunked categories if provided, otherwise use all categories
         const categoriesToFilter = categoryChunk || categories;
         if (categoriesToFilter && categoriesToFilter.length > 0) {
           const categoryFilter = categoriesToFilter
-            .map((cat: string) => `category = "${cat}"`)
+            .map(
+              (cat: string) =>
+                `category = "${escapeFilterValue(cat)}"`,
+            )
             .join(" || ");
           filterParts.push(`(${categoryFilter})`);
         }
@@ -74,7 +126,10 @@ export async function GET(request: NextRequest) {
         const coursesToFilter = courseChunk || courses;
         if (coursesToFilter && coursesToFilter.length > 0) {
           const courseFilter = coursesToFilter
-            .map((course: string) => `course_name = "${course}"`)
+            .map(
+              (course: string) =>
+                `course_name = "${escapeFilterValue(course)}"`,
+            )
             .join(" || ");
           filterParts.push(`(${courseFilter})`);
         }
@@ -83,7 +138,10 @@ export async function GET(request: NextRequest) {
         const statusesToFilter = statusChunk || statuses;
         if (statusesToFilter && statusesToFilter.length > 0) {
           const statusFilter = statusesToFilter
-            .map((status: string) => `status = "${status}"`)
+            .map(
+              (status: string) =>
+                `status = "${escapeFilterValue(status)}"`,
+            )
             .join(" || ");
           filterParts.push(`(${statusFilter})`);
         }
@@ -93,14 +151,17 @@ export async function GET(request: NextRequest) {
           homeUniversityChunk || homeUniversities;
         if (homeUniversitiesToFilter && homeUniversitiesToFilter.length > 0) {
           const homeUniversityFilter = homeUniversitiesToFilter
-            .map((uni: string) => `home_university = "${uni}"`)
+            .map(
+              (uni: string) =>
+                `home_university = "${escapeFilterValue(uni)}"`,
+            )
             .join(" || ");
           filterParts.push(`(${homeUniversityFilter})`);
         }
 
         // Percentile-based filtering
-        if (percentileInput && !isNaN(parseFloat(percentileInput))) {
-          const targetPercentile = parseFloat(percentileInput);
+        if (percentileInput) {
+          const targetPercentile = Number(percentileInput);
           const minPercentile = 0;
           const maxPercentile =
             Math.round(targetPercentile * 10000000000) / 10000000000;
@@ -189,19 +250,10 @@ export async function GET(request: NextRequest) {
                 );
                 if (chunkFilterQuery) {
                   chunkPromises.push(
-                    pb
-                      .collection(collectionName)
-                      .getFullList({
-                        filter: chunkFilterQuery,
-                        sort: "-last_rank",
-                      })
-                      .catch((error) => {
-                        console.error(
-                          `Export chunk query failed for ${collectionName}:`,
-                          error,
-                        );
-                        return [];
-                      }),
+                    pb.collection(collectionName).getFullList({
+                      filter: chunkFilterQuery,
+                      sort: "-last_rank",
+                    }),
                   );
                 }
               }
@@ -219,7 +271,6 @@ export async function GET(request: NextRequest) {
           uniqueRecords.set(record.id, record);
         });
         allRecords = Array.from(uniqueRecords.values());
-
       } else {
         // Execute single query for smaller filter lists
         const filterQuery = buildFilterParts();
@@ -246,15 +297,11 @@ export async function GET(request: NextRequest) {
                 success: false,
                 error: "Data not available",
                 message: `${roundDisplayName} data is not available for export`,
-                details: `Collection ${collectionName} not found`,
-                round: sanitizedRound,
+                round,
               },
               {
                 status: 404,
-                headers: {
-                  "Cache-Control": "no-cache",
-                  "X-Content-Type-Options": "nosniff",
-                },
+                headers: RESPONSE_HEADERS,
               },
             );
           }
@@ -266,40 +313,31 @@ export async function GET(request: NextRequest) {
       console.error("Database export failed or authentication error:", error);
 
       // Check if it's an authentication error
-      if (error instanceof Error && error.message.includes("authentication")) {
+      if (
+        error instanceof Error &&
+        error.message.toLowerCase().includes("authentication")
+      ) {
         return NextResponse.json(
           {
             success: false,
             error: "Authentication required",
             message: "Please log in to export cutoff data",
-            details: error.message,
           },
           {
             status: 401,
-            headers: {
-              "Cache-Control": "no-cache",
-              "X-Content-Type-Options": "nosniff",
-            },
+            headers: RESPONSE_HEADERS,
           },
         );
       }
 
-      // Generate mock data for export as fallback
-      allRecords = Array.from({ length: 500 }, (_, i) => ({
-        college_code: `COL${String(i + 1).padStart(3, "0")}`,
-        college_name: `Mock Engineering College ${i + 1}`,
-        course_code: `CS${String(i + 1).padStart(2, "0")}`,
-        course_name: `Computer Science and Engineering ${i + 1}`,
-        category: ["GOPENS", "GOBCS", "GSTS", "GVJS"][i % 4],
-        seat_allocation_section: [
-          "STATE_LEVEL",
-          "HOME_TO_HOME",
-          "HOME_TO_OTHER",
-        ][i % 3],
-        cutoff_score: String(150 - i * 0.2),
-        last_rank: String(1000 + i * 10),
-        total_admitted: 60 + (i % 20),
-      }));
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Export unavailable",
+          message: "The cutoff export could not be completed. Try again.",
+        },
+        { status: 503, headers: RESPONSE_HEADERS },
+      );
     }
 
     // Convert to CSV
@@ -319,12 +357,12 @@ export async function GET(request: NextRequest) {
       headers.join(","),
       ...allRecords.map((record) =>
         [
-          record.college_code,
-          `"${record.college_name}"`,
-          record.course_code,
-          `"${record.course_name}"`,
-          record.category,
-          record.seat_allocation_section,
+          escapeCsvText(record.college_code),
+          escapeCsvText(record.college_name),
+          escapeCsvText(record.course_code),
+          escapeCsvText(record.course_name),
+          escapeCsvText(record.category),
+          escapeCsvText(record.seat_allocation_section),
           record.cutoff_score,
           record.last_rank,
           record.total_admitted,
@@ -336,6 +374,7 @@ export async function GET(request: NextRequest) {
       status: 200,
       headers: {
         "Content-Type": "text/csv",
+        ...RESPONSE_HEADERS,
         "Content-Disposition": `attachment; filename=mht_cet_state_cutoffs_${year}_${roundDisplayName.toLowerCase().replace(" ", "_")}.csv`,
       },
     });
@@ -345,9 +384,9 @@ export async function GET(request: NextRequest) {
       {
         success: false,
         error: "Failed to export cutoff data",
-        details: error instanceof Error ? error.message : "Unknown error",
+        message: "The cutoff export could not be completed. Try again.",
       },
-      { status: 500 },
+      { status: 500, headers: RESPONSE_HEADERS },
     );
   }
 }

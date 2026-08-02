@@ -278,6 +278,8 @@ export const TopToolbar = memo(function TopToolbar({
             {search && (
               <button
                 onClick={() => onSearchChange("")}
+                aria-label="Clear search"
+                title="Clear search"
                 className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded"
               >
                 <X className="h-3 w-3 text-gray-400" />
@@ -336,7 +338,13 @@ export const TopToolbar = memo(function TopToolbar({
           {/* Density Toggle */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="neutral" size="sm" className="h-9 gap-2">
+              <Button
+                variant="neutral"
+                size="sm"
+                className="h-9 gap-2"
+                aria-label={`Table density: ${density}`}
+                title={`Table density: ${density}`}
+              >
                 {density === "compact" && <Rows3 className="h-4 w-4" />}
                 {density === "comfortable" && (
                   <LayoutList className="h-4 w-4" />
@@ -366,7 +374,13 @@ export const TopToolbar = memo(function TopToolbar({
           {/* Column Visibility */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="neutral" size="sm" className="h-9 gap-2">
+              <Button
+                variant="neutral"
+                size="sm"
+                className="h-9 gap-2"
+                aria-label="Choose visible columns"
+                title="Choose visible columns"
+              >
                 <Columns3 className="h-4 w-4" />
                 <span className="hidden sm:inline">Columns</span>
               </Button>
@@ -405,6 +419,8 @@ export const TopToolbar = memo(function TopToolbar({
             className="h-9 gap-2"
             onClick={handleExport}
             disabled={records.length === 0}
+            aria-label="Export current page to CSV"
+            title="Export current page to CSV"
           >
             <Download className="h-4 w-4" />
             <span className="hidden sm:inline">Export</span>
@@ -416,6 +432,8 @@ export const TopToolbar = memo(function TopToolbar({
             size="sm"
             className="h-9 gap-2"
             onClick={handleShare}
+            aria-label="Copy link to clipboard"
+            title="Copy link to clipboard"
           >
             <Share2 className="h-4 w-4" />
           </Button>

@@ -76,7 +76,7 @@ export function parseCutoffFlagCommand(text: string): ParseCutoffCommandResult {
   if (!percentile) {
     return {
       ok: false,
-      error: "Missing percentile. Try --percentile 95 --year 2025 --round 1.",
+      error: "Missing percentile. Try --percentile 95 --year 2026 --round 1.",
     };
   }
 
@@ -113,4 +113,4 @@ export function parseCutoffFlagCommand(text: string): ParseCutoffCommandResult {
 }
 
 export const CUTOFF_COMMAND_USAGE =
-  "Try `--percentile 95 --year 2025 --round 1 --category obc --subcategory home --course cs-it`.";
+  "Try `--percentile 95 --year 2026 --round 1 --category obc --subcategory home --course cs-it`.";

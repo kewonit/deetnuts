@@ -1,6 +1,5 @@
 import "dotenv/config";
 import { setTimeout as sleep } from "node:timers/promises";
-import snoowrap from "snoowrap";
 
 import {
   claimBotEventViaApi,
@@ -13,15 +12,10 @@ import {
   parseCutoffFlagCommand,
 } from "../lib/bot/commands";
 import { formatRedditCutoffResponse } from "../lib/bot/formatters";
-
-type RedditComment = {
-  id: string;
-  name?: string;
-  body?: string;
-  author?: { name?: string } | string;
-  subreddit?: { display_name?: string } | string;
-  reply(text: string): Promise<unknown>;
-};
+import {
+  RedditClient,
+  type RedditComment,
+} from "../lib/bot/reddit-client";
 
 const DEFAULT_POLL_INTERVAL_MS = 60_000;
 const DEFAULT_LIMIT = 50;
@@ -51,13 +45,11 @@ function isDryRun() {
 }
 
 function getAuthorName(comment: RedditComment) {
-  if (typeof comment.author === "string") return comment.author;
-  return comment.author?.name ?? "";
+  return comment.author ?? "";
 }
 
 function getSubredditName(comment: RedditComment, fallback: string) {
-  if (typeof comment.subreddit === "string") return comment.subreddit;
-  return comment.subreddit?.display_name ?? fallback;
+  return comment.subreddit ?? fallback;
 }
 
 function getRequestId(comment: RedditComment) {
@@ -274,14 +266,12 @@ async function pollSubreddit({
   botUsername,
   dryRunSeen,
 }: {
-  reddit: snoowrap;
+  reddit: RedditClient;
   subreddit: string;
   botUsername: string | null;
   dryRunSeen: Set<string>;
 }) {
-  const comments = (await reddit
-    .getSubreddit(subreddit)
-    .getNewComments({ limit: DEFAULT_LIMIT })) as unknown as RedditComment[];
+  const comments = await reddit.getNewComments(subreddit, DEFAULT_LIMIT);
 
   for (const comment of [...comments].reverse()) {
     await processComment({ comment, subreddit, botUsername, dryRunSeen });
@@ -304,7 +294,7 @@ async function main() {
     throw new Error("REDDIT_SUBREDDITS must contain at least one subreddit");
   }
 
-  const reddit = new snoowrap({
+  const reddit = new RedditClient({
     userAgent: requiredEnv("REDDIT_USER_AGENT"),
     clientId: requiredEnv("REDDIT_CLIENT_ID"),
     clientSecret: requiredEnv("REDDIT_CLIENT_SECRET"),

@@ -34,7 +34,7 @@ import { MobileFilterToast } from "./components/MobileFilterToast";
 import { TopToolbar } from "./components/TopToolbar";
 import { useCutoffData } from "./hooks/use-cutoff-data";
 import { recordAnonymousStateCutoffAction } from "./anonymous-usage";
-import { ROUNDS_BY_YEAR } from "./constants";
+import { DEFAULT_YEAR, ROUNDS_BY_YEAR } from "./constants";
 import {
   MHT_CET_CANDIDATURE_OPTIONS,
   MHT_CET_CATEGORY_OPTIONS,
@@ -115,7 +115,7 @@ function StateCutoffsContent() {
         "rank",
       ] as const).withDefault("rank"),
       rank: parseAsString.withDefault(""),
-      year: parseAsInteger.withDefault(2025),
+      year: parseAsInteger.withDefault(DEFAULT_YEAR),
       round: parseAsInteger.withDefault(1),
       mht_candidature: parseAsStringLiteral(
         MHT_CET_CANDIDATURE_IDS,
@@ -327,7 +327,7 @@ function StateCutoffsContent() {
     } = {};
 
     if (!ROUNDS_BY_YEAR[year]) {
-      incompatibleProfileValues.year = 2025;
+      incompatibleProfileValues.year = DEFAULT_YEAR;
       incompatibleProfileValues.round = 1;
     } else if (!ROUNDS_BY_YEAR[year].includes(round)) {
       incompatibleProfileValues.round = 1;

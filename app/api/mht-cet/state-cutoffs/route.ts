@@ -11,6 +11,7 @@ import {
 } from "@/app/mht-cet/state-cutoffs/anonymous-usage";
 import {
   DEFAULT_ROUND,
+  DEFAULT_YEAR,
   isRoundAvailableForYear,
   ROUNDS_BY_YEAR,
 } from "@/app/mht-cet/state-cutoffs/constants";
@@ -202,7 +203,7 @@ export async function POST(request: NextRequest) {
     }
 
     const sanitizedYear =
-      Number.isInteger(year) && ROUNDS_BY_YEAR[year] ? year : 2025;
+      Number.isInteger(year) && ROUNDS_BY_YEAR[year] ? year : DEFAULT_YEAR;
 
     // Validate round parameter
     const sanitizedRound =
