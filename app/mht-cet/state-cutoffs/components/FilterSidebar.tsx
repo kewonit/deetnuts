@@ -784,6 +784,7 @@ const CandidateProfileSetup = memo(function CandidateProfileSetup({
 
 const FilterGroup = memo(function FilterGroup({
   title,
+  description,
   icon: Icon,
   groups,
   selected,
@@ -791,6 +792,7 @@ const FilterGroup = memo(function FilterGroup({
   isGrouped = true,
 }: {
   title: string;
+  description?: string;
   icon: ElementType;
   groups: Record<string, string[]> | Array<{ value: string; label: string }>;
   selected: string[];
@@ -880,8 +882,15 @@ const FilterGroup = memo(function FilterGroup({
               )}
             />
           </div>
-          <span className="font-medium text-sm text-gray-800 break-words whitespace-normal">
-            {title}
+          <span className="min-w-0 flex-1 text-left">
+            <span className="block text-sm font-medium text-gray-800 break-words whitespace-normal">
+              {title}
+            </span>
+            {description ? (
+              <span className="mt-0.5 block text-xs font-normal leading-4 text-gray-500">
+                {description}
+              </span>
+            ) : null}
           </span>
           {selected.length > 0 && (
             <Badge className="ml-auto mr-2 bg-purple-600 text-white hover:bg-purple-700 px-2 py-0.5 text-xs">
@@ -895,6 +904,7 @@ const FilterGroup = memo(function FilterGroup({
           <div className="flex gap-3">
             <Input
               placeholder={`Search ${title.toLowerCase()}...`}
+              aria-label={`Search ${title.toLowerCase()}`}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="h-10 text-sm border-gray-300 focus:border-purple-500"
@@ -932,10 +942,16 @@ const FilterGroup = memo(function FilterGroup({
                         <div
                           role="button"
                           tabIndex={0}
+                          aria-pressed={items.every((item) =>
+                            selected.includes(item),
+                          )}
                           onClick={() => toggleGroup(items)}
-                          onKeyDown={(e) =>
-                            e.key === "Enter" && toggleGroup(items)
-                          }
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              toggleGroup(items);
+                            }
+                          }}
                           className="flex items-center gap-3 w-full py-2 px-3 text-sm text-purple-600 hover:bg-purple-50 rounded-lg transition-colors cursor-pointer"
                         >
                           <Checkbox
@@ -951,10 +967,14 @@ const FilterGroup = memo(function FilterGroup({
                             key={item}
                             role="button"
                             tabIndex={0}
+                            aria-pressed={selected.includes(item)}
                             onClick={() => toggleItem(item)}
-                            onKeyDown={(e) =>
-                              e.key === "Enter" && toggleItem(item)
-                            }
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                toggleItem(item);
+                              }
+                            }}
                             className={cn(
                               "flex items-center gap-3 w-full py-2 px-3 text-sm rounded-lg transition-colors cursor-pointer min-w-0",
                               selected.includes(item)
@@ -980,17 +1000,22 @@ const FilterGroup = memo(function FilterGroup({
                         key={typeof item === "string" ? item : item.value}
                         role="button"
                         tabIndex={0}
+                        aria-pressed={selected.includes(
+                          typeof item === "string" ? item : item.value,
+                        )}
                         onClick={() =>
                           toggleItem(
                             typeof item === "string" ? item : item.value,
                           )
                         }
-                        onKeyDown={(e) =>
-                          e.key === "Enter" &&
-                          toggleItem(
-                            typeof item === "string" ? item : item.value,
-                          )
-                        }
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            toggleItem(
+                              typeof item === "string" ? item : item.value,
+                            );
+                          }
+                        }}
                         className={cn(
                           "flex items-center gap-3 w-full py-2.5 px-3 text-sm rounded-lg transition-colors cursor-pointer min-w-0",
                           selected.includes(
@@ -1129,6 +1154,18 @@ export const FilterSidebar = memo(function FilterSidebar({
             onMinorityCommunityChange={onMinorityCommunityChange}
           />
 
+          <Accordion type="single" collapsible>
+            <FilterGroup
+              title="Courses"
+              description="Search courses or select a group"
+              icon={GraduationCap}
+              groups={COURSE_GROUPS}
+              selected={courses}
+              onChange={onCoursesChange}
+              isGrouped
+            />
+          </Accordion>
+
           <Separator className="bg-gray-200" />
 
           <Collapsible>
@@ -1138,7 +1175,7 @@ export const FilterSidebar = memo(function FilterSidebar({
                   Advanced filters
                 </span>
                 <span className="block text-xs text-gray-500">
-                  Year, round, courses and raw refinement
+                  Year, round, seat pools, status and university
                 </span>
               </span>
               <ChevronDown className="h-4 w-4 text-gray-500" />
@@ -1161,15 +1198,6 @@ export const FilterSidebar = memo(function FilterSidebar({
                     isGrouped
                   />
                 ) : null}
-
-                <FilterGroup
-                  title="Courses"
-                  icon={GraduationCap}
-                  groups={COURSE_GROUPS}
-                  selected={courses}
-                  onChange={onCoursesChange}
-                  isGrouped
-                />
 
                 <FilterGroup
                   title="College Status"
