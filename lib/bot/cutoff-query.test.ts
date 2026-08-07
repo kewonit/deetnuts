@@ -156,6 +156,7 @@ test("selectTopUniqueCutoffRows dedupes college-course rows", () => {
       {
         college_code: "1001",
         college_name: "A College",
+        course_code: "100124210",
         course_name: "Computer Engineering",
         category: "GOPENS",
         cutoff_score: "95.1",
@@ -164,6 +165,7 @@ test("selectTopUniqueCutoffRows dedupes college-course rows", () => {
       {
         college_code: "1001",
         college_name: "A College",
+        course_code: "100124210",
         course_name: "Computer Engineering",
         category: "GOPENH",
         cutoff_score: "94.9",
@@ -172,6 +174,7 @@ test("selectTopUniqueCutoffRows dedupes college-course rows", () => {
       {
         college_code: "1002",
         college_name: "B College",
+        course_code: 100224610,
         course_name: "Information Technology",
         category: "GOPENS",
         cutoff_score: "94.7",
@@ -183,7 +186,10 @@ test("selectTopUniqueCutoffRows dedupes college-course rows", () => {
 
   assert.equal(rows.length, 2);
   assert.equal(rows[0].collegeName, "A College");
+  assert.equal(rows[0].collegeCode, "1001");
+  assert.equal(rows[0].courseCode, "100124210");
   assert.equal(rows[0].category, "GOPENS");
+  assert.equal(rows[1].courseCode, "100224610");
 });
 
 test("queryBotStateCutoffs returns top unique rows and source URL", async () => {
@@ -208,6 +214,7 @@ test("queryBotStateCutoffs returns top unique rows and source URL", async () => 
             {
               college_code: "1001",
               college_name: "A College",
+              course_code: "100124210",
               course_name: "Artificial Intelligence and Data Science",
               category: "GOBCS",
               cutoff_score: "94.8",
@@ -216,6 +223,7 @@ test("queryBotStateCutoffs returns top unique rows and source URL", async () => 
             {
               college_code: "1002",
               college_name: "B College",
+              course_code: "100261210",
               course_name: "Mechanical Engineering",
               category: "GOBCS",
               cutoff_score: "94.9",
@@ -241,6 +249,7 @@ test("queryBotStateCutoffs returns top unique rows and source URL", async () => 
     result.rows[0].courseName,
     "Artificial Intelligence and Data Science",
   );
+  assert.equal(result.rows[0].courseCode, "100124210");
   assert.match(result.sourceUrl, /percentile=95/);
   assert.match(result.sourceUrl, /GOBCS/);
   assert.match(

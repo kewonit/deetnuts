@@ -2,6 +2,8 @@ import type { BotCutoffResult } from "./cutoff-query";
 
 const DISCLAIMER =
   "Cutoffs are historical reference data, not admission guarantees. Verify official CAP data.";
+const DISCORD_RESPONSE_LIMIT = 1_900;
+const STATE_CUTOFFS_URL = "https://deetnuts.com/mht-cet/state-cutoffs";
 
 function formatPercentile(value: number) {
   return `${value.toFixed(2).replace(/\.?0+$/, "")}%`;
@@ -14,6 +16,28 @@ function formatRank(value: number | null) {
 function truncate(value: string, maxLength: number) {
   if (value.length <= maxLength) return value;
   return `${value.slice(0, Math.max(0, maxLength - 1)).trimEnd()}…`;
+}
+
+function formatDiscordValue(value: string, maxLength: number) {
+  return truncate(value.replace(/\s+/g, " ").trim(), maxLength);
+}
+
+function formatDiscordCode(value: string | null) {
+  return value ? formatDiscordValue(value, 24) : "n/a";
+}
+
+function formatDiscordCutoffRow(
+  row: BotCutoffResult["rows"][number],
+  index: number,
+) {
+  return [
+    `${index + 1}. ${formatDiscordValue(row.collegeName, 64)} — ${formatDiscordValue(row.courseName, 52)}`,
+    `   College code: ${formatDiscordCode(row.collegeCode)} · Branch code: ${formatDiscordCode(row.courseCode)} | ${formatPercentile(row.cutoffScore)} | ${formatRank(row.lastRank)} | ${formatDiscordValue(row.category, 24)}`,
+  ];
+}
+
+function formatOmittedDiscordRows(count: number) {
+  return `… ${count} more top ${count === 1 ? "result" : "results"} at the link below.`;
 }
 
 function getQueryFilterLabels(result: BotCutoffResult) {
@@ -37,19 +61,66 @@ export function formatCutoffSummaryHeader(result: BotCutoffResult) {
 
 export function formatDiscordCutoffResponse(result: BotCutoffResult) {
   const lines = [formatCutoffSummaryHeader(result), ""];
+  const detailedFooter = [
+    "",
+    `More results: [open filtered search](${result.sourceUrl})`,
+    "",
+    DISCLAIMER,
+  ];
+  const compactFooter = [
+    "",
+    `More results: ${STATE_CUTOFFS_URL}`,
+    "",
+    DISCLAIMER,
+  ];
 
   if (result.rows.length === 0) {
     lines.push("No matching cutoff rows found for this query.");
   } else {
-    result.rows.forEach((row, index) => {
-      lines.push(
-        `${index + 1}. ${truncate(row.collegeName, 72)} - ${truncate(row.courseName, 56)} | ${formatPercentile(row.cutoffScore)} | ${formatRank(row.lastRank)} | ${row.category}`,
-      );
-    });
+    const rowBlocks = result.rows.map(formatDiscordCutoffRow);
+    const firstRowWithFooter = [
+      ...lines,
+      ...rowBlocks[0],
+      ...(rowBlocks.length > 1
+        ? [formatOmittedDiscordRows(rowBlocks.length - 1)]
+        : []),
+      ...detailedFooter,
+    ].join("\n");
+    const footer =
+      firstRowWithFooter.length <= DISCORD_RESPONSE_LIMIT
+        ? detailedFooter
+        : compactFooter;
+    let displayedRows = 0;
+
+    for (const rowBlock of rowBlocks) {
+      const remainingRows = rowBlocks.length - displayedRows - 1;
+      const candidate = [
+        ...lines,
+        ...rowBlock,
+        ...(remainingRows > 0
+          ? [formatOmittedDiscordRows(remainingRows)]
+          : []),
+        ...footer,
+      ].join("\n");
+
+      if (candidate.length > DISCORD_RESPONSE_LIMIT) break;
+      lines.push(...rowBlock);
+      displayedRows += 1;
+    }
+
+    const omittedRows = rowBlocks.length - displayedRows;
+    if (omittedRows > 0) {
+      lines.push(formatOmittedDiscordRows(omittedRows));
+    }
+
+    lines.push(...footer);
+    return lines.join("\n");
   }
 
-  lines.push("", `More: ${result.sourceUrl}`, "", DISCLAIMER);
-  return lines.join("\n").slice(0, 1900);
+  const detailedResponse = [...lines, ...detailedFooter].join("\n");
+  return detailedResponse.length <= DISCORD_RESPONSE_LIMIT
+    ? detailedResponse
+    : [...lines, ...compactFooter].join("\n");
 }
 
 export function formatRedditCutoffResponse(result: BotCutoffResult) {

@@ -60,6 +60,7 @@ export interface RawStateCutoffRow {
   id?: string | null;
   college_code?: string | number | null;
   college_name?: string | null;
+  course_code?: string | number | null;
   course_name?: string | null;
   category?: string | null;
   cutoff_score?: string | number | null;
@@ -70,6 +71,7 @@ export interface RawStateCutoffRow {
 export interface BotCutoffRow {
   collegeCode: string | null;
   collegeName: string;
+  courseCode: string | null;
   courseName: string;
   category: string;
   cutoffScore: number;
@@ -243,6 +245,7 @@ function normalizeRawRow(row: RawStateCutoffRow): BotCutoffRow | null {
   return {
     collegeCode: toNullableString(row.college_code),
     collegeName,
+    courseCode: toNullableString(row.course_code),
     courseName,
     category,
     cutoffScore,
@@ -313,7 +316,7 @@ export async function fetchBotStateCutoffRows(
   let request = supabase
     .from(collectionName)
     .select(
-      "id,college_code,college_name,course_name,category,cutoff_score,last_rank,home_university",
+      "id,college_code,college_name,course_code,course_name,category,cutoff_score,last_rank,home_university",
       { count: "exact" },
     )
     .gte("cutoff_score", 0)
