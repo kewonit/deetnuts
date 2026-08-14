@@ -31,14 +31,6 @@ export async function generateAllUrls(): Promise<SitemapUrl[]> {
       url: `${baseUrl}/compliance/cookie-policy`,
       lastModified: seoLastUpdated,
     },
-    {
-      url: `${baseUrl}/nirf`,
-      lastModified: seoLastUpdated,
-    },
-    {
-      url: `${baseUrl}/predictions`,
-      lastModified: seoLastUpdated,
-    },
   ];
 }
 

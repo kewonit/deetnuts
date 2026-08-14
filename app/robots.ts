@@ -35,7 +35,6 @@ export default function robots(): MetadataRoute.Robots {
     ],
     sitemap: [
       `${baseUrl}/sitemap.xml`,
-      `${baseUrl}/josaa/sitemap.xml`,
       `${baseUrl}/mht-cet/sitemap.xml`,
     ],
     host: baseUrl,

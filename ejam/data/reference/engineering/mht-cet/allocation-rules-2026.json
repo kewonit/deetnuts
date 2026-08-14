@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "rules_year": 2026,
+  "source_id": "mht-cet.2026.brochure",
+  "source_sha256": "f2f74f09669937c5cbfff0033e00838c85ee861d5c8923eecbd0894134cae1ba",
+  "entries": [
+    {
+      "id": "stage-i",
+      "label": "I",
+      "supported_semantics": [
+        "standard",
+        "pwd-released-to-base-category",
+        "defence-released-to-base-category",
+        "minority-to-maharashtra"
+      ]
+    },
+    {
+      "id": "stage-ii",
+      "label": "II",
+      "supported_semantics": ["ladies-to-male-same-category"]
+    },
+    {
+      "id": "stage-iv",
+      "label": "IV",
+      "supported_semantics": ["unrestricted-maharashtra-merit"]
+    }
+  ]
+}

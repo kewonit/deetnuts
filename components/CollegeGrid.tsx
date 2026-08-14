@@ -2,7 +2,7 @@
 
 import { useState, useMemo, memo } from "react";
 import Link from "next/link";
-import { createCollegeSlug } from "@/lib/slugify";
+import { getMhtCetCollegePath } from "@/lib/admissions/canonical";
 import fuzzysort from "fuzzysort";
 
 interface College {
@@ -23,9 +23,9 @@ const CollegeCard = memo(function CollegeCard({
 }: {
   college: College;
 }) {
-  const slug = createCollegeSlug(
+  const collegePath = getMhtCetCollegePath(
     college.college_name,
-    college.college_id.toString(),
+    college.college_id,
   );
 
   return (
@@ -33,7 +33,7 @@ const CollegeCard = memo(function CollegeCard({
       <div className="p-6 flex-grow">
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
-            <Link href={`/mht-cet/colleges/${slug}`}>
+            <Link href={collegePath} scroll={false}>
               <h2 className="text-xl font-heading text-black hover:text-main transition-colors group-hover:text-main line-clamp-2 mb-3 h-14">
                 {college.college_name}
               </h2>
@@ -86,7 +86,8 @@ const CollegeCard = memo(function CollegeCard({
 
       <div className="p-6 pt-4 border-t-2 border-black">
         <Link
-          href={`/mht-cet/colleges/${slug}`}
+          href={collegePath}
+          scroll={false}
           className="w-full inline-flex items-center justify-center px-6 py-3 bg-main text-black font-heading rounded-base hover:bg-main-dark transition-all duration-200 border-2 border-black shadow-base"
         >
           <span>View Details</span>

@@ -1,21 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { headers } from "next/headers";
 import "./globals.css";
 
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/footer";
-import { GoogleAnalytics } from "@next/third-parties/google";
-import GrainEffect from "@/components/graineffect";
-import { Suspense } from "react";
-import Loading from "./loading";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as SonnerToaster } from "sonner";
-import NextTopLoader from "nextjs-toploader";
-import MotionWrapper from "@/components/MotionWrapper";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
 import SiteJsonLd from "@/components/SiteJsonLd";
-
-const inter = Inter({ subsets: ["latin"] });
+import SanitizedGoogleAnalytics from "@/components/analytics/SanitizedGoogleAnalytics";
 
 export const metadata: Metadata = {
   applicationName: "DEETNUTS",
@@ -24,19 +12,12 @@ export const metadata: Metadata = {
     template: "%s | DEETNUTS",
   },
   description:
-    "Mildly important data related to colleges simplified. Explore JoSAA cutoffs for IITs, NITs, IIITs, MHT-CET cutoffs, NIRF rankings, and admission trends.",
+    "Mildly important Maharashtra college data simplified. Explore MHT-CET cutoffs, seat matrices, colleges, and admission trends.",
   metadataBase: new URL("https://deetnuts.com"),
   keywords: [
-    "JoSAA",
-    "JEE Advanced",
-    "JEE Main",
     "MHT-CET",
-    "IIT cutoffs",
-    "NIT cutoffs",
-    "IIIT cutoffs",
     "engineering admission",
     "college cutoffs",
-    "NIRF rankings",
     "seat matrix",
   ],
   authors: [{ name: "DEETNUTS" }],
@@ -56,7 +37,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "DEETNUTS - College Data Simplified",
     description:
-      "Explore JoSAA cutoffs for IITs, NITs, IIITs, MHT-CET cutoffs, NIRF rankings, and admission trends.",
+      "Explore MHT-CET cutoffs, seat matrices, Maharashtra colleges, and admission trends.",
     url: "https://deetnuts.com",
     siteName: "DEETNUTS",
     images: [
@@ -74,7 +55,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "DEETNUTS - College Data Simplified",
     description:
-      "Explore JoSAA cutoffs for IITs, NITs, IIITs, MHT-CET cutoffs, NIRF rankings, and admission trends.",
+      "Explore MHT-CET cutoffs, seat matrices, Maharashtra colleges, and admission trends.",
     images: [
       "https://res.cloudinary.com/dfyrk32ua/image/upload/v1722186653/deetnuts/preview_o5ykn7.png",
     ],
@@ -92,44 +73,45 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const requestHeaders = await headers();
+  const admissionsDetail =
+    requestHeaders.get("x-deetnuts-admissions-detail") === "1";
+  const ejamPredictor = requestHeaders.get("x-deetnuts-ejam-page") === "1";
+  let pageContent: React.ReactNode;
+
+  if (ejamPredictor) {
+    const { default: StandardSiteShell } = await import(
+      "@/components/StandardSiteShell"
+    );
+    pageContent = (
+      <StandardSiteShell>{children}</StandardSiteShell>
+    );
+  } else if (admissionsDetail) {
+    pageContent = (
+      <>
+        {children}
+        <SanitizedGoogleAnalytics />
+      </>
+    );
+  } else {
+    const { default: StandardSiteShell } = await import(
+      "@/components/StandardSiteShell"
+    );
+    pageContent = <StandardSiteShell>{children}</StandardSiteShell>;
+  }
+
   return (
     <html lang="en" className="bg-[#E4DFF2]">
       <head>
         <SiteJsonLd />
       </head>
-      <body
-        className={`${inter.className} relative min-h-screen overflow-x-hidden`}
-      >
-        <NuqsAdapter>
-          <Navbar />
-          <Suspense fallback={<Loading />}>
-            <MotionWrapper>
-              <NextTopLoader
-                color="#C7A1FE"
-                initialPosition={0.08}
-                crawlSpeed={200}
-                height={5}
-                crawl={true}
-                showSpinner={false}
-                easing="ease"
-                speed={200}
-                shadow="0 0 20px #C7A1FE,0 0 15px #C7A1FE"
-              />
-              {children}
-            </MotionWrapper>
-          </Suspense>
-          <Toaster />
-          <SonnerToaster position="top-right" richColors closeButton />
-          <GrainEffect />
-          <GoogleAnalytics gaId="G-PF9S037SJQ" />
-          <Footer />
-          <div className="fixed bottom-0 left-0 right-0 z-50"></div>
-        </NuqsAdapter>
+      <body className="relative min-h-screen overflow-x-hidden font-sans">
+        {pageContent}
       </body>
     </html>
   );

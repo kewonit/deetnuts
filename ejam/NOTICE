@@ -1,0 +1,45 @@
+DATA ATTRIBUTION AND DISCLAIMER
+
+The source code is licensed under AGPL-3.0-or-later. That
+licence covers the code only, not the datasets bundled with or derived by
+this repo.
+
+1. I don't own the official data
+
+   I do not claim copyright, ownership, or any proprietary interest in
+   examination results, counselling cutoffs, seat matrices, institute lists,
+   or related official publications. Those materials come from public
+   releases by the Government of India and its authorised bodies,
+   including NTA, JoSAA, CSAB, and participating institutes.
+
+2. Where the data comes from
+
+   Files under data/ are compiled from publicly available official sources
+   for convenience. Source URLs and publishers are listed in
+   data/sources/engineering/jee.json. Parquet files and predictor indices
+   are processed copies of those records — not official publications.
+
+3. No affiliation
+
+   This project is not affiliated with, sponsored by, or endorsed by NTA,
+   JoSAA, CSAB, any IIT, NIT, IIIT, any government or any private body.
+
+4. Don't rely on this alone
+
+   Data may have errors or be out of date. Predictions are rough estimates
+   based on past cutoffs, not admissions advice. Always verify ranks,
+   eligibility, and seat counts on the official JoSAA, CSAB, and NTA
+   portals before making decisions.
+
+5. Names and marks
+
+   Third-party names and logos belong to their owners. I use them only to
+   identify the original sources.
+
+6. Licence scope
+
+   AGPL-3.0 applies to my code only. It does not give you extra rights to
+   official government data beyond what the original publishers already
+   provide.
+
+For official counselling information, use the government portals directly.

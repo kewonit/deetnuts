@@ -1,6 +1,6 @@
 # DEETNUTS
 
-DEETNUTS is a data-heavy Next.js application for publishing public college and admissions data in a searchable, student-facing format. The repository contains the web application, data-access layer, upload utilities, and migration tooling used to manage JoSAA, MHT-CET, NIRF, and related datasets.
+DEETNUTS is a data-heavy Next.js application for publishing MHT-CET college and admissions data in a searchable, student-facing format. The repository contains the web application, data-access layer, upload utilities, and migration tooling used to manage MHT-CET datasets.
 
 Live properties:
 
@@ -12,12 +12,10 @@ The current codebase covers the following data domains:
 
 | Domain                      | Coverage in Repository                         | Notes                                                       |
 | --------------------------- | ---------------------------------------------- | ----------------------------------------------------------- |
-| JoSAA cutoffs               | 2018-2024                                      | IIT, NIT, IIIT, and GFTI institute, branch, and cutoff data |
 | MHT-CET state cutoffs       | 2024 rounds 1-3, 2025 rounds 1-4, 2026 round 1 | Profile-aware cutoffs derived from official CAP data        |
 | MHT-CET all-India cutoffs   | 2024 rounds 1-3                                | API handlers exist for all three rounds                     |
 | MHT-CET seat matrix         | 2024                                           | Batch-ingested from CSV                                     |
 | MHT-CET college master data | 2024                                           | Used for directory and detail pages                         |
-| JEE Main predictions        | 2026 predictions compared against 2025         | Served from a precomputed CSV-backed dataset                |
 
 ## Architecture Summary
 
@@ -54,6 +52,7 @@ deetnuts/
 ├── components/        # Shared UI components and feature-specific presentation
 ├── data/              # Checked-in supporting data files used by the app and imports
 ├── docs/              # Maintained technical and operational documentation
+├── ejam/              # Vendored eJAM predictor runtime and verified release data
 ├── lib/               # Data clients, auth helpers, metadata, and utilities
 ├── public/            # Static assets
 ├── scripts/           # Data ingestion, migration, and maintenance scripts
@@ -122,6 +121,16 @@ npm run format
 
 Operational scripts are documented in [docs/scripts-readme.md](./docs/scripts-readme.md).
 
+### eJAM predictor runtime
+
+The JEE Main and JEE Advanced predictor uses the minimum vendored eJAM runtime
+under `ejam/`: predictor/data source modules, verified release data, and the
+upstream licence and attribution files. The standalone eJAM web app, workspace
+tooling, build caches, and duplicate UI source are intentionally excluded.
+
+The checked-in MHT-CET eligibility-map generator reads eJAM reference data from
+this in-repository runtime rather than relying on a sibling checkout.
+
 ## Deployment
 
 The repository is configured for standalone Next.js output and containerized deployment.
@@ -145,7 +154,6 @@ If you need to replay the legacy migration flow, apply the SQL in `supabase/migr
 
 Feature-local documentation is also available in:
 
-- [app/predictions/README.md](./app/predictions/README.md)
 - [app/mht-cet/all-india-cutoffs/README.md](./app/mht-cet/all-india-cutoffs/README.md)
 
 ## License

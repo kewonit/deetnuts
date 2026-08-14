@@ -1,0 +1,24 @@
+# ejam data lake — ignore rules (see docs/DATA.md)
+
+# Raw scraped sources (regenerable from ejam-ingest)
+**/_raw/
+
+# Ingest runtime logs (versioned catalog releases stay tracked)
+catalog/sources.jsonl
+catalog/runs.jsonl
+
+# Local / experimental outputs
+_scratch/
+_cache/
+
+# Release payloads are published as GitHub Release assets.
+# Keep catalog and small reference/knowledge metadata in git; keep large data local.
+datasets/**/*.parquet
+tools/**/*.parquet
+tools/**/*.lineage.json
+
+# DEETNUTS ships the verified predictor release with the app so fresh builds do
+# not depend on a network download and cannot start with missing exam data.
+!datasets/engineering/**/*.parquet
+!tools/college-predictor/**/*.parquet
+!tools/college-predictor/**/*.lineage.json

@@ -451,3 +451,26 @@ export function buildAllocationOrFilter(
     `and(institute_home_university_id.neq.${homeUniversityId},seat_allocation_section.in.(HOME_TO_OTHER,OTHER_TO_OTHER))`,
   ].join(",");
 }
+
+export function isAllocationSectionEligible(
+  profile: MhtCetCandidateProfile,
+  allocationSection: string | null | undefined,
+  instituteHomeUniversityId: string | null | undefined,
+): boolean {
+  if (!allocationSection) return false;
+
+  if (profile.candidatureType === "type-e") {
+    return ["STATE_LEVEL", "HOME_TO_OTHER", "OTHER_TO_OTHER"].includes(
+      allocationSection,
+    );
+  }
+
+  if (allocationSection === "STATE_LEVEL") return true;
+  if (!profile.homeUniversityId || !instituteHomeUniversityId) return false;
+
+  const isHomeUniversity =
+    profile.homeUniversityId === instituteHomeUniversityId;
+  return isHomeUniversity
+    ? ["HOME_TO_HOME", "OTHER_TO_HOME"].includes(allocationSection)
+    : ["HOME_TO_OTHER", "OTHER_TO_OTHER"].includes(allocationSection);
+}

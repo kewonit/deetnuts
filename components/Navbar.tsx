@@ -4,7 +4,6 @@ import MobileDrawer from "@/components/MobileDrawer";
 import NavDropdown from "@/components/NavDropdown";
 import AuthButton from "./authbutton";
 import { AiFillGithub } from "react-icons/ai";
-import EjamHeader from "./EjamHeader";
 
 const GITHUB_REPO_URL = "https://github.com/kewonit/deetnuts";
 const GITHUB_REPO_API_URL = "https://api.github.com/repos/kewonit/deetnuts";
@@ -54,9 +53,7 @@ const Navbar = async () => {
 
   return (
     <>
-      <EjamHeader />
-      <div className="h-9" aria-hidden="true" />
-      <nav className="fixed sm:relative left-0 top-9 sm:top-auto z-20 mx-auto flex h-[88px] w-full items-center border-b-4 border-black bg-white px-5 m500:h-16 ">
+      <nav className="fixed sm:relative left-0 top-0 sm:top-auto z-20 mx-auto flex h-[88px] w-full items-center border-b-4 border-black bg-white px-5 m500:h-16 ">
         <div className="mx-auto flex w-[1300px] max-w-full items-center justify-between">
           <MobileDrawer githubStarCount={formattedStarCount} />
 
@@ -70,7 +67,7 @@ const Navbar = async () => {
                 BETA
               </span>
             </Link>
-            <div className="ml-16 flex items-center m900:hidden">
+            <div className="site-desktop-nav-links ml-16 flex items-center m900:hidden">
               <NavDropdown />
             </div>
           </div>
@@ -81,7 +78,7 @@ const Navbar = async () => {
               rel="noreferrer"
               href={GITHUB_REPO_URL}
               aria-label="Star DEETNUTS on GitHub"
-              className="flex items-center gap-2 rounded-base border-2 border-black bg-[#FFF4CC] px-3 py-2 font-bold text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-none m900:hidden"
+              className="site-desktop-github flex items-center gap-2 rounded-base border-2 border-black bg-[#FFF4CC] px-3 py-2 font-bold text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-none m900:hidden"
             >
               <AiFillGithub className="h-5 w-5" />
               <span className="text-sm leading-none">Star</span>

@@ -1,0 +1,31 @@
+# exam config for CSAB — supplementary counselling for NITs/IIITs/CFIs after JoSAA
+# CSAB closing ranks are systematically higher (worse) than JoSAA round 6 for the
+# same program because the stronger candidates already accepted JoSAA seats
+# cutoff_score_type: rank (same as JEE Main — CSAB uses JEE Main rank for eligibility)
+schema_version: 1
+id: csab
+name: Central Seat Allocation Board
+abbreviation: CSAB
+domain: engineering
+conducting_body: Central Seat Allocation Board
+official_url: https://csab.nic.in
+
+category_system: jee-categories
+quota_system: josaa-quotas
+gender_system: josaa-genders
+counselling_bodies:
+  - csab
+
+scoring_type: marks
+cutoff_score_type: rank
+
+data_dependencies:
+  - dataset: cutoffs
+    path_template: "data/datasets/engineering/jee/csab/cutoffs/year={year}/round={round}/cutoffs.parquet"
+    required: false
+  - dataset: seat_matrix
+    path_template: "data/datasets/engineering/jee/csab/seat-matrix/year={year}/seat-matrix.parquet"
+    required: false
+  - dataset: predictor_index
+    path_template: "data/tools/college-predictor/csab/predictor-index.parquet"
+    required: true

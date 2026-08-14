@@ -3,71 +3,6 @@
 
 create extension if not exists pg_trgm;
 
--- JoSAA
-create table if not exists public.josaa_institutes (
-  id text primary key,
-  created timestamptz default now(),
-  updated timestamptz default now(),
-  name text not null,
-  code text,
-  short_name text,
-  slug text,
-  institute_type text,
-  state text,
-  city text,
-  established_year int,
-  nirf_rank int,
-  website text,
-  logo_url text,
-  years_active int[] default '{}',
-  original_id text unique
-);
-
-create table if not exists public.josaa_branches (
-  id text primary key,
-  created timestamptz default now(),
-  updated timestamptz default now(),
-  name text not null,
-  code text,
-  short_code text,
-  degree_type text,
-  duration int,
-  duration_years int,
-  specializations text[] default '{}',
-  years_active int[] default '{}',
-  original_id text unique
-);
-
-create table if not exists public.josaa_cutoffs (
-  id text primary key,
-  created timestamptz default now(),
-  updated timestamptz default now(),
-  institute text,
-  institute_id text not null,
-  branch text,
-  branch_id text not null,
-  branch_code text,
-  year int not null,
-  round int not null,
-  category text not null,
-  gender text not null,
-  seat_type text,
-  opening_rank int,
-  closing_rank int,
-  quota text,
-  is_pwd boolean,
-  source text
-);
-
-create table if not exists public.josaa_institute_aliases (
-  id text primary key,
-  created timestamptz default now(),
-  updated timestamptz default now(),
-  institute text,
-  alias text not null,
-  is_official boolean default false
-);
-
 -- MHT-CET
 create table if not exists public."2024_mht_cet_colleges" (
   id text primary key,
@@ -179,29 +114,7 @@ create table if not exists public."2024_all_india_rounds_three" (
   like public."2024_all_india_rounds_one" including all
 );
 
-create table if not exists public.engineering_bits_cutoffs (
-  id text primary key,
-  created timestamptz default now(),
-  updated timestamptz default now(),
-  "Year" text,
-  "Program" text,
-  "Campus" text,
-  "Degree" text,
-  "Quotas" text,
-  "Gender" text,
-  "Opening" int,
-  "Closing" int
-);
-
 -- Indexes for current query patterns
-create index if not exists idx_josaa_institutes_original_id on public.josaa_institutes (original_id);
-create index if not exists idx_josaa_branches_original_id on public.josaa_branches (original_id);
-create index if not exists idx_josaa_cutoffs_institute_year on public.josaa_cutoffs (institute_id, year);
-create index if not exists idx_josaa_cutoffs_branch_year on public.josaa_cutoffs (branch_id, year);
-create index if not exists idx_josaa_cutoffs_round_category_gender on public.josaa_cutoffs (round, category, gender);
-create index if not exists idx_josaa_institutes_name_trgm on public.josaa_institutes using gin (name gin_trgm_ops);
-create index if not exists idx_josaa_branches_name_trgm on public.josaa_branches using gin (name gin_trgm_ops);
-create index if not exists idx_josaa_branches_short_code_trgm on public.josaa_branches using gin (short_code gin_trgm_ops);
 
 create index if not exists idx_mht_colleges_college_id on public."2024_mht_cet_colleges" (college_id);
 create index if not exists idx_mht_colleges_name_trgm on public."2024_mht_cet_colleges" using gin (college_name gin_trgm_ops);
@@ -223,15 +136,10 @@ create index if not exists idx_all_india_round1_college_name_trgm on public."202
 create index if not exists idx_all_india_round2_rank on public."2024_all_india_rounds_two" (rank);
 create index if not exists idx_all_india_round3_rank on public."2024_all_india_rounds_three" (rank);
 
-create index if not exists idx_bits_year on public.engineering_bits_cutoffs ("Year");
 
 -- RLS model:
 -- Read access for anon/authenticated users on public data tables,
 -- write access only with service role.
-alter table public.josaa_institutes enable row level security;
-alter table public.josaa_branches enable row level security;
-alter table public.josaa_cutoffs enable row level security;
-alter table public.josaa_institute_aliases enable row level security;
 alter table public."2024_mht_cet_colleges" enable row level security;
 alter table public."2024_mht_cet_colleges_seat_matrix" enable row level security;
 alter table public."2024_mht_cet_round_one_cutoffs_duplicate" enable row level security;
@@ -241,31 +149,3 @@ alter table public."2025_mht_cet_round_one_cutoffs" enable row level security;
 alter table public."2024_all_india_rounds_one" enable row level security;
 alter table public."2024_all_india_rounds_two" enable row level security;
 alter table public."2024_all_india_rounds_three" enable row level security;
-alter table public.engineering_bits_cutoffs enable row level security;
-
-do $$
-begin
-  if not exists (
-    select 1 from pg_policies where schemaname = 'public' and tablename = 'josaa_institutes' and policyname = 'public read josaa institutes'
-  ) then
-    create policy "public read josaa institutes" on public.josaa_institutes for select using (true);
-  end if;
-
-  if not exists (
-    select 1 from pg_policies where schemaname = 'public' and tablename = 'josaa_branches' and policyname = 'public read josaa branches'
-  ) then
-    create policy "public read josaa branches" on public.josaa_branches for select using (true);
-  end if;
-
-  if not exists (
-    select 1 from pg_policies where schemaname = 'public' and tablename = 'josaa_cutoffs' and policyname = 'public read josaa cutoffs'
-  ) then
-    create policy "public read josaa cutoffs" on public.josaa_cutoffs for select using (true);
-  end if;
-
-  if not exists (
-    select 1 from pg_policies where schemaname = 'public' and tablename = 'josaa_institute_aliases' and policyname = 'public read josaa institute aliases'
-  ) then
-    create policy "public read josaa institute aliases" on public.josaa_institute_aliases for select using (true);
-  end if;
-end $$;

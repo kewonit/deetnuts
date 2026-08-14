@@ -20,8 +20,8 @@ const TermsAndConditions = () => {
         </h2>
         <p>
           DeetNuts provides informational content related to various educational
-          examinations and rankings, including but not limited to MHTCET, JEE,
-          JOOSA, and NIRF. All data displayed on the Site is sourced from
+          examinations and counseling, including MHT-CET. All data displayed
+          on the Site is sourced from
           official sources.
         </p>
       </section>

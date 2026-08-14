@@ -1,0 +1,26 @@
+# JoSAA quota system — home-state/other-state and special quotas
+# DASA variants serve NRI/OCI; LA and JK are state-carve-out quotas
+schema_version: 1
+id: josaa-quotas
+name: JoSAA Seat Quotas
+description: quota system used by JoSAA and CSAB for JEE seat allotment
+
+values:
+  - id: ai
+    label: All India
+  - id: hs
+    label: Home State
+  - id: os
+    label: Other State
+  - id: ap
+    label: Andhra Pradesh State
+  - id: go
+    label: Goa State
+  - id: jk
+    label: Jammu & Kashmir State
+  - id: la
+    label: Ladakh State
+  - id: dasa-ciwg
+    label: DASA (Children of Indian Workers in Gulf Countries)
+  - id: dasa-non-ciwg
+    label: DASA (Non-CIWG NRI/OCI)

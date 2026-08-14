@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "source": {
+    "source_id": "mht-cet.2026.cap1",
+    "url": "https://cappublicdocs2026.blob.core.windows.net/documents/2026ENGG_CAP1_MH_CutOff_V1.pdf",
+    "local_path": "cutoffs/2026-cap1.pdf",
+    "sha256": "c8e0b040da945bf58a28b22221946b2b1b0cbc5065d30b0f6867919c552fe1f3"
+  },
+  "parser": {
+    "id": "mht-cet-cutoff-extractor-v2",
+    "sha256": "bfb3669b6701e52497fd7ef87275301fcf926ad259cb9cedd6a5c3cb6d45b0cb"
+  },
+  "reconciliation": {
+    "source": "380 official institute-wise CAP Round I allotment PDFs",
+    "source_index_url": "https://fe2026.mahacet.org/StaticPages/frmInstituteWiseAllotmentList?did=2021",
+    "normalized_cutoffs_sha256": "d2ca863bf3498f6e096cfa70f027ddc4530a65bca763493640659bb9b7833a42",
+    "extracted_official_stage_rows": 36059,
+    "published_stage_rows": 36053,
+    "reconciled_base_keys": 35956,
+    "multi_stage_keys": 97,
+    "institute_count": 380,
+    "choice_code_count": 4238
+  },
+  "normalizations": [
+    "ORPHANI and ORPHANN are normalized to ORPHAN",
+    "Minority seat allocation scope is reconciled to the parent section retained by institute allotment PDFs"
+  ],
+  "predictor_training_policy": "The target-2026 predictor index remains trained on 2024-2025 only; actual 2026 rows are published as observed evidence without target leakage."
+}

@@ -1,0 +1,30 @@
+# exam config for JEE Main — engineering entrance, NTA-administered
+# scoring_type: what candidate submits; cutoff_score_type: how cutoffs are expressed in datasets
+schema_version: 1
+id: jee-main
+name: Joint Entrance Examination Main
+abbreviation: JEE Main
+domain: engineering
+conducting_body: National Testing Agency
+official_url: https://jeemain.nta.ac.in
+
+category_system: jee-categories
+quota_system: josaa-quotas
+gender_system: josaa-genders
+counselling_bodies:
+  - josaa
+  - csab
+
+scoring_type: marks
+cutoff_score_type: rank
+
+data_dependencies:
+  - dataset: cutoffs
+    path_template: "data/datasets/engineering/jee/josaa/cutoffs/year={year}/round={round}/cutoffs.parquet"
+    required: false
+  - dataset: seat_matrix
+    path_template: "data/datasets/engineering/jee/josaa/seat-matrix/year={year}/seat-matrix.parquet"
+    required: false
+  - dataset: predictor_index
+    path_template: "data/tools/college-predictor/josaa/predictor-index.parquet"
+    required: true

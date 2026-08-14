@@ -9,6 +9,7 @@ import {
   MhtCetCandidateProfileSchema,
   buildAllocationOrFilter,
   deriveEligibleSeatPools,
+  isAllocationSectionEligible,
   isCandidateScoreValid,
   type MhtCetCandidateProfile,
 } from "./candidate-profile";
@@ -184,6 +185,43 @@ test("builds HU/OHU filters from normalized institute home university", () => {
       "seat_allocation_section.eq.HOME_TO_OTHER",
       "seat_allocation_section.eq.OTHER_TO_OTHER",
     ].join(","),
+  );
+});
+
+test("checks allocation eligibility against the institute home university", () => {
+  const homeCandidate = createProfile();
+  assert.equal(
+    isAllocationSectionEligible(homeCandidate, "HOME_TO_HOME", puneUniversity),
+    true,
+  );
+  assert.equal(
+    isAllocationSectionEligible(homeCandidate, "HOME_TO_OTHER", puneUniversity),
+    false,
+  );
+  assert.equal(
+    isAllocationSectionEligible(homeCandidate, "HOME_TO_OTHER", "mumbai-university"),
+    true,
+  );
+  assert.equal(
+    isAllocationSectionEligible(homeCandidate, "HOME_TO_HOME", "mumbai-university"),
+    false,
+  );
+
+  const borderCandidate = createProfile({
+    candidatureType: "type-e",
+    homeUniversityId: undefined,
+  });
+  assert.equal(
+    isAllocationSectionEligible(borderCandidate, "STATE_LEVEL", null),
+    true,
+  );
+  assert.equal(
+    isAllocationSectionEligible(borderCandidate, "HOME_TO_OTHER", null),
+    true,
+  );
+  assert.equal(
+    isAllocationSectionEligible(borderCandidate, "HOME_TO_HOME", null),
+    false,
   );
 });
 

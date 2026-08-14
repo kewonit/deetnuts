@@ -84,30 +84,6 @@ export function generatePageMetadata({
 }
 
 /**
- * Generate metadata for JOSAA institute pages
- */
-export function generateInstituteMetadata(
-  instituteName: string,
-  instituteShortName: string,
-  slug: string,
-): Metadata {
-  return generatePageMetadata({
-    title: `${instituteShortName} Cutoffs - JoSAA`,
-    description: `View JoSAA cutoffs, branch comparisons, and historical trends for ${instituteName}. Find opening and closing ranks for all categories.`,
-    path: `/josaa/institutes/${slug}`,
-    keywords: [
-      instituteShortName,
-      "JoSAA cutoffs",
-      "JEE Advanced",
-      "JEE Main",
-      "cutoff ranks",
-      "admission",
-      "engineering colleges",
-    ],
-  });
-}
-
-/**
  * Generate metadata for MHT-CET college pages
  */
 export function generateCollegeMetadata(

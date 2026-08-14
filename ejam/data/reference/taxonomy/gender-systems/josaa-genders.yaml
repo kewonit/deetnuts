@@ -1,0 +1,14 @@
+# JoSAA gender system — supernumerary seats are distinct from gender-neutral seats
+# "Female-only (including Supernumerary)" is the exact JoSAA label; kept verbatim for traceability
+schema_version: 1
+id: josaa-genders
+name: JoSAA Gender Pool
+description: gender seat pool labels used in JoSAA/CSAB allotment data
+
+values:
+  - id: gender-neutral
+    label: Gender-Neutral
+  - id: female-only
+    label: Female-only (including Supernumerary)
+  - id: na
+    label: Not Applicable

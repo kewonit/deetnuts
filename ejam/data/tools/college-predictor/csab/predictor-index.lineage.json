@@ -1,0 +1,47 @@
+{
+  "index_dataset": "predictor_index",
+  "built_at": "2026-05-25T07:11:11.964Z",
+  "manifest_version": "v0.2.0",
+  "source_cutoffs": [
+    {
+      "path": "datasets/engineering/jee/csab/cutoffs/year=2021/round=1/cutoffs.parquet",
+      "sha256": "77663aef06d4e61f6ee525d8dc95aa26ee046a82b5d42f39200caa123117897b"
+    },
+    {
+      "path": "datasets/engineering/jee/csab/cutoffs/year=2022/round=1/cutoffs.parquet",
+      "sha256": "25710f428337f13619a764dafbdf2a8821a782133482bea0536bb2c5ed575405"
+    },
+    {
+      "path": "datasets/engineering/jee/csab/cutoffs/year=2022/round=2/cutoffs.parquet",
+      "sha256": "36aba048b0115cc24d56ea10ca96e4aa4dddfd4c520e8b528548334bcf9a7f38"
+    },
+    {
+      "path": "datasets/engineering/jee/csab/cutoffs/year=2023/round=1/cutoffs.parquet",
+      "sha256": "e1109f532d321811f44ed5051747b27272c39856c725b9ab6c10146fede294f6"
+    },
+    {
+      "path": "datasets/engineering/jee/csab/cutoffs/year=2023/round=2/cutoffs.parquet",
+      "sha256": "a87835bdd5471a0ebcab78307bc71aef2a5569d169ee89c557cfca181ec599f9"
+    },
+    {
+      "path": "datasets/engineering/jee/csab/cutoffs/year=2024/round=1/cutoffs.parquet",
+      "sha256": "a07809340e69bb087f767a711d011741f2efb9f50738a58aa7fcd3842d2cf8e5"
+    },
+    {
+      "path": "datasets/engineering/jee/csab/cutoffs/year=2024/round=2/cutoffs.parquet",
+      "sha256": "54ed080835feb3092bd81e69fb650af5880eafb6b88a22a3df1b8204ac9b9206"
+    },
+    {
+      "path": "datasets/engineering/jee/csab/cutoffs/year=2025/round=1/cutoffs.parquet",
+      "sha256": "64b4ddb5be49429266135592418fb0887ec4d54c556835fccbd213fc7e3185c2"
+    },
+    {
+      "path": "datasets/engineering/jee/csab/cutoffs/year=2025/round=2/cutoffs.parquet",
+      "sha256": "0dc701bd7422d8fd8f78301c042a2626ab7a601b789a3a86141a03ebde67b020"
+    },
+    {
+      "path": "datasets/engineering/jee/csab/cutoffs/year=2025/round=3/cutoffs.parquet",
+      "sha256": "092c16a1c6e88727bdd25d221b224d1b6b4cf8c6cf70459ebc8d1ea425b87963"
+    }
+  ]
+}

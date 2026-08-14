@@ -27,7 +27,7 @@ export default function MobileDrawer({
 
   return (
     <>
-      <div className="hidden w-auto m900:block m800:w-auto m500:w-auto m400:w-[unset]">
+      <div className="site-mobile-nav-trigger hidden w-auto m900:block m800:w-auto m500:w-auto m400:w-[unset]">
         <button
           onClick={() => setIsDrawerActive(true)}
           aria-label="Open navigation menu"

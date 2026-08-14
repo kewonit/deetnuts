@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "model_id": "mht-cap-empirical-v3",
+  "target_year": 2026,
+  "rules_year": 2026,
+  "source_years": [2024, 2025],
+  "minimum_stratum_size": 30,
+  "band_thresholds": {
+    "safe": 0.85,
+    "iffy": 0.4,
+    "delulu": 0.1
+  },
+  "release_gates": {
+    "within_20_percent_minimum": 0.3,
+    "interval_80_coverage_minimum": 0.7,
+    "interval_80_coverage_maximum": 0.9,
+    "interval_95_coverage_minimum": 0.9
+  }
+}

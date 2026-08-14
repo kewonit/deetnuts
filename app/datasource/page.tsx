@@ -139,46 +139,6 @@ const Datasource = () => {
                   </a>
                 </TableCell>
               </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">JOSAA</TableCell>
-                <TableCell>Cut Offs</TableCell>
-                <TableCell>2024, All Rounds</TableCell>
-                <TableCell className="text-left hover:underline">
-                  <a href="https://josaa.admissions.nic.in/applicant/SeatAllotmentResult/CurrentORCR.aspx">
-                    https://josaa.admissions.nic.in/applicant/SeatAllotmentResult/CurrentORCR.aspx
-                  </a>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">BITS</TableCell>
-                <TableCell>Cut Offs</TableCell>
-                <TableCell>2023, All Rounds</TableCell>
-                <TableCell className="text-left hover:underline">
-                  <a href="https://www.bitsadmission.com/bitsat/2023/BITSAT-2023_Cut-off_Scores.pdf">
-                    https://www.bitsadmission.com/bitsat/2023/BITSAT-2023_Cut-off_Scores.pdf
-                  </a>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">BITS</TableCell>
-                <TableCell>Cut Offs</TableCell>
-                <TableCell>2022, All Rounds</TableCell>
-                <TableCell className="text-left hover:underline">
-                  <a href="https://www.bitsadmission.com/bitsat/2022/BITSAT-2022_Cut-off_Scores.pdf">
-                    https://www.bitsadmission.com/bitsat/2022/BITSAT-2022_Cut-off_Scores.pdf
-                  </a>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">BITS</TableCell>
-                <TableCell>Cut Offs</TableCell>
-                <TableCell>2021, All Rounds</TableCell>
-                <TableCell className="text-left hover:underline">
-                  <a href="https://www.bitsadmission.com/bitsat/2021/BITSAT-2021_Cut-off_Scores.pdf">
-                    https://www.bitsadmission.com/bitsat/2021/BITSAT-2021_Cut-off_Scores.pdf
-                  </a>
-                </TableCell>
-              </TableRow>
             </TableBody>
           </Table>
         </section>

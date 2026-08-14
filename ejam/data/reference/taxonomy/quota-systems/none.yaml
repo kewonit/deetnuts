@@ -1,0 +1,7 @@
+# null quota system — for exams that have no quota concept (eg BITSAT)
+schema_version: 1
+id: none
+name: No Quota System
+description: placeholder for exams that do not partition seats by quota
+
+values: []

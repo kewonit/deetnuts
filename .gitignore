@@ -11,6 +11,8 @@ __pycache__/
 
 # testing
 /coverage
+/playwright-report/
+/test-results/
 
 # next.js
 /.next/
@@ -46,7 +48,6 @@ next-env.d.ts
 /pb_migrations/
 
 # Data folders
-/data/josaa/
 /data/output/
 /.github/
 /.superpowers/

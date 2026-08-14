@@ -1,0 +1,29 @@
+# exam config for JEE Advanced — IIT admission, IIT-administered
+# no quota system — IIT seats use AI (All India) only; category_system same as main
+schema_version: 1
+id: jee-advanced
+name: Joint Entrance Examination Advanced
+abbreviation: JEE Advanced
+domain: engineering
+conducting_body: IIT (zone-rotated annually)
+official_url: https://jeeadv.ac.in
+
+category_system: jee-categories
+quota_system: none
+gender_system: josaa-genders
+counselling_bodies:
+  - josaa
+
+scoring_type: marks
+cutoff_score_type: rank
+
+data_dependencies:
+  - dataset: cutoffs
+    path_template: "data/datasets/engineering/jee/josaa/cutoffs/year={year}/round={round}/cutoffs.parquet"
+    required: false
+  - dataset: seat_matrix
+    path_template: "data/datasets/engineering/jee/josaa/seat-matrix/year={year}/seat-matrix.parquet"
+    required: false
+  - dataset: predictor_index
+    path_template: "data/tools/college-predictor/josaa/predictor-index.parquet"
+    required: true

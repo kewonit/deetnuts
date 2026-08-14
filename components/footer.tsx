@@ -1,10 +1,4 @@
 import Link from "next/link";
-import { Montserrat } from "next/font/google";
-
-const lato = Montserrat({
-  subsets: ["latin"],
-  weight: ["400", "700", "900"],
-});
 
 export default function Footer() {
   const legalLinks = [
@@ -14,18 +8,11 @@ export default function Footer() {
   ];
 
   const serviceLinks = [
-    { name: "JoSAA Cutoffs", href: "/josaa" },
     { name: "MHT-CET Cutoffs", href: "/mht-cet" },
-    { name: "NIRF Rankings", href: "/nirf" },
-    { name: "Predictions", href: "/predictions" },
   ];
 
   const Tools = [
     { name: "Home", href: "/" },
-    { name: "All Colleges", href: "/josaa/all-colleges" },
-    { name: "Institute Search", href: "/josaa/search" },
-    { name: "Compare Institutes", href: "/josaa/compare" },
-    { name: "Trends Analysis", href: "/josaa/trends" },
     { name: "MHT-CET Colleges", href: "/mht-cet/colleges" },
   ];
 
@@ -37,7 +24,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-gradient-to-b from-purple-300 to-yellow-100 border-t-2 border-t-black">
-      <div className={lato.className}>
+      <div className="font-sans">
         <div className="mx-auto max-w-screen-xl space-y-8 px-4 py-16 sm:px-6 lg:space-y-16 lg:px-8">
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-x-8">
             <div className="lg:col-span-6">

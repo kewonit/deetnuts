@@ -1,0 +1,77 @@
+/* Keep the embedded predictor inside its own viewport instead of the site shell. */
+body:has(.deetnuts-ejam-shell) {
+  font-family:
+    ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.deetnuts-ejam-shell {
+  height: calc(100dvh - 88px);
+  min-height: calc(100dvh - 88px);
+  overflow: hidden;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.deetnuts-ejam-shell [data-slot="sidebar-wrapper"],
+.deetnuts-ejam-shell [data-slot="sidebar-inset"] {
+  height: 100%;
+  min-height: 0;
+}
+
+.deetnuts-ejam-shell [data-slot="sidebar-header"] {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .deetnuts-ejam-shell [data-slot="sidebar-container"] {
+    top: 88px;
+    bottom: auto;
+    height: calc(100dvh - 88px);
+  }
+}
+
+@media (max-width: 639px) {
+  .deetnuts-ejam-shell {
+    height: calc(100dvh - 64px);
+    min-height: calc(100dvh - 64px);
+    margin-top: 64px;
+  }
+
+  body:has(.deetnuts-ejam-shell) [data-slot="sidebar"][data-mobile="true"],
+  body:has(.deetnuts-ejam-shell) [data-slot="sheet-overlay"] {
+    top: 64px;
+    height: calc(100dvh - 64px);
+  }
+}
+
+@media (max-width: 767px) {
+  .deetnuts-ejam-shell [data-slot="sidebar-header"] {
+    display: flex;
+  }
+}
+
+@media (max-width: 899px) {
+  body:has(.deetnuts-ejam-shell) .site-mobile-nav-trigger {
+    display: block;
+  }
+
+  body:has(.deetnuts-ejam-shell) .site-desktop-nav-links,
+  body:has(.deetnuts-ejam-shell) .site-desktop-github {
+    display: none;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 767px) {
+  body:has(.deetnuts-ejam-shell) [data-slot="sidebar"][data-mobile="true"],
+  body:has(.deetnuts-ejam-shell) [data-slot="sheet-overlay"] {
+    top: 88px;
+    height: calc(100dvh - 88px);
+  }
+}
+
+@media (min-width: 640px) {
+  body:has(.deetnuts-ejam-shell) .site-default-chrome nav {
+    position: relative;
+  }
+}

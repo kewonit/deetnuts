@@ -1,0 +1,550 @@
+{
+  "schema_version": 1,
+  "rules_year": 2026,
+  "source_id": "mht-cet.2026.brochure",
+  "historical_aliases": [
+    {
+      "source_code": "PWDSEBCH",
+      "observed_years": [2024, 2025, 2026],
+      "category_id": "sebc",
+      "ladies_seat": false,
+      "allocation_scope": "home-university",
+      "special_eligibility": "pwd",
+      "predictable": true
+    },
+    {
+      "source_code": "PWDSTS",
+      "observed_years": [2024, 2025, 2026],
+      "category_id": "st",
+      "ladies_seat": false,
+      "allocation_scope": "state-level",
+      "special_eligibility": "pwd",
+      "predictable": true
+    },
+    {
+      "source_code": "PWDRNT2H",
+      "observed_years": [2024],
+      "category_id": "nt-c",
+      "ladies_seat": false,
+      "allocation_scope": "home-university",
+      "special_eligibility": "pwd",
+      "predictable": true
+    },
+    {
+      "source_code": "DEFRSTS",
+      "observed_years": [2025, 2026],
+      "category_id": "st",
+      "ladies_seat": false,
+      "allocation_scope": "state-level",
+      "special_eligibility": "defence",
+      "predictable": true
+    }
+  ],
+  "groups": [
+    {
+      "category_id": "open",
+      "ladies_seat": false,
+      "special_eligibility": "none",
+      "predictable": true,
+      "codes": {
+        "home-university": ["GOPENH"],
+        "other-university": ["GOPENO"],
+        "state-level": ["GOPENS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "open",
+      "ladies_seat": true,
+      "special_eligibility": "none",
+      "predictable": true,
+      "codes": {
+        "home-university": ["LOPENH"],
+        "other-university": ["LOPENO"],
+        "state-level": ["LOPENS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "sc",
+      "ladies_seat": false,
+      "special_eligibility": "none",
+      "predictable": true,
+      "codes": {
+        "home-university": ["GSCH"],
+        "other-university": ["GSCO"],
+        "state-level": ["GSCS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "sc",
+      "ladies_seat": true,
+      "special_eligibility": "none",
+      "predictable": true,
+      "codes": {
+        "home-university": ["LSCH"],
+        "other-university": ["LSCO"],
+        "state-level": ["LSCS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "st",
+      "ladies_seat": false,
+      "special_eligibility": "none",
+      "predictable": true,
+      "codes": {
+        "home-university": ["GSTH"],
+        "other-university": ["GSTO"],
+        "state-level": ["GSTS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "st",
+      "ladies_seat": true,
+      "special_eligibility": "none",
+      "predictable": true,
+      "codes": {
+        "home-university": ["LSTH"],
+        "other-university": ["LSTO"],
+        "state-level": ["LSTS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "vj-dt",
+      "ladies_seat": false,
+      "special_eligibility": "none",
+      "predictable": true,
+      "codes": {
+        "home-university": ["GVJH"],
+        "other-university": ["GVJO"],
+        "state-level": ["GVJS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "vj-dt",
+      "ladies_seat": true,
+      "special_eligibility": "none",
+      "predictable": true,
+      "codes": {
+        "home-university": ["LVJH"],
+        "other-university": ["LVJO"],
+        "state-level": ["LVJS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "nt-b",
+      "ladies_seat": false,
+      "special_eligibility": "none",
+      "predictable": true,
+      "codes": {
+        "home-university": ["GNT1H"],
+        "other-university": ["GNT1O"],
+        "state-level": ["GNT1S"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "nt-b",
+      "ladies_seat": true,
+      "special_eligibility": "none",
+      "predictable": true,
+      "codes": {
+        "home-university": ["LNT1H"],
+        "other-university": ["LNT1O"],
+        "state-level": ["LNT1S"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "nt-c",
+      "ladies_seat": false,
+      "special_eligibility": "none",
+      "predictable": true,
+      "codes": {
+        "home-university": ["GNT2H"],
+        "other-university": ["GNT2O"],
+        "state-level": ["GNT2S"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "nt-c",
+      "ladies_seat": true,
+      "special_eligibility": "none",
+      "predictable": true,
+      "codes": {
+        "home-university": ["LNT2H"],
+        "other-university": ["LNT2O"],
+        "state-level": ["LNT2S"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "nt-d",
+      "ladies_seat": false,
+      "special_eligibility": "none",
+      "predictable": true,
+      "codes": {
+        "home-university": ["GNT3H"],
+        "other-university": ["GNT3O"],
+        "state-level": ["GNT3S"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "nt-d",
+      "ladies_seat": true,
+      "special_eligibility": "none",
+      "predictable": true,
+      "codes": {
+        "home-university": ["LNT3H"],
+        "other-university": ["LNT3O"],
+        "state-level": ["LNT3S"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "obc",
+      "ladies_seat": false,
+      "special_eligibility": "none",
+      "predictable": true,
+      "codes": {
+        "home-university": ["GOBCH"],
+        "other-university": ["GOBCO"],
+        "state-level": ["GOBCS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "obc",
+      "ladies_seat": true,
+      "special_eligibility": "none",
+      "predictable": true,
+      "codes": {
+        "home-university": ["LOBCH"],
+        "other-university": ["LOBCO"],
+        "state-level": ["LOBCS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "sebc",
+      "ladies_seat": false,
+      "special_eligibility": "none",
+      "predictable": true,
+      "codes": {
+        "home-university": ["GSEBCH"],
+        "other-university": ["GSEBCO"],
+        "state-level": ["GSEBCS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "sebc",
+      "ladies_seat": true,
+      "special_eligibility": "none",
+      "predictable": true,
+      "codes": {
+        "home-university": ["LSEBCH"],
+        "other-university": ["LSEBCO"],
+        "state-level": ["LSEBCS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "open",
+      "ladies_seat": false,
+      "special_eligibility": "ews",
+      "predictable": true,
+      "codes": {
+        "home-university": [],
+        "other-university": [],
+        "state-level": ["EWS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": null,
+      "ladies_seat": false,
+      "special_eligibility": "tfws",
+      "predictable": true,
+      "codes": {
+        "home-university": [],
+        "other-university": [],
+        "state-level": ["TFWS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": null,
+      "ladies_seat": false,
+      "special_eligibility": "orphan",
+      "predictable": true,
+      "codes": {
+        "home-university": [],
+        "other-university": [],
+        "state-level": ["ORPHAN"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": null,
+      "ladies_seat": false,
+      "special_eligibility": "minority",
+      "predictable": true,
+      "codes": {
+        "home-university": [],
+        "other-university": [],
+        "state-level": ["MI"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "open",
+      "ladies_seat": false,
+      "special_eligibility": "defence",
+      "predictable": true,
+      "codes": {
+        "home-university": [],
+        "other-university": [],
+        "state-level": ["DEFOPENS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "obc",
+      "ladies_seat": false,
+      "special_eligibility": "defence",
+      "predictable": true,
+      "codes": {
+        "home-university": [],
+        "other-university": [],
+        "state-level": ["DEFOBCS", "DEFROBCS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "sc",
+      "ladies_seat": false,
+      "special_eligibility": "defence",
+      "predictable": true,
+      "codes": {
+        "home-university": [],
+        "other-university": [],
+        "state-level": ["DEFSCS", "DEFRSCS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "st",
+      "ladies_seat": false,
+      "special_eligibility": "defence",
+      "predictable": true,
+      "codes": {
+        "home-university": [],
+        "other-university": [],
+        "state-level": ["DEFSTS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "vj-dt",
+      "ladies_seat": false,
+      "special_eligibility": "defence",
+      "predictable": true,
+      "codes": {
+        "home-university": [],
+        "other-university": [],
+        "state-level": ["DEFRVJS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "nt-b",
+      "ladies_seat": false,
+      "special_eligibility": "defence",
+      "predictable": true,
+      "codes": {
+        "home-university": [],
+        "other-university": [],
+        "state-level": ["DEFRNT1S"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "nt-c",
+      "ladies_seat": false,
+      "special_eligibility": "defence",
+      "predictable": true,
+      "codes": {
+        "home-university": [],
+        "other-university": [],
+        "state-level": ["DEFRNT2S"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "nt-d",
+      "ladies_seat": false,
+      "special_eligibility": "defence",
+      "predictable": true,
+      "codes": {
+        "home-university": [],
+        "other-university": [],
+        "state-level": ["DEFRNT3S"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "sebc",
+      "ladies_seat": false,
+      "special_eligibility": "defence",
+      "predictable": true,
+      "codes": {
+        "home-university": [],
+        "other-university": [],
+        "state-level": ["DEFSEBCS", "DEFRSEBCS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "open",
+      "ladies_seat": false,
+      "special_eligibility": "pwd",
+      "predictable": true,
+      "codes": {
+        "home-university": ["PWDOPENH"],
+        "other-university": [],
+        "state-level": ["PWDOPENS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "obc",
+      "ladies_seat": false,
+      "special_eligibility": "pwd",
+      "predictable": true,
+      "codes": {
+        "home-university": ["PWDOBCH", "PWDROBCH"],
+        "other-university": [],
+        "state-level": ["PWDOBCS", "PWDROBCS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "sc",
+      "ladies_seat": false,
+      "special_eligibility": "pwd",
+      "predictable": true,
+      "codes": {
+        "home-university": ["PWDSCH", "PWDRSCH"],
+        "other-university": [],
+        "state-level": ["PWDSCS", "PWDRSCS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "st",
+      "ladies_seat": false,
+      "special_eligibility": "pwd",
+      "predictable": true,
+      "codes": {
+        "home-university": ["PWDRSTH"],
+        "other-university": [],
+        "state-level": ["PWDRSTS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "vj-dt",
+      "ladies_seat": false,
+      "special_eligibility": "pwd",
+      "predictable": true,
+      "codes": {
+        "home-university": [],
+        "other-university": [],
+        "state-level": ["PWDRVJS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "nt-b",
+      "ladies_seat": false,
+      "special_eligibility": "pwd",
+      "predictable": true,
+      "codes": {
+        "home-university": [],
+        "other-university": [],
+        "state-level": ["PWDRNT1S"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "nt-c",
+      "ladies_seat": false,
+      "special_eligibility": "pwd",
+      "predictable": true,
+      "codes": {
+        "home-university": [],
+        "other-university": [],
+        "state-level": ["PWDRNT2S"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "nt-d",
+      "ladies_seat": false,
+      "special_eligibility": "pwd",
+      "predictable": true,
+      "codes": {
+        "home-university": [],
+        "other-university": [],
+        "state-level": ["PWDRNT3S"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": "sebc",
+      "ladies_seat": false,
+      "special_eligibility": "pwd",
+      "predictable": true,
+      "codes": {
+        "home-university": ["PWDRSEBCH"],
+        "other-university": [],
+        "state-level": ["PWDSEBCS", "PWDRSEBCS"],
+        "maharashtra-state": []
+      }
+    },
+    {
+      "category_id": null,
+      "ladies_seat": false,
+      "special_eligibility": "none",
+      "predictable": false,
+      "exclusion_reason": "All India or ambiguous parser-only codes are outside the verified Maharashtra State CAP predictor.",
+      "codes": {
+        "home-university": [],
+        "other-university": [],
+        "state-level": [
+          "AI",
+          "GNT1_DEF",
+          "GNT2_DEF",
+          "LNT1_DEF",
+          "LNT2_DEF",
+          "LNT3",
+          "OBC",
+          "OPEN",
+          "OTHER",
+          "PWDOPEN",
+          "ST"
+        ],
+        "maharashtra-state": []
+      }
+    }
+  ]
+}

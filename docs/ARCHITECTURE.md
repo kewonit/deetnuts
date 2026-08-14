@@ -62,11 +62,9 @@ The codebase still carries compatibility layers that preserve PocketBase-like in
 
 The `app/` directory is organized by data domain and product surface.
 
-- `app/josaa/`: JoSAA landing pages, institute detail pages, comparison flows, trends, and search
 - `app/mht-cet/`: state cutoffs, college detail pages, seat matrix views, and all-India cutoff pages
-- `app/nirf/`: ranking views backed by Supabase tables
 - `app/auth/`, `app/account/`, `app/profile/`, `app/signup/`, `app/login/`: authenticated user flows
-- `app/api/`: route handlers for predictions, all-India cutoffs, college detail access, and other server endpoints
+- `app/api/`: route handlers for MHT-CET cutoffs, college detail access, and other server endpoints
 
 ### Shared Libraries
 
@@ -76,22 +74,10 @@ The `lib/` directory contains the operational core of the application.
 - `lib/metadata.ts`: shared metadata generation helpers for SEO and social cards
 - `lib/data-fetching.ts`: generic fetch utilities, retry helpers, and cache presets
 - `lib/performance.ts`: lightweight performance instrumentation helpers
-- `lib/josaa-client.ts`: typed JoSAA access layer built on the compatibility client
 - `lib/college-data.ts`: cached helpers for MHT-CET college and seat data
 - `lib/pocketbaseClient.ts`: PocketBase-like interface backed by Supabase for legacy consumers
 
 ## Data Domains
-
-### JoSAA
-
-Primary tables:
-
-- `josaa_institutes`
-- `josaa_branches`
-- `josaa_cutoffs`
-- `josaa_institute_aliases`
-
-Working coverage in the repository is 2018-2024. The JoSAA module reads through `lib/josaa-client.ts`, which still exposes PocketBase-shaped collection operations for historical compatibility.
 
 ### MHT-CET State Cutoffs
 
@@ -126,16 +112,6 @@ Primary tables:
 - `2024_all_india_rounds_three`
 
 The API surface supports all three rounds. The checked-in `app/mht-cet/all-india-cutoffs/page.tsx` currently renders a single visible round tab, while the API handlers and alternate `page-optimized.tsx` retain broader round support.
-
-### Predictions
-
-The predictions module is dataset-backed rather than model-backed at runtime.
-
-- Source file: `scripts/predictions_2026_complete.csv`
-- API route: `app/api/predictions/route.ts`
-- Coverage: predicted 2026 cutoffs compared against a 2025 baseline
-
-The repository does not contain training code or online inference services for this feature.
 
 ## Auth and Data Access Boundaries
 

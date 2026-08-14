@@ -1,0 +1,23 @@
+schema_version: 1
+id: mht-cet-categories
+name: MHT-CET Maharashtra CAP categories
+description: Base reservation categories used for Maharashtra State CAP seat eligibility.
+values:
+  - id: open
+    label: Open
+  - id: sc
+    label: Scheduled Caste
+  - id: st
+    label: Scheduled Tribe
+  - id: vj-dt
+    label: Vimukta Jati / De-notified Tribes
+  - id: nt-b
+    label: Nomadic Tribes B
+  - id: nt-c
+    label: Nomadic Tribes C
+  - id: nt-d
+    label: Nomadic Tribes D
+  - id: obc
+    label: Other Backward Classes
+  - id: sebc
+    label: Socially and Educationally Backward Classes

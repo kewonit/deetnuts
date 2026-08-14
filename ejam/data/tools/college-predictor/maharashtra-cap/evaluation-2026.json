@@ -1,0 +1,31 @@
+{
+  "label": "mht-cet-2026-honest-evaluation",
+  "temporal_point_test": {
+    "label": "2024-point-forecast-to-2025",
+    "matched_records": 48171,
+    "mae": 17737.5277,
+    "median_absolute_error": 11830,
+    "within_10_percent": 0.3445,
+    "within_20_percent": 0.6526
+  },
+  "grouped_uncertainty_calibration": {
+    "label": "institute-grouped-2024-to-2025",
+    "folds": 5,
+    "evaluated_records": 48171,
+    "interval_50_coverage": 0.4946,
+    "interval_80_coverage": 0.7917,
+    "interval_95_coverage": 0.9435
+  },
+  "band_monotonicity": {
+    "checks": 404323,
+    "violations": 0
+  },
+  "band_outcomes_monotonic": true,
+  "release_gates": {
+    "point_within_20_passed": true,
+    "interval_80_passed": true,
+    "interval_95_passed": true,
+    "monotonic_passed": true,
+    "passed": true
+  }
+}

@@ -1,0 +1,32 @@
+# JEE category system — mirrors official JoSAA seat type labels
+# values here are the canonical category_id strings used in CutoffRow
+schema_version: 1
+id: jee-categories
+name: JEE Seat Categories
+description: seat reservation categories as defined by JoSAA/CSAB for JEE counselling
+
+values:
+  - id: open
+    label: Open
+  - id: open-pwd
+    label: Open (PwD)
+  - id: ews
+    label: Economically Weaker Section
+  - id: ews-pwd
+    label: EWS (PwD)
+  - id: obc-ncl
+    label: Other Backward Classes (Non-Creamy Layer)
+  - id: obc-ncl-pwd
+    label: OBC-NCL (PwD)
+  - id: sc
+    label: Scheduled Caste
+  - id: sc-pwd
+    label: SC (PwD)
+  - id: sc-prep
+    label: SC (Preparatory)
+  - id: st
+    label: Scheduled Tribe
+  - id: st-pwd
+    label: ST (PwD)
+  - id: st-prep
+    label: ST (Preparatory)

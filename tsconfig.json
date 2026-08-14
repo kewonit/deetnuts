@@ -19,7 +19,11 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@ejam/data": ["./ejam/packages/data/src/index.ts"],
+      "@ejam/data/*": ["./ejam/packages/data/src/*"],
+      "@ejam/predictors": ["./ejam/packages/predictors/src/index.ts"],
+      "@ejam/predictors/*": ["./ejam/packages/predictors/src/*"]
     },
     "target": "ES2020"
   },
@@ -31,5 +35,5 @@
     "lib/supabaseClient.js",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "bot", "lib/bot", "scripts"]
+  "exclude": ["node_modules", "bot", "lib/bot", "scripts", "ejam"]
 }

@@ -1,0 +1,76 @@
+{
+  "index_dataset": "mht-cet-maharashtra-cap-predictor-index",
+  "built_at": "2026-08-12T19:22:52.241Z",
+  "manifest_version": "v0.2.4",
+  "source_cutoffs": [
+    {
+      "path": "datasets/engineering/mht-cet/maharashtra-cap/cutoffs/year=2024/round=1/cutoffs.parquet",
+      "sha256": "8f01ca02e67e069f3300a87d07cc237f957ad3bb8938b4845c43b6aef3d07761"
+    },
+    {
+      "path": "datasets/engineering/mht-cet/maharashtra-cap/cutoffs/year=2024/round=2/cutoffs.parquet",
+      "sha256": "1b82f8fa1fa4f2993a93435dbc50dd05b83ff965ea1f9d48f9498ebf8894230f"
+    },
+    {
+      "path": "datasets/engineering/mht-cet/maharashtra-cap/cutoffs/year=2024/round=3/cutoffs.parquet",
+      "sha256": "192a68090858098236b784f8056f6357b6d390aa8da62667147883a8cf3fdfc9"
+    },
+    {
+      "path": "datasets/engineering/mht-cet/maharashtra-cap/cutoffs/year=2025/round=1/cutoffs.parquet",
+      "sha256": "e5f84f629f87ca390439809acb3850ecd1cf627ebdd04970c1bf9fcd0ea0f344"
+    },
+    {
+      "path": "datasets/engineering/mht-cet/maharashtra-cap/cutoffs/year=2025/round=2/cutoffs.parquet",
+      "sha256": "0f93b4eeb4e06676b19aaeef1c887b43f938ae44825593001e6cc92186d76711"
+    },
+    {
+      "path": "datasets/engineering/mht-cet/maharashtra-cap/cutoffs/year=2025/round=3/cutoffs.parquet",
+      "sha256": "ac222badd5a8b95b498f84637b908754722dbfa20b2a1922c195f45a3613c3e9"
+    },
+    {
+      "path": "datasets/engineering/mht-cet/maharashtra-cap/cutoffs/year=2025/round=4/cutoffs.parquet",
+      "sha256": "c163b91c6f715620055230944827c19502b9e2b3bea6ee28e80ba396d2cd625e"
+    }
+  ],
+  "source_references": [
+    {
+      "dataset": "allocation_rules_2026",
+      "path": "reference/engineering/mht-cet/allocation-rules-2026.json",
+      "sha256": "240084fc8424018544e323374c6be3356511fb621f131c82ee826a7ce0909587"
+    },
+    {
+      "dataset": "historical_stage_rules_2024",
+      "path": "reference/engineering/mht-cet/historical-stage-rules-2024.json",
+      "sha256": "e555f555ae855ab02d98979fa48c01f806e5ffe904d73f6fb2425e802ab5e07f"
+    },
+    {
+      "dataset": "historical_stage_rules_2025",
+      "path": "reference/engineering/mht-cet/historical-stage-rules-2025.json",
+      "sha256": "047fff52335c8a9b9c8f997d9e4c96b810affd33cf9af3d319a50088f9cea481"
+    },
+    {
+      "dataset": "institute_reference",
+      "path": "reference/engineering/mht-cet/institutes-2024.json",
+      "sha256": "520089880fe13cf60911905734149663766205c1b2a841e4ceb89842e801c79d"
+    },
+    {
+      "dataset": "institute_reference",
+      "path": "reference/engineering/mht-cet/institutes-2025.json",
+      "sha256": "0d684515bfc37674b0fbfa194ceb366ce582a8bb8b4db7848f7de83ea9234845"
+    },
+    {
+      "dataset": "official_extraction",
+      "path": "reference/engineering/mht-cet/official-extraction-2024-2025.json",
+      "sha256": "a1bf0010123bb2e4794baffc422e25cb3b7e66cfab439f6508963aeb9c9e67c1"
+    },
+    {
+      "dataset": "seat_pool_rules",
+      "path": "reference/engineering/mht-cet/seat-pools-2026.json",
+      "sha256": "83d44f9b73623e8c2dc5981b94e1824655136afd5977f3e42b7c3c46b7271b1d"
+    }
+  ],
+  "model_configuration": {
+    "path": "reference/engineering/mht-cet/model-2026.json",
+    "sha256": "7f135e29b5483a59efb2e19858f686a7e6b22ae50b53364d20fd7ef39509ea63"
+  }
+}

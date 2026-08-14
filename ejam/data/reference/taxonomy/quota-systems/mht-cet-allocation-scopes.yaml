@@ -1,0 +1,13 @@
+schema_version: 1
+id: mht-cet-allocation-scopes
+name: MHT-CET allocation scopes
+description: Home University, Other University, and statewide Maharashtra CAP allocation scopes.
+values:
+  - id: home-university
+    label: Home University
+  - id: other-university
+    label: Other Than Home University
+  - id: state-level
+    label: State Level
+  - id: maharashtra-state
+    label: Maharashtra State

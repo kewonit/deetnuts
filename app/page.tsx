@@ -10,29 +10,20 @@ import SparklesText from "@/components/magicui/sparkles-text";
 import CommunityPartners from "@/components/ui/community-partners";
 
 export const metadata: Metadata = {
-  title: "2026 Engineering Admission Tools | JoSAA & MHT-CET Cutoffs",
+  title: "2026 MHT-CET Cutoffs & Admission Tools",
   description:
-    "Plan 2026 engineering admissions with JoSAA cutoff data through 2025, historical MHT-CET cutoffs, NIRF rankings, seat matrices, and admission trends.",
+    "Plan 2026 Maharashtra engineering admissions with MHT-CET cutoffs, college data, seat matrices, and admission trends.",
   keywords: [
     "engineering admission 2026",
-    "JoSAA 2026 counselling",
-    "JoSAA cutoffs",
-    "JoSAA 2025 cutoffs",
-    "JEE Advanced cutoffs",
-    "JEE Main cutoffs",
-    "IIT admission",
-    "NIT admission",
-    "IIIT admission",
     "MHT-CET cutoffs",
-    "engineering colleges India",
+    "Maharashtra engineering colleges",
     "college seat matrix",
-    "NIRF rankings",
     "admission trends",
   ],
   openGraph: {
     title: "2026 Engineering Admission Tools | DEETNUTS",
     description:
-      "Plan 2026 engineering admissions with JoSAA data through 2025, historical MHT-CET cutoffs, NIRF rankings, and admission trends.",
+      "Plan 2026 Maharashtra engineering admissions with MHT-CET cutoffs, college data, seat matrices, and admission trends.",
     url: "https://deetnuts.com",
     type: "website",
   },
@@ -65,7 +56,7 @@ export default function Home() {
               />
               <img
                 src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1722072594/deetnuts/3_t0cm25.png"
-                alt="DEETNUTS - College data simplified for JEE and MHT-CET aspirants"
+                alt="DEETNUTS - College data simplified for MHT-CET aspirants"
                 className="w-full h-full object-contain object-center"
               />
             </picture>

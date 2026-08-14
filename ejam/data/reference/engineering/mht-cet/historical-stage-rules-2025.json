@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "source_year": 2025,
+  "source_id": "mht-cet.2025.brochure",
+  "source_sha256": "7b821016f55ad88086587216da4a9901d8ad7c81b266507a611a973cf1acf825",
+  "entries": [
+    {
+      "id": "mht-stage-2025-standard",
+      "source_label": "I",
+      "semantics_id": "standard",
+      "source_ladies_requirement": "any",
+      "allowed_source_special_eligibilities": [
+        "none",
+        "ews",
+        "tfws",
+        "pwd",
+        "defence",
+        "orphan",
+        "minority"
+      ],
+      "effect": {
+        "category_policy": "source",
+        "ladies_policy": "source",
+        "special_policy": "source",
+        "candidature_policy": "source"
+      }
+    },
+    {
+      "id": "mht-stage-2025-ladies-to-male",
+      "source_label": "II",
+      "semantics_id": "ladies-to-male-same-category",
+      "source_ladies_requirement": "required",
+      "allowed_source_special_eligibilities": ["none"],
+      "effect": {
+        "category_policy": "source",
+        "ladies_policy": "non-ladies-only",
+        "special_policy": "source",
+        "candidature_policy": "source"
+      }
+    },
+    {
+      "id": "mht-stage-2025-pwd-released",
+      "source_label": "I-Non PWD",
+      "semantics_id": "pwd-released-to-base-category",
+      "source_ladies_requirement": "forbidden",
+      "allowed_source_special_eligibilities": ["pwd"],
+      "effect": {
+        "category_policy": "source",
+        "ladies_policy": "any",
+        "special_policy": "removed",
+        "candidature_policy": "source"
+      }
+    },
+    {
+      "id": "mht-stage-2025-defence-released",
+      "source_label": "I-Non Defence",
+      "semantics_id": "defence-released-to-base-category",
+      "source_ladies_requirement": "forbidden",
+      "allowed_source_special_eligibilities": ["defence"],
+      "effect": {
+        "category_policy": "source",
+        "ladies_policy": "any",
+        "special_policy": "removed",
+        "candidature_policy": "source"
+      }
+    },
+    {
+      "id": "mht-stage-2025-minority-to-maharashtra",
+      "source_label": "MH",
+      "semantics_id": "minority-to-maharashtra",
+      "source_ladies_requirement": "forbidden",
+      "allowed_source_special_eligibilities": ["minority"],
+      "effect": {
+        "category_policy": "any",
+        "ladies_policy": "any",
+        "special_policy": "removed",
+        "candidature_policy": "maharashtra-state"
+      }
+    },
+    {
+      "id": "mht-stage-2025-unrestricted",
+      "source_label": "VII",
+      "semantics_id": "unrestricted-maharashtra-merit",
+      "source_ladies_requirement": "any",
+      "allowed_source_special_eligibilities": [
+        "none",
+        "pwd",
+        "defence",
+        "orphan"
+      ],
+      "effect": {
+        "category_policy": "any",
+        "ladies_policy": "any",
+        "special_policy": "removed",
+        "candidature_policy": "maharashtra-state"
+      }
+    }
+  ]
+}

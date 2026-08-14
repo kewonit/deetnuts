@@ -1,0 +1,62 @@
+[
+  {
+    "institute_code": "02805",
+    "district": "Chhatrapati Sambhajinagar",
+    "source_locator": "https://fe2026.mahacet.org/StaticPages/frmInstituteSummary?InstituteCode=02805"
+  },
+  {
+    "institute_code": "04026",
+    "district": "Gadchiroli",
+    "source_locator": "https://fe2026.mahacet.org/StaticPages/frmInstituteSummary?InstituteCode=04026"
+  },
+  {
+    "institute_code": "04762",
+    "district": "Chandrapur",
+    "source_locator": "https://fe2026.mahacet.org/StaticPages/frmInstituteSummary?InstituteCode=04762"
+  },
+  {
+    "institute_code": "05413",
+    "district": "Dhule",
+    "source_locator": "https://fe2026.mahacet.org/StaticPages/frmInstituteSummary?InstituteCode=05413"
+  },
+  {
+    "institute_code": "05682",
+    "district": "Ahilyanagar",
+    "source_locator": "https://fe2026.mahacet.org/StaticPages/frmInstituteSummary?InstituteCode=05682"
+  },
+  {
+    "institute_code": "05683",
+    "district": "Nashik",
+    "source_locator": "https://fe2026.mahacet.org/StaticPages/frmInstituteSummary?InstituteCode=05683"
+  },
+  {
+    "institute_code": "05686",
+    "district": "Nashik",
+    "source_locator": "https://fe2026.mahacet.org/StaticPages/frmInstituteSummary?InstituteCode=05686"
+  },
+  {
+    "institute_code": "06041",
+    "district": "Solapur",
+    "source_locator": "https://fe2026.mahacet.org/StaticPages/frmInstituteSummary?InstituteCode=06041"
+  },
+  {
+    "institute_code": "06725",
+    "district": "Solapur",
+    "source_locator": "https://fe2026.mahacet.org/StaticPages/frmInstituteSummary?InstituteCode=06725"
+  },
+  {
+    "institute_code": "06814",
+    "district": "Kolhapur",
+    "source_locator": "https://fe2026.mahacet.org/StaticPages/frmInstituteSummary?InstituteCode=06814"
+  },
+  {
+    "institute_code": "16371",
+    "district": "Pune",
+    "source_locator": "https://fe2026.mahacet.org/StaticPages/frmInstituteSummary?InstituteCode=16371"
+  },
+  {
+    "institute_code": "16372",
+    "district": "Satara",
+    "source_locator": "https://fe2026.mahacet.org/StaticPages/frmInstituteSummary?InstituteCode=16372"
+  }
+]

@@ -1,0 +1,138 @@
+{
+  "schema_version": 2,
+  "parser": {
+    "id": "mht-cet-cutoff-extractor-v2",
+    "sha256": "bfb3669b6701e52497fd7ef87275301fcf926ad259cb9cedd6a5c3cb6d45b0cb"
+  },
+  "reference_parser": {
+    "id": "mht-cet-institute-reference-extractor-v2",
+    "sha256": "9118767512a611d0d12c3b9681c2df0fe1f1645f1a262474a5be03c6ce9ddba4"
+  },
+  "rules_sources": [
+    {
+      "source_id": "mht-cet.2024.brochure",
+      "sha256": "c07a7c0edc2ecc7c8b65e2053a91f39b49203941404b20164113934a67013f06"
+    },
+    {
+      "source_id": "mht-cet.2025.brochure",
+      "sha256": "7b821016f55ad88086587216da4a9901d8ad7c81b266507a611a973cf1acf825"
+    },
+    {
+      "source_id": "mht-cet.2026.brochure",
+      "sha256": "f2f74f09669937c5cbfff0033e00838c85ee861d5c8923eecbd0894134cae1ba"
+    }
+  ],
+  "historical_stage_rule_registries": [
+    {
+      "source_year": 2024,
+      "source_id": "mht-cet.2024.brochure",
+      "source_sha256": "c07a7c0edc2ecc7c8b65e2053a91f39b49203941404b20164113934a67013f06",
+      "registry_path": "historical-stage-rules-2024.json",
+      "registry_sha256": "e555f555ae855ab02d98979fa48c01f806e5ffe904d73f6fb2425e802ab5e07f"
+    },
+    {
+      "source_year": 2025,
+      "source_id": "mht-cet.2025.brochure",
+      "source_sha256": "7b821016f55ad88086587216da4a9901d8ad7c81b266507a611a973cf1acf825",
+      "registry_path": "historical-stage-rules-2025.json",
+      "registry_sha256": "047fff52335c8a9b9c8f997d9e4c96b810affd33cf9af3d319a50088f9cea481"
+    }
+  ],
+  "allocation_rule_registry": {
+    "rules_year": 2026,
+    "source_id": "mht-cet.2026.brochure",
+    "registry_path": "allocation-rules-2026.json",
+    "registry_sha256": "240084fc8424018544e323374c6be3356511fb621f131c82ee826a7ce0909587"
+  },
+  "total_stage_rows": 178972,
+  "source_key_count": 177598,
+  "multi_stage_key_count": 1373,
+  "additional_stage_cell_count": 1374,
+  "observed_stage_labels": [
+    "I",
+    "I-Non Defence",
+    "I-Non PWD",
+    "II",
+    "MH",
+    "VII"
+  ],
+  "sources": [
+    {
+      "source_id": "mht-cet.2024.cap1",
+      "year": 2024,
+      "round": 1,
+      "pdf_path": "cutoffs/2024-cap1.pdf",
+      "pdf_sha256": "1e2df4023e8f12ea4dda19d564281e3a5968577b94d640cd7647933065babd8c",
+      "normalized_path": "cutoffs-year=2024-round=1.jsonl",
+      "normalized_sha256": "8fc7ddf98eae21e8dde2499c293ea86ea21714f73e63ed205e89eff54c0d94ba",
+      "row_count": 31781,
+      "source_key_count": 31652
+    },
+    {
+      "source_id": "mht-cet.2024.cap2",
+      "year": 2024,
+      "round": 2,
+      "pdf_path": "cutoffs/2024-cap2.pdf",
+      "pdf_sha256": "38436ad4d418b6ba8de8a99da4e0fd6f44b02657183430b7d3622a6f4974bcbc",
+      "normalized_path": "cutoffs-year=2024-round=2.jsonl",
+      "normalized_sha256": "5a43d225dd6a35f10b27a61697faf5300932b971b84aa24b20d74db4f7c58809",
+      "row_count": 30834,
+      "source_key_count": 30486
+    },
+    {
+      "source_id": "mht-cet.2024.cap3",
+      "year": 2024,
+      "round": 3,
+      "pdf_path": "cutoffs/2024-cap3.pdf",
+      "pdf_sha256": "9db0899eaf0cd73a8bb00d065a06a434c9b949f05e8713d875a9daaa7172f18c",
+      "normalized_path": "cutoffs-year=2024-round=3.jsonl",
+      "normalized_sha256": "03e18e69243fb759b68b57058f581ac964d18629a7f8f760847be0584ade2a8b",
+      "row_count": 16734,
+      "source_key_count": 16597
+    },
+    {
+      "source_id": "mht-cet.2025.cap1",
+      "year": 2025,
+      "round": 1,
+      "pdf_path": "cutoffs/2025-cap1.pdf",
+      "pdf_sha256": "ee8b652ca88f2f3f52062d58860d59b7a6367be7d4c752d3e8d238e57ae8f10e",
+      "normalized_path": "cutoffs-year=2025-round=1.jsonl",
+      "normalized_sha256": "fd5e671e454554c93e899507efe64d14ba5fd2b3e35faa3eb5da2ecd87b6f234",
+      "row_count": 34433,
+      "source_key_count": 34329
+    },
+    {
+      "source_id": "mht-cet.2025.cap2",
+      "year": 2025,
+      "round": 2,
+      "pdf_path": "cutoffs/2025-cap2.pdf",
+      "pdf_sha256": "2c885e124ca8091f55c67f5088c7c886b3fc8b04d4fff9b050fc07a5caa96c61",
+      "normalized_path": "cutoffs-year=2025-round=2.jsonl",
+      "normalized_sha256": "d16baff462d8ab52fe3b9fcbfc927af12e7e7de30d531a38502e3746322eeede",
+      "row_count": 33463,
+      "source_key_count": 33023
+    },
+    {
+      "source_id": "mht-cet.2025.cap3",
+      "year": 2025,
+      "round": 3,
+      "pdf_path": "cutoffs/2025-cap3.pdf",
+      "pdf_sha256": "2b61a2e3f8229f2cee8d9ee4e6c1ff7117eebf82ee3b2105608ef98a65588d7f",
+      "normalized_path": "cutoffs-year=2025-round=3.jsonl",
+      "normalized_sha256": "ec76c360a4dff69bd09fb3beac8fa291577c0a2254971140fb19d6e3ec2012bf",
+      "row_count": 17983,
+      "source_key_count": 17854
+    },
+    {
+      "source_id": "mht-cet.2025.cap4",
+      "year": 2025,
+      "round": 4,
+      "pdf_path": "cutoffs/2025-cap4.pdf",
+      "pdf_sha256": "58ca7fe5ca89dc7a4ac559f5efdd34804a62333d51ca2736ec6389bdd09471ac",
+      "normalized_path": "cutoffs-year=2025-round=4.jsonl",
+      "normalized_sha256": "74dd223129c6ee9e4fd759bfec0039d25c42b87220b666ada7c8017350c1af78",
+      "row_count": 13744,
+      "source_key_count": 13657
+    }
+  ]
+}

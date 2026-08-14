@@ -1,0 +1,13 @@
+# simple gender system — for exams that only track Male/Female/Third Gender
+schema_version: 1
+id: simple-genders
+name: Simple Gender Pool
+description: basic three-way gender classification for exams without supernumerary pool logic
+
+values:
+  - id: Male
+    label: Male
+  - id: Female
+    label: Female
+  - id: Third-Gender
+    label: Third Gender

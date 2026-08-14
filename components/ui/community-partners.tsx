@@ -20,7 +20,7 @@ export default function CommunityPartners() {
   return (
     <section className="border-y-2 border-y-black bg-white py-12 px-base lg:py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
+        <div className="mb-10 flex flex-col items-center text-center">
           <div className="inline-block mb-3 px-4 py-1.5 bg-purple-300 border-2 border-black rounded-md font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transform hover:-translate-y-0.5 transition-transform">
             COMMUNITY PARTNERS
           </div>
@@ -33,7 +33,7 @@ export default function CommunityPartners() {
           </p>
         </div>
 
-        <div className="mx-auto grid w-container max-w-7xl grid-cols-1 gap-8 px-5 sm:grid-cols-2">
+        <div className="mx-auto grid w-full max-w-2xl grid-cols-1 gap-8 px-5">
           {partners.map((partner, i) => (
             <div
               key={i}
@@ -148,16 +148,6 @@ export default function CommunityPartners() {
               </div>
             </div>
           ))}
-        </div>
-
-        <div className="mt-12 text-center">
-          <div className="inline-block border-2 border-black bg-yellow-100 rounded-md p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            <p className="font-bold flex items-center justify-center">
-              <span className="text-xl mr-2">🤝</span>
-              DeetNuts is officially partnered with these Reddit communities for
-              college advice
-            </p>
-          </div>
         </div>
       </div>
     </section>

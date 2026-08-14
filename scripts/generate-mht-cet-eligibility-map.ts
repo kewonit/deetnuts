@@ -12,7 +12,7 @@ type InstituteReference = {
 };
 
 const repositoryRoot = resolve(__dirname, "..");
-const ejamRoot = resolve(repositoryRoot, "..", "ejam");
+const ejamRoot = resolve(repositoryRoot, "ejam");
 const outputPath = resolve(
   repositoryRoot,
   "lib/mht-cet/state-cutoffs/institute-eligibility.generated.json",

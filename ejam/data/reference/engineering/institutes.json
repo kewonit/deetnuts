@@ -1,0 +1,1628 @@
+[
+  {
+    "id": "iit-kharagpur",
+    "name": "Indian Institute of Technology Kharagpur",
+    "aliases": ["IIT Kharagpur", "IIT, Kharagpur", "IITKGP"],
+    "type": "IIT",
+    "state": "West Bengal",
+    "city": "Kharagpur",
+    "established": 1951,
+    "nirf_rank": 5
+  },
+  {
+    "id": "iit-bombay",
+    "name": "Indian Institute of Technology Bombay",
+    "aliases": ["IIT Bombay", "IIT, Bombay", "IIT Mumbai", "IITB"],
+    "type": "IIT",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "established": 1958,
+    "nirf_rank": 3
+  },
+  {
+    "id": "iit-madras",
+    "name": "Indian Institute of Technology Madras",
+    "aliases": ["IIT Madras", "IIT, Madras", "IIT Chennai", "IITM"],
+    "type": "IIT",
+    "state": "Tamil Nadu",
+    "city": "Chennai",
+    "established": 1959,
+    "nirf_rank": 1
+  },
+  {
+    "id": "iit-kanpur",
+    "name": "Indian Institute of Technology Kanpur",
+    "aliases": ["IIT Kanpur", "IIT, Kanpur", "IITK"],
+    "type": "IIT",
+    "state": "Uttar Pradesh",
+    "city": "Kanpur",
+    "established": 1959,
+    "nirf_rank": 4
+  },
+  {
+    "id": "iit-delhi",
+    "name": "Indian Institute of Technology Delhi",
+    "aliases": ["IIT Delhi", "IIT, Delhi", "IITD"],
+    "type": "IIT",
+    "state": "Delhi",
+    "city": "New Delhi",
+    "established": 1961,
+    "nirf_rank": 2
+  },
+  {
+    "id": "iit-guwahati",
+    "name": "Indian Institute of Technology Guwahati",
+    "aliases": ["IIT Guwahati", "IIT, Guwahati", "IITG"],
+    "type": "IIT",
+    "state": "Assam",
+    "city": "Guwahati",
+    "established": 1994,
+    "nirf_rank": 7
+  },
+  {
+    "id": "iit-roorkee",
+    "name": "Indian Institute of Technology Roorkee",
+    "aliases": ["IIT Roorkee", "IIT, Roorkee", "IITR"],
+    "type": "IIT",
+    "state": "Uttarakhand",
+    "city": "Roorkee",
+    "established": 2001,
+    "nirf_rank": 6
+  },
+  {
+    "id": "iit-bhubaneswar",
+    "name": "Indian Institute of Technology Bhubaneswar",
+    "aliases": ["IIT Bhubaneswar", "IIT, Bhubaneswar", "IITBBS"],
+    "type": "IIT",
+    "state": "Odisha",
+    "city": "Bhubaneswar",
+    "established": 2008,
+    "nirf_rank": 28
+  },
+  {
+    "id": "iit-gandhinagar",
+    "name": "Indian Institute of Technology Gandhinagar",
+    "aliases": ["IIT Gandhinagar", "IIT, Gandhinagar", "IITGN"],
+    "type": "IIT",
+    "state": "Gujarat",
+    "city": "Gandhinagar",
+    "established": 2008,
+    "nirf_rank": 16
+  },
+  {
+    "id": "iit-hyderabad",
+    "name": "Indian Institute of Technology Hyderabad",
+    "aliases": ["IIT Hyderabad", "IIT, Hyderabad", "IITH"],
+    "type": "IIT",
+    "state": "Telangana",
+    "city": "Hyderabad",
+    "established": 2008,
+    "nirf_rank": 8
+  },
+  {
+    "id": "iit-jodhpur",
+    "name": "Indian Institute of Technology Jodhpur",
+    "aliases": ["IIT Jodhpur", "IIT, Jodhpur", "IITJ"],
+    "type": "IIT",
+    "state": "Rajasthan",
+    "city": "Jodhpur",
+    "established": 2008,
+    "nirf_rank": 21
+  },
+  {
+    "id": "iit-patna",
+    "name": "Indian Institute of Technology Patna",
+    "aliases": ["IIT Patna", "IIT, Patna", "IITP"],
+    "type": "IIT",
+    "state": "Bihar",
+    "city": "Patna",
+    "established": 2008,
+    "nirf_rank": 26
+  },
+  {
+    "id": "iit-ropar",
+    "name": "Indian Institute of Technology Ropar",
+    "aliases": ["IIT Ropar", "IIT, Ropar", "IITRPR"],
+    "type": "IIT",
+    "state": "Punjab",
+    "city": "Rupnagar",
+    "established": 2008,
+    "nirf_rank": 22
+  },
+  {
+    "id": "iit-indore",
+    "name": "Indian Institute of Technology Indore",
+    "aliases": ["IIT Indore", "IIT, Indore", "IITI"],
+    "type": "IIT",
+    "state": "Madhya Pradesh",
+    "city": "Indore",
+    "established": 2009,
+    "nirf_rank": 14
+  },
+  {
+    "id": "iit-mandi",
+    "name": "Indian Institute of Technology Mandi",
+    "aliases": ["IIT Mandi", "IIT, Mandi", "IITMandi"],
+    "type": "IIT",
+    "state": "Himachal Pradesh",
+    "city": "Mandi",
+    "established": 2009,
+    "nirf_rank": 31
+  },
+  {
+    "id": "iit-varanasi",
+    "name": "Indian Institute of Technology (BHU) Varanasi",
+    "aliases": [
+      "IIT BHU",
+      "IIT (BHU) Varanasi",
+      "IIT Banaras",
+      "IIT-BHU",
+      "IIT BHU Varanasi",
+      "Indian Institute of Technology (Banaras Hindu University) Varanasi"
+    ],
+    "type": "IIT",
+    "state": "Uttar Pradesh",
+    "city": "Varanasi",
+    "established": 2012,
+    "nirf_rank": 15
+  },
+  {
+    "id": "iit-palakkad",
+    "name": "Indian Institute of Technology Palakkad",
+    "aliases": ["IIT Palakkad", "IIT, Palakkad", "IITPKD"],
+    "type": "IIT",
+    "state": "Kerala",
+    "city": "Palakkad",
+    "established": 2015,
+    "nirf_rank": 58
+  },
+  {
+    "id": "iit-tirupati",
+    "name": "Indian Institute of Technology Tirupati",
+    "aliases": ["IIT Tirupati", "IIT, Tirupati", "IITTP"],
+    "type": "IIT",
+    "state": "Andhra Pradesh",
+    "city": "Tirupati",
+    "established": 2015,
+    "nirf_rank": 59
+  },
+  {
+    "id": "iit-dhanbad",
+    "name": "Indian Institute of Technology (ISM) Dhanbad",
+    "aliases": [
+      "IIT ISM Dhanbad",
+      "IIT (ISM) Dhanbad",
+      "ISM Dhanbad",
+      "IITISM",
+      "Indian School of Mines Dhanbad",
+      "Indian School of Mines, Dhanbad",
+      "Indian Institute of Technology (Indian School of Mines) Dhanbad",
+      "Indian Institute of Technology (Indian School of Mines)"
+    ],
+    "type": "IIT",
+    "state": "Jharkhand",
+    "city": "Dhanbad",
+    "established": 2016,
+    "nirf_rank": 12
+  },
+  {
+    "id": "iit-bhilai",
+    "name": "Indian Institute of Technology Bhilai",
+    "aliases": ["IIT Bhilai", "IIT, Bhilai", "IITBH"],
+    "type": "IIT",
+    "state": "Chhattisgarh",
+    "city": "Bhilai",
+    "established": 2016,
+    "nirf_rank": 69
+  },
+  {
+    "id": "iit-goa",
+    "name": "Indian Institute of Technology Goa",
+    "aliases": ["IIT Goa", "IIT, Goa", "IITGoa"],
+    "type": "IIT",
+    "state": "Goa",
+    "city": "Ponda",
+    "established": 2016,
+    "nirf_rank": 78
+  },
+  {
+    "id": "iit-jammu",
+    "name": "Indian Institute of Technology Jammu",
+    "aliases": ["IIT Jammu", "IIT, Jammu", "IITJMU"],
+    "type": "IIT",
+    "state": "Jammu and Kashmir",
+    "city": "Jammu",
+    "established": 2016,
+    "nirf_rank": 51
+  },
+  {
+    "id": "iit-dharwad",
+    "name": "Indian Institute of Technology Dharwad",
+    "aliases": ["IIT Dharwad", "IIT, Dharwad", "IITDH"],
+    "type": "IIT",
+    "state": "Karnataka",
+    "city": "Dharwad",
+    "established": 2016,
+    "nirf_rank": 81
+  },
+  {
+    "id": "nit-trichy",
+    "name": "National Institute of Technology Tiruchirappalli",
+    "aliases": [
+      "NIT Trichy",
+      "NIT Tiruchirappalli",
+      "NITT",
+      "REC Tiruchirappalli"
+    ],
+    "type": "NIT",
+    "state": "Tamil Nadu",
+    "city": "Tiruchirappalli",
+    "established": 1964,
+    "nirf_rank": 9
+  },
+  {
+    "id": "nit-warangal",
+    "name": "National Institute of Technology Warangal",
+    "aliases": ["NIT Warangal", "NITW", "REC Warangal", "RECW"],
+    "type": "NIT",
+    "state": "Telangana",
+    "city": "Warangal",
+    "established": 1959,
+    "nirf_rank": 19
+  },
+  {
+    "id": "nit-surathkal",
+    "name": "National Institute of Technology Karnataka, Surathkal",
+    "aliases": [
+      "NIT Surathkal",
+      "NITK Surathkal",
+      "NIT Karnataka",
+      "NITK",
+      "KREC Surathkal"
+    ],
+    "type": "NIT",
+    "state": "Karnataka",
+    "city": "Mangalore",
+    "established": 1960,
+    "nirf_rank": 17
+  },
+  {
+    "id": "nit-rourkela",
+    "name": "National Institute of Technology Rourkela",
+    "aliases": ["NIT Rourkela", "NITRKL", "REC Rourkela"],
+    "type": "NIT",
+    "state": "Odisha",
+    "city": "Rourkela",
+    "established": 1961,
+    "nirf_rank": 18
+  },
+  {
+    "id": "nit-calicut",
+    "name": "National Institute of Technology Calicut",
+    "aliases": ["NIT Calicut", "NITC", "REC Calicut", "NIT Kozhikode"],
+    "type": "NIT",
+    "state": "Kerala",
+    "city": "Kozhikode",
+    "established": 1961,
+    "nirf_rank": 25
+  },
+  {
+    "id": "nit-durgapur",
+    "name": "National Institute of Technology Durgapur",
+    "aliases": ["NIT Durgapur", "NITDGP", "REC Durgapur"],
+    "type": "NIT",
+    "state": "West Bengal",
+    "city": "Durgapur",
+    "established": 1960,
+    "nirf_rank": 43
+  },
+  {
+    "id": "nit-silchar",
+    "name": "National Institute of Technology Silchar",
+    "aliases": ["NIT Silchar", "NITS", "REC Silchar"],
+    "type": "NIT",
+    "state": "Assam",
+    "city": "Silchar",
+    "established": 1967,
+    "nirf_rank": 48
+  },
+  {
+    "id": "nit-hamirpur",
+    "name": "National Institute of Technology Hamirpur",
+    "aliases": ["NIT Hamirpur", "NITH", "REC Hamirpur"],
+    "type": "NIT",
+    "state": "Himachal Pradesh",
+    "city": "Hamirpur",
+    "established": 1986,
+    "nirf_rank": 71
+  },
+  {
+    "id": "nit-jalandhar",
+    "name": "Dr B R Ambedkar National Institute of Technology Jalandhar",
+    "aliases": [
+      "NIT Jalandhar",
+      "Dr. B R Ambedkar NIT Jalandhar",
+      "NITJ",
+      "REC Jalandhar"
+    ],
+    "type": "NIT",
+    "state": "Punjab",
+    "city": "Jalandhar",
+    "established": 1987,
+    "nirf_rank": 46
+  },
+  {
+    "id": "nit-kurukshetra",
+    "name": "National Institute of Technology Kurukshetra",
+    "aliases": ["NIT Kurukshetra", "NITKKR", "REC Kurukshetra"],
+    "type": "NIT",
+    "state": "Haryana",
+    "city": "Kurukshetra",
+    "established": 1963,
+    "nirf_rank": 41
+  },
+  {
+    "id": "nit-allahabad",
+    "name": "Motilal Nehru National Institute of Technology Allahabad",
+    "aliases": [
+      "NIT Allahabad",
+      "MNNIT Allahabad",
+      "MNNIT",
+      "MNREC Allahabad",
+      "NIT Prayagraj"
+    ],
+    "type": "NIT",
+    "state": "Uttar Pradesh",
+    "city": "Prayagraj",
+    "established": 1961,
+    "nirf_rank": 56
+  },
+  {
+    "id": "nit-bhopal",
+    "name": "Maulana Azad National Institute of Technology Bhopal",
+    "aliases": ["NIT Bhopal", "MANIT Bhopal", "MANIT", "MACT Bhopal"],
+    "type": "NIT",
+    "state": "Madhya Pradesh",
+    "city": "Bhopal",
+    "established": 1960,
+    "nirf_rank": 65
+  },
+  {
+    "id": "nit-nagpur",
+    "name": "Visvesvaraya National Institute of Technology Nagpur",
+    "aliases": ["NIT Nagpur", "VNIT Nagpur", "VNIT", "VRCE Nagpur"],
+    "type": "NIT",
+    "state": "Maharashtra",
+    "city": "Nagpur",
+    "established": 1960,
+    "nirf_rank": 34
+  },
+  {
+    "id": "nit-jaipur",
+    "name": "Malaviya National Institute of Technology Jaipur",
+    "aliases": ["NIT Jaipur", "MNIT Jaipur", "MNIT", "MREC Jaipur"],
+    "type": "NIT",
+    "state": "Rajasthan",
+    "city": "Jaipur",
+    "established": 1963,
+    "nirf_rank": 37
+  },
+  {
+    "id": "nit-srinagar",
+    "name": "National Institute of Technology Srinagar",
+    "aliases": ["NIT Srinagar", "REC Srinagar"],
+    "type": "NIT",
+    "state": "Jammu and Kashmir",
+    "city": "Srinagar",
+    "established": 1960,
+    "nirf_rank": 80
+  },
+  {
+    "id": "nit-patna",
+    "name": "National Institute of Technology Patna",
+    "aliases": ["NIT Patna", "NITP", "Bihar College of Engineering"],
+    "type": "NIT",
+    "state": "Bihar",
+    "city": "Patna",
+    "established": 1886,
+    "nirf_rank": 83
+  },
+  {
+    "id": "nit-raipur",
+    "name": "National Institute of Technology Raipur",
+    "aliases": ["NIT Raipur", "NITRR", "GEC Raipur"],
+    "type": "NIT",
+    "state": "Chhattisgarh",
+    "city": "Raipur",
+    "established": 1956,
+    "nirf_rank": 68
+  },
+  {
+    "id": "nit-surat",
+    "name": "Sardar Vallabhbhai National Institute of Technology Surat",
+    "aliases": ["NIT Surat", "SVNIT Surat", "SVNIT", "SVRCET Surat"],
+    "type": "NIT",
+    "state": "Gujarat",
+    "city": "Surat",
+    "established": 1961,
+    "nirf_rank": 64
+  },
+  {
+    "id": "nit-jamshedpur",
+    "name": "National Institute of Technology Jamshedpur",
+    "aliases": ["NIT Jamshedpur", "NITJSR", "RIT Jamshedpur"],
+    "type": "NIT",
+    "state": "Jharkhand",
+    "city": "Jamshedpur",
+    "established": 1960,
+    "nirf_rank": 87
+  },
+  {
+    "id": "nit-goa",
+    "name": "National Institute of Technology Goa",
+    "aliases": ["NIT Goa", "NITGOA"],
+    "type": "NIT",
+    "state": "Goa",
+    "city": "Farmagudi",
+    "established": 2010,
+    "nirf_rank": null
+  },
+  {
+    "id": "nit-agartala",
+    "name": "National Institute of Technology Agartala",
+    "aliases": ["NIT Agartala", "NITA", "Tripura Engineering College"],
+    "type": "NIT",
+    "state": "Tripura",
+    "city": "Agartala",
+    "established": 1965,
+    "nirf_rank": 95
+  },
+  {
+    "id": "nit-arunachal-pradesh",
+    "name": "National Institute of Technology Arunachal Pradesh",
+    "aliases": ["NIT Arunachal Pradesh", "NITAP"],
+    "type": "NIT",
+    "state": "Arunachal Pradesh",
+    "city": "Jote",
+    "established": 2010,
+    "nirf_rank": null
+  },
+  {
+    "id": "nit-manipur",
+    "name": "National Institute of Technology Manipur",
+    "aliases": ["NIT Manipur", "NITMN"],
+    "type": "NIT",
+    "state": "Manipur",
+    "city": "Imphal",
+    "established": 2010,
+    "nirf_rank": null
+  },
+  {
+    "id": "nit-meghalaya",
+    "name": "National Institute of Technology Meghalaya",
+    "aliases": ["NIT Meghalaya", "NITM"],
+    "type": "NIT",
+    "state": "Meghalaya",
+    "city": "Shillong",
+    "established": 2010,
+    "nirf_rank": 67
+  },
+  {
+    "id": "nit-mizoram",
+    "name": "National Institute of Technology Mizoram",
+    "aliases": ["NIT Mizoram", "NITMZ"],
+    "type": "NIT",
+    "state": "Mizoram",
+    "city": "Aizawl",
+    "established": 2010,
+    "nirf_rank": null
+  },
+  {
+    "id": "nit-nagaland",
+    "name": "National Institute of Technology Nagaland",
+    "aliases": ["NIT Nagaland", "NITN"],
+    "type": "NIT",
+    "state": "Nagaland",
+    "city": "Dimapur",
+    "established": 2010,
+    "nirf_rank": null
+  },
+  {
+    "id": "nit-sikkim",
+    "name": "National Institute of Technology Sikkim",
+    "aliases": ["NIT Sikkim", "NITSKM"],
+    "type": "NIT",
+    "state": "Sikkim",
+    "city": "Ravangla",
+    "established": 2010,
+    "nirf_rank": null
+  },
+  {
+    "id": "nit-uttarakhand",
+    "name": "National Institute of Technology Uttarakhand",
+    "aliases": ["NIT Uttarakhand", "NITUK"],
+    "type": "NIT",
+    "state": "Uttarakhand",
+    "city": "Srinagar",
+    "established": 2009,
+    "nirf_rank": null
+  },
+  {
+    "id": "nit-puducherry",
+    "name": "National Institute of Technology Puducherry",
+    "aliases": ["NIT Puducherry", "NITPY"],
+    "type": "NIT",
+    "state": "Puducherry",
+    "city": "Karaikal",
+    "established": 2010,
+    "nirf_rank": null
+  },
+  {
+    "id": "nit-delhi",
+    "name": "National Institute of Technology Delhi",
+    "aliases": ["NIT Delhi", "NITD"],
+    "type": "NIT",
+    "state": "Delhi",
+    "city": "New Delhi",
+    "established": 2010,
+    "nirf_rank": 45
+  },
+  {
+    "id": "nit-andhra-pradesh",
+    "name": "National Institute of Technology Andhra Pradesh",
+    "aliases": ["NIT Andhra Pradesh", "NITANP"],
+    "type": "NIT",
+    "state": "Andhra Pradesh",
+    "city": "Tadepalligudem",
+    "established": 2015,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiest-shibpur",
+    "name": "Indian Institute of Engineering Science and Technology Shibpur",
+    "aliases": ["IIEST Shibpur", "IIEST", "BESU Shibpur", "BE College Shibpur"],
+    "type": "IIEST",
+    "state": "West Bengal",
+    "city": "Howrah",
+    "established": 1856,
+    "nirf_rank": 39
+  },
+  {
+    "id": "spa-delhi",
+    "name": "School of Planning and Architecture New Delhi",
+    "aliases": [
+      "SPA Delhi",
+      "SPA New Delhi",
+      "School of Planning and Architecture, New Delhi",
+      "Schoolof Planning&Architecture, New Delhi",
+      "SchoolofPlanning&Architecture, NewDelhi"
+    ],
+    "type": "SPA",
+    "state": "Delhi",
+    "city": "New Delhi",
+    "established": 1941,
+    "nirf_rank": null
+  },
+  {
+    "id": "spa-bhopal",
+    "name": "School of Planning and Architecture Bhopal",
+    "aliases": ["SPA Bhopal", "School of Planning and Architecture, Bhopal"],
+    "type": "SPA",
+    "state": "Madhya Pradesh",
+    "city": "Bhopal",
+    "established": 2008,
+    "nirf_rank": null
+  },
+  {
+    "id": "spa-vijayawada",
+    "name": "School of Planning and Architecture Vijayawada",
+    "aliases": [
+      "SPA Vijayawada",
+      "School of Planning and Architecture, Vijayawada",
+      "Schoolof Planning&Architecture: Vijayawada",
+      "SchoolofPlanning&Architecture: Vijayawada"
+    ],
+    "type": "SPA",
+    "state": "Andhra Pradesh",
+    "city": "Vijayawada",
+    "established": 2008,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-allahabad",
+    "name": "Indian Institute of Information Technology Allahabad",
+    "aliases": [
+      "Indian Institute of Information Technology, Allahabad",
+      "IIIT Allahabad",
+      "IIITA"
+    ],
+    "type": "IIIT",
+    "state": "Uttar Pradesh",
+    "city": "Prayagraj",
+    "established": 1999,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiitdm-kancheepuram",
+    "name": "Indian Institute of Information Technology Design and Manufacturing Kancheepuram",
+    "aliases": [
+      "Indian Institute of Information Technology, Design & Manufacturing, Kancheepuram",
+      "IIITDM Kancheepuram",
+      "IIITDM Kancheepuram Chennai"
+    ],
+    "type": "IIIT",
+    "state": "Tamil Nadu",
+    "city": "Chennai",
+    "established": 2007,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-guwahati",
+    "name": "Indian Institute of Information Technology Guwahati",
+    "aliases": [
+      "Indian Institute of Information Technology, Guwahati",
+      "IIIT Guwahati",
+      "IIITG"
+    ],
+    "type": "IIIT",
+    "state": "Assam",
+    "city": "Guwahati",
+    "established": 2013,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-gwalior",
+    "name": "Atal Bihari Vajpayee Indian Institute of Information Technology and Management Gwalior",
+    "aliases": [
+      "Atal Bihari Vajpayee Indian Institute of Information Technology & Management Gwalior",
+      "ABV-IIITM Gwalior",
+      "IIITM Gwalior"
+    ],
+    "type": "IIIT",
+    "state": "Madhya Pradesh",
+    "city": "Gwalior",
+    "established": 1997,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-vadodara",
+    "name": "Indian Institute of Information Technology Vadodara",
+    "aliases": [
+      "Indian Institute of Information Technology(IIIT), Vadodara, Gujrat",
+      "IIIT Vadodara",
+      "IIITV"
+    ],
+    "type": "IIIT",
+    "state": "Gujarat",
+    "city": "Vadodara",
+    "established": 2013,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-vadodara-diu",
+    "name": "Indian Institute of Information Technology Vadodara International Campus Diu",
+    "aliases": [
+      "Indian Institute of Information Technology, Vadodara International Campus Diu (IIITVICD)",
+      "IIITVICD",
+      "IIIT Vadodara Diu"
+    ],
+    "type": "IIIT",
+    "state": "Daman and Diu",
+    "city": "Diu",
+    "established": 2019,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-sri-city",
+    "name": "Indian Institute of Information Technology Sri City",
+    "aliases": [
+      "Indian Institute of Information Technology (IIIT), Sri City, Chittoor",
+      "Indian Institute of Information Technology(IIIT), Sri City, Chittoor District, Andhra Pradesh",
+      "Indian Institute of Information Technology(IIIT), Sri City, Chittoor District, Andra Pradesh",
+      "IIIT Sri City",
+      "IIITS"
+    ],
+    "type": "IIIT",
+    "state": "Andhra Pradesh",
+    "city": "Chittoor",
+    "established": 2013,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-agartala",
+    "name": "Indian Institute of Information Technology Agartala",
+    "aliases": [
+      "Indian Institute of Information Technology, Agartala",
+      "IIIT Agartala"
+    ],
+    "type": "IIIT",
+    "state": "Tripura",
+    "city": "Agartala",
+    "established": 2013,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiitdm-jabalpur",
+    "name": "Indian Institute of Information Technology Design and Manufacturing Jabalpur",
+    "aliases": [
+      "Pt. Dwarka Prasad Mishra Indian Institute of Information Technology, Design & Manufacture Jabalpur",
+      "IIITDM Jabalpur",
+      "PDPM IIITDM Jabalpur",
+      "Pandit Dwarka Prasad Mishra Indian Institute of Information Technology, Design and Manufacturing (IIITDM) Jabalpur"
+    ],
+    "type": "IIIT",
+    "state": "Madhya Pradesh",
+    "city": "Jabalpur",
+    "established": 2005,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-kota",
+    "name": "Indian Institute of Information Technology Kota",
+    "aliases": [
+      "Indian Institute of Information Technology (IIIT)Kota, Rajasthan",
+      "IIIT Kota"
+    ],
+    "type": "IIIT",
+    "state": "Rajasthan",
+    "city": "Kota",
+    "established": 2013,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-kalyani",
+    "name": "Indian Institute of Information Technology Kalyani",
+    "aliases": [
+      "Indian Institute of Information Technology(IIIT) Kalyani, West Bengal",
+      "IIIT Kalyani"
+    ],
+    "type": "IIIT",
+    "state": "West Bengal",
+    "city": "Kalyani",
+    "established": 2014,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-una",
+    "name": "Indian Institute of Information Technology Una",
+    "aliases": [
+      "Indian Institute of Information Technology(IIIT) Una, Himachal Pradesh",
+      "IIIT Una"
+    ],
+    "type": "IIIT",
+    "state": "Himachal Pradesh",
+    "city": "Una",
+    "established": 2014,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-sonepat",
+    "name": "Indian Institute of Information Technology Sonepat",
+    "aliases": [
+      "Indian Institute of Information Technology(IIIT) Kilohrad, Sonepat, Haryana",
+      "IIIT Sonepat",
+      "IIIT Kilohrad"
+    ],
+    "type": "IIIT",
+    "state": "Haryana",
+    "city": "Sonepat",
+    "established": 2014,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-dharwad",
+    "name": "Indian Institute of Information Technology Dharwad",
+    "aliases": [
+      "Indian Institute of Information Technology(IIIT) Dharwad",
+      "IIIT Dharwad"
+    ],
+    "type": "IIIT",
+    "state": "Karnataka",
+    "city": "Dharwad",
+    "established": 2015,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-kottayam",
+    "name": "Indian Institute of Information Technology Kottayam",
+    "aliases": [
+      "Indian Institute of Information Technology(IIIT) Kottayam",
+      "IIIT Kottayam"
+    ],
+    "type": "IIIT",
+    "state": "Kerala",
+    "city": "Kottayam",
+    "established": 2015,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-nagpur",
+    "name": "Indian Institute of Information Technology Nagpur",
+    "aliases": [
+      "Indian Institute of Information Technology (IIIT) Nagpur",
+      "IIIT Nagpur"
+    ],
+    "type": "IIIT",
+    "state": "Maharashtra",
+    "city": "Nagpur",
+    "established": 2016,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-pune",
+    "name": "Indian Institute of Information Technology Pune",
+    "aliases": [
+      "Indian Institute of Information Technology (IIIT) Pune",
+      "IIIT Pune"
+    ],
+    "type": "IIIT",
+    "state": "Maharashtra",
+    "city": "Pune",
+    "established": 2016,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-ranchi",
+    "name": "Indian Institute of Information Technology Ranchi",
+    "aliases": [
+      "Indian Institute of Information Technology (IIIT) Ranchi",
+      "IIIT Ranchi"
+    ],
+    "type": "IIIT",
+    "state": "Jharkhand",
+    "city": "Ranchi",
+    "established": 2016,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-bhagalpur",
+    "name": "Indian Institute of Information Technology Bhagalpur",
+    "aliases": [
+      "Indian Institute of Information Technology Bhagalpur",
+      "IIIT Bhagalpur"
+    ],
+    "type": "IIIT",
+    "state": "Bihar",
+    "city": "Bhagalpur",
+    "established": 2017,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-bhopal",
+    "name": "Indian Institute of Information Technology Bhopal",
+    "aliases": [
+      "Indian Institute of Information Technology Bhopal",
+      "IIIT Bhopal"
+    ],
+    "type": "IIIT",
+    "state": "Madhya Pradesh",
+    "city": "Bhopal",
+    "established": 2017,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiitdm-kurnool",
+    "name": "Indian Institute of Information Technology Design and Manufacturing Kurnool",
+    "aliases": [
+      "Indian Institute of Information Technology Design & Manufacturing Kurnool, Andhra Pradesh",
+      "IIITDM Kurnool"
+    ],
+    "type": "IIIT",
+    "state": "Andhra Pradesh",
+    "city": "Kurnool",
+    "established": 2015,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-lucknow",
+    "name": "Indian Institute of Information Technology Lucknow",
+    "aliases": [
+      "Indian Institute of Information Technology Lucknow",
+      "IIIT Lucknow"
+    ],
+    "type": "IIIT",
+    "state": "Uttar Pradesh",
+    "city": "Lucknow",
+    "established": 2015,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-manipur",
+    "name": "Indian Institute of Information Technology Manipur",
+    "aliases": [
+      "Indian Institute of Information Technology Manipur",
+      "INDIAN INSTITUTE OF INFORMATION TECHNOLOGY SENAPATI MANIPUR",
+      "IIIT Manipur",
+      "IIIT Senapati Manipur"
+    ],
+    "type": "IIIT",
+    "state": "Manipur",
+    "city": "Senapati",
+    "established": 2015,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-tiruchirappalli",
+    "name": "Indian Institute of Information Technology Tiruchirappalli",
+    "aliases": [
+      "Indian Institute of Information Technology Srirangam, Tiruchirappalli",
+      "Indian Institute of Information Technology Tiruchirappalli",
+      "IIIT Tiruchirappalli",
+      "IIIT Trichy"
+    ],
+    "type": "IIIT",
+    "state": "Tamil Nadu",
+    "city": "Tiruchirappalli",
+    "established": 2015,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-surat",
+    "name": "Indian Institute of Information Technology Surat",
+    "aliases": [
+      "Indian Institute of Information Technology Surat",
+      "IIIT Surat"
+    ],
+    "type": "IIIT",
+    "state": "Gujarat",
+    "city": "Surat",
+    "established": 2017,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-raichur",
+    "name": "Indian Institute of Information Technology Raichur",
+    "aliases": [
+      "Indian institute of information technology, Raichur, Karnataka",
+      "IIIT Raichur"
+    ],
+    "type": "IIIT",
+    "state": "Karnataka",
+    "city": "Raichur",
+    "established": 2019,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-bhubaneswar",
+    "name": "International Institute of Information Technology Bhubaneswar",
+    "aliases": [
+      "International Institute of Information Technology, Bhubaneswar",
+      "IIIT Bhubaneswar"
+    ],
+    "type": "IIIT",
+    "state": "Odisha",
+    "city": "Bhubaneswar",
+    "established": 2006,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiit-naya-raipur",
+    "name": "International Institute of Information Technology Naya Raipur",
+    "aliases": [
+      "International Institute of Information Technology, Naya Raipur",
+      "IIIT Naya Raipur"
+    ],
+    "type": "IIIT",
+    "state": "Chhattisgarh",
+    "city": "Raipur",
+    "established": 2013,
+    "nirf_rank": null
+  },
+  {
+    "id": "bit-mesra",
+    "name": "Birla Institute of Technology Mesra",
+    "aliases": [
+      "Birla Institute of Technology, Mesra, Ranchi",
+      "BIT Mesra",
+      "Birla Institute of Technology Mesra"
+    ],
+    "type": "GFTI",
+    "state": "Jharkhand",
+    "city": "Ranchi",
+    "established": 1955,
+    "nirf_rank": null
+  },
+  {
+    "id": "bit-deoghar",
+    "name": "Birla Institute of Technology Deoghar Off-Campus",
+    "aliases": ["Birla Institute of Technology, Deoghar Off-Campus"],
+    "type": "GFTI",
+    "state": "Jharkhand",
+    "city": "Deoghar",
+    "established": 2007,
+    "nirf_rank": null
+  },
+  {
+    "id": "bit-patna",
+    "name": "Birla Institute of Technology Patna Off-Campus",
+    "aliases": ["Birla Institute of Technology, Patna Off-Campus"],
+    "type": "GFTI",
+    "state": "Bihar",
+    "city": "Patna",
+    "established": 2006,
+    "nirf_rank": null
+  },
+  {
+    "id": "assam-university",
+    "name": "Assam University Silchar",
+    "aliases": ["Assam University, Silchar"],
+    "type": "GFTI",
+    "state": "Assam",
+    "city": "Silchar",
+    "established": 1994,
+    "nirf_rank": null
+  },
+  {
+    "id": "central-univ-jharkhand",
+    "name": "Central University of Jharkhand",
+    "aliases": ["CU Jharkhand", "Central University of Jharkhand"],
+    "type": "GFTI",
+    "state": "Jharkhand",
+    "city": "Ranchi",
+    "established": 2009,
+    "nirf_rank": null
+  },
+  {
+    "id": "central-univ-haryana",
+    "name": "Central University of Haryana",
+    "aliases": ["Central University of Haryana"],
+    "type": "GFTI",
+    "state": "Haryana",
+    "city": "Mahendragarh",
+    "established": 2009,
+    "nirf_rank": null
+  },
+  {
+    "id": "central-univ-jammu",
+    "name": "Central University of Jammu",
+    "aliases": ["Central University of Jammu"],
+    "type": "GFTI",
+    "state": "Jammu and Kashmir",
+    "city": "Jammu",
+    "established": 2011,
+    "nirf_rank": null
+  },
+  {
+    "id": "central-univ-rajasthan",
+    "name": "Central University of Rajasthan",
+    "aliases": [
+      "Central University of Rajasthan, Rajasthan",
+      "Central University of Rajasthan"
+    ],
+    "type": "GFTI",
+    "state": "Rajasthan",
+    "city": "Ajmer",
+    "established": 2009,
+    "nirf_rank": null
+  },
+  {
+    "id": "cit-kokrajhar",
+    "name": "Central Institute of Technology Kokrajhar",
+    "aliases": [
+      "Central institute of Technology Kokrajar, Assam",
+      "CIT Kokrajhar"
+    ],
+    "type": "GFTI",
+    "state": "Assam",
+    "city": "Kokrajhar",
+    "established": 2006,
+    "nirf_rank": null
+  },
+  {
+    "id": "csvtu-bhilai",
+    "name": "Chhattisgarh Swami Vivekananda Technical University Bhilai",
+    "aliases": [
+      "Chhattisgarh Swami Vivekanada Technical University, Bhilai (CSVTU Bhilai)",
+      "CSVTU Bhilai"
+    ],
+    "type": "GFTI",
+    "state": "Chhattisgarh",
+    "city": "Bhilai",
+    "established": 2004,
+    "nirf_rank": null
+  },
+  {
+    "id": "gati-shakti-vishwavidyalaya",
+    "name": "Gati Shakti Vishwavidyalaya Vadodara",
+    "aliases": ["Gati Shakti Vishwavidyalaya, Vadodara"],
+    "type": "GFTI",
+    "state": "Gujarat",
+    "city": "Vadodara",
+    "established": 2022,
+    "nirf_rank": null
+  },
+  {
+    "id": "gkciet-malda",
+    "name": "Ghani Khan Choudhary Institute of Engineering and Technology Malda",
+    "aliases": [
+      "Ghani Khan Choudhary Institute of Engineering and Technology, Malda, West Bengal",
+      "GKCIET Malda"
+    ],
+    "type": "GFTI",
+    "state": "West Bengal",
+    "city": "Malda",
+    "established": 2012,
+    "nirf_rank": null
+  },
+  {
+    "id": "gurukula-kangri-vishwavidyalaya",
+    "name": "Gurukula Kangri Vishwavidyalaya Haridwar",
+    "aliases": ["Gurukula Kangri Vishwavidyalaya, Haridwar"],
+    "type": "GFTI",
+    "state": "Uttarakhand",
+    "city": "Haridwar",
+    "established": 1902,
+    "nirf_rank": null
+  },
+  {
+    "id": "hnb-garhwal-university",
+    "name": "Hemwati Nandan Bahuguna Garhwal University",
+    "aliases": [
+      "HNB Garhwal University Srinagar (Garhwal)",
+      "HNB Garhwal University"
+    ],
+    "type": "GFTI",
+    "state": "Uttarakhand",
+    "city": "Srinagar",
+    "established": 1973,
+    "nirf_rank": null
+  },
+  {
+    "id": "iict-bhadohi",
+    "name": "Indian Institute of Carpet Technology Bhadohi",
+    "aliases": ["Indian Institute of Carpet Technology, Bhadohi"],
+    "type": "GFTI",
+    "state": "Uttar Pradesh",
+    "city": "Bhadohi",
+    "established": 1952,
+    "nirf_rank": null
+  },
+  {
+    "id": "iicpt-thanjavur",
+    "name": "Indian Institute of Crop Processing Technology Thanjavur",
+    "aliases": [
+      "Indian Institute of Crop Processing Technology, Thanjavur, Tamilnadu"
+    ],
+    "type": "GFTI",
+    "state": "Tamil Nadu",
+    "city": "Thanjavur",
+    "established": 1955,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiht-varanasi",
+    "name": "Indian Institute of Handloom Technology Varanasi",
+    "aliases": [
+      "Indian Institute of Handloom Technology(IIHT), Varanasi",
+      "IIHT Varanasi"
+    ],
+    "type": "GFTI",
+    "state": "Uttar Pradesh",
+    "city": "Varanasi",
+    "established": 1956,
+    "nirf_rank": null
+  },
+  {
+    "id": "iiht-salem",
+    "name": "Indian Institute of Handloom Technology Salem",
+    "aliases": ["Indian Institute of Handloom Technology, Salem", "IIHT Salem"],
+    "type": "GFTI",
+    "state": "Tamil Nadu",
+    "city": "Salem",
+    "established": 1960,
+    "nirf_rank": null
+  },
+  {
+    "id": "ict-iocl-bhubaneswar",
+    "name": "Institute of Chemical Technology Mumbai Indian Oil Odisha Campus Bhubaneswar",
+    "aliases": [
+      "Institute of Chemical Technology, Mumbai: Indian Oil Odisha Campus, Bhubaneswar",
+      "ICT Mumbai IOC Odisha Campus"
+    ],
+    "type": "GFTI",
+    "state": "Odisha",
+    "city": "Bhubaneswar",
+    "established": 2018,
+    "nirf_rank": null
+  },
+  {
+    "id": "iet-dr-hsg-university",
+    "name": "Institute of Engineering and Technology Dr HS Gour University Sagar",
+    "aliases": [
+      "Institute of Engineering and Technology, Dr. H. S. Gour University. Sagar (A Central University)",
+      "IET Dr. HS Gour University Sagar"
+    ],
+    "type": "GFTI",
+    "state": "Madhya Pradesh",
+    "city": "Sagar",
+    "established": 1946,
+    "nirf_rank": null
+  },
+  {
+    "id": "iitram-ahmedabad",
+    "name": "Institute of Infrastructure Technology Research and Management Ahmedabad",
+    "aliases": [
+      "Institute of Infrastructure, Technology, Research and Management-Ahmedabad",
+      "IITRAM Ahmedabad"
+    ],
+    "type": "GFTI",
+    "state": "Gujarat",
+    "city": "Ahmedabad",
+    "established": 2013,
+    "nirf_rank": null
+  },
+  {
+    "id": "it-ggv-bilaspur",
+    "name": "Institute of Technology Guru Ghasidas Vishwavidyalaya Bilaspur",
+    "aliases": [
+      "Institute of Technology, Guru Ghasidas Vishwavidyalaya (A Central University), Bilaspur, (C.G.)",
+      "School of Studies of Engineering and Technology, Guru Ghasidas Vishwavidyalaya, Bilaspur",
+      "GGV Bilaspur"
+    ],
+    "type": "GFTI",
+    "state": "Chhattisgarh",
+    "city": "Bilaspur",
+    "established": 1983,
+    "nirf_rank": null
+  },
+  {
+    "id": "jk-institute-allahabad",
+    "name": "JK Institute of Applied Physics and Technology University of Allahabad",
+    "aliases": [
+      "J.K. Institute of Applied Physics & Technology, Department of Electronics & Communication, University of Allahabad- Allahabad",
+      "JK Institute Allahabad"
+    ],
+    "type": "GFTI",
+    "state": "Uttar Pradesh",
+    "city": "Prayagraj",
+    "established": 1956,
+    "nirf_rank": null
+  },
+  {
+    "id": "jnu-delhi",
+    "name": "Jawaharlal Nehru University Delhi",
+    "aliases": ["Jawaharlal Nehru University, Delhi", "JNU Delhi"],
+    "type": "GFTI",
+    "state": "Delhi",
+    "city": "New Delhi",
+    "established": 1969,
+    "nirf_rank": null
+  },
+  {
+    "id": "mizoram-university",
+    "name": "Mizoram University Aizawl",
+    "aliases": ["Mizoram University, Aizawl"],
+    "type": "GFTI",
+    "state": "Mizoram",
+    "city": "Aizawl",
+    "established": 2001,
+    "nirf_rank": null
+  },
+  {
+    "id": "niamt-ranchi",
+    "name": "National Institute of Advanced Manufacturing Technology Ranchi",
+    "aliases": [
+      "National Institute of Advanced Manufacturing Technology, Ranchi",
+      "NIAMT Ranchi"
+    ],
+    "type": "GFTI",
+    "state": "Jharkhand",
+    "city": "Ranchi",
+    "established": 1966,
+    "nirf_rank": null
+  },
+  {
+    "id": "nielit-aurangabad",
+    "name": "National Institute of Electronics and Information Technology Aurangabad",
+    "aliases": [
+      "National Institute of Electronics and Information Technology, Aurangabad (Maharashtra)",
+      "NIELIT Aurangabad"
+    ],
+    "type": "GFTI",
+    "state": "Maharashtra",
+    "city": "Aurangabad",
+    "established": 1974,
+    "nirf_rank": null
+  },
+  {
+    "id": "niftem-kundli",
+    "name": "National Institute of Food Technology Entrepreneurship and Management Kundli",
+    "aliases": [
+      "National Institute of Food Technology Entrepreneurship and Management, Kundli",
+      "National Institute of Food Technology Entrepreneurship and Management, Sonepat, Haryana",
+      "NIFTEM Kundli",
+      "NIFTEM-K"
+    ],
+    "type": "GFTI",
+    "state": "Haryana",
+    "city": "Sonepat",
+    "established": 1989,
+    "nirf_rank": null
+  },
+  {
+    "id": "niftem-thanjavur",
+    "name": "National Institute of Food Technology Entrepreneurship and Management Thanjavur",
+    "aliases": [
+      "National Institute of Food Technology Entrepreneurship and Management, Thanjavur",
+      "National Institute of Food Technology, Entrepreneurship and Management (NIFTEM) - Thanjavur",
+      "lndian Institute of Food Processing Technology, Thanjavur, Tamil Naidu.",
+      "NIFTEM-T",
+      "IIFPT Thanjavur"
+    ],
+    "type": "GFTI",
+    "state": "Tamil Nadu",
+    "city": "Thanjavur",
+    "established": 1955,
+    "nirf_rank": null
+  },
+  {
+    "id": "nifft-ranchi",
+    "name": "National Institute of Foundry and Forge Technology Ranchi",
+    "aliases": [
+      "National Institute of Foundry & Forge Technology, Hatia, Ranchi",
+      "NIFFT Ranchi"
+    ],
+    "type": "GFTI",
+    "state": "Jharkhand",
+    "city": "Ranchi",
+    "established": 1966,
+    "nirf_rank": null
+  },
+  {
+    "id": "nerist-itanagar",
+    "name": "North Eastern Regional Institute of Science and Technology Itanagar",
+    "aliases": [
+      "North Eastern Regional Institute of Science and Technology, Nirjuli-791109 (Itanagar),Arunachal Pradesh",
+      "NERIST Itanagar"
+    ],
+    "type": "GFTI",
+    "state": "Arunachal Pradesh",
+    "city": "Itanagar",
+    "established": 1984,
+    "nirf_rank": null
+  },
+  {
+    "id": "nehu-shillong",
+    "name": "North Eastern Hill University Shillong",
+    "aliases": ["North-Eastern Hill University, Shillong", "NEHU Shillong"],
+    "type": "GFTI",
+    "state": "Meghalaya",
+    "city": "Shillong",
+    "established": 1973,
+    "nirf_rank": null
+  },
+  {
+    "id": "pec-puducherry",
+    "name": "Pondicherry Engineering College Puducherry",
+    "aliases": [
+      "Pondicherry Engineering College, Puducherry",
+      "PEC Puducherry"
+    ],
+    "type": "GFTI",
+    "state": "Puducherry",
+    "city": "Puducherry",
+    "established": 1984,
+    "nirf_rank": null
+  },
+  {
+    "id": "ptu-puducherry",
+    "name": "Puducherry Technological University",
+    "aliases": [
+      "Puducherry Technological University, Puducherry",
+      "PTU Puducherry"
+    ],
+    "type": "GFTI",
+    "state": "Puducherry",
+    "city": "Puducherry",
+    "established": 2019,
+    "nirf_rank": null
+  },
+  {
+    "id": "pec-chandigarh",
+    "name": "Punjab Engineering College Chandigarh",
+    "aliases": ["Punjab Engineering College, Chandigarh", "PEC Chandigarh"],
+    "type": "GFTI",
+    "state": "Chandigarh",
+    "city": "Chandigarh",
+    "established": 1947,
+    "nirf_rank": null
+  },
+  {
+    "id": "sliet",
+    "name": "Sant Longowal Institute of Engineering and Technology",
+    "aliases": [
+      "Sant Longowal Institute of Engineering and Technology",
+      "SLIET Longowal"
+    ],
+    "type": "GFTI",
+    "state": "Punjab",
+    "city": "Longowal",
+    "established": 1989,
+    "nirf_rank": null
+  },
+  {
+    "id": "tezpur-university",
+    "name": "Tezpur University",
+    "aliases": [
+      "School of Engineering, Tezpur University, Napaam, Tezpur",
+      "Tezpur University"
+    ],
+    "type": "GFTI",
+    "state": "Assam",
+    "city": "Tezpur",
+    "established": 1994,
+    "nirf_rank": null
+  },
+  {
+    "id": "smvdu",
+    "name": "Shri Mata Vaishno Devi University",
+    "aliases": [
+      "Shri Mata Vaishno Devi University, Katra, Jammu & Kashmir",
+      "SMVDU"
+    ],
+    "type": "GFTI",
+    "state": "Jammu and Kashmir",
+    "city": "Katra",
+    "established": 1999,
+    "nirf_rank": null
+  },
+  {
+    "id": "univ-hyderabad",
+    "name": "University of Hyderabad",
+    "aliases": ["University of Hyderabad", "UoH"],
+    "type": "GFTI",
+    "state": "Telangana",
+    "city": "Hyderabad",
+    "established": 1974,
+    "nirf_rank": null
+  },
+  {
+    "id": "iust-kashmir",
+    "name": "Islamic University of Science and Technology Kashmir",
+    "aliases": [
+      "Islamic University of Science and Technology Kashmir",
+      "IUST Kashmir"
+    ],
+    "type": "GFTI",
+    "state": "Jammu and Kashmir",
+    "city": "Awantipora",
+    "established": 2005,
+    "nirf_rank": null
+  },
+  {
+    "id": "nielit-ajmer",
+    "name": "National Institute of Electronics and Information Technology Ajmer",
+    "aliases": [
+      "National Institute of Electronics and Information Technology, Ajmer (Rajasthan)",
+      "NIELIT Ajmer"
+    ],
+    "type": "GFTI",
+    "state": "Rajasthan",
+    "city": "Ajmer",
+    "established": 1974,
+    "nirf_rank": null
+  },
+  {
+    "id": "nielit-gorakhpur",
+    "name": "National Institute of Electronics and Information Technology Gorakhpur",
+    "aliases": [
+      "National Institute of Electronics and Information Technology, Gorakhpur (UP)",
+      "NIELIT Gorakhpur"
+    ],
+    "type": "GFTI",
+    "state": "Uttar Pradesh",
+    "city": "Gorakhpur",
+    "established": 1974,
+    "nirf_rank": null
+  },
+  {
+    "id": "nielit-patna",
+    "name": "National Institute of Electronics and Information Technology Patna",
+    "aliases": [
+      "National Institute of Electronics and Information Technology, Patna (Bihar)",
+      "NIELIT Patna"
+    ],
+    "type": "GFTI",
+    "state": "Bihar",
+    "city": "Patna",
+    "established": 1974,
+    "nirf_rank": null
+  },
+  {
+    "id": "nielit-ropar",
+    "name": "National Institute of Electronics and Information Technology Ropar",
+    "aliases": [
+      "National Institute of Electronics and Information Technology, Ropar (Punjab)",
+      "NIELIT Ropar"
+    ],
+    "type": "GFTI",
+    "state": "Punjab",
+    "city": "Ropar",
+    "established": 1974,
+    "nirf_rank": null
+  },
+  {
+    "id": "rgnau-amethi",
+    "name": "Rajiv Gandhi National Aviation University Amethi",
+    "aliases": [
+      "Rajiv Gandhi National Aviation University, Fursatganj, Amethi (UP)",
+      "RGNAU Amethi"
+    ],
+    "type": "GFTI",
+    "state": "Uttar Pradesh",
+    "city": "Amethi",
+    "established": 2013,
+    "nirf_rank": null
+  },
+  {
+    "id": "sgsits-indore",
+    "name": "Shri G S Institute of Technology and Science Indore",
+    "aliases": [
+      "Shri G. S. Institute of Technology and Science Indore",
+      "SGSITS Indore"
+    ],
+    "type": "GFTI",
+    "state": "Madhya Pradesh",
+    "city": "Indore",
+    "established": 1952,
+    "nirf_rank": null
+  },
+  {
+    "id": "nitttr-bhopal",
+    "name": "National Institute of Technical Teachers Training and Research Bhopal",
+    "aliases": [
+      "NITTTR Bhopal",
+      "National Institute of Technical Teachers Training and Research, Bhopal",
+      "National Institute of Technical Teachers' Training and Research, Bhopal"
+    ],
+    "type": "GFTI",
+    "state": "Madhya Pradesh",
+    "city": "Bhopal",
+    "established": 1965,
+    "nirf_rank": null
+  },
+  {
+    "id": "central-univ-karnataka",
+    "name": "Central University of Karnataka",
+    "aliases": [
+      "CUK",
+      "Central University of Karnataka, Kalaburagi",
+      "Central University of Karnataka Kalaburagi"
+    ],
+    "type": "GFTI",
+    "state": "Karnataka",
+    "city": "Kalaburagi",
+    "established": 2009,
+    "nirf_rank": null
+  },
+  {
+    "id": "central-univ-punjab",
+    "name": "Central University of Punjab",
+    "aliases": [
+      "Central University of Punjab, Bathinda",
+      "CUP Bathinda",
+      "Central University of Punjab Bathinda"
+    ],
+    "type": "GFTI",
+    "state": "Punjab",
+    "city": "Bathinda",
+    "established": 2009,
+    "nirf_rank": null
+  },
+  {
+    "id": "iisc-bangalore",
+    "name": "Indian Institute of Science Bangalore",
+    "aliases": [
+      "Indian Institute of Science, Bangalore",
+      "IISc Bangalore",
+      "IISc Bengaluru",
+      "Indian Institute of Science, Bengaluru",
+      "Indian Institute of Science"
+    ],
+    "type": "GFTI",
+    "state": "Karnataka",
+    "city": "Bengaluru",
+    "established": 1909,
+    "nirf_rank": null
+  }
+]

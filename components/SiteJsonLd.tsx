@@ -22,7 +22,7 @@ export default function SiteJsonLd() {
     },
     sameAs: ["https://x.com/kewonit", "https://discord.gg/xbtqGcQ6SF"],
     description:
-      "Mildly important data related to colleges simplified. Comprehensive JoSAA, MHT-CET cutoffs, seat matrix, and admission data for engineering colleges in India.",
+      "Mildly important Maharashtra college data simplified. Comprehensive MHT-CET cutoffs, seat matrices, and admission data.",
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer service",

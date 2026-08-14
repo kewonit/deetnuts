@@ -8,20 +8,24 @@
   })
 */
 }
-import { AlertTriangle } from "lucide-react";
-import { Alert } from "@/components/ui/alert";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function Features() {
   const features = [
     {
-      title: "NIRF Rankings",
-      text: "Explore Engineering college rankings, placements, and more.",
-      image:
-        "https://res.cloudinary.com/dfyrk32ua/image/upload/v1721510733/deetnuts/logos/National_Institutional_Ranking_Framework_logo_xekyp5.png",
-      buttonText: "Explore",
-      href: "/nirf",
+      title: "JEE Main",
+      text: "Predict NIT, IIIT, and GFTI admission chances using JoSAA and CSAB data.",
+      image: "/exams/jee_main.webp",
+      buttonText: "Predict",
+      href: "/college-predictor?exam=jee-main",
+    },
+    {
+      title: "JEE Advanced",
+      text: "Predict IIT admission chances using historical JoSAA cutoffs.",
+      image: "/exams/jee_adv.webp",
+      buttonText: "Predict",
+      href: "/college-predictor?exam=jee-advanced",
     },
     {
       title: "MHT-CET",
@@ -31,52 +35,20 @@ export default function Features() {
       buttonText: "Explore",
       href: "/mht-cet",
     },
-    {
-      title: "JOSAA Cutoffs",
-      text: "Check cutoff ranks for IITs, NITs, and other top engineering colleges.",
-      image:
-        "https://res.cloudinary.com/dfyrk32ua/image/upload/v1721510732/deetnuts/logos/jossa_logo_oablhz.png",
-      buttonText: "Explore",
-      href: "/josaa",
-    },
-    {
-      title: "BITS Pilani Cutoffs 2023",
-      text: "Check the latest cutoffs for BITS Pilani campuses.",
-      image:
-        "https://res.cloudinary.com/dfyrk32ua/image/upload/v1721510726/deetnuts/logos/BITS_Pilani-Logo_b8sizn.svg",
-      buttonText: "Explore",
-      href: "/engineering/colleges/bits/cutoffs/2023",
-    },
   ];
 
   return (
     <div>
       <section className="border-y-2 border-y-black bg-bg py-8 px-2 px-base lg:py-12 lg:px-12">
-        <div className="font-mono max-w-2xl mx-auto p-4 mb-8">
-          <div className="border-4 border-red-600 bg-red-50 p-4 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-20 h-20 bg-red-200 rotate-45 transform translate-x-10 -translate-y-10"></div>
-            <div className="relative flex items-center space-x-4">
-              <AlertTriangle className="w-10 h-10 flex-shrink-0 text-red-600" />
-              <div>
-                <h2 className="text-xl font-bold mb-1 uppercase tracking-tight text-red-600">
-                  Warning
-                </h2>
-                <p className="text-sm leading-tight text-red-800">
-                  This stuff is still being actively built, here is a preview
-                  straight from the helms of the backend!
-                </p>
-              </div>
-            </div>
-            <div className="mt-3 flex justify-end">
-              <div className="w-12 h-1 bg-red-600"></div>
-            </div>
-          </div>
+        <div className="mx-auto mb-8 max-w-2xl px-4 text-center">
+          <h2 className="font-heading text-3xl tracking-tight sm:text-4xl">
+            College Admission Tools
+          </h2>
         </div>
 
         <div className="mx-auto grid w-container max-w-7xl grid-cols-1 gap-5 px-5 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, i) => {
-            const isActive =
-              feature.title === "MHT-CET" || feature.title === "JOSAA Cutoffs";
+            const isActive = true;
             return (
               <div
                 className={

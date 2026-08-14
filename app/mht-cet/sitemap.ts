@@ -1,6 +1,5 @@
 import { MetadataRoute } from "next";
-import { getCollegesData } from "@/lib/college-data";
-import { createCollegeSlug } from "@/lib/slugify";
+import { getCanonicalMhtCetCollegePaths } from "@/lib/admissions/proxy-canonical";
 
 // Force dynamic rendering for sitemap generation
 export const dynamic = "force-dynamic";
@@ -29,17 +28,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Dynamic college pages
-  try {
-    const colleges = await getCollegesData();
-
-    const collegePages: MetadataRoute.Sitemap = colleges.map((college) => ({
-      url: `${baseUrl}/mht-cet/colleges/${createCollegeSlug(college.college_name, college.college_id)}`,
+  const collegePages: MetadataRoute.Sitemap =
+    getCanonicalMhtCetCollegePaths().map((path) => ({
+      url: `${baseUrl}${path}`,
     }));
 
-    return [...staticPages, ...collegePages];
-  } catch (error) {
-    console.error("Failed to generate MHT-CET college sitemap:", error);
-    return staticPages;
-  }
+  return [...staticPages, ...collegePages];
 }

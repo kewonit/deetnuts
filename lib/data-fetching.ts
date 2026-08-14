@@ -150,10 +150,10 @@ export const CachePresets = {
   },
   INSTITUTE: {
     revalidate: 900,
-    tags: ["institute", "josaa"],
+    tags: ["institute", "mht-cet"],
   },
   CUTOFFS: {
     revalidate: 1800,
-    tags: ["cutoffs", "josaa"],
+    tags: ["cutoffs", "mht-cet"],
   },
 } as const;

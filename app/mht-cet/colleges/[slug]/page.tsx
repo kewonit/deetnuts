@@ -1,344 +1,75 @@
-import Link from "next/link";
-import { parseCollegeSlug } from "@/lib/slugify";
-import SeatMatrix from "@/components/SeatMatrix";
-import CutoffsTable from "@/components/CutoffsTable";
-import { Suspense } from "react";
-import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import { notFound, permanentRedirect, redirect } from "next/navigation";
+import MhtCetDetailView from "@/components/admissions/MhtCetDetailView";
+import { getMhtCetCollegeDetail } from "@/lib/admissions/data";
+import { getCanonicalUrl, matchesCanonicalSegment } from "@/lib/admissions/canonical";
+import { isAdmissionsV2Enabled } from "@/lib/admissions/flags";
+import {
+  parseAdmissionsInteger,
+  withNeutralAdmissionsQuery,
+} from "@/lib/admissions/query-state";
 
-async function getCollege(id: string) {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_URL}/api/mht-cet/colleges/${id}`,
-      { next: { revalidate: 3600 } },
-    );
-    if (!res.ok) {
-      if (res.status === 404) {
-        return null; // Return null instead of throwing notFound
-      }
-      throw new Error(
-        `Failed to fetch college data for id: ${id}. Status: ${res.status}`,
-      );
-    }
-    return res.json();
-  } catch (error) {
-    console.error("Error fetching college:", error);
-    return null; // Return null for any fetch errors
-  }
-}
-
-async function getSeatMatrix(id: string) {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_URL}/api/mht-cet/colleges/${id}/seat-matrix`,
-      { next: { revalidate: 3600 } },
-    );
-    if (!res.ok) {
-      if (res.status === 404) {
-        return { seatMatrix: [], matchInfo: null };
-      }
-      throw new Error(`Failed to fetch seat matrix data for id: ${id}`);
-    }
-    return res.json();
-  } catch (error) {
-    console.error("Error fetching seat matrix:", error);
-    return { seatMatrix: [], matchInfo: null };
-  }
-}
-
-async function getCutoffs(id: string) {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_URL}/api/mht-cet/colleges/${id}/cutoffs`,
-      { next: { revalidate: 3600 } },
-    );
-    if (!res.ok) {
-      if (res.status === 404) {
-        return { cutoffs: [] };
-      }
-      throw new Error(`Failed to fetch cutoffs data for id: ${id}`);
-    }
-    return res.json();
-  } catch (error) {
-    console.error("Error fetching cutoffs:", error);
-    return { cutoffs: [] };
-  }
-}
-
-export async function generateMetadata(props: {
+interface PageProps {
   params: Promise<{ slug: string }>;
-}) {
-  const params = await props.params;
-  const { slug } = params;
-  const { id } = parseCollegeSlug(slug);
-  if (!id) {
-    return {
-      title: "College Not Found",
-      description: "The college you are looking for could not be found.",
-    };
+  searchParams: Promise<{ year?: string; round?: string }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const model = await getMhtCetCollegeDetail(slug);
+  if (!model) {
+    return { title: "College not found", robots: { index: false, follow: false } };
   }
-  const college = await getCollege(id);
-
-  if (!college) {
-    return {
-      title: "College Not Found",
-      description: "The college you are looking for could not be found.",
-    };
+  const canonicalSegment = model.canonicalPath.split("/").at(-1) || "";
+  if (!matchesCanonicalSegment(slug, canonicalSegment)) {
+    permanentRedirect(model.canonicalPath);
   }
-
-  const title = `${college.college_name} MHT-CET 2024 Cutoffs & Seats`;
-  const description = `Plan MHT-CET 2026 admission to ${college.college_name} using the available 2024 cutoffs, fee structure, seat matrix, and college details.`;
-  const canonicalUrl = `https://deetnuts.com/mht-cet/colleges/${slug}`;
-
+  const title = `${model.college.name} MHT-CET cutoffs`;
+  const description = `Review verified 2026 MHT-CET cutoff evidence, exact seat pools, programs, and explicitly dated 2024 seat information for ${model.college.name}.`;
   return {
     title,
     description,
-    keywords: [
-      college.college_name,
-      "MHT-CET",
-      "MHT-CET 2026 admissions",
-      "MHT-CET 2024 cutoffs",
-      "Engineering Admissions",
-      "College Cutoffs",
-      "Fee Structure",
-      "Seat Matrix",
-      college.home_university,
-    ],
-    creator: "DeetNuts",
+    alternates: { canonical: getCanonicalUrl(model.canonicalPath) },
     openGraph: {
       title,
       description,
-      url: canonicalUrl,
-      siteName: "DeetNuts",
-      images: [
-        {
-          url: "/MHT-CET_logo.png", // Replace with a more specific image if available
-          width: 800,
-          height: 600,
-          alt: `Logo of ${college.college_name}`,
-        },
-      ],
-      locale: "en_IN",
+      url: getCanonicalUrl(model.canonicalPath),
       type: "website",
-    },
-    alternates: {
-      canonical: canonicalUrl,
     },
   };
 }
 
-import CollegeJsonLd from "@/components/CollegeJsonLd";
-
-export default async function CollegePage(props: {
-  params: Promise<{ slug: string }>;
-}) {
-  const params = await props.params;
-  const { slug } = params;
-  const { id } = parseCollegeSlug(slug);
-
-  if (!id) {
+export default async function CollegePage({ params, searchParams }: PageProps) {
+  if (!isAdmissionsV2Enabled("mht-cet")) redirect("/mht-cet/colleges");
+  const [{ slug }, search] = await Promise.all([params, searchParams]);
+  const requestedYear = parseAdmissionsInteger(search.year);
+  const requestedRound = parseAdmissionsInteger(search.round);
+  if (
+    (search.year !== undefined && requestedYear === undefined) ||
+    (search.round !== undefined && requestedRound === undefined)
+  ) {
     notFound();
   }
-
-  let college;
-  let seatMatrix;
-  let cutoffs;
-  let collegeError = null;
-  let seatMatrixError = null;
-  let cutoffsError = null;
-
-  try {
-    [college, seatMatrix, cutoffs] = await Promise.all([
-      getCollege(id),
-      getSeatMatrix(id),
-      getCutoffs(id),
-    ]);
-  } catch (error: any) {
-    // Handle errors for all promises, or individual errors if needed
-    console.error("Error fetching data in parallel:", error);
-    // For now, we'll set a generic error and let individual components handle their missing data
-    collegeError = "Failed to load college data.";
-    seatMatrixError = "Failed to load seat matrix data.";
-    cutoffsError = "Failed to load cutoffs data.";
+  const model = await getMhtCetCollegeDetail(slug, {
+    year: requestedYear,
+    round: requestedRound,
+  });
+  if (!model) notFound();
+  if (
+    (requestedYear !== undefined && requestedYear !== model.selectedYear) ||
+    (requestedRound !== undefined && requestedRound !== model.selectedRound)
+  ) {
+    notFound();
   }
-
-  // If we don't have college data, render an error state instead of calling notFound()
-  if (!college) {
-    return (
-      <div className="min-h-screen bg-bg">
-        <div className="container mx-auto px-4 pt-32 pb-8">
-          <div className="max-w-2xl mx-auto text-center">
-            <div className="bg-white border-4 border-black rounded-base shadow-base p-12">
-              <div className="text-8xl mb-6">😿</div>
-              <h1 className="text-4xl font-heading text-black mb-6">
-                COLLEGE NOT FOUND
-              </h1>
-              <p className="text-xl font-base text-black mb-8 leading-relaxed">
-                we couldn&apos;t find the college you&apos;re looking for! 🔍
-                <br />
-                this might be due to an invalid ID or the college data might not
-                be available.
-              </p>
-              <div className="space-y-4">
-                <Link
-                  href="/mht-cet/colleges"
-                  className="inline-block bg-main text-black px-8 py-4 border-2 border-black rounded-base shadow-base font-heading text-lg hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none transition-all"
-                >
-                  Browse All Colleges 📚
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  const canonicalSegment = model.canonicalPath.split("/").at(-1) || "";
+  if (!matchesCanonicalSegment(slug, canonicalSegment)) {
+    permanentRedirect(
+      withNeutralAdmissionsQuery(model.canonicalPath, {
+        year: search.year ? model.selectedYear : undefined,
+        round: search.round ? model.selectedRound : undefined,
+      }),
     );
   }
 
-  return (
-    <div className="min-h-screen bg-bg">
-      <CollegeJsonLd college={college} />
-      <div className="container mx-auto max-w-full sm:max-w-3xl md:max-w-4xl lg:max-w-5xl xl:max-w-7xl px-2 sm:px-4 pt-28 sm:pt-32 pb-8 sm:pb-12">
-        {/* Breadcrumb */}
-        <nav className="mb-8">
-          <div className="flex items-center space-x-2 text-sm font-base">
-            <Link
-              href="/"
-              className="hover:text-main transition-colors font-medium"
-            >
-              Home
-            </Link>
-            <span className="font-bold">🎀</span>
-            <Link
-              href="/mht-cet"
-              className="hover:text-main transition-colors font-medium"
-            >
-              MHT-CET
-            </Link>
-            <span className="font-bold">🎀</span>
-            <Link
-              href="/mht-cet/colleges"
-              className="hover:text-main transition-colors font-medium"
-            >
-              Colleges
-            </Link>
-            <span className="font-bold">🎀</span>
-            <span className="text-black font-heading">
-              {college.college_name}
-            </span>
-          </div>
-        </nav>
-
-        {/* College Header Card */}
-        <div className="bg-white border-4 border-black rounded-base shadow-base p-4 sm:p-8 mb-8">
-          <div className="flex items-start justify-between mb-6">
-            <div className="flex-1">
-              <h1 className="text-4xl md:text-6xl font-heading mb-4 text-black leading-tight tracking-tight">
-                {college.college_name}
-              </h1>
-              <div className="flex flex-wrap gap-3 mb-6">
-                <span className="bg-purple-300 text-black px-4 py-2 border-2 border-black rounded-base font-heading text-sm">
-                  🆔 ID: {college.college_id}
-                </span>
-                <span
-                  className={`px-4 py-2 border-2 border-black rounded-base font-heading text-sm ${
-                    college.status === "Active"
-                      ? "bg-green-300 text-black"
-                      : "bg-red-300 text-black"
-                  }`}
-                >
-                  {college.status === "Active" ? "✅" : "🔴"} {college.status}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
-            <div className="space-y-4">
-              <div className="flex items-start">
-                <div className="w-12 h-12 bg-main border-2 border-black rounded-base flex items-center justify-center mr-4">
-                  <span className="text-2xl">🆔</span>
-                </div>
-                <div>
-                  <span className="font-heading text-black block text-lg">
-                    College ID
-                  </span>
-                  <span className="font-base text-black text-xl">
-                    {college.college_id}
-                  </span>
-                </div>
-              </div>
-              <div className="flex items-start">
-                <div className="w-12 h-12 bg-green-300 border-2 border-black rounded-base flex items-center justify-center mr-4">
-                  <span className="text-2xl">📋</span>
-                </div>
-                <div>
-                  <span className="font-heading text-black block text-lg">
-                    Status
-                  </span>
-                  <span className="font-base text-black text-xl italic">
-                    {college.status}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="space-y-4">
-              <div className="flex items-start">
-                <div className="w-12 h-12 bg-purple-300 border-2 border-black rounded-base flex items-center justify-center mr-4">
-                  <span className="text-2xl">🏫</span>
-                </div>
-                <div>
-                  <span className="font-heading text-black block text-lg">
-                    Home University
-                  </span>
-                  <span className="font-base text-black text-xl">
-                    {college.home_university}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="space-y-4">
-              <div className="flex items-start">
-                <div className="w-12 h-12 bg-yellow-300 border-2 border-black rounded-base flex items-center justify-center mr-4">
-                  <span className="text-2xl">🗂️</span>
-                </div>
-                <div>
-                  <span className="font-heading text-black block text-lg">
-                    Record ID
-                  </span>
-                  <span className="font-base text-black text-sm font-mono">
-                    {college.id}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Seat Matrix Section */}
-        <div className="mb-12">
-          <Suspense fallback={<SeatMatrix data={[]} isLoading={true} />}>
-            <div className="space-y-6">
-              <SeatMatrix
-                data={seatMatrix?.seatMatrix || []}
-                error={seatMatrixError}
-                isLoading={false}
-              />
-            </div>
-          </Suspense>
-        </div>
-
-        {/* Cutoffs Section */}
-        <div>
-          <Suspense fallback={<CutoffsTable data={[]} isLoading={true} />}>
-            <div className="space-y-6">
-              <CutoffsTable
-                data={cutoffs?.cutoffs || []}
-                error={cutoffsError}
-                isLoading={false}
-              />
-            </div>
-          </Suspense>
-        </div>
-      </div>
-    </div>
-  );
+  return <MhtCetDetailView model={model} />;
 }

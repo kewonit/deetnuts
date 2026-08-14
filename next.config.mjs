@@ -2,10 +2,15 @@
 const nextConfig = {
   output: "standalone",
 
+  outputFileTracingRoot: process.cwd(),
+  outputFileTracingIncludes: {
+    "/api/predict/[exam_id]": ["ejam/data/**/*"],
+  },
+
   // React 19 & Next.js 16 Performance Features
   reactCompiler: true, // Enable React Compiler for automatic memoization
 
-  // Turbopack configuration
+  // Keep Turbopack enabled while the legacy webpack font rule remains available.
   turbopack: {},
 
   // Production performance optimizations
@@ -36,6 +41,7 @@ const nextConfig = {
     formats: ["image/avif", "image/webp"],
   },
   env: {
+    EJAM_DATA_ROOT: process.env.EJAM_DATA_ROOT || "ejam/data",
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   },
@@ -84,7 +90,7 @@ const nextConfig = {
           {
             key: "Content-Security-Policy",
             value:
-              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https://res.cloudinary.com https://external-preview.redd.it; font-src 'self'; connect-src 'self' https://*.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self';",
+              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https://res.cloudinary.com https://external-preview.redd.it; font-src 'self'; connect-src 'self' https://*.supabase.co https://www.google-analytics.com https://*.google-analytics.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self';",
           },
         ],
       },

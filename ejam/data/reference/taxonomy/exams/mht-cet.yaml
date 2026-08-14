@@ -1,0 +1,28 @@
+# MHT-CET Maharashtra State CAP predictor
+schema_version: 1
+id: mht-cet
+name: Maharashtra Common Entrance Test
+abbreviation: MHT-CET
+domain: engineering
+conducting_body: Maharashtra State Common Entrance Test Cell
+official_url: https://cetcell.mahacet.org
+
+category_system: mht-cet-categories
+quota_system: mht-cet-allocation-scopes
+gender_system: mht-cet-seat-entitlements
+counselling_bodies:
+  - maharashtra-cap
+
+scoring_type: rank
+cutoff_score_type: rank
+
+data_dependencies:
+  - dataset: cutoffs
+    path_template: "data/datasets/engineering/mht-cet/maharashtra-cap/cutoffs/year={year}/round={round}/cutoffs.parquet"
+    required: false
+  - dataset: seat_matrix
+    path_template: "data/reference/engineering/mht-cet/seat-matrix-{year}.jsonl"
+    required: false
+  - dataset: predictor_index
+    path_template: "data/tools/college-predictor/maharashtra-cap/predictor-index.parquet"
+    required: true

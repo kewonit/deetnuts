@@ -1,0 +1,9 @@
+schema_version: 1
+id: mht-cet-seat-entitlements
+name: MHT-CET seat entitlements
+description: Seat-pool entitlement labels; these describe allocation eligibility rather than gender identity.
+values:
+  - id: gender-neutral
+    label: Gender-neutral seats
+  - id: ladies
+    label: Ladies and gender-neutral seats

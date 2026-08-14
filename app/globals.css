@@ -1,7 +1,50 @@
-@import url("https://fonts.googleapis.com/css2?family=Abel&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body:has([data-admissions-full-page]) .site-default-chrome {
+  display: none;
+}
+
+body:has([data-admissions-full-page]) {
+  background: #f6f7fb;
+}
+
+.admissions-surface {
+  --admissions-ink: #111827;
+  --admissions-muted: #5f6b7a;
+  --admissions-line: #dce1e8;
+  --admissions-brand: #6d3be5;
+  --admissions-brand-soft: #eee8ff;
+  color: var(--admissions-ink);
+}
+
+.admissions-panel {
+  border: 1px solid var(--admissions-line);
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.admissions-surface section[id] {
+  scroll-margin-top: 5.5rem;
+}
+
+@media (pointer: coarse) {
+  .admissions-surface :is(a, button, input, select, summary) {
+    min-height: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admissions-surface *,
+  .admissions-surface *::before,
+  .admissions-surface *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
 
 @layer utilities {
   .line-clamp-1 {

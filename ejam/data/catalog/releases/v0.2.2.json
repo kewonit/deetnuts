@@ -1,0 +1,457 @@
+{
+  "version": "v0.2.2",
+  "generated_at": "2026-07-27T16:58:14.162Z",
+  "git_sha": "c305fff",
+  "datasets": [
+    {
+      "path": "datasets/engineering/jee/csab/cutoffs/year=2021/round=1/cutoffs.parquet",
+      "sha256": "77663aef06d4e61f6ee525d8dc95aa26ee046a82b5d42f39200caa123117897b",
+      "bytes": 36131
+    },
+    {
+      "path": "datasets/engineering/jee/csab/cutoffs/year=2022/round=1/cutoffs.parquet",
+      "sha256": "25710f428337f13619a764dafbdf2a8821a782133482bea0536bb2c5ed575405",
+      "bytes": 42680
+    },
+    {
+      "path": "datasets/engineering/jee/csab/cutoffs/year=2022/round=2/cutoffs.parquet",
+      "sha256": "36aba048b0115cc24d56ea10ca96e4aa4dddfd4c520e8b528548334bcf9a7f38",
+      "bytes": 31281
+    },
+    {
+      "path": "datasets/engineering/jee/csab/cutoffs/year=2023/round=1/cutoffs.parquet",
+      "sha256": "e1109f532d321811f44ed5051747b27272c39856c725b9ab6c10146fede294f6",
+      "bytes": 45392
+    },
+    {
+      "path": "datasets/engineering/jee/csab/cutoffs/year=2023/round=2/cutoffs.parquet",
+      "sha256": "a87835bdd5471a0ebcab78307bc71aef2a5569d169ee89c557cfca181ec599f9",
+      "bytes": 33783
+    },
+    {
+      "path": "datasets/engineering/jee/csab/cutoffs/year=2024/round=1/cutoffs.parquet",
+      "sha256": "a07809340e69bb087f767a711d011741f2efb9f50738a58aa7fcd3842d2cf8e5",
+      "bytes": 50567
+    },
+    {
+      "path": "datasets/engineering/jee/csab/cutoffs/year=2024/round=2/cutoffs.parquet",
+      "sha256": "54ed080835feb3092bd81e69fb650af5880eafb6b88a22a3df1b8204ac9b9206",
+      "bytes": 36067
+    },
+    {
+      "path": "datasets/engineering/jee/csab/cutoffs/year=2025/round=1/cutoffs.parquet",
+      "sha256": "64b4ddb5be49429266135592418fb0887ec4d54c556835fccbd213fc7e3185c2",
+      "bytes": 12494
+    },
+    {
+      "path": "datasets/engineering/jee/csab/cutoffs/year=2025/round=2/cutoffs.parquet",
+      "sha256": "0dc701bd7422d8fd8f78301c042a2626ab7a601b789a3a86141a03ebde67b020",
+      "bytes": 15851
+    },
+    {
+      "path": "datasets/engineering/jee/csab/cutoffs/year=2025/round=3/cutoffs.parquet",
+      "sha256": "092c16a1c6e88727bdd25d221b224d1b6b4cf8c6cf70459ebc8d1ea425b87963",
+      "bytes": 16410
+    },
+    {
+      "path": "datasets/engineering/jee/csab/seat-matrix/year=2023/seat-matrix.parquet",
+      "sha256": "5d065710f4f5684d7901cca2065230ec298018a60bebd4c304cbdf751627d034",
+      "bytes": 19613
+    },
+    {
+      "path": "datasets/engineering/jee/csab/seat-matrix/year=2024/seat-matrix.parquet",
+      "sha256": "ca0bbd913c38e2129357887634931978da18de69462a45f6895dfb17ccc63610",
+      "bytes": 23224
+    },
+    {
+      "path": "datasets/engineering/jee/csab/seat-matrix/year=2025/seat-matrix.parquet",
+      "sha256": "3bace9d16b03b315921ac2e27dd5ba86b2b33611796f5fcc45d0c9cf26a0d879",
+      "bytes": 52356
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2016/round=1/cutoffs.parquet",
+      "sha256": "3fb01208d225a1159e925a542e69b0ff7d40f238441c4f4f336c7be3a83d28fe",
+      "bytes": 37072
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2016/round=2/cutoffs.parquet",
+      "sha256": "5ac4c2fb94c0532622bd02fb2d45bd64b414903c69c3f46937d3a3b7a8bf76b3",
+      "bytes": 37199
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2016/round=3/cutoffs.parquet",
+      "sha256": "e56fdae72bca9c4e26476db5ecda74175be7b0f7e59245d4bbed29c6dbe7ffa3",
+      "bytes": 32743
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2016/round=4/cutoffs.parquet",
+      "sha256": "6bceca034ef6f8864d8f4fd96de6a74f982275cee426bd3039ec848aa2854b46",
+      "bytes": 32702
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2016/round=5/cutoffs.parquet",
+      "sha256": "cbae93e5e22fb06ca97ade0d523127704946919c898d629b0653a4f2a61d35aa",
+      "bytes": 32642
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2016/round=6/cutoffs.parquet",
+      "sha256": "2b95956a4ed73d86d65d99c79abc9e59e679ebe94731ec1b076703fd2164f653",
+      "bytes": 32683
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2017/round=1/cutoffs.parquet",
+      "sha256": "ee76855924ff47f9f9649b8a28435fb4227815574f46c3a1002d8da3715500d5",
+      "bytes": 38584
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2017/round=2/cutoffs.parquet",
+      "sha256": "58ab49740833392511d270b5e7b0841a41412219d4a83c89f69dbc3920bce93c",
+      "bytes": 33880
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2017/round=3/cutoffs.parquet",
+      "sha256": "e7360c74dcbb35ec209b7074c5d5208799e0b676afdd05c658ec2ebf17033a31",
+      "bytes": 33730
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2017/round=4/cutoffs.parquet",
+      "sha256": "ee639fdbf0caed26bdbafb634925a632c796658b36646f39abcb7c40f293a597",
+      "bytes": 33522
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2017/round=5/cutoffs.parquet",
+      "sha256": "bb1ca38c52a2f27e485e72903a45e9f0619df17f672a1c029018010bc294823d",
+      "bytes": 33446
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2017/round=6/cutoffs.parquet",
+      "sha256": "6ca7f6758837b8ba6cc4112ca31ac27a84f6c8f768d6b8902a51fa601e31dc04",
+      "bytes": 33414
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2017/round=7/cutoffs.parquet",
+      "sha256": "223614175f3716b346389f00e6b4bd0af12cf65f53f82280b0c96675a0ad0290",
+      "bytes": 33366
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2018/round=1/cutoffs.parquet",
+      "sha256": "e47002eec13d4980cc2ba4051e3ec247472bc0b8f8d311d7c8cc59dcdce2b093",
+      "bytes": 56034
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2018/round=2/cutoffs.parquet",
+      "sha256": "19760fb3f0699fa8d272fa4de5481c7d527d449c0b96d1a17420283388163cca",
+      "bytes": 47900
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2018/round=3/cutoffs.parquet",
+      "sha256": "1101a3cecdb39f98f169f015361b60a786f2e1f9f060627f5b09df6448aa45ab",
+      "bytes": 32765
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2018/round=4/cutoffs.parquet",
+      "sha256": "fd1c43aebdbf684c66c4ed09bc533f6272729c778529217c76c2f50c89717b75",
+      "bytes": 39583
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2018/round=5/cutoffs.parquet",
+      "sha256": "a5554b35dfbea74aa2faeacb121f3b47c679cc4365a15b09c85ca0b5c74afd15",
+      "bytes": 45080
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2018/round=6/cutoffs.parquet",
+      "sha256": "af94c86851cbc1248f4ac4af2f82396fb1175da3acaed7d0c1b8d4f5d794e395",
+      "bytes": 47120
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2018/round=7/cutoffs.parquet",
+      "sha256": "bc81ec704f3bde937a92815266eff333453d2ac9af3bab8abb7518f24fc80ccb",
+      "bytes": 43295
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2019/round=1/cutoffs.parquet",
+      "sha256": "c33e0c1089a78e1f84a4bcd7713f3accf456e91038318e9fa4c136b26a88489a",
+      "bytes": 61130
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2019/round=2/cutoffs.parquet",
+      "sha256": "0707301b7b62c484dfa42b15556a2bab4e7714e4306587f7db80eeae84840a69",
+      "bytes": 42349
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2019/round=3/cutoffs.parquet",
+      "sha256": "6aeea8419abe2f9dafd3cabea6c56cbeed5b0ab7a540b4632a00d3ee23e1758e",
+      "bytes": 27426
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2019/round=4/cutoffs.parquet",
+      "sha256": "0255c6bf00de691c4b4cf8c6a683c02fab7957790433752449ad58a2b3ac53eb",
+      "bytes": 42463
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2019/round=5/cutoffs.parquet",
+      "sha256": "10c0cec198aa99dd105f6dd13363ff3b4621928d6656a4900359eb3077a5176a",
+      "bytes": 57626
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2019/round=6/cutoffs.parquet",
+      "sha256": "254a7bdf299ec88095e007e30b0ec3e158152c518c11856ab2659d3937586ff0",
+      "bytes": 44087
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2019/round=7/cutoffs.parquet",
+      "sha256": "19a22497b38ae453aa207f81b8905009c7b776525d4ae17debbfbbd323093d13",
+      "bytes": 47718
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2020/round=1/cutoffs.parquet",
+      "sha256": "8436e88be1f17b60d52b3139516cc37de5b1002e07b3d26f00fae362d67a50f3",
+      "bytes": 77580
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2020/round=2/cutoffs.parquet",
+      "sha256": "d0ef83b1f4479863d6468fb9696c284cecab58aa72e707190222b60d87bc82e9",
+      "bytes": 55574
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2020/round=4/cutoffs.parquet",
+      "sha256": "37288ba9b1cca6624d3ebb6f51ebd87966b3312fede4b28d4afda5be15887afc",
+      "bytes": 63841
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2020/round=5/cutoffs.parquet",
+      "sha256": "9c1db8515f9ed070bc00d4dd67270b3a2d40396d0431bf16589295239cf2ca49",
+      "bytes": 66294
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2020/round=6/cutoffs.parquet",
+      "sha256": "4ea3e8bc656221ad4d96eaee4fd62a968b663b3bd6d5f8f6a21ceb4f4369610e",
+      "bytes": 52261
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2021/round=1/cutoffs.parquet",
+      "sha256": "75453f6e3822580d981edca477302590acfa1023b0b33f15a3cada3f38d96a73",
+      "bytes": 47454
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2021/round=2/cutoffs.parquet",
+      "sha256": "e8e1d3883b9b3d62bc5c524255747a1621957196c5ecf42744471995634da073",
+      "bytes": 61485
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2021/round=3/cutoffs.parquet",
+      "sha256": "05d62446529f9872f7f7c95c28bc4f6f1e238f768a8c816b505edfc751972943",
+      "bytes": 61368
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2021/round=4/cutoffs.parquet",
+      "sha256": "6b5df4cdde18659ecafe51e14b94651d6bcb6e412f329f4adb45add5153ff570",
+      "bytes": 60929
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2021/round=5/cutoffs.parquet",
+      "sha256": "f07c7e00f9932733e91e4fa8d69f24883dbf2065b7c51a0054496e1a181c9bbf",
+      "bytes": 49624
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2021/round=6/cutoffs.parquet",
+      "sha256": "ea3b221ac9ab234e07e454a90e042d320bd9e5d923a3aebe7bb7877b29c693c4",
+      "bytes": 66550
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2022/round=1/cutoffs.parquet",
+      "sha256": "8a62cd3a9d8f565a64e7318245250712c498a266f38c97e3f5b0dd9567a4efa1",
+      "bytes": 62970
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2022/round=2/cutoffs.parquet",
+      "sha256": "fb38815fb63a183d180700d00eaa3d2ae09012e55053f819ff416ae86df3669c",
+      "bytes": 59009
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2022/round=3/cutoffs.parquet",
+      "sha256": "05cd75928c7f479d85ca562de7135992a765dbaafdeb5cbfc6bb977d1ff3a369",
+      "bytes": 44690
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2022/round=4/cutoffs.parquet",
+      "sha256": "6ee5ab1285b1ffc7eaf8591db6834d970c30a2fb11077c5f33010743c5a82533",
+      "bytes": 44378
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2022/round=5/cutoffs.parquet",
+      "sha256": "048d8bc83bb492e270744dea54e02e4c34a9dd8dd4f42dd98dd6c0cc0b439238",
+      "bytes": 48871
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2022/round=6/cutoffs.parquet",
+      "sha256": "f7410f130025ae031e0c8a43bd3e6507542ec4814909945f7d4d0d1a967e026d",
+      "bytes": 53056
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2023/round=1/cutoffs.parquet",
+      "sha256": "ab4431da82202f39a641684581d70480d04781b5695792cc9f0eff313206fc70",
+      "bytes": 49462
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2023/round=2/cutoffs.parquet",
+      "sha256": "6192a0e6aacdf26756a3814b0f1faa2e74780c6c7639d03a62080e35e4556841",
+      "bytes": 43466
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2023/round=3/cutoffs.parquet",
+      "sha256": "ffbec5df6ffc42594caac0e0a5126c92aa28bf378d3df195f49775e380c4378a",
+      "bytes": 51601
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2023/round=4/cutoffs.parquet",
+      "sha256": "3768ffcdba9ea4dfebad71f628e7a5a476acf8e727681670fa492dbd245f833d",
+      "bytes": 50085
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2023/round=5/cutoffs.parquet",
+      "sha256": "46a5f36249e00fa9ae11c0f3ada1348216ff9fb1ae5e1d4db99231cc0a18e805",
+      "bytes": 50137
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2023/round=6/cutoffs.parquet",
+      "sha256": "80237e7d07be7277557760ed2f70adf62970e152e3f240370d306fe7eb9c4af5",
+      "bytes": 52082
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2024/round=1/cutoffs.parquet",
+      "sha256": "430ccde1a95f816ce293a9008b60a91a569dc23bf11e0ec5b930d61feed0fdea",
+      "bytes": 95221
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2024/round=2/cutoffs.parquet",
+      "sha256": "d696f4482f8dc4bb9778697c173ea21f3b365c293853fb8b307f73c41e5b0456",
+      "bytes": 56411
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2024/round=3/cutoffs.parquet",
+      "sha256": "7acfd2f1f27ecbc8318f90ad18de4c9a62cf0d2b91c14baf4d491f80745886fd",
+      "bytes": 61483
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2024/round=4/cutoffs.parquet",
+      "sha256": "2b0ebfa70061cc7b362e1d8a7c155a7b028dac6cfeb6deb8c8c8f701946fd804",
+      "bytes": 58574
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2024/round=5/cutoffs.parquet",
+      "sha256": "53a43368c356ec069b097fb5db5a4a61514f3b4670053e2ab3fad9dacc4dfd6b",
+      "bytes": 59440
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2025/round=1/cutoffs.parquet",
+      "sha256": "c5e7cd0748cf429143c4e11d86db86543dacedc43b1d05bd5ad6d1bd5c49e8e8",
+      "bytes": 81938
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2025/round=2/cutoffs.parquet",
+      "sha256": "06e1c13b53e3f9a889d2b00dad4c5af954bcdf06c2f71212015ecfbab09643af",
+      "bytes": 44245
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2025/round=3/cutoffs.parquet",
+      "sha256": "23b935f14dcce0d60a101c3c9110353d11f1bc516f870ecc71737d3120b3a440",
+      "bytes": 81984
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2025/round=4/cutoffs.parquet",
+      "sha256": "259ac2ae2502b5520233b3f7153cbe6f4f0f4f09588163e38ddd0a0aa02d892f",
+      "bytes": 102921
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2025/round=5/cutoffs.parquet",
+      "sha256": "6b2056d4ecfb2683b5291c969d4ea379bf7e72be26c18444457dac53f98a16bb",
+      "bytes": 102961
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/cutoffs/year=2025/round=6/cutoffs.parquet",
+      "sha256": "6e6074ff6397003e6010869becbc26d003bddbae6477dff4b1be8f4bfe61a840",
+      "bytes": 88825
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/seat-matrix/year=2023/seat-matrix.parquet",
+      "sha256": "20580398e2d67a527221944ab4f87559db9489584c36b7e34f1754af3720e67a",
+      "bytes": 16515
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/seat-matrix/year=2024/seat-matrix.parquet",
+      "sha256": "39bdcd38c6197d8aa4170eba585073e721e2fb4ecf37a4cc2b84d719d6a66632",
+      "bytes": 17188
+    },
+    {
+      "path": "datasets/engineering/jee/josaa/seat-matrix/year=2025/seat-matrix.parquet",
+      "sha256": "ea5b429dc9c2a68b78df7758fbfc1b4f7f3dbee9b26433140b1b543fab5d9bdf",
+      "bytes": 18693
+    },
+    {
+      "path": "datasets/engineering/mht-cet/maharashtra-cap/cutoffs/year=2024/round=1/cutoffs.parquet",
+      "sha256": "8f01ca02e67e069f3300a87d07cc237f957ad3bb8938b4845c43b6aef3d07761",
+      "bytes": 795594
+    },
+    {
+      "path": "datasets/engineering/mht-cet/maharashtra-cap/cutoffs/year=2024/round=2/cutoffs.parquet",
+      "sha256": "1b82f8fa1fa4f2993a93435dbc50dd05b83ff965ea1f9d48f9498ebf8894230f",
+      "bytes": 791931
+    },
+    {
+      "path": "datasets/engineering/mht-cet/maharashtra-cap/cutoffs/year=2024/round=3/cutoffs.parquet",
+      "sha256": "192a68090858098236b784f8056f6357b6d390aa8da62667147883a8cf3fdfc9",
+      "bytes": 458913
+    },
+    {
+      "path": "datasets/engineering/mht-cet/maharashtra-cap/cutoffs/year=2025/round=1/cutoffs.parquet",
+      "sha256": "e5f84f629f87ca390439809acb3850ecd1cf627ebdd04970c1bf9fcd0ea0f344",
+      "bytes": 851641
+    },
+    {
+      "path": "datasets/engineering/mht-cet/maharashtra-cap/cutoffs/year=2025/round=2/cutoffs.parquet",
+      "sha256": "0f93b4eeb4e06676b19aaeef1c887b43f938ae44825593001e6cc92186d76711",
+      "bytes": 856623
+    },
+    {
+      "path": "datasets/engineering/mht-cet/maharashtra-cap/cutoffs/year=2025/round=3/cutoffs.parquet",
+      "sha256": "ac222badd5a8b95b498f84637b908754722dbfa20b2a1922c195f45a3613c3e9",
+      "bytes": 490394
+    },
+    {
+      "path": "datasets/engineering/mht-cet/maharashtra-cap/cutoffs/year=2025/round=4/cutoffs.parquet",
+      "sha256": "c163b91c6f715620055230944827c19502b9e2b3bea6ee28e80ba396d2cd625e",
+      "bytes": 393668
+    },
+    {
+      "path": "tools/college-predictor/csab/predictor-index.lineage.json",
+      "sha256": "7fbdc0d908e2491b54da35c2fd2b367995bf5f06a2e6c153105b910726777cd5",
+      "bytes": 1991
+    },
+    {
+      "path": "tools/college-predictor/csab/predictor-index.parquet",
+      "sha256": "7c71ce32a5639ca77c0af38818807f8e056407ba46d79d32aa3cd6a958922c5d",
+      "bytes": 230832
+    },
+    {
+      "path": "tools/college-predictor/josaa/predictor-index.lineage.json",
+      "sha256": "4c18a93b432408d81fdd4ec6fc1868e2c1e7ccc4c6ea017048df7a5f1e83eda9",
+      "bytes": 11487
+    },
+    {
+      "path": "tools/college-predictor/josaa/predictor-index.parquet",
+      "sha256": "0dec2bc082b55291c41aa1180fcd4e4689c91eb08573b60409777a8df1b0f7ee",
+      "bytes": 644785
+    },
+    {
+      "path": "tools/college-predictor/maharashtra-cap/predictor-index.lineage.json",
+      "sha256": "e551c66325542868a7ff65cd73867b5a7471ef758076acd8780d414422e0dbaf",
+      "bytes": 3200
+    },
+    {
+      "path": "tools/college-predictor/maharashtra-cap/predictor-index.parquet",
+      "sha256": "492d36734d20d21ea1313fb5e26c76d3a1f8240e208a6d3a3f77473acf165c21",
+      "bytes": 1597742
+    }
+  ]
+}

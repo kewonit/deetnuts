@@ -310,10 +310,6 @@ export default class PocketBase {
 
     getList: async () => {
       const items = [
-        "josaa_institutes",
-        "josaa_branches",
-        "josaa_cutoffs",
-        "josaa_institute_aliases",
         "2024_mht_cet_colleges",
         "2024_mht_cet_colleges_seat_matrix",
         "2024_mht_cet_round_one_cutoffs_duplicate",
@@ -323,7 +319,6 @@ export default class PocketBase {
         "2024_all_india_rounds_one",
         "2024_all_india_rounds_two",
         "2024_all_india_rounds_three",
-        "engineering_bits_cutoffs",
       ].map((name) => ({ id: name, name }));
 
       return {
