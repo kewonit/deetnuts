@@ -54,9 +54,6 @@ export const metadata: Metadata = {
     ],
     creator: "@kewonit",
   },
-  alternates: {
-    canonical: "https://deetnuts.com",
-  },
   icons: {
     icon: "/favicon.ico",
   },

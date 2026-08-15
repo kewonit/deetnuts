@@ -16,14 +16,14 @@ export default function Features() {
     {
       title: "JEE Main",
       text: "Predict NIT, IIIT, and GFTI admission chances using JoSAA and CSAB data.",
-      image: "/exams/jee_main.webp",
+      image: "/ejam/exams/jee_main.webp",
       buttonText: "Predict",
       href: "/college-predictor?exam=jee-main",
     },
     {
       title: "JEE Advanced",
       text: "Predict IIT admission chances using historical JoSAA cutoffs.",
-      image: "/exams/jee_adv.webp",
+      image: "/ejam/exams/jee_adv.webp",
       buttonText: "Predict",
       href: "/college-predictor?exam=jee-advanced",
     },

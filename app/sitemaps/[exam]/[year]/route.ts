@@ -4,10 +4,22 @@ import type { JeeExamId } from "@/lib/jee-cutoffs/types";
 
 export const dynamicParams = true;
 
-export function generateStaticParams() {
-  return (["jee-main", "jee-advanced"] as const).flatMap((exam) =>
-    Array.from({ length: 10 }, (_, index) => ({ exam, year: String(2016 + index) })),
+export async function generateStaticParams() {
+  const shards = new Set(
+    (await getJeeSeoRoutes())
+      .filter(
+        (route) =>
+          route.indexable &&
+          route.examId &&
+          route.year &&
+          ["year", "program", "profile"].includes(route.routeType),
+      )
+      .map((route) => `${route.examId}:${route.year}`),
   );
+  return Array.from(shards, (shard) => {
+    const [exam, year] = shard.split(":");
+    return { exam, year };
+  });
 }
 
 function escapeXml(value: string): string {
@@ -30,6 +42,15 @@ export async function GET(
       route.year === year &&
       ["year", "program", "profile"].includes(route.routeType),
   );
+  if (routes.length === 0) {
+    return new NextResponse("Not found", {
+      status: 404,
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+        "X-Robots-Tag": "noindex",
+      },
+    });
+  }
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${routes.map((route) => `  <url><loc>${escapeXml(`https://deetnuts.com${route.path}`)}</loc><lastmod>${escapeXml(route.lastChangedAt)}</lastmod></url>`).join("\n")}\n</urlset>\n`;
   return new NextResponse(xml, {
     headers: {

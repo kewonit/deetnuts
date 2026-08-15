@@ -1,6 +1,6 @@
 import { Toaster } from "sonner";
-import { COLLEGE_PREDICTOR_LCP_PRELOAD } from "@/ejam-ui/lib/static-image";
-import { cn } from "@/ejam-ui/lib/utils";
+import { COLLEGE_PREDICTOR_LCP_PRELOAD } from "@ejam/ui/lib/static-image";
+import { cn } from "@ejam/ui/lib/utils";
 import "./route.css";
 
 export default function CollegePredictorLayout({
@@ -10,7 +10,7 @@ export default function CollegePredictorLayout({
 }) {
   return (
     <>
-      <link rel="stylesheet" href="/ejam-ui.css" />
+      <link rel="stylesheet" href="/ejam/ui.css" />
       <link
         rel="preload"
         as="image"

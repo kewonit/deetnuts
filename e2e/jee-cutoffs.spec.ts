@@ -12,7 +12,7 @@ test("year page is source-useful in server HTML and exposes canonical SEO", asyn
   expect(html).toContain("Source records");
   expect(html).not.toContain('"@type":"Dataset"');
   expect(html).not.toContain('"@type":"CollegeOrUniversity"');
-  expect(html).not.toContain('/ejam-ui.css');
+  expect(html).not.toContain('/ejam/ui.css');
 
   await page.goto(pagePath);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Assam University Silchar cutoff 2025");
@@ -102,7 +102,11 @@ test("analytics makes no Google request before consent", async ({ page }) => {
 });
 
 test("unknown routes and invalid API releases fail explicitly", async ({ request }) => {
-  expect((await request.get("/jee-main/colleges/not-a-college")).status()).toBe(404);
+  const unknownCollege = await request.get("/jee-main/colleges/not-a-college");
+  expect(unknownCollege.status()).toBe(404);
+  const unknownHtml = await unknownCollege.text();
+  expect(unknownHtml).toMatch(/<meta name="robots" content="noindex"/);
+  expect(unknownHtml).not.toMatch(/<link rel="canonical"/);
   expect((await request.get("/jee-main/colleges/assam-university/cutoffs/2015")).status()).toBe(404);
 
   const wrongExam = await request.get("/jee-main/colleges/iit-bhilai", { maxRedirects: 0 });
@@ -116,4 +120,26 @@ test("unknown routes and invalid API releases fail explicitly", async ({ request
   const staleRelease = await request.get("/api/jee-cutoffs/jee-main/assam-university/2025?release=old");
   expect(staleRelease.status()).toBe(409);
   expect(staleRelease.headers()["cache-control"]).toContain("no-store");
+});
+
+test("sitemaps expose only canonical, indexable release routes", async ({ request }) => {
+  const index = await request.get("/sitemap-index.xml");
+  expect(index.status()).toBe(200);
+  const indexXml = await index.text();
+  expect(indexXml).toContain("https://deetnuts.com/sitemap.xml");
+  expect(indexXml).toContain("https://deetnuts.com/sitemaps/jee-main/2025");
+  expect(indexXml).toContain("https://deetnuts.com/sitemaps/jee-advanced/2025");
+  expect(indexXml).toMatch(/<lastmod>[^<]+<\/lastmod>/);
+
+  const shard = await request.get("/sitemaps/jee-main/2025");
+  expect(shard.status()).toBe(200);
+  const shardXml = await shard.text();
+  expect(shardXml).toContain(`https://deetnuts.com${pagePath}`);
+  expect(shardXml).not.toContain(
+    `${pagePath}/programs/agricultural-engineering-b-tech-4-year-agricultural-engineering/csab/all-india/open/female-only`,
+  );
+
+  const missingShard = await request.get("/sitemaps/jee-main/2015");
+  expect(missingShard.status()).toBe(404);
+  expect(missingShard.headers()["x-robots-tag"]).toBe("noindex");
 });

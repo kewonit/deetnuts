@@ -1,5 +1,10 @@
-import Link from "next/link";
+import type { Metadata } from "next";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Page not found",
+  description: "The requested DEETNUTS page could not be found.",
+};
 
 export default function NotFound() {
   return (
