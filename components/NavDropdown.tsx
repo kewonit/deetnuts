@@ -15,6 +15,7 @@ interface LinkItem {
 
 const cutoffLinks: LinkItem[] = [
   { href: "/mht-cet", title: "MHTCET", subtitle: "All India & State Cutoffs" },
+  { href: "/jee-cutoffs", title: "JEE Main & Advanced", subtitle: "JoSAA & CSAB opening and closing ranks" },
 ];
 
 const toolLinks: LinkItem[] = [{ href: "#", title: "/", subtitle: "/" }];

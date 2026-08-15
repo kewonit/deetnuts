@@ -1,0 +1,123 @@
+{
+  "description": "All 23 Indian Institutes of Technology (IITs) participating in JEE (Advanced) and JoSAA seat allocation",
+  "source": "jeeadv.2026.brochure",
+  "count": 23,
+  "iits": [
+    {
+      "name": "IIT Kharagpur",
+      "established": 1951,
+      "location": "Kharagpur, West Bengal"
+    },
+    {
+      "name": "IIT Bombay",
+      "established": 1958,
+      "location": "Mumbai, Maharashtra"
+    },
+    {
+      "name": "IIT Madras",
+      "established": 1959,
+      "location": "Chennai, Tamil Nadu"
+    },
+    {
+      "name": "IIT Kanpur",
+      "established": 1959,
+      "location": "Kanpur, Uttar Pradesh"
+    },
+    {
+      "name": "IIT Delhi",
+      "established": 1961,
+      "location": "New Delhi"
+    },
+    {
+      "name": "IIT Guwahati",
+      "established": 1994,
+      "location": "Guwahati, Assam"
+    },
+    {
+      "name": "IIT Roorkee",
+      "established": 2001,
+      "location": "Roorkee, Uttarakhand"
+    },
+    {
+      "name": "IIT (BHU) Varanasi",
+      "established": 2012,
+      "location": "Varanasi, Uttar Pradesh"
+    },
+    {
+      "name": "IIT Bhubaneswar",
+      "established": 2008,
+      "location": "Bhubaneswar, Odisha"
+    },
+    {
+      "name": "IIT Gandhinagar",
+      "established": 2008,
+      "location": "Gandhinagar, Gujarat"
+    },
+    {
+      "name": "IIT Hyderabad",
+      "established": 2008,
+      "location": "Hyderabad, Telangana"
+    },
+    {
+      "name": "IIT Jodhpur",
+      "established": 2008,
+      "location": "Jodhpur, Rajasthan"
+    },
+    {
+      "name": "IIT Patna",
+      "established": 2008,
+      "location": "Patna, Bihar"
+    },
+    {
+      "name": "IIT Ropar",
+      "established": 2008,
+      "location": "Rupnagar, Punjab"
+    },
+    {
+      "name": "IIT Indore",
+      "established": 2009,
+      "location": "Indore, Madhya Pradesh"
+    },
+    {
+      "name": "IIT Mandi",
+      "established": 2009,
+      "location": "Mandi, Himachal Pradesh"
+    },
+    {
+      "name": "IIT ISM Dhanbad",
+      "established": 2016,
+      "location": "Dhanbad, Jharkhand",
+      "note": "Originally founded 1926 as Indian School of Mines (ISM); granted IIT status in 2016"
+    },
+    {
+      "name": "IIT Palakkad",
+      "established": 2015,
+      "location": "Palakkad, Kerala"
+    },
+    {
+      "name": "IIT Tirupati",
+      "established": 2015,
+      "location": "Tirupati, Andhra Pradesh"
+    },
+    {
+      "name": "IIT Bhilai",
+      "established": 2016,
+      "location": "Bhilai, Chhattisgarh"
+    },
+    {
+      "name": "IIT Goa",
+      "established": 2016,
+      "location": "Ponda, Goa"
+    },
+    {
+      "name": "IIT Jammu",
+      "established": 2016,
+      "location": "Jammu, Jammu & Kashmir"
+    },
+    {
+      "name": "IIT Dharwad",
+      "established": 2016,
+      "location": "Dharwad, Karnataka"
+    }
+  ]
+}

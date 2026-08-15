@@ -3,7 +3,10 @@
  */
 
 import { readFile } from "node:fs/promises";
-import { parquetRead } from "hyparquet";
+// tsx loads this workspace package through CJS in node:test; the package's
+// ESM-only root export is therefore unavailable there, so use its node entry.
+// @ts-expect-error hyparquet does not expose types for the direct node entry.
+import { parquetRead } from "../../node_modules/hyparquet/src/node.js";
 import { compressors } from "hyparquet-compressors";
 
 export async function readParquetRows<T = Record<string, unknown>>(
@@ -17,7 +20,7 @@ export async function readParquetRows<T = Record<string, unknown>>(
     file: arrayBuffer,
     rowFormat: "object",
     compressors,
-    onComplete: (data) => {
+    onComplete: (data: unknown[]) => {
       rows = data;
     },
   });

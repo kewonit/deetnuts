@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prebuild": "npm run verify:jee-cutoff-data",
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint app components lib",
     "lint:fix": "eslint app components lib --fix",
@@ -33,7 +34,10 @@
     "generate:admissions-canonical-manifest": "tsx scripts/generate-admissions-canonical-manifest.ts",
     "test:mht-cet-profile": "node --import tsx --test lib/mht-cet/state-cutoffs/candidate-profile.test.ts",
     "test:admissions": "node --conditions=react-server --import tsx --test lib/admissions/*.test.ts lib/mht-cet/state-cutoffs/candidate-profile.test.ts",
-    "test:e2e:admissions": "playwright test e2e/admissions-details.spec.ts"
+    "test:e2e:admissions": "playwright test e2e/admissions-details.spec.ts",
+    "test:jee-cutoffs": "EJAM_DATA_ROOT=ejam/data node --conditions=react-server --import tsx --test lib/jee-cutoffs/*.test.mts",
+    "test:e2e:jee-cutoffs": "playwright test e2e/jee-cutoffs.spec.ts",
+    "verify:jee-cutoff-data": "node --import tsx ejam/packages/data-cli/src/release/fetch-data.ts && node --import tsx ejam/packages/data-cli/src/jee/cutoff-pages/verify.ts"
   },
   "dependencies": {
     "@duckdb/duckdb-wasm": "^1.30.0",

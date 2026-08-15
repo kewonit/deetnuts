@@ -1,0 +1,52 @@
+{
+  "name": "@ejam/predictors",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./registry": {
+      "import": "./src/registry.ts",
+      "types": "./src/registry.ts"
+    },
+    "./shared/quota-input": {
+      "import": "./src/shared/quota-input.ts",
+      "types": "./src/shared/quota-input.ts"
+    },
+    "./jee-main": {
+      "import": "./src/jee-main/index.ts",
+      "types": "./src/jee-main/index.ts"
+    },
+    "./jee-advanced": {
+      "import": "./src/jee-advanced/index.ts",
+      "types": "./src/jee-advanced/index.ts"
+    },
+    "./csab": {
+      "import": "./src/csab/index.ts",
+      "types": "./src/csab/index.ts"
+    },
+    "./mht-cet": {
+      "import": "./src/mht-cet/index.ts",
+      "types": "./src/mht-cet/index.ts"
+    }
+  },
+  "scripts": {
+    "lint": "biome check .",
+    "lint:write": "biome check --write .",
+    "format": "biome format --write .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@ejam/data": "workspace:*",
+    "zod": "^4.4.2"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3",
+    "vitest": "^3.2.4"
+  }
+}

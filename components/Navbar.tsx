@@ -6,56 +6,12 @@ import AuthButton from "./authbutton";
 import { AiFillGithub } from "react-icons/ai";
 
 const GITHUB_REPO_URL = "https://github.com/kewonit/deetnuts";
-const GITHUB_REPO_API_URL = "https://api.github.com/repos/kewonit/deetnuts";
-
-type GitHubRepoResponse = {
-  stargazers_count?: number;
-};
-
-async function getGitHubStarCount(): Promise<number | null> {
-  try {
-    const response = await fetch(GITHUB_REPO_API_URL, {
-      headers: {
-        Accept: "application/vnd.github+json",
-        "User-Agent": "deetnuts-navbar-star",
-        "X-GitHub-Api-Version": "2022-11-28",
-      },
-      next: { revalidate: 3600 },
-    });
-
-    if (!response.ok) {
-      return null;
-    }
-
-    const data = (await response.json()) as GitHubRepoResponse;
-    return typeof data.stargazers_count === "number"
-      ? data.stargazers_count
-      : null;
-  } catch {
-    return null;
-  }
-}
-
-function formatStarCount(count: number | null): string | null {
-  if (count === null) {
-    return null;
-  }
-
-  return new Intl.NumberFormat("en", {
-    notation: count >= 1000 ? "compact" : "standard",
-    maximumFractionDigits: 1,
-  }).format(count);
-}
-
-const Navbar = async () => {
-  const starCount = await getGitHubStarCount();
-  const formattedStarCount = formatStarCount(starCount);
-
+const Navbar = () => {
   return (
     <>
-      <nav className="fixed sm:relative left-0 top-0 sm:top-auto z-20 mx-auto flex h-[88px] w-full items-center border-b-4 border-black bg-white px-5 m500:h-16 ">
+      <nav className="relative z-20 mx-auto flex h-[88px] w-full items-center border-b-4 border-black bg-white px-5 m500:h-16 ">
         <div className="mx-auto flex w-[1300px] max-w-full items-center justify-between">
-          <MobileDrawer githubStarCount={formattedStarCount} />
+          <MobileDrawer />
 
           <div className="flex items-center pl-5 m400:flex-1 m400:pl-5">
             <Link
@@ -82,15 +38,7 @@ const Navbar = async () => {
             >
               <AiFillGithub className="h-5 w-5" />
               <span className="text-sm leading-none">Star</span>
-              {formattedStarCount ? (
-                <span className="rounded-full border-2 border-black bg-white px-2 py-0.5 text-xs leading-none">
-                  {formattedStarCount}
-                </span>
-              ) : (
-                <span className="text-xs leading-none text-gray-700">
-                  on GitHub
-                </span>
-              )}
+              <span className="text-xs leading-none text-gray-700">on GitHub</span>
             </a>
             <AuthButton />
           </div>

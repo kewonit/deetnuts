@@ -5,6 +5,30 @@ const nextConfig = {
   outputFileTracingRoot: process.cwd(),
   outputFileTracingIncludes: {
     "/api/predict/[exam_id]": ["ejam/data/**/*"],
+    "/api/jee-cutoffs/[exam]/[college]/[year]": [
+      "ejam/data/catalog/**/*",
+      "ejam/data/tools/college-cutoffs/**/*",
+    ],
+    "/api/jee-cutoffs/[exam]/[college]/trend": [
+      "ejam/data/catalog/**/*",
+      "ejam/data/tools/college-cutoffs/**/*",
+    ],
+    "/jee-main/colleges/**/*": [
+      "ejam/data/catalog/**/*",
+      "ejam/data/tools/college-cutoffs/**/*",
+    ],
+    "/jee-advanced/colleges/**/*": [
+      "ejam/data/catalog/**/*",
+      "ejam/data/tools/college-cutoffs/**/*",
+    ],
+    "/compliance/data-sources-and-licensing": [
+      "ejam/data/catalog/**/*",
+      "ejam/data/tools/college-cutoffs/**/*",
+    ],
+    "/sitemaps/**/*": [
+      "ejam/data/catalog/**/*",
+      "ejam/data/tools/college-cutoffs/**/*",
+    ],
   },
 
   // React 19 & Next.js 16 Performance Features
@@ -104,9 +128,10 @@ const nextConfig = {
           },
         ],
       },
-      // API routes - no caching
+      // API routes default to no-store. Versioned JEE cutoff routes set their
+      // own success/error policy so 400/404/409 responses are never immutable.
       {
-        source: "/api/(.*)",
+        source: "/api/:path((?!jee-cutoffs(?:/|$)).*)",
         headers: [
           {
             key: "Cache-Control",

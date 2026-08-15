@@ -84,6 +84,8 @@ export function ChartContainer({
   className,
   children,
   footer,
+  minWidth,
+  minHeight,
   ...props
 }: Readonly<ChartContainerProps>) {
   const uniqueId = React.useId();
@@ -110,6 +112,8 @@ export function ChartContainer({
         <RechartsPrimitive.ResponsiveContainer
           className="min-h-0 w-full flex-1"
           initialDimension={initialDimension}
+          minWidth={minWidth}
+          minHeight={minHeight}
         >
           {children}
         </RechartsPrimitive.ResponsiveContainer>

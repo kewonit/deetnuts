@@ -1,0 +1,167 @@
+{
+  "id": "jee-main",
+  "name": "Joint Entrance Examination (Main)",
+  "abbreviation": "JEE (Main)",
+  "conducting_body": "National Testing Agency (NTA), Government of India",
+  "official_url": "https://jeemain.nta.nic.in/",
+  "scope": "National-level engineering entrance exam for admission to NITs, IIITs, CFTIs and qualifying candidates for JEE (Advanced)",
+  "languages": [
+    "English",
+    "Hindi",
+    "Assamese",
+    "Bengali",
+    "Gujarati",
+    "Kannada",
+    "Malayalam",
+    "Marathi",
+    "Odia",
+    "Punjabi",
+    "Tamil",
+    "Telugu",
+    "Urdu"
+  ],
+  "exam_frequency": "Twice a year (two sessions: January and April)",
+  "papers": {
+    "paper1": {
+      "name": "Paper 1 (B.E. / B.Tech.)",
+      "mode": "Computer Based Test (CBT)",
+      "subjects": ["Mathematics", "Physics", "Chemistry"],
+      "duration_minutes": 180,
+      "total_marks": 300,
+      "total_questions": 75,
+      "structure_per_subject": {
+        "section_a": {
+          "type": "Multiple Choice Questions (MCQs)",
+          "questions_per_subject": 20,
+          "marks_per_question": 4,
+          "negative_marking": "-1 for each incorrect answer"
+        },
+        "section_b": {
+          "type": "Numerical Value Questions (NVQs)",
+          "questions_per_subject": 5,
+          "marks_per_question": 4,
+          "negative_marking": "-1 for each incorrect answer"
+        }
+      },
+      "source": "jeemain.2026.bulletin"
+    },
+    "paper2a": {
+      "name": "Paper 2A (B.Arch.)",
+      "mode": "Mathematics and Aptitude in CBT; Drawing Test in pen-and-paper (offline) on A4 sheet",
+      "subjects": ["Mathematics", "Aptitude Test", "Drawing Test"],
+      "duration_minutes": 180,
+      "total_marks": 400,
+      "source": "jeemain.2026.bulletin"
+    },
+    "paper2b": {
+      "name": "Paper 2B (B.Planning)",
+      "mode": "Computer Based Test (CBT)",
+      "subjects": ["Mathematics", "Aptitude Test", "Planning-Based Questions"],
+      "duration_minutes": 180,
+      "total_marks": 400,
+      "source": "jeemain.2026.bulletin"
+    }
+  },
+  "syllabus_source": "jeemain.2026.syllabus.paper1",
+  "eligibility": {
+    "age_limit": "No age restriction for JEE (Main). Candidates who have passed class 12 / equivalent in 2024, 2025, or appearing in 2026 are eligible.",
+    "qualifying_examination": "Class 12 / equivalent (AICTE-recognised) with Physics, Chemistry and Mathematics as compulsory subjects",
+    "year_of_appearance": "Passed in 2024, 2025, or appearing in 2026",
+    "number_of_attempts": "For JEE (Main) 2026, eligible candidates are those who passed Class 12 / equivalent in 2024 or 2025, or are appearing in 2026.",
+    "reservation_eligibility": {
+      "general": "All Indian nationals / OCI / PIO / Foreign nationals meeting qualifying criteria",
+      "obc_ncl": "Certificate valid as per central list on the last date of registration",
+      "sc_st": "As per central list",
+      "ews": "Income and asset certificate as per central format",
+      "pwd": "Minimum 40% disability; certificate with UDID / Form issued by notified medical authority",
+      "source": "jeemain.2026.bulletin"
+    }
+  },
+  "reservations": {
+    "general_ews": "10% for Economically Weaker Section (Gen-EWS)",
+    "obc_ncl": "27% for Other Backward Classes (Non-Creamy Layer)",
+    "sc": "15% for Scheduled Caste",
+    "st": "7.5% for Scheduled Tribe",
+    "pwd": "5% horizontal reservation for Persons with Disabilities (PwD) across all categories",
+    "source": "jeemain.2026.bulletin"
+  },
+  "application_fee_inr": {
+    "single_paper": {
+      "description": "Paper 1 OR Paper 2A OR Paper 2B (any one)",
+      "in_india": {
+        "general_male": 1000,
+        "general_female": 800,
+        "gen_ews_obc_ncl_male": 900,
+        "gen_ews_obc_ncl_female": 800,
+        "sc_st_pwd_pwbd_male": 500,
+        "sc_st_pwd_pwbd_female": 500,
+        "third_gender": 500
+      },
+      "outside_india": {
+        "general_male": 5000,
+        "general_female": 4000,
+        "gen_ews_obc_ncl_male": 4500,
+        "gen_ews_obc_ncl_female": 4000,
+        "sc_st_pwd_pwbd_male": 2500,
+        "sc_st_pwd_pwbd_female": 2500,
+        "third_gender": 3000
+      }
+    },
+    "both_papers": {
+      "description": "Paper 1 + Paper 2A, or Paper 1 + Paper 2B",
+      "in_india": {
+        "general_gen_ews_obc_male": 2000,
+        "general_gen_ews_obc_female": 1600,
+        "sc_st_pwd_pwbd_male": 1000,
+        "sc_st_pwd_pwbd_female": 1000,
+        "third_gender": 1000
+      },
+      "outside_india": {
+        "general_gen_ews_obc_male": 10000,
+        "general_gen_ews_obc_female": 8000,
+        "sc_st_pwd_pwbd_male": 5000,
+        "sc_st_pwd_pwbd_female": 5000
+      }
+    },
+    "payment_modes": ["Credit Card", "Debit Card", "Net Banking", "UPI"],
+    "source": "jeemain.2026.bulletin",
+    "note": "Service charges/processing fees of payment gateway extra. Fee non-refundable."
+  },
+  "schedule_2026": {
+    "session1": {
+      "application_window": "31 October 2025 to 27 November 2025 (up to 09:00 PM)",
+      "fee_deadline": "27 November 2025 (up to 11:50 PM)",
+      "city_intimation": "First week of January 2026 (tentative)",
+      "admit_card": "03\u201304 days before examination",
+      "exam_dates": "Between 21 January 2026 and 30 January 2026",
+      "result_declaration": "By 12 February 2026"
+    },
+    "session2": {
+      "application_window": "Last week of January 2026 onwards",
+      "fee_deadline": "To be notified later",
+      "city_intimation": "Second week of March 2026 (tentative)",
+      "admit_card": "03–04 days before examination",
+      "exam_dates": "Between 02 April 2026 and 09 April 2026",
+      "result_declaration": "By 20 April 2026"
+    },
+    "exam_timing": {
+      "first_shift": "09:00 AM – 12:00 Noon IST (3-hour paper) / 09:00 AM – 12:30 PM IST (3.5-hour paper)",
+      "second_shift": "03:00 PM – 06:00 PM IST (3-hour paper) / 03:00 PM – 06:30 PM IST (3.5-hour paper)",
+      "duration": "Paper 1 / Paper 2A / Paper 2B = 3 hours; B.Arch + B.Planning together = 3 hours 30 minutes"
+    },
+    "source": "jeemain.2026.faqs"
+  },
+  "admission_use": {
+    "nit_iiit_cfti": "JEE (Main) score is used for admission to NITs, IIEST, IIITs and Other-GFTIs through JoSAA / CSAB seat allocation process",
+    "iit_qualifying": "Top 2,50,000 (approx.) candidates in Paper 1 qualify for JEE (Advanced), subject to category-wise eligibility criteria",
+    "other_institutions": "Many state-level and private engineering colleges also use JEE (Main) score for admission",
+    "source": "jeemain.2026.bulletin"
+  },
+  "normalization": "NTA uses percentile-based normalization (N = 100 x Number of candidates with raw score <= candidate's score / Total number of candidates in that shift).",
+  "answer_key_challenges": "Provisional answer keys are displayed on the NTA website; candidates may challenge within the notified window with a non-refundable fee per question.",
+  "contact": {
+    "helpline": "011-40759000",
+    "email": "jeemain@nta.ac.in",
+    "website": "https://jeemain.nta.nic.in/"
+  }
+}

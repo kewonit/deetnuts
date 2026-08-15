@@ -1,0 +1,120 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      app: ${{ steps.filter.outputs.app }}
+      data: ${{ steps.filter.outputs.data }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            app:
+              - 'apps/**'
+              - 'packages/data/**'
+              - 'packages/predictors/**'
+              - '.github/**'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - 'pnpm-workspace.yaml'
+              - 'turbo.json'
+              - 'biome.json'
+              - 'tsconfig.json'
+              - 'apps/web/vercel.json'
+            data:
+              - 'data/**'
+              - 'packages/data/**'
+              - 'packages/data-cli/**'
+              - 'packages/data-validation/**'
+              - '.github/workflows/ci.yml'
+              - '.github/workflows/data-release.yml'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - 'pnpm-workspace.yaml'
+              - 'pyproject.toml'
+              - 'uv.lock'
+
+  app:
+    needs: changes
+    if: needs.changes.outputs.app == 'true'
+    runs-on: ubuntu-latest
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.1.3
+          standalone: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm check
+
+      - name: Fetch released data
+        run: pnpm data:fetch --download
+
+      - name: Build
+        run: pnpm turbo run build --filter=@ejam/web
+
+  data:
+    needs: changes
+    if: needs.changes.outputs.data == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.1.3
+          standalone: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - uses: astral-sh/setup-uv@v5
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Typecheck data-cli
+        run: pnpm --filter @ejam/data-cli typecheck
+
+      - name: Verify manifest checksums
+        run: pnpm data:fetch --download
+
+      - name: Verify index lineage sidecars
+        run: pnpm verify:index-lineage
+
+      - name: Validate data (json + parquet)
+        run: uv sync --directory packages/data-validation --frozen && pnpm validate:data
+
+      - name: Run @ejam/data tests
+        run: pnpm --filter @ejam/data test

@@ -1,0 +1,68 @@
+# dependencies
+node_modules
+.pnpm-debug.log*
+
+# build outputs
+.next
+/dist
+dist-data
+build
+out
+*.tsbuildinfo
+
+# environment
+.env
+.env.local
+.env.*.local
+
+# ide
+.vscode
+.idea
+*.swp
+*.swo
+
+# os
+.DS_Store
+Thumbs.db
+
+# logs
+*.log
+logs
+
+# misc
+.turbo
+coverage
+.venv
+__pycache__/
+
+# data lake — see data/.gitignore (parquet policy, sandbox, ingest logs)
+data-*.tar.gz
+.data-release.tar.gz
+
+# pnpm
+node_modules/
+.pnpm-store/
+
+# Next.js
+.next/
+out/
+apps/web/next-env.d.ts
+
+# Turbo
+.turbo/
+
+# env
+.env
+.env.local
+.env.*.local
+
+# scraper runtime cache
+apps/scraper/data/cache/
+
+# backtest + sandbox — local tuning only (not published)
+packages/data-cli/src/backtest/
+packages/data-cli/src/sandbox/
+.vercel
+
+# temp will release soon
+research/

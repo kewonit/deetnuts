@@ -1,0 +1,38 @@
+{
+  "globalDependencies": ["**/.env.*local"],
+  "globalEnv": ["NODE_ENV", "EJAM_DATA_ROOT", "MHT_CET_ENABLED"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build", "^typecheck"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {
+      "dependsOn": ["^lint"]
+    },
+    "format": {
+      "cache": false
+    },
+    "typecheck": {
+      "dependsOn": ["^typecheck"]
+    },
+    "test": {
+      "dependsOn": ["^typecheck"],
+      "cache": false
+    },
+    "//#data:fetch": {
+      "cache": false
+    },
+    "//#verify:index-lineage": {
+      "dependsOn": ["//#data:fetch"],
+      "cache": false
+    },
+    "//#validate:data": {
+      "dependsOn": ["//#data:fetch"],
+      "cache": false
+    }
+  }
+}

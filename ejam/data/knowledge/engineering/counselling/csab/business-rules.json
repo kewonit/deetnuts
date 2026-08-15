@@ -1,0 +1,116 @@
+{
+  "description": "Structured extract of CSAB Special Rounds business rules from the official CSAB brochure currently published on the CSAB Special page. This should be refreshed when the 2026 brochure is published.",
+  "source": "csab.2026.business_rules",
+  "status": "extracted_from_official_pdf_on_csab_special_page",
+  "official_page": "https://csab.nic.in/csab-special/",
+  "official_pdf": "https://cdnbbsr.s3waas.gov.in/s305a70454516ecd9194c293b0e415777f/uploads/2025/05/202508181225350702.pdf",
+  "cached_text": "data/_cache/official-text/jee/csab.official.business_rules.txt",
+  "note": "The live CSAB Special page currently exposes the 2025 official brochure PDF. The rules below are extracted from that official brochure text only.",
+  "sections": {
+    "eligibility": {
+      "summary": "CSAB Special rounds are open to candidates eligible for the NIT+ system through JEE Main, subject to nationality and brochure conditions.",
+      "facts": [
+        "Fresh registration is mandatory for CSAB Special rounds.",
+        "Candidates who are not Indian nationals and are not OCI/PIO card holders are not eligible for seat allocation through CSAB Special to NITs, IIEST, IIITs, SPAs, and other GFTIs.",
+        "Final admission confirmation is subject to production of valid original eligibility documents and physical verification at the admitting institute.",
+        "Reservation rules follow Government of India norms.",
+        "The brochure enumerates multiple eligible candidate types, including candidates who skipped JoSAA, had no seat, exited, withdrew, or held NIT+ seats through JoSAA."
+      ]
+    },
+    "special_round_registration": {
+      "summary": "All eligible candidates must register afresh on the CSAB portal; JoSAA registration does not carry forward.",
+      "facts": [
+        "Earlier JoSAA registration is not valid for CSAB Special rounds.",
+        "Candidates whose documents were not verified in JoSAA may update state of eligibility, nationality, gender, and category from beneficiary to non-beneficiary category during CSAB registration.",
+        "Candidates whose category changed to GEN during JoSAA may request category restoration if they later acquire valid certificates.",
+        "If a candidate does not register within the scheduled window, the candidate will not be considered in any CSAB Special round."
+      ]
+    },
+    "special_round_enrolment_fee": {
+      "summary": "After registration, candidates must pay the Special Round Enrolment Fee, which combines admission-fee and processing-fee components.",
+      "amounts": {
+        "gen_genews_obcncl": 40000,
+        "sc_st_pwd": 19000,
+        "special_round_processing_fee_non_refundable": 5000,
+        "iaf_ii_gen_genews_obcncl": 35000,
+        "iaf_ii_sc_st_pwd": 16000,
+        "additional_difference_when_applicable": 15000
+      },
+      "facts": [
+        "SREF includes Institute Admission Fee-I and a non-refundable Special Round Processing Fee of Rs. 5,000.",
+        "Type-6, 7, 8, and 9 candidates get previously paid JoSAA SAF balance adjusted as part of SREF and pay only the difference amount where applicable.",
+        "At SREF payment time, candidates must provide bank-account details and upload a cancelled cheque or passbook front page for refund processing.",
+        "IAF-II must be paid when a seat is allotted for the first time in CSAB Special rounds if the candidate is proceeding with Freeze, Float, or Slide.",
+        "Non-payment of IAF-II is treated as rejection of the allocated seat and removes the candidate from subsequent rounds."
+      ]
+    },
+    "choice_filling_and_locking": {
+      "summary": "Candidates must fill fresh choices for CSAB; JoSAA choices become void for CSAB allotment purposes.",
+      "facts": [
+        "Previously filled JoSAA choices are null and void for CSAB Special allotment.",
+        "Candidates must save at least one choice to be considered for seat allotment.",
+        "If choices are not locked, the last saved choices are auto-locked at deadline; if no choice is saved, the candidate is not considered for allotment.",
+        "Locked choices can be unlocked before deadline through portal request validated by OTP sent to registered mobile and email.",
+        "After deadline, candidates cannot reorder, add, or delete choices.",
+        "Candidates who secured JoSAA seats and still participate in CSAB must also fill fresh choices; their last secured NIT+ seat is automatically treated as the last choice."
+      ]
+    },
+    "seat_allotment_and_online_reporting": {
+      "summary": "Seat allotment is published online only and candidates must complete online reporting to retain a newly allotted seat.",
+      "facts": [
+        "Seat allotment is carried out according to JEE Main 2025 CRL for vacant seats.",
+        "Candidates must check allotment status themselves; no separate intimation is guaranteed.",
+        "Online reporting includes exercising willingness, uploading documents where applicable, paying IAF-II, and responding to verification queries.",
+        "If all documents and eligibility checks are satisfied, the seat is provisionally confirmed; final acceptance still depends on physical reporting and institute-side verification.",
+        "Failure to complete online reporting within the round timeline is treated as rejection and bars the candidate from later rounds."
+      ]
+    },
+    "document_verification": {
+      "summary": "Verification is online for applicable candidates and is required before provisional seat confirmation.",
+      "facts": [
+        "Document verification applies to candidates whose documents were not already verified in the NIT+ system during JoSAA rounds.",
+        "Candidates must resolve queries through the CSAB portal within the published schedule.",
+        "Failure to resolve verification queries in time leads to seat cancellation and loss of eligibility for subsequent rounds.",
+        "After successful verification, seat confirmation remains provisional until physical reporting and final institute checks.",
+        "PwD verification may be online through UDID upload or physical at a verification centre, depending on the candidate's disability-document status."
+      ]
+    },
+    "willingness_options": {
+      "summary": "Candidates use freeze, float, slide, surrender, withdraw, or exit to control continuation in later rounds.",
+      "definitions": {
+        "freeze": "Accept the offered seat and stop participating in further rounds while retaining the same seat.",
+        "float": "Accept the offered seat and remain eligible for higher-preference programs in any institute in later rounds.",
+        "slide": "Accept the offered seat and remain eligible for a higher-preference program within the same institute in later rounds.",
+        "surrender": "Reject the allotted seat but stay in the process for the next round; allotment will then be considered only from choices above the surrendered seat.",
+        "withdraw": "Reject the allotted or accepted seat and leave the seat-allocation process entirely.",
+        "exit": "Available only to candidates with no allotted seat; leaves the process entirely before the last round."
+      },
+      "rules": [
+        "Surrender is not available in the last round.",
+        "In the last round, all allotments are presumed accepted with freeze.",
+        "Once freeze is chosen, it cannot later be changed to float, slide, or surrender.",
+        "Candidates who do not save any willingness despite holding secured JoSAA seats and participating in CSAB are automatically moved with default float, or freeze if allotted first choice.",
+        "If a higher-preference seat is allotted after float or slide, the previous seat is automatically replaced and cannot be claimed later."
+      ]
+    },
+    "withdrawal_exit_and_refund": {
+      "summary": "Withdraw and exit remove the candidate from the process; refunds are partial and subject to deduction of processing charges.",
+      "facts": [
+        "Withdraw is available only up to before the last round and requires portal request plus OTP confirmation.",
+        "A withdrawn seat is cancelled and the candidate is excluded from later CSAB Special rounds.",
+        "Exit is only for candidates who have not been allotted a seat and is available only before the last round.",
+        "Candidates who exercise exit or withdraw are not considered for subsequent rounds and forfeit admission through that CSAB Special cycle.",
+        "The brochure states that withdrawing candidates receive refund of part of SREF after deducting applicable processing charges.",
+        "After physical reporting failure at the allotted institute, the brochure states that no refund will be admissible."
+      ]
+    },
+    "physical_reporting": {
+      "summary": "After all special rounds conclude, confirmed candidates must physically report to the allotted institute and complete admission formalities.",
+      "facts": [
+        "Physical reporting occurs after Special Rounds I, II, and III are completed.",
+        "Candidates must follow instructions published by the allotted institute and pay the balance institute fee, if applicable.",
+        "Failure to complete institute-level reporting and balance-fee payment may lead to cancellation."
+      ]
+    }
+  }
+}

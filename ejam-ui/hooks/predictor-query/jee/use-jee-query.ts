@@ -1,6 +1,9 @@
 "use client";
 
-import { PredictionErrorResponse, type PredictionProvenance } from "@ejam/data";
+import {
+  PredictionErrorResponse,
+  type PredictionProvenance,
+} from "@ejam/data/predictor-interface";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { predictorUsesQuotaHomeState } from "@/ejam-ui/hooks/use-predictor-state";
 import {

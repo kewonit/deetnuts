@@ -22,3 +22,5 @@ tools/**/*.lineage.json
 !datasets/engineering/**/*.parquet
 !tools/college-predictor/**/*.parquet
 !tools/college-predictor/**/*.lineage.json
+!tools/college-cutoffs/**/*.parquet
+!tools/college-cutoffs/**/*.lineage.json

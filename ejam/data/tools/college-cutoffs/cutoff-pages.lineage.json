@@ -1,0 +1,1000 @@
+{
+  "schema_version": 1,
+  "artifact": "college_cutoff_pages",
+  "release_version": "v0.2.5",
+  "source_manifest_version": "v0.2.4",
+  "generated_at": "2026-08-15T14:03:16.209Z",
+  "source_cutoffs": [
+    "datasets/engineering/jee/csab/cutoffs/year=2021/round=1/cutoffs.parquet",
+    "datasets/engineering/jee/csab/cutoffs/year=2022/round=1/cutoffs.parquet",
+    "datasets/engineering/jee/csab/cutoffs/year=2022/round=2/cutoffs.parquet",
+    "datasets/engineering/jee/csab/cutoffs/year=2023/round=1/cutoffs.parquet",
+    "datasets/engineering/jee/csab/cutoffs/year=2023/round=2/cutoffs.parquet",
+    "datasets/engineering/jee/csab/cutoffs/year=2024/round=1/cutoffs.parquet",
+    "datasets/engineering/jee/csab/cutoffs/year=2024/round=2/cutoffs.parquet",
+    "datasets/engineering/jee/csab/cutoffs/year=2025/round=1/cutoffs.parquet",
+    "datasets/engineering/jee/csab/cutoffs/year=2025/round=2/cutoffs.parquet",
+    "datasets/engineering/jee/csab/cutoffs/year=2025/round=3/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2016/round=1/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2016/round=2/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2016/round=3/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2016/round=4/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2016/round=5/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2016/round=6/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2017/round=1/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2017/round=2/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2017/round=3/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2017/round=4/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2017/round=5/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2017/round=6/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2017/round=7/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2018/round=1/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2018/round=2/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2018/round=3/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2018/round=4/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2018/round=5/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2018/round=6/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2018/round=7/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2019/round=1/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2019/round=2/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2019/round=3/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2019/round=4/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2019/round=5/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2019/round=6/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2019/round=7/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2020/round=1/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2020/round=2/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2020/round=4/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2020/round=5/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2020/round=6/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2021/round=1/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2021/round=2/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2021/round=3/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2021/round=4/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2021/round=5/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2021/round=6/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2022/round=1/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2022/round=2/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2022/round=3/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2022/round=4/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2022/round=5/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2022/round=6/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2023/round=1/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2023/round=2/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2023/round=3/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2023/round=4/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2023/round=5/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2023/round=6/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2024/round=1/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2024/round=2/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2024/round=3/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2024/round=4/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2024/round=5/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2025/round=1/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2025/round=2/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2025/round=3/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2025/round=4/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2025/round=5/cutoffs.parquet",
+    "datasets/engineering/jee/josaa/cutoffs/year=2025/round=6/cutoffs.parquet"
+  ],
+  "catalog_sha256": "aaa3466f0d590f7d45f0d6b68929ac6bf8ea06e5b66dbb6b2cebbf98c90601a9",
+  "artifacts": [
+    {
+      "instituteId": "assam-university",
+      "path": "tools/college-cutoffs/colleges/assam-university.parquet",
+      "sha256": "a275d5c7c98090e8ef70bfdaa37e83feff9aca855267de4ddb7d710783dd9ce5",
+      "bytes": 21100,
+      "rows": 2995
+    },
+    {
+      "instituteId": "bit-deoghar",
+      "path": "tools/college-cutoffs/colleges/bit-deoghar.parquet",
+      "sha256": "fb60c28245490c28ecaf81640c62ac28bf2baf5561478b3deb8a0ecc6af45c16",
+      "bytes": 10785,
+      "rows": 843
+    },
+    {
+      "instituteId": "bit-mesra",
+      "path": "tools/college-cutoffs/colleges/bit-mesra.parquet",
+      "sha256": "c17782e8e699c3c8c9faebedd5bbb2a3e5041c3ea6dfcfd593e5cb619f177bef",
+      "bytes": 41292,
+      "rows": 8026
+    },
+    {
+      "instituteId": "bit-patna",
+      "path": "tools/college-cutoffs/colleges/bit-patna.parquet",
+      "sha256": "96c6ced3cf8ac193b4ef856d1b9253a7faaa4d478516b6060df41d5c19d15461",
+      "bytes": 13251,
+      "rows": 1318
+    },
+    {
+      "instituteId": "central-univ-haryana",
+      "path": "tools/college-cutoffs/colleges/central-univ-haryana.parquet",
+      "sha256": "fa6793cfaee7798728568efb0b8ab37947c71535cddce6d23ea8d904c3905d61",
+      "bytes": 8696,
+      "rows": 428
+    },
+    {
+      "instituteId": "central-univ-jammu",
+      "path": "tools/college-cutoffs/colleges/central-univ-jammu.parquet",
+      "sha256": "f258bbac6bf878d53265e176251024e21a97f118196eb33891c1246de559f77f",
+      "bytes": 10318,
+      "rows": 652
+    },
+    {
+      "instituteId": "central-univ-jharkhand",
+      "path": "tools/college-cutoffs/colleges/central-univ-jharkhand.parquet",
+      "sha256": "9a72c734efae36bc650fd6959186be154bb9d9551e45ec3f80c6954017099ad8",
+      "bytes": 7657,
+      "rows": 258
+    },
+    {
+      "instituteId": "central-univ-rajasthan",
+      "path": "tools/college-cutoffs/colleges/central-univ-rajasthan.parquet",
+      "sha256": "67ea2736d7a6458d10a6f854089722e69300796832b44c6ea1cac58f4b0fbb77",
+      "bytes": 10252,
+      "rows": 726
+    },
+    {
+      "instituteId": "cit-kokrajhar",
+      "path": "tools/college-cutoffs/colleges/cit-kokrajhar.parquet",
+      "sha256": "2da24e615beff451b477b0bbeabc928a5cf933951d02901921cf7b0091e7a1da",
+      "bytes": 11115,
+      "rows": 789
+    },
+    {
+      "instituteId": "csvtu-bhilai",
+      "path": "tools/college-cutoffs/colleges/csvtu-bhilai.parquet",
+      "sha256": "f681683efa8bddd3ab2604f7634b7785b9f0cff9c314167e7710c17d0134eded",
+      "bytes": 8970,
+      "rows": 474
+    },
+    {
+      "instituteId": "gati-shakti-vishwavidyalaya",
+      "path": "tools/college-cutoffs/colleges/gati-shakti-vishwavidyalaya.parquet",
+      "sha256": "e16c5158de6890dec8debf8274628ef328a31c0cdd8a2be1b9bb2b174b5e00d4",
+      "bytes": 9827,
+      "rows": 659
+    },
+    {
+      "instituteId": "gkciet-malda",
+      "path": "tools/college-cutoffs/colleges/gkciet-malda.parquet",
+      "sha256": "2ce789ac3d489a8c597c634f4ef34b292e9bc54676db4bc5256f3046721e3fed",
+      "bytes": 16695,
+      "rows": 1834
+    },
+    {
+      "instituteId": "gurukula-kangri-vishwavidyalaya",
+      "path": "tools/college-cutoffs/colleges/gurukula-kangri-vishwavidyalaya.parquet",
+      "sha256": "6d7ccf62faa41b67040aa2ecaf817f3bd48a296e7b3dbaae603db13e808be90f",
+      "bytes": 15114,
+      "rows": 1491
+    },
+    {
+      "instituteId": "hnb-garhwal-university",
+      "path": "tools/college-cutoffs/colleges/hnb-garhwal-university.parquet",
+      "sha256": "0253ea5b4c6dd49b9ee53bd8d93f74b29cc8fa883f65f7aba7a1934ecd387df4",
+      "bytes": 12491,
+      "rows": 1233
+    },
+    {
+      "instituteId": "ict-iocl-bhubaneswar",
+      "path": "tools/college-cutoffs/colleges/ict-iocl-bhubaneswar.parquet",
+      "sha256": "6b164a2dbb285831277c5d0a14f4c3568d6b623d331b3c1f0238aa81d5bfe242",
+      "bytes": 7926,
+      "rows": 373
+    },
+    {
+      "instituteId": "iet-dr-hsg-university",
+      "path": "tools/college-cutoffs/colleges/iet-dr-hsg-university.parquet",
+      "sha256": "5e3308adf677f334049b7ed9320e0f61ab17807605e4720a7431e42a90979442",
+      "bytes": 9865,
+      "rows": 587
+    },
+    {
+      "instituteId": "iicpt-thanjavur",
+      "path": "tools/college-cutoffs/colleges/iicpt-thanjavur.parquet",
+      "sha256": "766090e1339e5ec59748082467596fa0e908545888167c2085b785a7d10cea5b",
+      "bytes": 5582,
+      "rows": 30
+    },
+    {
+      "instituteId": "iict-bhadohi",
+      "path": "tools/college-cutoffs/colleges/iict-bhadohi.parquet",
+      "sha256": "511cb8ec44072b8533b6d86ebcf56a537c26e64d80243fc85a67571b1a3b7737",
+      "bytes": 9083,
+      "rows": 353
+    },
+    {
+      "instituteId": "iiest-shibpur",
+      "path": "tools/college-cutoffs/colleges/iiest-shibpur.parquet",
+      "sha256": "486304d2d1e554edc798005984a67c42b0b01e5046e2197122fb0f87bd2d70dc",
+      "bytes": 26813,
+      "rows": 5398
+    },
+    {
+      "instituteId": "iiht-salem",
+      "path": "tools/college-cutoffs/colleges/iiht-salem.parquet",
+      "sha256": "923e8914baa940cb30039c8d26450458a4ff2533f8471bdf2d5db3a3cc524764",
+      "bytes": 6752,
+      "rows": 112
+    },
+    {
+      "instituteId": "iiht-varanasi",
+      "path": "tools/college-cutoffs/colleges/iiht-varanasi.parquet",
+      "sha256": "2eae8396c9ae9f79f37f582753911e295711225599080e834cf794ce78f3df7a",
+      "bytes": 7517,
+      "rows": 180
+    },
+    {
+      "instituteId": "iiit-agartala",
+      "path": "tools/college-cutoffs/colleges/iiit-agartala.parquet",
+      "sha256": "3184332bca88e4ef0c167006b3f4677661f1b862abc205e62853761cb8b2803e",
+      "bytes": 8223,
+      "rows": 395
+    },
+    {
+      "instituteId": "iiit-allahabad",
+      "path": "tools/college-cutoffs/colleges/iiit-allahabad.parquet",
+      "sha256": "518b6d1ab8d7ef8f00f95e2f108da7d2f671bf32e49a04654b133410c9ac2ec9",
+      "bytes": 16064,
+      "rows": 2816
+    },
+    {
+      "instituteId": "iiit-bhagalpur",
+      "path": "tools/college-cutoffs/colleges/iiit-bhagalpur.parquet",
+      "sha256": "7e1f0e4e6c95ee6c9bf153b48173ce392f1d4c4ec7d828a1507c808714d77337",
+      "bytes": 14995,
+      "rows": 1635
+    },
+    {
+      "instituteId": "iiit-bhopal",
+      "path": "tools/college-cutoffs/colleges/iiit-bhopal.parquet",
+      "sha256": "4ff4f75de9cff24dc2119014310a1d0a4cf0316405d55967f41a911ff47b09c3",
+      "bytes": 14013,
+      "rows": 1603
+    },
+    {
+      "instituteId": "iiit-bhubaneswar",
+      "path": "tools/college-cutoffs/colleges/iiit-bhubaneswar.parquet",
+      "sha256": "aaf762215896ee5468534fc83eaf11f551977b01c02a86006b6cffd399785846",
+      "bytes": 12479,
+      "rows": 1336
+    },
+    {
+      "instituteId": "iiit-dharwad",
+      "path": "tools/college-cutoffs/colleges/iiit-dharwad.parquet",
+      "sha256": "5ac20045d416e9ddcfcfdb474f69851b50ff4c70651878dd145a0cc2cebad5cf",
+      "bytes": 12910,
+      "rows": 1351
+    },
+    {
+      "instituteId": "iiit-guwahati",
+      "path": "tools/college-cutoffs/colleges/iiit-guwahati.parquet",
+      "sha256": "39e682ca82dd93daaf52a517aff97e86d57f63e24a2ff6235255f6e219002b98",
+      "bytes": 12200,
+      "rows": 1301
+    },
+    {
+      "instituteId": "iiit-gwalior",
+      "path": "tools/college-cutoffs/colleges/iiit-gwalior.parquet",
+      "sha256": "6948ec3f2661adc8e24099d06ac3e7f46e06564995d39833653921ff3533773a",
+      "bytes": 15591,
+      "rows": 2469
+    },
+    {
+      "instituteId": "iiit-kalyani",
+      "path": "tools/college-cutoffs/colleges/iiit-kalyani.parquet",
+      "sha256": "82aa046db6fbab7d072322bcabc55acb1cf46132e695ce621aaedded155c65ac",
+      "bytes": 11999,
+      "rows": 965
+    },
+    {
+      "instituteId": "iiit-kota",
+      "path": "tools/college-cutoffs/colleges/iiit-kota.parquet",
+      "sha256": "b94e95884e340abb1c02375f668c22d41bea36c24d053ec104745e7c3f12d805",
+      "bytes": 12856,
+      "rows": 1343
+    },
+    {
+      "instituteId": "iiit-kottayam",
+      "path": "tools/college-cutoffs/colleges/iiit-kottayam.parquet",
+      "sha256": "ad236580537dec4588118d22a60e862c97623b7e311b2e70099b4ec6879c5c38",
+      "bytes": 14395,
+      "rows": 1778
+    },
+    {
+      "instituteId": "iiit-lucknow",
+      "path": "tools/college-cutoffs/colleges/iiit-lucknow.parquet",
+      "sha256": "f8c68948e8f500241ed4a3f9dc2d3c2ead545ed873f364a4cd8c95836301035a",
+      "bytes": 13851,
+      "rows": 2104
+    },
+    {
+      "instituteId": "iiit-manipur",
+      "path": "tools/college-cutoffs/colleges/iiit-manipur.parquet",
+      "sha256": "89532e84d234b7abe8e6ff0fedaef572a55d36b0a68965b0dd97eba5ee5cdb97",
+      "bytes": 14838,
+      "rows": 1464
+    },
+    {
+      "instituteId": "iiit-nagpur",
+      "path": "tools/college-cutoffs/colleges/iiit-nagpur.parquet",
+      "sha256": "0abce1db1edff8c2616249cff093383ecaecb693be8c8ad5ef46da7cf9253229",
+      "bytes": 15427,
+      "rows": 1922
+    },
+    {
+      "instituteId": "iiit-naya-raipur",
+      "path": "tools/college-cutoffs/colleges/iiit-naya-raipur.parquet",
+      "sha256": "d4afff58c399af721dae75506d0aaf2675c3807a69026f0603b998b9d1100ff6",
+      "bytes": 10264,
+      "rows": 906
+    },
+    {
+      "instituteId": "iiit-pune",
+      "path": "tools/college-cutoffs/colleges/iiit-pune.parquet",
+      "sha256": "1e4e56d58cce038736f7d50fb091b1b780cb2ca32f596b5e495c5760ffcde024",
+      "bytes": 11738,
+      "rows": 1272
+    },
+    {
+      "instituteId": "iiit-raichur",
+      "path": "tools/college-cutoffs/colleges/iiit-raichur.parquet",
+      "sha256": "d1dc17529a2ee9106d504bffd1abfe8caec344ea6ede16a966bb78c2b3836075",
+      "bytes": 10330,
+      "rows": 944
+    },
+    {
+      "instituteId": "iiit-ranchi",
+      "path": "tools/college-cutoffs/colleges/iiit-ranchi.parquet",
+      "sha256": "6f5d39b19c0cdfabae09725bd1536c69175cdf208ca7c35e96afb14ae0a1cf19",
+      "bytes": 13883,
+      "rows": 1404
+    },
+    {
+      "instituteId": "iiit-sonepat",
+      "path": "tools/college-cutoffs/colleges/iiit-sonepat.parquet",
+      "sha256": "3ade6cc5636d17f0593ddcf3482e669d8ec187bde7d1f4c8368b1ec166d6805b",
+      "bytes": 11584,
+      "rows": 1051
+    },
+    {
+      "instituteId": "iiit-sri-city",
+      "path": "tools/college-cutoffs/colleges/iiit-sri-city.parquet",
+      "sha256": "76b437ef5325fccbf4c64da47665288dab68dc4462f65cffe957e8e7e94c351f",
+      "bytes": 12525,
+      "rows": 1289
+    },
+    {
+      "instituteId": "iiit-surat",
+      "path": "tools/college-cutoffs/colleges/iiit-surat.parquet",
+      "sha256": "1e9bc4e8cc60b843fdbeaf811ac4ab5a977030aef3259576e820f2923a0b57d6",
+      "bytes": 11835,
+      "rows": 1197
+    },
+    {
+      "instituteId": "iiit-tiruchirappalli",
+      "path": "tools/college-cutoffs/colleges/iiit-tiruchirappalli.parquet",
+      "sha256": "fbec3d3681e369201eb5c4dd3e23b0be32446d848d2efdbe12796aaf7f29bbf9",
+      "bytes": 12035,
+      "rows": 1288
+    },
+    {
+      "instituteId": "iiit-una",
+      "path": "tools/college-cutoffs/colleges/iiit-una.parquet",
+      "sha256": "7e4bbc9d9d7c05f949c296d7d9c0edcd9e5e5ddf7e9236f9755837b65c6b3991",
+      "bytes": 13973,
+      "rows": 1443
+    },
+    {
+      "instituteId": "iiit-vadodara",
+      "path": "tools/college-cutoffs/colleges/iiit-vadodara.parquet",
+      "sha256": "33e67a240fade382af5cb45c74e3e2c1eed9e05e53c6203cbcaca33ed53c8104",
+      "bytes": 13317,
+      "rows": 1497
+    },
+    {
+      "instituteId": "iiit-vadodara-diu",
+      "path": "tools/college-cutoffs/colleges/iiit-vadodara-diu.parquet",
+      "sha256": "207366f3eb281778b18fad251bc20d3887a335e82bda500eefdddf3130eb8087",
+      "bytes": 9260,
+      "rows": 593
+    },
+    {
+      "instituteId": "iiitdm-jabalpur",
+      "path": "tools/college-cutoffs/colleges/iiitdm-jabalpur.parquet",
+      "sha256": "6f0123798554486666aec55c48a10158808dc7302fa992ad2f731756211c800c",
+      "bytes": 16564,
+      "rows": 2636
+    },
+    {
+      "instituteId": "iiitdm-kancheepuram",
+      "path": "tools/college-cutoffs/colleges/iiitdm-kancheepuram.parquet",
+      "sha256": "12343a826c3d99e8f153740134ff28c43175056a1a6c96ea0ca9892776994b4b",
+      "bytes": 24206,
+      "rows": 4051
+    },
+    {
+      "instituteId": "iiitdm-kurnool",
+      "path": "tools/college-cutoffs/colleges/iiitdm-kurnool.parquet",
+      "sha256": "83b375b19f044b4ff7644c801e5b63053cbb50d016cf9fcc91ad3ae2ae103b2d",
+      "bytes": 17033,
+      "rows": 2280
+    },
+    {
+      "instituteId": "iit-bhilai",
+      "path": "tools/college-cutoffs/colleges/iit-bhilai.parquet",
+      "sha256": "9462b2787c2c2c13fa47f03eb53a56b0dda0b4cfe305a0dbc7504faf3fa871f5",
+      "bytes": 12158,
+      "rows": 1978
+    },
+    {
+      "instituteId": "iit-bhubaneswar",
+      "path": "tools/college-cutoffs/colleges/iit-bhubaneswar.parquet",
+      "sha256": "bcdf853b101e626eecd6e6edc0b14800a80cc8da7659899c51ab6aa6a5f6ce45",
+      "bytes": 21489,
+      "rows": 6144
+    },
+    {
+      "instituteId": "iit-bombay",
+      "path": "tools/college-cutoffs/colleges/iit-bombay.parquet",
+      "sha256": "a97f4943253e75d0a6485d1a02ec3a7b2d836df0681845555aed8a9b439bbde5",
+      "bytes": 37279,
+      "rows": 9516
+    },
+    {
+      "instituteId": "iit-delhi",
+      "path": "tools/college-cutoffs/colleges/iit-delhi.parquet",
+      "sha256": "0562d43bae3b012d752177d4e44855950ee605ced6b1f6f4e844a91e924fd4b4",
+      "bytes": 49859,
+      "rows": 9971
+    },
+    {
+      "instituteId": "iit-dhanbad",
+      "path": "tools/college-cutoffs/colleges/iit-dhanbad.parquet",
+      "sha256": "830663cf445206ed09fc06c77a3d1c265cfff313c6fbaa6edb6b7b0a0bfc600b",
+      "bytes": 26170,
+      "rows": 7721
+    },
+    {
+      "instituteId": "iit-dharwad",
+      "path": "tools/college-cutoffs/colleges/iit-dharwad.parquet",
+      "sha256": "a222ffd2e7035abbc5325278d5bbf3dad3aafe9842068ec6cc30a39bf3c25e34",
+      "bytes": 13022,
+      "rows": 2107
+    },
+    {
+      "instituteId": "iit-gandhinagar",
+      "path": "tools/college-cutoffs/colleges/iit-gandhinagar.parquet",
+      "sha256": "26ebeb8d0668b83e41ef3403d72f6249ffbc3097802a063cf42eb9e1b7e95663",
+      "bytes": 14557,
+      "rows": 3657
+    },
+    {
+      "instituteId": "iit-goa",
+      "path": "tools/college-cutoffs/colleges/iit-goa.parquet",
+      "sha256": "587607cb25659673aac7b84281d87b037ba083ba5aa687a37bc10ba9099bca94",
+      "bytes": 10470,
+      "rows": 1616
+    },
+    {
+      "instituteId": "iit-guwahati",
+      "path": "tools/college-cutoffs/colleges/iit-guwahati.parquet",
+      "sha256": "2743b8c6795583d3ba5c3343d47ec1d3057ffd559424251332f36c9b7192b26c",
+      "bytes": 17988,
+      "rows": 5537
+    },
+    {
+      "instituteId": "iit-hyderabad",
+      "path": "tools/college-cutoffs/colleges/iit-hyderabad.parquet",
+      "sha256": "bb5d269ff1ab96f457dd46d01d1e8bdaaef5d8f369df10ec56abfc1b25006843",
+      "bytes": 27949,
+      "rows": 6492
+    },
+    {
+      "instituteId": "iit-indore",
+      "path": "tools/college-cutoffs/colleges/iit-indore.parquet",
+      "sha256": "ebdcf484545e1adebb12968be7503ce38b33426c5e0c8b2ac7c03d1e3e493749",
+      "bytes": 13926,
+      "rows": 3462
+    },
+    {
+      "instituteId": "iit-jammu",
+      "path": "tools/college-cutoffs/colleges/iit-jammu.parquet",
+      "sha256": "f17ac2b242dae0e6ab45c2ab0dbaa6b8f9d58a5e7aa8797a13784b0748489ea1",
+      "bytes": 13598,
+      "rows": 2354
+    },
+    {
+      "instituteId": "iit-jodhpur",
+      "path": "tools/college-cutoffs/colleges/iit-jodhpur.parquet",
+      "sha256": "26d68cb4548d99df9d47579afe0f9a74ba2326283415579832a5cc8ff1c538ed",
+      "bytes": 16598,
+      "rows": 3931
+    },
+    {
+      "instituteId": "iit-kanpur",
+      "path": "tools/college-cutoffs/colleges/iit-kanpur.parquet",
+      "sha256": "424c4e5006e30391d3aa2879823749d7e2d574dfcafcce2204efcfda60aaf53c",
+      "bytes": 29451,
+      "rows": 7962
+    },
+    {
+      "instituteId": "iit-kharagpur",
+      "path": "tools/college-cutoffs/colleges/iit-kharagpur.parquet",
+      "sha256": "e3e8440bf4178f5d3ef7940cb0e3b4366ca19a348979bc5641e7bc035e78ae5f",
+      "bytes": 63624,
+      "rows": 18282
+    },
+    {
+      "instituteId": "iit-madras",
+      "path": "tools/college-cutoffs/colleges/iit-madras.parquet",
+      "sha256": "1fe2f96b0720c1eef0c5ffdfe6ed71c74f0aa3e59abc13ae2e52342081e86f51",
+      "bytes": 33063,
+      "rows": 8622
+    },
+    {
+      "instituteId": "iit-mandi",
+      "path": "tools/college-cutoffs/colleges/iit-mandi.parquet",
+      "sha256": "7df063371ce0e2d109b5e6333a319f8cfe1e8bb5967efd59f133c9c81610a91f",
+      "bytes": 16437,
+      "rows": 4141
+    },
+    {
+      "instituteId": "iit-palakkad",
+      "path": "tools/college-cutoffs/colleges/iit-palakkad.parquet",
+      "sha256": "4a9a634997340d95f73ebdfa5bd9ed2af38614ce8e7f2c11b73ef8a1cc1374a8",
+      "bytes": 11497,
+      "rows": 2008
+    },
+    {
+      "instituteId": "iit-patna",
+      "path": "tools/college-cutoffs/colleges/iit-patna.parquet",
+      "sha256": "bfe144a79d371cf7de9c58c4e8a61ca580248830f56ce1f3587f6b35c906e734",
+      "bytes": 23142,
+      "rows": 5706
+    },
+    {
+      "instituteId": "iit-roorkee",
+      "path": "tools/college-cutoffs/colleges/iit-roorkee.parquet",
+      "sha256": "59175c4c2e901c200c655ac26dccef71d2a5e810dbdcd8cc77a4e9dc48feae32",
+      "bytes": 38168,
+      "rows": 9140
+    },
+    {
+      "instituteId": "iit-ropar",
+      "path": "tools/college-cutoffs/colleges/iit-ropar.parquet",
+      "sha256": "d6c9a648749f4c06562d4f13e92bfd8d9f8a664fdfecca02cf23f57400bb30ac",
+      "bytes": 15707,
+      "rows": 3576
+    },
+    {
+      "instituteId": "iit-tirupati",
+      "path": "tools/college-cutoffs/colleges/iit-tirupati.parquet",
+      "sha256": "a7abe2583e1e38168d91e5a535d51404a9b9638c035ecea43f99f2fee1d20135",
+      "bytes": 11739,
+      "rows": 2151
+    },
+    {
+      "instituteId": "iit-varanasi",
+      "path": "tools/college-cutoffs/colleges/iit-varanasi.parquet",
+      "sha256": "cf2d7739aeaf73027d1c2e89422119bc3c7b8c57be29195943760cdccb431118",
+      "bytes": 32318,
+      "rows": 10516
+    },
+    {
+      "instituteId": "iitram-ahmedabad",
+      "path": "tools/college-cutoffs/colleges/iitram-ahmedabad.parquet",
+      "sha256": "880968a2057d3cdd9d391e013318ad602935b1e4abdd377984adce05df5afc2e",
+      "bytes": 12794,
+      "rows": 1243
+    },
+    {
+      "instituteId": "it-ggv-bilaspur",
+      "path": "tools/college-cutoffs/colleges/it-ggv-bilaspur.parquet",
+      "sha256": "9cf204607adc8e644ec2398378664fac0d7a6d7f7c311fd37e943bc92be4ae50",
+      "bytes": 21294,
+      "rows": 2735
+    },
+    {
+      "instituteId": "iust-kashmir",
+      "path": "tools/college-cutoffs/colleges/iust-kashmir.parquet",
+      "sha256": "99e1d07723565b5c78c25310005260bbdeafa11aec734065ce3fabb8b841c09a",
+      "bytes": 5459,
+      "rows": 36
+    },
+    {
+      "instituteId": "jk-institute-allahabad",
+      "path": "tools/college-cutoffs/colleges/jk-institute-allahabad.parquet",
+      "sha256": "5f6a636add16236753b5222b0e21115f69df594f02a10cab199792512c2573f8",
+      "bytes": 10917,
+      "rows": 801
+    },
+    {
+      "instituteId": "jnu-delhi",
+      "path": "tools/college-cutoffs/colleges/jnu-delhi.parquet",
+      "sha256": "5f701661e7b8014e544c1b506bf3c815e6d2cd00fa4e1ae2b994a1615cbc0a3d",
+      "bytes": 9740,
+      "rows": 730
+    },
+    {
+      "instituteId": "mizoram-university",
+      "path": "tools/college-cutoffs/colleges/mizoram-university.parquet",
+      "sha256": "5dc7a2b3cb92c2a7054b73322b0f4e767fcbee7a4b742cabc42475a0b1298065",
+      "bytes": 15484,
+      "rows": 1567
+    },
+    {
+      "instituteId": "nehu-shillong",
+      "path": "tools/college-cutoffs/colleges/nehu-shillong.parquet",
+      "sha256": "075000c39a0d6b55d2706acaa9fe3f0ad26142c4075cd883de0e7986857324ed",
+      "bytes": 10526,
+      "rows": 726
+    },
+    {
+      "instituteId": "nerist-itanagar",
+      "path": "tools/college-cutoffs/colleges/nerist-itanagar.parquet",
+      "sha256": "78a5cc1d975af6ffcccbd310ca956944afca368d2014a88887c3006fa6e5ca63",
+      "bytes": 9271,
+      "rows": 511
+    },
+    {
+      "instituteId": "niamt-ranchi",
+      "path": "tools/college-cutoffs/colleges/niamt-ranchi.parquet",
+      "sha256": "ffb33b6694b2936c541abedc27cb80e025c877b1d556d1486afd54c1f096c7b5",
+      "bytes": 12454,
+      "rows": 1242
+    },
+    {
+      "instituteId": "nielit-ajmer",
+      "path": "tools/college-cutoffs/colleges/nielit-ajmer.parquet",
+      "sha256": "3d30642a5715b0de60a35e4ab52090b713c632035f1e40f6575e302b101a91a0",
+      "bytes": 6666,
+      "rows": 40
+    },
+    {
+      "instituteId": "nielit-aurangabad",
+      "path": "tools/college-cutoffs/colleges/nielit-aurangabad.parquet",
+      "sha256": "e859263ebd31e60b855191e1eb84bfc4c9b4bdeaa551c2590bb63214c45bd091",
+      "bytes": 9205,
+      "rows": 434
+    },
+    {
+      "instituteId": "nielit-gorakhpur",
+      "path": "tools/college-cutoffs/colleges/nielit-gorakhpur.parquet",
+      "sha256": "c8e988c28e96530f7f5ae8b8b6ee66c6487f9448e2b5a1636641f55fcf4c5c37",
+      "bytes": 6770,
+      "rows": 79
+    },
+    {
+      "instituteId": "nielit-ropar",
+      "path": "tools/college-cutoffs/colleges/nielit-ropar.parquet",
+      "sha256": "6ebaaa4aac63b92859e98080bdc4cba6d63fa6d6f9a96be1d6f823ca4a462e1e",
+      "bytes": 5946,
+      "rows": 84
+    },
+    {
+      "instituteId": "nifft-ranchi",
+      "path": "tools/college-cutoffs/colleges/nifft-ranchi.parquet",
+      "sha256": "e2cc963fd25187d7e6cb39a9ef5b3d7bef36f65eb047a477dae9e70a03ae5c1c",
+      "bytes": 8401,
+      "rows": 388
+    },
+    {
+      "instituteId": "niftem-kundli",
+      "path": "tools/college-cutoffs/colleges/niftem-kundli.parquet",
+      "sha256": "8bbf29800882af0df02b6b099ee08d669287355fca1e4f6dca71184c2332e479",
+      "bytes": 8051,
+      "rows": 263
+    },
+    {
+      "instituteId": "niftem-thanjavur",
+      "path": "tools/college-cutoffs/colleges/niftem-thanjavur.parquet",
+      "sha256": "b0d8bd0bc0553b4606add1cb063602a05c0392c311f3237ca6a02bb00683dddc",
+      "bytes": 7557,
+      "rows": 250
+    },
+    {
+      "instituteId": "nit-agartala",
+      "path": "tools/college-cutoffs/colleges/nit-agartala.parquet",
+      "sha256": "55937da49ab0834376e38b7123214d3b4a56a1d8f4a9485d3b2aedac1874d77a",
+      "bytes": 53110,
+      "rows": 11533
+    },
+    {
+      "instituteId": "nit-allahabad",
+      "path": "tools/college-cutoffs/colleges/nit-allahabad.parquet",
+      "sha256": "fce88de2426d11b2fe86159fa1b6079bada02089e58fc8b92196889ad9e7945c",
+      "bytes": 36378,
+      "rows": 11629
+    },
+    {
+      "instituteId": "nit-andhra-pradesh",
+      "path": "tools/college-cutoffs/colleges/nit-andhra-pradesh.parquet",
+      "sha256": "6dad35686136236b8ff6ec54f65f6fcc1884a8cb542d41e83695c573d63234fe",
+      "bytes": 20765,
+      "rows": 3259
+    },
+    {
+      "instituteId": "nit-arunachal-pradesh",
+      "path": "tools/college-cutoffs/colleges/nit-arunachal-pradesh.parquet",
+      "sha256": "a49bd1d091fa393fe035149535f588c8036557ffc96d17b6337cdc43651f8010",
+      "bytes": 21929,
+      "rows": 3504
+    },
+    {
+      "instituteId": "nit-bhopal",
+      "path": "tools/college-cutoffs/colleges/nit-bhopal.parquet",
+      "sha256": "1ec07f9fc38908e37498c9aada7fea41068fe895beef8e6618345b5bc07c103f",
+      "bytes": 51593,
+      "rows": 12506
+    },
+    {
+      "instituteId": "nit-calicut",
+      "path": "tools/college-cutoffs/colleges/nit-calicut.parquet",
+      "sha256": "7947262e77a6f77283dc1f3f597abff475fd2888561e9b599b79407d17a96d8c",
+      "bytes": 52606,
+      "rows": 13230
+    },
+    {
+      "instituteId": "nit-delhi",
+      "path": "tools/college-cutoffs/colleges/nit-delhi.parquet",
+      "sha256": "1b85718b95122b3bd1f23147290e90fb94faca0ddd4add48a6f3d63daff1db2d",
+      "bytes": 23155,
+      "rows": 4947
+    },
+    {
+      "instituteId": "nit-durgapur",
+      "path": "tools/college-cutoffs/colleges/nit-durgapur.parquet",
+      "sha256": "d2b7236250099aba787afb278a27b66a0af1af875a0bfdd5167a1a5bc6c96215",
+      "bytes": 44766,
+      "rows": 11778
+    },
+    {
+      "instituteId": "nit-goa",
+      "path": "tools/college-cutoffs/colleges/nit-goa.parquet",
+      "sha256": "8b49dada05e491b279fd673f4181cacad68dd3e275f7d87588bcb39176df5590",
+      "bytes": 21909,
+      "rows": 4992
+    },
+    {
+      "instituteId": "nit-hamirpur",
+      "path": "tools/college-cutoffs/colleges/nit-hamirpur.parquet",
+      "sha256": "cdfad55fb80eea45638d62038685a17bb73aad7560d7452bbe2dca7e8284f27d",
+      "bytes": 49841,
+      "rows": 12134
+    },
+    {
+      "instituteId": "nit-jaipur",
+      "path": "tools/college-cutoffs/colleges/nit-jaipur.parquet",
+      "sha256": "3083bc6cc0578789ce1db30513e72b77230e0a5d143db6d7f8aa272c02d0e67b",
+      "bytes": 34155,
+      "rows": 10690
+    },
+    {
+      "instituteId": "nit-jalandhar",
+      "path": "tools/college-cutoffs/colleges/nit-jalandhar.parquet",
+      "sha256": "b4e8e0a3df0528bcd6a9d44fa64c3e0c849a70f8bbfcf22657bb26813638178e",
+      "bytes": 58298,
+      "rows": 13534
+    },
+    {
+      "instituteId": "nit-jamshedpur",
+      "path": "tools/college-cutoffs/colleges/nit-jamshedpur.parquet",
+      "sha256": "4e15e1ca0404d9d8c13b236710a933cd290ac8724e8fde936a8962518dbd2f8c",
+      "bytes": 30082,
+      "rows": 6927
+    },
+    {
+      "instituteId": "nit-kurukshetra",
+      "path": "tools/college-cutoffs/colleges/nit-kurukshetra.parquet",
+      "sha256": "b0a12426e89f84f7417f6145f7df4541802501983c5280971df4bb5b19e42c5d",
+      "bytes": 36877,
+      "rows": 8560
+    },
+    {
+      "instituteId": "nit-manipur",
+      "path": "tools/college-cutoffs/colleges/nit-manipur.parquet",
+      "sha256": "5ce7790cd0270572136104f4fb20947f554a2b456641957ad1e2dc8be372ce7c",
+      "bytes": 19497,
+      "rows": 2846
+    },
+    {
+      "instituteId": "nit-meghalaya",
+      "path": "tools/college-cutoffs/colleges/nit-meghalaya.parquet",
+      "sha256": "534aab78421870273153893b3ffdfec01d4e3988a5b9e5c947d2f2af887e58e2",
+      "bytes": 18960,
+      "rows": 3409
+    },
+    {
+      "instituteId": "nit-mizoram",
+      "path": "tools/college-cutoffs/colleges/nit-mizoram.parquet",
+      "sha256": "df609185c3844683b829b03ef03beb5700c35a86a998cfa5179c1d0cce14ad2f",
+      "bytes": 20391,
+      "rows": 2515
+    },
+    {
+      "instituteId": "nit-nagaland",
+      "path": "tools/college-cutoffs/colleges/nit-nagaland.parquet",
+      "sha256": "7cae8b3a27910c852a27fa67b9b70b7d6aec6cc6359378ffa0a11b3365356c10",
+      "bytes": 19721,
+      "rows": 2923
+    },
+    {
+      "instituteId": "nit-nagpur",
+      "path": "tools/college-cutoffs/colleges/nit-nagpur.parquet",
+      "sha256": "963a63651fa42d67a952a9dea982714de8266e795f722ab609c78f0f591d0065",
+      "bytes": 23541,
+      "rows": 4262
+    },
+    {
+      "instituteId": "nit-patna",
+      "path": "tools/college-cutoffs/colleges/nit-patna.parquet",
+      "sha256": "a55c008db23f48a8eb2268320135272322d6fbec8c594db8857277582ffa092a",
+      "bytes": 45301,
+      "rows": 10731
+    },
+    {
+      "instituteId": "nit-puducherry",
+      "path": "tools/college-cutoffs/colleges/nit-puducherry.parquet",
+      "sha256": "93a75e2f1043f7b0d8e45525f49e903175ef3551d2654ad39cc9c1842e0a2acb",
+      "bytes": 21444,
+      "rows": 4124
+    },
+    {
+      "instituteId": "nit-raipur",
+      "path": "tools/college-cutoffs/colleges/nit-raipur.parquet",
+      "sha256": "9107fb796be3fcd0decae850e8ae279f463b41e65046e13bc55c37e172533749",
+      "bytes": 55637,
+      "rows": 12121
+    },
+    {
+      "instituteId": "nit-rourkela",
+      "path": "tools/college-cutoffs/colleges/nit-rourkela.parquet",
+      "sha256": "d8eb374429e3ee75a499a9ac2161523fb7b44447f1027ac4e5cbf6795e469765",
+      "bytes": 63064,
+      "rows": 12898
+    },
+    {
+      "instituteId": "nit-sikkim",
+      "path": "tools/college-cutoffs/colleges/nit-sikkim.parquet",
+      "sha256": "047b6d5dcc64e5ff9a3284a3c441b221c2f2d1206a47e998f673d1a4a264f862",
+      "bytes": 19957,
+      "rows": 2975
+    },
+    {
+      "instituteId": "nit-silchar",
+      "path": "tools/college-cutoffs/colleges/nit-silchar.parquet",
+      "sha256": "90a5eaab66a739ef0f535a1959ee6d0c91ff389ca2448dc552bf6024cbfccf95",
+      "bytes": 22117,
+      "rows": 4105
+    },
+    {
+      "instituteId": "nit-srinagar",
+      "path": "tools/college-cutoffs/colleges/nit-srinagar.parquet",
+      "sha256": "260dea72d350b681b83cecd203a265a5f4ba3aa855f585e59096ee6f5181cfb5",
+      "bytes": 29459,
+      "rows": 5159
+    },
+    {
+      "instituteId": "nit-surat",
+      "path": "tools/college-cutoffs/colleges/nit-surat.parquet",
+      "sha256": "48049929ea885b5c8cd976c90b6a551340b224a012c399652619e89e8a3c5add",
+      "bytes": 27474,
+      "rows": 4769
+    },
+    {
+      "instituteId": "nit-surathkal",
+      "path": "tools/college-cutoffs/colleges/nit-surathkal.parquet",
+      "sha256": "3842c2ffa1d30012445a7a6d79958267e12a7e7add0e9d2e75043e2c60bf46c5",
+      "bytes": 36235,
+      "rows": 11453
+    },
+    {
+      "instituteId": "nit-trichy",
+      "path": "tools/college-cutoffs/colleges/nit-trichy.parquet",
+      "sha256": "4a93e034910d4b2ba4cdf72cf9154a294a74e4387de88f72ba5a81590c4c56a2",
+      "bytes": 24955,
+      "rows": 5680
+    },
+    {
+      "instituteId": "nit-uttarakhand",
+      "path": "tools/college-cutoffs/colleges/nit-uttarakhand.parquet",
+      "sha256": "f448853e1ca83461c2aa2b720d9da54ec97bac1ff2f63a3440c3b3f425bdb2fd",
+      "bytes": 15113,
+      "rows": 1980
+    },
+    {
+      "instituteId": "nit-warangal",
+      "path": "tools/college-cutoffs/colleges/nit-warangal.parquet",
+      "sha256": "a8747eaa3eea9643f5bdc9105509f33150c7d8a54f22afdb34d5cb9d0859ab65",
+      "bytes": 26191,
+      "rows": 5707
+    },
+    {
+      "instituteId": "pec-chandigarh",
+      "path": "tools/college-cutoffs/colleges/pec-chandigarh.parquet",
+      "sha256": "7ca375225eee53327655bcc40b9e90256c49be3ca7850b812a0bb4078f8d0f27",
+      "bytes": 21129,
+      "rows": 3745
+    },
+    {
+      "instituteId": "pec-puducherry",
+      "path": "tools/college-cutoffs/colleges/pec-puducherry.parquet",
+      "sha256": "25c1beaa9ce8d9092ce49d54317ae5507ed6cc9a59d919915ccc55dc0aeb331b",
+      "bytes": 10853,
+      "rows": 935
+    },
+    {
+      "instituteId": "ptu-puducherry",
+      "path": "tools/college-cutoffs/colleges/ptu-puducherry.parquet",
+      "sha256": "f7168b6b35bdf590da3c948974b4ac6e10af55563cf371c0141f15908883c8ca",
+      "bytes": 15433,
+      "rows": 1783
+    },
+    {
+      "instituteId": "rgnau-amethi",
+      "path": "tools/college-cutoffs/colleges/rgnau-amethi.parquet",
+      "sha256": "467ede768fc46203ba273eb963c2553bcdc16f7b3c45415d0a3388bb70df16d8",
+      "bytes": 6168,
+      "rows": 74
+    },
+    {
+      "instituteId": "sgsits-indore",
+      "path": "tools/college-cutoffs/colleges/sgsits-indore.parquet",
+      "sha256": "1af2e4c64684e29c6a2d30866c80322987977498671f0902fa12848452aa2785",
+      "bytes": 6087,
+      "rows": 54
+    },
+    {
+      "instituteId": "sliet",
+      "path": "tools/college-cutoffs/colleges/sliet.parquet",
+      "sha256": "c689154440de648b2550538003b630b77090049de3bfd47ccbd2adab426da248",
+      "bytes": 22816,
+      "rows": 2884
+    },
+    {
+      "instituteId": "smvdu",
+      "path": "tools/college-cutoffs/colleges/smvdu.parquet",
+      "sha256": "f564f6ab6f9ec8e81a72c96f87f1955253e75411a14c89bdb5132623e04748cd",
+      "bytes": 13531,
+      "rows": 1139
+    },
+    {
+      "instituteId": "spa-bhopal",
+      "path": "tools/college-cutoffs/colleges/spa-bhopal.parquet",
+      "sha256": "e13a2a86f388b9d72449b42af57014f931eb6a3818a0b3403feb24a316cb0156",
+      "bytes": 9397,
+      "rows": 705
+    },
+    {
+      "instituteId": "spa-delhi",
+      "path": "tools/college-cutoffs/colleges/spa-delhi.parquet",
+      "sha256": "235cc82afa3f40a9b5cc6e6e46963aaaff0fc45cac705b7593a81e044c712969",
+      "bytes": 9594,
+      "rows": 773
+    },
+    {
+      "instituteId": "spa-vijayawada",
+      "path": "tools/college-cutoffs/colleges/spa-vijayawada.parquet",
+      "sha256": "e41d85224f73a75fefd57c6c0e0f2f70946e521b06da4fbe795479d4bc60a957",
+      "bytes": 9549,
+      "rows": 716
+    },
+    {
+      "instituteId": "tezpur-university",
+      "path": "tools/college-cutoffs/colleges/tezpur-university.parquet",
+      "sha256": "a556c598d71d37be3dc056ddeea29e2aff4bfb1affd6f9070d5e6d6233cf2041",
+      "bytes": 17327,
+      "rows": 2091
+    },
+    {
+      "instituteId": "univ-hyderabad",
+      "path": "tools/college-cutoffs/colleges/univ-hyderabad.parquet",
+      "sha256": "c7e90785167907241b0e0e9f563527c37e2d1df2574e072f3e8e62ef1b05c40c",
+      "bytes": 8848,
+      "rows": 460
+    }
+  ]
+}

@@ -1,0 +1,210 @@
+{
+  "$schema_version": 1,
+  "description": "Registry of official sources used to populate JEE knowledge base. Only official Government of India / NTA / IIT / JoSAA / CSAB URLs are listed. Every fact in this knowledge base must trace back to a source_id in this file.",
+  "policy": {
+    "allowed_origins": [
+      "nta.ac.in",
+      "jeemain.nta.nic.in",
+      "jeemain.nta.ac.in",
+      "jeeadv.ac.in",
+      "jeeadv.nic.in",
+      "josaa.nic.in",
+      "csab.nic.in",
+      "cdnbbsr.s3waas.gov.in",
+      "education.gov.in"
+    ],
+    "disallowed": "Any third-party coaching, news, or aggregator sites (testbook, vedantu, sarvgyan, shiksha, etc.). These may not be referenced as a source_id.",
+    "exceptions": "Historical marks-vs-percentile and marks-vs-rank data (2022-2026) may be sourced from highly reputable coaching institutes (MathonGo, Allen, Resonance) purely for the purpose of training prediction models (only if they allow)"
+  },
+  "sources": [
+    {
+      "id": "jeemain.home",
+      "kind": "html",
+      "exam": "jee-main",
+      "year": null,
+      "title": "JEE (Main) official home page",
+      "url": "https://jeemain.nta.nic.in/",
+      "publisher": "National Testing Agency"
+    },
+    {
+      "id": "jeemain.2025.bulletin",
+      "kind": "pdf",
+      "exam": "jee-main",
+      "year": 2025,
+      "title": "JEE (Main) 2025 Information Bulletin",
+      "url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102824.pdf",
+      "publisher": "National Testing Agency"
+    },
+    {
+      "id": "jeemain.2025.syllabus.paper1",
+      "kind": "pdf",
+      "exam": "jee-main",
+      "year": 2025,
+      "title": "JEE (Main) 2025 Syllabus - Paper 1 (B.E./B.Tech.)",
+      "url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
+      "publisher": "National Testing Agency"
+    },
+    {
+      "id": "jeemain.2025.faqs",
+      "kind": "pdf",
+      "exam": "jee-main",
+      "year": 2025,
+      "title": "JEE (Main) 2025 Frequently Asked Questions (FAQs)",
+      "url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/11/2024111842.pdf",
+      "publisher": "National Testing Agency"
+    },
+    {
+      "id": "jeemain.2026.faqs",
+      "kind": "pdf",
+      "exam": "jee-main",
+      "year": 2026,
+      "title": "JEE (Main) 2026 Frequently Asked Questions (FAQs)",
+      "url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2025/11/202511201840645521.pdf",
+      "publisher": "National Testing Agency"
+    },
+    {
+      "id": "jeemain.2026.bulletin",
+      "kind": "pdf",
+      "exam": "jee-main",
+      "year": 2026,
+      "title": "JEE (Main) 2026 Information Bulletin",
+      "url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2025/11/202511021649722475.pdf",
+      "publisher": "National Testing Agency"
+    },
+    {
+      "id": "jeemain.2026.syllabus.paper1",
+      "kind": "pdf",
+      "exam": "jee-main",
+      "year": 2026,
+      "title": "JEE (Main) 2026 Syllabus - Paper 1 (B.E./B.Tech.)",
+      "url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2025/10/202510311323551056.pdf",
+      "publisher": "National Testing Agency"
+    },
+    {
+      "id": "jeeadv.home",
+      "kind": "html",
+      "exam": "jee-advanced",
+      "year": null,
+      "title": "JEE (Advanced) official home page",
+      "url": "https://jeeadv.ac.in/",
+      "publisher": "Joint Admission Board, IITs"
+    },
+    {
+      "id": "jeeadv.2026.brochure",
+      "kind": "pdf",
+      "exam": "jee-advanced",
+      "year": 2026,
+      "title": "JEE (Advanced) 2026 Information Brochure (English)",
+      "url": "https://jeeadv.ac.in/documents/IBEnglish_2026.pdf",
+      "publisher": "Joint Admission Board, IITs"
+    },
+    {
+      "id": "jeeadv.2026.eligibility",
+      "kind": "html",
+      "exam": "jee-advanced",
+      "year": 2026,
+      "title": "JEE (Advanced) 2026 Eligibility Criteria",
+      "url": "https://jeeadv.ac.in/eligibility.html",
+      "publisher": "Joint Admission Board, IITs"
+    },
+    {
+      "id": "josaa.home",
+      "kind": "html",
+      "exam": null,
+      "year": null,
+      "title": "Joint Seat Allocation Authority (JoSAA) home page",
+      "url": "https://josaa.nic.in/",
+      "publisher": "JoSAA, Ministry of Education"
+    },
+    {
+      "id": "josaa.bulletin",
+      "kind": "html",
+      "exam": null,
+      "year": null,
+      "title": "JoSAA Information Bulletin (eligibility + business rules)",
+      "url": "https://josaa.nic.in/information-bulletin/",
+      "publisher": "JoSAA, Ministry of Education"
+    },
+    {
+      "id": "csab.home",
+      "kind": "html",
+      "exam": null,
+      "year": null,
+      "title": "Central Seat Allocation Board (CSAB) home page",
+      "url": "https://csab.nic.in/",
+      "publisher": "CSAB"
+    },
+    {
+      "id": "josaa.2026.business_rules",
+      "kind": "html",
+      "exam": null,
+      "year": 2026,
+      "title": "JoSAA 2026 Business Rules",
+      "url": "https://josaa.nic.in/document/business-rule/",
+      "publisher": "JoSAA"
+    },
+    {
+      "id": "josaa.2025.seat_matrix",
+      "kind": "html",
+      "exam": null,
+      "year": 2025,
+      "title": "JoSAA 2025 Seat Matrix (applicant portal)",
+      "url": "https://josaa.admissions.nic.in/applicant/seatmatrix/seatmatrixinfo.aspx",
+      "publisher": "JoSAA"
+    },
+    {
+      "id": "josaa.2026.seat_matrix",
+      "kind": "html",
+      "exam": null,
+      "year": 2026,
+      "title": "JoSAA 2026 Seat Matrix",
+      "url": "https://josaa.nic.in/seat-matrix/",
+      "publisher": "JoSAA"
+    },
+    {
+      "id": "csab.2026.business_rules",
+      "kind": "html",
+      "exam": null,
+      "year": 2026,
+      "title": "CSAB 2026 Business Rules / Special Round",
+      "url": "https://csab.nic.in/csab-special/",
+      "publisher": "CSAB"
+    },
+    {
+      "id": "csab-vacancy-2023",
+      "kind": "pdf",
+      "exam": null,
+      "year": 2023,
+      "title": "CSAB 2023 vacant seats after JoSAA rounds",
+      "url": "https://cdnbbsr.s3waas.gov.in/s305a70454516ecd9194c293b0e415777f/uploads/2023/08/2023080562.pdf",
+      "publisher": "CSAB"
+    },
+    {
+      "id": "csab-vacancy-2024",
+      "kind": "pdf",
+      "exam": null,
+      "year": 2024,
+      "title": "CSAB 2024 vacant seats after JoSAA rounds",
+      "url": "https://cdnbbsr.s3waas.gov.in/s305a70454516ecd9194c293b0e415777f/uploads/2024/07/2024073199.pdf",
+      "publisher": "CSAB"
+    },
+    {
+      "id": "csab-vacancy-2025",
+      "kind": "pdf",
+      "exam": null,
+      "year": 2025,
+      "title": "CSAB 2025 vacant seats after JoSAA rounds",
+      "url": "https://cdnbbsr.s3waas.gov.in/s305a70454516ecd9194c293b0e415777f/uploads/2025/07/2025073028.pdf",
+      "publisher": "CSAB"
+    },
+    {
+      "id": "josaa.2025.faq",
+      "kind": "pdf",
+      "exam": null,
+      "year": 2025,
+      "title": "JoSAA 2025 Frequently Asked Questions",
+      "url": "https://cdnbbsr.s3waas.gov.in/s313111c20aee51aeb480ecbd988cd8cc9/uploads/2025/06/2025061093.pdf",
+      "publisher": "JoSAA, Ministry of Education"
+    }
+  ]
+}

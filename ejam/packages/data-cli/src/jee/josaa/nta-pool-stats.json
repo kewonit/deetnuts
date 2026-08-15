@@ -1,0 +1,92 @@
+{
+  "parsed_at": "2026-05-24T09:15:00.000Z",
+  "source_files": {
+    "2025": "packages/data-cli/src/backtest/data/notice_2025.pdf",
+    "2026": "packages/data-cli/src/backtest/data/notice_2026.pdf"
+  },
+  "ocr_note": "PDFs are scanned images; extracted with PyMuPDF + Tesseract. Verify critical numbers against PDF manually if needed.",
+  "documents": {
+    "2025": {
+      "type": "session_1_only",
+      "date": "2025-02-11",
+      "title": "JEE (Main) 2025 Session 1 NTA Scores — Paper 1",
+      "warning": "NOT the final combined Session 1+2 notice (Apr 2025). Unique full-year pool stats are NOT in this PDF.",
+      "session_1": {
+        "registered": 1311544,
+        "appeared": 1258136,
+        "attendance_pct": 95.93
+      },
+      "hundred_percentile_scorers": 14
+    },
+    "2026": {
+      "type": "final_combined",
+      "date": "2026-04-20",
+      "title": "JEE (Main) 2026 final NTA Scores — Paper 1 (both sessions)",
+      "session_1": {
+        "registered": 1355293,
+        "appeared": 1304653
+      },
+      "session_2": {
+        "registered": 1110904,
+        "appeared": 1034330
+      },
+      "both_sessions": {
+        "common_registered": 861343,
+        "common_appeared": 800514,
+        "unique_registered": 1604854,
+        "unique_appeared": 1538468
+      },
+      "hundred_percentile_scorers": 26,
+      "jee_advanced_eligibility_cutoffs": {
+        "UR-ALL": {
+          "percentile_from": 100,
+          "percentile_to": 93.4123549,
+          "candidates": 96873
+        },
+        "UR-PwBD": {
+          "percentile_from": 93.3244144,
+          "percentile_to": 0.0023186,
+          "candidates": 4391
+        },
+        "EWS-ALL": {
+          "percentile_from": 93.4105172,
+          "percentile_to": 82.4164528,
+          "candidates": 25009
+        },
+        "OBC-ALL": {
+          "percentile_from": 93.4105172,
+          "percentile_to": 80.9232583,
+          "candidates": 67597
+        },
+        "SC-ALL": {
+          "percentile_from": 93.4105172,
+          "percentile_to": 63.9172792,
+          "candidates": 37522
+        },
+        "ST-ALL": {
+          "percentile_from": 93.4041748,
+          "percentile_to": 52.0174712,
+          "candidates": 18790
+        }
+      }
+    }
+  },
+  "reference_2025_combined_from_nta_april_pdf": {
+    "note": "From official NTA press release 2025-04-18 (not in repo yet). Use for YoY pool comparison.",
+    "unique_registered": 1539848,
+    "unique_appeared": 1475103,
+    "common_registered": 833536,
+    "common_appeared": 775383,
+    "jee_advanced_eligibility_ur_percentile_to": 93.1023262
+  },
+  "pool_calibration": {
+    "unique_appeared_yoy": {
+      "2025": 1475103,
+      "2026": 1538468,
+      "growth_pct": 4.29,
+      "implied_pool_shift_if_literal": 0.0429
+    },
+    "sandbox_p7_super_a_default": 0.03,
+    "recommendation": "Production jam-josaa-v3 uses +3%/yr (sandbox walk-forward winner wf-rw-soft-p30, 2026-06). Literal pool growth (+4.3%) was not used — may overshoot. Override: EJAM_POOL_SHIFT_PCT."
+  }
+}

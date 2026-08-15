@@ -31,6 +31,13 @@ function hasPredictorQueryParams(request: NextRequest): boolean {
 
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
+  if (
+    ["/jee-cutoffs", "/jee-main", "/jee-advanced", "/josaa", "/sitemaps", "/sitemap-index.xml"].some(
+      (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+    )
+  ) {
+    return NextResponse.next();
+  }
   if (pathname === "/" && hasPredictorQueryParams(request)) {
     const destination = request.nextUrl.clone();
     destination.pathname = "/college-predictor";

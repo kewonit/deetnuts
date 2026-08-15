@@ -8,4 +8,8 @@ test("analytics sees route templates rather than entity identifiers", () => {
     "/mht-cet/colleges/[slug]",
   );
   assert.equal(sanitizeAnalyticsPathname("/mht-cet/colleges"), "/mht-cet/colleges");
+  assert.equal(
+    sanitizeAnalyticsPathname("/jee-main/colleges/nit-trichy/cutoffs/2025/programs/computer-science/josaa/home-state/open/gender-neutral"),
+    "/[jee-exam]/colleges/[slug]/cutoffs/[year]/programs/[program]/[body]/[quota]/[category]/[gender]",
+  );
 });

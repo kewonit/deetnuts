@@ -1,0 +1,99 @@
+{
+  "description": "Structured extract of JoSAA business-rule operational clauses used during counselling. The currently available official PDF linked on JoSAA is an older business-rules document, so this file captures verified rule mechanics from that official PDF and should be refreshed when the 2026 PDF is published.",
+  "source": "josaa.2026.business_rules",
+  "status": "extracted_from_official_pdf_linked_on_josaa_site",
+  "official_page": "https://josaa.nic.in/document/business-rule/",
+  "official_pdf": "https://cdnbbsr.s3waas.gov.in/s313111c20aee51aeb480ecbd988cd8cc9/uploads/2022/03/2022033180.pdf",
+  "official_2025_faq_pdf": "https://cdnbbsr.s3waas.gov.in/s313111c20aee51aeb480ecbd988cd8cc9/uploads/2025/06/2025061093.pdf",
+  "cached_text": "data/_cache/official-text/jee/josaa.official.business_rules.txt",
+  "note": "Mechanics (registration, choice filling, freeze/float/slide, document verification) are taken from the older official Business Rules PDF linked on josaa.nic.in. Monetary amounts and round count have been refreshed from the official JoSAA 2025 FAQ PDF and JoSAA 2025 announcements on josaa.nic.in.",
+  "sections": {
+    "registration": {
+      "summary": "Candidates log in on the JoSAA portal with qualifying exam credentials; registration and choice filling are free.",
+      "facts": [
+        "Candidates register and fill choices through https://josaa.nic.in.",
+        "Choice filling does not require any separate fee.",
+        "Only one seat can finally be made available from the set of filled choices, so candidates must prioritize carefully."
+      ]
+    },
+    "choice_filling_and_locking": {
+      "summary": "Candidates get a fixed choice-filling window, must lock choices by the deadline, and can unlock before deadline via OTP validation.",
+      "facts": [
+        "The choice-filling window is 10 days and includes 2 mock seat allocations on the 7th and 9th days.",
+        "Candidates must lock choices on or before the last day of choice filling.",
+        "If choices are not explicitly locked, the last saved choices are auto-locked at the deadline.",
+        "After locking but before deadline, candidates can request unlock through the portal and validate it using OTP sent to registered mobile and email.",
+        "After the deadline, candidates cannot reorder, add, or delete choices."
+      ]
+    },
+    "provisional_offer_and_online_reporting": {
+      "summary": "If a seat is allotted, the candidate must complete acceptance, document upload, fee payment, and query response within the round timeline.",
+      "steps": [
+        "Download provisional seat allocation letter.",
+        "Accept the seat and choose one of freeze, float, or slide.",
+        "Upload required documents on the portal.",
+        "Pay the seat acceptance fee in the same round in which the seat is first allotted.",
+        "Respond to verification queries, if any, within the stipulated time."
+      ],
+      "consequence_of_non_completion": "Failure to complete all online reporting steps is treated as rejection of the offer and removes the candidate from the JoSAA process for that year."
+    },
+    "document_verification": {
+      "summary": "Seat confirmation is provisional and depends on uploaded-document verification, query resolution, and eligibility satisfaction.",
+      "facts": [
+        "The seat is confirmed or cancelled after verification of uploaded documents and eligibility criteria.",
+        "Candidates must regularly check the portal and respond to any query within the round deadline.",
+        "Failure to reply to queries leads to seat cancellation and exit from the JoSAA process.",
+        "If any document or certificate is invalid, fraudulent, or inconsistent with eligibility norms, the seat is cancelled.",
+        "If a candidate later moves for the first time between NIT+ System and IIT allotment, documents may undergo dual verification without any extra seat acceptance fee."
+      ]
+    },
+    "freeze_float_slide": {
+      "summary": "Freeze keeps the allotted seat, float allows upgrade to higher preference across institutes, and slide allows upgrade within the same institute.",
+      "definitions": {
+        "freeze": "Candidate accepts the offered seat and does not want to participate in further rounds while retaining the same seat.",
+        "float": "Candidate accepts the offered seat and agrees to move to a higher-preference program in any institute if allotted later.",
+        "slide": "Candidate accepts the offered seat and agrees to move only to a higher-preference program within the same institute if allotted later."
+      },
+      "rules": [
+        "Float and slide are available only when the allotted seat is not the candidate's first choice.",
+        "Float and slide are not available in the last round.",
+        "Before the last round, a candidate may change from float to slide or freeze, and from slide to freeze.",
+        "Once freeze is chosen, it cannot be changed.",
+        "If a higher-preference seat is allotted after choosing float or slide, the earlier accepted seat is automatically forfeited."
+      ]
+    },
+    "seat_acceptance_fee": {
+      "summary": "Seat Acceptance Fee (SAF) must be paid once, in the round of first allotment, through portal-supported payment modes.",
+      "amounts": {
+        "currency": "INR",
+        "year": 2025,
+        "sc_st_and_pwd_tags": 15000,
+        "all_other_candidates": 30000,
+        "source": "josaa.2025.faq"
+      },
+      "facts": [
+        "Non-payment of SAF is treated as rejection of the allotted seat.",
+        "SAF includes JoSAA processing charges; the remainder is adjusted against the institute admission fee.",
+        "Payment can be made by net banking, debit card, credit card, or SBI e-challan.",
+        "Candidates pay SAF only once; if upgraded later through float or slide, they do not pay it again."
+      ]
+    },
+    "reporting_at_admitting_institute": {
+      "summary": "After counselling concludes, the candidate must report to the admitting institute, complete formalities, and face certificate re-check.",
+      "facts": [
+        "All certificates are re-checked by the admitting institute.",
+        "Admission can be cancelled if certificate formats or eligibility do not satisfy institute requirements."
+      ]
+    },
+    "withdrawal_and_refund": {
+      "summary": "Withdrawal cancels the seat and exits the candidate from JoSAA; refund is after deducting the JoSAA withdrawal processing charge where allowed.",
+      "facts": [
+        "Seat acceptance fee is generally not refundable, but valid withdrawal triggers refund after deducting JoSAA withdrawal processing charges of Rs. 7,000 (per JoSAA 2025 FAQ).",
+        "If a seat is cancelled due to eligibility failure or unresolved document discrepancy, refund is also after deducting Rs. 7,000 (per JoSAA 2025 FAQ).",
+        "JoSAA 2025 was conducted in 6 rounds; withdrawal is available after Round 1 and up to before the final round for both IIT and NIT+ systems.",
+        "To withdraw, the candidate submits the signed declaration form on the portal, confirms via OTP, and the reporting officer accepts, rejects, or raises a query.",
+        "After valid withdrawal, the candidate is excluded from subsequent rounds and forfeits eligibility for admission through that JoSAA cycle."
+      ]
+    }
+  }
+}

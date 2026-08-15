@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ejam.dev/data/schemas/mht-cet-cutoffs.schema.json",
+  "title": "eJAM MHT-CET Maharashtra CAP cutoff row",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "exam_id",
+    "counselling_id",
+    "year",
+    "round",
+    "institute_id",
+    "institute_code",
+    "source_institute_name",
+    "offering_id",
+    "choice_code",
+    "program_id",
+    "program_name",
+    "source_program_name",
+    "seat_pool_id",
+    "source_category_code",
+    "source_stage_label",
+    "source_stage_sequence",
+    "stage_semantics_id",
+    "source_seat_scope_id",
+    "effective_allocation_scope_id",
+    "source_allocation_section",
+    "source_id",
+    "source_locator",
+    "source_table",
+    "source_row_id",
+    "snapshot_sha256"
+  ],
+  "properties": {
+    "schema_version": { "const": 3 },
+    "exam_id": { "const": "mht-cet" },
+    "counselling_id": { "const": "maharashtra-cap" },
+    "year": { "type": "integer", "minimum": 2024 },
+    "round": { "type": "integer", "minimum": 1, "maximum": 4 },
+    "institute_id": { "type": "string", "pattern": "^mht-institute-[0-9]{5}$" },
+    "institute_code": { "type": "string", "pattern": "^[0-9]{5}$" },
+    "source_institute_name": { "type": "string", "minLength": 1 },
+    "offering_id": { "type": "string", "pattern": "^mht-choice-[0-9]{10}t?$" },
+    "choice_code": { "type": "string", "pattern": "^[0-9]{10}[A-Z]{0,2}$" },
+    "program_id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "program_name": { "type": "string", "minLength": 1 },
+    "source_program_name": { "type": "string", "minLength": 1 },
+    "seat_pool_id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "source_category_code": { "type": "string", "minLength": 1 },
+    "source_stage_label": { "type": "string", "minLength": 1 },
+    "source_stage_sequence": { "type": "integer", "minimum": 1 },
+    "stage_semantics_id": {
+      "enum": [
+        "standard",
+        "ladies-to-male-same-category",
+        "pwd-released-to-base-category",
+        "defence-released-to-base-category",
+        "minority-to-maharashtra",
+        "unrestricted-maharashtra-merit"
+      ]
+    },
+    "source_seat_scope_id": {
+      "enum": [
+        "home-university",
+        "other-university",
+        "state-level",
+        "maharashtra-state"
+      ]
+    },
+    "effective_allocation_scope_id": {
+      "enum": [
+        "home-university",
+        "other-university",
+        "state-level",
+        "maharashtra-state"
+      ]
+    },
+    "source_allocation_section": {
+      "enum": [
+        "HOME_TO_HOME",
+        "HOME_TO_OTHER",
+        "OTHER_TO_OTHER",
+        "OTHER_TO_HOME",
+        "STATE_LEVEL",
+        "MAHARASHTRA_STATE"
+      ]
+    },
+    "closing_rank": {
+      "type": ["integer", "null"],
+      "minimum": 1
+    },
+    "closing_percentile": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 100
+    },
+    "total_admitted": {
+      "type": ["integer", "null"],
+      "minimum": 0
+    },
+    "source_id": { "type": "string", "minLength": 1 },
+    "source_locator": { "type": "string", "minLength": 1 },
+    "source_table": { "type": "string", "minLength": 1 },
+    "source_row_id": { "type": "string", "minLength": 1 },
+    "snapshot_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  },
+  "additionalProperties": false
+}

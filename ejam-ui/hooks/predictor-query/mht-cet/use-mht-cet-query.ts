@@ -1,6 +1,9 @@
 "use client";
 
-import { PredictionErrorResponse, type PredictionProvenance } from "@ejam/data";
+import {
+  PredictionErrorResponse,
+  type PredictionProvenance,
+} from "@ejam/data/predictor-interface";
 import type { MhtCetPredictionInput } from "@ejam/data/mht-cet/browser";
 import {
   keepPreviousData,

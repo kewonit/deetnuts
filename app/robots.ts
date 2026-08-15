@@ -4,39 +4,21 @@ export default function robots(): MetadataRoute.Robots {
   const baseUrl = "https://deetnuts.com";
 
   return {
-    rules: [
-      {
-        userAgent: "*",
-        allow: "/",
-        disallow: [
-          "/api/",
-          "/auth/",
-          "/login/",
-          "/signup/",
-          "/account/",
-          "/profile/",
-          "/error/",
-          "/private/",
-        ],
-      },
-      {
-        userAgent: "Googlebot",
-        allow: "/",
-        disallow: [
-          "/api/",
-          "/auth/",
-          "/login/",
-          "/signup/",
-          "/account/",
-          "/profile/",
-          "/error/",
-        ],
-      },
-    ],
-    sitemap: [
-      `${baseUrl}/sitemap.xml`,
-      `${baseUrl}/mht-cet/sitemap.xml`,
-    ],
+    rules: {
+      userAgent: "*",
+      allow: ["/jee-cutoffs", "/jee-main/", "/jee-advanced/", "/"],
+      disallow: [
+        "/api/",
+        "/auth/",
+        "/login/",
+        "/signup/",
+        "/account/",
+        "/profile/",
+        "/error/",
+        "/private/",
+      ],
+    },
+    sitemap: `${baseUrl}/sitemap-index.xml`,
     host: baseUrl,
   };
 }

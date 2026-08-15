@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ejam.dev/data/schemas/seat-matrix.schema.json",
+  "title": "Seat Matrix",
+  "type": "object",
+  "required": [
+    "year",
+    "institute_id",
+    "program_id",
+    "quota",
+    "seat_type",
+    "gender",
+    "seats",
+    "source"
+  ],
+  "properties": {
+    "year": { "type": "integer" },
+    "institute_id": { "type": "string" },
+    "program_id": { "type": "string" },
+    "quota": { "type": "string" },
+    "seat_type": { "type": "string" },
+    "gender": { "type": "string" },
+    "seats": { "type": "integer", "minimum": 0 },
+    "source": { "type": "string" }
+  }
+}

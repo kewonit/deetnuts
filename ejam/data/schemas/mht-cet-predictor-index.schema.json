@@ -1,0 +1,224 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ejam.dev/data/schemas/mht-cet-predictor-index.schema.json",
+  "title": "eJAM MHT-CET predictor index row",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "model_id",
+    "target_year",
+    "rules_year",
+    "institute_id",
+    "institute_code",
+    "institute_name",
+    "institute_type",
+    "district",
+    "home_university_id",
+    "minority_community_id",
+    "offering_id",
+    "choice_code",
+    "program_id",
+    "program_name",
+    "seat_pool_id",
+    "source_stage_label",
+    "stage_semantics_id",
+    "source_seat_scope_id",
+    "allocation_scope_id",
+    "latest_year",
+    "years_of_data",
+    "data_quality",
+    "round1_rank",
+    "round2_rank",
+    "round3_rank",
+    "round4_rank",
+    "round1_status",
+    "round2_status",
+    "round3_status",
+    "round4_status",
+    "round1_percentile",
+    "round2_percentile",
+    "round3_percentile",
+    "round4_percentile",
+    "round1_relative_residuals",
+    "round2_relative_residuals",
+    "round3_relative_residuals",
+    "round4_relative_residuals",
+    "round1_uncertainty_source",
+    "round2_uncertainty_source",
+    "round3_uncertainty_source",
+    "round4_uncertainty_source",
+    "round1_data_quality",
+    "round2_data_quality",
+    "round3_data_quality",
+    "round4_data_quality"
+  ],
+  "properties": {
+    "schema_version": { "const": 3 },
+    "model_id": { "type": "string", "minLength": 1 },
+    "target_year": { "const": 2026 },
+    "rules_year": { "const": 2026 },
+    "institute_id": {
+      "type": "string",
+      "pattern": "^mht-institute-[0-9]{5}$"
+    },
+    "institute_code": { "type": "string", "pattern": "^[0-9]{5}$" },
+    "institute_name": { "type": "string", "minLength": 1 },
+    "institute_type": { "type": "string", "minLength": 1 },
+    "district": { "type": "string", "minLength": 1 },
+    "home_university_id": {
+      "$ref": "#/$defs/homeUniversity"
+    },
+    "minority_community_id": {
+      "$ref": "#/$defs/nullableMinorityCommunity"
+    },
+    "offering_id": {
+      "type": "string",
+      "pattern": "^mht-choice-[0-9]{10}t?$"
+    },
+    "choice_code": { "type": "string", "pattern": "^[0-9]{10}[A-Z]{0,2}$" },
+    "program_id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "program_name": { "type": "string", "minLength": 1 },
+    "seat_pool_id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "source_stage_label": { "type": "string", "minLength": 1 },
+    "stage_semantics_id": {
+      "enum": [
+        "standard",
+        "ladies-to-male-same-category",
+        "pwd-released-to-base-category",
+        "defence-released-to-base-category",
+        "minority-to-maharashtra",
+        "unrestricted-maharashtra-merit"
+      ]
+    },
+    "source_seat_scope_id": {
+      "enum": [
+        "home-university",
+        "other-university",
+        "state-level",
+        "maharashtra-state"
+      ]
+    },
+    "allocation_scope_id": {
+      "enum": [
+        "home-university",
+        "other-university",
+        "state-level",
+        "maharashtra-state"
+      ]
+    },
+    "latest_year": { "const": 2025 },
+    "years_of_data": { "type": "integer", "minimum": 1, "maximum": 2 },
+    "data_quality": { "enum": ["inferred", "pooled"] },
+    "round1_rank": { "$ref": "#/$defs/nullablePositiveInteger" },
+    "round2_rank": { "$ref": "#/$defs/nullablePositiveInteger" },
+    "round3_rank": { "$ref": "#/$defs/nullablePositiveInteger" },
+    "round4_rank": { "$ref": "#/$defs/nullablePositiveInteger" },
+    "round1_status": { "$ref": "#/$defs/roundDataStatus" },
+    "round2_status": { "$ref": "#/$defs/roundDataStatus" },
+    "round3_status": { "$ref": "#/$defs/roundDataStatus" },
+    "round4_status": { "$ref": "#/$defs/roundDataStatus" },
+    "round1_percentile": { "$ref": "#/$defs/nullablePercentile" },
+    "round2_percentile": { "$ref": "#/$defs/nullablePercentile" },
+    "round3_percentile": { "$ref": "#/$defs/nullablePercentile" },
+    "round4_percentile": { "$ref": "#/$defs/nullablePercentile" },
+    "round1_relative_residuals": { "$ref": "#/$defs/nullableResiduals" },
+    "round2_relative_residuals": { "$ref": "#/$defs/nullableResiduals" },
+    "round3_relative_residuals": { "$ref": "#/$defs/nullableResiduals" },
+    "round4_relative_residuals": { "$ref": "#/$defs/nullableResiduals" },
+    "round1_uncertainty_source": {
+      "$ref": "#/$defs/nullableUncertaintySource"
+    },
+    "round2_uncertainty_source": {
+      "$ref": "#/$defs/nullableUncertaintySource"
+    },
+    "round3_uncertainty_source": {
+      "$ref": "#/$defs/nullableUncertaintySource"
+    },
+    "round4_uncertainty_source": {
+      "enum": ["round4-pooled", null]
+    },
+    "round1_data_quality": { "$ref": "#/$defs/nullableDataQuality" },
+    "round2_data_quality": { "$ref": "#/$defs/nullableDataQuality" },
+    "round3_data_quality": { "$ref": "#/$defs/nullableDataQuality" },
+    "round4_data_quality": { "$ref": "#/$defs/nullableDataQuality" }
+  },
+  "$defs": {
+    "homeUniversity": {
+      "enum": [
+        "dr-babasaheb-ambedkar-marathwada-university",
+        "gondwana-university",
+        "kavayitri-bahinabai-chaudhari-north-maharashtra-university-jalgaon",
+        "mumbai-university",
+        "punyashlok-ahilyadevi-holkar-solapur-university",
+        "rashtrasant-tukadoji-maharaj-nagpur-university",
+        "sant-gadge-baba-amravati-university",
+        "savitribai-phule-pune-university",
+        "shivaji-university",
+        "swami-ramanand-teerth-marathwada-university-nanded"
+      ]
+    },
+    "nullableMinorityCommunity": {
+      "enum": [
+        "official-linguistic-minority-gujar",
+        "official-linguistic-minority-gujarathi",
+        "official-linguistic-minority-gujarathi-jain",
+        "official-linguistic-minority-hindi",
+        "official-linguistic-minority-kannada",
+        "official-linguistic-minority-malyalam",
+        "official-linguistic-minority-punjabi",
+        "official-linguistic-minority-sindhi",
+        "official-linguistic-minority-tamil",
+        "official-linguistic-minority-konkani",
+        "official-religious-minority-buddhist",
+        "official-religious-minority-christian",
+        "official-religious-minority-jain",
+        "official-religious-minority-jain-linguistic-minority-gujarathi",
+        "official-religious-minority-muslim",
+        "official-religious-minority-muslim-linguistic-minority-urdu",
+        "official-religious-minority-parsi",
+        "official-religious-minority-parsi-gujarathi",
+        "official-religious-minority-roman-catholics",
+        "official-religious-minority-sikh",
+        "official-religious-minority-zoroastrian",
+        null
+      ]
+    },
+    "nullablePositiveInteger": {
+      "type": ["integer", "null"],
+      "minimum": 1
+    },
+    "nullablePercentile": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 100
+    },
+    "roundDataStatus": {
+      "enum": ["rank", "percentile-only", "not-published"]
+    },
+    "nullableResiduals": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": { "type": "number" },
+          "minItems": 1
+        },
+        { "type": "null" }
+      ]
+    },
+    "nullableUncertaintySource": {
+      "enum": [
+        "round-stage-category-scope",
+        "round-stage-category",
+        "round-stage",
+        "round",
+        "global",
+        "round4-pooled",
+        null
+      ]
+    },
+    "nullableDataQuality": {
+      "enum": ["inferred", "pooled", null]
+    }
+  },
+  "additionalProperties": false
+}

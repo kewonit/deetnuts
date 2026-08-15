@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useReportWebVitals } from "next/web-vitals";
 import { sanitizeAnalyticsPathname } from "@/lib/admissions/analytics";
 
 const GA_ID = "G-PF9S037SJQ";
+const CONSENT_COOKIE = "deetnuts_analytics_consent";
 
 declare global {
   interface Window {
@@ -15,83 +16,85 @@ declare global {
   }
 }
 
+function readConsent(): boolean {
+  return document.cookie.split("; ").some((value) => value === `${CONSENT_COOKIE}=granted`);
+}
+
 function ensureGtag() {
   window.dataLayer = window.dataLayer || [];
-  window.gtag =
-    window.gtag ||
-    function gtag(...args: unknown[]) {
-      window.dataLayer.push(args);
-    };
+  window.gtag = window.gtag || function gtag(...args: unknown[]) { window.dataLayer.push(args); };
   return window.gtag;
 }
 
-function RouteReporter() {
+function setConsentDefaults() {
+  ensureGtag()("consent", "default", {
+    analytics_storage: "denied",
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    wait_for_update: 500,
+  });
+}
+
+function loadGoogleScript() {
+  if (document.getElementById("deetnuts-ga-loader")) return;
+  const script = document.createElement("script");
+  script.id = "deetnuts-ga-loader";
+  script.async = true;
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+  document.head.appendChild(script);
+}
+
+function RouteReporter({ enabled }: { enabled: boolean }) {
   const pathname = usePathname();
   const routeTemplate = sanitizeAnalyticsPathname(pathname);
 
   useEffect(() => {
+    if (!enabled) return;
     const gtag = ensureGtag();
     const safeLocation = `${window.location.origin}${routeTemplate}`;
-    gtag("set", {
-      page_path: routeTemplate,
-      page_location: safeLocation,
-    });
     if (!window.deetnutsAnalyticsConfigured) {
       gtag("js", new Date());
-      gtag("config", GA_ID, {
-        send_page_view: false,
-        page_path: routeTemplate,
-        page_location: safeLocation,
-      });
+      gtag("config", GA_ID, { send_page_view: false, page_path: routeTemplate, page_location: safeLocation });
       window.deetnutsAnalyticsConfigured = true;
     }
-    gtag("event", "page_view", {
-      page_path: routeTemplate,
-      page_location: safeLocation,
-    });
-  }, [routeTemplate]);
+    gtag("event", "page_view", { page_path: routeTemplate, page_location: safeLocation });
+  }, [enabled, routeTemplate]);
 
   useReportWebVitals((metric) => {
-    const gtag = ensureGtag();
-    const routeTemplate = sanitizeAnalyticsPathname(window.location.pathname);
-    gtag("event", metric.name, {
-      value: Math.round(
-        metric.name === "CLS" ? metric.value * 1000 : metric.value,
-      ),
+    if (!enabled) return;
+    const safePath = sanitizeAnalyticsPathname(window.location.pathname);
+    ensureGtag()("event", metric.name, {
+      value: Math.round(metric.name === "CLS" ? metric.value * 1000 : metric.value),
       event_label: metric.id,
       non_interaction: true,
-      page_path: routeTemplate,
-      page_location: `${window.location.origin}${routeTemplate}`,
+      page_path: safePath,
+      page_location: `${window.location.origin}${safePath}`,
     });
   });
-
-  return null;
-}
-
-function DeferredAnalyticsScript() {
-  useEffect(() => {
-    const timer = window.setTimeout(() => {
-      if (document.getElementById("deetnuts-ga-loader")) return;
-      const script = document.createElement("script");
-      script.id = "deetnuts-ga-loader";
-      script.async = true;
-      script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
-      document.head.appendChild(script);
-    }, 5_000);
-
-    return () => window.clearTimeout(timer);
-  }, []);
-
   return null;
 }
 
 export default function SanitizedGoogleAnalytics() {
-  return (
-    <>
-      <DeferredAnalyticsScript />
-      <Suspense fallback={null}>
-        <RouteReporter />
-      </Suspense>
-    </>
-  );
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    setConsentDefaults();
+    const applyConsent = (granted: boolean) => {
+      ensureGtag()("consent", "update", {
+        analytics_storage: granted ? "granted" : "denied",
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+      });
+      setEnabled(granted);
+      if (granted) loadGoogleScript();
+    };
+    applyConsent(readConsent());
+    const onConsent = (event: Event) => applyConsent((event as CustomEvent<{ granted: boolean }>).detail.granted);
+    window.addEventListener("deetnuts:analytics-consent", onConsent);
+    return () => window.removeEventListener("deetnuts:analytics-consent", onConsent);
+  }, []);
+
+  return <Suspense fallback={null}><RouteReporter enabled={enabled} /></Suspense>;
 }

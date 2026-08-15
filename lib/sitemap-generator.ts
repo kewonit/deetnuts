@@ -20,6 +20,9 @@ export async function generateAllUrls(): Promise<SitemapUrl[]> {
       lastModified: seoLastUpdated,
     },
     {
+      url: `${baseUrl}/jee-cutoffs`,
+    },
+    {
       url: `${baseUrl}/compliance/terms-and-conditions`,
       lastModified: seoLastUpdated,
     },

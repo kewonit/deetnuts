@@ -2,6 +2,8 @@ import CollegeGrid from "@/components/CollegeGrid";
 import Link from "next/link";
 import { getCollegesData } from "@/lib/college-data";
 
+export const dynamic = "force-dynamic";
+
 export default async function CollegesPage() {
   const colleges = await getCollegesData();
 

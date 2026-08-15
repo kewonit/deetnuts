@@ -1,0 +1,1622 @@
+[
+  {
+    "source_program_id": "abu-dhabi-campus-chemical-engineering",
+    "source_program_name": "Abu Dhabi Campus - Chemical Engineering",
+    "canonical_program_id": "abu-dhabi-campus-chemical-engineering"
+  },
+  {
+    "source_program_id": "abu-dhabi-campus-computer-science-and-engineering",
+    "source_program_name": "Abu Dhabi Campus - Computer Science and Engineering",
+    "canonical_program_id": "abu-dhabi-campus-computer-science-and-engineering"
+  },
+  {
+    "source_program_id": "abu-dhabi-campus-energy-engineering",
+    "source_program_name": "Abu Dhabi Campus - Energy Engineering",
+    "canonical_program_id": "abu-dhabi-campus-energy-engineering"
+  },
+  {
+    "source_program_id": "aeronautical-engineering",
+    "source_program_name": "Aeronautical Engineering",
+    "canonical_program_id": "aerospace"
+  },
+  {
+    "source_program_id": "aerospace",
+    "source_program_name": "Aerospace Engineering",
+    "canonical_program_id": "aerospace"
+  },
+  {
+    "source_program_id": "agricultural-and-food-engineering-with-m-tech-in-any-of-the-listed-specializations",
+    "source_program_name": "Agricultural and Food Engineering with M.Tech in any of the Listed Specializations",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "agricultural-engineering",
+    "source_program_name": "Agricultural Engineering",
+    "canonical_program_id": "agricultural-food-engineering"
+  },
+  {
+    "source_program_id": "agricultural-food-engineering",
+    "source_program_name": "Agricultural and Food Engineering",
+    "canonical_program_id": "agricultural-food-engineering"
+  },
+  {
+    "source_program_id": "animation-vfx",
+    "source_program_name": "Animation and VFX",
+    "canonical_program_id": "animation-vfx"
+  },
+  {
+    "source_program_id": "applied-geology",
+    "source_program_name": "Applied Geology",
+    "canonical_program_id": "applied-geology"
+  },
+  {
+    "source_program_id": "applied-geophysics",
+    "source_program_name": "Applied Geophysics",
+    "canonical_program_id": "applied-geophysics"
+  },
+  {
+    "source_program_id": "applied-mathematics",
+    "source_program_name": "Applied Mathematics",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "architecture",
+    "source_program_name": "Architecture",
+    "canonical_program_id": "architecture"
+  },
+  {
+    "source_program_id": "architecture-and-planning",
+    "source_program_name": "Architecture and Planning",
+    "canonical_program_id": "architecture"
+  },
+  {
+    "source_program_id": "architecture-town-and-regional-planning",
+    "source_program_name": "Architecture Town and Regional Planning",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "artificial-intelligence",
+    "source_program_name": "Artificial Intelligence",
+    "canonical_program_id": "artificial-intelligence"
+  },
+  {
+    "source_program_id": "artificial-intelligence-and-data-analytics",
+    "source_program_name": "Artificial Intelligence and Data Analytics",
+    "canonical_program_id": "artificial-intelligence-and-data-analytics"
+  },
+  {
+    "source_program_id": "artificial-intelligence-and-data-engineering",
+    "source_program_name": "Artificial Intelligence and Data Engineering",
+    "canonical_program_id": "artificial-intelligence"
+  },
+  {
+    "source_program_id": "artificial-intelligence-and-data-science-for-dasa-non-ciwg",
+    "source_program_name": "Artificial Intelligence and Data Science for DASA Non CIWG",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "artificial-intelligence-and-machine-learning",
+    "source_program_name": "Artificial Intelligence and Machine Learning",
+    "canonical_program_id": "artificial-intelligence"
+  },
+  {
+    "source_program_id": "artificial-intelligence-data-science",
+    "source_program_name": "Artificial Intelligence and Data Science",
+    "canonical_program_id": "artificial-intelligence-data-science"
+  },
+  {
+    "source_program_id": "b-tech-and-m-tech-in-engineering-and-computational-mechanics-dual-degree",
+    "source_program_name": "B. Tech. and M. Tech. in Engineering and Computational Mechanics (Dual Degree)",
+    "canonical_program_id": "b-tech-and-m-tech-in-engineering-and-computational-mechanics-dual-degree"
+  },
+  {
+    "source_program_id": "b-tech-artificial-intelligence-and-data-science-mba-in-digital-business-management-iim-bodh-gaya",
+    "source_program_name": "B.Tech Artificial Intelligence and Data Science MBA in Digital Business Management IIM Bodh Gaya",
+    "canonical_program_id": "b-tech-artificial-intelligence-and-data-science-mba-in-digital-business-management-iim-bod"
+  },
+  {
+    "source_program_id": "b-tech-chemical-engineering-mba-in-hospital-and-health-care-management-iim-bodh-gaya",
+    "source_program_name": "B.Tech (Chemical Engineering) - MBA in Hospital and Health Care Management (IIM Bodh Gaya)",
+    "canonical_program_id": "b-tech-chemical-engineering-mba-in-hospital-and-health-care-management-iim-bodh-gaya"
+  },
+  {
+    "source_program_id": "b-tech-chemical-science-and-technology-mba-in-hospital-and-health-care-management-iim-bodh-gaya",
+    "source_program_name": "B.Tech Chemical Science and Technology MBA in Hospital and Health Care Management IIM Bodh Gaya",
+    "canonical_program_id": "b-tech-chemical-science-and-technology-mba-in-hospital-and-health-care-management-iim-bodh"
+  },
+  {
+    "source_program_id": "b-tech-civil-engineering-mba",
+    "source_program_name": "B.Tech. (Civil Engineering) - MBA",
+    "canonical_program_id": "b-tech-civil-engineering-mba"
+  },
+  {
+    "source_program_id": "b-tech-civil-engineering-mba-iim-bodh-gaya",
+    "source_program_name": "B.Tech (Civil Engineering) - MBA (IIM Bodh Gaya)",
+    "canonical_program_id": "b-tech-civil-engineering-mba-iim-bodh-gaya"
+  },
+  {
+    "source_program_id": "b-tech-computer-science-and-engineering-and-m-tech-computer-science-and-engineering-with-specialization-in-systems-design",
+    "source_program_name": "B.Tech Computer Science and Engineering and M.Tech Computer Science and Engineering with Specialization in Systems Design",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "b-tech-computer-science-and-engineering-mba",
+    "source_program_name": "B.Tech. (Computer Science and Engineering) - MBA",
+    "canonical_program_id": "b-tech-computer-science-and-engineering-mba"
+  },
+  {
+    "source_program_id": "b-tech-computer-science-and-engineering-mba-in-digital-business-management-iim-bodh-gaya",
+    "source_program_name": "B.Tech (Computer Science and Engineering) - MBA in Digital Business Management (IIM Bodh Gaya)",
+    "canonical_program_id": "b-tech-computer-science-and-engineering-mba-in-digital-business-management-iim-bodh-gaya"
+  },
+  {
+    "source_program_id": "b-tech-cse-and-m-tech-in-cse",
+    "source_program_name": "B. Tech. (CSE) and M.Tech in CSE",
+    "canonical_program_id": "b-tech-cse-and-m-tech-in-cse"
+  },
+  {
+    "source_program_id": "b-tech-ece-m-tech-in-vlsi",
+    "source_program_name": "B. Tech. (ECE) -M. Tech. in VLSI",
+    "canonical_program_id": "b-tech-ece-m-tech-in-vlsi"
+  },
+  {
+    "source_program_id": "b-tech-eee-m-tech-in-power-control",
+    "source_program_name": "B. Tech. (EEE)-M. Tech. in (Power &. Control)",
+    "canonical_program_id": "b-tech-eee-m-tech-in-power-control"
+  },
+  {
+    "source_program_id": "b-tech-electrical-and-electronics-engineering-mba-iim-bodh-gaya",
+    "source_program_name": "B.Tech (Electrical and Electronics Engineering) - MBA (IIM Bodh Gaya)",
+    "canonical_program_id": "b-tech-electrical-and-electronics-engineering-mba-iim-bodh-gaya"
+  },
+  {
+    "source_program_id": "b-tech-electronics-and-communication-engineering-and-m-tech-electronics-and-communication-engineering-with-specialization-in-communication-systems-design",
+    "source_program_name": "B.Tech Electronics and Communication Engineering and M.Tech Electronics and Communication Engineering with Specialization in Communication Systems Design",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "b-tech-electronics-and-communication-engineering-and-m-tech-electronics-and-communication-engineering-with-specialization-in-vlsi-design",
+    "source_program_name": "B.Tech Electronics and Communication Engineering and M.Tech Electronics and Communication Engineering with Specialization in VLSI Design",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "b-tech-electronics-and-communication-engineering-mba",
+    "source_program_name": "B.Tech. (Electronics and Communication Engineering) - MBA",
+    "canonical_program_id": "b-tech-electronics-and-communication-engineering-mba"
+  },
+  {
+    "source_program_id": "b-tech-electronics-and-communication-engineering-mba-in-hospital-and-healthcare-management-iim-bodh-gaya",
+    "source_program_name": "B.Tech Electronics and Communication Engineering MBA in Hospital and Healthcare Management IIM Bodh Gaya",
+    "canonical_program_id": "b-tech-electronics-and-communication-engineering-mba-in-hospital-and-healthcare-management"
+  },
+  {
+    "source_program_id": "b-tech-engineering-physics-mba-iim-bodh-gaya",
+    "source_program_name": "B.Tech (Engineering Physics) - MBA (IIM Bodh Gaya)",
+    "canonical_program_id": "b-tech-engineering-physics-mba-iim-bodh-gaya"
+  },
+  {
+    "source_program_id": "b-tech-food-engineering-and-technology-mba",
+    "source_program_name": "B.Tech. (Food Engineering and Technology) - MBA",
+    "canonical_program_id": "b-tech-food-engineering-and-technology-mba"
+  },
+  {
+    "source_program_id": "b-tech-in-artificial-intelligenece-and-data-science-transportation-and-logistics",
+    "source_program_name": "B.Tech in Artificial Intelligenece and Data Science Transportation and Logistics",
+    "canonical_program_id": "artificial-intelligence-data-science"
+  },
+  {
+    "source_program_id": "b-tech-in-aviation-engineering",
+    "source_program_name": "B.Tech in Aviation Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "b-tech-in-ce-m-tech-in-geotechnical-engineering",
+    "source_program_name": "B. Tech in CE. - M. Tech. in Geotechnical Engineering",
+    "canonical_program_id": "b-tech-in-ce-m-tech-in-geotechnical-engineering"
+  },
+  {
+    "source_program_id": "b-tech-in-ce-m-tech-in-structural-engineering",
+    "source_program_name": "B. Tech in CE. - M. Tech. in Structural Engineering",
+    "canonical_program_id": "b-tech-in-ce-m-tech-in-structural-engineering"
+  },
+  {
+    "source_program_id": "b-tech-in-civil-engineering-rail-engineering",
+    "source_program_name": "B.Tech in Civil Engineering (Rail Engineering)",
+    "canonical_program_id": "b-tech-in-civil-engineering-rail-engineering"
+  },
+  {
+    "source_program_id": "b-tech-in-cse-ai-and-ml",
+    "source_program_name": "B.Tech in CSE AI and ML",
+    "canonical_program_id": "cse-ai-ml"
+  },
+  {
+    "source_program_id": "b-tech-in-electrical-engineering-rail-engineering",
+    "source_program_name": "B.Tech in Electrical Engineering ( Rail Engineering)",
+    "canonical_program_id": "b-tech-in-electrical-engineering-rail-engineering"
+  },
+  {
+    "source_program_id": "b-tech-in-electronics-and-communication-engineering-and-m-tech-in-communication-systems",
+    "source_program_name": "B.Tech in Electronics and Communication Engineering and M.Tech in Communication Systems",
+    "canonical_program_id": "b-tech-in-electronicsand-communication-engineering-and-m-tech-in-communication-s"
+  },
+  {
+    "source_program_id": "b-tech-in-electronics-and-communication-engineering-and-m-tech-in-microelectronics-and-vlsi-systems",
+    "source_program_name": "B.Tech in Electronics and Communication Engineering and M.Tech in Microelectronics and VLSI Systems",
+    "canonical_program_id": "b-tech-in-electronics-and-communication-engineering-and-m-tech-in-microelectronics-and-vls"
+  },
+  {
+    "source_program_id": "b-tech-in-electronics-and-communication-engineering-and-m-tech-in-vlsi-design",
+    "source_program_name": "B.Tech in Electronics and Communication Engineering and M.Tech in VLSI Design",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "b-tech-in-electronics-and-communication-engineering-with-minor-in-wearable-electronics",
+    "source_program_name": "B. Tech in Electronics and Communication Engineering with minor in Wearable Electronics",
+    "canonical_program_id": "b-tech-in-electronics-and-communication-engineering-with-minor-in-wearable-electronics"
+  },
+  {
+    "source_program_id": "b-tech-in-electronics-communication-engineering-rail-engineering",
+    "source_program_name": "B.Tech in Electronics Communication Engineering Rail Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "b-tech-in-general-engineering",
+    "source_program_name": "B.Tech in General Engineering",
+    "canonical_program_id": "b-tech-in-general-engineering"
+  },
+  {
+    "source_program_id": "b-tech-in-materials-science-and-engineering",
+    "source_program_name": "B.Tech in Materials Science and Engineering",
+    "canonical_program_id": "b-tech-in-materials-science-and-engineering"
+  },
+  {
+    "source_program_id": "b-tech-in-mathematics-and-computing",
+    "source_program_name": "B.Tech in Mathematics and Computing",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "b-tech-in-mechanical-engineering-and-m-tech-in-ai-and-robotics",
+    "source_program_name": "B.Tech in Mechanical Engineering and M.Tech in AI and Robotics",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "b-tech-in-mechanical-engineering-rail-engineering",
+    "source_program_name": "B.Tech in Mechanical Engineering ( Rail Engineering)",
+    "canonical_program_id": "b-tech-in-mechanical-engineering-rail-engineering"
+  },
+  {
+    "source_program_id": "b-tech-in-microelectronics-vlsi",
+    "source_program_name": "B.Tech in Microelectronics & VLSI",
+    "canonical_program_id": "b-tech-in-microelectronics-vlsi"
+  },
+  {
+    "source_program_id": "b-tech-information-technology-and-mba-m-tech-information-technology",
+    "source_program_name": "B.Tech Information Technology and MBA M.Tech Information Technology",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "b-tech-mathematics-and-computing-mba-in-digital-business-management-iim-bodh-gaya",
+    "source_program_name": "B.Tech (Mathematics and Computing) - MBA in Digital Business Management (IIM Bodh Gaya)",
+    "canonical_program_id": "b-tech-mathematics-and-computing-mba-in-digital-business-management-iim-bodh-gaya"
+  },
+  {
+    "source_program_id": "b-tech-mathematics-computing-m-tech-in-mathematics-computing",
+    "source_program_name": "B. Tech. (Mathematics & Computing) M. Tech. in (Mathematics & Computing)",
+    "canonical_program_id": "b-tech-mathematics-computing-m-tech-in-mathematics-computing"
+  },
+  {
+    "source_program_id": "b-tech-me-m-tech-in-mechatronics",
+    "source_program_name": "B. Tech. (ME) - M. Tech. in Mechatronics",
+    "canonical_program_id": "b-tech-me-m-tech-in-mechatronics"
+  },
+  {
+    "source_program_id": "b-tech-me-mba-nitie",
+    "source_program_name": "B.Tech Me MBA NITIE",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "b-tech-mechanical-engineering-and-m-tech-in-mechanical-engineering-with-specialization-in-product-design",
+    "source_program_name": "B.Tech Mechanical Engineering and M.Tech in Mechanical Engineering with Specialization in Product Design",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "b-tech-mechanical-engineering-and-m-tech-mechanical-engineering-with-specialization-in-advanced-manufacturing",
+    "source_program_name": "B.Tech Mechanical Engineering and M.Tech Mechanical Engineering with Specialization in Advanced Manufacturing",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "b-tech-mechanical-engineering-mba",
+    "source_program_name": "B.Tech. (Mechanical Engineering) - MBA",
+    "canonical_program_id": "b-tech-mechanical-engineering-mba"
+  },
+  {
+    "source_program_id": "b-tech-mechanical-engineering-mba-iim-mumbai",
+    "source_program_name": "B.Tech (Mechanical Engineering) - MBA (IIM Mumbai)",
+    "canonical_program_id": "b-tech-mechanical-engineering-mba-iim-mumbai"
+  },
+  {
+    "source_program_id": "b-tech-metallurgical-and-materials-engineering-mba-iim-bodh-gaya",
+    "source_program_name": "B.Tech (Metallurgical and Materials Engineering) - MBA (IIM Bodh Gaya)",
+    "canonical_program_id": "b-tech-metallurgical-and-materials-engineering-mba-iim-bodh-gaya"
+  },
+  {
+    "source_program_id": "b-tech-mining-engineering-and-mba-in-logistic-and-supply-chain-management-iim-mumbai",
+    "source_program_name": "B.Tech Mining Engineering and MBA in Logistic and Supply Chain Management (IIM Mumbai)",
+    "canonical_program_id": "b-tech-mining-engineering-and-mba-in-logistic-and-supply-chain-management-iim-mumbai"
+  },
+  {
+    "source_program_id": "bachelor-of-design",
+    "source_program_name": "Bachelor of Design",
+    "canonical_program_id": "bachelor-of-design"
+  },
+  {
+    "source_program_id": "bio-engineering",
+    "source_program_name": "Bio Engineering",
+    "canonical_program_id": "bio-engineering"
+  },
+  {
+    "source_program_id": "biochemical-engineering",
+    "source_program_name": "Biochemical Engineering",
+    "canonical_program_id": "biochemical-engineering"
+  },
+  {
+    "source_program_id": "biochemical-engineering-and-biotechnology",
+    "source_program_name": "Biochemical Engineering and Biotechnology",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "biochemical-engineering-with-m-tech-in-biochemical-engineering-and-biotechnology",
+    "source_program_name": "Biochemical Engineering with M.Tech in Biochemical Engineering and Biotechnology",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "bioengineering",
+    "source_program_name": "Bioengineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "bioengineering-with-m-tech-in-biomedical-technology",
+    "source_program_name": "Bioengineering with M.Tech in Biomedical Technology",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "biological-engineering",
+    "source_program_name": "Biological Engineering",
+    "canonical_program_id": "biological-engineering"
+  },
+  {
+    "source_program_id": "biological-sciences-and-bioengineering",
+    "source_program_name": "Biological Sciences and Bioengineering",
+    "canonical_program_id": "biological-engineering"
+  },
+  {
+    "source_program_id": "biological-sciences-bs",
+    "source_program_name": "Biological Sciences",
+    "canonical_program_id": "biological-sciences-bs"
+  },
+  {
+    "source_program_id": "biomedical-engineering",
+    "source_program_name": "Biomedical Engineering",
+    "canonical_program_id": "biomedical-engineering"
+  },
+  {
+    "source_program_id": "biosciences-and-bioengineering",
+    "source_program_name": "Biosciences and Bioengineering",
+    "canonical_program_id": "biosciencesand-bioengineering"
+  },
+  {
+    "source_program_id": "biotechnology",
+    "source_program_name": "Biotechnology",
+    "canonical_program_id": "biotechnology"
+  },
+  {
+    "source_program_id": "biotechnology-and-biochemical-engineering",
+    "source_program_name": "Biotechnology and Biochemical Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "biotechnology-and-bioinformatics",
+    "source_program_name": "Biotechnology and Bioinformatics",
+    "canonical_program_id": "biotechnology-and-bioinformatics"
+  },
+  {
+    "source_program_id": "bs-in-chemical-sciences",
+    "source_program_name": "BS in Chemical Sciences",
+    "canonical_program_id": "bs-in-chemical-sciences"
+  },
+  {
+    "source_program_id": "bs-in-economics-with-mba-iim-bodh-gaya",
+    "source_program_name": "BS in Economics with MBA (IIM Bodh Gaya)",
+    "canonical_program_id": "bs-in-economics-with-mba-iim-bodh-gaya"
+  },
+  {
+    "source_program_id": "bs-in-mathematics",
+    "source_program_name": "BS in Mathematics",
+    "canonical_program_id": "bs-in-mathematics"
+  },
+  {
+    "source_program_id": "carpet-and-textile-technology",
+    "source_program_name": "Carpet and Textile Technology",
+    "canonical_program_id": "textile-technology"
+  },
+  {
+    "source_program_id": "ceramic-engineering",
+    "source_program_name": "Ceramic Engineering",
+    "canonical_program_id": "ceramic-engineering"
+  },
+  {
+    "source_program_id": "ceramic-engineering-and-m-tech-industrial-ceramic",
+    "source_program_name": "Ceramic Engineering and M.Tech Industrial Ceramic",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "chemical",
+    "source_program_name": "Chemical Engineering",
+    "canonical_program_id": "chemical"
+  },
+  {
+    "source_program_id": "chemical-and-biochemical-engineering",
+    "source_program_name": "Chemical and Biochemical Engineering",
+    "canonical_program_id": "chemical-and-biochemical-engineering"
+  },
+  {
+    "source_program_id": "chemical-engineering-plastic-and-polymer",
+    "source_program_name": "Chemical Engineering Plastic and Polymer",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "chemical-science",
+    "source_program_name": "Chemical Science",
+    "canonical_program_id": "chemical-science"
+  },
+  {
+    "source_program_id": "chemical-science-and-technology",
+    "source_program_name": "Chemical Science and Technology",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "chemical-technology",
+    "source_program_name": "Chemical Technology",
+    "canonical_program_id": "chemical"
+  },
+  {
+    "source_program_id": "chemistry-bs",
+    "source_program_name": "Chemistry",
+    "canonical_program_id": "chemistry-bs"
+  },
+  {
+    "source_program_id": "chemistry-with-specialization",
+    "source_program_name": "Chemistry with Specialization",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "civil",
+    "source_program_name": "Civil Engineering",
+    "canonical_program_id": "civil"
+  },
+  {
+    "source_program_id": "civil-and-environmental-engineering",
+    "source_program_name": "Civil and Environmental Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "civil-construction-management-dual",
+    "source_program_name": "Civil Engineering with Specialization in Construction Technology and Management",
+    "canonical_program_id": "civil-construction-management-dual"
+  },
+  {
+    "source_program_id": "civil-engineering-and-m-tech-in-environmental-engineering",
+    "source_program_name": "Civil Engineering and M.Tech in Environmental Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "civil-engineering-and-m-tech-in-structural-engineering",
+    "source_program_name": "Civil Engineering and M.Tech in Structural Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "civil-engineering-and-m-tech-in-transportation-engineering",
+    "source_program_name": "Civil Engineering and M.Tech in Transportation Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "civil-engineering-and-m-tech-in-water-resources",
+    "source_program_name": "Civil Engineering and M.Tech in Water Resources",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "civil-engineering-with-any-of-the-listed-specialization",
+    "source_program_name": "Civil Engineering with any of the Listed Specialization",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "civil-engineering-with-m-tech-in-structural-engineering",
+    "source_program_name": "Civil Engineering with M.Tech in Structural Engineering",
+    "canonical_program_id": "civil-structural-dual"
+  },
+  {
+    "source_program_id": "civil-infrastructure-engineering",
+    "source_program_name": "Civil and Infrastructure Engineering",
+    "canonical_program_id": "civil-infrastructure-engineering"
+  },
+  {
+    "source_program_id": "computational-data-science",
+    "source_program_name": "Computational and Data Science",
+    "canonical_program_id": "computational-data-science"
+  },
+  {
+    "source_program_id": "computational-engineering",
+    "source_program_name": "Computational Engineering",
+    "canonical_program_id": "computational-engineering"
+  },
+  {
+    "source_program_id": "computational-engineering-and-mechanics",
+    "source_program_name": "Computational Engineering and Mechanics",
+    "canonical_program_id": "computational-engineering-and-mechanics"
+  },
+  {
+    "source_program_id": "computational-mathematics",
+    "source_program_name": "Computational Mathematics",
+    "canonical_program_id": "mathematics-bs"
+  },
+  {
+    "source_program_id": "computer-engineering",
+    "source_program_name": "Computer Engineering",
+    "canonical_program_id": "computer-science"
+  },
+  {
+    "source_program_id": "computer-science",
+    "source_program_name": "Computer Science and Engineering",
+    "canonical_program_id": "computer-science"
+  },
+  {
+    "source_program_id": "computer-science-and-artificial-intelligence",
+    "source_program_name": "Computer Science and Artificial Intelligence",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "computer-science-and-business",
+    "source_program_name": "Computer Science and Business",
+    "canonical_program_id": "computer-scienceand-business"
+  },
+  {
+    "source_program_id": "computer-science-and-engineering-and-m-tech-computer-science",
+    "source_program_name": "Computer Science and Engineering and M.Tech Computer Science",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "computer-science-and-engineering-and-m-tech-in-information-security",
+    "source_program_name": "Computer Science and Engineering and M.Tech in Information Security",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "computer-science-and-engineering-artificial-intelligence",
+    "source_program_name": "Computer Science and Engineering (Artificial Intelligence)",
+    "canonical_program_id": "computer-science-and-engineering-artificial-intelligence"
+  },
+  {
+    "source_program_id": "computer-science-and-engineering-artificial-intelligence-and-machine-learning",
+    "source_program_name": "Computer Science and Engineering (Artificial Intelligence and Machine Learning)",
+    "canonical_program_id": "computer-science-and-engineering-artificial-intelligence-and-machine-learning"
+  },
+  {
+    "source_program_id": "computer-science-and-engineering-artificial-intelligence-data-science",
+    "source_program_name": "Computer Science and Engineering ( Artificial Intelligence & Data Science)",
+    "canonical_program_id": "computer-science-and-engineering-artificial-intelligence-data-science"
+  },
+  {
+    "source_program_id": "computer-science-and-engineering-cyber-physical-system",
+    "source_program_name": "Computer Science and Engineering (Cyber Physical System)",
+    "canonical_program_id": "computer-science-and-engineering-cyber-physical-system"
+  },
+  {
+    "source_program_id": "computer-science-and-engineering-cyber-security",
+    "source_program_name": "Computer Science and Engineering Cyber Security",
+    "canonical_program_id": "computer-scienceand-engineering-cyber-security"
+  },
+  {
+    "source_program_id": "computer-science-and-engineering-data-science",
+    "source_program_name": "Computer Science and Engineering Data Science",
+    "canonical_program_id": "computer-scienceand-engineering-data-science"
+  },
+  {
+    "source_program_id": "computer-science-and-engineering-for-dasa-ciwg",
+    "source_program_name": "Computer Science and Engineering for DASA CIWG",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "computer-science-and-engineering-for-dasa-non-ciwg",
+    "source_program_name": "Computer Science and Engineering for DASA Non CIWG",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "computer-science-and-engineering-internet-of-things-cyber-security-including-block-chain-technology",
+    "source_program_name": "Computer Science and Engineering Internet of Things Cyber Security Including Block Chain Technology",
+    "canonical_program_id": "computer-science-and-engineering-internet-of-things-cyber-security-including-block-chain-t"
+  },
+  {
+    "source_program_id": "computer-science-and-engineering-with-major-in-artificial-intelligence",
+    "source_program_name": "Computer Science and Engineering with Major in Artificial Intelligence",
+    "canonical_program_id": "computer-science-and-engineering-with-major-in-artificial-intelligence"
+  },
+  {
+    "source_program_id": "computer-science-and-engineering-with-major-in-artificial-intelligence-for-dasa-ciwg",
+    "source_program_name": "Computer Science and Engineering with Major in Artificial Intelligence for DASA CIWG",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "computer-science-and-engineering-with-minor-in-ai-and-ml",
+    "source_program_name": "Computer Science and Engineering with minor in AI and ML",
+    "canonical_program_id": "computer-science-and-engineering-with-minor-in-ai-and-ml"
+  },
+  {
+    "source_program_id": "computer-science-and-engineering-with-specialization-in-artificial-intelligence-and-data-science",
+    "source_program_name": "Computer Science and Engineering with Specialization in Artificial Intelligence and Data Science",
+    "canonical_program_id": "computer-science-and-engineering-with-specialization-in-artificial-intelligence-and-data-s"
+  },
+  {
+    "source_program_id": "computer-science-and-engineering-with-specialization-in-cyber-security",
+    "source_program_name": "Computer Science and Engineering with Specialization in Cyber Security",
+    "canonical_program_id": "computer-science-and-engineering-with-specialization-in-cyber-security"
+  },
+  {
+    "source_program_id": "computer-science-and-engineering-with-specialization-in-data-science",
+    "source_program_name": "Computer Science and Engineering with Specialization in Data Science",
+    "canonical_program_id": "computer-science-and-engineering-with-specialization-in-data-science"
+  },
+  {
+    "source_program_id": "computer-science-and-engineering-with-specialization-in-quantum-technologies",
+    "source_program_name": "Computer Science and Engineering with specialization in Quantum Technologies",
+    "canonical_program_id": "computer-science-and-engineering-with-specialization-in-quantum-technologies"
+  },
+  {
+    "source_program_id": "computer-science-and-engineering-with-specialization-of-data-science-and-artificial-intelligence",
+    "source_program_name": "Computer Science and Engineering with Specialization of Data Science and Artificial Intelligence",
+    "canonical_program_id": "computer-science-and-engineering-with-specialization-of-data-science-and-artificial-intell"
+  },
+  {
+    "source_program_id": "computer-science-and-technology",
+    "source_program_name": "Computer Science and Technology",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "computer-science-engineering-artificial-intelligence",
+    "source_program_name": "Computer Science Engineering Artificial Intelligence",
+    "canonical_program_id": "computer-science"
+  },
+  {
+    "source_program_id": "computer-science-engineering-artificial-lntelligence-and-machine-learning",
+    "source_program_name": "Computer Science Engineering Artificial Intelligence and Machine Learning",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "computer-science-engineering-data-science",
+    "source_program_name": "Computer Science Engineering Data Science",
+    "canonical_program_id": "computer-science"
+  },
+  {
+    "source_program_id": "computer-science-engineering-data-science-and-analytics",
+    "source_program_name": "Computer Science & Engineering (Data Science and Analytics)",
+    "canonical_program_id": "computer-science-engineering-data-science-and-analytics"
+  },
+  {
+    "source_program_id": "computer-science-engineering-human-computer-lnteraction-and-gaming-technology",
+    "source_program_name": "Computer Science Engineering (Human Computer lnteraction and Gaming Technology)",
+    "canonical_program_id": "computer-science-engineering-human-computer-lnteraction-and-gaming-technology"
+  },
+  {
+    "source_program_id": "cse-data-science-analytics",
+    "source_program_name": "CSE (Data Science & Analytics)",
+    "canonical_program_id": "cse-data-science-analytics"
+  },
+  {
+    "source_program_id": "dairy-engineering",
+    "source_program_name": "Dairy Engineering",
+    "canonical_program_id": "dairy-engineering"
+  },
+  {
+    "source_program_id": "data-science-ai",
+    "source_program_name": "Data Science and Artificial Intelligence",
+    "canonical_program_id": "data-science-ai"
+  },
+  {
+    "source_program_id": "data-science-and-engineering",
+    "source_program_name": "Data Science and Engineering",
+    "canonical_program_id": "data-scienceand-engineering"
+  },
+  {
+    "source_program_id": "data-science-and-engineering-for-dasa-ciwg",
+    "source_program_name": "Data Science and Engineering for DASA CIWG",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "design",
+    "source_program_name": "Design",
+    "canonical_program_id": "design"
+  },
+  {
+    "source_program_id": "design-engineering",
+    "source_program_name": "Design Engineering",
+    "canonical_program_id": "engineering-design"
+  },
+  {
+    "source_program_id": "digital-agriculture",
+    "source_program_name": "Digital Agriculture",
+    "canonical_program_id": "digital-agriculture"
+  },
+  {
+    "source_program_id": "earth-sciences",
+    "source_program_name": "Earth Sciences",
+    "canonical_program_id": "earth-sciences"
+  },
+  {
+    "source_program_id": "economics-bs",
+    "source_program_name": "Economics",
+    "canonical_program_id": "economics-bs"
+  },
+  {
+    "source_program_id": "electrical",
+    "source_program_name": "Electrical Engineering",
+    "canonical_program_id": "electrical"
+  },
+  {
+    "source_program_id": "electrical-and-electronics-engineering",
+    "source_program_name": "Electrical and Electronics Engineering",
+    "canonical_program_id": "electricaland-electronics"
+  },
+  {
+    "source_program_id": "electrical-and-electronics-engineering-for-dasa-ciwg",
+    "source_program_name": "Electrical and Electronics Engineering for DASA CIWG",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electrical-and-electronics-engineering-for-dasa-non-ciwg",
+    "source_program_name": "Electrical and Electronics Engineering for DASA Non CIWG",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electrical-and-instrumentation-engineering",
+    "source_program_name": "Electrical and Instrumentation Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electrical-engineering-and-m-tech-control-and-automation",
+    "source_program_name": "Electrical Engineering and M.Tech Control and Automation",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electrical-engineering-and-m-tech-electronic-systems-and-communications",
+    "source_program_name": "Electrical Engineering and M.Tech Electronic Systems and Communications",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electrical-engineering-and-m-tech-power-electronics-and-drives",
+    "source_program_name": "Electrical Engineering and M.Tech Power Electronics and Drives",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electrical-engineering-for-dasa-ciwg",
+    "source_program_name": "Electrical Engineering for DASA CIWG",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electrical-engineering-ic-design-and-technology",
+    "source_program_name": "Electrical Engineering (IC Design and Technology)",
+    "canonical_program_id": "electrical-engineering-ic-design-and-technology"
+  },
+  {
+    "source_program_id": "electrical-engineering-integrated-circuit-design-and-technology",
+    "source_program_name": "Electrical Engineering (Integrated Circuit Design and Technology)",
+    "canonical_program_id": "electrical-engineering-integrated-circuit-design-and-technology"
+  },
+  {
+    "source_program_id": "electrical-engineering-power-and-automation",
+    "source_program_name": "Electrical Engineering (Power and Automation)",
+    "canonical_program_id": "electrical-engineering-power-and-automation"
+  },
+  {
+    "source_program_id": "electrical-engineering-with-m-tech-in-any-of-the-listed-specializations",
+    "source_program_name": "Electrical Engineering with M.Tech in any of the Listed Specializations",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electrical-engineering-with-m-tech-in-communications-and-signal-processing",
+    "source_program_name": "Electrical Engineering with M.Tech in Communications and Signal Processing",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electrical-engineering-with-m-tech-in-microelectronics",
+    "source_program_name": "Electrical Engineering with M.Tech in Microelectronics",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electrical-engineering-with-m-tech-in-power-electronics",
+    "source_program_name": "Electrical Engineering with M.Tech in Power Electronics",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electrical-engineering-with-specialization-in-power-system-engineering",
+    "source_program_name": "Electrical Engineering with Specialization In Power System Engineering",
+    "canonical_program_id": "electrical-engineering-with-specialization-in-power-system-engineering"
+  },
+  {
+    "source_program_id": "electrical-mba-dual",
+    "source_program_name": "B.Tech. Electrical Engineering with MBA",
+    "canonical_program_id": "electrical-mba-dual"
+  },
+  {
+    "source_program_id": "electronics-and-communication-engineering-and-m-tech-bio-medical-engineering",
+    "source_program_name": "Electronics and Communication Engineering and M.Tech Bio Medical Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electronics-and-communication-engineering-and-m-tech-communication-and-network",
+    "source_program_name": "Electronics and Communication Engineering and M.Tech Communication and Network",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electronics-and-communication-engineering-and-m-tech-ece-spl-micro-electronics",
+    "source_program_name": "Electronics and Communication Engineering and M.Tech ECE Specialization Micro Electronics",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electronics-and-communication-engineering-and-mba-information-technology",
+    "source_program_name": "Electronics and Communication Engineering and MBA Information Technology",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electronics-and-communication-engineering-avionics",
+    "source_program_name": "Electronics and Communication Engineering (Avionics)",
+    "canonical_program_id": "electronics-and-communication-engineering-avionics"
+  },
+  {
+    "source_program_id": "electronics-and-communication-engineering-design-and-manufacturing",
+    "source_program_name": "Electronics and Communication Engineering Design and Manufacturing",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electronics-and-communication-engineering-design-and-manufacturing-m-tech-signal-processing-communication-system-design",
+    "source_program_name": "Electronics and Communication Engineering Design and Manufacturing M.Tech Signal Processing Communication System Design",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electronics-and-communication-engineering-design-and-manufacturing-m-tech-vlsi-electronic-system-design",
+    "source_program_name": "Electronics and Communication Engineering Design and Manufacturing M.Tech VLSI Electronic System Design",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electronics-and-communication-engineering-for-dasa-ciwg",
+    "source_program_name": "Electronics and Communication Engineering for DASA CIWG",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electronics-and-communication-engineering-for-dasa-non-ciwg",
+    "source_program_name": "Electronics and Communication Engineering for DASA Non CIWG",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electronics-and-communication-engineering-internet-of-things",
+    "source_program_name": "Electronics and Communication Engineering (Internet of Things)",
+    "canonical_program_id": "electronics-and-communication-engineering-internet-of-things"
+  },
+  {
+    "source_program_id": "electronics-and-communication-engineering-under-flexible-academic-program",
+    "source_program_name": "Electronics and Communication Engineering under Flexible Academic Program",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electronics-and-communication-engineering-vlsi-design",
+    "source_program_name": "Electronics and Communication Engineering (VLSI Design)",
+    "canonical_program_id": "electronics-and-communication-engineering-vlsi-design"
+  },
+  {
+    "source_program_id": "electronics-and-communication-engineering-vlsi-design-and-technology",
+    "source_program_name": "Electronics and Communication Engineering (VLSI Design and Technology)",
+    "canonical_program_id": "electronics-and-communication-engineering-vlsi-design-and-technology"
+  },
+  {
+    "source_program_id": "electronics-and-communication-engineering-with-specialization-in-design-and-manufacturing",
+    "source_program_name": "Electronics and Communication Engineering with specialization in Design and Manufacturing",
+    "canonical_program_id": "electronics-and-communication-engineering-with-specialization-in-design-and-manufacturing"
+  },
+  {
+    "source_program_id": "electronics-and-communication-engineering-with-specialization-in-design-and-manufacturing-m-tech-signal-processing-and-communication-systems-design",
+    "source_program_name": "Electronics and Communication Engineering with Specialization in Design and Manufacturing M.Tech Signal Processing and Communication Systems Design",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electronics-and-communication-engineering-with-specialization-in-design-and-manufacturing-m-tech-vlsi-and-electronic-systems-design",
+    "source_program_name": "Electronics and Communication Engineering with Specialization in Design and Manufacturing M.Tech VLSI and Electronic Systems Design",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electronics-and-communication-engineering-with-specialization-in-microelectronics-and-vlsi-system-design",
+    "source_program_name": "Electronics and Communication Engineering with Specialization in Microelectronics and VLSI System Design",
+    "canonical_program_id": "electronics-and-communication-engineering-with-specialization-in-microelectronics-and-vlsi"
+  },
+  {
+    "source_program_id": "electronics-and-communication-engineering-with-specialization-in-vlsi-and-embedded-systems",
+    "source_program_name": "Electronics and Communication Engineering with specialization in VLSI and Embedded Systems",
+    "canonical_program_id": "electronics-and-communication-engineering-with-specialization-in-vlsi-and-embedded-systems"
+  },
+  {
+    "source_program_id": "electronics-and-communication-engineering-with-specialization-of-embedded-systems-and-internet-of-things",
+    "source_program_name": "Electronics and Communication Engineering with Specialization of Embedded Systems and Internet of Things",
+    "canonical_program_id": "electronics-and-communication-engineering-with-specialization-of-embedded-systems-and-inte"
+  },
+  {
+    "source_program_id": "electronics-and-electrical-communication-engineering",
+    "source_program_name": "Electronics and Electrical Communication Engineering",
+    "canonical_program_id": "electronics-communication"
+  },
+  {
+    "source_program_id": "electronics-and-electrical-communication-engineering-with-m-tech-in-any-of-the-listed-specializations",
+    "source_program_name": "Electronics and Electrical Communication Engineering with M.Tech in any of the Listed Specializations",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electronics-and-electrical-engineering",
+    "source_program_name": "Electronics and Electrical Engineering",
+    "canonical_program_id": "electricaland-electronics"
+  },
+  {
+    "source_program_id": "electronics-and-instrumentation-engineering-and-m-tech-vlsi-design-and-embedded",
+    "source_program_name": "Electronics and Instrumentation Engineering and M.Tech VLSI Design and Embedded",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "electronics-communication",
+    "source_program_name": "Electronics and Communication Engineering",
+    "canonical_program_id": "electronics-communication"
+  },
+  {
+    "source_program_id": "electronics-engineering",
+    "source_program_name": "Electronics Engineering",
+    "canonical_program_id": "electronics-engineering"
+  },
+  {
+    "source_program_id": "electronics-engineering-vlsi-design-and-technology",
+    "source_program_name": "Electronics Engineering (VLSI Design and Technology)",
+    "canonical_program_id": "electronics-engineering-vlsi-design-and-technology"
+  },
+  {
+    "source_program_id": "electronics-instrumentation",
+    "source_program_name": "Electronics and Instrumentation Engineering",
+    "canonical_program_id": "electronics-instrumentation"
+  },
+  {
+    "source_program_id": "electronics-system-engineering",
+    "source_program_name": "Electronics System Engineering",
+    "canonical_program_id": "electronics-engineering"
+  },
+  {
+    "source_program_id": "electronics-vlsi",
+    "source_program_name": "Electronics and VLSI Engineering",
+    "canonical_program_id": "electronics-vlsi"
+  },
+  {
+    "source_program_id": "energy-and-electrical-vehicle-engineering",
+    "source_program_name": "Energy and Electrical Vehicle Engineering",
+    "canonical_program_id": "energy-and-electrical-vehicle-engineering"
+  },
+  {
+    "source_program_id": "energy-engineering",
+    "source_program_name": "Energy Engineering",
+    "canonical_program_id": "energy-engineering"
+  },
+  {
+    "source_program_id": "energy-engineering-with-m-tech-in-energy-systems-engineering",
+    "source_program_name": "Energy Engineering with M.Tech in Energy Systems Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "engineering-computational-mechanics-dual",
+    "source_program_name": "Engineering and Computational Mechanics",
+    "canonical_program_id": "engineering-computational-mechanics-dual"
+  },
+  {
+    "source_program_id": "engineering-design",
+    "source_program_name": "Engineering Design",
+    "canonical_program_id": "engineering-design"
+  },
+  {
+    "source_program_id": "engineering-physics",
+    "source_program_name": "Engineering Physics",
+    "canonical_program_id": "engineering-physics"
+  },
+  {
+    "source_program_id": "engineering-physics-and-m-tech-with-specialization-in-nano-science",
+    "source_program_name": "Engineering Physics and M.Tech with Specialization in Nano Science",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "engineering-science",
+    "source_program_name": "Engineering Science",
+    "canonical_program_id": "engineering-science"
+  },
+  {
+    "source_program_id": "environmental-engineering",
+    "source_program_name": "Environmental Engineering",
+    "canonical_program_id": "environmental-engineering"
+  },
+  {
+    "source_program_id": "environmental-science-and-engineering",
+    "source_program_name": "Environmental Science and Engineering",
+    "canonical_program_id": "environmental-science-and-engineering"
+  },
+  {
+    "source_program_id": "exploration-geophysics",
+    "source_program_name": "Exploration Geophysics",
+    "canonical_program_id": "exploration-geophysics"
+  },
+  {
+    "source_program_id": "fashion-apparel-engineering",
+    "source_program_name": "Fashion and Apparel Engineering",
+    "canonical_program_id": "fashion-apparel-engineering"
+  },
+  {
+    "source_program_id": "food-engineering-technology",
+    "source_program_name": "Food Engineering and Technology",
+    "canonical_program_id": "food-engineering-technology"
+  },
+  {
+    "source_program_id": "food-process-engineering",
+    "source_program_name": "Food Process Engineering",
+    "canonical_program_id": "food-process-engineering"
+  },
+  {
+    "source_program_id": "food-technology",
+    "source_program_name": "Food Technology",
+    "canonical_program_id": "food-technology"
+  },
+  {
+    "source_program_id": "food-technology-management",
+    "source_program_name": "Food Technology and Management",
+    "canonical_program_id": "food-technology-management"
+  },
+  {
+    "source_program_id": "geological-technology",
+    "source_program_name": "Geological Technology",
+    "canonical_program_id": "geological-technology"
+  },
+  {
+    "source_program_id": "geophysical-technology",
+    "source_program_name": "Geophysical Technology",
+    "canonical_program_id": "geophysical-technology"
+  },
+  {
+    "source_program_id": "handloom-and-textile-technology",
+    "source_program_name": "Handloom and Textile Technology",
+    "canonical_program_id": "textile-technology"
+  },
+  {
+    "source_program_id": "industrial-and-production-engineering",
+    "source_program_name": "Industrial and Production Engineering",
+    "canonical_program_id": "industrialand-production"
+  },
+  {
+    "source_program_id": "industrial-and-systems-engineering-with-m-tech-in-industrial-and-systems-engineering-and-management",
+    "source_program_name": "Industrial and Systems Engineering with M.Tech in Industrial and Systems Engineering and Management",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "industrial-chemistry-dual",
+    "source_program_name": "Industrial Chemistry",
+    "canonical_program_id": "industrial-chemistry-dual"
+  },
+  {
+    "source_program_id": "industrial-design",
+    "source_program_name": "Industrial Design",
+    "canonical_program_id": "industrial-design"
+  },
+  {
+    "source_program_id": "industrial-engineering-and-operations-research",
+    "source_program_name": "Industrial Engineering and Operations Research",
+    "canonical_program_id": "industrial-engineering-and-operations-research"
+  },
+  {
+    "source_program_id": "industrial-iot",
+    "source_program_name": "Industrial Internet of Things",
+    "canonical_program_id": "industrial-iot"
+  },
+  {
+    "source_program_id": "industrial-systems-engineering",
+    "source_program_name": "Industrial and Systems Engineering",
+    "canonical_program_id": "industrial-systems-engineering"
+  },
+  {
+    "source_program_id": "information-technology",
+    "source_program_name": "Information Technology",
+    "canonical_program_id": "information-technology"
+  },
+  {
+    "source_program_id": "information-technology-and-m-tech-information-technology-spl-bio-informatics",
+    "source_program_name": "Information Technology and M.Tech Information Technology Specialization Bioinformatics",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "information-technology-and-m-tech-information-technology-spl-cyber-law-and-information-security",
+    "source_program_name": "Information Technology and M.Tech Information Technology Specialization Cyber Law and Information Security",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "information-technology-and-m-tech-information-technology-spl-human-computer-interaction",
+    "source_program_name": "Information Technology and M.Tech Information Technology Specialization Human Computer Interaction",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "information-technology-and-m-tech-information-technology-spl-intellegent-system",
+    "source_program_name": "Information Technology and M.Tech Information Technology Specialization Intelligent System",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "information-technology-and-m-tech-information-technology-spl-robotics",
+    "source_program_name": "Information Technology and M.Tech Information Technology Specialization Robotics",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "information-technology-and-m-tech-information-technology-spl-software-engineering",
+    "source_program_name": "Information Technology and M.Tech Information Technology Specialization Software Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "information-technology-and-m-tech-information-technology-spl-wireless-communication-engineering",
+    "source_program_name": "Information Technology and M.Tech Information Technology Specialization Wireless Communication Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "information-technology-and-mba-information-technology",
+    "source_program_name": "Information Technology and MBA Information Technology",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "information-technology-business-informatics",
+    "source_program_name": "Information Technology Business Informatics",
+    "canonical_program_id": "information-technology"
+  },
+  {
+    "source_program_id": "information-technology-for-dasa-ciwg",
+    "source_program_name": "Information Technology for DASA CIWG",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "information-technology-for-dasa-non-ciwg",
+    "source_program_name": "Information Technology for DASA Non CIWG",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "information-technology-under-flexible-academic-program",
+    "source_program_name": "Information Technology under Flexible Academic Program",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "instrumentation-and-biomedical-engineering",
+    "source_program_name": "Instrumentation and Biomedical Engineering",
+    "canonical_program_id": "instrumentation-and-biomedical-engineering"
+  },
+  {
+    "source_program_id": "instrumentation-control",
+    "source_program_name": "Instrumentation and Control Engineering",
+    "canonical_program_id": "instrumentation-control"
+  },
+  {
+    "source_program_id": "instrumentation-engineering",
+    "source_program_name": "Instrumentation Engineering",
+    "canonical_program_id": "instrumentation-engineering"
+  },
+  {
+    "source_program_id": "integrated-b-tech-it-and-m-tech-it",
+    "source_program_name": "Integrated B.Tech IT and M.Tech IT",
+    "canonical_program_id": "integrated-it-mtech"
+  },
+  {
+    "source_program_id": "integrated-b-tech-it-and-m-tech-it-for-dasa-ciwg",
+    "source_program_name": "Integrated B.Tech IT and M.Tech IT for DASA CIWG",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "integrated-b-tech-it-and-mba",
+    "source_program_name": "Integrated B.Tech IT and MBA",
+    "canonical_program_id": "integrated-it-mba"
+  },
+  {
+    "source_program_id": "integrated-b-tech-it-and-mba-for-dasa-ciwg",
+    "source_program_name": "Integrated B.Tech IT and MBA for DASA CIWG",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "integrated-b-tech-m-tech-in-civil-engineering",
+    "source_program_name": "Integrated B.Tech M.Tech in Civil Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "integrated-b-tech-m-tech-in-computer-science-engineering",
+    "source_program_name": "Integrated B.Tech M.Tech in Computer Science Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "integrated-b-tech-m-tech-in-electrical-engineering",
+    "source_program_name": "Integrated B.Tech M.Tech in Electrical Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "integrated-b-tech-m-tech-in-metallurgical-materials-engineering",
+    "source_program_name": "Integrated B.Tech M.Tech in Metallurgical Materials Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "integrated-circuit-design-technology",
+    "source_program_name": "Integrated Circuit Design & Technology",
+    "canonical_program_id": "integrated-circuit-design-technology"
+  },
+  {
+    "source_program_id": "interdisciplinary-sciences",
+    "source_program_name": "Interdisciplinary Sciences",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "life-science-msc",
+    "source_program_name": "Life Science",
+    "canonical_program_id": "life-science-msc"
+  },
+  {
+    "source_program_id": "manufacturing-engineering",
+    "source_program_name": "Manufacturing Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "manufacturing-science-and-engineering-with-m-tech-in-industrial-and-systems-engineering-and-management",
+    "source_program_name": "Manufacturing Science and Engineering with M.Tech in Industrial and Systems Engineering and Management",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "manufacturing-science-engineering",
+    "source_program_name": "Manufacturing Science and Engineering",
+    "canonical_program_id": "manufacturing-science-engineering"
+  },
+  {
+    "source_program_id": "material-science",
+    "source_program_name": "Material Science",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "materials-and-metallurgical-engineering",
+    "source_program_name": "Materials and Metallurgical Engineering",
+    "canonical_program_id": "metallurgical-materials"
+  },
+  {
+    "source_program_id": "materials-science-and-metallurgical-engineering",
+    "source_program_name": "Materials Science and Metallurgical Engineering",
+    "canonical_program_id": "materials-scienceand-metallurgical"
+  },
+  {
+    "source_program_id": "materials-science-engineering",
+    "source_program_name": "Materials Science and Engineering",
+    "canonical_program_id": "materials-science-engineering"
+  },
+  {
+    "source_program_id": "materials-science-technology",
+    "source_program_name": "Materials Science and Technology",
+    "canonical_program_id": "materials-science-technology"
+  },
+  {
+    "source_program_id": "mathematics-and-computing-technology",
+    "source_program_name": "Mathematics and Computing Technology",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mathematics-and-data-science",
+    "source_program_name": "Mathematics and Data Science",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mathematics-and-scientific-computing",
+    "source_program_name": "Mathematics and Scientific Computing",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mathematics-and-scientific-computing-for-dasa-ciwg",
+    "source_program_name": "Mathematics and Scientific Computing for DASA CIWG",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mathematics-bs",
+    "source_program_name": "Mathematics",
+    "canonical_program_id": "mathematics-bs"
+  },
+  {
+    "source_program_id": "mathematics-computing",
+    "source_program_name": "Mathematics and Computing",
+    "canonical_program_id": "mathematics-computing"
+  },
+  {
+    "source_program_id": "mechanical",
+    "source_program_name": "Mechanical Engineering",
+    "canonical_program_id": "mechanical"
+  },
+  {
+    "source_program_id": "mechanical-engineering-and-m-tech-in-computer-integrated-manufacturing",
+    "source_program_name": "Mechanical Engineering and M.Tech in Computer Integrated Manufacturing",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mechanical-engineering-and-m-tech-in-mechanical-system-design",
+    "source_program_name": "Mechanical Engineering and M.Tech in Mechanical System Design",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mechanical-engineering-and-m-tech-in-thermal-science-engineering",
+    "source_program_name": "Mechanical Engineering and M.Tech in Thermal Science Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mechanical-engineering-and-m-tech-mechatronics-and-automation",
+    "source_program_name": "Mechanical Engineering and M.Tech Mechatronics and Automation",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mechanical-engineering-d-and-m-and-m-tech-advanced-manufacturing",
+    "source_program_name": "Mechanical Engineering D and M and M.Tech Advanced Manufacturing",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mechanical-engineering-d-and-m-and-m-tech-product-design",
+    "source_program_name": "Mechanical Engineering D and M and M.Tech Product Design",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mechanical-engineering-design-and-manufacturing",
+    "source_program_name": "Mechanical Engineering Design and Manufacturing",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mechanical-engineering-for-dasa-ciwg",
+    "source_program_name": "Mechanical Engineering for DASA CIWG",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mechanical-engineering-for-dasa-non-ciwg",
+    "source_program_name": "Mechanical Engineering for DASA Non CIWG",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mechanical-engineering-manuacturing-engineering",
+    "source_program_name": "Mechanical Engineering Manuacturing Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mechanical-engineering-welding-technology",
+    "source_program_name": "Mechanical Engineering Welding Technology",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mechanical-engineering-with-m-tech-in-any-of-the-listed-specializations",
+    "source_program_name": "Mechanical Engineering with M.Tech in any of the Listed Specializations",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mechanical-engineering-with-m-tech-in-manufacturing-engineering",
+    "source_program_name": "Mechanical Engineering with M.Tech in Manufacturing Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mechanical-engineering-with-specialization-in-design-and-manufacturing",
+    "source_program_name": "Mechanical Engineering with specialization in Design and Manufacturing",
+    "canonical_program_id": "mechanical-engineering-with-specialization-in-design-and-manufacturing"
+  },
+  {
+    "source_program_id": "mechanical-engineering-with-specialization-in-design-and-manufacturing-m-tech-advanced-manufacturing",
+    "source_program_name": "Mechanical Engineering with Specialization in Design and Manufacturing M.Tech Advanced Manufacturing",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mechanical-engineering-with-specialization-in-design-and-manufacturing-m-tech-product-design",
+    "source_program_name": "Mechanical Engineering with Specialization in Design and Manufacturing M.Tech Product Design",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mechanical-engineering-with-specialization-in-manufacturing-and-industrial-engineering",
+    "source_program_name": "Mechanical Engineering with Specialization in Manufacturing and Industrial Engineering",
+    "canonical_program_id": "mechanical-engineering-with-specialization-in-manufacturing-and-industrial-engineering"
+  },
+  {
+    "source_program_id": "mechanical-engineering-with-specialization-in-smart-manufacturing",
+    "source_program_name": "Mechanical Engineering with Specialization in Smart Manufacturing",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mechanical-smart-manufacturing",
+    "source_program_name": "Mechanical Smart Manufacturing",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mechatronics-and-automation-engineering",
+    "source_program_name": "Mechatronics and Automation Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mechatronics-engineering",
+    "source_program_name": "Mechatronics Engineering",
+    "canonical_program_id": "mechanical"
+  },
+  {
+    "source_program_id": "metallurgical-and-materials-engineering-and-m-tech-in-materials-science-and-engineering",
+    "source_program_name": "Metallurgical and Materials Engineering and M.Tech in Materials Science and Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "metallurgical-engineering-and-materials-science",
+    "source_program_name": "Metallurgical Engineering and Materials Science",
+    "canonical_program_id": "metallurgical-materials"
+  },
+  {
+    "source_program_id": "metallurgical-engineering-and-materials-science-with-m-tech-in-ceramics-and-composites",
+    "source_program_name": "Metallurgical Engineering and Materials Science with M.Tech in Ceramics and Composites",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "metallurgical-engineering-and-materials-science-with-m-tech-in-metallurgical-process-engineering",
+    "source_program_name": "Metallurgical Engineering and Materials Science with M.Tech in Metallurgical Process Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "metallurgical-engineering-materials-science",
+    "source_program_name": "Metallurgical Engineering Materials Science",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "metallurgical-materials",
+    "source_program_name": "Metallurgical and Materials Engineering",
+    "canonical_program_id": "metallurgical-materials"
+  },
+  {
+    "source_program_id": "metallurgy-and-materials-engineering",
+    "source_program_name": "Metallurgy and Materials Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "microelectronics-vlsi-engineering",
+    "source_program_name": "Microelectronics VLSI Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mineral-and-metallurgical-engineering",
+    "source_program_name": "Mineral and Metallurgical Engineering",
+    "canonical_program_id": "mineral-and-metallurgical-engineering"
+  },
+  {
+    "source_program_id": "mineral-engineering",
+    "source_program_name": "Mineral Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "mining-engineering",
+    "source_program_name": "Mining Engineering",
+    "canonical_program_id": "mining-engineering"
+  },
+  {
+    "source_program_id": "mining-machinery-engineering",
+    "source_program_name": "Mining Machinery Engineering",
+    "canonical_program_id": "mining-machinery-engineering"
+  },
+  {
+    "source_program_id": "mining-safety-engineering",
+    "source_program_name": "Mining Safety Engineering",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "naval-architecture-and-ocean-engineering",
+    "source_program_name": "Naval Architecture and Ocean Engineering",
+    "canonical_program_id": "naval-architecture-and-ocean-engineering"
+  },
+  {
+    "source_program_id": "ocean-engineering-and-naval-architecture",
+    "source_program_name": "Ocean Engineering and Naval Architecture",
+    "canonical_program_id": "ocean-engineering-and-naval-architecture"
+  },
+  {
+    "source_program_id": "petroleum-engineering",
+    "source_program_name": "Petroleum Engineering",
+    "canonical_program_id": "petroleum-engineering"
+  },
+  {
+    "source_program_id": "pharmaceutical-engineering",
+    "source_program_name": "Pharmaceutical Engineering and Technology",
+    "canonical_program_id": "pharmaceutical-engineering"
+  },
+  {
+    "source_program_id": "pharmaceutics",
+    "source_program_name": "Pharmaceutics",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "physical-science",
+    "source_program_name": "Physical Science",
+    "canonical_program_id": "physical-science"
+  },
+  {
+    "source_program_id": "physics-and-computational-engineering",
+    "source_program_name": "Physics and Computational Engineering",
+    "canonical_program_id": "physics-and-computational-engineering"
+  },
+  {
+    "source_program_id": "physics-bs",
+    "source_program_name": "Physics",
+    "canonical_program_id": "physics-bs"
+  },
+  {
+    "source_program_id": "physics-with-specialization",
+    "source_program_name": "Physics with Specialization",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "planning",
+    "source_program_name": "Planning",
+    "canonical_program_id": "planning"
+  },
+  {
+    "source_program_id": "polymer-science-engineering",
+    "source_program_name": "Polymer Science and Engineering",
+    "canonical_program_id": "polymer-science-engineering"
+  },
+  {
+    "source_program_id": "printing-packaging-technology",
+    "source_program_name": "Printing and Packaging Technology",
+    "canonical_program_id": "printing-packaging-technology"
+  },
+  {
+    "source_program_id": "production-industrial",
+    "source_program_name": "Production and Industrial Engineering",
+    "canonical_program_id": "production-industrial"
+  },
+  {
+    "source_program_id": "quality-engineering-design-and-manufacturing",
+    "source_program_name": "Quality Engineering Design and Manufacturing",
+    "canonical_program_id": null
+  },
+  {
+    "source_program_id": "quantitative-economics-data-science-msc",
+    "source_program_name": "Quantitative Economics and Data Science",
+    "canonical_program_id": "quantitative-economics-data-science-msc"
+  },
+  {
+    "source_program_id": "robotics-ai",
+    "source_program_name": "Robotics and AI",
+    "canonical_program_id": "robotics-ai"
+  },
+  {
+    "source_program_id": "robotics-automation",
+    "source_program_name": "Robotics and Automation",
+    "canonical_program_id": "robotics-automation"
+  },
+  {
+    "source_program_id": "smart-manufacturing",
+    "source_program_name": "Smart Manufacturing",
+    "canonical_program_id": "smart-manufacturing"
+  },
+  {
+    "source_program_id": "space-sciences-engineering",
+    "source_program_name": "Space Sciences and Engineering",
+    "canonical_program_id": "space-sciences-engineering"
+  },
+  {
+    "source_program_id": "statistics-data-science-bs",
+    "source_program_name": "Statistics and Data Science",
+    "canonical_program_id": "statistics-data-science-bs"
+  },
+  {
+    "source_program_id": "sustainable-energy-technologies",
+    "source_program_name": "Sustainable Energy Technologies",
+    "canonical_program_id": "sustainableenergy-technologies"
+  },
+  {
+    "source_program_id": "textile-technology",
+    "source_program_name": "Textile Technology",
+    "canonical_program_id": "textile-technology"
+  },
+  {
+    "source_program_id": "vlsi-design-and-technology",
+    "source_program_name": "VLSI Design and Technology",
+    "canonical_program_id": "vlsidesignand-technology"
+  }
+]

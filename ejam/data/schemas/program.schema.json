@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ejam.dev/data/schemas/program.schema.json",
+  "title": "Program",
+  "type": "object",
+  "required": ["id", "name", "aliases", "degree", "duration_years"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "name": { "type": "string" },
+    "aliases": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "degree": { "type": "string" },
+    "duration_years": { "type": "integer" }
+  }
+}

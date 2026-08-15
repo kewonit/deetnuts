@@ -1,7 +1,7 @@
 import {
   type PredictionProvenance,
   PredictionSuccessResponse,
-} from "@ejam/data";
+} from "@ejam/data/predictor-interface";
 import { decodeJeeResult } from "./jee";
 import { decodeMhtResult } from "./mht-cet";
 import type { PredictorDisplayResult, PredictorExamId } from "./types";

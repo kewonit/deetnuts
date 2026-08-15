@@ -1,0 +1,163 @@
+{
+  "$schema_version": 1,
+  "description": "Official Maharashtra State CET Cell sources for MHT-CET Engineering CAP data and eligibility rules.",
+  "policy": {
+    "allowed_origins": [
+      "cetcell.mahacet.org",
+      "fe2024.mahacet.org",
+      "fe2025.mahacet.org",
+      "fe2026.mahacet.org",
+      "cappublicdocs2026.blob.core.windows.net"
+    ],
+    "disallowed": "Third-party cutoff aggregators and coaching sites may not be used as canonical data sources.",
+    "staging": "Deetnuts Supabase is a read-only staging snapshot. Published rows must reconcile with an official source listed here."
+  },
+  "sources": [
+    {
+      "id": "mht-cet.2026.brochure",
+      "kind": "pdf",
+      "exam": "mht-cet",
+      "year": 2026,
+      "title": "Information Brochure for Admission to Under Graduate and Post Graduate Technical Courses 2026-27",
+      "url": "https://cappublicdocs2026.blob.core.windows.net/documents/PublicPages/Information_Brochure_UG_PG_2026_27_dt_2_7_2026_DHG_1_Display.pdf?did=82533",
+      "publisher": "State Common Entrance Test Cell, Government of Maharashtra"
+    },
+    {
+      "id": "mht-cet.2026.cap1",
+      "kind": "pdf",
+      "exam": "mht-cet",
+      "year": 2026,
+      "title": "Maharashtra CAP Round I MH Cut Off 2026-27",
+      "url": "https://cappublicdocs2026.blob.core.windows.net/documents/2026ENGG_CAP1_MH_CutOff_V1.pdf",
+      "publisher": "State Common Entrance Test Cell, Government of Maharashtra"
+    },
+    {
+      "id": "mht-cet.2026.institutes",
+      "kind": "html",
+      "exam": "mht-cet",
+      "year": 2026,
+      "title": "Institute summaries and course details for CAP 2026-27",
+      "url": "https://fe2026.mahacet.org/StaticPages/frmInstituteList",
+      "publisher": "State Common Entrance Test Cell, Government of Maharashtra"
+    },
+    {
+      "id": "mht-cet.2025.brochure",
+      "kind": "pdf",
+      "exam": "mht-cet",
+      "year": 2025,
+      "title": "Information Brochure for Admission to Under Graduate and Post Graduate Technical Courses 2025-26",
+      "url": "https://fe2025.mahacet.org/PublicPages/Information_Brochure_UG_PG_2025_26_Final_02_07_2025.pdf?did=82496",
+      "publisher": "State Common Entrance Test Cell, Government of Maharashtra"
+    },
+    {
+      "id": "mht-cet.2024.brochure",
+      "kind": "pdf",
+      "exam": "mht-cet",
+      "year": 2024,
+      "title": "Information Brochure for Admission to Under Graduate Technical Courses 2024-25",
+      "url": "https://fe2024.mahacet.org/ViewPublicDocument?MenuId=7638",
+      "publisher": "State Common Entrance Test Cell, Government of Maharashtra"
+    },
+    {
+      "id": "mht-cet.2024.cap1",
+      "kind": "pdf",
+      "exam": "mht-cet",
+      "year": 2024,
+      "title": "Maharashtra CAP Round I Cut Off 2024-25",
+      "url": "https://cappublicdocs2026.blob.core.windows.net/documents/2024/2024ENGG_CAP1_CutOff.pdf",
+      "publisher": "State Common Entrance Test Cell, Government of Maharashtra"
+    },
+    {
+      "id": "mht-cet.2024.cap2",
+      "kind": "pdf",
+      "exam": "mht-cet",
+      "year": 2024,
+      "title": "Maharashtra CAP Round II Cut Off 2024-25",
+      "url": "https://cappublicdocs2026.blob.core.windows.net/documents/2024/2024ENGG_CAP2_CutOff.pdf",
+      "publisher": "State Common Entrance Test Cell, Government of Maharashtra"
+    },
+    {
+      "id": "mht-cet.2024.cap3",
+      "kind": "pdf",
+      "exam": "mht-cet",
+      "year": 2024,
+      "title": "Maharashtra CAP Round III Cut Off 2024-25",
+      "url": "https://cappublicdocs2026.blob.core.windows.net/documents/2024/2024ENGG_CAP3_CutOff.pdf",
+      "publisher": "State Common Entrance Test Cell, Government of Maharashtra"
+    },
+    {
+      "id": "mht-cet.2025.cap1",
+      "kind": "pdf",
+      "exam": "mht-cet",
+      "year": 2025,
+      "title": "Maharashtra CAP Round I Cut Off 2025-26",
+      "url": "https://cappublicdocs2026.blob.core.windows.net/documents/2025/2025ENGG_CAP1_CutOff.pdf",
+      "publisher": "State Common Entrance Test Cell, Government of Maharashtra"
+    },
+    {
+      "id": "mht-cet.2025.cap2",
+      "kind": "pdf",
+      "exam": "mht-cet",
+      "year": 2025,
+      "title": "Maharashtra CAP Round II Cut Off 2025-26",
+      "url": "https://cappublicdocs2026.blob.core.windows.net/documents/2025/2025ENGG_CAP2_CutOff.pdf",
+      "publisher": "State Common Entrance Test Cell, Government of Maharashtra"
+    },
+    {
+      "id": "mht-cet.2025.cap3",
+      "kind": "pdf",
+      "exam": "mht-cet",
+      "year": 2025,
+      "title": "Maharashtra CAP Round III Cut Off 2025-26",
+      "url": "https://cappublicdocs2026.blob.core.windows.net/documents/2025/2025ENGG_CAP3_CutOff.pdf",
+      "publisher": "State Common Entrance Test Cell, Government of Maharashtra"
+    },
+    {
+      "id": "mht-cet.2025.cap4",
+      "kind": "pdf",
+      "exam": "mht-cet",
+      "year": 2025,
+      "title": "Maharashtra CAP Round IV Cut Off 2025-26",
+      "url": "https://cappublicdocs2026.blob.core.windows.net/documents/2025/2025ENGG_CAP4_CutOff.pdf",
+      "publisher": "State Common Entrance Test Cell, Government of Maharashtra"
+    },
+    {
+      "id": "mht-cet.2024.institutes",
+      "kind": "html",
+      "exam": "mht-cet",
+      "year": 2024,
+      "title": "List of Institutes Participating in CAP 2024-25",
+      "url": "https://fe2024.mahacet.org/StaticPages/frmInstituteList",
+      "publisher": "State Common Entrance Test Cell, Government of Maharashtra"
+    },
+    {
+      "id": "mht-cet.2025.institutes",
+      "kind": "html",
+      "exam": "mht-cet",
+      "year": 2025,
+      "title": "List of Institutes Participating in CAP 2025-26",
+      "url": "https://fe2025.mahacet.org/StaticPages/frmInstituteList",
+      "publisher": "State Common Entrance Test Cell, Government of Maharashtra"
+    },
+    {
+      "id": "mht-cet.2024.seat-matrix",
+      "kind": "pdf",
+      "exam": "mht-cet",
+      "year": 2024,
+      "title": "Institute-wise Category-wise Seats for CAP Round I 2024-25",
+      "url": "https://fe2024.mahacet.org/ViewPublicDocument.aspx?MenuId=2441",
+      "publisher": "State Common Entrance Test Cell, Government of Maharashtra",
+      "model_usage": "Reference validation only; seat counts do not influence prediction probability."
+    },
+    {
+      "id": "mht-cet.2025.seat-matrix",
+      "kind": "pdf",
+      "exam": "mht-cet",
+      "year": 2025,
+      "title": "Institute-wise Category-wise Seats for CAP Round I 2025-26",
+      "url": "https://fe2025.mahacet.org/ViewPublicDocument.aspx?MenuId=2441",
+      "publisher": "State Common Entrance Test Cell, Government of Maharashtra",
+      "model_usage": "Reference validation only; seat counts do not influence prediction probability."
+    }
+  ]
+}

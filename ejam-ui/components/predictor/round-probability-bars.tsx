@@ -1,6 +1,6 @@
 "use client";
 
-import { classifyBand } from "@ejam/data/college-predictor";
+import { classifyBand } from "@ejam/data/college-predictor/browser";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BAND_STYLES } from "@/ejam-ui/lib/bands";
 import { cn } from "@/ejam-ui/lib/utils";

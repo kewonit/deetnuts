@@ -1,0 +1,35 @@
+{
+  "name": "@ejam/data-cli",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "fetch": "tsx src/release/fetch-data.ts",
+    "generate-manifest": "tsx src/release/generate-manifest.ts",
+    "package-data-release": "tsx src/release/package-data-release.ts",
+    "publish-data-release": "tsx src/release/publish-data-release.ts",
+    "build-predictor-index": "tsx src/jee/josaa/build-index.ts",
+    "build-csab-index": "tsx src/jee/csab/build-index.ts",
+    "build-cutoff-pages": "tsx src/jee/cutoff-pages/build.ts --source-release=v0.2.4 --release=v0.2.5",
+    "verify-cutoff-pages": "tsx src/jee/cutoff-pages/verify.ts",
+    "mht-cet:snapshot": "tsx src/mht-cet/snapshot.ts",
+    "mht-cet:build-index": "tsx src/mht-cet/build-index.ts",
+    "mht-cet:normalize": "tsx src/mht-cet/normalize.ts",
+    "mht-cet:import-2026-round-one": "tsx src/mht-cet/import-2026-round-one.ts",
+    "mht-cet:validate-seat-matrix": "tsx src/mht-cet/validate-seat-matrix.ts",
+    "verify-index-lineage": "tsx src/release/verify-index-lineage.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@duckdb/node-api": "^1.5.2-r.1",
+    "@ejam/data": "workspace:*",
+    "zod": "^4.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3",
+    "vitest": "^3.2.4"
+  }
+}

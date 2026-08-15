@@ -6,6 +6,9 @@ body:has(.deetnuts-ejam-shell) {
 }
 
 .deetnuts-ejam-shell {
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-instrument-sans: "Instrument Sans", var(--font-sans);
+  --font-serif-display: "Instrument Serif", ui-serif, Georgia, serif;
   height: calc(100dvh - 88px);
   min-height: calc(100dvh - 88px);
   overflow: hidden;

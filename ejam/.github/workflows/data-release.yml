@@ -1,0 +1,45 @@
+name: Data release verification
+
+on:
+  push:
+    tags:
+      - "data-*"
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.1.3
+          standalone: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - uses: astral-sh/setup-uv@v5
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Resolve manifest version from tag
+        id: meta
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          VERSION="${TAG#data-}"
+          echo "manifest=v${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Fetch and verify release datasets
+        env:
+          MANIFEST_VERSION: ${{ steps.meta.outputs.manifest }}
+        run: |
+          pnpm data:fetch --version="${MANIFEST_VERSION}" --download
+          pnpm verify:index-lineage
+          uv sync --directory packages/data-validation --frozen
+          pnpm validate:data

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ejam.dev/data/schemas/predictor-index.schema.json",
+  "title": "College Predictor Index",
+  "type": "object",
+  "required": [
+    "institute_id",
+    "program_id",
+    "seat_type",
+    "quota",
+    "gender",
+    "instype",
+    "degree",
+    "duration_years",
+    "weighted_mean",
+    "weighted_std",
+    "trend_slope",
+    "sigma_base",
+    "sigma_effective",
+    "predicted_closing_rank",
+    "data_quality",
+    "years_of_data",
+    "last_data_year",
+    "min_closing_rank",
+    "max_closing_rank",
+    "fill_round"
+  ],
+  "properties": {
+    "institute_id": { "type": "string" },
+    "program_id": { "type": "string" },
+    "seat_type": { "type": "string" },
+    "quota": { "type": "string" },
+    "gender": { "type": "string" },
+    "instype": { "type": "string" },
+    "degree": { "type": "string" },
+    "duration_years": { "type": "integer" },
+    "weighted_mean": { "type": "number" },
+    "weighted_std": { "type": "number" },
+    "trend_slope": { "type": "number" },
+    "sigma_base": { "type": "number" },
+    "sigma_effective": { "type": "number" },
+    "predicted_closing_rank": { "type": "integer", "minimum": 1 },
+    "data_quality": {
+      "type": "string",
+      "enum": ["pooled", "inferred", "sufficient"]
+    },
+    "years_of_data": { "type": "integer" },
+    "last_data_year": { "type": "integer" },
+    "min_closing_rank": { "type": "integer" },
+    "max_closing_rank": { "type": "integer" },
+    "fill_round": { "type": "integer" }
+  }
+}

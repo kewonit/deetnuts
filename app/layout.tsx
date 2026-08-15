@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import "./globals.css";
 
 import SiteJsonLd from "@/components/SiteJsonLd";
-import SanitizedGoogleAnalytics from "@/components/analytics/SanitizedGoogleAnalytics";
+import StandardSiteShell from "@/components/StandardSiteShell";
 
 export const metadata: Metadata = {
   applicationName: "DEETNUTS",
@@ -14,12 +13,6 @@ export const metadata: Metadata = {
   description:
     "Mildly important Maharashtra college data simplified. Explore MHT-CET cutoffs, seat matrices, colleges, and admission trends.",
   metadataBase: new URL("https://deetnuts.com"),
-  keywords: [
-    "MHT-CET",
-    "engineering admission",
-    "college cutoffs",
-    "seat matrix",
-  ],
   authors: [{ name: "DEETNUTS" }],
   creator: "DEETNUTS",
   publisher: "DEETNUTS",
@@ -73,45 +66,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const requestHeaders = await headers();
-  const admissionsDetail =
-    requestHeaders.get("x-deetnuts-admissions-detail") === "1";
-  const ejamPredictor = requestHeaders.get("x-deetnuts-ejam-page") === "1";
-  let pageContent: React.ReactNode;
-
-  if (ejamPredictor) {
-    const { default: StandardSiteShell } = await import(
-      "@/components/StandardSiteShell"
-    );
-    pageContent = (
-      <StandardSiteShell>{children}</StandardSiteShell>
-    );
-  } else if (admissionsDetail) {
-    pageContent = (
-      <>
-        {children}
-        <SanitizedGoogleAnalytics />
-      </>
-    );
-  } else {
-    const { default: StandardSiteShell } = await import(
-      "@/components/StandardSiteShell"
-    );
-    pageContent = <StandardSiteShell>{children}</StandardSiteShell>;
-  }
-
   return (
     <html lang="en" className="bg-[#E4DFF2]">
       <head>
         <SiteJsonLd />
       </head>
       <body className="relative min-h-screen overflow-x-hidden font-sans">
-        {pageContent}
+        <StandardSiteShell>{children}</StandardSiteShell>
       </body>
     </html>
   );

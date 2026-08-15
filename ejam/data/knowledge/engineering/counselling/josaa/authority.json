@@ -1,0 +1,53 @@
+{
+  "id": "josaa",
+  "name": "Joint Seat Allocation Authority",
+  "abbreviation": "JoSAA",
+  "conducting_body": "Ministry of Education, Government of India",
+  "official_url": "https://josaa.nic.in/",
+  "scope": "Centralised seat allocation for IITs, NITs, IIEST, IIITs, and Other-GFTIs based on JEE (Advanced) and JEE (Main) ranks",
+  "participating_institutes": {
+    "iits": "23 IITs — admission based on JEE (Advanced) rank",
+    "nits": "31 NITs — admission based on JEE (Main) rank through JoSAA/CSAB",
+    "iiest": "IIEST Shibpur — based on JEE (Main)",
+    "iiits": "IIITs (Triple-I-Ts) — based on JEE (Main)",
+    "other_gftis": "Other Government-Funded Technical Institutes — based on JEE (Main)"
+  },
+  "rounds": "Typically 6 rounds of seat allocation (Round 1 to Round 6), followed by a special round if vacancies remain",
+  "business_rules": {
+    "choice_filling": "Candidates register on JoSAA portal and fill choices in order of preference across all participating institutes and programmes",
+    "seat_acceptance": "After each round, candidates must accept the allocated seat and pay the seat acceptance fee to confirm",
+    "freeze_float_slide": {
+      "freeze": "Accept the offered seat and do not participate in further rounds",
+      "float": "Accept the offered seat but remain eligible for a better preferred choice in subsequent rounds",
+      "slide": "Accept the offered seat but remain eligible for a better preferred programme in the SAME institute"
+    },
+    "withdrawal": "Candidates can withdraw before the last round; partial refund rules apply",
+    "physical_reporting": "After the final round, candidates must report physically to the allotted institute with original documents"
+  },
+  "seat_matrix": {
+    "description": "Seat matrix is published before each counselling round, showing category-wise and programme-wise seats in each institute",
+    "note": "Exact numbers change every year; always refer to the official seat matrix on josaa.nic.in"
+  },
+  "eligibility": {
+    "jee_advanced": "Candidates who have qualified JEE (Advanced) and meet all eligibility criteria are eligible for IITs",
+    "jee_main": "Candidates who have appeared in JEE (Main) are eligible for NITs, IIITs, IIEST, and Other-GFTIs"
+  },
+  "categories_considered": [
+    "OPEN",
+    "OPEN-PwD",
+    "Gen-EWS",
+    "Gen-EWS-PwD",
+    "OBC-NCL",
+    "OBC-NCL-PwD",
+    "SC",
+    "SC-PwD",
+    "ST",
+    "ST-PwD"
+  ],
+  "reservation_horizontal": "5% horizontal reservation for PwD within each category",
+  "source": "josaa.bulletin",
+  "contact": {
+    "website": "https://josaa.nic.in/",
+    "helpdesk": "Available on the JoSAA portal during active counselling periods"
+  }
+}

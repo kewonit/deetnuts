@@ -1,0 +1,39 @@
+{
+  "description": "Structured policy extracts from the official JEE (Advanced) 2026 brochure.",
+  "source": "jeeadv.2026.brochure",
+  "tie_breaking": {
+    "steps": [
+      "Higher positive marks",
+      "If still tied, higher marks in Mathematics",
+      "If still tied, higher marks in Physics",
+      "If still tied, same rank"
+    ],
+    "verbatim_excerpt": "If the aggregate marks scored by two or more candidates are the same, then the following tie-break policy will be used for awarding ranks: Step 1: Candidates having higher positive marks will be awarded higher rank. If the tie breaking criterion at Step 1 fails to break the tie, then the following criterion at Step 2 will be followed. Step 2: Higher rank will be assigned to the candidate who has obtained higher marks in Mathematics. If this does not break the tie, higher rank will be assigned to the candidate who has obtained higher marks in Physics. If there is a tie even after this, candidates will be assigned the same rank."
+  },
+  "female_supernumerary_seats": {
+    "purpose": "Improve gender balance in IIT undergraduate programmes.",
+    "eligible_candidates": "Indian nationals or OCI/PIO (I) candidates who are declared qualified in JEE (Advanced) 2026.",
+    "allocation_basis": "Strictly based on performance in JEE (Advanced) 2026.",
+    "target": "Each institute ensures at least 20% female enrolment in undergraduate programme(s).",
+    "implementation_reference": "Detailed procedure is set out in JoSAA 2026 Business Rules.",
+    "verbatim_excerpt": "Following the directions of the Ministry of Education, Government of India, and the decision taken by the IIT Council, supernumerary seats have been created for female candidates for improving the gender balance in the undergraduate programs in IITs. These supernumerary seats will be offered only to Indian nationals or OCI/PIO (I) candidates who are declared qualified in JEE (Advanced) 2026, and strictly based on the performance in JEE (Advanced) 2026. The number of supernumerary seats in various programs will be decided by individual IITs ensuring that every institute has at least 20% female enrolment in undergraduate programme(s). The detailed procedure for implementation of the above shall be set out in the Business Rules of JoSAA 2026."
+  },
+  "foreign_nationals_and_oci_pio": {
+    "foreign_nationals": {
+      "definition": "Candidates who are not citizens of India by birth or naturalized.",
+      "seat_cap": "Supernumerary with a cap of 10% of total seats in every course.",
+      "reservation_status": "Outside GEN-EWS, OBC-NCL, SC, ST, and PwD reservation categories.",
+      "female_subcategory": "No separate female supernumerary sub-category within foreign national supernumerary seats.",
+      "jee_main_requirement": "Not required to write JEE (Main) 2026; may register directly for JEE (Advanced) 2026 subject to other eligibility criteria."
+    },
+    "oci_pio": {
+      "before_2021_cutoff": "OCI/PIO candidates who obtained cards before 04.03.2021 may apply either as foreign nationals or at par with Indian nationals.",
+      "after_2021_cutoff": "OCI/PIO candidates who obtained cards after 04.03.2021 are treated as foreign national candidates.",
+      "foreign_supernumerary_only": "OCI/PIO (F) candidates compete only for foreign supernumerary seats."
+    },
+    "verbatim_excerpt": "Candidates who are NOT citizens of India (by birth or naturalized) shall be considered as foreign nationals. Seats allotted to such foreign national candidates are supernumerary with a cap of 10% of total number of seats in every course. These candidates are outside the ambit of reservation of seats under the GEN-EWS, OBC-NCL, SC, ST, and PwD categories/sub-categories. There are no separate supernumerary seats or sub-category for females in the foreign national supernumerary seats. The foreign national candidates are NOT required to write JEE (Main) 2026 and may register for JEE (Advanced) 2026 directly subject to fulfilment of other eligibility criteria."
+  },
+  "dasa": {
+    "status": "DASA is not a JEE (Advanced) policy section in the brochure. In this dataset it is treated separately from JEE (Advanced) admission rules."
+  }
+}

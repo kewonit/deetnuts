@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ejam.dev/data/schemas/institute.schema.json",
+  "title": "Institute",
+  "type": "object",
+  "required": ["id", "name", "aliases", "type", "state", "city", "established"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "name": { "type": "string" },
+    "aliases": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "type": { "type": "string" },
+    "state": { "type": "string" },
+    "city": { "type": "string" },
+    "established": { "type": "integer" },
+    "nirf_rank": {
+      "anyOf": [{ "type": "integer" }, { "type": "null" }]
+    }
+  }
+}

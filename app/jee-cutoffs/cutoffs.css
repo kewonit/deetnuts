@@ -1,0 +1,359 @@
+.jee-cutoff-shell {
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-instrument-sans: "Instrument Sans", var(--font-sans);
+  --font-serif-display: "Instrument Serif", ui-serif, Georgia, serif;
+  --cutoff-bg: #0a0a0a;
+  --cutoff-panel: #0a0a0a;
+  --cutoff-panel-raised: #171717;
+  --cutoff-ink: #fafafa;
+  --cutoff-muted: #a1a1a1;
+  --cutoff-line: rgb(255 255 255 / 0.12);
+  min-height: 100vh;
+  background: var(--cutoff-bg);
+  color: var(--cutoff-ink);
+  font-family: var(--font-sans), sans-serif;
+}
+
+.jee-cutoff-shell *,
+.jee-cutoff-shell *::before,
+.jee-cutoff-shell *::after { box-sizing: border-box; }
+
+.cutoff-main {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: 24px 24px 72px;
+}
+
+.cutoff-breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+  color: var(--cutoff-muted);
+  font-size: 12px;
+}
+.cutoff-breadcrumbs span { display: inline-flex; align-items: center; gap: 8px; }
+.cutoff-breadcrumbs a { color: inherit; text-decoration: none; }
+.cutoff-breadcrumbs a:hover { color: var(--cutoff-ink); }
+
+.cutoff-hero {
+  padding: 32px;
+  border: 1px solid var(--cutoff-line);
+  background: var(--cutoff-panel);
+}
+.cutoff-kicker {
+  display: block;
+  color: var(--cutoff-muted);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+.cutoff-hero h1 {
+  max-width: 850px;
+  margin: 10px 0 12px;
+  font: 500 clamp(30px, 4vw, 48px)/1.05 var(--font-instrument-sans), sans-serif;
+  letter-spacing: -.035em;
+}
+.cutoff-lead {
+  max-width: 720px;
+  margin: 0;
+  color: var(--cutoff-muted);
+  font-size: 14px;
+  line-height: 1.65;
+}
+.cutoff-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 20px;
+  color: var(--cutoff-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.cutoff-hero-meta span + span { padding-left: 16px; border-left: 1px solid var(--cutoff-line); }
+
+.cutoff-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+.cutoff-button,
+.cutoff-year-link {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  border: 1px solid var(--cutoff-line);
+  background: transparent;
+  color: var(--cutoff-ink);
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+.cutoff-button:hover,
+.cutoff-year-link:hover { border-color: rgb(255 255 255 / .24); background: var(--cutoff-panel-raised); }
+.cutoff-button-primary { border-color: var(--cutoff-ink); background: var(--cutoff-ink); color: #171717; }
+.cutoff-button-primary:hover { border-color: #fff; background: #fff; }
+
+.cutoff-facts {
+  display: grid;
+  grid-template-columns: .8fr 1.3fr .7fr .8fr 1.4fr;
+  margin: -1px 0 0;
+  border: 1px solid var(--cutoff-line);
+  background: var(--cutoff-line);
+  gap: 1px;
+}
+.cutoff-fact { min-width: 0; min-height: 76px; padding: 16px; background: var(--cutoff-panel); }
+.cutoff-fact dt { color: var(--cutoff-muted); font-size: 10px; font-weight: 500; }
+.cutoff-fact dd { margin: 7px 0 0; font-size: 12px; line-height: 1.45; }
+
+.cutoff-section { padding-top: 40px; }
+.cutoff-section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 14px;
+}
+.cutoff-section-heading h2,
+.cutoff-year-nav h2,
+.cutoff-info-card h2,
+.cutoff-source-card h2 {
+  margin: 0;
+  font: 500 16px/1.3 var(--font-sans), sans-serif;
+}
+.cutoff-section-heading p,
+.cutoff-muted {
+  margin: 4px 0 0;
+  color: var(--cutoff-muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+.cutoff-inline-link { display: inline-block; margin-top: 7px; color: var(--cutoff-ink); font-size: 11px; text-underline-offset: 3px; }
+
+.cutoff-search {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 38px;
+  margin-bottom: 12px;
+  padding: 0 12px;
+  border: 1px solid var(--cutoff-line);
+  color: var(--cutoff-muted);
+}
+.cutoff-search:focus-within { border-color: #737373; box-shadow: 0 0 0 3px rgb(115 115 115 / .3); }
+.cutoff-search svg { width: 16px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-width: 1.5; }
+.cutoff-search input { min-width: 0; border: 0; outline: 0; background: transparent; color: var(--cutoff-ink); font-size: 13px; }
+.cutoff-search input::placeholder { color: var(--cutoff-muted); }
+.cutoff-search > span:last-child { font-size: 11px; font-variant-numeric: tabular-nums; }
+
+.cutoff-directory,
+.cutoff-exam-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  border: 1px solid var(--cutoff-line);
+  background: var(--cutoff-line);
+}
+.cutoff-exam-grid { grid-template-columns: 1fr 1fr; }
+.cutoff-college-card,
+.cutoff-exam-card {
+  display: flex;
+  min-width: 0;
+  min-height: 126px;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px;
+  background: var(--cutoff-panel);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 150ms ease;
+}
+.cutoff-college-card h3,
+.cutoff-exam-card h2 { margin: 20px 0 6px; font-size: 14px; font-weight: 500; line-height: 1.35; }
+.cutoff-college-card p,
+.cutoff-exam-card p { margin: 0; color: var(--cutoff-muted); font-size: 11px; line-height: 1.5; }
+.cutoff-college-card:hover,
+.cutoff-exam-card:hover { background: var(--cutoff-panel-raised); }
+.cutoff-card-arrow { flex: 0 0 auto; align-self: start; color: var(--cutoff-muted); font-size: 13px; }
+.cutoff-exam-card { min-height: 174px; padding: 24px; }
+.cutoff-exam-card h2 { margin-top: 34px; font: 500 22px/1.2 var(--font-instrument-sans), sans-serif; }
+
+.cutoff-year-nav { display: flex; align-items: center; gap: 20px; margin-top: 24px; padding: 14px 0; border-block: 1px solid var(--cutoff-line); }
+.cutoff-year-nav h2 { flex: 0 0 auto; font-size: 12px; }
+.cutoff-years { display: flex; flex-wrap: wrap; gap: 6px; }
+.cutoff-year-link { min-height: 30px; padding-inline: 10px; }
+.cutoff-year-link[aria-current="page"] { border-color: var(--cutoff-ink); background: var(--cutoff-ink); color: #171717; }
+
+.cutoff-controls-panel {
+  margin-top: 24px;
+  border: 1px solid var(--cutoff-line);
+  background: var(--cutoff-panel);
+}
+.cutoff-controls-intro { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 16px; border-bottom: 1px solid var(--cutoff-line); }
+.cutoff-controls-intro h2 { margin: 0; font-size: 14px; font-weight: 500; }
+.cutoff-controls-intro p { margin: 3px 0 0; color: var(--cutoff-muted); font-size: 11px; }
+.cutoff-loading { color: var(--cutoff-muted); font-size: 11px; }
+.cutoff-controls { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1px; background: var(--cutoff-line); }
+.cutoff-field { display: grid; min-width: 0; gap: 7px; padding: 12px; background: var(--cutoff-panel); color: var(--cutoff-muted); font-size: 11px; font-weight: 500; }
+.cutoff-field select {
+  width: 100%;
+  min-height: 34px;
+  padding: 0 28px 0 9px;
+  border: 1px solid rgb(255 255 255 / .15);
+  border-radius: 0;
+  background: transparent;
+  color: var(--cutoff-ink);
+  font-size: 12px;
+  text-overflow: ellipsis;
+}
+.cutoff-field select:hover { border-color: rgb(255 255 255 / .28); }
+.cutoff-field select:focus-visible,
+.cutoff-button:focus-visible,
+.cutoff-year-link:focus-visible,
+.cutoff-college-card:focus-visible,
+.cutoff-exam-card:focus-visible { outline: 3px solid rgb(115 115 115 / .55); outline-offset: 2px; }
+
+.cutoff-chart-card,
+.cutoff-table-section {
+  margin-top: 16px;
+  padding: 20px;
+  border: 1px solid var(--cutoff-line);
+  background: var(--cutoff-panel);
+}
+.cutoff-trend-card { margin-top: 0; }
+.cutoff-program-field { width: min(460px, 48vw); padding: 0; }
+.cutoff-chart-wrap { min-height: 330px; }
+.cutoff-chart { display: block; width: 100%; height: 286px; }
+.cutoff-chart-grid { stroke: rgb(255 255 255 / .09); stroke-width: 1; }
+.cutoff-chart-axis { fill: var(--cutoff-muted); font: 10px var(--font-sans), sans-serif; }
+.cutoff-chart-line { fill: none; stroke-width: 2; vector-effect: non-scaling-stroke; }
+.cutoff-chart-opening { stroke: #fafafa; }
+.cutoff-chart-closing { stroke: #a3a3a3; stroke-dasharray: 5 5; }
+.cutoff-chart-dot { stroke: var(--cutoff-panel); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.cutoff-chart-dot-opening { fill: #fafafa; }
+.cutoff-chart-dot-closing { fill: #a3a3a3; }
+.cutoff-chart-legend { display: flex; flex-wrap: wrap; gap: 14px; padding: 4px 0 2px; color: var(--cutoff-muted); font-size: 10px; }
+.cutoff-chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.cutoff-chart-key { display: block; width: 18px; border-top: 2px solid #fafafa; }
+.cutoff-chart-key-closing { border-color: #a3a3a3; border-top-style: dashed; }
+.cutoff-chart-note { margin: 8px 0 0; color: var(--cutoff-muted); font-size: 11px; }
+
+.cutoff-result-count { color: var(--cutoff-muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.cutoff-program-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; border: 1px solid var(--cutoff-line); background: var(--cutoff-line); }
+.cutoff-program-list a { display: grid; gap: 5px; min-width: 0; padding: 14px 16px; background: var(--cutoff-panel); color: var(--cutoff-ink); text-decoration: none; }
+.cutoff-program-list a:hover { background: var(--cutoff-panel-raised); }
+.cutoff-program-list a:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.cutoff-program-list strong { overflow: hidden; font-size: 12px; font-weight: 500; line-height: 1.4; text-overflow: ellipsis; }
+.cutoff-program-list span { color: var(--cutoff-muted); font-size: 10px; line-height: 1.45; }
+.cutoff-table-scroll { overflow-x: auto; border: 1px solid var(--cutoff-line); }
+.cutoff-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.cutoff-table caption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); }
+.cutoff-table th,
+.cutoff-table td { height: 46px; padding: 10px 12px; border-top: 1px solid var(--cutoff-line); text-align: left; vertical-align: middle; }
+.cutoff-table thead th { height: 38px; border-top: 0; background: var(--cutoff-panel); color: var(--cutoff-muted); font-size: 11px; font-weight: 500; }
+.cutoff-table tbody th { max-width: 460px; font-weight: 500; }
+.cutoff-table tbody th small { display: block; margin-top: 4px; color: var(--cutoff-muted); font-size: 9px; font-weight: 400; }
+.cutoff-table tbody th a { color: inherit; text-underline-offset: 3px; }
+.cutoff-table tbody tr:hover { background: var(--cutoff-panel-raised); }
+.cutoff-table td:nth-last-child(-n+2) { font-variant-numeric: tabular-nums; }
+.cutoff-table td:last-child strong { font-weight: 600; }
+
+.cutoff-error { margin-bottom: 12px; padding: 11px 12px; border: 1px solid rgb(248 113 113 / .35); color: #fecaca; font-size: 12px; }
+.cutoff-empty { margin: 0; padding: 32px 20px; border: 1px solid var(--cutoff-line); color: var(--cutoff-muted); text-align: center; font-size: 12px; }
+.cutoff-sr-table { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); contain: strict; white-space: nowrap; }
+
+.cutoff-copy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin-top: 40px; border: 1px solid var(--cutoff-line); background: var(--cutoff-line); }
+.cutoff-info-card { padding: 20px; background: var(--cutoff-panel); }
+.cutoff-info-card p { margin: 9px 0 0; color: var(--cutoff-muted); font-size: 12px; line-height: 1.65; }
+.cutoff-info-card strong { color: var(--cutoff-ink); font-weight: 500; }
+.cutoff-source-card { display: grid; grid-template-columns: minmax(180px, .7fr) 1.3fr; gap: 18px 28px; margin-top: 16px; padding: 20px; border: 1px solid var(--cutoff-line); background: var(--cutoff-panel); }
+.cutoff-source-card p { margin: 7px 0 0; color: var(--cutoff-muted); font-size: 12px; line-height: 1.6; }
+.cutoff-source-list { display: grid; gap: 1px; margin: 0; padding: 0; background: var(--cutoff-line); list-style: none; }
+.cutoff-source-list li { display: grid; gap: 4px; padding: 10px 12px; background: var(--cutoff-panel); }
+.cutoff-source-list strong { color: var(--cutoff-ink); font-size: 11px; font-weight: 500; line-height: 1.4; }
+.cutoff-source-list span { color: var(--cutoff-muted); font-size: 9px; line-height: 1.4; }
+.cutoff-source-links { display: flex; flex-wrap: wrap; gap: 7px; align-content: start; }
+.cutoff-source-links a { display: inline-flex; min-height: 34px; align-items: center; gap: 7px; padding: 0 10px; border: 1px solid var(--cutoff-line); color: var(--cutoff-ink); font-size: 11px; text-decoration: none; }
+.cutoff-source-links a:hover { background: var(--cutoff-panel-raised); }
+.cutoff-source-card .cutoff-disclaimer { grid-column: 1 / -1; margin-top: 0; padding-top: 16px; border-top: 1px solid var(--cutoff-line); font-size: 11px; }
+.cutoff-disclaimer a { color: var(--cutoff-ink); text-decoration: underline; text-underline-offset: 3px; }
+
+.jee-cutoff-footer { border-top: 1px solid rgb(255 255 255 / .1); background: #0a0a0a; color: #fafafa; font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif; }
+.jee-cutoff-footer-inner { width: min(1180px, 100%); margin: 0 auto; padding: 24px; }
+.jee-cutoff-footer-top { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.jee-cutoff-footer-brand { color: #fafafa; font-size: 13px; font-weight: 600; text-decoration: none; }
+.jee-cutoff-footer-top nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 16px; }
+.jee-cutoff-footer a { color: #a1a1a1; font-size: 11px; text-decoration: none; }
+.jee-cutoff-footer button { padding: 0; border: 0; background: transparent; color: #a1a1a1; cursor: pointer; font: inherit; font-size: 11px; }
+.jee-cutoff-footer a:hover { color: #fafafa; }
+.jee-cutoff-footer button:hover { color: #fafafa; }
+.jee-cutoff-footer-bottom { display: flex; align-items: start; justify-content: space-between; gap: 24px; margin-top: 18px; padding-top: 16px; border-top: 1px solid rgb(255 255 255 / .1); }
+.jee-cutoff-footer-bottom p { max-width: 760px; margin: 0; color: #a1a1a1; font-size: 10px; line-height: 1.55; }
+.jee-cutoff-footer-bottom div { display: flex; flex: 0 0 auto; gap: 14px; }
+.jee-cutoff-footer-bottom a,
+.jee-cutoff-footer-bottom button { font-size: 10px; }
+
+@keyframes cutoff-pulse { 50% { opacity: .55; } }
+
+@media (max-width: 900px) {
+  .cutoff-facts { grid-template-columns: repeat(2, 1fr); }
+  .cutoff-fact-wide { grid-column: 1 / -1; }
+  .cutoff-directory { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cutoff-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cutoff-copy-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 620px) {
+  .cutoff-main { padding: 16px 12px 56px; }
+  .cutoff-breadcrumbs { margin-bottom: 12px; font-size: 11px; }
+  .cutoff-hero { padding: 22px 18px; }
+  .cutoff-hero h1 { margin-block: 8px 10px; font-size: 30px; }
+  .cutoff-lead { font-size: 13px; }
+  .cutoff-hero-meta { gap: 8px 12px; }
+  .cutoff-hero-meta span + span { padding-left: 12px; }
+  .cutoff-section { padding-top: 32px; }
+  .cutoff-section-heading { align-items: stretch; flex-direction: column; gap: 12px; }
+  .cutoff-directory,
+  .cutoff-exam-grid,
+  .cutoff-program-list { grid-template-columns: 1fr; }
+  .cutoff-program-list a:last-child:nth-child(odd) { grid-column: auto; }
+  .cutoff-college-card { min-height: 112px; padding: 16px; }
+  .cutoff-exam-card { min-height: 150px; padding: 20px; }
+  .cutoff-year-nav { display: block; overflow: hidden; }
+  .cutoff-year-nav h2 { margin-bottom: 10px; }
+  .cutoff-years { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+  .cutoff-years::-webkit-scrollbar { display: none; }
+  .cutoff-year-link { flex: 0 0 auto; }
+  .cutoff-controls-panel { margin-top: 16px; }
+  .cutoff-controls { grid-template-columns: 1fr 1fr; }
+  .cutoff-field:nth-child(5) { grid-column: 1 / -1; }
+  .cutoff-chart-card,
+  .cutoff-table-section { padding: 16px; }
+  .cutoff-program-field { width: 100%; }
+  .cutoff-chart { height: 270px; }
+  .cutoff-chart-wrap { min-height: 310px; }
+  .cutoff-table-scroll { overflow: visible; border: 0; }
+  .cutoff-table,
+  .cutoff-table tbody,
+  .cutoff-table tr,
+  .cutoff-table th,
+  .cutoff-table td { display: block; width: 100%; }
+  .cutoff-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); }
+  .cutoff-table tbody { display: grid; gap: 8px; }
+  .cutoff-table tbody tr { padding: 12px 14px; border: 1px solid var(--cutoff-line); background: var(--cutoff-panel); }
+  .cutoff-table tbody th,
+  .cutoff-table tbody td { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 10px; height: auto; padding: 6px 0; border: 0; text-align: right; }
+  .cutoff-table tbody th { max-width: none; text-align: right; }
+  .cutoff-table tbody th::before,
+  .cutoff-table tbody td::before { content: attr(data-label); color: var(--cutoff-muted); font-size: 10px; font-weight: 400; text-align: left; }
+  .cutoff-source-card { grid-template-columns: 1fr; padding: 16px; }
+  .cutoff-source-card .cutoff-disclaimer { grid-column: auto; }
+  .jee-cutoff-footer-inner { padding: 20px 16px; }
+  .jee-cutoff-footer-top,
+  .jee-cutoff-footer-bottom { align-items: stretch; flex-direction: column; gap: 14px; }
+  .jee-cutoff-footer-top nav { justify-content: flex-start; gap: 10px 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jee-cutoff-shell * { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+}

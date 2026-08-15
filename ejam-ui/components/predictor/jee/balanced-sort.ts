@@ -1,9 +1,9 @@
-import type { CollegePredictorFilters } from "@ejam/data/college-predictor";
+import type { CollegePredictorFilters } from "@ejam/data/college-predictor/browser";
 import {
   applyBalancedRanking,
   branchFilterActive,
   instituteMetaFromPrograms,
-} from "@ejam/data/college-predictor";
+} from "@ejam/data/college-predictor/browser";
 import {
   jeeProgramKey,
   type PredictorDisplayProgram,

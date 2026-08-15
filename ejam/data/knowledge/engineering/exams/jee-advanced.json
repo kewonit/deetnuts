@@ -1,0 +1,104 @@
+{
+  "id": "jee-advanced",
+  "name": "Joint Entrance Examination (Advanced)",
+  "abbreviation": "JEE (Advanced)",
+  "conducting_body": "Joint Admission Board (JAB), constituted by IITs; administered by one IIT on rotation",
+  "official_url": "https://jeeadv.ac.in/",
+  "scope": "Gateway for admission to Bachelor's, Integrated Master's, and Dual Degree programmes in all IITs",
+  "exam_frequency": "Once a year",
+  "mode": "Computer Based Test (CBT)",
+  "language": "English and Hindi",
+  "duration_hours": 3,
+  "papers": {
+    "paper1": {
+      "subjects": ["Physics", "Chemistry", "Mathematics"],
+      "duration_hours": 3,
+      "type": "Objective (MCQ, MSQ, numerical), designed to test comprehension, reasoning and analytical ability"
+    },
+    "paper2": {
+      "subjects": ["Physics", "Chemistry", "Mathematics"],
+      "duration_hours": 3,
+      "type": "Objective (MCQ, MSQ, numerical), designed to test comprehension, reasoning and analytical ability"
+    },
+    "note": "Both papers are compulsory. Questions may be multiple-choice, multiple-select, or numerical-answer type."
+  },
+  "eligibility": {
+    "primary_route": "Candidates must be among the top 2,50,000 (approx.) successful candidates of JEE (Main) Paper 1, including all categories",
+    "age_limit": "Date of birth on or after 01 October 2001. Five-year relaxation for SC, ST, PwD candidates: on or after 01 October 1996.",
+    "year_of_first_appearance_12th": "Candidates should have appeared for the Class XII (or equivalent) examination for the first time in 2025 or 2026",
+    "number_of_attempts": "Maximum two attempts in consecutive years. A candidate can appear in JEE (Advanced) a maximum of two times (first appearance + one repeat), starting from the year they first appeared for Class XII/equivalent",
+    "preparatory_courses": "Candidates who qualified for the preparatory course in any of the IITs in 2025 can appear in JEE (Advanced) 2026",
+    "oci_pio": "OCI/PIO candidates who obtained their OCI/PIO cards before 04.03.2021 may choose either OCI/PIO (I) status, treated at par with Indian nationals, or OCI/PIO (F) status, treated as foreign nationals. OCI/PIO candidates who obtained their cards after 04.03.2021 are treated as OCI/PIO (F) and compete only for foreign supernumerary seats. OCI/PIO (I) and OCI/PIO (F) candidates are not entitled to reservation under GEN-EWS, OBC-NCL, SC, or ST categories.",
+    "source": "jeeadv.2026.brochure"
+  },
+  "registration_fee_inr_2026": {
+    "female": 1600,
+    "sc_st_pwd": 1600,
+    "general_ews_obc_male": 3200,
+    "source": "jeeadv.2026.brochure",
+    "note": "Exact fee subject to annual revision; verify on jeeadv.ac.in at the time of registration."
+  },
+  "schedule_2026": {
+    "registration_window": "To be announced (typically opens ~2 weeks after JEE Main Session 1 results)",
+    "exam_date": "To be announced (historically held on a Sunday in late May or early June)",
+    "paper1_timing": "09:00–12:00 IST (tentative)",
+    "paper2_timing": "14:30–17:30 IST (tentative)",
+    "result_declaration": "Typically within 2–3 weeks of the examination",
+    "seat_allocation_start": "Through JoSAA after JEE (Advanced) result; typically begins in mid-June"
+  },
+  "architecture_aptitude_test_aat": {
+    "description": "Candidates desiring admission to B.Arch. at IITs must qualify JEE (Advanced) AND appear in the Architecture Aptitude Test (AAT). It is NOT required for B.Tech. or other programmes.",
+    "conducting_body": "Joint Admission Board (JAB)",
+    "mode": "Offline / Pen-and-Paper",
+    "eligibility": "Only candidates who have qualified in JEE (Advanced) can register for AAT",
+    "schedule_2026": {
+      "online_registration": "Monday, June 01, 2026 (10:00 IST) to Tuesday, June 02, 2026 (17:00 IST)",
+      "exam_date": "Thursday, June 04, 2026 (09:00 IST to 12:00 IST)",
+      "result_declaration": "Sunday, June 07, 2026 (17:00 IST)"
+    },
+    "source": "jeeadv.2026.brochure"
+  },
+  "tie_breaking_rules": {
+    "description": "If aggregate marks of two or more candidates are equal, the following tie-break policy applies in order:",
+    "steps": [
+      "Step 1: Candidates with higher positive marks (total marks without negative marking) are awarded higher rank.",
+      "Step 2: If tie persists, higher marks in Mathematics breaks the tie.",
+      "Step 3: If tie still persists, higher marks in Physics breaks the tie.",
+      "Step 4: If tie still persists, candidates are assigned the same rank."
+    ],
+    "source": "jeeadv.2026.brochure"
+  },
+  "female_supernumerary_seats": {
+    "description": "Supernumerary seats created for female candidates to improve gender balance in IIT undergraduate programmes.",
+    "eligibility": "Only Indian nationals or OCI/PIO(I) candidates declared qualified in JEE (Advanced) 2026",
+    "allocation": "Strictly based on performance in JEE (Advanced) 2026",
+    "target": "Individual IITs ensure at least 20% female enrolment in undergraduate programme(s)",
+    "implementation": "Detailed procedure set out in JoSAA 2026 Business Rules",
+    "note": "No separate female supernumerary seats within foreign national supernumerary quota",
+    "source": "jeeadv.2026.brochure"
+  },
+  "foreign_nationals": {
+    "description": "Candidates who are NOT citizens of India (by birth or naturalized) are considered foreign nationals.",
+    "jee_main_requirement": "NOT required to write JEE (Main) 2026; may register directly for JEE (Advanced) 2026 subject to other eligibility criteria",
+    "seats": "Supernumerary with a cap of 10% of total number of seats in every course",
+    "reservation": "Outside the ambit of GEN-EWS, OBC-NCL, SC, ST, and PwD reservation categories",
+    "female_supernumerary": "No separate supernumerary seats or sub-category for females within foreign national quota",
+    "reference_url": "https://jeeadv.ac.in/foreign.html",
+    "source": "jeeadv.2026.brochure"
+  },
+  "ranking": {
+    "method": "Aggregate marks in Paper 1 and Paper 2 across Physics, Chemistry, Mathematics. See `tie_breaking_rules` for tie resolution.",
+    "category_wise_ranking": "Separate Common Rank Lists (CRLs) and category rank lists prepared for Gen-EWS, OBC-NCL, SC, ST, PwD",
+    "source": "jeeadv.2026.brochure"
+  },
+  "participating_institutes": {
+    "iits": "All 23 Indian Institutes of Technology",
+    "iit_list_source": "jeeadv.2026.brochure",
+    "note": "See iit-list.json for the full list with locations."
+  },
+  "contact": {
+    "website": "https://jeeadv.ac.in/",
+    "email": "Typically published in the information brochure each year",
+    "helpline": "Published in the information brochure each year"
+  }
+}

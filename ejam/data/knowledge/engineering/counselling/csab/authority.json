@@ -1,0 +1,30 @@
+{
+  "id": "csab",
+  "name": "Central Seat Allocation Board",
+  "abbreviation": "CSAB",
+  "conducting_body": "Ministry of Education, Government of India",
+  "official_url": "https://csab.nic.in/",
+  "scope": "Special / supernumerary round seat allocation for NITs, IIITs, IIEST and Other-GFTIs for vacant seats remaining after JoSAA",
+  "types": {
+    "csab_special": {
+      "full_name": "CSAB Special Round",
+      "description": "Conducted after JoSAA to fill remaining vacant seats across NITs, IIITs, IIEST and Other-GFTIs"
+    },
+    "csab_neut": {
+      "full_name": "CSAB for North Eastern and Union Territories (NEUT)",
+      "description": "Special round for candidates from North Eastern States and Union Territories to allocate seats in AICTE-approved institutes under the reservation scheme for States and UTs lacking such facilities."
+    }
+  },
+  "eligibility": {
+    "jee_main": "Candidates who have appeared in JEE (Main) and meet the eligibility criteria of the participating institutes",
+    "note": "Candidates who have already secured and retained a JoSAA-allotted NIT+ seat can participate in CSAB Special without surrendering it first. If no new seat is allotted, the JoSAA seat is retained; if a new CSAB seat is allotted, the retained JoSAA seat is automatically cancelled."
+  },
+  "process": {
+    "registration": "Separate online registration on csab.nic.in after JoSAA concludes",
+    "choice_filling": "Fresh choice filling specific to CSAB participating institutes and programmes",
+    "rounds": "Typically 2 rounds for CSAB Special; additional rounds possible",
+    "reporting": "Document verification and reporting at the allotted institute as per CSAB schedule"
+  },
+  "fee_note": "Seat acceptance / processing fees published in the CSAB business rules each year",
+  "source": "csab.home"
+}
