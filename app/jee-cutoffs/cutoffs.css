@@ -223,6 +223,7 @@
 .cutoff-trend-card { margin-top: 0; }
 .cutoff-program-field { width: min(460px, 48vw); padding: 0; }
 .cutoff-chart-wrap { min-height: 330px; }
+.cutoff-chart-stage { position: relative; }
 .cutoff-chart { display: block; width: 100%; height: 286px; }
 .cutoff-chart-grid { stroke: rgb(255 255 255 / .09); stroke-width: 1; }
 .cutoff-chart-axis { fill: var(--cutoff-muted); font: 10px var(--font-sans), sans-serif; }
@@ -232,6 +233,13 @@
 .cutoff-chart-dot { stroke: var(--cutoff-panel); stroke-width: 2; vector-effect: non-scaling-stroke; }
 .cutoff-chart-dot-opening { fill: #fafafa; }
 .cutoff-chart-dot-closing { fill: #a3a3a3; }
+.cutoff-chart-dot.is-active { stroke: #fff; stroke-width: 2.5; }
+.cutoff-chart-hover-line { stroke: rgb(255 255 255 / .28); stroke-width: 1; stroke-dasharray: 3 3; vector-effect: non-scaling-stroke; pointer-events: none; }
+.cutoff-chart-tooltip { position: absolute; top: 10px; z-index: 2; display: grid; min-width: 132px; gap: 4px; padding: 9px 10px; border: 1px solid rgb(255 255 255 / .22); background: #171717; color: var(--cutoff-muted); font-size: 10px; line-height: 1.35; box-shadow: 0 8px 24px rgb(0 0 0 / .34); transform: translateX(-14px); pointer-events: none; }
+.cutoff-chart-tooltip.is-right { transform: translateX(calc(-100% + 14px)); }
+.cutoff-chart-tooltip strong { color: var(--cutoff-ink); font-size: 11px; }
+.cutoff-chart-tooltip span { display: flex; justify-content: space-between; gap: 16px; }
+.cutoff-chart-tooltip b { color: var(--cutoff-ink); font-weight: 600; font-variant-numeric: tabular-nums; }
 .cutoff-chart-legend { display: flex; flex-wrap: wrap; gap: 14px; padding: 4px 0 2px; color: var(--cutoff-muted); font-size: 10px; }
 .cutoff-chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
 .cutoff-chart-key { display: block; width: 18px; border-top: 2px solid #fafafa; }

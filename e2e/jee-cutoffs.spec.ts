@@ -33,6 +33,18 @@ test("filters cascade, persist in the fragment, and support browser history", as
   await expect(page.getByLabel("Round")).toHaveValue("3");
 });
 
+test("chart hover shows the exact opening and closing ranks", async ({ page }) => {
+  await page.goto(pagePath);
+  const chart = page.locator("svg.cutoff-chart").first();
+  await chart.hover();
+  const tooltip = page.locator(".cutoff-chart-tooltip").first();
+  await expect(tooltip).toBeVisible();
+  await expect(tooltip).toContainText("Opening");
+  await expect(tooltip).toContainText("Closing");
+  await page.getByRole("heading", { level: 1 }).hover();
+  await expect(tooltip).toBeHidden();
+});
+
 test("mobile restyles the one semantic table without horizontal page overflow", async ({ page }) => {
   test.skip((page.viewportSize()?.width ?? 0) > 390, "Mobile assertion");
   await page.goto(pagePath);
