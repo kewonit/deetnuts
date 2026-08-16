@@ -64,7 +64,6 @@ export type SeoRouteRow = {
   content_sha256: string;
   last_changed_at: string;
   source_ids_json: string;
-  rights_status: "unconfirmed";
 };
 
 type SourceRegistryEntry = {
@@ -77,8 +76,6 @@ type SourceRegistryEntry = {
   instituteType: string;
   officialDomain: string;
   sourceLocator: string;
-  rightsStatus: "unconfirmed";
-  retrievalEvidence: null;
 };
 
 const QUOTA_SLUGS: Record<string, string> = {
@@ -214,8 +211,6 @@ function sourceEntry(row: ServingRow): SourceRegistryEntry {
     instituteType,
     officialDomain: locator.hostname,
     sourceLocator: row.source_locator,
-    rightsStatus: "unconfirmed",
-    retrievalEvidence: null,
   };
 }
 
@@ -249,7 +244,7 @@ export async function buildSeoArtifacts(args: {
   const sources = new Map<string, SourceRegistryEntry>();
 
   const addRoute = (
-    route: Omit<SeoRouteRow, "last_changed_at" | "rights_status"> & {
+    route: Omit<SeoRouteRow, "last_changed_at"> & {
       fallbackLastChangedAt?: string;
     },
   ) => {
@@ -264,7 +259,6 @@ export async function buildSeoArtifacts(args: {
         previous?.content_sha256 === route.content_sha256
           ? previous.last_changed_at
           : fallbackLastChangedAt,
-      rights_status: "unconfirmed",
     });
   };
 
@@ -493,10 +487,8 @@ export async function buildSeoArtifacts(args: {
     sourcePath,
     `${JSON.stringify(
       {
-        schemaVersion: 1,
+        schemaVersion: 2,
         generatedAt: args.generatedAt,
-        rightsNotice:
-          "Technical provenance only. A source entry does not assert permission, endorsement, or a data reuse licence.",
         sources: sourceEntries,
       },
       null,

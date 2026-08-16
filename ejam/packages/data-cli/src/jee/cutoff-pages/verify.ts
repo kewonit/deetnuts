@@ -150,7 +150,8 @@ async function main(): Promise<void> {
   const oneRoundProfiles = profiles.length - multiRoundProfiles;
   const indexableRoutes = seoRoutes.filter((route) => route.indexable).length;
   const sourceRegistry = JSON.parse(await fs.readFile(sourceRegistryPath, "utf8")) as {
-    sources: Array<{ sourceId: string; title: string; rightsStatus: string }>;
+    schemaVersion: number;
+    sources: Array<{ sourceId: string; title: string; officialDomain: string }>;
   };
   if (
     programs !== catalog.totals.programs ||
@@ -159,9 +160,10 @@ async function main(): Promise<void> {
     oneRoundProfiles !== catalog.totals.oneRoundProfiles ||
     seoRoutes.length !== catalog.totals.canonicalRoutes ||
     indexableRoutes !== catalog.totals.indexableRoutes ||
+    sourceRegistry.schemaVersion !== 2 ||
     sourceRegistry.sources.length !== catalog.totals.sources ||
     sourceRegistry.sources.some(
-      (source) => !source.sourceId || !source.title || source.rightsStatus !== "unconfirmed",
+      (source) => !source.sourceId || !source.title || !source.officialDomain,
     )
   ) {
     throw new Error("SEO route/source totals do not reconcile");

@@ -404,7 +404,7 @@ export default function AdmissionsFitPanel(props: AdmissionsFitPanelProps) {
               {savedSource
                 ? "Saved on this device and encoded in the URL fragment."
                 : "When saved, this profile stays on this device and is encoded in the URL fragment."}{" "}
-              The fragment is not sent to our server, but anyone you share the link with can read it.
+              The fragment is not part of the page request, but anyone you share the link with can read it. Submitted values are sent to the no-store comparison endpoint to calculate the result.
               {savedSource
                 ? ` Loaded from ${savedSource === "link" ? "this link" : "this device"}.`
                 : ""}

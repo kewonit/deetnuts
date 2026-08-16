@@ -39,7 +39,7 @@ function pageJsonLd(name: string, canonical: string, crumbs: Array<{ name: strin
 
 function SourceContext({ sources }: { sources: CutoffSourceRegistryEntry[] }) {
   const ordered = [...sources].sort((left, right) => left.title.localeCompare(right.title, "en", { numeric: true }));
-  return <section className="cutoff-source-card"><div><h2>Source records</h2><p>Publisher records used for this exact page.</p></div><ul className="cutoff-source-list">{ordered.map((source) => <li key={source.sourceId}><strong>{source.title}</strong><span>{source.officialDomain}</span></li>)}</ul><p className="cutoff-disclaimer" data-nosnippet>DEETNUTS is independent of the counselling authorities and colleges listed. Verify admission decisions on the applicable official portal. Source access does not grant reuse rights; see <Link href="/compliance/data-sources-and-licensing">data &amp; licensing</Link>.</p></section>;
+  return <section className="cutoff-source-card"><div><h2>Source records</h2><p>Publisher records used for this exact page.</p></div><ul className="cutoff-source-list">{ordered.map((source) => <li key={source.sourceId}><strong>{source.title}</strong><span>{source.officialDomain}</span></li>)}</ul><p className="cutoff-disclaimer" data-nosnippet>DEETNUTS is independent of the counselling authorities and colleges listed. Public cutoff pages are open to everyone. Verify admission decisions on the applicable official portal; see <Link href="/compliance/data-sources-and-licensing">sources &amp; methodology</Link>.</p></section>;
 }
 
 export async function programMetadata(

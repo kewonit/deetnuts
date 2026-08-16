@@ -80,7 +80,6 @@ export type JeeSeoRoute = {
   contentSha256: string;
   lastChangedAt: string;
   sourceIds: string[];
-  rightsStatus: "unconfirmed";
 };
 
 export type CutoffSourceRegistryEntry = {
@@ -93,8 +92,6 @@ export type CutoffSourceRegistryEntry = {
   instituteType: string;
   officialDomain: string;
   sourceLocator: string;
-  rightsStatus: "unconfirmed";
-  retrievalEvidence: null;
 };
 
 export type CutoffServingRow = {

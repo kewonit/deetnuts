@@ -43,7 +43,6 @@ type RawSeoRoute = {
   content_sha256: string;
   last_changed_at: string | Date;
   source_ids_json: string;
-  rights_status: "unconfirmed";
 };
 
 type SourceRegistry = {
@@ -108,7 +107,6 @@ function normalizeRoute(raw: RawSeoRoute): JeeSeoRoute {
         ? raw.last_changed_at.toISOString()
         : String(raw.last_changed_at),
     sourceIds: JSON.parse(raw.source_ids_json) as string[],
-    rightsStatus: raw.rights_status,
   };
 }
 

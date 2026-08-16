@@ -4,6 +4,8 @@ import "./globals.css";
 import SiteJsonLd from "@/components/SiteJsonLd";
 import StandardSiteShell from "@/components/StandardSiteShell";
 
+const themeBootScript = `try{var t=localStorage.getItem("deetnuts_theme");var r=document.documentElement;if(t==="light"||t==="dark"){r.classList.add(t);r.classList.remove(t==="light"?"dark":"light")}}catch(e){}`;
+
 export const metadata: Metadata = {
   applicationName: "DEETNUTS",
   title: {
@@ -69,8 +71,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="bg-[#E4DFF2]">
+    <html lang="en" className="bg-[#E4DFF2]" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
         <SiteJsonLd />
       </head>
       <body className="relative min-h-screen overflow-x-hidden font-sans">

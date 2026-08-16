@@ -55,18 +55,77 @@ test("mobile restyles the one semantic table without horizontal page overflow", 
 });
 
 test("cutoff surface has no detectable WCAG A/AA violations", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "light" });
   await page.goto(pagePath);
   await page.locator("svg.cutoff-chart").waitFor({ state: "attached" });
-  const results = await new AxeBuilder({ page }).include(".jee-cutoff-shell").analyze();
-  expect(results.violations).toEqual([]);
+  const lightResults = await new AxeBuilder({ page }).include(".jee-cutoff-shell").include(".jee-cutoff-footer").analyze();
+  expect(lightResults.violations).toEqual([]);
+  await page.emulateMedia({ colorScheme: "dark" });
+  const darkResults = await new AxeBuilder({ page }).include(".jee-cutoff-shell").include(".jee-cutoff-footer").analyze();
+  expect(darkResults.violations).toEqual([]);
 });
 
-test("cutoff routes use the compact product footer", async ({ page }) => {
+test("cutoff routes use the structured product footer", async ({ page }) => {
   await page.goto(pagePath);
   const footer = page.locator(".jee-cutoff-footer");
   await expect(footer).toBeVisible();
   await expect(page.locator("footer.bg-gradient-to-b")).toHaveCount(0);
-  expect((await footer.boundingBox())?.height ?? Infinity).toBeLessThan(450);
+  await expect(footer.locator(".jee-cutoff-footer-heading")).toHaveText(["Cutoffs", "Tools", "Data", "Project"]);
+  expect((await footer.boundingBox())?.height ?? Infinity).toBeLessThan(960);
+});
+
+test("homepage and older site pages retain the original footer", async ({ page }) => {
+  for (const path of ["/", "/mht-cet"]) {
+    await page.goto(path);
+    await expect(page.locator(".jee-cutoff-footer")).toHaveCount(0);
+    const originalFooter = page.locator(".legacy-site-footer");
+    await expect(originalFooter).toBeVisible();
+    await expect(originalFooter).toContainText("MHT-CET");
+    await expect(originalFooter.locator("[data-legacy-wordmark] svg")).toBeVisible();
+  }
+});
+
+test("cutoff surfaces follow light and dark color preferences", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "light" });
+  await page.goto(pagePath);
+  const colors = () => page.evaluate(() => {
+    const shell = getComputedStyle(document.querySelector(".jee-cutoff-shell")!);
+    const footer = getComputedStyle(document.querySelector(".jee-cutoff-footer")!);
+    const openingLine = getComputedStyle(document.querySelector(".cutoff-chart-opening")!);
+    return { shell: shell.backgroundColor, footer: footer.backgroundColor, line: openingLine.stroke };
+  });
+  const light = await colors();
+  await page.emulateMedia({ colorScheme: "dark" });
+  const dark = await colors();
+  expect(light.shell).not.toBe(dark.shell);
+  expect(light.footer).not.toBe(dark.footer);
+  expect(light.line).not.toBe(dark.line);
+});
+
+test("theme settings override the device preference and persist", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto(pagePath);
+  await page.getByRole("button", { name: "Decline" }).click();
+  const shell = page.locator(".jee-cutoff-shell");
+  const deviceBackground = await shell.evaluate((element) => getComputedStyle(element).backgroundColor);
+
+  await page.getByRole("button", { name: "Theme settings", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Theme" });
+  await expect(dialog).toBeVisible();
+  expect((await new AxeBuilder({ page }).include(".theme-settings-panel").analyze()).violations).toEqual([]);
+  await dialog.getByRole("button", { name: /^Light/ }).click();
+  await expect(page.locator("html")).toHaveClass(/\blight\b/);
+  const lightBackground = await shell.evaluate((element) => getComputedStyle(element).backgroundColor);
+  expect(lightBackground).not.toBe(deviceBackground);
+
+  await page.reload();
+  await expect(page.locator("html")).toHaveClass(/\blight\b/);
+  await page.getByRole("button", { name: "Theme settings", exact: true }).click();
+  const lightDialog = page.getByRole("dialog", { name: "Theme" });
+  expect((await new AxeBuilder({ page }).include(".theme-settings-panel").analyze()).violations).toEqual([]);
+  await lightDialog.getByRole("button", { name: /^System/ }).click();
+  await expect(page.locator("html")).not.toHaveClass(/\b(?:light|dark)\b/);
+  await expect.poll(() => shell.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe(deviceBackground);
 });
 
 test("header stays in flow with the intended responsive height", async ({ page }) => {
@@ -111,6 +170,53 @@ test("analytics makes no Google request before consent", async ({ page }) => {
   expect(googleRequests).toEqual([]);
   await page.getByRole("button", { name: "Decline" }).click();
   expect(googleRequests).toEqual([]);
+});
+
+test("analytics consent is versioned and revocation clears GA cookies", async ({ page }) => {
+  await page.goto(pagePath);
+  await page.evaluate(() => {
+    document.cookie = "deetnuts_analytics_consent=granted:2026-08-16; Path=/; SameSite=Lax";
+    document.cookie = "_ga=test-client; Path=/; SameSite=Lax";
+    document.cookie = "_ga_TEST=test-session; Path=/; SameSite=Lax";
+  });
+  await page.reload();
+  await page.getByRole("button", { name: "Cookie settings", exact: true }).click();
+  await expect(page.getByRole("dialog", { name: "Analytics cookie settings" })).toContainText("Current choice: analytics allowed");
+  await page.getByRole("button", { name: "Decline" }).click();
+  await expect.poll(() => page.evaluate(() => document.cookie)).toContain("deetnuts_analytics_consent=denied:2026-08-16");
+  expect(await page.evaluate(() => document.cookie)).not.toMatch(/(?:^|; )_ga(?:_|=)/);
+});
+
+test("legal pages are complete, canonical and readable in both themes", async ({ page, request }) => {
+  for (const path of [
+    "/compliance/terms-and-conditions",
+    "/compliance/privacy-policy",
+    "/compliance/cookie-policy",
+  ]) {
+    const response = await request.get(path);
+    expect(response.status()).toBe(200);
+    const html = await response.text();
+    expect(html).toContain("Version");
+    await page.goto(path);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", `https://deetnuts.com${path}`);
+    await expect(page.locator(".policy-page")).toBeVisible();
+  }
+  await page.emulateMedia({ colorScheme: "light" });
+  const light = await page.locator(".policy-page").evaluate((element) => getComputedStyle(element).backgroundColor);
+  await page.emulateMedia({ colorScheme: "dark" });
+  const dark = await page.locator(".policy-page").evaluate((element) => getComputedStyle(element).backgroundColor);
+  expect(light).not.toBe(dark);
+  expect((await new AxeBuilder({ page }).include(".policy-page").analyze()).violations).toEqual([]);
+});
+
+test("core sitemap publishes the legal and compliance routes", async ({ request }) => {
+  const response = await request.get("/sitemap.xml");
+  expect(response.status()).toBe(200);
+  const xml = await response.text();
+  expect(xml).toContain("https://deetnuts.com/compliance/terms-and-conditions");
+  expect(xml).toContain("https://deetnuts.com/compliance/privacy-policy");
+  expect(xml).toContain("https://deetnuts.com/compliance/cookie-policy");
+  expect(xml).toContain("https://deetnuts.com/compliance/automated-access");
 });
 
 test("unknown routes and invalid API releases fail explicitly", async ({ request }) => {

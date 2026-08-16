@@ -30,6 +30,5 @@ test("cutoff provenance registry covers every current source", async () => {
   const sources = await getCutoffSources();
   assert.equal(sources.length, 274);
   assert.equal(new Set(sources.map((source) => source.sourceId)).size, sources.length);
-  assert.ok(sources.every((source) => source.title && source.officialDomain && source.rightsStatus === "unconfirmed"));
+  assert.ok(sources.every((source) => source.title && source.officialDomain));
 });
-

@@ -5,6 +5,7 @@ import RouteAwareFooter from "@/components/RouteAwareFooter";
 import SanitizedGoogleAnalytics from "@/components/analytics/SanitizedGoogleAnalytics";
 import RouteAwareHeader from "@/components/RouteAwareHeader";
 import CookieConsent from "@/components/analytics/CookieConsent";
+import ThemeSettings from "@/components/theme/ThemeSettings";
 
 export default function StandardSiteShell({
   children,
@@ -24,6 +25,7 @@ export default function StandardSiteShell({
       </div>
       <SanitizedGoogleAnalytics />
       <CookieConsent />
+      <ThemeSettings />
       <RouteAwareFooter />
       <div className="fixed bottom-0 left-0 right-0 z-50"></div>
     </>

@@ -2,16 +2,72 @@
   --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-instrument-sans: "Instrument Sans", var(--font-sans);
   --font-serif-display: "Instrument Serif", ui-serif, Georgia, serif;
+  --cutoff-bg: #fafafa;
+  --cutoff-panel: #fff;
+  --cutoff-panel-raised: #f3f3f3;
+  --cutoff-ink: #18181b;
+  --cutoff-muted: #686868;
+  --cutoff-line: rgb(24 24 27 / .13);
+  --cutoff-line-strong: rgb(24 24 27 / .25);
+  --cutoff-focus: rgb(82 82 82 / .32);
+  --cutoff-inverse: #fff;
+  --cutoff-chart-grid: rgb(24 24 27 / .1);
+  --cutoff-chart-opening: #18181b;
+  --cutoff-chart-closing: #737373;
+  --cutoff-chart-dot-stroke: #fff;
+  --cutoff-chart-hover: rgb(24 24 27 / .32);
+  --cutoff-tooltip-bg: #18181b;
+  --cutoff-tooltip-ink: #fafafa;
+  --cutoff-tooltip-muted: #d4d4d4;
+  --cutoff-error: #b91c1c;
+  --cutoff-error-line: rgb(185 28 28 / .3);
+  min-height: 100vh;
+  background: var(--cutoff-bg);
+  color: var(--cutoff-ink);
+  color-scheme: light;
+  font-family: var(--font-sans), sans-serif;
+}
+
+html.dark .jee-cutoff-shell {
   --cutoff-bg: #0a0a0a;
   --cutoff-panel: #0a0a0a;
   --cutoff-panel-raised: #171717;
   --cutoff-ink: #fafafa;
   --cutoff-muted: #a1a1a1;
-  --cutoff-line: rgb(255 255 255 / 0.12);
-  min-height: 100vh;
-  background: var(--cutoff-bg);
-  color: var(--cutoff-ink);
-  font-family: var(--font-sans), sans-serif;
+  --cutoff-line: rgb(255 255 255 / .12);
+  --cutoff-line-strong: rgb(255 255 255 / .24);
+  --cutoff-focus: rgb(163 163 163 / .4);
+  --cutoff-inverse: #171717;
+  --cutoff-chart-grid: rgb(255 255 255 / .09);
+  --cutoff-chart-opening: #fafafa;
+  --cutoff-chart-closing: #a3a3a3;
+  --cutoff-chart-dot-stroke: #0a0a0a;
+  --cutoff-chart-hover: rgb(255 255 255 / .28);
+  --cutoff-error: #fecaca;
+  --cutoff-error-line: rgb(248 113 113 / .35);
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not(.light) .jee-cutoff-shell {
+    --cutoff-bg: #0a0a0a;
+    --cutoff-panel: #0a0a0a;
+    --cutoff-panel-raised: #171717;
+    --cutoff-ink: #fafafa;
+    --cutoff-muted: #a1a1a1;
+    --cutoff-line: rgb(255 255 255 / .12);
+    --cutoff-line-strong: rgb(255 255 255 / .24);
+    --cutoff-focus: rgb(163 163 163 / .4);
+    --cutoff-inverse: #171717;
+    --cutoff-chart-grid: rgb(255 255 255 / .09);
+    --cutoff-chart-opening: #fafafa;
+    --cutoff-chart-closing: #a3a3a3;
+    --cutoff-chart-dot-stroke: #0a0a0a;
+    --cutoff-chart-hover: rgb(255 255 255 / .28);
+    --cutoff-error: #fecaca;
+    --cutoff-error-line: rgb(248 113 113 / .35);
+    color-scheme: dark;
+  }
 }
 
 .jee-cutoff-shell *,
@@ -89,9 +145,9 @@
   transition: background-color 150ms ease, border-color 150ms ease;
 }
 .cutoff-button:hover,
-.cutoff-year-link:hover { border-color: rgb(255 255 255 / .24); background: var(--cutoff-panel-raised); }
-.cutoff-button-primary { border-color: var(--cutoff-ink); background: var(--cutoff-ink); color: #171717; }
-.cutoff-button-primary:hover { border-color: #fff; background: #fff; }
+.cutoff-year-link:hover { border-color: var(--cutoff-line-strong); background: var(--cutoff-panel-raised); }
+.cutoff-button-primary { border-color: var(--cutoff-ink); background: var(--cutoff-ink); color: var(--cutoff-inverse); }
+.cutoff-button-primary:hover { border-color: var(--cutoff-ink); background: var(--cutoff-ink); }
 
 .cutoff-facts {
   display: grid;
@@ -182,7 +238,7 @@
 .cutoff-year-nav h2 { flex: 0 0 auto; font-size: 12px; }
 .cutoff-years { display: flex; flex-wrap: wrap; gap: 6px; }
 .cutoff-year-link { min-height: 30px; padding-inline: 10px; }
-.cutoff-year-link[aria-current="page"] { border-color: var(--cutoff-ink); background: var(--cutoff-ink); color: #171717; }
+.cutoff-year-link[aria-current="page"] { border-color: var(--cutoff-ink); background: var(--cutoff-ink); color: var(--cutoff-inverse); }
 
 .cutoff-controls-panel {
   margin-top: 24px;
@@ -199,19 +255,19 @@
   width: 100%;
   min-height: 34px;
   padding: 0 28px 0 9px;
-  border: 1px solid rgb(255 255 255 / .15);
+  border: 1px solid var(--cutoff-line-strong);
   border-radius: 0;
   background: transparent;
   color: var(--cutoff-ink);
   font-size: 12px;
   text-overflow: ellipsis;
 }
-.cutoff-field select:hover { border-color: rgb(255 255 255 / .28); }
+.cutoff-field select:hover { border-color: var(--cutoff-ink); }
 .cutoff-field select:focus-visible,
 .cutoff-button:focus-visible,
 .cutoff-year-link:focus-visible,
 .cutoff-college-card:focus-visible,
-.cutoff-exam-card:focus-visible { outline: 3px solid rgb(115 115 115 / .55); outline-offset: 2px; }
+.cutoff-exam-card:focus-visible { outline: 3px solid var(--cutoff-focus); outline-offset: 2px; }
 
 .cutoff-chart-card,
 .cutoff-table-section {
@@ -225,25 +281,25 @@
 .cutoff-chart-wrap { min-height: 330px; }
 .cutoff-chart-stage { position: relative; }
 .cutoff-chart { display: block; width: 100%; height: 286px; }
-.cutoff-chart-grid { stroke: rgb(255 255 255 / .09); stroke-width: 1; }
+.cutoff-chart-grid { stroke: var(--cutoff-chart-grid); stroke-width: 1; }
 .cutoff-chart-axis { fill: var(--cutoff-muted); font: 10px var(--font-sans), sans-serif; }
 .cutoff-chart-line { fill: none; stroke-width: 2; vector-effect: non-scaling-stroke; }
-.cutoff-chart-opening { stroke: #fafafa; }
-.cutoff-chart-closing { stroke: #a3a3a3; stroke-dasharray: 5 5; }
-.cutoff-chart-dot { stroke: var(--cutoff-panel); stroke-width: 2; vector-effect: non-scaling-stroke; }
-.cutoff-chart-dot-opening { fill: #fafafa; }
-.cutoff-chart-dot-closing { fill: #a3a3a3; }
-.cutoff-chart-dot.is-active { stroke: #fff; stroke-width: 2.5; }
-.cutoff-chart-hover-line { stroke: rgb(255 255 255 / .28); stroke-width: 1; stroke-dasharray: 3 3; vector-effect: non-scaling-stroke; pointer-events: none; }
-.cutoff-chart-tooltip { position: absolute; top: 10px; z-index: 2; display: grid; min-width: 132px; gap: 4px; padding: 9px 10px; border: 1px solid rgb(255 255 255 / .22); background: #171717; color: var(--cutoff-muted); font-size: 10px; line-height: 1.35; box-shadow: 0 8px 24px rgb(0 0 0 / .34); transform: translateX(-14px); pointer-events: none; }
+.cutoff-chart-opening { stroke: var(--cutoff-chart-opening); }
+.cutoff-chart-closing { stroke: var(--cutoff-chart-closing); stroke-dasharray: 5 5; }
+.cutoff-chart-dot { stroke: var(--cutoff-chart-dot-stroke); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.cutoff-chart-dot-opening { fill: var(--cutoff-chart-opening); }
+.cutoff-chart-dot-closing { fill: var(--cutoff-chart-closing); }
+.cutoff-chart-dot.is-active { stroke: var(--cutoff-chart-dot-stroke); stroke-width: 2.5; }
+.cutoff-chart-hover-line { stroke: var(--cutoff-chart-hover); stroke-width: 1; stroke-dasharray: 3 3; vector-effect: non-scaling-stroke; pointer-events: none; }
+.cutoff-chart-tooltip { position: absolute; top: 10px; z-index: 2; display: grid; min-width: 132px; gap: 4px; padding: 9px 10px; border: 1px solid rgb(255 255 255 / .22); background: var(--cutoff-tooltip-bg); color: var(--cutoff-tooltip-muted); font-size: 10px; line-height: 1.35; box-shadow: 0 8px 24px rgb(0 0 0 / .24); transform: translateX(-14px); pointer-events: none; }
 .cutoff-chart-tooltip.is-right { transform: translateX(calc(-100% + 14px)); }
-.cutoff-chart-tooltip strong { color: var(--cutoff-ink); font-size: 11px; }
+.cutoff-chart-tooltip strong { color: var(--cutoff-tooltip-ink); font-size: 11px; }
 .cutoff-chart-tooltip span { display: flex; justify-content: space-between; gap: 16px; }
-.cutoff-chart-tooltip b { color: var(--cutoff-ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.cutoff-chart-tooltip b { color: var(--cutoff-tooltip-ink); font-weight: 600; font-variant-numeric: tabular-nums; }
 .cutoff-chart-legend { display: flex; flex-wrap: wrap; gap: 14px; padding: 4px 0 2px; color: var(--cutoff-muted); font-size: 10px; }
 .cutoff-chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
-.cutoff-chart-key { display: block; width: 18px; border-top: 2px solid #fafafa; }
-.cutoff-chart-key-closing { border-color: #a3a3a3; border-top-style: dashed; }
+.cutoff-chart-key { display: block; width: 18px; border-top: 2px solid var(--cutoff-chart-opening); }
+.cutoff-chart-key-closing { border-color: var(--cutoff-chart-closing); border-top-style: dashed; }
 .cutoff-chart-note { margin: 8px 0 0; color: var(--cutoff-muted); font-size: 11px; }
 
 .cutoff-result-count { color: var(--cutoff-muted); font-size: 11px; font-variant-numeric: tabular-nums; }
@@ -266,7 +322,7 @@
 .cutoff-table td:nth-last-child(-n+2) { font-variant-numeric: tabular-nums; }
 .cutoff-table td:last-child strong { font-weight: 600; }
 
-.cutoff-error { margin-bottom: 12px; padding: 11px 12px; border: 1px solid rgb(248 113 113 / .35); color: #fecaca; font-size: 12px; }
+.cutoff-error { margin-bottom: 12px; padding: 11px 12px; border: 1px solid var(--cutoff-error-line); color: var(--cutoff-error); font-size: 12px; }
 .cutoff-empty { margin: 0; padding: 32px 20px; border: 1px solid var(--cutoff-line); color: var(--cutoff-muted); text-align: center; font-size: 12px; }
 .cutoff-sr-table { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); contain: strict; white-space: nowrap; }
 
@@ -286,20 +342,53 @@
 .cutoff-source-card .cutoff-disclaimer { grid-column: 1 / -1; margin-top: 0; padding-top: 16px; border-top: 1px solid var(--cutoff-line); font-size: 11px; }
 .cutoff-disclaimer a { color: var(--cutoff-ink); text-decoration: underline; text-underline-offset: 3px; }
 
-.jee-cutoff-footer { border-top: 1px solid rgb(255 255 255 / .1); background: #0a0a0a; color: #fafafa; font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif; }
-.jee-cutoff-footer-inner { width: min(1180px, 100%); margin: 0 auto; padding: 24px; }
-.jee-cutoff-footer-top { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-.jee-cutoff-footer-brand { color: #fafafa; font-size: 13px; font-weight: 600; text-decoration: none; }
-.jee-cutoff-footer-top nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 16px; }
-.jee-cutoff-footer a { color: #a1a1a1; font-size: 11px; text-decoration: none; }
-.jee-cutoff-footer button { padding: 0; border: 0; background: transparent; color: #a1a1a1; cursor: pointer; font: inherit; font-size: 11px; }
-.jee-cutoff-footer a:hover { color: #fafafa; }
-.jee-cutoff-footer button:hover { color: #fafafa; }
-.jee-cutoff-footer-bottom { display: flex; align-items: start; justify-content: space-between; gap: 24px; margin-top: 18px; padding-top: 16px; border-top: 1px solid rgb(255 255 255 / .1); }
-.jee-cutoff-footer-bottom p { max-width: 760px; margin: 0; color: #a1a1a1; font-size: 10px; line-height: 1.55; }
-.jee-cutoff-footer-bottom div { display: flex; flex: 0 0 auto; gap: 14px; }
-.jee-cutoff-footer-bottom a,
-.jee-cutoff-footer-bottom button { font-size: 10px; }
+.jee-cutoff-footer {
+  --cutoff-footer-bg: #f7f7f7;
+  --cutoff-footer-ink: #202020;
+  --cutoff-footer-muted: #6b6b6b;
+  --cutoff-footer-faint: #666;
+  --cutoff-footer-line: rgb(24 24 27 / .12);
+  border-top: 1px solid var(--cutoff-footer-line);
+  background: var(--cutoff-footer-bg);
+  color: var(--cutoff-footer-ink);
+  color-scheme: light;
+  font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+}
+html.dark .jee-cutoff-footer {
+  --cutoff-footer-bg: #0f0f0f;
+  --cutoff-footer-ink: #f5f5f5;
+  --cutoff-footer-muted: #aaa;
+  --cutoff-footer-faint: #858585;
+  --cutoff-footer-line: rgb(255 255 255 / .12);
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  html:not(.light) .jee-cutoff-footer {
+    --cutoff-footer-bg: #0f0f0f;
+    --cutoff-footer-ink: #f5f5f5;
+    --cutoff-footer-muted: #aaa;
+    --cutoff-footer-faint: #858585;
+    --cutoff-footer-line: rgb(255 255 255 / .12);
+    color-scheme: dark;
+  }
+}
+.jee-cutoff-footer-inner { width: min(1360px, 100%); margin: 0 auto; padding: 56px 32px 36px; }
+.jee-cutoff-footer-grid { display: grid; grid-template-columns: minmax(230px, 1.35fr) repeat(4, minmax(120px, 1fr)); gap: 40px clamp(28px, 4vw, 64px); }
+.jee-cutoff-footer-about { display: flex; min-width: 0; flex-direction: column; align-items: flex-start; }
+.jee-cutoff-footer .jee-cutoff-footer-brand { color: var(--cutoff-footer-ink); font-size: 25px; font-weight: 600; letter-spacing: -.03em; line-height: 1; text-decoration: none; }
+.jee-cutoff-footer-about > p { max-width: 245px; margin: 18px 0 0; color: var(--cutoff-footer-muted); font-size: 13px; line-height: 1.65; }
+.jee-cutoff-footer-about small { margin-top: 28px; color: var(--cutoff-footer-faint); font-size: 11px; }
+.jee-cutoff-footer-project-links { display: flex; gap: 16px; margin-top: 18px; }
+.jee-cutoff-footer nav { display: flex; min-width: 0; flex-direction: column; align-items: flex-start; gap: 14px; }
+.jee-cutoff-footer-heading { margin: 0 0 5px; color: var(--cutoff-footer-ink); font-size: 14px; font-weight: 600; }
+.jee-cutoff-footer a { color: var(--cutoff-footer-muted); font-size: 12px; line-height: 1.45; text-decoration: none; text-underline-offset: 3px; }
+.jee-cutoff-footer button { padding: 0; border: 0; background: transparent; color: var(--cutoff-footer-muted); cursor: pointer; font: inherit; font-size: 12px; line-height: 1.45; text-align: left; }
+.jee-cutoff-footer a:hover,
+.jee-cutoff-footer button:hover { color: var(--cutoff-footer-ink); text-decoration: underline; }
+.jee-cutoff-footer-notices { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--cutoff-footer-line); }
+.jee-cutoff-footer-notices > p { max-width: 1180px; margin: 0 0 8px; color: var(--cutoff-footer-faint); font-size: 10px; line-height: 1.7; }
+.jee-cutoff-footer-legal { display: flex; flex-wrap: wrap; gap: 10px 18px; margin-top: 18px; }
+.jee-cutoff-footer-legal a { font-size: 10px; }
 
 @keyframes cutoff-pulse { 50% { opacity: .55; } }
 
@@ -309,6 +398,8 @@
   .cutoff-directory { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .cutoff-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .cutoff-copy-grid { grid-template-columns: 1fr; }
+  .jee-cutoff-footer-grid { grid-template-columns: minmax(210px, 1.2fr) repeat(2, minmax(130px, 1fr)); }
+  .jee-cutoff-footer-about { grid-row: span 2; }
 }
 
 @media (max-width: 620px) {
@@ -356,10 +447,12 @@
   .cutoff-table tbody td::before { content: attr(data-label); color: var(--cutoff-muted); font-size: 10px; font-weight: 400; text-align: left; }
   .cutoff-source-card { grid-template-columns: 1fr; padding: 16px; }
   .cutoff-source-card .cutoff-disclaimer { grid-column: auto; }
-  .jee-cutoff-footer-inner { padding: 20px 16px; }
-  .jee-cutoff-footer-top,
-  .jee-cutoff-footer-bottom { align-items: stretch; flex-direction: column; gap: 14px; }
-  .jee-cutoff-footer-top nav { justify-content: flex-start; gap: 10px 16px; }
+  .jee-cutoff-footer-inner { padding: 40px 18px 28px; }
+  .jee-cutoff-footer-grid { grid-template-columns: 1fr 1fr; gap: 34px 24px; }
+  .jee-cutoff-footer-about { grid-column: 1 / -1; grid-row: auto; }
+  .jee-cutoff-footer-about > p { max-width: 320px; }
+  .jee-cutoff-footer-about small { margin-top: 20px; }
+  .jee-cutoff-footer-notices { margin-top: 38px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

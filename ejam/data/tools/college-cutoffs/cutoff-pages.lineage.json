@@ -3,7 +3,7 @@
   "artifact": "college_cutoff_pages",
   "release_version": "v0.2.5",
   "source_manifest_version": "v0.2.4",
-  "generated_at": "2026-08-15T14:03:16.209Z",
+  "generated_at": "2026-08-15T21:09:44.476Z",
   "source_cutoffs": [
     "datasets/engineering/jee/csab/cutoffs/year=2021/round=1/cutoffs.parquet",
     "datasets/engineering/jee/csab/cutoffs/year=2022/round=1/cutoffs.parquet",
@@ -77,7 +77,7 @@
     "datasets/engineering/jee/josaa/cutoffs/year=2025/round=5/cutoffs.parquet",
     "datasets/engineering/jee/josaa/cutoffs/year=2025/round=6/cutoffs.parquet"
   ],
-  "catalog_sha256": "aaa3466f0d590f7d45f0d6b68929ac6bf8ea06e5b66dbb6b2cebbf98c90601a9",
+  "catalog_sha256": "f5ddd0456671029939cfa98e723df7fa3dc6f459725f1f96e451091ce3e57b29",
   "artifacts": [
     {
       "instituteId": "assam-university",
