@@ -1085,23 +1085,23 @@
     },
     {
       "path": "tools/college-cutoffs/catalog.json",
-      "sha256": "aaa3466f0d590f7d45f0d6b68929ac6bf8ea06e5b66dbb6b2cebbf98c90601a9",
+      "sha256": "f5ddd0456671029939cfa98e723df7fa3dc6f459725f1f96e451091ce3e57b29",
       "bytes": 608581
     },
     {
       "path": "tools/college-cutoffs/cutoff-sources.json",
-      "sha256": "186b2792a5dc4ddfa5543182981eac68a74dbea491532fe5fb0266ef06d1a650",
-      "bytes": 144093
+      "sha256": "e2fc683940f02a423092e99d61ee75d3c8cda4fedc115f5c214b1fe8b6482375",
+      "bytes": 124784
     },
     {
       "path": "tools/college-cutoffs/cutoff-pages.lineage.json",
-      "sha256": "f5d2586b6b4b4ab813084bf646abc16eda863b31dffd478f331b92e5a3229138",
+      "sha256": "70c383284667fb8e3e6c9449ca6742d00a82f37530dc90c9b2671a15b2161eec",
       "bytes": 38152
     },
     {
       "path": "tools/college-cutoffs/seo-routes.parquet",
-      "sha256": "89b7e37ce977257ecdb076e658283c7497f1f26b636bf5bfa5bb33f0da9a7944",
-      "bytes": 5145446
+      "sha256": "7bc725d53caa660c9312975362b8b054b0279bc82ea581f91d8e90613f0f9e5f",
+      "bytes": 5142561
     },
     {
       "path": "tools/college-predictor/csab/predictor-index.lineage.json",
