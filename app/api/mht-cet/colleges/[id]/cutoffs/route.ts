@@ -25,12 +25,12 @@ export async function GET(
     const cutoffs = records as unknown as CutoffData[];
 
     return NextResponse.json({ cutoffs });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error fetching cutoff data:", error);
     return new NextResponse(
       JSON.stringify({
         message: "Failed to fetch cutoff data",
-        error: error.message,
+        error: error instanceof Error ? error.message : "Unknown error",
       }),
       { status: 500, headers: { "Content-Type": "application/json" } },
     );

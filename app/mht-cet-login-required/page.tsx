@@ -3,7 +3,15 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { sanitizeMhtCetRedirectPath } from "@/lib/auth-redirect";
 
-export default async function MHTCETLoginRequired({ searchParams }: any) {
+type MhtCetLoginRequiredProps = {
+  searchParams: Promise<{
+    redirect?: string | string[];
+  }>;
+};
+
+export default async function MHTCETLoginRequired({
+  searchParams,
+}: MhtCetLoginRequiredProps) {
   const params = await searchParams;
   const redirectTo = sanitizeMhtCetRedirectPath(params?.redirect);
 

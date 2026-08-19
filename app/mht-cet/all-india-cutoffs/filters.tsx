@@ -4,7 +4,6 @@ import { useState, useCallback } from "react";
 import {
   Search,
   X,
-  Filter,
   RotateCcw,
   Loader2,
   Check,
@@ -27,12 +26,15 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
 } from "@/components/ui/command";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { FilterState } from "./types";
-import { ENGINEERING_BRANCHES, COURSE_GROUPS } from "./constants";
+import {
+  ENGINEERING_BRANCHES,
+  COURSE_GROUPS,
+  type EngineeringBranch,
+} from "./constants";
 import { Badge } from "@/components/ui/badge";
 
 interface FiltersProps {
@@ -89,7 +91,7 @@ export function Filters({
       const groupBranches =
         COURSE_GROUPS[groupName as keyof typeof COURSE_GROUPS] || [];
       const availableGroupBranches = groupBranches.filter((branch) =>
-        ENGINEERING_BRANCHES.includes(branch as any),
+        ENGINEERING_BRANCHES.includes(branch as EngineeringBranch),
       );
       const currentBranches = filters.branches || [];
 
@@ -133,11 +135,6 @@ export function Filters({
   const activeFilterCount = Object.values(filters).filter(
     (value) => value !== "",
   ).length;
-
-  // Get filtered branches based on search
-  const filteredBranches = ENGINEERING_BRANCHES.filter((branch) =>
-    branch.toLowerCase().includes((filters.search || "").toLowerCase()),
-  );
 
   return (
     <Card className="w-full border-2 border-black shadow-base rounded-base bg-white">
@@ -324,7 +321,7 @@ export function Filters({
                   {Object.entries(COURSE_GROUPS).map(
                     ([groupName, branches]) => {
                       const availableGroupBranches = branches.filter((branch) =>
-                        ENGINEERING_BRANCHES.includes(branch as any),
+                        ENGINEERING_BRANCHES.includes(branch as EngineeringBranch),
                       );
                       const currentBranches = filters.branches || [];
                       const selectedInGroup = availableGroupBranches.filter(

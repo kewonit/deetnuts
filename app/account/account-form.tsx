@@ -2,10 +2,9 @@
 import { useEffect, useState } from "react";
 import { type User } from "@/lib/auth";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { updateProfile } from "@/app/login/actions";
-import { SubmitButton } from "@/app/login/sumbit-button";
+import { SubmitButton } from "@/app/login/submit-button";
 
 export default function AccountForm({
   user,

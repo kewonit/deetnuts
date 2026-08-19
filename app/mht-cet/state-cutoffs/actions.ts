@@ -1,6 +1,9 @@
 "use server";
 
-import { getPocketBase } from "@/lib/pocketbaseClient";
+import {
+  getPocketBase,
+  type PocketBaseLike,
+} from "@/lib/pocketbaseClient";
 import { createAdminClient } from "@/lib/supabase/admin";
 import {
   MhtCetCandidateProfileSchema,
@@ -23,6 +26,7 @@ import {
   buildStateCutoffSearchFilter,
   escapeFilterValue,
 } from "./search-filter";
+import type { CutoffRecord } from "./types";
 
 interface ProfiledCutoffQuery {
   page: number;
@@ -443,7 +447,7 @@ export async function getCutoffRecords(
 
     // Helper function to validate collection exists
     const validateCollectionExists = async (
-      pb: any,
+      pb: PocketBaseLike,
       collectionName: string,
     ): Promise<boolean> => {
       try {
@@ -579,7 +583,7 @@ export async function getCutoffRecords(
       // Execute queries for all combinations of chunks
       const chunkTasks: Array<
         () => Promise<{
-          items: any[];
+          items: CutoffRecord[];
           totalItems: number;
           totalPages: number;
           page: number;
@@ -600,7 +604,7 @@ export async function getCutoffRecords(
                 chunkTasks.push(() =>
                   pb
                     .collection(collectionName)
-                    .getList(
+                    .getList<CutoffRecord>(
                       1, // Always get page 1 for chunks
                       200, // Get more items per chunk to have enough for final pagination
                       {
@@ -637,7 +641,7 @@ export async function getCutoffRecords(
       const allItems = chunkResults.flatMap((chunkResult) => chunkResult.items);
 
       // Remove duplicates
-      const uniqueItems = new Map();
+      const uniqueItems = new Map<string, CutoffRecord>();
       allItems.forEach((item) => {
         uniqueItems.set(item.id, item);
       });
@@ -646,7 +650,7 @@ export async function getCutoffRecords(
       const totalItems = uniqueItemsArray.length;
 
       // Sort the combined and deduplicated results according to the sort criteria
-      uniqueItemsArray.sort((a: any, b: any) => {
+      uniqueItemsArray.sort((a, b) => {
         if (percentileInput && !isNaN(parseFloat(percentileInput))) {
           // Sort by cutoff_score descending for percentile searches
           return parseFloat(b.cutoff_score) - parseFloat(a.cutoff_score);
@@ -682,10 +686,12 @@ export async function getCutoffRecords(
 
       // This query uses the authenticated user's credentials and respects collection permissions
       try {
-        result = await pb.collection(collectionName).getList(page, perPage, {
-          filter: filterQuery,
-          sort: sortString,
-        });
+        result = await pb
+          .collection(collectionName)
+          .getList<CutoffRecord>(page, perPage, {
+            filter: filterQuery,
+            sort: sortString,
+          });
       } catch (collectionError) {
         console.error(
           `Failed to query collection ${collectionName}:`,
@@ -728,7 +734,7 @@ export async function getCutoffRecords(
       collection: collectionName,
       searchInsight,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Server Action Error:", error);
 
     // Enhanced error handling for different error types
@@ -783,7 +789,7 @@ export async function getCutoffRecords(
     return {
       success: false,
       error: "Failed to fetch cutoff data",
-      details: error.message || "Unknown error occurred",
+      details: error instanceof Error ? error.message : "Unknown error occurred",
       round: round,
     };
   }

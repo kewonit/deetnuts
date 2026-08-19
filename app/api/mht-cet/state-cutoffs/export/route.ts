@@ -13,6 +13,7 @@ import {
   buildStateCutoffSearchFilter,
   escapeFilterValue,
 } from "@/app/mht-cet/state-cutoffs/search-filter";
+import type { CutoffRecord } from "@/app/mht-cet/state-cutoffs/types";
 
 const MAX_EXPORT_FILTER_VALUES = 40;
 const MAX_FILTER_VALUE_LENGTH = 240;
@@ -91,7 +92,7 @@ export async function GET(request: NextRequest) {
 
     const pb = getPocketBase();
 
-    let allRecords;
+    let allRecords: CutoffRecord[];
 
     try {
       // Ensure user authentication using Supabase before making the request
@@ -237,7 +238,7 @@ export async function GET(request: NextRequest) {
             : [homeUniversities];
 
         // Execute queries for all combinations of chunks
-        const chunkPromises = [];
+        const chunkPromises: Promise<CutoffRecord[]>[] = [];
         for (const categoryChunk of categoryChunks) {
           for (const courseChunk of courseChunks) {
             for (const statusChunk of statusChunks) {
@@ -250,7 +251,7 @@ export async function GET(request: NextRequest) {
                 );
                 if (chunkFilterQuery) {
                   chunkPromises.push(
-                    pb.collection(collectionName).getFullList({
+                    pb.collection(collectionName).getFullList<CutoffRecord>({
                       filter: chunkFilterQuery,
                       sort: "-last_rank",
                     }),
@@ -266,7 +267,7 @@ export async function GET(request: NextRequest) {
         allRecords = chunkResults.flatMap((result) => result);
 
         // Remove duplicates
-        const uniqueRecords = new Map();
+        const uniqueRecords = new Map<string, CutoffRecord>();
         allRecords.forEach((record) => {
           uniqueRecords.set(record.id, record);
         });
@@ -276,10 +277,12 @@ export async function GET(request: NextRequest) {
         const filterQuery = buildFilterParts();
 
         try {
-          allRecords = await pb.collection(collectionName).getFullList({
-            filter: filterQuery,
-            sort: "-last_rank",
-          });
+          allRecords = await pb
+            .collection(collectionName)
+            .getFullList<CutoffRecord>({
+              filter: filterQuery,
+              sort: "-last_rank",
+            });
         } catch (collectionError) {
           console.error(
             `Export query failed for ${collectionName}:`,

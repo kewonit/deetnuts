@@ -10,6 +10,7 @@ export default function CollegePredictorLayout({
 }) {
   return (
     <>
+      {/* eslint-disable-next-line @next/next/no-css-tags -- eJAM's embedded stylesheet is generated outside Next's CSS pipeline. */}
       <link rel="stylesheet" href="/ejam/ui.css" />
       <link
         rel="preload"

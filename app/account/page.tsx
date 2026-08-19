@@ -1,7 +1,14 @@
 import AccountForm from "./account-form";
 import { createClient } from "@/app/lib/supabase/server";
 import { redirect } from "next/navigation";
-export default async function Account({ searchParams }: any) {
+
+type AccountPageProps = {
+  searchParams: Promise<{
+    message?: string | string[];
+  }>;
+};
+
+export default async function Account({ searchParams }: AccountPageProps) {
   const supabase = await createClient();
 
   const {
@@ -23,5 +30,10 @@ export default async function Account({ searchParams }: any) {
     updated: user.updated_at || "",
   };
 
-  return <AccountForm user={accountFormUser} message={params?.message} />;
+  return (
+    <AccountForm
+      user={accountFormUser}
+      message={typeof params?.message === "string" ? params.message : undefined}
+    />
+  );
 }

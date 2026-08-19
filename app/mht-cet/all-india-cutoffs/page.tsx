@@ -58,6 +58,11 @@ export default function AllIndiaCutoffsPage() {
   });
 
   const isInitialMount = useRef(true);
+  const currentPageRef = useRef(currentPage);
+
+  useEffect(() => {
+    currentPageRef.current = currentPage;
+  }, [currentPage]);
 
   // Effect for immediate fetches on page change, sort change, or round change
   useEffect(() => {
@@ -73,7 +78,7 @@ export default function AllIndiaCutoffsPage() {
     const debounceTimer = setTimeout(() => {
       // On initial mount, or when filters change, fetch data.
       // A search should always reset to page 1.
-      if (currentPage !== 1) {
+      if (currentPageRef.current !== 1) {
         setCurrentPage(1);
       } else {
         refetch();

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SubmitButton } from "./sumbit-button";
+import { SubmitButton } from "./submit-button";
 import { signInWithGoogle } from "./actions";
 
 type GoogleAuthFormProps = {

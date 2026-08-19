@@ -22,7 +22,7 @@ interface SparklesTextProps {
    * @description
    * The component to be rendered as the text
    * */
-  as?: ReactElement<any>;
+  as?: ReactElement;
 
   /**
    * @default ""

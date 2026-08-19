@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { ClientResponseError, getPocketBase } from "@/lib/pocketbaseClient";
-import { parseCollegeSlug, normalizeCollegeCode } from "@/lib/slugify";
+import { parseCollegeSlug } from "@/lib/slugify";
 
 interface College {
   id: string;
@@ -12,7 +12,10 @@ interface College {
   updated: string;
 }
 
-export async function GET(request: Request, { params }: any) {
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   const resolvedParams = await params;
 
   try {
@@ -74,7 +77,7 @@ export async function GET(request: Request, { params }: any) {
     }
 
     return NextResponse.json(college);
-  } catch (error: any) {
+  } catch (error: unknown) {
     if (error instanceof ClientResponseError) {
       return NextResponse.json(
         { message: "Failed to fetch college", error: error.message },
@@ -84,7 +87,7 @@ export async function GET(request: Request, { params }: any) {
     return NextResponse.json(
       {
         message: "An unexpected error occurred",
-        error: (error as Error).message,
+        error: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 },
     );

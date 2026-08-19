@@ -72,8 +72,6 @@ The `lib/` directory contains the operational core of the application.
 
 - `lib/auth.ts` and `lib/supabaseAuth.ts`: authenticated user helpers for server-side routes and pages
 - `lib/metadata.ts`: shared metadata generation helpers for SEO and social cards
-- `lib/data-fetching.ts`: generic fetch utilities, retry helpers, and cache presets
-- `lib/performance.ts`: lightweight performance instrumentation helpers
 - `lib/college-data.ts`: cached helpers for MHT-CET college and seat data
 - `lib/pocketbaseClient.ts`: PocketBase-like interface backed by Supabase for legacy consumers
 
@@ -101,7 +99,7 @@ Primary tables:
 - `2024_mht_cet_colleges`
 - `2024_mht_cet_colleges_seat_matrix`
 
-Most current API routes use the full `2024_mht_cet_colleges_seat_matrix` table name. One older helper in `lib/college-data.ts` still queries `2024_seat_matrix`, which is worth confirming in environments where no compatibility view exists.
+The application uses the full `2024_mht_cet_colleges_seat_matrix` table name for seat-matrix access.
 
 ### MHT-CET All-India Cutoffs
 
@@ -111,7 +109,7 @@ Primary tables:
 - `2024_all_india_rounds_two`
 - `2024_all_india_rounds_three`
 
-The API surface supports all three rounds. The checked-in `app/mht-cet/all-india-cutoffs/page.tsx` currently renders a single visible round tab, while the API handlers and alternate `page-optimized.tsx` retain broader round support.
+The API surface supports all three rounds. The checked-in `app/mht-cet/all-india-cutoffs/page.tsx` currently renders a single visible round tab; the remaining rounds are available through the API handlers.
 
 ## Auth and Data Access Boundaries
 

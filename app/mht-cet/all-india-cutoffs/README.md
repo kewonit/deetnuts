@@ -8,14 +8,12 @@ Current repository state:
 
 - the API surface supports round one, round two, and round three
 - the checked-in `page.tsx` currently renders round one as the visible tab in the UI
-- `page-optimized.tsx` still exists as an alternate multi-round implementation variant
 
 ## File Layout
 
 ```text
 app/mht-cet/all-india-cutoffs/
 ├── page.tsx
-├── page-optimized.tsx
 ├── data-table.tsx
 ├── filters.tsx
 ├── types.ts
@@ -90,7 +88,7 @@ The active page implementation includes:
 
 ## Important Current Limitation
 
-The data layer and route handlers support all three rounds, but the checked-in `page.tsx` only exposes round one through the visible tab list. If you need to validate round two or round three today, call the API routes directly or compare against `page-optimized.tsx` before changing the active page implementation.
+The data layer and route handlers support all three rounds, but the checked-in `page.tsx` only exposes round one through the visible tab list. Validate round two or round three through the API routes until those tabs are intentionally enabled.
 
 ## Stack Notes
 

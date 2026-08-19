@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import {
   ClientResponseError,
   getPocketBase,
-  ensureAuthenticatedServer,
 } from "@/lib/pocketbaseClient";
 import { parseCollegeSlug } from "@/lib/slugify";
 
@@ -67,7 +66,10 @@ function normalizeCollegeCode(code: string | number): string {
   return String(code).padStart(4, "0");
 }
 
-export async function GET(request: Request, { params }: any) {
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   const resolvedParams = await params;
 
   try {
@@ -124,7 +126,7 @@ export async function GET(request: Request, { params }: any) {
         collegeName: college.college_name,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     if (error instanceof ClientResponseError) {
       return NextResponse.json(
         { message: "Failed to fetch seat matrix", error: error.message },
@@ -134,7 +136,7 @@ export async function GET(request: Request, { params }: any) {
     return NextResponse.json(
       {
         message: "An unexpected error occurred",
-        error: (error as Error).message,
+        error: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 },
     );

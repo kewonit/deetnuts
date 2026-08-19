@@ -12,7 +12,6 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-  ColumnSort,
 } from "@tanstack/react-table";
 import {
   Table,

@@ -9,6 +9,36 @@ type SupabaseLikeError = {
   hint?: string;
 };
 
+type SupabaseQueryResult = {
+  data: unknown[] | null;
+  error: SupabaseLikeError | null;
+  count: number | null;
+};
+
+type FilterableQuery = {
+  eq(column: string, value: unknown): FilterableQuery;
+  neq(column: string, value: unknown): FilterableQuery;
+  gte(column: string, value: unknown): FilterableQuery;
+  lte(column: string, value: unknown): FilterableQuery;
+  gt(column: string, value: unknown): FilterableQuery;
+  lt(column: string, value: unknown): FilterableQuery;
+  ilike(column: string, pattern: string): FilterableQuery;
+  or(filters: string): FilterableQuery;
+  order(column: string, options?: { ascending?: boolean }): FilterableQuery;
+  range(from: number, to: number): FilterableQuery;
+  limit(limit: number): FilterableQuery;
+  then<TResult1 = SupabaseQueryResult, TResult2 = never>(
+    onfulfilled?:
+      | ((
+          value: SupabaseQueryResult,
+        ) => TResult1 | PromiseLike<TResult1>)
+      | null,
+    onrejected?:
+      | ((reason: unknown) => TResult2 | PromiseLike<TResult2>)
+      | null,
+  ): PromiseLike<TResult1 | TResult2>;
+};
+
 function isMissingRelationError(error: SupabaseLikeError | null): boolean {
   if (!error) return false;
   return (
@@ -76,16 +106,16 @@ type ListResult<T> = {
 };
 
 export interface PocketBaseCollection {
-  getList<T = any>(
+  getList<T = unknown>(
     page: number,
     perPage: number,
     options?: ListOptions,
   ): Promise<ListResult<T>>;
-  getFullList<T = any>(options?: FullListOptions): Promise<T[]>;
-  getFirstListItem<T = any>(filter: string): Promise<T>;
-  getOne<T = any>(id: string): Promise<T>;
-  create<T = any>(payload: Record<string, unknown>): Promise<T>;
-  update<T = any>(id: string, payload: Record<string, unknown>): Promise<T>;
+  getFullList<T = unknown>(options?: FullListOptions): Promise<T[]>;
+  getFirstListItem<T = unknown>(filter: string): Promise<T>;
+  getOne<T = unknown>(id: string): Promise<T>;
+  create<T = unknown>(payload: Record<string, unknown>): Promise<T>;
+  update<T = unknown>(id: string, payload: Record<string, unknown>): Promise<T>;
   delete(id: string): Promise<{ id: string }>;
   authRefresh(): Promise<{ token: string | null; record: null }>;
   authWithPassword(
@@ -259,7 +289,10 @@ export function getPocketBase(): PocketBaseLike {
         .filter((group) => group.or.length > 0);
     };
 
-    const applyFilter = (query: any, filter?: string) => {
+    const applyFilter = (
+      query: FilterableQuery,
+      filter?: string,
+    ): FilterableQuery => {
       const groups = parseFilterExpression(filter);
       let nextQuery = query;
 
@@ -282,7 +315,7 @@ export function getPocketBase(): PocketBaseLike {
           else if (term.operator === "<")
             nextQuery = nextQuery.lt(term.field, value);
           else if (term.operator === "~")
-            nextQuery = nextQuery.ilike(term.field, value);
+            nextQuery = nextQuery.ilike(term.field, String(value));
           continue;
         }
 
@@ -318,7 +351,10 @@ export function getPocketBase(): PocketBaseLike {
       return nextQuery;
     };
 
-    const applySort = (query: any, sort?: string) => {
+    const applySort = (
+      query: FilterableQuery,
+      sort?: string,
+    ): FilterableQuery => {
       if (!sort) return query;
 
       const sortColumns = sort
@@ -337,15 +373,17 @@ export function getPocketBase(): PocketBaseLike {
     };
 
     const collectionFactory = (name: string): PocketBaseCollection => ({
-      async getList<T = any>(
+      async getList<T = unknown>(
         page: number,
         perPage: number,
         options?: ListOptions,
       ): Promise<ListResult<T>> {
         const selectColumns = options?.fields || "*";
-        let query = adminClient.from(name).select(selectColumns, {
-          count: options?.skipTotal ? undefined : "exact",
-        });
+        let query = adminClient
+          .from(name)
+          .select(selectColumns, {
+            count: options?.skipTotal ? undefined : "exact",
+          }) as unknown as FilterableQuery;
 
         query = applyFilter(query, options?.filter);
         query = applySort(query, options?.sort);
@@ -360,10 +398,12 @@ export function getPocketBase(): PocketBaseLike {
             return createEmptyListResult<T>(page, perPage, 0);
           }
 
-          let countQuery = adminClient.from(name).select("id", {
-            count: "exact",
-            head: true,
-          });
+          let countQuery = adminClient
+            .from(name)
+            .select("id", {
+              count: "exact",
+              head: true,
+            }) as unknown as FilterableQuery;
           countQuery = applyFilter(countQuery, options?.filter);
 
           const { count: fallbackCount, error: fallbackError } =
@@ -403,14 +443,16 @@ export function getPocketBase(): PocketBaseLike {
         };
       },
 
-      async getFullList<T = any>(options?: FullListOptions): Promise<T[]> {
+      async getFullList<T = unknown>(options?: FullListOptions): Promise<T[]> {
         const selectColumns = options?.fields || "*";
         const pageSize = 1000;
         let page = 1;
         const allRecords: T[] = [];
 
         while (true) {
-          let query = adminClient.from(name).select(selectColumns);
+          let query = adminClient
+            .from(name)
+            .select(selectColumns) as unknown as FilterableQuery;
           query = applyFilter(query, options?.filter);
           query = applySort(query, options?.sort);
 
@@ -439,8 +481,11 @@ export function getPocketBase(): PocketBaseLike {
         return allRecords;
       },
 
-      async getFirstListItem<T = any>(filter: string): Promise<T> {
-        let query = adminClient.from(name).select("*").limit(1);
+      async getFirstListItem<T = unknown>(filter: string): Promise<T> {
+        let query = adminClient
+          .from(name)
+          .select("*")
+          .limit(1) as unknown as FilterableQuery;
         query = applyFilter(query, filter);
 
         const { data, error } = await query;
@@ -455,7 +500,7 @@ export function getPocketBase(): PocketBaseLike {
         return data[0] as T;
       },
 
-      async getOne<T = any>(id: string): Promise<T> {
+      async getOne<T = unknown>(id: string): Promise<T> {
         const { data, error } = await adminClient
           .from(name)
           .select("*")
@@ -476,7 +521,7 @@ export function getPocketBase(): PocketBaseLike {
         return data[0] as T;
       },
 
-      async create<T = any>(payload: Record<string, unknown>): Promise<T> {
+      async create<T = unknown>(payload: Record<string, unknown>): Promise<T> {
         const { data, error } = await adminClient
           .from(name)
           .insert(payload)
@@ -490,7 +535,7 @@ export function getPocketBase(): PocketBaseLike {
         return data as T;
       },
 
-      async update<T = any>(
+      async update<T = unknown>(
         id: string,
         payload: Record<string, unknown>,
       ): Promise<T> {
@@ -560,36 +605,5 @@ export async function ensureUserAuthenticated(): Promise<void> {
     throw new Error(
       `User authentication failed: ${error instanceof Error ? error.message : "Unknown error"}`,
     );
-  }
-}
-
-/**
- * Server-side authentication function (for API routes only) - DEPRECATED
- * Use ensureUserAuthenticated instead for user-based auth
- */
-export async function ensureAuthenticatedServer(): Promise<void> {
-  return;
-}
-
-/**
- * Client-side function to get PocketBase instance without authentication
- * (for public collections or using API routes)
- */
-export function getPocketBaseClient() {
-  return getPocketBase();
-}
-
-/**
- * Error handler for PocketBase requests
- */
-export class PocketBaseError extends Error {
-  status: number;
-  data: any;
-
-  constructor(message: string, status: number = 500, data: any = null) {
-    super(message);
-    this.name = "PocketBaseError";
-    this.status = status;
-    this.data = data;
   }
 }

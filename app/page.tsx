@@ -1,10 +1,7 @@
-import Link from "next/link";
 import { Metadata } from "next";
 import Features from "@/components/ui/faq";
-import arrow from "@/public/svg/arrow.svg";
 import herogrid from "@/public/svg/herogrid.svg";
 import Hero from "@/components/ui/hero";
-import { Button } from "@/components/ui/button";
 import Marquee from "react-fast-marquee";
 import SparklesText from "@/components/magicui/sparkles-text";
 import CommunityPartners from "@/components/ui/community-partners";

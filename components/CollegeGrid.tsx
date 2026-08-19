@@ -118,7 +118,6 @@ export default function CollegeGrid({ colleges }: CollegeGridProps) {
     let result = colleges;
     if (searchTerm.trim()) {
       // Fuzzy search across name, ID, and university
-      const searchKeys = ["college_name", "college_id", "home_university"];
       // Combine all searchable fields into a string for each college
       const prepared = result.map((college) => ({
         ...college,
