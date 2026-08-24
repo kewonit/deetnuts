@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+env_file=${1:-}
+[[ -n "$env_file" && -f "$env_file" && ! -L "$env_file" ]] || { echo "Runtime environment file is missing or unsafe" >&2; exit 1; }
+
+permissions=$(stat -c '%a' "$env_file")
+[[ "$permissions" == 600 || "$permissions" == 400 ]] || {
+  echo "$env_file must have mode 0600 or 0400" >&2
+  exit 1
+}
+[[ $(stat -c '%u:%g' "$env_file") == 0:0 ]] || {
+  echo "$env_file must be owned by root:root" >&2
+  exit 1
+}
+
+if ! awk '
+  /\r$/ { exit 1 }
+  /^[[:space:]]*($|#)/ { next }
+  !/^[A-Za-z_][A-Za-z0-9_]*=/ { exit 1 }
+  {
+    key = $0
+    sub(/=.*/, "", key)
+    if (++seen[key] > 1) exit 1
+  }
+' "$env_file"; then
+  echo "$env_file contains a malformed line, a carriage return, or a duplicate variable name" >&2
+  exit 1
+fi
+
+read_value() {
+  local key=$1
+  awk -F= -v key="$key" '$1 == key { sub(/^[^=]*=/, ""); print; exit }' "$env_file"
+}
+
+required=(
+  NEXT_PUBLIC_APP_URL
+  POCKETBASE_INTERNAL_URL
+  POCKETBASE_SERVICE_EMAIL
+  POCKETBASE_SERVICE_PASSWORD
+  AUTH_STATE_SECRET
+  BOT_API_TOKEN
+)
+
+for key in "${required[@]}"; do
+  value=$(read_value "$key")
+  if [[ -z "$value" || "$value" == replace-* || "$value" == *your-project* ]]; then
+    echo "$key is missing or still contains an example value" >&2
+    exit 1
+  fi
+done
+
+[[ $(read_value NEXT_PUBLIC_APP_URL) == https://www.deetnuts.com ]] || {
+  echo "NEXT_PUBLIC_APP_URL must be https://www.deetnuts.com" >&2
+  exit 1
+}
+[[ $(read_value POCKETBASE_INTERNAL_URL) == http://pocketbase:8090 ]] || {
+  echo "POCKETBASE_INTERNAL_URL must be the private http://pocketbase:8090 origin" >&2
+  exit 1
+}
+[[ $(read_value POCKETBASE_SERVICE_EMAIL) =~ ^[^[:space:]@]+@[^[:space:]@]+\.[A-Za-z]{2,63}$ ]] || {
+  echo "POCKETBASE_SERVICE_EMAIL is malformed" >&2
+  exit 1
+}
+service_password=$(read_value POCKETBASE_SERVICE_PASSWORD)
+auth_state_secret=$(read_value AUTH_STATE_SECRET)
+bot_token=$(read_value BOT_API_TOKEN)
+(( ${#service_password} >= 32 && ${#service_password} <= 72 )) || {
+  echo "POCKETBASE_SERVICE_PASSWORD must contain between 32 and 72 characters" >&2
+  exit 1
+}
+(( ${#auth_state_secret} >= 32 )) || {
+  echo "AUTH_STATE_SECRET must contain at least 32 characters" >&2
+  exit 1
+}
+(( ${#bot_token} >= 32 )) || {
+  echo "BOT_API_TOKEN must contain at least 32 characters" >&2
+  exit 1
+}
+[[ "$service_password" != "$auth_state_secret" && "$service_password" != "$bot_token" && "$auth_state_secret" != "$bot_token" ]] || {
+  echo "PocketBase service, OAuth state, and bot secrets must be distinct" >&2
+  exit 1
+}
+
+if grep -Eq '^(NEXT_PUBLIC_SUPABASE_|SUPABASE_SERVICE_ROLE_KEY=)' "$env_file"; then
+  echo "Supabase credentials must not be present in the application runtime environment" >&2
+  exit 1
+fi
+
+if grep -Eq '^NEXT_PUBLIC_.*(SERVICE_ROLE|SECRET)' "$env_file"; then
+  echo "A server secret must never use a NEXT_PUBLIC_ name" >&2
+  exit 1
+fi
+
+echo "Runtime environment is valid"

@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+import { COMPLIANCE } from "../lib/compliance";
 
 const pagePath = "/jee-main/colleges/assam-university/cutoffs/2025";
 
@@ -16,7 +17,7 @@ test("year page is source-useful in server HTML and exposes canonical SEO", asyn
 
   await page.goto(pagePath);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Assam University Silchar cutoff 2025");
-  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://deetnuts.com/jee-main/colleges/assam-university/cutoffs/2025");
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://www.deetnuts.com/jee-main/colleges/assam-university/cutoffs/2025");
   await expect(page.locator(".cutoff-table")).toContainText("Computer Science and Engineering");
 });
 
@@ -174,16 +175,16 @@ test("analytics makes no Google request before consent", async ({ page }) => {
 
 test("analytics consent is versioned and revocation clears GA cookies", async ({ page }) => {
   await page.goto(pagePath);
-  await page.evaluate(() => {
-    document.cookie = "deetnuts_analytics_consent=granted:2026-08-16; Path=/; SameSite=Lax";
+  await page.evaluate((policyVersion) => {
+    document.cookie = `deetnuts_analytics_consent=granted:${policyVersion}; Path=/; SameSite=Lax`;
     document.cookie = "_ga=test-client; Path=/; SameSite=Lax";
     document.cookie = "_ga_TEST=test-session; Path=/; SameSite=Lax";
-  });
+  }, COMPLIANCE.policyVersion);
   await page.reload();
   await page.getByRole("button", { name: "Cookie settings", exact: true }).click();
   await expect(page.getByRole("dialog", { name: "Analytics cookie settings" })).toContainText("Current choice: analytics allowed");
   await page.getByRole("button", { name: "Decline" }).click();
-  await expect.poll(() => page.evaluate(() => document.cookie)).toContain("deetnuts_analytics_consent=denied:2026-08-16");
+  await expect.poll(() => page.evaluate(() => document.cookie)).toContain(`deetnuts_analytics_consent=denied:${COMPLIANCE.policyVersion}`);
   expect(await page.evaluate(() => document.cookie)).not.toMatch(/(?:^|; )_ga(?:_|=)/);
 });
 
@@ -198,7 +199,7 @@ test("legal pages are complete, canonical and readable in both themes", async ({
     const html = await response.text();
     expect(html).toContain("Version");
     await page.goto(path);
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", `https://deetnuts.com${path}`);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", `https://www.deetnuts.com${path}`);
     await expect(page.locator(".policy-page")).toBeVisible();
   }
   await page.emulateMedia({ colorScheme: "light" });
@@ -213,10 +214,10 @@ test("core sitemap publishes the legal and compliance routes", async ({ request 
   const response = await request.get("/sitemap.xml");
   expect(response.status()).toBe(200);
   const xml = await response.text();
-  expect(xml).toContain("https://deetnuts.com/compliance/terms-and-conditions");
-  expect(xml).toContain("https://deetnuts.com/compliance/privacy-policy");
-  expect(xml).toContain("https://deetnuts.com/compliance/cookie-policy");
-  expect(xml).toContain("https://deetnuts.com/compliance/automated-access");
+  expect(xml).toContain("https://www.deetnuts.com/compliance/terms-and-conditions");
+  expect(xml).toContain("https://www.deetnuts.com/compliance/privacy-policy");
+  expect(xml).toContain("https://www.deetnuts.com/compliance/cookie-policy");
+  expect(xml).toContain("https://www.deetnuts.com/compliance/automated-access");
 });
 
 test("unknown routes and invalid API releases fail explicitly", async ({ request }) => {
@@ -244,15 +245,15 @@ test("sitemaps expose only canonical, indexable release routes", async ({ reques
   const index = await request.get("/sitemap-index.xml");
   expect(index.status()).toBe(200);
   const indexXml = await index.text();
-  expect(indexXml).toContain("https://deetnuts.com/sitemap.xml");
-  expect(indexXml).toContain("https://deetnuts.com/sitemaps/jee-main/2025");
-  expect(indexXml).toContain("https://deetnuts.com/sitemaps/jee-advanced/2025");
+  expect(indexXml).toContain("https://www.deetnuts.com/sitemap.xml");
+  expect(indexXml).toContain("https://www.deetnuts.com/sitemaps/jee-main/2025");
+  expect(indexXml).toContain("https://www.deetnuts.com/sitemaps/jee-advanced/2025");
   expect(indexXml).toMatch(/<lastmod>[^<]+<\/lastmod>/);
 
   const shard = await request.get("/sitemaps/jee-main/2025");
   expect(shard.status()).toBe(200);
   const shardXml = await shard.text();
-  expect(shardXml).toContain(`https://deetnuts.com${pagePath}`);
+  expect(shardXml).toContain(`https://www.deetnuts.com${pagePath}`);
   expect(shardXml).not.toContain(
     `${pagePath}/programs/agricultural-engineering-b-tech-4-year-agricultural-engineering/csab/all-india/open/female-only`,
   );

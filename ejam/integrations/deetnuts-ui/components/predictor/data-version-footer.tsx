@@ -1,6 +1,6 @@
 "use client";
 
-import type { PredictionProvenance } from "@ejam/data";
+import type { PredictionProvenance } from "@ejam/data/predictor-interface";
 
 const DATA_DOC_URL = "https://github.com/su6u/ejam/blob/main/docs/DATA.md";
 

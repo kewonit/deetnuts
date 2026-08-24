@@ -1,4 +1,3 @@
-import type { ExamPredictor } from "@ejam/data";
 import {
   getMhtCetPredictorIndexFromDeps,
   loadMhtCetSeatPoolRegistry,
@@ -7,6 +6,7 @@ import {
   type MhtCetPredictionResult as MhtCetPredictionResultType,
   predictMhtCetPrograms,
 } from "@ejam/data/mht-cet";
+import type { ExamPredictor } from "@ejam/data/predictor-interface";
 import {
   createServerCacheKey,
   getServerCacheEntry,

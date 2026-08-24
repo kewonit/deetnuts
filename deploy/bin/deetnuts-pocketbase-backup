@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+umask 077
+
+APP_ROOT=${DEETNUTS_ROOT:-/opt/deetnuts}
+STATE_ENV="$APP_ROOT/state/compose.env"
+BACKUP_DIR="$APP_ROOT/backups/pocketbase"
+
+compose=(
+  docker compose
+  --project-directory "$APP_ROOT"
+  --env-file "$STATE_ENV"
+  --file "$APP_ROOT/docker-compose.yml"
+)
+
+container_id=$("${compose[@]}" ps --status running --quiet pocketbase)
+[[ -n "$container_id" ]] || {
+  echo "PocketBase is not running" >&2
+  exit 1
+}
+
+latest=$(docker exec "$container_id" sh -c '
+  set -eu
+  [ -d /pb/pb_data/backups ] || exit 1
+  latest_path=$(ls -1t /pb/pb_data/backups/*.zip 2>/dev/null | head -n 1)
+  basename "$latest_path"
+')
+[[ "$latest" =~ ^[A-Za-z0-9._-]+\.zip$ ]] || {
+  echo "No safe PocketBase backup archive was found" >&2
+  exit 1
+}
+
+install -d -o root -g root -m 0700 "$BACKUP_DIR"
+temporary=$(mktemp "$BACKUP_DIR/.backup.XXXXXX")
+trap 'rm -f "$temporary"' EXIT
+docker cp "$container_id:/pb/pb_data/backups/$latest" "$temporary"
+[[ -s "$temporary" ]] || {
+  echo "Copied PocketBase backup is empty" >&2
+  exit 1
+}
+unzip -tqq "$temporary"
+install -o root -g root -m 0600 "$temporary" "$BACKUP_DIR/$latest"
+rm -f "$temporary"
+trap - EXIT
+
+mapfile -t expired < <(
+  find "$BACKUP_DIR" -maxdepth 1 -type f -name '*.zip' -printf '%T@ %p\n' \
+    | sort -nr \
+    | awk 'NR > 7 { sub(/^[^ ]+ /, ""); print }'
+)
+for archive in "${expired[@]}"; do
+  [[ "$archive" == "$BACKUP_DIR/"*.zip ]] || continue
+  rm -f -- "$archive"
+done
+
+echo "Verified PocketBase backup copy: $latest"

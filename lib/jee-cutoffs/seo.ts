@@ -3,7 +3,7 @@ import "server-only";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { readParquetRows } from "@ejam/data/college-predictor";
-import { resolveDataRoot } from "@ejam/data";
+import { resolveDataRoot } from "@ejam/data/data-root";
 import {
   bodyLabel,
   genderLabel,

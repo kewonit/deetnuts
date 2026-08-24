@@ -1,4 +1,4 @@
-import { createAdminClient } from "@/lib/supabase/admin";
+import { getPocketBase } from "@/lib/pocketbaseClient";
 
 export const BOT_USAGE_EVENT_NAMES = [
   "cutoff_request",
@@ -45,8 +45,8 @@ export function isBotUsageStatus(value: string): value is BotUsageStatus {
 }
 
 export async function logBotUsageEvent(event: BotUsageEvent) {
-  const supabase = createAdminClient();
-  const { error } = await supabase.from("bot_usage_events").insert({
+  const now = new Date().toISOString();
+  await getPocketBase().collection("bot_usage_events").create({
     request_id: event.requestId,
     external_id: event.externalId ?? null,
     platform: event.platform,
@@ -61,11 +61,9 @@ export async function logBotUsageEvent(event: BotUsageEvent) {
     result_count: event.resultCount ?? null,
     duration_ms: event.durationMs ?? null,
     error_code: event.errorCode ?? null,
+    created_at: now,
+    updated_at: now,
   });
-
-  if (error) {
-    throw new Error(error.message);
-  }
 }
 
 export async function safeLogBotUsageEvent(event: BotUsageEvent) {

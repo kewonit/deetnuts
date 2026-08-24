@@ -3,6 +3,7 @@ import "./globals.css";
 
 import SiteJsonLd from "@/components/SiteJsonLd";
 import StandardSiteShell from "@/components/StandardSiteShell";
+import { PRODUCTION_SITE_URL } from "@/lib/site-url";
 
 const themeBootScript = `try{var t=localStorage.getItem("deetnuts_theme");var r=document.documentElement;if(t==="light"||t==="dark"){r.classList.add(t);r.classList.remove(t==="light"?"dark":"light")}}catch(e){}`;
 
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
   },
   description:
     "Mildly important Maharashtra college data simplified. Explore MHT-CET cutoffs, seat matrices, colleges, and admission trends.",
-  metadataBase: new URL("https://deetnuts.com"),
+  metadataBase: new URL(PRODUCTION_SITE_URL),
   authors: [{ name: "DEETNUTS" }],
   creator: "DEETNUTS",
   publisher: "DEETNUTS",
@@ -33,7 +34,7 @@ export const metadata: Metadata = {
     title: "DEETNUTS - College Data Simplified",
     description:
       "Explore MHT-CET cutoffs, seat matrices, Maharashtra colleges, and admission trends.",
-    url: "https://deetnuts.com",
+    url: PRODUCTION_SITE_URL,
     siteName: "DEETNUTS",
     images: [
       {

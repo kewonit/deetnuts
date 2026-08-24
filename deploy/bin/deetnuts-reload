@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+APP_ROOT=${DEETNUTS_ROOT:-/opt/deetnuts}
+STATE_ENV="$APP_ROOT/state/compose.env"
+
+compose=(
+  docker compose
+  --project-directory "$APP_ROOT"
+  --env-file "$STATE_ENV"
+  --file "$APP_ROOT/docker-compose.yml"
+)
+
+"$APP_ROOT/deploy/bin/validate-runtime-env" "$APP_ROOT/shared/web.env"
+"$APP_ROOT/deploy/bin/validate-origin-certs" \
+  "$(awk -F= '$1 == "ORIGIN_CERT_DIR" { sub(/^[^=]*=/, ""); print; exit }' "$STATE_ENV")"
+"${compose[@]}" exec -T nginx nginx -t
+"${compose[@]}" exec -T nginx nginx -s reload

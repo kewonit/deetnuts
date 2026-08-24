@@ -72,7 +72,7 @@ Do not use the presence or absence of round-two and round-three tabs in `page.ts
 
 ### API returns empty data
 
-- verify the corresponding Supabase tables exist and contain data
+- verify the corresponding PocketBase collections exist and contain data
 - confirm the environment variables used by the compatibility client are loaded
 
 ### Filters appear to do nothing

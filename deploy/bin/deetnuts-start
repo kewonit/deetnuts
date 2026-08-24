@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+APP_ROOT=${DEETNUTS_ROOT:-/opt/deetnuts}
+STATE_ENV="$APP_ROOT/state/compose.env"
+ACTIVE_SLOT_FILE="$APP_ROOT/state/active-slot"
+UPSTREAM_FILE="$APP_ROOT/deploy/nginx/conf.d/00-active-upstream.conf"
+
+active_slot=$(tr -d '[:space:]' < "$ACTIVE_SLOT_FILE")
+[[ "$active_slot" == blue || "$active_slot" == green ]] || {
+  echo "Invalid active deployment slot" >&2
+  exit 1
+}
+
+compose=(
+  docker compose
+  --project-directory "$APP_ROOT"
+  --env-file "$STATE_ENV"
+  --file "$APP_ROOT/docker-compose.yml"
+)
+
+"$APP_ROOT/deploy/bin/validate-runtime-env" "$APP_ROOT/shared/web.env"
+"$APP_ROOT/deploy/bin/validate-origin-certs" \
+  "$(awk -F= '$1 == "ORIGIN_CERT_DIR" { sub(/^[^=]*=/, ""); print; exit }' "$STATE_ENV")"
+"$APP_ROOT/deploy/bin/validate-pocketbase-secrets" \
+  "$(awk -F= '$1 == "POCKETBASE_ENCRYPTION_KEY_FILE" { sub(/^[^=]*=/, ""); print; exit }' "$STATE_ENV")" \
+  "$(awk -F= '$1 == "POCKETBASE_SUPERUSER_EMAIL_FILE" { sub(/^[^=]*=/, ""); print; exit }' "$STATE_ENV")" \
+  "$(awk -F= '$1 == "POCKETBASE_SUPERUSER_PASSWORD_FILE" { sub(/^[^=]*=/, ""); print; exit }' "$STATE_ENV")" \
+  "$(awk -F= '$1 == "POCKETBASE_MIGRATION_KEY_FILE" { sub(/^[^=]*=/, ""); print; exit }' "$STATE_ENV")"
+
+temporary_upstream=$(mktemp "$UPSTREAM_FILE.XXXXXX")
+trap 'rm -f "$temporary_upstream"' EXIT
+printf 'upstream deetnuts_active {\n    zone deetnuts_active 64k;\n    server web-%s:3000 resolve;\n    keepalive 32;\n}\n' \
+  "$active_slot" > "$temporary_upstream"
+chown root:root "$temporary_upstream"
+chmod 0644 "$temporary_upstream"
+mv -f -- "$temporary_upstream" "$UPSTREAM_FILE"
+trap - EXIT
+
+wait_for_health() {
+  local service=$1
+  local attempts=${2:-40}
+  local container_id
+  local health=starting
+
+  container_id=$("${compose[@]}" ps --quiet "$service")
+  [[ -n "$container_id" ]] || return 1
+  for ((attempt = 1; attempt <= attempts; attempt += 1)); do
+    health=$(docker inspect --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' "$container_id")
+    [[ "$health" == healthy ]] && return 0
+    [[ "$health" == unhealthy || "$health" == exited || "$health" == dead ]] && return 1
+    sleep 3
+  done
+  return 1
+}
+
+"${compose[@]}" up -d --no-deps pocketbase
+wait_for_health pocketbase
+
+"${compose[@]}" up -d --no-deps "web-$active_slot"
+wait_for_health "web-$active_slot"
+
+"${compose[@]}" up -d --no-deps nginx
+wait_for_health nginx 20
+"${compose[@]}" stop --timeout 30 "web-$([[ "$active_slot" == blue ]] && echo green || echo blue)" || true

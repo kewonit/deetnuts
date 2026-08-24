@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import FAQJsonLd, { MHTCET_FAQS } from "@/components/FAQJsonLd";
+import { PRODUCTION_SITE_URL } from "@/lib/site-url";
 
 interface Link {
   title: string;
@@ -62,11 +63,11 @@ export const metadata: Metadata = {
     title: "MHT-CET 2026 Cutoffs and Admission Planning",
     description:
       "Search 2026 CAP Round I state cutoffs derived from official MHT-CET allotment PDFs, with historical data for Maharashtra engineering admissions.",
-    url: "https://deetnuts.com/mht-cet",
+    url: `${PRODUCTION_SITE_URL}/mht-cet`,
     type: "website",
   },
   alternates: {
-    canonical: "https://deetnuts.com/mht-cet",
+    canonical: `${PRODUCTION_SITE_URL}/mht-cet`,
   },
 };
 

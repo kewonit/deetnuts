@@ -1,4 +1,4 @@
-import { createClient } from "@/app/lib/supabase/server";
+import { getAuthenticatedPocketBase } from "@/lib/pocketbase/auth";
 import { unstable_rethrow } from "next/navigation";
 import { cache } from "react";
 
@@ -18,29 +18,23 @@ export interface User {
  */
 export const getCurrentUser = cache(async (): Promise<User | null> => {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-      error,
-    } = await supabase.auth.getUser();
-
-    if (error || !user) {
+    const auth = await getAuthenticatedPocketBase();
+    if (!auth) {
       return null;
     }
+    const { user } = auth;
 
-    // Map Supabase user to our User interface
     const mappedUser: User = {
       id: user.id,
-      email: user.email || "",
+      email: user.email,
       name:
-        user.user_metadata?.full_name ||
-        user.user_metadata?.name ||
+        user.full_name ||
         user.email?.split("@")[0] ||
         "",
-      verified: user.email_confirmed_at !== null,
-      avatar: user.user_metadata?.avatar_url,
-      created: user.created_at,
-      updated: user.updated_at || user.created_at,
+      verified: user.verified,
+      avatar: user.avatar_url,
+      created: user.created,
+      updated: user.updated || user.created,
     };
 
     return mappedUser;

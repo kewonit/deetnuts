@@ -1,4 +1,4 @@
-import PocketBase from "./supabase-pocketbase-compat";
+import PocketBase from "pocketbase";
 import { createReadStream } from "fs";
 import { parse } from "csv-parse";
 import * as path from "path";
@@ -30,7 +30,10 @@ class BatchMHTCETCutoffUploader {
 
   constructor() {
     // Initialize PocketBase
-    const pbUrl = process.env.POCKETBASE_URL || "https://api.deetnuts.com";
+    const pbUrl =
+      process.env.POCKETBASE_MIGRATION_URL ||
+      process.env.POCKETBASE_URL ||
+      "http://127.0.0.1:8090";
     this.pb = new PocketBase(pbUrl);
 
     // Disable auto-cancellation to prevent concurrent batch requests from being cancelled
@@ -51,8 +54,8 @@ class BatchMHTCETCutoffUploader {
   }
 
   async authenticateWithCredentials(): Promise<boolean> {
-    const adminEmail = process.env.POCKETBASE_ADMIN_EMAIL;
-    const adminPassword = process.env.POCKETBASE_ADMIN_PASSWORD;
+    const adminEmail = process.env.POCKETBASE_SUPERUSER_EMAIL;
+    const adminPassword = process.env.POCKETBASE_SUPERUSER_PASSWORD;
 
     if (!adminEmail || !adminPassword) {
       console.error("❌ Missing admin credentials in environment variables");
@@ -61,7 +64,9 @@ class BatchMHTCETCutoffUploader {
 
     try {
       console.log("🔑 Authenticating with credentials...");
-      await this.pb.admins.authWithPassword(adminEmail, adminPassword);
+      await this.pb
+        .collection("_superusers")
+        .authWithPassword(adminEmail, adminPassword);
       console.log(" Successfully authenticated as admin");
       return true;
     } catch (error) {

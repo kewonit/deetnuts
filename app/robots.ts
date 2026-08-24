@@ -1,8 +1,7 @@
 import { MetadataRoute } from "next";
+import { PRODUCTION_SITE_URL } from "@/lib/site-url";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = "https://deetnuts.com";
-
   return {
     rules: {
       userAgent: "*",
@@ -18,7 +17,7 @@ export default function robots(): MetadataRoute.Robots {
         "/private/",
       ],
     },
-    sitemap: `${baseUrl}/sitemap-index.xml`,
-    host: baseUrl,
+    sitemap: `${PRODUCTION_SITE_URL}/sitemap-index.xml`,
+    host: PRODUCTION_SITE_URL,
   };
 }

@@ -1,0 +1,454 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+umask 027
+
+APP_ROOT=${DEETNUTS_ROOT:-/opt/deetnuts}
+STATE_DIR="$APP_ROOT/state"
+STATE_ENV="$STATE_DIR/compose.env"
+ACTIVE_SLOT_FILE="$STATE_DIR/active-slot"
+RELEASE_DIR="$STATE_DIR/releases"
+UPSTREAM_FILE="$APP_ROOT/deploy/nginx/conf.d/00-active-upstream.conf"
+COMPOSE_FILE="$APP_ROOT/docker-compose.yml"
+CLOUDFLARE_ENV="$APP_ROOT/shared/cloudflare.env"
+WEB_IMAGE_PATTERN='^ghcr\.io/kewonit/deetnuts-web@sha256:[0-9a-f]{64}$'
+WORKER_IMAGE_PATTERN='^ghcr\.io/kewonit/deetnuts-worker@sha256:[0-9a-f]{64}$'
+POCKETBASE_IMAGE_PATTERN='^ghcr\.io/kewonit/deetnuts-pocketbase@sha256:[0-9a-f]{64}$'
+LOCAL_IMAGE_PATTERN='^sha256:[0-9a-f]{64}$'
+RELEASE_PATTERN='^[0-9a-f]{40}$'
+
+compose() {
+  docker compose \
+    --project-directory "$APP_ROOT" \
+    --env-file "$STATE_ENV" \
+    --file "$COMPOSE_FILE" \
+    "$@"
+}
+
+read_env_value() {
+  local file=$1
+  local key=$2
+  awk -F= -v key="$key" '$1 == key { sub(/^[^=]*=/, ""); print; exit }' "$file"
+}
+
+set_env_value() {
+  local key=$1
+  local value=$2
+  local temporary
+  temporary=$(mktemp "$STATE_DIR/compose.env.XXXXXX")
+  awk -v key="$key" -v value="$value" '
+    BEGIN { found = 0 }
+    index($0, key "=") == 1 { print key "=" value; found = 1; next }
+    { print }
+    END { if (!found) print key "=" value }
+  ' "$STATE_ENV" > "$temporary"
+  chown root:root "$temporary"
+  chmod 0600 "$temporary"
+  mv -f -- "$temporary" "$STATE_ENV"
+}
+
+wait_for_health() {
+  local service=$1
+  local attempts=${2:-40}
+  local container_id
+  container_id=$(compose ps --quiet "$service")
+  if [[ -z "$container_id" ]]; then
+    echo "No container found for $service" >&2
+    return 1
+  fi
+
+  for ((attempt = 1; attempt <= attempts; attempt += 1)); do
+    local health
+    health=$(docker inspect --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' "$container_id")
+    if [[ "$health" == healthy ]]; then
+      return 0
+    fi
+    if [[ "$health" == unhealthy || "$health" == exited || "$health" == dead ]]; then
+      docker logs --tail 100 "$container_id" >&2 || true
+      return 1
+    fi
+    sleep 3
+  done
+
+  docker logs --tail 100 "$container_id" >&2 || true
+  echo "$service did not become healthy" >&2
+  return 1
+}
+
+smoke_candidate() {
+  local service=$1
+  local expected_sha=$2
+  local container_id
+  container_id=$(compose ps --quiet "$service")
+  docker exec -e EXPECTED_SHA="$expected_sha" "$container_id" node -e '
+    const expected = process.env.EXPECTED_SHA;
+    const paths = ["/api/health", "/", "/sitemap-index.xml"];
+    (async () => {
+      for (const path of paths) {
+        const response = await fetch(`http://127.0.0.1:3000${path}`, {
+          headers: { accept: path.endsWith("xml") ? "application/xml" : "text/html,application/json" },
+          signal: AbortSignal.timeout(15000),
+        });
+        if (!response.ok) throw new Error(`${path} returned ${response.status}`);
+        if (path === "/api/health") {
+          const body = await response.json();
+          if (body.status !== "ok" || body.sha !== expected) {
+            throw new Error(`health release mismatch: ${JSON.stringify(body)}`);
+          }
+        } else {
+          await response.arrayBuffer();
+        }
+      }
+    })().catch((error) => { console.error(error); process.exit(1); });
+  '
+}
+
+write_upstream() {
+  local slot=$1
+  local temporary
+  temporary=$(mktemp "$UPSTREAM_FILE.XXXXXX")
+  printf 'upstream deetnuts_active {\n    zone deetnuts_active 64k;\n    server web-%s:3000 resolve;\n    keepalive 32;\n}\n' "$slot" > "$temporary"
+  chown root:root "$temporary"
+  chmod 0644 "$temporary"
+  mv -f -- "$temporary" "$UPSTREAM_FILE"
+}
+
+write_active_slot() {
+  local slot=$1
+  local temporary
+  temporary=$(mktemp "$STATE_DIR/active-slot.XXXXXX")
+  printf '%s\n' "$slot" > "$temporary"
+  chown root:root "$temporary"
+  chmod 0600 "$temporary"
+  mv -f -- "$temporary" "$ACTIVE_SLOT_FILE"
+}
+
+verify_public_release() {
+  local expected_sha=$1
+  local body
+  body=$(curl --fail --silent --show-error --connect-timeout 5 --max-time 15 \
+    --retry 2 --retry-all-errors --retry-delay 2 \
+    -H 'Accept: application/json' \
+    https://www.deetnuts.com/api/health)
+  if ! jq --exit-status --arg sha "$expected_sha" \
+    '.status == "ok" and .sha == $sha' <<<"$body" >/dev/null; then
+    echo "Public health response does not identify $expected_sha: $body" >&2
+    return 1
+  fi
+}
+
+purge_public_cache() {
+  [[ -f "$CLOUDFLARE_ENV" ]] || {
+    echo "Missing $CLOUDFLARE_ENV" >&2
+    return 1
+  }
+  [[ $(stat -c '%U:%G' "$CLOUDFLARE_ENV") == root:root ]] || {
+    echo "$CLOUDFLARE_ENV must be owned by root:root" >&2
+    return 1
+  }
+  [[ $(stat -c '%a' "$CLOUDFLARE_ENV") == 600 ]] || {
+    echo "$CLOUDFLARE_ENV must have mode 0600" >&2
+    return 1
+  }
+
+  local zone_id
+  local api_token
+  local response
+  zone_id=$(read_env_value "$CLOUDFLARE_ENV" CLOUDFLARE_ZONE_ID)
+  api_token=$(read_env_value "$CLOUDFLARE_ENV" CLOUDFLARE_API_TOKEN)
+  [[ "$zone_id" =~ ^[0-9a-f]{32}$ ]] || {
+    echo "CLOUDFLARE_ZONE_ID must be a 32-character lowercase hex ID" >&2
+    return 1
+  }
+  [[ "$api_token" =~ ^[A-Za-z0-9_-]{30,}$ ]] || {
+    echo "CLOUDFLARE_API_TOKEN is missing or malformed" >&2
+    return 1
+  }
+
+  response=$(curl --fail-with-body --silent --show-error \
+    --connect-timeout 10 \
+    --max-time 30 \
+    --retry 3 \
+    --retry-all-errors \
+    --retry-delay 2 \
+    --request POST \
+    --header "Authorization: Bearer $api_token" \
+    --header 'Content-Type: application/json' \
+    --data '{"hosts":["www.deetnuts.com"]}' \
+    "https://api.cloudflare.com/client/v4/zones/$zone_id/purge_cache")
+  jq --exit-status \
+    '.success == true and ((.errors // []) | length == 0)' \
+    <<<"$response" >/dev/null || {
+    echo "Cloudflare rejected the www.deetnuts.com cache purge" >&2
+    return 1
+  }
+}
+
+record_release() {
+  local release_sha=$1
+  local web_image=$2
+  local worker_image=$3
+  local pocketbase_image=$4
+  local release_file="$RELEASE_DIR/$release_sha.env"
+  local temporary
+  temporary=$(mktemp "$RELEASE_DIR/release.XXXXXX")
+  printf 'RELEASE_SHA=%s\nWEB_IMAGE=%s\nWORKER_IMAGE=%s\nPOCKETBASE_IMAGE=%s\n' \
+    "$release_sha" "$web_image" "$worker_image" "$pocketbase_image" > "$temporary"
+  chown root:root "$temporary"
+  chmod 0600 "$temporary"
+  mv -f -- "$temporary" "$release_file"
+
+  mapfile -t old_releases < <(
+    find "$RELEASE_DIR" -maxdepth 1 -type f -name '*.env' -printf '%T@ %p\n' \
+      | sort -nr \
+      | awk 'NR > 3 { sub(/^[^ ]+ /, ""); print }'
+  )
+  for old_release in "${old_releases[@]}"; do
+    [[ "$old_release" == "$RELEASE_DIR/"*.env ]] || continue
+    rm -f -- "$old_release"
+  done
+}
+
+prune_slot_prerender_cache() {
+  local slot=$1
+  local cleanup_image=$2
+  [[ "$slot" == blue || "$slot" == green ]] || {
+    echo "Refusing to prune an invalid cache slot" >&2
+    return 1
+  }
+
+  local volume_label="web-$slot-cache"
+  local -a cache_volumes=()
+  mapfile -t cache_volumes < <(
+    docker volume ls --quiet \
+      --filter 'label=com.docker.compose.project=deetnuts' \
+      --filter "label=com.docker.compose.volume=$volume_label"
+  )
+  if (( ${#cache_volumes[@]} != 1 )); then
+    echo "Expected exactly one Compose volume for $volume_label" >&2
+    return 1
+  fi
+
+  docker run --rm \
+    --network none \
+    --read-only \
+    --cap-drop ALL \
+    --security-opt no-new-privileges \
+    --mount "type=volume,source=${cache_volumes[0]},target=/cache" \
+    --entrypoint node \
+    "$cleanup_image" \
+    -e '
+      const fs = require("node:fs");
+      const path = require("node:path");
+      const root = "/cache/prerender-releases";
+      if (!fs.existsSync(root)) process.exit(0);
+
+      const rootStat = fs.lstatSync(root);
+      if (!rootStat.isDirectory() || rootStat.isSymbolicLink()) {
+        throw new Error("The stopped slot cache root is unsafe");
+      }
+
+      for (const entry of fs.readdirSync(root, { withFileTypes: true })) {
+        if (entry.isDirectory() && /^[0-9a-f]{40}$/.test(entry.name)) {
+          fs.rmSync(path.join(root, entry.name), {
+            recursive: true,
+            force: true,
+          });
+        }
+      }
+    '
+}
+
+deploy_release() {
+  local release_sha=$1
+  local web_image=$2
+  local worker_image=$3
+  local pocketbase_image=$4
+  local public_check=${5:-public}
+
+  [[ "$release_sha" =~ $RELEASE_PATTERN ]] || { echo "Invalid release SHA" >&2; return 2; }
+  [[ "$web_image" =~ $WEB_IMAGE_PATTERN || "$web_image" =~ $LOCAL_IMAGE_PATTERN ]] || { echo "Invalid web image reference" >&2; return 2; }
+  [[ "$worker_image" =~ $WORKER_IMAGE_PATTERN || "$worker_image" =~ $LOCAL_IMAGE_PATTERN ]] || { echo "Invalid worker image reference" >&2; return 2; }
+  [[ "$pocketbase_image" =~ $POCKETBASE_IMAGE_PATTERN || "$pocketbase_image" =~ $LOCAL_IMAGE_PATTERN ]] || { echo "Invalid PocketBase image reference" >&2; return 2; }
+  [[ "$public_check" == public || "$public_check" == origin-only ]] || { echo "Invalid verification mode" >&2; return 2; }
+
+  "$APP_ROOT/deploy/bin/validate-runtime-env" "$APP_ROOT/shared/web.env"
+  "$APP_ROOT/deploy/bin/validate-origin-certs" \
+    "$(read_env_value "$STATE_ENV" ORIGIN_CERT_DIR)"
+  "$APP_ROOT/deploy/bin/validate-pocketbase-secrets" \
+    "$(read_env_value "$STATE_ENV" POCKETBASE_ENCRYPTION_KEY_FILE)" \
+    "$(read_env_value "$STATE_ENV" POCKETBASE_SUPERUSER_EMAIL_FILE)" \
+    "$(read_env_value "$STATE_ENV" POCKETBASE_SUPERUSER_PASSWORD_FILE)" \
+    "$(read_env_value "$STATE_ENV" POCKETBASE_MIGRATION_KEY_FILE)"
+  [[ $(read_env_value "$STATE_ENV" DEETNUTS_MIGRATION_MODE) == 0 ]] || {
+    echo "Refusing to deploy the web application while PocketBase migration mode is enabled" >&2
+    return 1
+  }
+
+  local active_slot
+  active_slot=$(tr -d '[:space:]' < "$ACTIVE_SLOT_FILE")
+  [[ "$active_slot" == blue || "$active_slot" == green ]] || { echo "Invalid active slot" >&2; return 1; }
+  local candidate_slot=blue
+  [[ "$active_slot" == blue ]] && candidate_slot=green
+  local active_service="web-$active_slot"
+  local candidate_service="web-$candidate_slot"
+
+  local rollback_dir
+  rollback_dir=$(mktemp -d "$STATE_DIR/rollback.XXXXXX")
+  cp "$STATE_ENV" "$rollback_dir/compose.env"
+  cp "$UPSTREAM_FILE" "$rollback_dir/upstream.conf"
+  cp "$ACTIVE_SLOT_FILE" "$rollback_dir/active-slot"
+  local switched=0
+  local pocketbase_updated=0
+
+  rollback_on_error() {
+    local exit_code=${1:-$?}
+    trap - ERR INT TERM HUP
+    set +e
+    install -o root -g root -m 0600 "$rollback_dir/compose.env" "$STATE_ENV"
+    install -o root -g root -m 0644 "$rollback_dir/upstream.conf" "$UPSTREAM_FILE"
+    install -o root -g root -m 0600 "$rollback_dir/active-slot" "$ACTIVE_SLOT_FILE"
+    if (( pocketbase_updated )); then
+      compose up -d --no-deps pocketbase
+      wait_for_health pocketbase 40
+    fi
+    if (( switched )); then
+      compose up -d --no-deps "$active_service"
+      compose exec -T nginx nginx -t
+      compose exec -T nginx nginx -s reload
+    fi
+    compose stop --timeout 30 "$candidate_service"
+    rm -rf "$rollback_dir"
+    echo "Deployment failed; restored $active_slot" >&2
+    exit "$exit_code"
+  }
+  trap 'rollback_on_error $?' ERR
+  trap 'rollback_on_error 130' INT
+  trap 'rollback_on_error 143' TERM
+  trap 'rollback_on_error 129' HUP
+
+  local image_key=WEB_BLUE_IMAGE
+  local sha_key=BLUE_DEPLOYMENT_SHA
+  if [[ "$candidate_slot" == green ]]; then
+    image_key=WEB_GREEN_IMAGE
+    sha_key=GREEN_DEPLOYMENT_SHA
+  fi
+  set_env_value "$image_key" "$web_image"
+  set_env_value "$sha_key" "$release_sha"
+  set_env_value WORKER_IMAGE "$worker_image"
+  set_env_value POCKETBASE_IMAGE "$pocketbase_image"
+
+  if [[ "$web_image" =~ $LOCAL_IMAGE_PATTERN ]]; then
+    docker image inspect "$web_image" >/dev/null
+  else
+    compose pull "$candidate_service"
+  fi
+  if [[ "$worker_image" =~ $LOCAL_IMAGE_PATTERN ]]; then
+    docker image inspect "$worker_image" >/dev/null
+  fi
+  if [[ "$pocketbase_image" =~ $LOCAL_IMAGE_PATTERN ]]; then
+    docker image inspect "$pocketbase_image" >/dev/null
+  else
+    compose pull pocketbase
+  fi
+  compose up -d --no-deps pocketbase
+  pocketbase_updated=1
+  wait_for_health pocketbase
+  compose up -d --no-deps "$candidate_service"
+  wait_for_health "$candidate_service"
+  smoke_candidate "$candidate_service" "$release_sha"
+
+  write_upstream "$candidate_slot"
+  switched=1
+  if compose ps --status running --quiet nginx | grep -q .; then
+    compose exec -T nginx nginx -t
+    compose exec -T nginx nginx -s reload
+  else
+    compose up -d --no-deps nginx
+    wait_for_health nginx 20
+  fi
+
+  if [[ "$public_check" == public ]]; then
+    purge_public_cache
+    verify_public_release "$release_sha"
+  fi
+
+  local observation_seconds=${DEPLOY_OBSERVATION_SECONDS:-600}
+  if [[ ! "$observation_seconds" =~ ^[0-9]+$ ]] || (( observation_seconds > 1800 )); then
+    echo "Observation period must be between 0 and 1800 seconds" >&2
+    return 2
+  fi
+  local elapsed=0
+  while (( elapsed < observation_seconds )); do
+    sleep 15
+    elapsed=$((elapsed + 15))
+    wait_for_health "$candidate_service" 1
+    if [[ "$public_check" == public ]]; then
+      verify_public_release "$release_sha"
+    fi
+  done
+
+  record_release "$release_sha" "$web_image" "$worker_image" "$pocketbase_image"
+  compose stop --timeout 30 "$active_service" || true
+  systemctl enable deetnuts.service >/dev/null
+  write_active_slot "$candidate_slot"
+
+  trap - ERR INT TERM HUP
+  rm -rf "$rollback_dir"
+  if ! prune_slot_prerender_cache "$active_slot" "$web_image"; then
+    echo "Warning: could not prune the stopped $active_slot ISR cache" >&2
+  fi
+  echo "Deployed $release_sha to $candidate_slot"
+}
+
+rollback_release() {
+  local release_sha=$1
+  local mode=${2:-public}
+  [[ "$release_sha" =~ $RELEASE_PATTERN ]] || { echo "Invalid rollback SHA" >&2; return 2; }
+  local release_file="$RELEASE_DIR/$release_sha.env"
+  [[ -f "$release_file" ]] || { echo "Release $release_sha is not retained" >&2; return 1; }
+  local pocketbase_image
+  pocketbase_image=$(read_env_value "$release_file" POCKETBASE_IMAGE)
+  [[ -n "$pocketbase_image" ]] || pocketbase_image=$(read_env_value "$STATE_ENV" POCKETBASE_IMAGE)
+  deploy_release \
+    "$release_sha" \
+    "$(read_env_value "$release_file" WEB_IMAGE)" \
+    "$(read_env_value "$release_file" WORKER_IMAGE)" \
+    "$pocketbase_image" \
+    "$mode"
+}
+
+status() {
+  printf 'active-slot=%s\n' "$(cat "$ACTIVE_SLOT_FILE")"
+  compose ps
+}
+
+mkdir -p "$STATE_DIR" "$RELEASE_DIR"
+exec 9>"$STATE_DIR/deploy.lock"
+if ! flock --nonblock 9; then
+  echo "Another deployment command is already running" >&2
+  exit 75
+fi
+[[ -f "$STATE_ENV" && -f "$ACTIVE_SLOT_FILE" && -f "$UPSTREAM_FILE" ]] || {
+  echo "Deployment state has not been initialized" >&2
+  exit 1
+}
+
+case ${1:-} in
+  deploy)
+    [[ $# -ge 5 && $# -le 6 ]] || { echo "Usage: deetnuts-deploy deploy SHA WEB_IMAGE WORKER_IMAGE POCKETBASE_IMAGE [public|origin-only]" >&2; exit 2; }
+    deploy_release "$2" "$3" "$4" "$5" "${6:-public}"
+    ;;
+  rollback)
+    [[ $# -ge 2 && $# -le 3 ]] || { echo "Usage: deetnuts-deploy rollback SHA [public|origin-only]" >&2; exit 2; }
+    rollback_release "$2" "${3:-public}"
+    ;;
+  status)
+    [[ $# -eq 1 ]] || { echo "Usage: deetnuts-deploy status" >&2; exit 2; }
+    status
+    ;;
+  *)
+    echo "Allowed commands: deploy, rollback, status" >&2
+    exit 2
+    ;;
+esac

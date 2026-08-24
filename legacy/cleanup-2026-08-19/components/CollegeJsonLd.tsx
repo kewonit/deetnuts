@@ -10,7 +10,7 @@ interface CollegeJsonLdProps {
 }
 
 export default function CollegeJsonLd({ college, slug }: CollegeJsonLdProps) {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://deetnuts.com";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.deetnuts.com";
   const collegeSlug =
     slug || createCollegeSlug(college.college_name, college.college_id);
   const collegeUrl = `${baseUrl}/mht-cet/colleges/${collegeSlug}`;

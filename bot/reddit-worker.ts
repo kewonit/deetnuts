@@ -1,4 +1,4 @@
-import "dotenv/config";
+import { writeFile } from "node:fs/promises";
 import { setTimeout as sleep } from "node:timers/promises";
 
 import {
@@ -19,6 +19,20 @@ import {
 
 const DEFAULT_POLL_INTERVAL_MS = 60_000;
 const DEFAULT_LIMIT = 50;
+const DEFAULT_HEALTH_FILE = "/tmp/reddit-worker-healthy";
+
+let shutdownRequested = false;
+const shutdownController = new AbortController();
+
+function requestShutdown(signal: NodeJS.Signals) {
+  if (shutdownRequested) return;
+  shutdownRequested = true;
+  console.log(`Received ${signal}; stopping Reddit worker`);
+  shutdownController.abort();
+}
+
+process.once("SIGINT", () => requestShutdown("SIGINT"));
+process.once("SIGTERM", () => requestShutdown("SIGTERM"));
 
 function requiredEnv(name: string) {
   const value = process.env[name];
@@ -274,7 +288,9 @@ async function pollSubreddit({
   const comments = await reddit.getNewComments(subreddit, DEFAULT_LIMIT);
 
   for (const comment of [...comments].reverse()) {
+    if (shutdownRequested) return;
     await processComment({ comment, subreddit, botUsername, dryRunSeen });
+    await touchHealthFile();
   }
 }
 
@@ -288,7 +304,17 @@ async function logHeartbeat(subreddits: string[]) {
   });
 }
 
+async function touchHealthFile() {
+  const healthFile =
+    process.env.REDDIT_WORKER_HEALTH_FILE || DEFAULT_HEALTH_FILE;
+  await writeFile(healthFile, `${Date.now()}\n`, { mode: 0o600 });
+}
+
 async function main() {
+  if (process.env.NODE_ENV !== "production") {
+    await import("dotenv/config");
+  }
+
   const subreddits = parseCsv(requiredEnv("REDDIT_SUBREDDITS"));
   if (subreddits.length === 0) {
     throw new Error("REDDIT_SUBREDDITS must contain at least one subreddit");
@@ -319,9 +345,11 @@ async function main() {
   });
 
   await logHeartbeat(subreddits);
+  await touchHealthFile();
 
-  for (;;) {
+  while (!shutdownRequested) {
     for (const subreddit of subreddits) {
+      if (shutdownRequested) break;
       try {
         await pollSubreddit({ reddit, subreddit, botUsername, dryRunSeen });
       } catch (error) {
@@ -329,9 +357,22 @@ async function main() {
       }
     }
 
+    if (shutdownRequested) break;
     await logHeartbeat(subreddits);
-    await sleep(pollIntervalMs);
+    await touchHealthFile();
+
+    try {
+      await sleep(pollIntervalMs, undefined, {
+        signal: shutdownController.signal,
+      });
+    } catch (error) {
+      if (!(error instanceof Error) || error.name !== "AbortError") {
+        throw error;
+      }
+    }
   }
+
+  console.log("Reddit cutoff worker stopped");
 }
 
 main().catch((error) => {

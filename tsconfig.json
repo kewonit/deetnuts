@@ -25,7 +25,8 @@
       "@ejam/predictors": ["./ejam/packages/predictors/src/index.ts"],
       "@ejam/predictors/*": ["./ejam/packages/predictors/src/*"]
     },
-    "target": "ES2020"
+    "target": "ES2020",
+    "allowJs": true
   },
   "include": [
     "next-env.d.ts",

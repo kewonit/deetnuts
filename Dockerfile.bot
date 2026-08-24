@@ -1,18 +1,48 @@
-FROM node:22-alpine AS deps
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --force --no-audit --no-fund
+# syntax=docker/dockerfile:1.12
 
-FROM node:22-alpine AS builder
+ARG NODE_IMAGE=node:22-alpine@sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32
+
+FROM ${NODE_IMAGE} AS deps
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --no-audit --no-fund
+
+FROM ${NODE_IMAGE} AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run bot:build
 
-FROM node:22-alpine AS runner
+FROM ${NODE_IMAGE} AS runner
 WORKDIR /app
-ENV NODE_ENV=production
-COPY package*.json ./
-RUN npm ci --omit=dev --force --no-audit --no-fund
-COPY --from=builder /app/dist ./dist
+
+ARG OCI_CREATED
+ARG OCI_REVISION
+ARG OCI_SOURCE=https://github.com/kewonit/deetnuts
+LABEL org.opencontainers.image.created=${OCI_CREATED} \
+      org.opencontainers.image.description="DEETNUTS Reddit worker" \
+      org.opencontainers.image.licenses="MIT AND AGPL-3.0-or-later" \
+      org.opencontainers.image.revision=${OCI_REVISION} \
+      org.opencontainers.image.source=${OCI_SOURCE} \
+      org.opencontainers.image.title="DEETNUTS Reddit worker"
+
+ENV NODE_ENV=production \
+    HOME=/tmp \
+    NODE_OPTIONS=--max-old-space-size=128 \
+    REDDIT_WORKER_HEALTH_FILE=/tmp/reddit-worker-healthy
+
+RUN rm -rf /usr/local/lib/node_modules/npm \
+        /usr/local/lib/node_modules/corepack \
+        /opt/yarn-v1.22.22 && \
+    rm -f /usr/local/bin/npm /usr/local/bin/npx \
+        /usr/local/bin/corepack /usr/local/bin/pnpm /usr/local/bin/pnpx \
+        /usr/local/bin/yarn /usr/local/bin/yarnpkg && \
+    addgroup --system --gid 1001 bot && \
+    adduser --system --uid 1001 --ingroup bot bot && \
+    chown -R bot:bot /app /tmp
+COPY --from=builder --chown=bot:bot /app/dist ./dist
+
+USER bot
+HEALTHCHECK --interval=2m --timeout=5s --start-period=30s --retries=3 \
+  CMD ["node", "-e", "const fs=require('node:fs');const p=process.env.REDDIT_WORKER_HEALTH_FILE;const max=Math.max(Number(process.env.REDDIT_POLL_INTERVAL_MS)||60000,60000)*3;try{if(Date.now()-fs.statSync(p).mtimeMs>max)process.exit(1)}catch{process.exit(1)}"]
 CMD ["node", "dist/bot/bot/reddit-worker.js"]

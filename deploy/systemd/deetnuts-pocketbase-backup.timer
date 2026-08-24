@@ -1,0 +1,11 @@
+[Unit]
+Description=Verify a daily DEETNUTS PocketBase backup copy
+
+[Timer]
+OnCalendar=*-*-* 04:15:00 UTC
+RandomizedDelaySec=10m
+Persistent=true
+Unit=deetnuts-pocketbase-backup.service
+
+[Install]
+WantedBy=timers.target

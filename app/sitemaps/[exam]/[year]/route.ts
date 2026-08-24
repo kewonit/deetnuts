@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getJeeSeoRoutes } from "@/lib/jee-cutoffs/seo";
 import type { JeeExamId } from "@/lib/jee-cutoffs/types";
+import { PRODUCTION_SITE_URL } from "@/lib/site-url";
 
 export const dynamicParams = true;
 
@@ -51,7 +52,7 @@ export async function GET(
       },
     });
   }
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${routes.map((route) => `  <url><loc>${escapeXml(`https://deetnuts.com${route.path}`)}</loc><lastmod>${escapeXml(route.lastChangedAt)}</lastmod></url>`).join("\n")}\n</urlset>\n`;
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${routes.map((route) => `  <url><loc>${escapeXml(`${PRODUCTION_SITE_URL}${route.path}`)}</loc><lastmod>${escapeXml(route.lastChangedAt)}</lastmod></url>`).join("\n")}\n</urlset>\n`;
   return new NextResponse(xml, {
     headers: {
       "Content-Type": "application/xml; charset=utf-8",

@@ -1,4 +1,4 @@
-import { createAdminClient } from "@/lib/supabase/admin";
+import { getPocketBase } from "@/lib/pocketbaseClient";
 
 export interface DailyStats {
   date: string;
@@ -44,40 +44,32 @@ function formatDateLabel(iso: string): string {
 }
 
 export async function fetchBotStats(): Promise<BotStats> {
-  const supabase = createAdminClient();
   const since = getDateDaysAgo(30);
-
-  // Only aggregate request volume, status, and duration.
-  const [dailyResult, durationResult, totalsResult] = await Promise.all([
-    // Daily breakdown
-    supabase
-      .from("bot_usage_events")
-      .select("status, created_at")
-      .gte("created_at", since)
-      .in("event_name", TRACKED_REQUEST_EVENTS),
-
-    // Duration trends
-    supabase
-      .from("bot_usage_events")
-      .select("duration_ms, created_at")
-      .gte("created_at", since)
-      .in("event_name", TRACKED_REQUEST_EVENTS)
-      .not("duration_ms", "is", null)
-      .gt("duration_ms", 0)
-      .lt("duration_ms", 30000), // Filter outliers > 30s
-
-    // Totals
-    supabase
-      .from("bot_usage_events")
-      .select("status, duration_ms, created_at")
-      .gte("created_at", since)
-      .in("event_name", TRACKED_REQUEST_EVENTS),
-  ]);
-
-  // Handle errors gracefully - return empty stats rather than crash
-  const dailyRows = dailyResult.error ? [] : (dailyResult.data ?? []);
-  const durationRows = durationResult.error ? [] : (durationResult.data ?? []);
-  const totalsRows = totalsResult.error ? [] : (totalsResult.data ?? []);
+  const eventFilter = TRACKED_REQUEST_EVENTS
+    .map((event) => `event_name = "${event}"`)
+    .join(" || ");
+  let totalsRows: Array<{
+    status: string;
+    duration_ms: number | null;
+    created_at: string;
+  }> = [];
+  try {
+    totalsRows = await getPocketBase()
+      .collection("bot_usage_events")
+      .getFullList({
+        fields: "status,duration_ms,created_at",
+        filter: `created_at >= "${since}" && (${eventFilter})`,
+      }) as typeof totalsRows;
+  } catch {
+    // Statistics are noncritical and intentionally degrade to an empty series.
+  }
+  const dailyRows = totalsRows;
+  const durationRows = totalsRows.filter(
+    (row) =>
+      typeof row.duration_ms === "number" &&
+      row.duration_ms > 0 &&
+      row.duration_ms < 30000,
+  );
 
   // Build daily map
   const dailyMap = new Map<string, DailyStats>();

@@ -2,12 +2,12 @@
 
 ## Overview
 
-DEETNUTS is a Next.js App Router application backed by Supabase and a set of ingestion utilities for public admissions datasets. The repository serves two related purposes:
+DEETNUTS is a Next.js App Router application backed by self-hosted PocketBase and a set of ingestion utilities for public admissions datasets. The repository serves two related purposes:
 
 - a production web application for browsing and comparing data
 - an operational workspace for importing, validating, and migrating datasets
 
-The codebase still carries compatibility layers that preserve PocketBase-like interfaces for older modules and scripts, but the live runtime is centered on Supabase.
+The live runtime uses PocketBase directly. Supabase remains only as the read-only source for the explicit migration and as a temporary rollback copy after cutover.
 
 ## System Diagram
 
@@ -25,36 +25,43 @@ The codebase still carries compatibility layers that preserve PocketBase-like in
                                                |
                                                v
                                      +--------------------+
-                                     | PocketBase-Shaped  |
-                                     | Compatibility API  |
-                                     | scripts/supabase-  |
-                                     | pocketbase-compat  |
+                                     | PocketBase SDK     |
+                                     | batch ingestion    |
                                      +---------+----------+
                                                |
                                                v
-+-----------+       +----------------------+    +----------------------+
-| Browser / | ----> | Next.js App Router   | -> | Supabase Postgres    |
-| Search    |       | pages + API routes   |    | and Supabase Auth    |
-+-----------+       +----------+-----------+    +----------------------+
-                               |
-                               v
-                     +----------------------+
-                     | Shared Lib Layer     |
-                     | lib/*                |
-                     +----------------------+
++-----------+       +----------------------+       +----------------------+
+| Browser / | ----> | Cloudflare DNS, TLS, | ----> | Unprivileged Nginx   |
+| Search    |       | CDN, WAF, redirects  |       | on DigitalOcean      |
++-----------+       +----------------------+       +-----------+----------+
+                                                              |
+                                                              v
+                                                    +----------------------+
+                                                    | Active blue/green    |
+                                                    | Next.js container    |
+                                                    +----------+-----------+
+                                                               |
+                                  +----------------------------+------------------+
+                                  v                                               v
+                        +----------------------+                       +----------------------+
+                        | Shared Lib Layer     |                       | Private PocketBase   |
+                        | lib/*                |                       | data, auth, files    |
+                        +----------------------+                       +----------------------+
 ```
 
 ## Runtime Stack
 
 | Layer              | Current Choice          | Notes                                                 |
 | ------------------ | ----------------------- | ----------------------------------------------------- |
-| Framework          | Next.js 16.2.9          | App Router, standalone output                         |
-| UI runtime         | React 19.2.3            | React Compiler enabled                                |
+| Framework          | Next.js 16.2.12         | App Router, standalone output                         |
+| UI runtime         | React 19.2.8            | React Compiler enabled                                |
 | Language           | TypeScript              | Used across app and scripts                           |
 | Styling            | Tailwind CSS            | Shared UI primitives plus project-specific components |
-| Auth               | Supabase Auth           | Cookie-based server auth helpers                      |
-| Primary data store | Supabase Postgres       | Live application backend                              |
-| Deployment model   | Docker standalone build | Node 22 Alpine builder/runner image                   |
+| Auth               | PocketBase              | Signed, HttpOnly host-only application cookie         |
+| Primary data store | PocketBase SQLite       | Private volume on the single production VM            |
+| Edge               | Cloudflare              | DNS, strict TLS, caching, WAF and canonical redirects |
+| Origin             | DigitalOcean + Nginx    | Single Droplet with blue/green web containers         |
+| Deployment model   | Docker standalone build | Private digest-pinned Node 22 Alpine images            |
 
 ## Major Application Areas
 
@@ -70,10 +77,10 @@ The `app/` directory is organized by data domain and product surface.
 
 The `lib/` directory contains the operational core of the application.
 
-- `lib/auth.ts` and `lib/supabaseAuth.ts`: authenticated user helpers for server-side routes and pages
+- `lib/auth.ts` and `lib/pocketbase/*`: authenticated user helpers for server-side routes and pages
 - `lib/metadata.ts`: shared metadata generation helpers for SEO and social cards
 - `lib/college-data.ts`: cached helpers for MHT-CET college and seat data
-- `lib/pocketbaseClient.ts`: PocketBase-like interface backed by Supabase for legacy consumers
+- `lib/pocketbaseClient.ts`: private, service-authenticated PocketBase adapter
 
 ## Data Domains
 
@@ -115,52 +122,36 @@ The API surface supports all three rounds. The checked-in `app/mht-cet/all-india
 
 ### Auth
 
-The live app uses Supabase Auth.
+The live app uses PocketBase auth.
 
 - `lib/auth.ts` exposes cached user and auth-status helpers.
-- `lib/supabaseAuth.ts` provides stricter authenticated access helpers for server operations.
+- `lib/pocketbase/auth.ts` validates and refreshes PocketBase tokens and manages signed OAuth state.
 
 ### Data Access
 
-There are two active access patterns in the repository:
+Runtime reads and writes use a service-authenticated PocketBase adapter on the private Docker network. User-owned profile updates use the authenticated user's PocketBase token and collection rules. Browsers never connect to PocketBase directly.
 
-1. Direct Supabase usage for modules that already migrated fully.
-2. PocketBase-like wrappers for older modules that still rely on collection semantics, filter strings, or batch-like workflows.
+### Collection Security
 
-This split is intentional for now, but it is the primary architectural compromise still visible in the codebase.
-
-### Row-Level Security
-
-All tables in the exposed `public` schema have RLS enabled. Access is split by data class:
-
-- Public reference datasets grant `SELECT` only to `anon` and `authenticated`; client writes are revoked.
-- Profiles, todos, mock attempts, and mock responses use authenticated owner-scoped policies. Updates include both `USING` and `WITH CHECK` ownership predicates.
-- Approved question content is readable, while answer keys, review metadata, import batches, and import errors remain backend-only.
-- State-cutoff tables used by server actions, eligibility mappings, and bot telemetry are service-role-only unless a table has an explicit public reference-data policy.
-- Avatar reads are public, but uploads and updates require authentication, the caller's UUID folder, ownership on updates, an allowed image extension, and the bucket size/MIME limits.
-
-The RLS hardening migration revokes legacy automatic Data API grants before restoring this allowlist and verifies the resulting catalog state before committing. Service-only tables intentionally have no client policy; with client grants revoked, RLS therefore denies access by default.
+Imported data collections allow only the dedicated `app_services` backend role. The users collection allows a user to view only their own record and update only approved profile fields; email, verification, source IDs, and migration audit fields are immutable to users. Private avatars are served through an authenticated same-user proxy with MIME, size, redirect, and host checks. PocketBase itself has no published port.
 
 ## Compatibility Layer
 
-Two files define the compatibility boundary:
-
-- `lib/pocketbaseClient.ts`: used by application code that still expects a PocketBase collection client
-- `scripts/supabase-pocketbase-compat.ts`: used by ingestion scripts that still expect PocketBase batch APIs and auth semantics
-
-These wrappers translate familiar collection operations such as `getList`, `getFullList`, `create`, `upsert`, and filter expressions into Supabase queries.
+`lib/pocketbaseClient.ts` defines the runtime boundary. It authenticates a dedicated backend service, validates its role, retries once after token expiry, and exposes the narrow collection operations used by the application.
 
 ## Deployment Model
 
 ### Application Deployment
 
-- `next.config.mjs` enables standalone output and production headers.
-- `Dockerfile` builds a standalone Next.js server and runs it with a non-root user.
-- `docker-compose.yml` starts the frontend container and a PocketBase container.
+- `next.config.mjs` enables standalone output, deployment IDs, scoped caching and production headers.
+- `Dockerfile` builds a standalone Next.js server with a BuildKit-mounted Server Actions key and runs it as a non-root user.
+- `docker-compose.yml` defines blue and green web slots, an unprivileged Nginx origin, bounded resources, read-only filesystems and a disabled Reddit-worker profile.
+- Only the active web slot and Nginx restart after a host reboot. The inactive slot remains available only during a deployment or rollback window.
+- GHCR images are private, addressed by digest, scanned and attested before the restricted host deployment command accepts them.
 
-### Operational Caveat
+### Availability Boundary
 
-The compose file still reflects migration-era infrastructure. The core application runtime is Supabase-first, but the repository continues to carry a PocketBase service definition for compatibility and legacy workflows.
+Blue/green switching removes ordinary web release downtime but does not make the single VM highly available. PocketBase data is persisted in a named volume with scheduled verified backups; recovery still requires restoring or reprovisioning the single VM.
 
 ## Request Flows
 
@@ -170,7 +161,7 @@ The compose file still reflects migration-era infrastructure. The core applicati
 Route request
   -> App Router page or API handler
     -> lib helper or direct collection query
-      -> Supabase-backed data source
+      -> private PocketBase service adapter
         -> typed or normalized response
           -> rendered page / JSON payload
 ```
@@ -180,7 +171,7 @@ Route request
 ```text
 Route request
   -> cookies()
-    -> Supabase server client
+    -> authenticated PocketBase user client
       -> auth.getUser()
         -> protected query or redirect/error path
 ```
@@ -191,14 +182,14 @@ Route request
 CSV file
   -> scripts/*.ts parser
     -> compatibility wrapper batch builder
-      -> Supabase inserts / upserts / deletes
+      -> PocketBase inserts / upserts / deletes
         -> operational logs and validation output
 ```
 
 ## Known Maintenance Hotspots
 
 - Some npm aliases in `package.json` still point to files that are no longer present in `scripts/`.
-- Several CLI scripts still validate legacy PocketBase-style auth variable names even though the actual database work is executed through Supabase-backed wrappers.
+- Supabase credentials are migration-source inputs only and are rejected by runtime environment validation.
 - The all-India cutoff UI and the all-India API surface are not perfectly aligned at the moment.
 - One older seat-matrix helper still uses a shortened table name.
 

@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { updateSession } from "@/utils/supabase/middleware";
 import { getAdmissionsCanonicalRouteDecision } from "@/lib/admissions/proxy-canonical";
 import { parseLegacyMhtCetCutoffRoute } from "@/lib/admissions/legacy-route";
+import { getRequestOrigin } from "@/lib/site-url";
 
 const PREDICTOR_QUERY_KEYS = [
   "band",
@@ -23,10 +23,22 @@ const PREDICTOR_QUERY_KEYS = [
   "state_of_domicile",
 ] as const;
 
+const AUTH_COOKIE_NAME =
+  process.env.NODE_ENV === "production"
+    ? "__Host-deetnuts_auth"
+    : "deetnuts_auth";
+const PROTECTED_ROUTES = ["/account", "/dashboard", "/profile", "/settings"];
+
 function hasPredictorQueryParams(request: NextRequest): boolean {
   return PREDICTOR_QUERY_KEYS.some((key) =>
     request.nextUrl.searchParams.has(key),
   );
+}
+
+function redirectUrl(request: NextRequest, pathname: string): URL {
+  const destination = new URL(pathname, getRequestOrigin(request.url));
+  destination.search = request.nextUrl.search;
+  return destination;
 }
 
 export async function proxy(request: NextRequest) {
@@ -39,8 +51,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
   if (pathname === "/" && hasPredictorQueryParams(request)) {
-    const destination = request.nextUrl.clone();
-    destination.pathname = "/college-predictor";
+    const destination = redirectUrl(request, "/college-predictor");
     return NextResponse.redirect(destination, 301);
   }
   const notFound = () => {
@@ -63,8 +74,7 @@ export async function proxy(request: NextRequest) {
   if (legacyMatch) {
     const parsed = parseLegacyMhtCetCutoffRoute(legacyMatch[1], legacyMatch[2]);
     if (parsed) {
-      const destination = request.nextUrl.clone();
-      destination.pathname = "/mht-cet/state-cutoffs";
+      const destination = redirectUrl(request, "/mht-cet/state-cutoffs");
       destination.search = `?year=${parsed.year}&round=${parsed.round}`;
       return NextResponse.redirect(destination, 308);
     }
@@ -76,14 +86,16 @@ export async function proxy(request: NextRequest) {
     return notFound();
   }
   if (canonicalDecision?.type === "redirect") {
-    const destination = request.nextUrl.clone();
-    destination.pathname = canonicalDecision.pathname;
+    const destination = redirectUrl(request, canonicalDecision.pathname);
     return NextResponse.redirect(destination, 308);
   }
 
   const mhtCetDisabled = process.env.ADMISSIONS_V2_MHT_CET?.toLowerCase() !== "true";
   if (mhtCetDisabled && /^\/mht-cet\/colleges\/[^/]+\/?$/.test(pathname)) {
-    return NextResponse.redirect(new URL("/mht-cet/colleges", request.url), 307);
+    return NextResponse.redirect(
+      new URL("/mht-cet/colleges", getRequestOrigin(request.url)),
+      307,
+    );
   }
 
   const isAdmissionsDetail = /^\/mht-cet\/colleges\/[^/]+\/?$/.test(pathname);
@@ -97,7 +109,16 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next({ request: { headers: request.headers } });
   }
 
-  return updateSession(request);
+  if (
+    PROTECTED_ROUTES.some((route) => pathname.startsWith(route)) &&
+    !request.cookies.has(AUTH_COOKIE_NAME)
+  ) {
+    const url = new URL("/login", getRequestOrigin(request.url));
+    url.searchParams.set("redirect", `${pathname}${request.nextUrl.search}`);
+    return NextResponse.redirect(url);
+  }
+
+  return NextResponse.next({ request: { headers: request.headers } });
 }
 
 export const config = {

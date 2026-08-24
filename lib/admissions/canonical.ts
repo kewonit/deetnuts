@@ -1,6 +1,5 @@
 import { createCollegeSlug } from "@/lib/slugify";
-
-const SITE_URL = "https://deetnuts.com";
+import { PRODUCTION_SITE_URL } from "@/lib/site-url";
 
 export function getMhtCetCollegePath(
   collegeName: string,
@@ -13,7 +12,7 @@ export function getMhtCetCollegePath(
 }
 
 export function getCanonicalUrl(path: string): string {
-  return new URL(path, SITE_URL).toString();
+  return new URL(path, PRODUCTION_SITE_URL).toString();
 }
 
 export function matchesCanonicalSegment(

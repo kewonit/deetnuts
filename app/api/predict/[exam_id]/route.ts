@@ -7,8 +7,8 @@
 import type {
   PredictionErrorResponse,
   PredictionSuccessResponse,
-} from "@ejam/data";
-import { PredictionInputError } from "@ejam/data";
+} from "@ejam/data/predictor-interface";
+import { PredictionInputError } from "@ejam/data/predictor-interface";
 import { decodeCollegePredictorUrlParams } from "@ejam/data/college-predictor";
 import {
   buildPredictionProvenance,

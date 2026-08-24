@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+cert_dir=${1:-}
+[[ -n "$cert_dir" && -d "$cert_dir" && ! -L "$cert_dir" ]] || {
+  echo "Origin certificate directory is missing or unsafe" >&2
+  exit 1
+}
+
+check_attributes() {
+  local path=$1
+  local expected_mode=$2
+  local expected_uid=$3
+  local expected_gid=$4
+  local attributes
+
+  [[ -f "$path" && ! -L "$path" ]] || {
+    echo "$path is missing or is not a regular file" >&2
+    exit 1
+  }
+  attributes=$(stat -c '%a %u %g' "$path")
+  [[ "$attributes" == "$expected_mode $expected_uid $expected_gid" ]] || {
+    echo "$path must have mode $expected_mode and owner $expected_uid:$expected_gid" >&2
+    exit 1
+  }
+}
+
+tls_group=${DEETNUTS_TLS_GROUP:-deetnuts-tls}
+tls_group_entry=$(getent group "$tls_group")
+[[ -n "$tls_group_entry" ]] || {
+  echo "The dedicated $tls_group group is missing" >&2
+  exit 1
+}
+tls_gid=$(cut -d: -f3 <<<"$tls_group_entry")
+
+directory_attributes=$(stat -c '%a %u %g' "$cert_dir")
+[[ "$directory_attributes" == "750 0 $tls_gid" ]] || {
+  echo "$cert_dir must have mode 0750 and owner root:$tls_group" >&2
+  exit 1
+}
+
+check_attributes "$cert_dir/origin.pem" 640 0 "$tls_gid"
+check_attributes "$cert_dir/origin-key.pem" 640 0 "$tls_gid"
+check_attributes "$cert_dir/cloudflare-origin-pull-ca.pem" 640 0 "$tls_gid"
+
+command -v openssl >/dev/null 2>&1 || {
+  echo "openssl is required to validate origin certificates" >&2
+  exit 1
+}
+
+origin_cert="$cert_dir/origin.pem"
+origin_key="$cert_dir/origin-key.pem"
+client_ca="$cert_dir/cloudflare-origin-pull-ca.pem"
+
+openssl x509 -in "$origin_cert" -noout >/dev/null
+openssl pkey -in "$origin_key" -noout -check >/dev/null
+openssl x509 -in "$client_ca" -noout >/dev/null
+
+# Leave enough time to replace certificates without an emergency cutover.
+openssl x509 -in "$origin_cert" -noout -checkend 2592000 >/dev/null || {
+  echo "The origin certificate expires within 30 days" >&2
+  exit 1
+}
+openssl x509 -in "$client_ca" -noout -checkend 2592000 >/dev/null || {
+  echo "The authenticated-origin-pull CA expires within 30 days" >&2
+  exit 1
+}
+
+subject_alt_names=$(openssl x509 -in "$origin_cert" -noout -ext subjectAltName)
+grep -Fq 'DNS:deetnuts.com' <<<"$subject_alt_names" || {
+  echo "The origin certificate does not cover deetnuts.com" >&2
+  exit 1
+}
+grep -Fq 'DNS:www.deetnuts.com' <<<"$subject_alt_names" || {
+  echo "The origin certificate does not cover www.deetnuts.com" >&2
+  exit 1
+}
+
+origin_cert_public_key=$(
+  openssl x509 -in "$origin_cert" -pubkey -noout \
+    | openssl pkey -pubin -outform DER \
+    | sha256sum \
+    | awk '{ print $1 }'
+)
+origin_private_key_public_key=$(
+  openssl pkey -in "$origin_key" -pubout -outform DER \
+    | sha256sum \
+    | awk '{ print $1 }'
+)
+[[ "$origin_cert_public_key" == "$origin_private_key_public_key" ]] || {
+  echo "The origin certificate and private key do not match" >&2
+  exit 1
+}
+
+client_ca_constraints=$(openssl x509 -in "$client_ca" -noout -text)
+grep -Eq 'CA:[[:space:]]*TRUE' <<<"$client_ca_constraints" || {
+  echo "The authenticated-origin-pull certificate is not a CA" >&2
+  exit 1
+}
+
+echo "Origin certificate files are valid"

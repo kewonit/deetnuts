@@ -24,7 +24,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import { createClient } from "@/utils/supabase/client";
 import {
   FilterSidebar,
   type FilterSidebarProps,
@@ -198,33 +197,22 @@ function StateCutoffsContent() {
   const pendingUserFetchActionRef = useRef(false);
 
   useEffect(() => {
-    let isActive = true;
-    const supabase = createClient();
-
-    supabase.auth
-      .getUser()
-      .then(({ data }) => {
-        if (isActive) {
-          setIsAuthenticated(Boolean(data.user));
-        }
+    const controller = new AbortController();
+    fetch("/api/auth/session", {
+      cache: "no-store",
+      credentials: "same-origin",
+      signal: controller.signal,
+    })
+      .then((response) => (response.ok ? response.json() : { user: null }))
+      .then((data: { user?: unknown }) => {
+        setIsAuthenticated(Boolean(data.user));
       })
       .catch(() => {
-        if (isActive) {
-          setIsAuthenticated(false);
-        }
+        if (!controller.signal.aborted) setIsAuthenticated(false);
       });
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (isActive) {
-        setIsAuthenticated(Boolean(session?.user));
-      }
-    });
-
     return () => {
-      isActive = false;
-      subscription.unsubscribe();
+      controller.abort();
     };
   }, []);
 

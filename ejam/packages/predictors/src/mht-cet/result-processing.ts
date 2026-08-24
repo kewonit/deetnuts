@@ -1,10 +1,10 @@
-import { PredictionInputError } from "@ejam/data";
 import type {
   MhtCetPredictionInput,
   MhtCetPredictionResult,
   MhtCetProbabilityBand,
   MhtCetProgramPrediction,
 } from "@ejam/data/mht-cet";
+import { PredictionInputError } from "@ejam/data/predictor-interface";
 import {
   boundariesEqual,
   decodeMhtCursor,

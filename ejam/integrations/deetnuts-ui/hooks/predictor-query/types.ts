@@ -1,4 +1,4 @@
-import type { PredictionProvenance } from "@ejam/data";
+import type { PredictionProvenance } from "@ejam/data/predictor-interface";
 import type {
   MhtCetCandidatureType,
   MhtCetCategoryId,

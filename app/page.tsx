@@ -5,6 +5,7 @@ import Hero from "@/components/ui/hero";
 import Marquee from "react-fast-marquee";
 import SparklesText from "@/components/magicui/sparkles-text";
 import CommunityPartners from "@/components/ui/community-partners";
+import { PRODUCTION_SITE_URL } from "@/lib/site-url";
 
 export const metadata: Metadata = {
   title: "2026 MHT-CET Cutoffs & Admission Tools",
@@ -21,11 +22,11 @@ export const metadata: Metadata = {
     title: "2026 Engineering Admission Tools | DEETNUTS",
     description:
       "Plan 2026 Maharashtra engineering admissions with MHT-CET cutoffs, college data, seat matrices, and admission trends.",
-    url: "https://deetnuts.com",
+    url: PRODUCTION_SITE_URL,
     type: "website",
   },
   alternates: {
-    canonical: "https://deetnuts.com",
+    canonical: PRODUCTION_SITE_URL,
   },
 };
 

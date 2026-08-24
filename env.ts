@@ -7,17 +7,13 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
-    DATABASE_URL: z
-      .string()
-      .url()
-      .refine(
-        (str) => !str.includes("YOUR_POSTGRES_URL_HERE"),
-        "You forgot to change the default URL",
-      ),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
-    SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
+    POCKETBASE_INTERNAL_URL: z.string().url(),
+    POCKETBASE_SERVICE_EMAIL: z.string().email(),
+    POCKETBASE_SERVICE_PASSWORD: z.string().min(32),
+    AUTH_STATE_SECRET: z.string().min(32),
   },
 
   /**
@@ -26,8 +22,7 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    NEXT_PUBLIC_SUPABASE_URL: z.string(),
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string(),
+    NEXT_PUBLIC_APP_URL: z.string().url(),
   },
 
   /**
@@ -35,11 +30,12 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
-    DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
-    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
-    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    POCKETBASE_INTERNAL_URL: process.env.POCKETBASE_INTERNAL_URL,
+    POCKETBASE_SERVICE_EMAIL: process.env.POCKETBASE_SERVICE_EMAIL,
+    POCKETBASE_SERVICE_PASSWORD: process.env.POCKETBASE_SERVICE_PASSWORD,
+    AUTH_STATE_SECRET: process.env.AUTH_STATE_SECRET,
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

@@ -1,0 +1,13 @@
+{
+  "name": "deetnuts-pocketbase-migration",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "dotenv": "17.4.2",
+    "pg": "8.23.0",
+    "pg-query-stream": "4.17.0",
+    "pocketbase": "0.28.0",
+    "tsx": "4.22.4"
+  }
+}

@@ -1,53 +1,53 @@
 import { MetadataRoute } from "next";
+import { PRODUCTION_SITE_URL } from "@/lib/site-url";
 
-const baseUrl = "https://deetnuts.com";
-const seoLastUpdated = new Date("2026-08-16T00:00:00.000Z");
+const seoLastUpdated = new Date("2026-08-23T00:00:00.000Z");
 
 export type SitemapUrl = MetadataRoute.Sitemap[number];
 
 export async function generateAllUrls(): Promise<SitemapUrl[]> {
   return [
     {
-      url: baseUrl,
+      url: PRODUCTION_SITE_URL,
       lastModified: seoLastUpdated,
     },
     {
-      url: `${baseUrl}/creators`,
+      url: `${PRODUCTION_SITE_URL}/creators`,
       lastModified: seoLastUpdated,
     },
     {
-      url: `${baseUrl}/datasource`,
+      url: `${PRODUCTION_SITE_URL}/datasource`,
       lastModified: seoLastUpdated,
     },
     {
-      url: `${baseUrl}/jee-cutoffs`,
+      url: `${PRODUCTION_SITE_URL}/jee-cutoffs`,
     },
     {
-      url: `${baseUrl}/compliance`,
+      url: `${PRODUCTION_SITE_URL}/compliance`,
       lastModified: seoLastUpdated,
     },
     {
-      url: `${baseUrl}/compliance/terms-and-conditions`,
+      url: `${PRODUCTION_SITE_URL}/compliance/terms-and-conditions`,
       lastModified: seoLastUpdated,
     },
     {
-      url: `${baseUrl}/compliance/privacy-policy`,
+      url: `${PRODUCTION_SITE_URL}/compliance/privacy-policy`,
       lastModified: seoLastUpdated,
     },
     {
-      url: `${baseUrl}/compliance/cookie-policy`,
+      url: `${PRODUCTION_SITE_URL}/compliance/cookie-policy`,
       lastModified: seoLastUpdated,
     },
     {
-      url: `${baseUrl}/compliance/data-sources-and-licensing`,
+      url: `${PRODUCTION_SITE_URL}/compliance/data-sources-and-licensing`,
       lastModified: seoLastUpdated,
     },
     {
-      url: `${baseUrl}/compliance/automated-access`,
+      url: `${PRODUCTION_SITE_URL}/compliance/automated-access`,
       lastModified: seoLastUpdated,
     },
     {
-      url: `${baseUrl}/compliance/open-source-notices`,
+      url: `${PRODUCTION_SITE_URL}/compliance/open-source-notices`,
       lastModified: seoLastUpdated,
     },
   ];

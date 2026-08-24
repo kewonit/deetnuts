@@ -1,4 +1,4 @@
-import { createAdminClient } from "@/lib/supabase/admin";
+import { ClientResponseError, getPocketBase } from "@/lib/pocketbaseClient";
 
 export type BotProcessedEventStatus =
   | "processing"
@@ -25,28 +25,30 @@ export async function claimBotEvent({
   action: string;
   metadata?: Record<string, unknown>;
 }): Promise<{ claimed: true; event: ClaimedBotEvent } | { claimed: false }> {
-  const supabase = createAdminClient();
-  const { data, error } = await supabase
-    .from("bot_processed_events")
-    .insert({
+  try {
+    const now = new Date().toISOString();
+    const data = await getPocketBase().collection("bot_processed_events").create({
       platform,
       external_id: externalId,
       action,
       status: "processing",
       metadata,
-    })
-    .select("id,platform,external_id,action,status")
-    .single();
-
-  if (error) {
-    if (error.code === "23505") {
+      created_at: now,
+      updated_at: now,
+    });
+    return { claimed: true, event: data as unknown as ClaimedBotEvent };
+  } catch (error) {
+    const responseData =
+      error instanceof ClientResponseError ? JSON.stringify(error.data) : "";
+    if (
+      error instanceof ClientResponseError &&
+      error.status === 400 &&
+      responseData.includes("validation_not_unique")
+    ) {
       return { claimed: false };
     }
-
-    throw new Error(error.message);
+    throw error;
   }
-
-  return { claimed: true, event: data as ClaimedBotEvent };
 }
 
 export async function updateBotEventStatus({
@@ -58,21 +60,11 @@ export async function updateBotEventStatus({
   status: BotProcessedEventStatus;
   metadata?: Record<string, unknown>;
 }) {
-  const supabase = createAdminClient();
-  const { data, error } = await supabase
-    .from("bot_processed_events")
-    .update({
+  const data = await getPocketBase().collection("bot_processed_events").update(id, {
       status,
       metadata: metadata ?? {},
       updated_at: new Date().toISOString(),
-    })
-    .eq("id", id)
-    .select("id,platform,external_id,action,status")
-    .single();
+    });
 
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  return data as ClaimedBotEvent;
+  return data as unknown as ClaimedBotEvent;
 }
