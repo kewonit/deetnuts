@@ -49,7 +49,9 @@ This directory contains the local, reviewable part of the Vercel-to-DigitalOcean
 7. Set Cloudflare Full (strict), Authenticated Origin Pulls, canonical redirects, WAF exclusions, and cache rules. Create a zone-scoped token with only `Zone / Cache Purge` for `deetnuts.com`, then put it and the zone ID in `shared/cloudflare.env`.
 8. Configure the Google OAuth web client with the exact redirect URI `https://www.deetnuts.com/auth/callback`, then store its client ID and secret only in the root-owned one-time migration environment.
 9. Run `deetnuts-pocketbase-migrate` against the read-only Supabase source. Do not cut over until its global count/digest, Google identity, storage byte/hash, and backup checks pass.
-10. Perform the first deployment with the `origin-only` verification mode. Use normal `public` verification only after DNS points through Cloudflare.
+10. Add `NEXT_SERVER_ACTIONS_ENCRYPTION_KEY` as a repository Actions secret before publishing images. It must remain stable across releases and contain canonical base64 for exactly 32 bytes.
+11. Add `DO_HOST`, `DO_FIREWALL_ID`, `DO_API_TOKEN`, `DO_SSH_PRIVATE_KEY`, and `DO_SSH_HOST_KEY` to the GitHub Production environment only after the host and firewall exist. Set the repository variable `DO_DEPLOY_ENABLED=true` only when that configuration is complete; image publication remains available while deployment is disabled.
+12. Perform the first deployment with the `origin-only` verification mode. Use normal `public` verification only after DNS points through Cloudflare.
 
 `bootstrap-host.sh` is a provisioning/update operation, not a live reload. For a later host-file update, stop `deetnuts.service`, run the reviewed bootstrap from the desired checkout, then start the service and verify it. The script refuses to replace bind-mounted configuration while the service is active and reconstructs the Nginx upstream from the retained active-slot marker.
 

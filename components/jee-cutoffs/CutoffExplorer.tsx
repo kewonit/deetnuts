@@ -56,7 +56,6 @@ export function CutoffExplorer(props: {
   const [error, setError] = useState<string | null>(null);
   const [announcement, setAnnouncement] = useState("");
   const [isPending, startTransition] = useTransition();
-  const initialized = useRef(false);
   const exactProfile = props.profileRoutes.find((route) => route.offeringId === selection.offeringId && route.body === selection.body && route.quota === selection.quota && route.seatType === selection.seatType && route.gender === selection.gender);
 
   async function load(
@@ -110,8 +109,6 @@ export function CutoffExplorer(props: {
   const loadController = useRef<AbortController | null>(null);
 
   useEffect(() => {
-    if (initialized.current) return;
-    initialized.current = true;
     const selectionFromHash = () => {
       const current = new URLSearchParams(location.hash.slice(1));
       return {
