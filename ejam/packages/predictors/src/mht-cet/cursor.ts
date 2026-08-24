@@ -1,9 +1,9 @@
 import { createHash } from "node:crypto";
-import { PredictionInputError } from "@ejam/data";
 import type {
   MhtCetPredictionInput,
   MhtCetPredictionResult,
 } from "@ejam/data/mht-cet";
+import { PredictionInputError } from "@ejam/data/predictor-interface";
 import { z } from "zod4";
 import { normalizeMhtSearchText } from "./search";
 

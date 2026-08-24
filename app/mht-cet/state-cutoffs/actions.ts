@@ -4,10 +4,8 @@ import {
   getPocketBase,
   type PocketBaseLike,
 } from "@/lib/pocketbaseClient";
-import { createAdminClient } from "@/lib/supabase/admin";
 import {
   MhtCetCandidateProfileSchema,
-  buildAllocationOrFilter,
   deriveEligibleSeatPools,
 } from "@/lib/mht-cet/state-cutoffs/candidate-profile";
 import {
@@ -41,28 +39,6 @@ interface ProfiledCutoffQuery {
   round: number;
   year: number;
   profile: unknown;
-}
-
-interface ProfiledQueryBuilder {
-  in(column: string, values: readonly string[]): ProfiledQueryBuilder;
-  not(column: string, operator: string, value: unknown): ProfiledQueryBuilder;
-  or(filter: string): ProfiledQueryBuilder;
-  gt(column: string, value: number): ProfiledQueryBuilder;
-  gte(column: string, value: number): ProfiledQueryBuilder;
-  lte(column: string, value: number): ProfiledQueryBuilder;
-  eq(column: string, value: string): ProfiledQueryBuilder;
-  order(
-    column: string,
-    options: { ascending: boolean },
-  ): ProfiledQueryBuilder;
-  range(
-    from: number,
-    to: number,
-  ): PromiseLike<{
-    data: unknown[] | null;
-    error: { code?: string; message: string } | null;
-    count: number | null;
-  }>;
 }
 
 const tokenizeProfileSearch = (search: string): string[] => {
@@ -171,50 +147,55 @@ export async function getProfiledCutoffRecords(
   }
 
   try {
-    const supabase = createAdminClient();
-    let query = supabase
-      .from(collectionName)
-      .select(
-        "id,college_code,college_name,course_code,course_name,category,seat_allocation_section,cutoff_score,last_rank,total_admitted,status,home_university,institute_home_university_id,affiliating_university_id,minority_community_id",
-        { count: "exact" },
-      )
-      .in("category", derived.categoryCodes)
-      .not("institute_home_university_id", "is", null)
-      .or(
-        buildAllocationOrFilter(parsedProfile.data),
-      ) as unknown as ProfiledQueryBuilder;
-
-    if (input.scoreMode === "rank") {
-      query = query
-        .not("last_rank", "is", null)
-        .gt("last_rank", 0)
-        .gte("last_rank", score)
-        .order("last_rank", { ascending: true })
-        .order("id", { ascending: true });
+    const equalsAny = (field: string, values: string[]) =>
+      `(${values.map((value) => `${field} = "${escapeFilterValue(value)}"`).join(" || ")})`;
+    const filterParts = [
+      equalsAny("category", derived.categoryCodes),
+      'institute_home_university_id != ""',
+    ];
+    if (parsedProfile.data.candidatureType === "type-e") {
+      filterParts.push(
+        equalsAny("seat_allocation_section", [
+          "STATE_LEVEL",
+          "HOME_TO_OTHER",
+          "OTHER_TO_OTHER",
+        ]),
+      );
     } else {
-      query = query
-        .gte("cutoff_score", 0)
-        .lte("cutoff_score", score)
-        .order("cutoff_score", { ascending: false })
-        .order("id", { ascending: true });
+      const home = escapeFilterValue(parsedProfile.data.homeUniversityId || "");
+      filterParts.push(
+        `(seat_allocation_section = "STATE_LEVEL" || ` +
+          `(institute_home_university_id = "${home}" && ${equalsAny("seat_allocation_section", ["HOME_TO_HOME", "OTHER_TO_HOME"])}) || ` +
+          `(institute_home_university_id != "${home}" && ${equalsAny("seat_allocation_section", ["HOME_TO_OTHER", "OTHER_TO_OTHER"])}))`,
+      );
+    }
+    let sort: string;
+    if (input.scoreMode === "rank") {
+      filterParts.push(`last_rank > 0`, `last_rank >= ${score}`);
+      sort = "last_rank,id";
+    } else {
+      filterParts.push(`cutoff_score >= 0`, `cutoff_score <= ${score}`);
+      sort = "-cutoff_score,id";
     }
 
     if (courses.length > 0) {
-      query = query.in("course_name", courses);
+      filterParts.push(equalsAny("course_name", courses));
     }
     if (statuses.length > 0) {
-      query = query.in("status", statuses);
+      filterParts.push(equalsAny("status", statuses));
     }
     if (homeUniversities.length > 0) {
-      query = query.in("home_university", homeUniversities);
+      filterParts.push(equalsAny("home_university", homeUniversities));
     }
 
     for (const token of tokenizeProfileSearch(search)) {
       if (/^\d+$/.test(token)) {
-        query = query.eq("college_code", token.replace(/^0+(?=\d)/, ""));
+        filterParts.push(
+          `college_code = "${token.replace(/^0+(?=\d)/, "")}"`,
+        );
       } else {
-        query = query.or(
-          `college_name.ilike.%${token}%,course_name.ilike.%${token}%`,
+        filterParts.push(
+          `(college_name ~ "${escapeFilterValue(token)}" || course_name ~ "${escapeFilterValue(token)}")`,
         );
       }
     }
@@ -223,46 +204,28 @@ export async function getProfiledCutoffRecords(
       derived.categoryCodes.includes("MI") &&
       derived.minorityInstituteIds.length > 0
     ) {
-      query = query.or(
-        `category.neq.MI,and(category.eq.MI,minority_community_id.in.(${derived.minorityInstituteIds.join(",")}))`,
+      filterParts.push(
+        `(category != "MI" || (category = "MI" && ${equalsAny("minority_community_id", derived.minorityInstituteIds)}))`,
       );
     }
 
-    const from = (page - 1) * perPage;
-    const to = from + perPage - 1;
-    const { data, error, count } = await query.range(from, to);
+    const result = await getPocketBase().collection(collectionName).getList(
+      page,
+      perPage,
+      {
+        fields:
+          "id,college_code,college_name,course_code,course_name,category,seat_allocation_section,cutoff_score,last_rank,total_admitted,status,home_university,institute_home_university_id,affiliating_university_id,minority_community_id",
+        filter: filterParts.join(" && "),
+        sort,
+      },
+    );
 
-    if (error) {
-      console.error("Profiled cutoff query failed", {
-        collectionName,
-        code: error.code,
-        message: error.message,
-      });
-      const missingTable = error.code === "42P01";
-      const missingProfileColumns =
-        error.code === "42703" ||
-        error.message.includes("institute_home_university_id");
-      return {
-        success: false,
-        error: missingTable
-          ? "Data not available"
-          : missingProfileColumns
-            ? "Profiled cutoff data is not ready"
-            : "Failed to fetch cutoff data",
-        message: missingTable
-          ? `Cutoff data is unavailable for ${sanitizedYear} round ${sanitizedRound}.`
-          : missingProfileColumns
-            ? "The candidate eligibility migration must be applied before using guided results."
-            : "The cutoff data could not be loaded. Try again.",
-      };
-    }
-
-    const totalItems = count ?? 0;
+    const totalItems = result.totalItems;
     return {
       success: true,
-      data: data ?? [],
+      data: result.items,
       totalItems,
-      totalPages: Math.ceil(totalItems / perPage),
+      totalPages: result.totalPages,
       page,
       perPage,
       round: sanitizedRound,

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ensureUserAuthenticated } from "@/lib/supabaseAuth";
+import { ensureUserAuthenticated } from "@/lib/pocketbase/user-auth";
 import { getPocketBase } from "@/lib/pocketbaseClient";
 import {
   getCollectionForRound,
@@ -95,7 +95,7 @@ export async function GET(request: NextRequest) {
     let allRecords: CutoffRecord[];
 
     try {
-      // Ensure user authentication using Supabase before making the request
+      // Verify the PocketBase session before exporting account-only data.
       await ensureUserAuthenticated();
 
       // Helper function to build filter query parts with chunked parameters

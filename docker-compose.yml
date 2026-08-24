@@ -1,72 +1,244 @@
-version: "3"
+name: deetnuts
+
+x-web: &web
+  init: true
+  env_file:
+    - ${WEB_ENV_FILE:-./deploy/env/web.env.example}
+  environment:
+    NODE_ENV: production
+    HOSTNAME: 0.0.0.0
+    PORT: "3000"
+    NEXT_TELEMETRY_DISABLED: "1"
+  expose:
+    - "3000"
+  networks:
+    - application
+  depends_on:
+    pocketbase:
+      condition: service_healthy
+  read_only: true
+  tmpfs:
+    - /tmp:rw,noexec,nosuid,size=64m,uid=1001,gid=1001,mode=1777
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges:true
+  restart: unless-stopped
+  stop_grace_period: 30s
+  mem_limit: 1024m
+  memswap_limit: 1280m
+  cpus: 1.0
+  pids_limit: 256
+  healthcheck:
+    test:
+      - CMD
+      - node
+      - -e
+      - fetch('http://127.0.0.1:3000/api/health').then(r=>{if(!r.ok)throw new Error(String(r.status))}).catch(()=>process.exit(1))
+    interval: 30s
+    timeout: 5s
+    retries: 3
+    start_period: 20s
+  logging:
+    driver: journald
+    options:
+      tag: deetnuts-{{.Name}}
 
 services:
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
-        - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
-        - DATABASE_URL=${DATABASE_URL}
-        - DIRECT_URL=${DIRECT_URL}
-        - NEXT_PUBLIC_POCKETBASE_URL=${NEXT_PUBLIC_POCKETBASE_URL}
-    ports:
-      - "127.0.0.1:3000:3000"
-    environment:
-      - NODE_ENV=production
-      - HOSTNAME=0.0.0.0
-      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
-      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
-      - DATABASE_URL=${DATABASE_URL}
-      - DIRECT_URL=${DIRECT_URL}
-      - NEXT_PUBLIC_POCKETBASE_URL=${NEXT_PUBLIC_POCKETBASE_URL}
-      - NEXT_TELEMETRY_DISABLED=1
-    depends_on:
-      - pocketbase
-    restart: unless-stopped
-    # Add healthcheck to ensure container is running properly
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
-    deploy:
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: 300M
-        reservations:
-          cpus: '0.1'
-          memory: 100M
-
   pocketbase:
-    image: ghcr.io/muchobien/pocketbase:latest
-    container_name: pocketbase
-    restart: unless-stopped
-    ports:
-      - "127.0.0.1:8090:8090"
-    volumes:
-      - pocketbase-data:/pb_data
+    image: ${POCKETBASE_IMAGE:?POCKETBASE_IMAGE must be an immutable image digest}
+    init: true
+    user: "10001:10001"
     environment:
-      - TZ=UTC
-    # Add healthcheck for pocketbase
+      DEETNUTS_MIGRATION_MODE: ${DEETNUTS_MIGRATION_MODE:-0}
+      GOMEMLIMIT: 320MiB
+    expose:
+      - "8090"
+    networks:
+      - application
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m,uid=10001,gid=10001,mode=1777
+    volumes:
+      - pocketbase-data:/pb/pb_data
+    secrets:
+      - pocketbase_encryption_key
+      - pocketbase_superuser_email
+      - pocketbase_superuser_password
+      - pocketbase_migration_key
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    stop_grace_period: 60s
+    mem_limit: 448m
+    memswap_limit: 640m
+    cpus: 1.0
+    pids_limit: 96
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8090/api/health"]
+      test:
+        - CMD
+        - wget
+        - --quiet
+        - --spider
+        - http://127.0.0.1:8090/api/health
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: journald
+      options:
+        tag: deetnuts-{{.Name}}
+
+  pocketbase-migrate:
+    profiles:
+      - migration
+    image: ${POCKETBASE_MIGRATION_IMAGE:?POCKETBASE_MIGRATION_IMAGE must be an immutable image digest}
+    init: true
+    user: "10001:10001"
+    env_file:
+      - ${POCKETBASE_MIGRATION_ENV_FILE:-./deploy/env/pocketbase-migration.env.example}
+    environment:
+      POCKETBASE_MIGRATION_URL: http://pocketbase:8090
+    networks:
+      - application
+    depends_on:
+      pocketbase:
+        condition: service_healthy
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=32m,uid=10001,gid=10001,mode=1777
+    secrets:
+      - pocketbase_superuser_email
+      - pocketbase_superuser_password
+      - pocketbase_migration_key
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: "no"
+    stop_grace_period: 30s
+    mem_limit: 512m
+    memswap_limit: 768m
+    cpus: 1.0
+    pids_limit: 128
+    logging:
+      driver: journald
+      options:
+        tag: deetnuts-{{.Name}}
+
+  web-blue:
+    <<: *web
+    image: ${WEB_BLUE_IMAGE:?WEB_BLUE_IMAGE must be an immutable image digest}
+    environment:
+      NODE_ENV: production
+      HOSTNAME: 0.0.0.0
+      PORT: "3000"
+      NEXT_TELEMETRY_DISABLED: "1"
+      DEPLOYMENT_SHA: ${BLUE_DEPLOYMENT_SHA:?BLUE_DEPLOYMENT_SHA is required}
+    volumes:
+      - web-blue-cache:/app/.next/cache
+
+  web-green:
+    <<: *web
+    image: ${WEB_GREEN_IMAGE:?WEB_GREEN_IMAGE must be an immutable image digest}
+    environment:
+      NODE_ENV: production
+      HOSTNAME: 0.0.0.0
+      PORT: "3000"
+      NEXT_TELEMETRY_DISABLED: "1"
+      DEPLOYMENT_SHA: ${GREEN_DEPLOYMENT_SHA:?GREEN_DEPLOYMENT_SHA is required}
+    volumes:
+      - web-green-cache:/app/.next/cache
+
+  nginx:
+    image: nginxinc/nginx-unprivileged:1.30.4-alpine@sha256:44e36330f74d4f3a1d4e222acca9e23b401fb87811a7597024502bb759c4dd49
+    init: true
+    user: "101:${NGINX_TLS_GID:-1999}"
+    ports:
+      - "443:8443"
+    networks:
+      - application
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=32m,uid=101,gid=101,mode=1777
+      - /var/cache/nginx:rw,noexec,nosuid,size=32m,uid=101,gid=101,mode=0750
+    volumes:
+      - ${NGINX_CONFIG_ROOT:-./deploy/nginx}/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ${NGINX_CONFIG_ROOT:-./deploy/nginx}/conf.d:/etc/nginx/conf.d:ro
+      - ${NGINX_CONFIG_ROOT:-./deploy/nginx}/snippets:/etc/nginx/snippets:ro
+      - ${NGINX_CONFIG_ROOT:-./deploy/nginx}/cloudflare-real-ip.conf:/etc/nginx/cloudflare-real-ip.conf:ro
+      - ${ORIGIN_CERT_DIR:-./deploy/nginx/certs}:/etc/nginx/certs:ro
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    stop_grace_period: 30s
+    mem_limit: 96m
+    cpus: 0.5
+    pids_limit: 64
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--spider",
+          "http://127.0.0.1:8080/nginx-health",
+        ]
       interval: 30s
       timeout: 5s
       retries: 3
       start_period: 10s
-    deploy:
-      resources:
-        limits:
-          cpus: '0.3'
-          memory: 150M
-        reservations:
-          cpus: '0.05'
-          memory: 50M
+    logging:
+      driver: journald
+      options:
+        tag: deetnuts-{{.Name}}
+
+  reddit-worker:
+    profiles:
+      - reddit-worker
+    image: ${WORKER_IMAGE:?WORKER_IMAGE must be an immutable image digest}
+    init: true
+    env_file:
+      - ${WORKER_ENV_FILE:-./deploy/env/worker.env.example}
+    networks:
+      - application
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m,uid=1001,gid=1001,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    stop_grace_period: 30s
+    mem_limit: 192m
+    cpus: 0.5
+    pids_limit: 128
+    logging:
+      driver: journald
+      options:
+        tag: deetnuts-{{.Name}}
+
+networks:
+  application:
+    name: deetnuts-application
 
 volumes:
+  web-blue-cache:
+  web-green-cache:
   pocketbase-data:
-    driver: local
+
+secrets:
+  pocketbase_encryption_key:
+    file: ${POCKETBASE_ENCRYPTION_KEY_FILE:-./deploy/secrets/pocketbase_encryption_key.example}
+  pocketbase_superuser_email:
+    file: ${POCKETBASE_SUPERUSER_EMAIL_FILE:-./deploy/secrets/pocketbase_superuser_email.example}
+  pocketbase_superuser_password:
+    file: ${POCKETBASE_SUPERUSER_PASSWORD_FILE:-./deploy/secrets/pocketbase_superuser_password.example}
+  pocketbase_migration_key:
+    file: ${POCKETBASE_MIGRATION_KEY_FILE:-./deploy/secrets/pocketbase_migration_key.example}

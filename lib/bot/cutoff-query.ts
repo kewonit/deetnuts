@@ -1,6 +1,7 @@
 import { z } from "zod";
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { ClientResponseError, getPocketBase } from "@/lib/pocketbaseClient";
+import { PRODUCTION_SITE_URL } from "@/lib/site-url";
 import {
   DEFAULT_ROUND,
   DEFAULT_YEAR,
@@ -300,49 +301,48 @@ export function buildStateCutoffsUrl(query: NormalizedBotCutoffQuery) {
     params.set("courses", query.branchGroup.courses.join(","));
   }
 
-  return `https://deetnuts.com/mht-cet/state-cutoffs?${params.toString()}`;
+  return `${PRODUCTION_SITE_URL}/mht-cet/state-cutoffs?${params.toString()}`;
 }
 
 export async function fetchBotStateCutoffRows(
   query: NormalizedBotCutoffQuery,
 ): Promise<{ rows: RawStateCutoffRow[]; totalMatched: number }> {
-  const supabase = createAdminClient();
   const collectionName = getCollectionForRound(query.round, query.year);
   const overfetchLimit = Math.max(
     query.limit * query.categoryCodes.length * 2,
     50,
   );
 
-  let request = supabase
-    .from(collectionName)
-    .select(
-      "id,college_code,college_name,course_code,course_name,category,cutoff_score,last_rank,home_university",
-      { count: "exact" },
-    )
-    .gte("cutoff_score", 0)
-    .lte("cutoff_score", query.percentile)
-    .in("category", [...query.categoryCodes])
-    .order("cutoff_score", { ascending: false });
-
+  const equalsAny = (field: string, values: string[]) =>
+    `(${values.map((value) => `${field} = "${value.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`).join(" || ")})`;
+  const filters = [
+    "cutoff_score >= 0",
+    `cutoff_score <= ${query.percentile}`,
+    equalsAny("category", [...query.categoryCodes]),
+  ];
   if (query.branchGroup.courses.length > 0) {
-    request = request.in("course_name", [...query.branchGroup.courses]);
+    filters.push(equalsAny("course_name", [...query.branchGroup.courses]));
   }
 
-  const { data, error, count } = await request.limit(overfetchLimit);
-
-  if (error) {
-    const message = error.message || "Failed to query cutoff data";
+  try {
+    const result = await getPocketBase()
+      .collection(collectionName)
+      .getList<RawStateCutoffRow>(1, overfetchLimit, {
+        fields:
+          "id,college_code,college_name,course_code,course_name,category,cutoff_score,last_rank,home_university",
+        filter: filters.join(" && "),
+        sort: "-cutoff_score",
+      });
+    return { rows: result.items, totalMatched: result.totalItems };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to query cutoff data";
     const code =
-      error.code === "42P01" || message.includes("does not exist")
+      (error instanceof ClientResponseError && error.status === 404) ||
+      message.includes("does not exist")
         ? "DATA_UNAVAILABLE"
         : "QUERY_FAILED";
     throw new BotCutoffError(code, message, { cause: error });
   }
-
-  return {
-    rows: (data ?? []) as RawStateCutoffRow[],
-    totalMatched: count ?? data?.length ?? 0,
-  };
 }
 
 export async function queryBotStateCutoffs(

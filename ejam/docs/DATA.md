@@ -52,7 +52,7 @@ pnpm data:fetch
 
 ## Adding data
 
-Git tracks catalog releases, reference/config metadata, and source attribution. Parquet payloads live in GitHub Releases as `data-X.Y.Z.tar.gz`, pinned by `data/catalog/releases/vX.Y.Z.json`. Local dev, CI, and Vercel all hydrate `data/` with `pnpm data:fetch --download`.
+Git tracks catalog releases, reference/config metadata, and source attribution. Parquet payloads live in GitHub Releases as `data-X.Y.Z.tar.gz`, pinned by `data/catalog/releases/vX.Y.Z.json`. Local development, CI, and container builds all hydrate `data/` with `pnpm data:fetch --download`.
 
 Official cutoffs only. Cite the JoSAA OR/CR or CSAB notice URL in your PR. If it's a new source, add it to `data/sources/engineering/jee.json`. No fabricated cutoffs, no paywalled PDFs you can't redistribute. Seat matrix is optional registry data; the predictor does not load it at runtime.
 

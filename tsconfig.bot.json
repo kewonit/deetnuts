@@ -9,6 +9,6 @@
     "outDir": "dist/bot",
     "target": "ES2022"
   },
-  "include": ["bot/**/*.ts", "lib/bot/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["bot/reddit-worker.ts"],
+  "exclude": ["node_modules", "**/*.test.ts"]
 }

@@ -4,7 +4,7 @@
  * the API route uses this to dispatch without knowing exam internals
  */
 
-import type { ExamPredictor } from "@ejam/data";
+import type { ExamPredictor } from "@ejam/data/predictor-interface";
 
 /** registry entry — predictor is lazy-loaded to keep API cold-start light */
 type RegistryEntry = {

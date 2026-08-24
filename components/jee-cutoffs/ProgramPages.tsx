@@ -10,8 +10,9 @@ import {
   profileLabel,
 } from "@/lib/jee-cutoffs/seo";
 import type { CutoffSourceRegistryEntry, JeeExamId, JeeSeoRoute } from "@/lib/jee-cutoffs/types";
+import { PRODUCTION_SITE_URL } from "@/lib/site-url";
 
-const baseUrl = "https://deetnuts.com";
+const baseUrl = PRODUCTION_SITE_URL;
 
 function JsonLd({ value }: { value: unknown }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(value).replace(/</g, "\\u003c") }} />;

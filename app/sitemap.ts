@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { getJeeSeoRoutes } from "@/lib/jee-cutoffs/seo";
 import { generateAllUrls } from "@/lib/sitemap-generator";
+import { PRODUCTION_SITE_URL } from "@/lib/site-url";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [routes, corePages] = await Promise.all([getJeeSeoRoutes(), generateAllUrls()]);
@@ -8,8 +9,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const route of routes
     .filter((route) => route.indexable && ["entry", "directory", "hub"].includes(route.routeType))
   ) {
-    urls.set(`https://deetnuts.com${route.path}`, {
-      url: `https://deetnuts.com${route.path}`,
+    urls.set(`${PRODUCTION_SITE_URL}${route.path}`, {
+      url: `${PRODUCTION_SITE_URL}${route.path}`,
       lastModified: route.lastChangedAt,
     });
   }

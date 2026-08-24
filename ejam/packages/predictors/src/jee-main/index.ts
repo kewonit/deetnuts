@@ -5,7 +5,6 @@
  * value from institutes.json — validated at the Zod schema layer before predict() is called
  */
 
-import type { ExamPredictor } from "@ejam/data";
 import {
   type CollegePredictionResult,
   type CollegePredictorFilters,
@@ -14,6 +13,7 @@ import {
   loadCanonicalStates,
   predictPrograms,
 } from "@ejam/data/college-predictor";
+import type { ExamPredictor } from "@ejam/data/predictor-interface";
 import { z } from "zod4";
 import {
   finalizePredictionResult,
@@ -90,7 +90,7 @@ async function loadRegistryMaps(): Promise<RegistryMaps> {
 
   const { readFileSync } = await import("node:fs");
   const { resolve } = await import("node:path");
-  const { resolveRegistryRoot } = await import("@ejam/data");
+  const { resolveRegistryRoot } = await import("@ejam/data/data-root");
   const registryRoot = resolveRegistryRoot();
   const institutes = JSON.parse(
     readFileSync(

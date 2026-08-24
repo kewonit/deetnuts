@@ -1,9 +1,10 @@
 import type { BotCutoffResult } from "./cutoff-query";
+import { PRODUCTION_SITE_URL } from "../site-url";
 
 const DISCLAIMER =
   "Cutoffs are historical reference data, not admission guarantees. Verify official CAP data.";
 const DISCORD_RESPONSE_LIMIT = 1_900;
-const STATE_CUTOFFS_URL = "https://deetnuts.com/mht-cet/state-cutoffs";
+const STATE_CUTOFFS_URL = `${PRODUCTION_SITE_URL}/mht-cet/state-cutoffs`;
 
 function formatPercentile(value: number) {
   return `${value.toFixed(2).replace(/\.?0+$/, "")}%`;

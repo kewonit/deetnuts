@@ -3,7 +3,7 @@ import {
   getCutoffRecords,
   getProfiledCutoffRecords,
 } from "../../../mht-cet/state-cutoffs/actions";
-import { createClient } from "@/app/lib/supabase/server";
+import { getAuthenticatedPocketBase } from "@/lib/pocketbase/auth";
 import {
   ANONYMOUS_STATE_CUTOFF_API_COOKIE,
   ANONYMOUS_STATE_CUTOFF_API_REQUEST_LIMIT,
@@ -61,13 +61,7 @@ function stripPrivateErrorDetails(value: unknown): unknown {
 
 async function isRequestAuthenticated(): Promise<boolean> {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-      error,
-    } = await supabase.auth.getUser();
-
-    return !error && Boolean(user);
+    return Boolean(await getAuthenticatedPocketBase());
   } catch (error) {
     console.warn(
       "State cutoffs auth check failed; treating as anonymous",

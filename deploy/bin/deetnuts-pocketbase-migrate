@@ -1,0 +1,133 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+umask 077
+
+APP_ROOT=${DEETNUTS_ROOT:-/opt/deetnuts}
+STATE_DIR="$APP_ROOT/state"
+STATE_ENV="$STATE_DIR/compose.env"
+WEB_ENV="$APP_ROOT/shared/web.env"
+MIGRATION_ENV=$(awk -F= '$1 == "POCKETBASE_MIGRATION_ENV_FILE" { sub(/^[^=]*=/, ""); print; exit }' "$STATE_ENV")
+REGISTRY_IMAGE_PATTERN='^ghcr\.io/kewonit/deetnuts-pocketbase-migration@sha256:[0-9a-f]{64}$'
+LOCAL_IMAGE_PATTERN='^sha256:[0-9a-f]{64}$'
+
+compose() {
+  docker compose \
+    --project-directory "$APP_ROOT" \
+    --env-file "$STATE_ENV" \
+    --file "$APP_ROOT/docker-compose.yml" \
+    "$@"
+}
+
+read_value() {
+  local file=$1
+  local key=$2
+  awk -F= -v key="$key" '$1 == key { sub(/^[^=]*=/, ""); print; exit }' "$file"
+}
+
+set_state_value() {
+  local key=$1
+  local value=$2
+  local temporary
+  temporary=$(mktemp "$STATE_DIR/compose.env.XXXXXX")
+  awk -v key="$key" -v value="$value" '
+    BEGIN { found = 0 }
+    index($0, key "=") == 1 { print key "=" value; found = 1; next }
+    { print }
+    END { if (!found) print key "=" value }
+  ' "$STATE_ENV" > "$temporary"
+  chown root:root "$temporary"
+  chmod 0600 "$temporary"
+  mv -f -- "$temporary" "$STATE_ENV"
+}
+
+wait_for_health() {
+  local container_id
+  container_id=$(compose ps --quiet pocketbase)
+  [[ -n "$container_id" ]] || return 1
+  for ((attempt = 1; attempt <= 60; attempt += 1)); do
+    health=$(docker inspect --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' "$container_id")
+    [[ "$health" == healthy ]] && return 0
+    [[ "$health" == unhealthy || "$health" == exited || "$health" == dead ]] && return 1
+    sleep 3
+  done
+  return 1
+}
+
+[[ -f "$MIGRATION_ENV" && ! -L "$MIGRATION_ENV" ]] || {
+  echo "PocketBase migration environment is missing or unsafe" >&2
+  exit 1
+}
+[[ $(stat -c '%u:%g' "$MIGRATION_ENV") == 0:0 && $(stat -c '%a' "$MIGRATION_ENV") == 600 ]] || {
+  echo "PocketBase migration environment must be root:root mode 0600" >&2
+  exit 1
+}
+for key in \
+  DIRECT_URL_SUPABASE \
+  NEXT_PUBLIC_SUPABASE_URL \
+  SUPABASE_SERVICE_ROLE_KEY \
+  POCKETBASE_SERVICE_EMAIL \
+  POCKETBASE_SERVICE_PASSWORD \
+  GOOGLE_OAUTH_CLIENT_ID \
+  GOOGLE_OAUTH_CLIENT_SECRET; do
+  value=$(read_value "$MIGRATION_ENV" "$key")
+  [[ -n "$value" && "$value" != replace-* && "$value" != *your-source* ]] || {
+    echo "$key is missing from the PocketBase migration environment" >&2
+    exit 1
+  }
+done
+[[ $(read_value "$MIGRATION_ENV" POCKETBASE_SERVICE_EMAIL) == "$(read_value "$WEB_ENV" POCKETBASE_SERVICE_EMAIL)" ]] || {
+  echo "Migration and web PocketBase service emails differ" >&2
+  exit 1
+}
+[[ $(read_value "$MIGRATION_ENV" POCKETBASE_SERVICE_PASSWORD) == "$(read_value "$WEB_ENV" POCKETBASE_SERVICE_PASSWORD)" ]] || {
+  echo "Migration and web PocketBase service passwords differ" >&2
+  exit 1
+}
+[[ $(read_value "$STATE_ENV" DEETNUTS_MIGRATION_MODE) == 0 ]] || {
+  echo "PocketBase migration mode is already enabled" >&2
+  exit 1
+}
+
+migration_image=$(read_value "$STATE_ENV" POCKETBASE_MIGRATION_IMAGE)
+[[ "$migration_image" =~ $REGISTRY_IMAGE_PATTERN || "$migration_image" =~ $LOCAL_IMAGE_PATTERN ]] || {
+  echo "PocketBase migration image is not an immutable allowed digest" >&2
+  exit 1
+}
+
+exec 9>"$STATE_DIR/deploy.lock"
+flock --nonblock 9 || {
+  echo "Another deployment or migration command is already running" >&2
+  exit 75
+}
+
+if [[ "$migration_image" =~ $LOCAL_IMAGE_PATTERN ]]; then
+  docker image inspect "$migration_image" >/dev/null
+else
+  compose --profile migration pull pocketbase-migrate
+fi
+
+restore_normal_mode() {
+  local exit_code=${1:-$?}
+  trap - EXIT INT TERM HUP
+  set +e
+  set_state_value DEETNUTS_MIGRATION_MODE 0
+  compose up -d --no-deps --force-recreate pocketbase
+  wait_for_health
+  exit "$exit_code"
+}
+trap 'restore_normal_mode $?' EXIT
+trap 'restore_normal_mode 130' INT
+trap 'restore_normal_mode 143' TERM
+trap 'restore_normal_mode 129' HUP
+
+set_state_value DEETNUTS_MIGRATION_MODE 1
+compose up -d --no-deps --force-recreate pocketbase
+wait_for_health
+compose --profile migration run --rm --no-deps pocketbase-migrate
+
+trap - EXIT INT TERM HUP
+set_state_value DEETNUTS_MIGRATION_MODE 0
+compose up -d --no-deps --force-recreate pocketbase
+wait_for_health
+echo "PocketBase migration completed and migration-only routes are disabled"

@@ -77,7 +77,7 @@ function releaseNotes(version: string): string {
   return [
     `Catalog release: data/catalog/releases/${version}.json`,
     "",
-    "This release contains the manifest-pinned data tarball for local, CI, and Vercel builds.",
+    "This release contains the manifest-pinned data tarball for local, CI, and container builds.",
     "",
     "Use:",
     "",

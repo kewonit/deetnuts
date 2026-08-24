@@ -1,0 +1,22 @@
+# syntax=docker/dockerfile:1.12
+
+ARG NODE_IMAGE=node:22-alpine@sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32
+
+FROM ${NODE_IMAGE}
+WORKDIR /migration
+
+COPY pocketbase/migrate/package.json pocketbase/migrate/package-lock.json ./
+RUN npm ci --no-audit --no-fund && \
+    npm cache clean --force && \
+    addgroup --system --gid 10001 migration && \
+    adduser --system --uid 10001 --ingroup migration migration
+
+COPY --chown=10001:10001 scripts/migrate-supabase-to-pocketbase.ts ./scripts/
+COPY --chown=10001:10001 lib/pocketbase/email.ts ./lib/pocketbase/
+COPY --chown=10001:10001 pocketbase/migrate/entrypoint.sh /usr/local/bin/migrate-entrypoint
+RUN chmod 0555 /usr/local/bin/migrate-entrypoint && \
+    chmod 0444 /migration/scripts/migrate-supabase-to-pocketbase.ts && \
+    chmod 0444 /migration/lib/pocketbase/email.ts
+
+USER 10001:10001
+ENTRYPOINT ["/usr/local/bin/migrate-entrypoint"]

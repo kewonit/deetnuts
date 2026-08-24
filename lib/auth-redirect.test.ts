@@ -42,8 +42,8 @@ test("buildAuthCallbackUrl encodes nested redirect params", () => {
   assert.equal(
     buildAuthCallbackUrl(
       "/mht-cet/state-cutoffs?percentile=95&year=2025&round=1",
-      "https://deetnuts.com",
+      "https://www.deetnuts.com",
     ),
-    "https://deetnuts.com/auth/callback?redirect=%2Fmht-cet%2Fstate-cutoffs%3Fpercentile%3D95%26year%3D2025%26round%3D1",
+    "https://www.deetnuts.com/auth/callback?redirect=%2Fmht-cet%2Fstate-cutoffs%3Fpercentile%3D95%26year%3D2025%26round%3D1",
   );
 });

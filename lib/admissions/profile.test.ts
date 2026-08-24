@@ -52,7 +52,7 @@ test("profile fragments round-trip and remain distinct from canonical state", ()
   );
 
   const url = setProfileFragmentInUrl(
-    new URL("https://deetnuts.com/mht-cet/colleges/example-01002?year=2026#view=table"),
+    new URL("https://www.deetnuts.com/mht-cet/colleges/example-01002?year=2026#view=table"),
     fragment,
   );
   assert.equal(url.pathname, "/mht-cet/colleges/example-01002");

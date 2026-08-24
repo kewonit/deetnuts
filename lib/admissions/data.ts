@@ -2,7 +2,7 @@ import "server-only";
 
 import { cache } from "react";
 import { unstable_cache } from "next/cache";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { ClientResponseError, getPocketBase } from "@/lib/pocketbaseClient";
 import { getMhtCetCollegePath } from "@/lib/admissions/canonical";
 import type {
   AdmissionsCutoffObservation,
@@ -96,26 +96,30 @@ function mhtCollegeCodes(id: string): string[] {
   return [...new Set([numeric, numeric.padStart(4, "0"), numeric.padStart(5, "0")])];
 }
 
+function collegeCodeFilter(id: string): string {
+  return mhtCollegeCodes(id)
+    .map((code) => `college_code = "${code}"`)
+    .join(" || ");
+}
+
 export const getCachedMhtCetCollegeCutoffs = unstable_cache(
   async (collegeId: string, year: number, round: number): Promise<MhtCetCutoffRow[]> => {
     if (!isRoundAvailableForYear(round, year)) return [];
     const table = getCollectionForRound(round, year);
     const fields = `${MHT_BASE_CUTOFF_FIELDS}${year >= 2026 ? MHT_2026_PROVENANCE_FIELDS : ""}`;
-    const supabase = createAdminClient();
-    const { data, error } = await supabase
-      .from(table)
-      .select(fields)
-      .in("college_code", mhtCollegeCodes(collegeId))
-      .order("course_name")
-      .order("category");
-    if (error) {
+    try {
+      return await getPocketBase().collection(table).getFullList<MhtCetCutoffRow>({
+        fields,
+        filter: `(${collegeCodeFilter(collegeId)})`,
+        sort: "course_name,category",
+      });
+    } catch (error) {
       throw new AdmissionsDataError(
         `MHT-CET ${year} Round ${round} cutoffs are unavailable`,
         "UNAVAILABLE",
         error,
       );
     }
-    return (data ?? []) as unknown as MhtCetCutoffRow[];
   },
   ["admissions-v2-mht-college-cutoffs"],
   { revalidate: 60 * 60 },
@@ -123,16 +127,17 @@ export const getCachedMhtCetCollegeCutoffs = unstable_cache(
 
 const getCachedMhtCetMasterCollege = unstable_cache(
   async (collegeId: string): Promise<MhtCetMasterCollegeRow | null> => {
-    const supabase = createAdminClient();
-    const { data, error } = await supabase
-      .from("2024_mht_cet_colleges")
-      .select("id,college_id,college_name,status,home_university")
-      .eq("college_id", Number(collegeId))
-      .limit(1);
-    if (error) {
+    try {
+      const result = await getPocketBase()
+        .collection("2024_mht_cet_colleges")
+        .getList<MhtCetMasterCollegeRow>(1, 1, {
+          fields: "id,college_id,college_name,status,home_university",
+          filter: `college_id = ${Number(collegeId)}`,
+        });
+      return result.items[0] ?? null;
+    } catch (error) {
       throw new AdmissionsDataError("MHT-CET college directory is unavailable", "UNAVAILABLE", error);
     }
-    return ((data ?? [])[0] as MhtCetMasterCollegeRow | undefined) ?? null;
   },
   ["admissions-v2-mht-master-college"],
   { revalidate: 60 * 60 * 24 },
@@ -140,19 +145,21 @@ const getCachedMhtCetMasterCollege = unstable_cache(
 
 const getCachedMhtCetSeatMatrix = unstable_cache(
   async (collegeId: string): Promise<MhtCetSeatMatrixRow[]> => {
-    const supabase = createAdminClient();
-    const { data, error } = await supabase
-      .from("2024_mht_cet_colleges_seat_matrix")
-      .select(
-        "id,college_code,choice_code,course_name,seat_type,SI,MS_seats,all_india,institute_seats,minority_seats,CAP_seats,Total",
-      )
-      .in("college_code", mhtCollegeCodes(collegeId))
-      .order("course_name");
-    if (error?.code === "42P01") return [];
-    if (error) {
+    let data: MhtCetSeatMatrixRow[];
+    try {
+      data = await getPocketBase()
+        .collection("2024_mht_cet_colleges_seat_matrix")
+        .getFullList<MhtCetSeatMatrixRow>({
+          fields:
+            "id,college_code,choice_code,course_name,seat_type,SI,MS_seats,all_india,institute_seats,minority_seats,CAP_seats,Total",
+          filter: `(${collegeCodeFilter(collegeId)})`,
+          sort: "course_name",
+        });
+    } catch (error) {
+      if (error instanceof ClientResponseError && error.status === 404) return [];
       throw new AdmissionsDataError("The 2024 seat matrix is unavailable", "UNAVAILABLE", error);
     }
-    return (data ?? []).map((row) => ({
+    return data.map((row) => ({
       ...row,
       SI: Number(row.SI) || 0,
       MS_seats: Number(row.MS_seats) || 0,
@@ -161,7 +168,7 @@ const getCachedMhtCetSeatMatrix = unstable_cache(
       minority_seats: Number(row.minority_seats) || 0,
       CAP_seats: Number(row.CAP_seats) || 0,
       Total: Number(row.Total) || 0,
-    })) as MhtCetSeatMatrixRow[];
+    }));
   },
   ["admissions-v2-mht-seat-matrix"],
   { revalidate: 60 * 60 * 24 },

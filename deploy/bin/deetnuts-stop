@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+APP_ROOT=${DEETNUTS_ROOT:-/opt/deetnuts}
+
+docker compose \
+  --project-directory "$APP_ROOT" \
+  --env-file "$APP_ROOT/state/compose.env" \
+  --file "$APP_ROOT/docker-compose.yml" \
+  stop --timeout 60 nginx web-blue web-green reddit-worker pocketbase

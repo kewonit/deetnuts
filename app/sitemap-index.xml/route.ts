@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getJeeSeoRoutes } from "@/lib/jee-cutoffs/seo";
+import { PRODUCTION_SITE_URL } from "@/lib/site-url";
 
 export const dynamic = "force-static";
 
@@ -10,7 +11,7 @@ export async function GET() {
   const shardDates = new Map<string, string>();
   for (const route of routes) {
     if (!route.indexable || !route.examId || !route.year || !indexableShardTypes.has(route.routeType)) continue;
-    const location = `https://deetnuts.com/sitemaps/${route.examId}/${route.year}`;
+    const location = `${PRODUCTION_SITE_URL}/sitemaps/${route.examId}/${route.year}`;
     const currentDate = shardDates.get(location);
     if (!currentDate || route.lastChangedAt > currentDate) shardDates.set(location, route.lastChangedAt);
   }
@@ -18,7 +19,7 @@ export async function GET() {
     .filter((route) => route.indexable && ["entry", "directory", "hub"].includes(route.routeType))
     .reduce((latest, route) => (route.lastChangedAt > latest ? route.lastChangedAt : latest), "");
   const sitemaps = [
-    { location: "https://deetnuts.com/sitemap.xml", lastModified: coreDate },
+    { location: `${PRODUCTION_SITE_URL}/sitemap.xml`, lastModified: coreDate },
     ...Array.from(shardDates, ([location, lastModified]) => ({ location, lastModified })).sort((left, right) =>
       left.location.localeCompare(right.location),
     ),

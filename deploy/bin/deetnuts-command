@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+command_line=${SSH_ORIGINAL_COMMAND:-}
+read -r -a words <<<"$command_line"
+
+case ${words[0]:-} in
+  deploy)
+    [[ ${#words[@]} -ge 5 && ${#words[@]} -le 6 ]] || exit 2
+    [[ ${words[1]} =~ ^[0-9a-f]{40}$ ]] || exit 2
+    [[ ${words[2]} =~ ^ghcr\.io/kewonit/deetnuts-web@sha256:[0-9a-f]{64}$ ]] || exit 2
+    [[ ${words[3]} =~ ^ghcr\.io/kewonit/deetnuts-worker@sha256:[0-9a-f]{64}$ ]] || exit 2
+    [[ ${words[4]} =~ ^ghcr\.io/kewonit/deetnuts-pocketbase@sha256:[0-9a-f]{64}$ ]] || exit 2
+    if [[ ${#words[@]} -eq 6 ]]; then
+      [[ ${words[5]} == public || ${words[5]} == origin-only ]] || exit 2
+    fi
+    exec sudo -n /usr/local/sbin/deetnuts-deploy "${words[@]}"
+    ;;
+  rollback)
+    [[ ${#words[@]} -ge 2 && ${#words[@]} -le 3 ]] || exit 2
+    [[ ${words[1]} =~ ^[0-9a-f]{40}$ ]] || exit 2
+    if [[ ${#words[@]} -eq 3 ]]; then
+      [[ ${words[2]} == public || ${words[2]} == origin-only ]] || exit 2
+    fi
+    exec sudo -n /usr/local/sbin/deetnuts-deploy "${words[@]}"
+    ;;
+  status)
+    [[ ${#words[@]} -eq 1 ]] || exit 2
+    exec sudo -n /usr/local/sbin/deetnuts-deploy status
+    ;;
+  *)
+    echo "Command is not permitted" >&2
+    exit 2
+    ;;
+esac

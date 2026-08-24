@@ -1,28 +1,15 @@
 import { redirect } from "next/navigation";
-import { createClient } from "@/utils/supabase/server";
+import { getAuthenticatedPocketBase } from "@/lib/pocketbase/auth";
 import { BsArrowReturnLeft } from "react-icons/bs";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export default async function PrivatePage() {
-  const supabase = await createClient();
-
-  const { data, error } = await supabase.auth.getUser();
-  if (error || !data?.user) {
+  const auth = await getAuthenticatedPocketBase();
+  if (!auth) {
     redirect("/login?redirect=/profile");
   }
-
-  const { data: profileData, error: profileError } = await supabase
-    .from("profiles")
-    .select("username")
-    .eq("id", data.user.id)
-    .single();
-
-  if (profileError) {
-    console.error("Error fetching profile:", profileError);
-  }
-
-  const username = profileData?.username || "Kitty!";
+  const username = auth.user.username || auth.user.full_name || "Kitty!";
 
   return (
     <section className="inset-0 mt-20 flex w-full flex-col items-center justify-center border-b-2 border-b-black bg-white bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:70px_70px] font-base">
@@ -40,16 +27,4 @@ export default async function PrivatePage() {
       </div>
     </section>
   );
-}
-
-{
-  /* 
-  Be careful when protecting pages. The server gets the user session from the cookies, which can be spoofed by anyone.
-
-  Always use supabase.auth.getUser() to protect pages and user data.
-
-  Never trust supabase.auth.getSession() inside Server Components. It isn't guaranteed to revalidate the Auth token.
-
-  It's safe to trust getUser() because it sends a request to the Supabase Auth server every time to revalidate the Auth token.
-*/
 }

@@ -1,10 +1,51 @@
+import { fileURLToPath } from "node:url";
+
 /** @type {import('next').NextConfig} */
+const isProduction = process.env.NODE_ENV === "production";
+const deploymentId = process.env.NEXT_DEPLOYMENT_ID?.trim();
+const selfHostedCacheHandler = fileURLToPath(
+  new URL("./deploy/next-cache-handler.cjs", import.meta.url),
+);
+
+if (deploymentId && !/^[A-Za-z0-9._-]{7,64}$/.test(deploymentId)) {
+  throw new Error("NEXT_DEPLOYMENT_ID must be a 7-64 character release identifier");
+}
+
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline'${isProduction ? "" : " 'unsafe-eval'"} https://www.googletagmanager.com`,
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' blob: data: https://www.deetnuts.com https://deetnuts.com https://res.cloudinary.com https://external-preview.redd.it",
+  "font-src 'self' data:",
+  "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com",
+  "frame-src https://www.youtube-nocookie.com",
+  "worker-src 'self' blob:",
+  "object-src 'none'",
+  "frame-ancestors 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  ...(isProduction ? ["upgrade-insecure-requests"] : []),
+].join("; ");
+
 const nextConfig = {
   output: "standalone",
+  cacheHandler: selfHostedCacheHandler,
+  cacheMaxMemorySize: 0,
+
+  ...(deploymentId
+    ? {
+        deploymentId,
+        generateBuildId: async () => deploymentId,
+      }
+    : {}),
 
   outputFileTracingRoot: process.cwd(),
   outputFileTracingIncludes: {
-    "/api/predict/[exam_id]": ["ejam/data/**/*"],
+    "/api/predict/[exam_id]": [
+      "ejam/data/catalog/**/*",
+      "ejam/data/reference/**/*",
+      "ejam/data/tools/college-predictor/**/*",
+    ],
     "/api/jee-cutoffs/[exam]/[college]/[year]": [
       "ejam/data/catalog/**/*",
       "ejam/data/tools/college-cutoffs/**/*",
@@ -43,13 +84,21 @@ const nextConfig = {
 
   images: {
     remotePatterns: [
-      {
-        protocol: "http",
-        hostname: "localhost",
-      },
+      ...(!isProduction
+        ? [
+            {
+              protocol: "http",
+              hostname: "localhost",
+            },
+          ]
+        : []),
       {
         protocol: "https",
         hostname: "deetnuts.com",
+      },
+      {
+        protocol: "https",
+        hostname: "www.deetnuts.com",
       },
       {
         protocol: "https",
@@ -63,11 +112,6 @@ const nextConfig = {
     // Production image optimization
     minimumCacheTTL: 60,
     formats: ["image/avif", "image/webp"],
-  },
-  env: {
-    EJAM_DATA_ROOT: process.env.EJAM_DATA_ROOT || "ejam/data",
-    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   },
   webpack(config) {
     config.module.rules.push({
@@ -100,7 +144,7 @@ const nextConfig = {
           },
           {
             key: "X-XSS-Protection",
-            value: "1; mode=block",
+            value: "0",
           },
           {
             key: "Referrer-Policy",
@@ -113,18 +157,18 @@ const nextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value:
-              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https://res.cloudinary.com https://external-preview.redd.it; font-src 'self'; connect-src 'self' https://*.supabase.co https://www.google-analytics.com https://*.google-analytics.com; frame-src https://www.youtube-nocookie.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self';",
+            value: contentSecurityPolicy,
           },
         ],
       },
-      // Static assets caching
+      // Public filenames are not guaranteed to be content-hashed.
       {
         source: "/:all*(svg|jpg|png|gif|ico|jpeg|webp|woff2|woff|ttf|eot)",
         headers: [
           {
             key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
+            value:
+              "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800",
           },
         ],
       },

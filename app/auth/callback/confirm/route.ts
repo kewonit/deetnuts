@@ -1,11 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server";
 
 import { sanitizeRedirectPath } from "@/lib/auth-redirect";
+import { getRequestOrigin } from "@/lib/site-url";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const next = sanitizeRedirectPath(searchParams.get("redirect"));
-  const loginUrl = new URL("/login", request.url);
+  const loginUrl = new URL("/login", getRequestOrigin(request.url));
   loginUrl.searchParams.set(
     "message",
     "Email code sign-in has been replaced by Google sign-in.",

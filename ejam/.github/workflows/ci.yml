@@ -35,7 +35,7 @@ jobs:
               - 'turbo.json'
               - 'biome.json'
               - 'tsconfig.json'
-              - 'apps/web/vercel.json'
+              - 'apps/web/next.config.ts'
             data:
               - 'data/**'
               - 'packages/data/**'

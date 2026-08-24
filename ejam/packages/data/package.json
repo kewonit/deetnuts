@@ -21,6 +21,10 @@
       "import": "./src/reader.ts",
       "types": "./src/reader.ts"
     },
+    "./data-root": {
+      "import": "./src/data-root.ts",
+      "types": "./src/data-root.ts"
+    },
     "./exam-config": {
       "import": "./src/exam-config/index.ts",
       "types": "./src/exam-config/index.ts"

@@ -62,7 +62,5 @@ apps/scraper/data/cache/
 # backtest + sandbox — local tuning only (not published)
 packages/data-cli/src/backtest/
 packages/data-cli/src/sandbox/
-.vercel
-
 # temp will release soon
 research/

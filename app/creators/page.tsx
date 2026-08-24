@@ -1,6 +1,7 @@
 import React from "react";
 import { Metadata } from "next";
 import Augillion from "next/font/local";
+import { PRODUCTION_SITE_URL } from "@/lib/site-url";
 
 const augillion = Augillion({
   src: "../../public/Augillion.otf",
@@ -14,11 +15,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Creators | DEETNUTS",
     description: "Meet the team behind DEETNUTS.",
-    url: "https://deetnuts.com/creators",
+    url: `${PRODUCTION_SITE_URL}/creators`,
     type: "website",
   },
   alternates: {
-    canonical: "https://deetnuts.com/creators",
+    canonical: `${PRODUCTION_SITE_URL}/creators`,
   },
 };
 

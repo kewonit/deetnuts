@@ -1,5 +1,5 @@
 import AccountForm from "./account-form";
-import { createClient } from "@/app/lib/supabase/server";
+import { getAuthenticatedPocketBase } from "@/lib/pocketbase/auth";
 import { redirect } from "next/navigation";
 
 type AccountPageProps = {
@@ -9,25 +9,22 @@ type AccountPageProps = {
 };
 
 export default async function Account({ searchParams }: AccountPageProps) {
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const auth = await getAuthenticatedPocketBase();
 
   const params = await searchParams;
 
-  if (!user) {
+  if (!auth) {
     redirect("/login?redirect=/account");
   }
+  const { user } = auth;
 
   const accountFormUser = {
     id: user.id,
-    email: user.email || "",
-    name: user.user_metadata?.full_name || "",
-    verified: !!user.email_confirmed_at,
-    created: user.created_at || "",
-    updated: user.updated_at || "",
+    email: user.email,
+    name: user.full_name || "",
+    verified: user.verified,
+    created: user.created || "",
+    updated: user.updated || "",
   };
 
   return (

@@ -1,7 +1,7 @@
 /**
  * Reusable skeleton components for loading states
  * Best Practice: Provides better perceived performance
- * Follows Vercel's recommendation for streaming SSR
+ * Supports streaming SSR without coupling the component to a hosting provider.
  */
 
 export function CardSkeleton() {

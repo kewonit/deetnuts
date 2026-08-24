@@ -10,7 +10,7 @@
       "cappublicdocs2026.blob.core.windows.net"
     ],
     "disallowed": "Third-party cutoff aggregators and coaching sites may not be used as canonical data sources.",
-    "staging": "Deetnuts Supabase is a read-only staging snapshot. Published rows must reconcile with an official source listed here."
+    "staging": "The private DEETNUTS PocketBase collections are a staging copy. Published rows must reconcile with an official source listed here."
   },
   "sources": [
     {

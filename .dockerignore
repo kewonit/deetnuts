@@ -1,5 +1,9 @@
 # dependencies
-/node_modules
+**/node_modules
+**/.pnpm-store
+**/.venv
+**/__pycache__
+**/.pytest_cache
 /.pnp
 .pnp.js
 .yarn/install-state.gz
@@ -8,6 +12,8 @@
 /coverage
 /test
 /tests
+/test-results
+/playwright-report
 /cypress
 /e2e
 /storybook
@@ -17,12 +23,15 @@
 /*.test.*
 
 # next.js
-/.next/
+**/.next/
+**/.turbo/
 /out/
 
 # production
 /build
 /dist
+/data/output
+/ejam/data/_scratch
 
 # misc
 .DS_Store
@@ -36,6 +45,13 @@ desktop.ini
 .env*
 !.env.example
 docs
+legacy
+supabase
+.agents
+.codex
+.vercel
+ejam/.vercel
+ejam/apps/web/.vercel
 .editorconfig
 .eslintrc*
 .prettierrc*

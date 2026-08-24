@@ -46,7 +46,7 @@ export default function Terms() {
 
       <section id="accounts">
         <h2>5. Accounts and authentication</h2>
-        <p>Some features may require a Google-authenticated account maintained through Supabase. You must provide accurate account information, keep access to your Google account secure, and promptly notify <a href={`mailto:${COMPLIANCE.privacyEmail}`}>{COMPLIANCE.privacyEmail}</a> if you suspect unauthorised access. Do not share an authenticated session or use another person’s account without authority.</p>
+        <p>Some features may require an account authenticated with Google or an existing email and password. Account records are maintained in the self-hosted DEETNUTS PocketBase service. You must provide accurate account information, keep access to your Google account and password secure, and promptly notify <a href={`mailto:${COMPLIANCE.privacyEmail}`}>{COMPLIANCE.privacyEmail}</a> if you suspect unauthorised access. Do not share an authenticated session or use another person’s account without authority.</p>
         <p>You may stop using an account at any time and request deletion through the privacy contact. Signing out ends the local authenticated session addressed by that action; it may not erase the account or records that must be retained for security, dispute handling or legal compliance. Account processing is described in the Privacy Policy.</p>
       </section>
 

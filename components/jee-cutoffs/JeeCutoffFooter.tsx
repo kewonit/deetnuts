@@ -40,7 +40,7 @@ const legalLinks = [
 ];
 
 export function JeeCutoffFooter() {
-  const sourceCommit = process.env.VERCEL_GIT_COMMIT_SHA || process.env.NEXT_PUBLIC_SOURCE_COMMIT;
+  const sourceCommit = process.env.NEXT_PUBLIC_SOURCE_COMMIT;
 
   return (
     <footer className="jee-cutoff-footer">

@@ -36,8 +36,13 @@ yarn-error.log*
 .env
 .env*.local
 
-# vercel
-.vercel
+# production runtime secrets and mutable deployment state
+deploy/env/*.env
+!deploy/env/*.env.example
+deploy/secrets/*
+!deploy/secrets/*.example
+deploy/nginx/certs/*.pem
+deploy/state/
 
 # typescript
 *.tsbuildinfo
@@ -49,6 +54,5 @@ next-env.d.ts
 
 # Data folders
 /data/output/
-/.github/
 /.superpowers/
 /plans/

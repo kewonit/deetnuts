@@ -1,11 +1,10 @@
 // components/SiteJsonLd.tsx
 // Site-wide structured data for Organization and WebSite schema
 import { serializeJsonLd } from "@/lib/json-ld";
+import { PRODUCTION_SITE_URL } from "@/lib/site-url";
 
 export default function SiteJsonLd() {
-  const baseUrl = (
-    process.env.NEXT_PUBLIC_APP_URL || "https://deetnuts.com"
-  ).replace(/\/+$/, "");
+  const baseUrl = PRODUCTION_SITE_URL;
 
   // Organization schema
   const organizationData = {

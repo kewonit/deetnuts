@@ -1,12 +1,12 @@
 import { Metadata } from "next";
+import { PRODUCTION_SITE_URL } from "@/lib/site-url";
 
 /**
- * Shared metadata generators following Vercel best practices
+ * Shared metadata generators for consistent SEO metadata.
  * Benefits: DRY, consistent SEO, easy maintenance
  */
 
 const SITE_NAME = "DEETNUTS";
-const SITE_URL = "https://deetnuts.com";
 const DEFAULT_DESCRIPTION =
   "mildly important data related to colleges simplified";
 
@@ -22,7 +22,7 @@ interface PageMetadataOptions {
 
 /**
  * Generate comprehensive metadata for a page
- * Follows Vercel best practices for SEO
+ * Generate canonical, Open Graph, and crawler metadata together.
  */
 export function generatePageMetadata({
   title,
@@ -34,8 +34,10 @@ export function generatePageMetadata({
   keywords = [],
 }: PageMetadataOptions): Metadata {
   const fullTitle = title === SITE_NAME ? title : `${title} | ${SITE_NAME}`;
-  const url = `${SITE_URL}${path}`;
-  const imageUrl = image.startsWith("http") ? image : `${SITE_URL}${image}`;
+  const url = `${PRODUCTION_SITE_URL}${path}`;
+  const imageUrl = image.startsWith("http")
+    ? image
+    : `${PRODUCTION_SITE_URL}${image}`;
 
   return {
     title: fullTitle,

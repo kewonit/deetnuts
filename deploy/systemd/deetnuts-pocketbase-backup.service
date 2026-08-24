@@ -1,0 +1,15 @@
+[Unit]
+Description=Copy and verify the latest DEETNUTS PocketBase backup
+Requires=docker.service
+After=docker.service deetnuts.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/deetnuts-pocketbase-backup
+User=root
+Group=root
+PrivateTmp=true
+NoNewPrivileges=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/opt/deetnuts/backups

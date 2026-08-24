@@ -36,7 +36,7 @@ const result: BotCutoffResult = {
     },
   ],
   totalMatched: 1,
-  sourceUrl: "https://deetnuts.com/mht-cet/state-cutoffs?percentile=95",
+  sourceUrl: "https://www.deetnuts.com/mht-cet/state-cutoffs?percentile=95",
 };
 
 test("escapeRedditMarkdown escapes markdown syntax", () => {
@@ -98,7 +98,7 @@ test("formatDiscordCutoffResponse preserves its footer for oversized results", (
       courseCode: `${10_000 + index}24210`,
       courseName: "Very Long Computer Engineering Branch ".repeat(6),
     })),
-    sourceUrl: `https://deetnuts.com/mht-cet/state-cutoffs?courses=${"x".repeat(2_500)}`,
+    sourceUrl: `https://www.deetnuts.com/mht-cet/state-cutoffs?courses=${"x".repeat(2_500)}`,
   };
 
   const text = formatDiscordCutoffResponse(oversizedResult);
@@ -107,7 +107,7 @@ test("formatDiscordCutoffResponse preserves its footer for oversized results", (
   assert.match(text, /College code: 10000/);
   assert.match(text, /Branch code: 1000024210/);
   assert.match(text, /… \d+ more top results/);
-  assert.match(text, /More results: https:\/\/deetnuts\.com\/mht-cet\/state-cutoffs/);
+  assert.match(text, /More results: https:\/\/www\.deetnuts\.com\/mht-cet\/state-cutoffs/);
   assert.match(text, /Verify official CAP data/i);
   assert.doesNotMatch(text, /x{100}/);
 });

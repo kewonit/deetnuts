@@ -15,7 +15,7 @@ export default async function Login({ searchParams }: AuthPageProps) {
   return (
     <GoogleAuthForm
       title="Sign in"
-      description="Use your Google account to continue."
+      description="Use Google or your existing email and password."
       redirectTo={redirectTo}
       message={typeof params?.message === "string" ? params.message : undefined}
     />

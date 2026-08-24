@@ -36,7 +36,7 @@ The route handlers call the shared request builder in `_shared.ts`, which:
 - parses pagination and sort parameters
 - sanitizes free-text inputs
 - builds collection-style filter strings
-- queries the Supabase-backed compatibility client in `lib/pocketbaseClient.ts`
+- queries the private service-authenticated PocketBase adapter in `lib/pocketbaseClient.ts`
 
 ## API Surface
 
@@ -95,6 +95,6 @@ The data layer and route handlers support all three rounds, but the checked-in `
 - framework: Next.js 16 App Router
 - UI runtime: React 19
 - table layer: TanStack Table
-- backend access: Supabase through the PocketBase-compatible client
+- backend access: PocketBase on the private application network
 
 For test steps, see `TEST_GUIDE.md` in the same directory.

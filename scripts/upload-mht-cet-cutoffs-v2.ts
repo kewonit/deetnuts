@@ -1,4 +1,4 @@
-import PocketBase from "./supabase-pocketbase-compat";
+import PocketBase from "pocketbase";
 import { createReadStream } from "fs";
 import { parse } from "csv-parse";
 import * as path from "path";
@@ -27,7 +27,10 @@ class MHTCETCutoffUploader {
 
   constructor() {
     // Initialize PocketBase - adjust URL as needed
-    const pbUrl = process.env.POCKETBASE_URL || "https://api.deetnuts.com";
+    const pbUrl =
+      process.env.POCKETBASE_MIGRATION_URL ||
+      process.env.POCKETBASE_URL ||
+      "http://127.0.0.1:8090";
     this.pb = new PocketBase(pbUrl);
     this.pb.autoCancellation(false); // Disable auto-cancellation for bulk uploads
 
@@ -46,38 +49,17 @@ class MHTCETCutoffUploader {
   }
 
   async authenticateWithCredentials() {
-    const adminEmail = process.env.POCKETBASE_ADMIN_EMAIL;
-    const adminPassword = process.env.POCKETBASE_ADMIN_PASSWORD;
-
-    console.log(" Debug info:");
-    console.log(
-      `   Email: ${adminEmail ? adminEmail.substring(0, 3) + "***" : "NOT SET"}`,
-    );
-    console.log(
-      `   Password: ${adminPassword ? "***" + adminPassword.substring(adminPassword.length - 3) : "NOT SET"}`,
-    );
-    console.log(`   PocketBase URL: ${this.pb.baseUrl}`);
+    const adminEmail = process.env.POCKETBASE_SUPERUSER_EMAIL;
+    const adminPassword = process.env.POCKETBASE_SUPERUSER_PASSWORD;
 
     if (!adminEmail || !adminPassword) {
       throw new Error(
-        "POCKETBASE_ADMIN_EMAIL and POCKETBASE_ADMIN_PASSWORD must be set in environment variables",
+        "POCKETBASE_SUPERUSER_EMAIL and POCKETBASE_SUPERUSER_PASSWORD must be set in environment variables",
       );
     }
 
     // Try different authentication methods
     const authMethods = [
-      {
-        name: "Admin",
-        method: () =>
-          this.pb.admins.authWithPassword(adminEmail, adminPassword),
-      },
-      {
-        name: "Users collection",
-        method: () =>
-          this.pb
-            .collection("users")
-            .authWithPassword(adminEmail, adminPassword),
-      },
       {
         name: "Superusers collection",
         method: () =>

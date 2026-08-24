@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { SubmitButton } from "./submit-button";
-import { signInWithGoogle } from "./actions";
+import { signInWithGoogle, signInWithPassword } from "./actions";
 
 type GoogleAuthFormProps = {
   title: string;
@@ -38,7 +38,7 @@ export function GoogleAuthForm({
         Back
       </Link>
 
-      <form className="animate-in flex-1 flex flex-col w-full justify-center gap-4 text-foreground">
+      <div className="animate-in flex-1 flex flex-col w-full justify-center gap-4 text-foreground">
         {message && (
           <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
             <p className="text-red-800 text-sm text-center">{message}</p>
@@ -50,37 +50,69 @@ export function GoogleAuthForm({
           <p className="text-muted-foreground">{description}</p>
         </div>
 
-        <input type="hidden" name="redirect" value={redirectTo} />
-
-        <SubmitButton
-          formAction={signInWithGoogle}
-          className="bg-white border-2 border-black mt-4 gap-3"
-          pendingText="Opening Google..."
-        >
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 18 18"
-            className="h-5 w-5"
+        <form action={signInWithGoogle}>
+          <input type="hidden" name="redirect" value={redirectTo} />
+          <SubmitButton
+            className="w-full bg-white border-2 border-black mt-4 gap-3"
+            pendingText="Opening Google..."
           >
-            <path
-              fill="#4285F4"
-              d="M17.64 9.205c0-.638-.057-1.252-.164-1.841H9v3.482h4.844a4.14 4.14 0 0 1-1.797 2.715v2.258h2.909c1.702-1.567 2.684-3.877 2.684-6.614Z"
-            />
-            <path
-              fill="#34A853"
-              d="M9 18c2.43 0 4.468-.806 5.956-2.181l-2.91-2.258c-.805.54-1.835.859-3.046.859-2.344 0-4.328-1.585-5.037-3.714H.956v2.332A9 9 0 0 0 9 18Z"
-            />
-            <path
-              fill="#FBBC05"
-              d="M3.963 10.706A5.41 5.41 0 0 1 3.682 9c0-.592.102-1.168.281-1.706V4.962H.956A9 9 0 0 0 0 9c0 1.452.347 2.827.956 4.038l3.007-2.332Z"
-            />
-            <path
-              fill="#EA4335"
-              d="M9 3.58c1.322 0 2.507.454 3.441 1.346l2.581-2.581C13.464.892 11.426 0 9 0A9 9 0 0 0 .956 4.962l3.007 2.332C4.672 5.165 6.656 3.58 9 3.58Z"
-            />
-          </svg>
-          Continue with Google
-        </SubmitButton>
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 18 18"
+              className="h-5 w-5"
+            >
+              <path
+                fill="#4285F4"
+                d="M17.64 9.205c0-.638-.057-1.252-.164-1.841H9v3.482h4.844a4.14 4.14 0 0 1-1.797 2.715v2.258h2.909c1.702-1.567 2.684-3.877 2.684-6.614Z"
+              />
+              <path
+                fill="#34A853"
+                d="M9 18c2.43 0 4.468-.806 5.956-2.181l-2.91-2.258c-.805.54-1.835.859-3.046.859-2.344 0-4.328-1.585-5.037-3.714H.956v2.332A9 9 0 0 0 9 18Z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M3.963 10.706A5.41 5.41 0 0 1 3.682 9c0-.592.102-1.168.281-1.706V4.962H.956A9 9 0 0 0 0 9c0 1.452.347 2.827.956 4.038l3.007-2.332Z"
+              />
+              <path
+                fill="#EA4335"
+                d="M9 3.58c1.322 0 2.507.454 3.441 1.346l2.581-2.581C13.464.892 11.426 0 9 0A9 9 0 0 0 .956 4.962l3.007 2.332C4.672 5.165 6.656 3.58 9 3.58Z"
+              />
+            </svg>
+            Continue with Google
+          </SubmitButton>
+        </form>
+
+        <div className="flex items-center gap-3 py-2" aria-hidden="true">
+          <span className="h-px flex-1 bg-border" />
+          <span className="text-xs uppercase tracking-wider text-muted-foreground">or</span>
+          <span className="h-px flex-1 bg-border" />
+        </div>
+
+        <form action={signInWithPassword} className="flex flex-col gap-3">
+          <input type="hidden" name="redirect" value={redirectTo} />
+          <label htmlFor="email" className="text-sm font-medium">Email</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            required
+            className="h-11 rounded-md border-2 border-black bg-background px-3"
+          />
+          <label htmlFor="password" className="text-sm font-medium">Password</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            autoComplete="current-password"
+            required
+            minLength={6}
+            className="h-11 rounded-md border-2 border-black bg-background px-3"
+          />
+          <SubmitButton className="w-full" pendingText="Signing in...">
+            Sign in with password
+          </SubmitButton>
+        </form>
 
         <p className="mt-4 text-center text-xs text-muted-foreground">
           By continuing, you agree to our{" "}
@@ -99,7 +131,7 @@ export function GoogleAuthForm({
           </Link>
           .
         </p>
-      </form>
+      </div>
     </div>
   );
 }

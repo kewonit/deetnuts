@@ -1,0 +1,17 @@
+[Unit]
+Description=DEETNUTS production containers
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/sbin/deetnuts-start
+ExecStop=/usr/local/sbin/deetnuts-stop
+ExecReload=/usr/local/sbin/deetnuts-reload
+TimeoutStartSec=180
+TimeoutStopSec=90
+
+[Install]
+WantedBy=multi-user.target

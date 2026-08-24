@@ -1,3 +1,5 @@
+import { getSiteUrl } from "@/lib/site-url";
+
 const LOCAL_REDIRECT_ORIGIN = "https://deetnuts.local";
 
 export const DEFAULT_AUTH_REDIRECT = "/";
@@ -67,21 +69,7 @@ export function sanitizeMhtCetRedirectPath(value: unknown): string {
 }
 
 function getBaseUrl(): string {
-  const vercelProductionUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL;
-  const candidate =
-    process.env.NEXT_PUBLIC_BASE_URL ||
-    process.env.NEXT_PUBLIC_APP_URL ||
-    (vercelProductionUrl ? `https://${vercelProductionUrl}` : undefined) ||
-    "http://localhost:3000";
-
-  try {
-    const origin = new URL(candidate).origin;
-    return origin === "https://deetnuts.com"
-      ? "https://www.deetnuts.com"
-      : origin;
-  } catch {
-    return "http://localhost:3000";
-  }
+  return getSiteUrl();
 }
 
 export function buildAuthCallbackUrl(
