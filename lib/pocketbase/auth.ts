@@ -1,6 +1,11 @@
 import "server-only";
 
-import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import {
+  createCipheriv,
+  createDecipheriv,
+  hkdfSync,
+  randomBytes,
+} from "node:crypto";
 import { cookies } from "next/headers";
 import PocketBase, { ClientResponseError, type RecordModel } from "pocketbase";
 import { sanitizeRedirectPath } from "@/lib/auth-redirect";
@@ -11,6 +16,11 @@ export const AUTH_COOKIE_NAME = `${HOST_COOKIE_PREFIX}deetnuts_auth`;
 export const OAUTH_STATE_COOKIE_NAME = `${HOST_COOKIE_PREFIX}deetnuts_oauth`;
 
 const OAUTH_STATE_TTL_MS = 10 * 60 * 1000;
+const OAUTH_STATE_VERSION = "v1";
+const OAUTH_STATE_IV_BYTES = 12;
+const OAUTH_STATE_TAG_BYTES = 16;
+const OAUTH_STATE_MAX_LENGTH = 4096;
+const OAUTH_STATE_CONTEXT = Buffer.from("deetnuts/oauth-state/v1");
 
 export interface PocketBaseUserRecord extends RecordModel {
   email: string;
@@ -62,8 +72,17 @@ function getStateSecret(): Buffer {
   return Buffer.from(value);
 }
 
-function signature(value: string): string {
-  return createHmac("sha256", getStateSecret()).update(value).digest("base64url");
+function getStateEncryptionKey(): Buffer {
+  // AUTH_STATE_SECRET is high-entropy key material, not a user password.
+  return Buffer.from(
+    hkdfSync(
+      "sha256",
+      getStateSecret(),
+      OAUTH_STATE_CONTEXT,
+      OAUTH_STATE_CONTEXT,
+      32,
+    ),
+  );
 }
 
 function parseJwtExpiration(token: string): Date | undefined {
@@ -111,25 +130,61 @@ export function sealOAuthState(
     redirect: sanitizeRedirectPath(redirect),
     issuedAt: Date.now(),
   };
-  const encoded = Buffer.from(JSON.stringify(payload)).toString("base64url");
-  return `${encoded}.${signature(encoded)}`;
+  const iv = randomBytes(OAUTH_STATE_IV_BYTES);
+  const cipher = createCipheriv("aes-256-gcm", getStateEncryptionKey(), iv);
+  cipher.setAAD(OAUTH_STATE_CONTEXT);
+  const ciphertext = Buffer.concat([
+    cipher.update(JSON.stringify(payload), "utf8"),
+    cipher.final(),
+  ]);
+  const tag = cipher.getAuthTag();
+  return [
+    OAUTH_STATE_VERSION,
+    iv.toString("base64url"),
+    ciphertext.toString("base64url"),
+    tag.toString("base64url"),
+  ].join(".");
 }
 
-export function openOAuthState(value: string | undefined): OAuthStatePayload | null {
-  if (!value) return null;
-  const [encoded, receivedSignature, extra] = value.split(".");
-  if (!encoded || !receivedSignature || extra) return null;
-  const expectedSignature = signature(encoded);
-  const received = Buffer.from(receivedSignature);
-  const expected = Buffer.from(expectedSignature);
-  if (received.length !== expected.length || !timingSafeEqual(received, expected)) {
+export function openOAuthState(
+  value: string | undefined,
+): OAuthStatePayload | null {
+  if (!value || value.length > OAUTH_STATE_MAX_LENGTH) return null;
+  const [version, encodedIv, encodedCiphertext, encodedTag, extra] =
+    value.split(".");
+  if (
+    version !== OAUTH_STATE_VERSION ||
+    !encodedIv ||
+    !encodedCiphertext ||
+    !encodedTag ||
+    extra
+  ) {
     return null;
   }
 
   try {
-    const payload = JSON.parse(
-      Buffer.from(encoded, "base64url").toString("utf8"),
-    ) as Partial<OAuthStatePayload>;
+    const iv = Buffer.from(encodedIv, "base64url");
+    const ciphertext = Buffer.from(encodedCiphertext, "base64url");
+    const tag = Buffer.from(encodedTag, "base64url");
+    if (
+      iv.length !== OAUTH_STATE_IV_BYTES ||
+      !ciphertext.length ||
+      tag.length !== OAUTH_STATE_TAG_BYTES
+    ) {
+      return null;
+    }
+    const decipher = createDecipheriv(
+      "aes-256-gcm",
+      getStateEncryptionKey(),
+      iv,
+    );
+    decipher.setAAD(OAUTH_STATE_CONTEXT);
+    decipher.setAuthTag(tag);
+    const encoded = Buffer.concat([
+      decipher.update(ciphertext),
+      decipher.final(),
+    ]).toString("utf8");
+    const payload = JSON.parse(encoded) as Partial<OAuthStatePayload>;
     if (
       payload.provider !== "google" ||
       typeof payload.state !== "string" ||

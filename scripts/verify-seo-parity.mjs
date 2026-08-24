@@ -1,3 +1,5 @@
+import { extractLocations } from "./seo-xml.mjs";
+
 const canonicalOrigin = "https://www.deetnuts.com";
 
 function readOrigin(name, fallback) {
@@ -58,21 +60,6 @@ async function request(origin, path, init = {}) {
     }
   }
   throw lastError;
-}
-
-function decodeXml(value) {
-  return value
-    .replaceAll("&amp;", "&")
-    .replaceAll("&lt;", "<")
-    .replaceAll("&gt;", ">")
-    .replaceAll("&quot;", '"')
-    .replaceAll("&apos;", "'");
-}
-
-function extractLocations(xml) {
-  return [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) =>
-    decodeXml(match[1].trim()),
-  );
 }
 
 function toPath(location) {
