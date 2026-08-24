@@ -236,9 +236,26 @@ jobs:
 
       - name: Enforce image sizes
         run: |
-          web_size=$(docker image inspect "${WEB_IMAGE}@${{ steps.web.outputs.digest }}" --format '{{.Size}}')
-          worker_size=$(docker image inspect "${WORKER_IMAGE}@${{ steps.worker.outputs.digest }}" --format '{{.Size}}')
-          pocketbase_size=$(docker image inspect "${POCKETBASE_IMAGE}@${{ steps.pocketbase.outputs.digest }}" --format '{{.Size}}')
+          compressed_size() {
+            local image=$1
+            local index_digest=$2
+            local manifest_digest
+            manifest_digest=$(
+              docker buildx imagetools inspect --raw "${image}@${index_digest}" |
+                jq -er '
+                  [.manifests[]
+                    | select(.platform.os == "linux" and .platform.architecture == "amd64")
+                    | .digest]
+                  | if length == 1 then .[0] else error("expected exactly one linux/amd64 manifest") end
+                '
+            )
+            docker buildx imagetools inspect --raw "${image}@${manifest_digest}" |
+              jq -er '[.layers[].size] | add'
+          }
+          web_size=$(compressed_size "$WEB_IMAGE" "${{ steps.web.outputs.digest }}")
+          worker_size=$(compressed_size "$WORKER_IMAGE" "${{ steps.worker.outputs.digest }}")
+          pocketbase_size=$(compressed_size "$POCKETBASE_IMAGE" "${{ steps.pocketbase.outputs.digest }}")
+          printf 'Compressed image sizes (bytes): web=%s worker=%s pocketbase=%s\n' "$web_size" "$worker_size" "$pocketbase_size"
           test "$web_size" -le 402653184
           test "$worker_size" -le 134217728
           test "$pocketbase_size" -le 67108864
