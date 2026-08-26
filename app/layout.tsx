@@ -3,9 +3,10 @@ import "./globals.css";
 
 import SiteJsonLd from "@/components/SiteJsonLd";
 import StandardSiteShell from "@/components/StandardSiteShell";
+import { InlineScript } from "@/components/inline-script";
 import { PRODUCTION_SITE_URL } from "@/lib/site-url";
 
-const themeBootScript = `try{var t=localStorage.getItem("deetnuts_theme");var r=document.documentElement;if(t==="light"||t==="dark"){r.classList.add(t);r.classList.remove(t==="light"?"dark":"light")}}catch(e){}`;
+const themeBootScript = `try{var t=null;try{t=localStorage.getItem("deetnuts_theme")}catch(e){}var r=document.documentElement;var d=t==="dark"||(t!=="light"&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches);if(t==="light"||t==="dark"){r.classList.add(t);r.classList.remove(t==="light"?"dark":"light")}var sync=function(){var s=document.querySelector(".deetnuts-ejam-shell");if(!s)return false;s.classList.toggle("dark",Boolean(d));return true};if(!sync()&&window.MutationObserver){var o=new MutationObserver(function(){if(sync())o.disconnect()});o.observe(document.documentElement,{childList:true,subtree:true})}}catch(e){}`;
 
 export const metadata: Metadata = {
   applicationName: "DEETNUTS",
@@ -74,7 +75,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-[#E4DFF2]" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
+        <InlineScript html={themeBootScript} />
         <SiteJsonLd />
       </head>
       <body className="relative min-h-screen overflow-x-hidden font-sans">

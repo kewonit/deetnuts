@@ -31,11 +31,18 @@ export default function Footer() {
             <div className="lg:col-span-6">
               <div className="text-black text-4xl font-heading">DeetNuts</div>
 
-              <p className="mt-4 max-w-xl text-gray-500 leading-snug" data-nosnippet>
-                DEETNUTS is an independent educational-data project. College and
+              <p
+                className="mt-4 max-w-lg text-gray-500 leading-snug"
+                data-nosnippet
+              >
+                DEETNUTS is an independent educational-data project and is not
+                affiliated with or endorsed by any examination authority,
+                counselling body, college, or listed institution. College and
                 counselling data is compiled from published sources and may
-                contain processing errors. Always verify admission decisions on
-                the applicable official portal.
+                contain transcription or processing errors. Figures, listings,
+                eligibility details, seat availability, and deadlines may
+                change. Always verify admission decisions on the applicable
+                official portal.
               </p>
               <a
                 href="https://discord.gg/xbtqGcQ6SF"
