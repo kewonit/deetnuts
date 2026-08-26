@@ -90,7 +90,7 @@ const CollegeCard = memo(function CollegeCard({
           scroll={false}
           className="w-full inline-flex items-center justify-center px-6 py-3 bg-main text-black font-heading rounded-base hover:bg-main-dark transition-all duration-200 border-2 border-black shadow-base"
         >
-          <span>View Details</span>
+          <span>View college</span>
           <svg
             className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"
             fill="currentColor"
@@ -146,10 +146,10 @@ export default function CollegeGrid({ colleges }: CollegeGridProps) {
       <div className="bg-white border-4 border-black rounded-base shadow-base p-4 sm:p-8 mb-8">
         <div className="mb-6">
           <h2 className="text-3xl font-heading text-black mb-2">
-            Find Your Perfect College
+            Search colleges
           </h2>
           <p className="text-lg font-base text-black">
-            Use the filters below to narrow down your search
+            Search by college name, ID, or home university.
           </p>
         </div>
 
@@ -159,12 +159,12 @@ export default function CollegeGrid({ colleges }: CollegeGridProps) {
               htmlFor="search"
               className="block text-sm font-semibold text-gray-700 mb-3"
             >
-              🔍 Search Colleges
+              Search colleges
             </label>
             <input
               type="text"
               id="search"
-              placeholder="Search by name, ID, or university..."
+              placeholder="Search by name, ID, or university"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full px-4 py-3 border-2 border-black rounded-base shadow-base focus:outline-none focus:ring-2 focus:ring-main focus:border-main transition-all duration-200 text-black placeholder-gray-500"
@@ -175,7 +175,7 @@ export default function CollegeGrid({ colleges }: CollegeGridProps) {
               htmlFor="status"
               className="block text-sm font-semibold text-gray-700 mb-3"
             >
-              📊 Filter by Status
+              Filter by status
             </label>
             <select
               id="status"
@@ -183,7 +183,7 @@ export default function CollegeGrid({ colleges }: CollegeGridProps) {
               onChange={(e) => setStatusFilter(e.target.value)}
               className="w-full px-4 py-3 border-2 border-black rounded-base shadow-base focus:outline-none focus:ring-2 focus:ring-main focus:border-main transition-all duration-200 text-black bg-white"
             >
-              <option value="all">All Statuses</option>
+              <option value="all">All statuses</option>
               {uniqueStatuses.map((status) => (
                 <option key={status} value={status}>
                   {status}
@@ -196,7 +196,7 @@ export default function CollegeGrid({ colleges }: CollegeGridProps) {
         <div className="mt-6 flex items-center justify-between text-sm">
           <div className="flex items-center space-x-4">
             <span className="px-4 py-2 bg-main text-black rounded-base font-heading border-2 border-black shadow-base">
-              📈 Showing {filteredColleges.length} of {colleges.length} colleges
+              Showing {filteredColleges.length} of {colleges.length} colleges
             </span>
             {(searchTerm || statusFilter !== "all") && (
               <button
@@ -206,7 +206,7 @@ export default function CollegeGrid({ colleges }: CollegeGridProps) {
                 }}
                 className="px-4 py-2 bg-red-300 text-black rounded-base hover:bg-red-400 transition-colors border-2 border-black shadow-base font-heading"
               >
-                ✖️ Clear filters
+                Clear filters
               </button>
             )}
           </div>
@@ -219,11 +219,10 @@ export default function CollegeGrid({ colleges }: CollegeGridProps) {
           <div className="max-w-md mx-auto">
             <div className="text-6xl mb-4">🔍</div>
             <h3 className="text-2xl font-bold text-black mb-2">
-              No colleges found
+              No colleges match these filters
             </h3>
             <p className="text-black mb-6">
-              Try adjusting your search criteria or filters to find more
-              results.
+              Change the search terms or filters and try again.
             </p>
             <button
               onClick={() => {
@@ -232,7 +231,7 @@ export default function CollegeGrid({ colleges }: CollegeGridProps) {
               }}
               className="px-6 py-3 bg-main text-black rounded-base hover:bg-main-dark transition-colors font-heading border-2 border-black shadow-base"
             >
-              Reset Search
+              Clear filters
             </button>
           </div>
         </div>

@@ -1,13 +1,15 @@
 import { BAND_STYLES } from "@ejam/ui/lib/bands";
 import type { PredictorDisplayProgram } from "@ejam/ui/lib/predictor-adapters";
 
-// aliases so users can type old or slang band names and still match
+// Support internal keys, display labels, and legacy search terms.
 const BAND_ALIASES: Record<string, string[]> = {
-  safe: ["safe"],
-  iffy: ["iffy", "target"],
-  delulu: ["delulu", "reach"],
+  safe: ["safe", "likely"],
+  iffy: ["iffy", "possible", "target"],
+  delulu: ["delulu", "unlikely", "reach"],
   "doesnt-matter": [
     "doesnt-matter",
+    "very unlikely",
+    "very-unlikely",
     "doesn't matter yaar",
     "doesnt matter yaar",
     "doesn't matter",
@@ -20,7 +22,7 @@ const BAND_ALIASES: Record<string, string[]> = {
   ],
 };
 
-// Smart aliases for Indian engineering branches
+// Support common names for engineering branches.
 const KEYWORD_ALIASES: Array<[string, string]> = [
   ["computer science", "cs cse"],
   ["artificial intelligence", "ai aiml ml"],
@@ -48,7 +50,7 @@ function bandMatchesToken(band: string, token: string): boolean {
   return label ? label.toLowerCase().includes(token) : false;
 }
 
-/** build a compact searchable string per row — cached by callers */
+/** Build a compact searchable string per row. Callers cache the result. */
 function buildSearchText(row: PredictorDisplayProgram): string {
   let text = [
     row.instituteName,

@@ -43,7 +43,7 @@ export default function Home() {
               <SparklesText text="DEETNUTS" />
             </div>
             <h2 className="text-center font-heading text-3xl m1000:text-2xl m500:text-xl m400:text-xl">
-              mildly important college data simplified
+              clear college and admission data
             </h2>
           </div>
           <div className="relative w-full h-[50vh] flex justify-center items-center overflow-hidden">
@@ -54,7 +54,7 @@ export default function Home() {
               />
               <img
                 src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1722072594/deetnuts/3_t0cm25.png"
-                alt="DEETNUTS - College data simplified for MHT-CET aspirants"
+                alt="DEETNUTS college and admission data for MHT-CET students"
                 className="w-full h-full object-contain object-center"
               />
             </picture>
@@ -72,14 +72,14 @@ export default function Home() {
           .map((_, id) => (
             <div className="flex items-center" key={id}>
               <span className="mx-10 text-xl font-bold sm:text-2xl lg:text-4xl">
-                mildly important college data simplified
+                clear college and admission data
               </span>
               <a className="text-2xl md:text-6xl" key={`emoji-${id}`}>
                 {" "}
                 🎀{" "}
               </a>
               <span className="mx-10 text-xl font-bold sm:text-2xl lg:text-4xl">
-                self scrapped da data
+                source-backed MHT-CET data
               </span>
               <a className="text-2xl md:text-6xl" key={`emoji-${id}-2`}>
                 {" "}
