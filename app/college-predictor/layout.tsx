@@ -1,6 +1,7 @@
 import { Toaster } from "sonner";
 import { COLLEGE_PREDICTOR_LCP_PRELOAD } from "@ejam/ui/lib/static-image";
 import { cn } from "@ejam/ui/lib/utils";
+import { EjamThemeBridge } from "@/app/college-predictor/ejam-theme-bridge";
 import "./route.css";
 
 export default function CollegePredictorLayout({
@@ -21,10 +22,12 @@ export default function CollegePredictorLayout({
       />
       <div
         className={cn(
-          "deetnuts-ejam-shell dark min-h-screen bg-background text-foreground antialiased",
+          "deetnuts-ejam-shell min-h-screen bg-background text-foreground antialiased",
           "font-sans",
         )}
+        suppressHydrationWarning
       >
+        <EjamThemeBridge />
         {children}
         <Toaster
           position="bottom-right"

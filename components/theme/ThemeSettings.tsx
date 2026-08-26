@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 
 const STORAGE_KEY = "deetnuts_theme";
+const OPEN_EVENT = "deetnuts:open-theme-settings";
+const CHANGE_EVENT = "deetnuts:theme-change";
 type ThemePreference = "system" | "light" | "dark";
 
 function readPreference(): ThemePreference {
@@ -21,7 +23,11 @@ function applyPreference(preference: ThemePreference) {
 }
 
 export function ThemeSettingsButton({ className = "" }: { className?: string }) {
-  return <button type="button" className={className} onClick={() => window.dispatchEvent(new Event("deetnuts:open-theme-settings"))}>Theme settings</button>;
+  return <button type="button" className={className} onClick={openThemeSettings}>Theme settings</button>;
+}
+
+export function openThemeSettings() {
+  window.dispatchEvent(new Event(OPEN_EVENT));
 }
 
 export default function ThemeSettings() {
@@ -40,10 +46,10 @@ export default function ThemeSettings() {
       setPreference(next);
       applyPreference(next);
     };
-    window.addEventListener("deetnuts:open-theme-settings", show);
+    window.addEventListener(OPEN_EVENT, show);
     window.addEventListener("storage", sync);
     return () => {
-      window.removeEventListener("deetnuts:open-theme-settings", show);
+      window.removeEventListener(OPEN_EVENT, show);
       window.removeEventListener("storage", sync);
     };
   }, []);
@@ -67,6 +73,7 @@ export default function ThemeSettings() {
     }
     applyPreference(next);
     setPreference(next);
+    window.dispatchEvent(new Event(CHANGE_EVENT));
   };
 
   if (!open) return null;
