@@ -1,6 +1,6 @@
 # DEETNUTS
 
-DEETNUTS is a data-heavy Next.js application for publishing MHT-CET college and admissions data in a searchable, student-facing format. The repository contains the web application, data-access layer, upload utilities, and migration tooling used to manage MHT-CET datasets.
+DEETNUTS is a Next.js application for publishing MHT-CET college and admissions data in a searchable format. The repository contains the web application, data-access layer, upload utilities, and migration tools for MHT-CET datasets.
 
 Live properties:
 
@@ -10,12 +10,12 @@ Live properties:
 
 The current codebase covers the following data domains:
 
-| Domain                      | Coverage in Repository                         | Notes                                                       |
-| --------------------------- | ---------------------------------------------- | ----------------------------------------------------------- |
-| MHT-CET state cutoffs       | 2024 rounds 1-3, 2025 rounds 1-4, 2026 round 1 | Profile-aware cutoffs derived from official CAP data        |
-| MHT-CET all-India cutoffs   | 2024 rounds 1-3                                | API handlers exist for all three rounds                     |
-| MHT-CET seat matrix         | 2024                                           | Batch-ingested from CSV                                     |
-| MHT-CET college master data | 2024                                           | Used for directory and detail pages                         |
+| Domain                      | Coverage in Repository                         | Notes                                                |
+| --------------------------- | ---------------------------------------------- | ---------------------------------------------------- |
+| MHT-CET state cutoffs       | 2024 rounds 1-3, 2025 rounds 1-4, 2026 round 1 | Profile-aware cutoffs derived from official CAP data |
+| MHT-CET all-India cutoffs   | 2024 rounds 1-3                                | API handlers exist for all three rounds              |
+| MHT-CET seat matrix         | 2024                                           | Batch-ingested from CSV                              |
+| MHT-CET college master data | 2024                                           | Used for directory and detail pages                  |
 
 ## Architecture Summary
 
@@ -42,7 +42,7 @@ CSV / JSON source files
 			-> PocketBase collections
 ```
 
-For a fuller system description, see [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md).
+For a full system description, see [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md).
 
 ## Repository Layout
 
@@ -65,7 +65,7 @@ deetnuts/
 
 Prerequisites:
 
-- Node.js 22 or newer is the safest match for the checked-in Docker build
+- Node.js 22 or newer is the recommended version for the checked-in Docker build
 - npm
 
 Install and start the app:
@@ -95,8 +95,8 @@ AUTH_STATE_SECRET=at-least-32-random-characters
 Notes:
 
 - The browser never receives PocketBase administrator or service credentials.
-- Supabase variables are accepted only by the explicit one-time source migration; they must not appear in the application runtime environment.
-- Most `scripts/` entrypoints load `.env`; the web app uses the usual Next.js `.env.local` flow. If you run the CLI utilities directly, keep the required values available in your shell or a local `.env` file.
+- Supabase variables are accepted only by the explicit one-time source migration. They must not appear in the application runtime environment.
+- Most `scripts/` entrypoints load `.env`. The web app uses the standard Next.js `.env.local` flow. If you run a CLI utility directly, keep the required values in your shell or a local `.env` file.
 
 ## Development Commands
 
@@ -112,7 +112,7 @@ npm run test:platform
 npm run format
 ```
 
-Operational scripts are documented in [docs/scripts-readme.md](./docs/scripts-readme.md).
+Deployment operations are documented in [deploy/README.md](./deploy/README.md).
 
 ### eJAM predictor runtime
 
@@ -143,7 +143,7 @@ The repository contains the complete Supabase-to-PocketBase migration path:
 - `scripts/migrate-supabase-to-pocketbase.ts` takes a read-only repeatable snapshot, imports auth/data/storage, verifies exact counts and digests, configures Google OAuth, and creates a pre-cutover backup.
 - The source Supabase project is rollback-only after cutover and is not a runtime dependency.
 
-Run the migration only through `deploy/bin/deetnuts-pocketbase-migrate`; it gates the temporary import hook and disables batch migration features when verification finishes.
+Run the migration only through `deploy/bin/deetnuts-pocketbase-migrate`. The command controls the temporary import hook. It disables batch migration features when verification finishes.
 
 ## Documentation
 

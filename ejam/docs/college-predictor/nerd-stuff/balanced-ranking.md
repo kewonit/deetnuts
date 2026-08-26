@@ -1,31 +1,33 @@
-# balanced ranking
+# Balanced ranking
 
-chance alone pushes very safe but less popular branches to the top. balanced ranking tries to surface options that are both reachable and reasonably desirable. it runs after probability, using metadata on each row plus NIRF ranks from the institute registry.
+Probability alone can place a highly reachable branch above a branch that a student may prefer. Balanced ranking combines probability with institute and branch scores.
 
-## composite formula
+The score runs after probability calculation. It uses metadata for each row and NIRF ranks from the institute registry.
+
+## Composite formula
 
 <p align="center">
-  <img src="../../../apps/web/public/tools/p/formulas/balanced-score.svg" alt="balanced score" width="45%">
+  <img src="../../../apps/web/public/tools/p/formulas/balanced-score.svg" alt="Balanced score" width="45%">
 </p>
 
-`I` = institute score, `B` = branch factor, `P` = cumulative probability. higher is better. `I` and `B` are 0–100; `P` is 0–1.
+`I` is institute score. `B` is branch score. `P` is cumulative probability. Higher values produce a higher score. `I` and `B` range from 0 to 100. `P` ranges from 0 to 1.
 
-when a **branch name filter** is active in the UI, `branch_factor` is forced to `100` so every visible row is branch-neutral (the filter already narrowed branches).
+When the interface filters by branch name, it sets `branch_factor` to `100`. The filter already selects the branch group.
 
-## institute score
+## Institute score
 
-base score by institute type:
+The base score depends on institute type:
 
-| type | base |
-| --- | --- |
-| IIT | 95 |
-| NIT | 75 |
-| IIIT | 65 |
-| CFI | 55 |
-| GFTI | 50 |
-| unknown | 40 |
+| Type    | Base score |
+| ------- | ---------: |
+| IIT     |         95 |
+| NIT     |         75 |
+| IIIT    |         65 |
+| CFI     |         55 |
+| GFTI    |         50 |
+| Unknown |         40 |
 
-**if NIRF rank is known:** up to +5 points. rank 1 gets full bonus; rank 200+ gets none.
+When the NIRF rank exists, the score can increase by up to 5 points. Rank 1 receives the full bonus. Rank 200 or higher receives no bonus.
 
 $$
 b_{\mathrm{nirf}} = \max\!\left(0,\; 5 \cdot \left(1 - \frac{n - 1}{199}\right)\right)
@@ -35,9 +37,9 @@ $$
 I = \min(100,\; I_{\mathrm{base}} + b_{\mathrm{nirf}})
 $$
 
-where $n$ = NIRF rank.
+`n` is the NIRF rank.
 
-**if NIRF is missing:** blend base with competitiveness vs the worst predicted closing rank in the current result set:
+When NIRF data is missing, the score uses the base score and competitiveness against the highest predicted closing rank in the current result set.
 
 $$
 \kappa = 1 - \frac{\hat{c}}{\hat{c}_{\max}}
@@ -47,41 +49,41 @@ $$
 I = \min\!\left(100,\; 0.7\, I_{\mathrm{base}} + 0.3 \cdot \max(0, \kappa) \cdot 100\right)
 $$
 
-tighter cutoffs (lower rank number) imply stronger demand, so the fallback nudges score up.
+A lower predicted closing rank indicates stronger demand. The fallback increases the score for that condition.
 
-## branch score
+## Branch score
 
-branch names matched with keyword tiers on `program_id` and `program_name`:
+The builder matches keywords in `program_id` and `program_name`. The first matching tier wins.
 
-| pattern (examples) | score |
-| --- | --- |
-| CSE, CS, Computer Science | 100 |
-| AI, ML, Data Science | 92 |
-| ECE, Electronics | 85 |
-| EE, Electrical | 80 |
-| ME, Mechanical | 72 |
-| CE, Civil | 68 |
-| Chemical | 65 |
-| no match | 50 |
+| Pattern examples          | Score |
+| ------------------------- | ----: |
+| CSE, CS, Computer Science |   100 |
+| AI, ML, Data Science      |    92 |
+| ECE, Electronics          |    85 |
+| EE, Electrical            |    80 |
+| ME, Mechanical            |    72 |
+| CE, Civil                 |    68 |
+| Chemical                  |    65 |
+| No match                  |    50 |
 
-first matching tier wins. rough popularity proxy, not placement or salary data.
+This score is a rough popularity measure. It does not represent placement or salary data.
 
-## sort tie-breakers
+## Tie breakers
 
-when score ties:
+When two rows have the same balanced score, sort them in this order:
 
-1. higher `institute_score`
-2. higher `branch_score`
-3. higher `cumulative_probability`
-4. lower `predicted_closing_rank` (more competitive)
+1. Higher `institute_score`.
+2. Higher `branch_score`.
+3. Higher `cumulative_probability`.
+4. Lower `predicted_closing_rank`.
 
-## other sort modes
+## Other sort modes
 
-| sort key | behavior |
-| --- | --- |
-| **balanced** | composite score above (default) |
-| **best chance** | highest cumulative probability first, then closing rank (UI label; internal key `chance`) |
-| **closing rank** | most competitive programs first |
-| **institute** | alphabetical by institute, then program |
+| Sort key                   | Behavior                                                                          |
+| -------------------------- | --------------------------------------------------------------------------------- |
+| **Balanced**               | Uses the composite score. This is the default.                                    |
+| **Best probability**       | Sorts by cumulative probability, then closing rank. The internal key is `chance`. |
+| **Predicted closing rank** | Places the most competitive programs first.                                       |
+| **Institute**              | Sorts by institute name, then program name.                                       |
 
-balanced scores recompute on filtered subsets so the competitiveness fallback uses the current result ceiling, not the full national list.
+The interface recalculates balanced scores after filters run. The competitiveness fallback uses the highest result in the filtered set.

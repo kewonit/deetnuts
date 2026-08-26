@@ -61,7 +61,7 @@ The live runtime uses PocketBase directly. Supabase remains only as the read-onl
 | Primary data store | PocketBase SQLite       | Private volume on the single production VM            |
 | Edge               | Cloudflare              | DNS, strict TLS, caching, WAF and canonical redirects |
 | Origin             | DigitalOcean + Nginx    | Single Droplet with blue/green web containers         |
-| Deployment model   | Docker standalone build | Private digest-pinned Node 22 Alpine images            |
+| Deployment model   | Docker standalone build | Private digest-pinned Node 22 Alpine images           |
 
 ## Major Application Areas
 
@@ -116,7 +116,7 @@ Primary tables:
 - `2024_all_india_rounds_two`
 - `2024_all_india_rounds_three`
 
-The API surface supports all three rounds. The checked-in `app/mht-cet/all-india-cutoffs/page.tsx` currently renders a single visible round tab; the remaining rounds are available through the API handlers.
+The API surface supports all three rounds. The checked-in `app/mht-cet/all-india-cutoffs/page.tsx` currently renders one visible round tab. The other rounds are available through the API handlers.
 
 ## Auth and Data Access Boundaries
 
@@ -133,7 +133,7 @@ Runtime reads and writes use a service-authenticated PocketBase adapter on the p
 
 ### Collection Security
 
-Imported data collections allow only the dedicated `app_services` backend role. The users collection allows a user to view only their own record and update only approved profile fields; email, verification, source IDs, and migration audit fields are immutable to users. Private avatars are served through an authenticated same-user proxy with MIME, size, redirect, and host checks. PocketBase itself has no published port.
+Imported data collections allow only the dedicated `app_services` backend role. The users collection allows each user to view only their own record and update only approved profile fields. Users cannot change email, verification, source IDs, or migration audit fields. Private avatars use an authenticated same-user proxy with MIME, size, redirect, and host checks. PocketBase has no published port.
 
 ## Compatibility Layer
 
@@ -151,7 +151,7 @@ Imported data collections allow only the dedicated `app_services` backend role. 
 
 ### Availability Boundary
 
-Blue/green switching removes ordinary web release downtime but does not make the single VM highly available. PocketBase data is persisted in a named volume with scheduled verified backups; recovery still requires restoring or reprovisioning the single VM.
+Blue/green switching removes ordinary web release downtime. It does not make the single VM highly available. PocketBase data is stored in a named volume with scheduled verified backups. Recovery still requires restoring or reprovisioning the single VM.
 
 ## Request Flows
 

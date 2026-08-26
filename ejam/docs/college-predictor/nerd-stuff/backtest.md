@@ -1,86 +1,80 @@
-# backtest
+# Backtest
 
-holdout check for `jam-josaa-v3` and `jam-csab-v2`. rebuilds each index from training cutoffs only, forecasts 2025 closing ranks, and compares to actual 2025 final-round cutoffs.
+This backtest evaluates `jam-josaa-v3` and `jam-csab-v2`. It rebuilds each index from training cutoffs, forecasts 2025 closing ranks, and compares the forecasts with the final 2025 cutoffs.
 
-> `jam-josaa-v2` is deprecated. backtest now runs v3 production hyperparams.
+`jam-josaa-v2` is deprecated. The backtest uses the version 3 production parameters.
 
-not a promise for this year's counselling. useful for catching bad hyperparam changes before shipping.
+The result is not a promise for the current counselling cycle. It helps identify harmful index parameter changes before a data release.
 
-## setup
+## Setup
 
 ```bash
-pnpm data:fetch --download   # needs local cutoff parquets
+pnpm data:fetch --download
 pnpm exec tsx packages/data-cli/src/backtest/predictor.ts
 ```
 
-writes `data/_scratch/backtest-results.json` (gitignored). exits non-zero if either builder's within-20% rate drops below 30%.
+The script writes `data/_scratch/backtest-results.json`. The file is ignored by Git. The command exits with a non-zero status when either builder's within-20-percent rate falls below 30 percent.
 
-implementation: `packages/data-cli/src/backtest/predictor.ts`. training SQL mirrors the production index builders (`jee/josaa/build-index.ts`, `jee/csab/build-index.ts`).
+The implementation is in `packages/data-cli/src/backtest/predictor.ts`. Its training SQL matches the production builders in `jee/josaa/build-index.ts` and `jee/csab/build-index.ts`.
 
-## train / holdout split
+## Training and holdout split
 
-| split | years | role |
-| --- | --- | --- |
-| training | 2021–2024 | build predicted closing rank + `sigma_eff` per program seat |
-| holdout | 2025 | ground truth from official cutoffs |
+| Split    | Years        | Role                                                               |
+| -------- | ------------ | ------------------------------------------------------------------ |
+| Training | 2021 to 2024 | Build predicted closing rank and `sigma_eff` for each program seat |
+| Holdout  | 2025         | Provide the actual final-round closing rank                        |
 
-for each `(institute, program, seat_type, quota, gender)` key:
+For each `(institute, program, seat_type, quota, gender)` key:
 
-1. **training:** run the same DuckDB pipeline as production, but cap input cutoffs at `year <= 2024`. JoSAA uses a 4-year weighted window; CSAB uses 2 years and the 50/50 ensemble.
-2. **holdout:** take 2025's **final round** closing rank (max round per key, worst closing rank wins dedupe ties).
-3. **match:** keep keys present in both training index and 2025 holdout.
+1. The training step runs the production DuckDB pipeline with input cutoffs limited to `year <= 2024`. JoSAA uses a four-year weighted window. CSAB uses a two-year window and the 50/50 ensemble.
+2. The holdout step takes the 2025 final-round closing rank. When duplicate keys exist, the highest closing rank wins.
+3. The match step keeps keys that exist in both the training index and the 2025 holdout.
 
-latest run (2026-06-09): **11,069** JoSAA programs matched, **1,221** CSAB programs matched.
+The latest run on 2026-06-09 matched 11,069 JoSAA programs and 1,221 CSAB programs.
 
-## metrics
+## Metrics
 
-### ±20% cutoff accuracy (`within_20pct`)
+### Within-20-percent cutoff accuracy
 
-for each matched program, a hit when:
+For each matched program, a prediction is a hit when:
 
 $$
-\left|\frac{\hat{c} - a}{a}\right| \le 0.20
+\left|\frac{\hat{c} - a}{a}\right| \leq 0.20
 $$
 
-$\hat{c}$ = predicted closing rank from the training-only index. $a$ = actual 2025 final-round closing rank.
+`c_hat` is the prediction from the training-only index. `a` is the actual final-round closing rank in 2025.
 
-reported as the fraction of matched programs that pass. JSON also has ±10% (`within_10pct`); not shown on the homepage.
+The result is the fraction of matched programs that pass. The JSON file also includes within-10-percent accuracy. The homepage does not show that value.
 
-### band boundary hit (`band_accuracy`)
+### Probability-band boundary hit
 
-at the **actual** 2025 closing rank $a$, plug $r = a$ into the normal CDF with the training-only $\hat{c}$ and $\sigma_{\mathrm{eff}}$. classify the band (safe ≥85%, iffy ≥40%, delulu ≥10%, else doesn't matter yaar).
+At the actual 2025 closing rank `a`, the backtest sets `r = a` in the normal CDF. It uses the training-only predicted rank and `sigma_eff`.
 
-count a hit when the band is **safe** or **iffy**. that checks whether a student sitting exactly on the holdout closing rank would see a non-pessimistic label.
+The backtest counts a hit when the result is **Likely** or **Possible**. This tests the label at the exact closing rank. It does not test a random applicant.
 
-this is not the same as "did we predict the right band for a random applicant." it only tests programs at the cutoff boundary.
+### Other fields
 
-### other fields in `backtest-results.json`
+| Field                             | Meaning                                                                  |
+| --------------------------------- | ------------------------------------------------------------------------ |
+| `mae_ranks` and `median_ae_ranks` | Mean and median absolute rank error                                      |
+| `band_calibration`                | Direction accuracy by band, including optimistic and pessimistic results |
+| `within_10pct`                    | Same metric with a 10 percent threshold                                  |
 
-| field | meaning |
-| --- | --- |
-| `mae_ranks` / `median_ae_ranks` | mean / median absolute rank error |
-| `band_calibration` | per-band direction accuracy (optimistic vs pessimistic vs predicted rank) |
-| `within_10pct` | same as ±20%, threshold 10% |
+## Latest results, 2025 holdout
 
-## latest results (2025 holdout)
+| Metric                        | JoSAA (`jam-josaa-v3`) |  CSAB |
+| ----------------------------- | ---------------------: | ----: |
+| Within 20 percent             |              **73.9%** | 68.8% |
+| Probability-band boundary hit |              **50.7%** | 51.8% |
+| Programs matched              |                 11,069 | 1,221 |
+| Median absolute error, ranks  |                    433 | 9,927 |
 
-| metric | JoSAA (`jam-josaa-v3`) | CSAB |
-| --- | --- | --- |
-| ±20% cutoff accuracy | **73.9%** | 68.8% |
-| band boundary hit | **50.7%** | 51.8% |
-| programs matched | 11,069 | 1,221 |
-| median absolute error (ranks) | 433 | 9,927 |
+The deprecated `jam-josaa-v2` result was 72.8 percent within 20 percent. Its probability-band boundary result was 42.0 percent.
 
-previous `jam-josaa-v2` (deprecated): 72.8% ±20%, 42.0% band boundary.
+To reproduce the result, run `pnpm exec tsx packages/data-cli/src/backtest/predictor.ts`. Read the summary or open `data/_scratch/backtest-results.json`.
 
-reproduce: `pnpm exec tsx packages/data-cli/src/backtest/predictor.ts` and read the summary, or open `data/_scratch/backtest-results.json`.
+When you change index parameters in `packages/data-cli/src/jee/josaa/model-config.ts` or `packages/data-cli/src/jee/csab/model-config.ts`, run the backtest before you publish a data release.
 
----
+## Related evaluation
 
-when you change index hyperparameters (`packages/data-cli/src/jee/josaa/model-config.ts`, `packages/data-cli/src/jee/csab/model-config.ts`), run the backtest script before publishing a data release.
-
----
-
-## related: 2026 mid-counselling holdout
-
-for a seat-by-seat accuracy report against **2026 JoSAA rounds 1–4** (train ≤2025, no leakage), see [2026 R1–R4 accuracy report](2026-rounds-accuracy-report.md). that run also breaks out institute type, seat type, quota, rank tier, PwD vs non-PwD, and round-trajectory drift.
+Read the [2026 rounds 1 to 4 accuracy report](2026-rounds-accuracy-report.md) for a seat-level evaluation against 2026 JoSAA rounds 1 through 4. That report also groups results by institute type, seat type, quota, rank tier, disability status, and round trajectory.

@@ -1,35 +1,32 @@
-# Contributing to ejam
+# Contributing to eJAM
 
-ejam is a personal hobby project, open source under [AGPL-3.0-or-later](LICENSE). Contributions are welcome: code, data fixes, docs, and bug reports.
+eJAM is an open-source project under [AGPL-3.0-or-later](LICENSE). Contributions can include code, data corrections, documentation, and bug reports.
 
-Read [NOTICE](NOTICE) before touching datasets. Official JoSAA / CSAB / NTA data stays their property; this repo only ships processed copies for convenience.
+Read [NOTICE](NOTICE) before you change a dataset. JoSAA, CSAB, and NTA own their official data. This repository stores processed copies for project use.
 
-<br>
+## Contribution areas
 
-## Help with
+You can contribute to the web application, predictor, index builders, cutoff data, documentation, or issue reports.
 
-Code (web, engine, index build), cutoff data, docs, or issues.
-
-**Non-engineering exams (NEET, etc.)** Right now ejam is mostly JEE / JoSAA / CSAB. I do not know how NEET or other counselling bodies work (MCC, state quotas, round rules, where official cutoffs live). If you do, I would genuinely love help: docs explaining the process, data sources, or what a tool should even look like. [Open an issue](https://github.com/su6u/ejam/issues/new).
-
-<br>
+The project currently focuses on JEE Main, JEE Advanced, JoSAA, and CSAB. If you understand another counselling system, open an issue with the official rules and source locations.
 
 ## Setup
 
-Node 22+, pnpm 11 (`packageManager` in root). uv if you touch Python validation.
+Use Node.js 22 or newer and pnpm 11. The root `package.json` defines the package manager version. Use `uv` when you change Python validation tools.
 
 ```bash
-git clone https://github.com/su6u/ejam.git && cd ejam
+git clone https://github.com/su6u/ejam.git
+cd ejam
 pnpm install
 pnpm data:fetch --download
 pnpm dev
 ```
 
-App is `apps/web`, predictor at `/college-predictor`.
+The web application is in `apps/web`. The college predictor uses the `/college-predictor` route.
 
-<br>
+## Before you open a pull request
 
-## Before a PR
+Run these checks:
 
 ```bash
 pnpm typecheck
@@ -37,7 +34,7 @@ pnpm check
 pnpm build
 ```
 
-Touched `data/` or index builders? Also run:
+Run these additional checks when you change `data/` or an index builder:
 
 ```bash
 pnpm data:fetch
@@ -46,31 +43,27 @@ pnpm validate:data
 pnpm --filter @ejam/data test
 ```
 
-Changed index hyperparams? `pnpm backtest`. Lint fix: `pnpm check:write`.
+Run `pnpm backtest` when you change index parameters. Run `pnpm check:write` to apply lint fixes.
 
-Match existing style in the file you edit. One concern per PR when you can. Details: [docs/DATA.md](docs/DATA.md) for data, [docs/college-predictor/](docs/college-predictor/) for predictor.
+Keep the existing style in each file. Keep one concern per pull request when possible. Read [DATA.md](docs/DATA.md) for data changes and [college predictor documentation](docs/college-predictor/) for predictor changes.
 
-<br>
+## Data changes
 
-## Data PRs
+Use official cutoff data only. Include the source URL in the pull request. Do not add fabricated data or material that you cannot redistribute.
 
-Official cutoffs only. Cite the source URL. No fabricated cutoffs or stuff you can't redistribute.
+1. Run `pnpm data:fetch --download`.
+2. Add or correct local Parquet files.
+3. Rebuild the index when the cutoff history changes.
+4. Run `pnpm generate:manifest --version=vX.Y.Z`.
+5. Run the checks in [Before you open a pull request](#before-you-open-a-pull-request).
+6. Open a pull request with catalog, reference, and source changes only.
 
-Full walkthrough: [docs/DATA.md — Adding data](docs/DATA.md#adding-data). Short version:
+Read [DATA.md](docs/DATA.md#adding-data) for the complete process.
 
-1. `pnpm data:fetch --download`
-2. Add/fix parquets locally, rebuild indices if history changed
-3. `pnpm generate:manifest --version=vX.Y.Z` and run the verify commands in [Before a PR](#before-a-pr)
-4. Open PR with catalog release + reference + sources only
+## Bug reports
 
-<br>
+Include the rank and profile inputs, or a sanitized URL. Describe the expected and actual result. Include the data version shown in the result footer when available. For a cutoff correction, provide the official OR/CR source link instead of a screenshot.
 
-## Bugs
+## Security reports
 
-Share rank/profile (or sanitized URL), expected vs actual, data version from results footer if you have it. Wrong cutoff? Official OR/CR link beats a screenshot.
-
-<br>
-
-## Security
-
-Serious stuff: contact maintainer privately, not a public issue.
+Send serious security reports to the maintainer privately. Do not publish sensitive details in a public issue.

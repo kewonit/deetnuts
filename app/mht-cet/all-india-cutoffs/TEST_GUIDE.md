@@ -23,7 +23,7 @@ This distinction matters because the current checked-in page exposes only round 
    http://localhost:3000/mht-cet/all-india-cutoffs
    ```
 
-3. Hit the API endpoints directly.
+3. Request the API endpoints directly.
 
    ```text
    http://localhost:3000/api/mht-cet/all-india-cutoffs/2024-round-one
