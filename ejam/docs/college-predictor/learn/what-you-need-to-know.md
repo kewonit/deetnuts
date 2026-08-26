@@ -1,41 +1,43 @@
-# what you need to know
+# What you need to know
 
-garbage in, garbage out. have this ready before you hit predict, and know what the numbers actually are.
+Prepare the profile values before you run a prediction. Use the same category, gender, and quota that you will use during counselling.
 
-## before you open the tool
+## Before you open the tool
 
-| topic | what to have |
-| --- | --- |
-| **counselling rank** | the number from the official rank list / allotment. not percentile, not marks. |
-| **category + gender** | same seat pool as the portal: OPEN, EWS, OBC-NCL, SC, ST, plus gender-neutral or female-only where it applies. |
-| **quota + home state** | Main / CSAB: **OS** and **HS** need domicile **home state**. **AI** does not. UI default is **OS**. pick the quota you'll actually fill choices with. |
-| **counselling body** | JoSAA and CSAB are different indexes and cutoffs. CSAB is after JoSAA for vacant NIT+ seats; cutoffs are usually worse (higher rank) because stronger people already took JoSAA seats. |
+| Topic                    | Required information                                                                                                                                      |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Counselling rank**     | The rank from the official rank list or allotment. Do not enter a percentile or mark.                                                                     |
+| **Category and gender**  | The seat pool that matches the portal, such as OPEN, EWS, OBC-NCL, SC, ST, gender-neutral, or female-only.                                                |
+| **Quota and home state** | JEE Main and CSAB use `OS`, `HS`, or `AI`. `OS` and `HS` require the home state. `AI` does not. Select the quota that you will use during choice filling. |
+| **Counselling body**     | JoSAA and CSAB use separate indexes and cutoff histories. CSAB follows JoSAA for vacant NIT+ seats.                                                       |
 
-## exams and institute types
+## Exams and institute groups
 
-### JEE Main + JoSAA
+### JEE Main with JoSAA
 
-- **NIT:** National Institutes of Technology
-- **IIIT:** Indian Institutes of Information Technology
-- **CFI:** centrally funded institutes in the JoSAA pool
+- **NIT:** National Institute of Technology
+- **IIIT:** Indian Institute of Information Technology
+- **CFI:** Centrally funded institute in the JoSAA pool
 
-JoSAA PDFs often say **GFTI**. ejam uses **CFI** for the same group in the index and UI. same seats, different acronym.
+JoSAA documents often use `GFTI`. The eJAM index and interface use `CFI` for the same group.
 
-quota: **OS**, **HS**, **AI**.
+Available quotas are `OS`, `HS`, and `AI`.
 
-### JEE Main + CSAB
+### JEE Main with CSAB
 
-separate CSAB index. same rank / profile inputs, CSAB cutoff history only. NIT+, IIIT, CFI. no IITs.
+CSAB uses a separate index and cutoff history. It uses the same rank and profile inputs. It includes NIT+, IIIT, and CFI institutes. It does not include IITs.
 
 ### JEE Advanced
 
-IITs only. category and gender still matter; quota is All India inside this tool.
+The JEE Advanced view includes IITs only. Category and gender still affect the result. The tool uses All India quota.
 
-## EWS: two different things
+## EWS options
 
-| mechanism | what it does |
-| --- | --- |
-| **Gen-EWS category** (dropdown) | predicts against **EWS seat rows**. normal path when applying under EWS. |
-| **`?ews=true` in the URL** | dual comparison: OPEN seats plus a parallel EWS pass, for General students weighing an EWS certificate. |
+The tool has two EWS paths:
 
-both assume you actually qualify for EWS in counselling. dual mode shows a caveat when it's on.
+| Option                           | Function                                                                              |
+| -------------------------------- | ------------------------------------------------------------------------------------- |
+| **Gen-EWS** in the category list | Compares the rank with EWS seat rows.                                                 |
+| **`?ews=true` in the URL**       | Runs an additional EWS comparison beside the OPEN comparison for a General candidate. |
+
+Both paths require valid EWS eligibility during counselling. The dual comparison shows a notice when it is active.

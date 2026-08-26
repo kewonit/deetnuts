@@ -1,7 +1,10 @@
 "use client";
 
 import type { ProbabilityBand } from "@ejam/data/college-predictor";
-import { FilterChip, FilterGroup } from "@ejam/ui/components/predictor/filter-chips";
+import {
+  FilterChip,
+  FilterGroup,
+} from "@ejam/ui/components/predictor/filter-chips";
 import type { ResultsFilterState } from "@ejam/ui/components/predictor/results-filter-logic";
 import type { ExamType } from "@ejam/ui/hooks/use-predictor-state";
 import { isJeeMainCounselling } from "@ejam/ui/hooks/use-predictor-state";
@@ -158,7 +161,7 @@ export function ResultsFilters({
     <fieldset className="min-w-0 border-0 p-0">
       <div className="mb-1.5 flex items-center justify-between">
         <legend className="inline-flex shrink-0 items-center gap-1 text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
-          Doesn't matter yaar
+          Very unlikely results
         </legend>
       </div>
       <div className="sliding-toggle-track" data-gap="1">

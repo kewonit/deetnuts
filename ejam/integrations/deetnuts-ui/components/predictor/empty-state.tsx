@@ -40,7 +40,7 @@ export function getEmptyStateDescription({
   }
 
   if (metadata && metadata.hidden_programs > 0) {
-    return `Nothing clears our 10% chance cutoff at this rank. ${formatInteger(metadata.hidden_programs)} "doesn't matter yaar" picks are hidden. Try a better (lower) rank to see likely options.`;
+    return `No result exceeds the 10% probability threshold at this rank. ${formatInteger(metadata.hidden_programs)} very unlikely programs are hidden. Enter a lower rank to view more likely options.`;
   }
 
   if (metadata && metadata.total_matching_programs === 0) {
@@ -103,7 +103,7 @@ export function EmptyState({
               className={emptyStateActionClass}
               onClick={() => deferAfterPress(onShowLongShots)}
             >
-              Show doesn't matter yaar
+              Show very unlikely results
             </Button>
           </EmptyContent>
         ) : onOpenSetup ? (
@@ -128,11 +128,7 @@ export function EmptyState({
   );
 }
 
-export function ErrorState({
-  message,
-}: {
-  message: string;
-}) {
+export function ErrorState({ message }: { message: string }) {
   return (
     <ResultsCardShell description={null}>
       <Empty className="min-h-0" role="alert">

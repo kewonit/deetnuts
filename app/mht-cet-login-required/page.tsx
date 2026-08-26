@@ -30,18 +30,18 @@ export default async function MHTCETLoginRequired({
             MHT-CET Resources
           </h1>
           <p className="text-lg text-gray-600">
-            Access exclusive MHT-CET cutoffs
+            Sign in to view MHT-CET cutoff data
           </p>
         </div>
 
         <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-5 shadow-sm relative overflow-visible">
           <div className="text-center relative z-10">
             <h3 className="text-lg font-semibold text-green-800 mb-1">
-              Your Data is Safe
+              Privacy information
             </h3>
             <p className="text-sm text-green-700 leading-relaxed">
-              We only collect your email to rate limit usage and keep this
-              service free for everyone. We will never sell your data.
+              We collect your email address to enforce usage limits. We do not
+              sell your data.
             </p>
           </div>
 
@@ -59,10 +59,10 @@ export default async function MHTCETLoginRequired({
 
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
           <h2 className="text-xl font-semibold text-blue-900 mb-3">
-            Login Required
+            Sign-in required
           </h2>
           <p className="text-blue-700 mb-4">
-            Please sign in to access MHT-CET resources including state cutoffs
+            Sign in to view MHT-CET resources, including state cutoffs.
           </p>
 
           <div className="space-y-3">
@@ -91,7 +91,7 @@ export default async function MHTCETLoginRequired({
 
         <div className="text-sm text-gray-500">
           <Link href="/" className="hover:underline">
-            ← Back to Homepage
+            Back to home page
           </Link>
         </div>
       </div>

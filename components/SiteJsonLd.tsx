@@ -21,7 +21,7 @@ export default function SiteJsonLd() {
     },
     sameAs: ["https://x.com/kewonit", "https://discord.gg/xbtqGcQ6SF"],
     description:
-      "Mildly important Maharashtra college data simplified. Comprehensive MHT-CET cutoffs, seat matrices, and admission data.",
+      "Maharashtra college and admission data, including MHT-CET cutoffs and seat matrices.",
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer service",
@@ -36,7 +36,7 @@ export default function SiteJsonLd() {
     "@id": `${baseUrl}/#website`,
     url: baseUrl,
     name: "DEETNUTS",
-    description: "Mildly important data related to colleges simplified",
+    description: "College and admission data for students in Maharashtra",
     inLanguage: "en-IN",
     publisher: {
       "@id": `${baseUrl}/#organization`,

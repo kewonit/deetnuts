@@ -1,6 +1,6 @@
-# DeetNuts URL Structure Documentation
+# DEETNUTS URL structure
 
-This document provides an overview of the active URLs on the DeetNuts website.
+This document lists the active public URLs on the DEETNUTS website.
 
 ## Base URL
 
@@ -10,30 +10,30 @@ https://www.deetnuts.com
 
 ## Static Pages
 
-| Page Name | URL | Description |
-|-----------|-----|-------------|
-| Home | `/` | Main landing page |
-| Creators | `/creators` | Information about the creators |
-| Data Source | `/datasource` | Data source documentation |
-| Terms & Conditions | `/compliance/terms-and-conditions` | Legal terms and conditions |
+| Page                 | URL                                | Description                      |
+| -------------------- | ---------------------------------- | -------------------------------- |
+| Home                 | `/`                                | Main page                        |
+| Creators             | `/creators`                        | Project and operator information |
+| Data sources         | `/datasource`                      | Data source documentation        |
+| Terms and conditions | `/compliance/terms-and-conditions` | Service terms                    |
 
 ## MHT-CET Section
 
-| Page Name | URL | Description |
-|-----------|-----|-------------|
-| MHT-CET Cutoffs | `/mht-cet` | Main MHT-CET cutoffs page |
-| All India Cutoffs | `/mht-cet/all-india-cutoffs` | All India category cutoffs |
-| State Cutoffs | `/mht-cet/state-cutoffs` | State-wise cutoffs |
-| Colleges | `/mht-cet/colleges` | List of MHT-CET colleges |
-| College Detail | `/mht-cet/colleges/[slug]` | College-specific cutoffs and seat data |
+| Page              | URL                          | Description                   |
+| ----------------- | ---------------------------- | ----------------------------- |
+| MHT-CET cutoffs   | `/mht-cet`                   | MHT-CET cutoff tools          |
+| All India cutoffs | `/mht-cet/all-india-cutoffs` | All India cutoff data         |
+| State cutoffs     | `/mht-cet/state-cutoffs`     | State cutoff data             |
+| Colleges          | `/mht-cet/colleges`          | MHT-CET college list          |
+| College detail    | `/mht-cet/colleges/[slug]`   | College cutoffs and seat data |
 
 ## Other Application Pages
 
-| Page Name | URL | Description |
-|-----------|-----|-------------|
-| Account | `/account` | User account dashboard |
-| Login | `/login` | User login |
-| Signup | `/signup` | User registration |
+| Page    | URL        | Description           |
+| ------- | ---------- | --------------------- |
+| Account | `/account` | Account page          |
+| Login   | `/login`   | Sign-in page          |
+| Signup  | `/signup`  | Account creation page |
 
 ## Sitemap Locations
 

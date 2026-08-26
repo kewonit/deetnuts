@@ -43,14 +43,14 @@ directory.
 
 The database import intentionally:
 
-- includes only filled MHT-CET state cutoff groups;
-- excludes vacant-only groups and All-India/JEE groups;
-- normalizes `ORPHANI` and `ORPHANN` to `ORPHAN`;
-- normalizes EWS, TFWS, and orphan rows to state-level allocation;
-- maps minority rows from their preserved parent allocation section;
+- includes only filled MHT-CET state cutoff groups
+- excludes vacant-only groups and All-India/JEE groups
+- normalizes `ORPHANI` and `ORPHANN` to `ORPHAN`
+- normalizes EWS, TFWS, and orphan rows to state-level allocation
+- maps minority rows from their preserved parent allocation section
 - reuses existing 2025 institute eligibility IDs only when the explicit 2026
-  home-university and minority status do not conflict;
-- maps new institutes only from exact official home-university labels; and
+  home-university and minority status do not conflict
+- maps new institutes only from exact official home-university labels
 - leaves the affiliating-university ID null for new institutes because the PDFs
   do not authoritatively provide it.
 
@@ -66,6 +66,6 @@ non-MHT source groups. The 12 new 2026 institute codes have exact official
 home-university mappings and deliberately null affiliating-university IDs.
 
 The `2026_mht_cet_round_one_cutoffs` table has RLS enabled. Direct access is
-revoked from anonymous and authenticated roles; server-side `service_role`
+revoked from anonymous and authenticated roles. Server-side `service_role`
 access is read-only. Schema changes are in
 `supabase/migrations/20260802160720_add_2026_mht_cet_round_one_cutoffs.sql`.

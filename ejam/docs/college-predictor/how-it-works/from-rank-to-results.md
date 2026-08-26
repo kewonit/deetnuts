@@ -1,65 +1,70 @@
-# from rank to results
+# From rank to results
 
-every row you see is one **seat pool**: institute + branch + seat type + quota + gender. all we're really asking is, at your rank, how often did someone like you actually land that seat in past years, nudged forward to this cycle?
+Each result represents one seat pool. A seat pool combines an institute, program, seat type, quota, and gender.
 
-## the index row (built offline)
+The predictor asks one question. How often did a similar rank reach this seat in the available history?
 
-before you ever hit predict, the index builder already did the boring part:
+## The index row
 
-- weighted a bunch of years of opening/closing ranks per round
-- projected a **predicted closing rank** for this cycle (trend + how the pool shifts on josaa)
-- saved per-round means and a **fill round** (the point where the seat basically stopped moving)
-- set $\sigma_{\mathrm{eff}}$, the uncertainty width, wider when there just isn't much data
+The index builder prepares each row before a request runs. It performs these steps:
 
-the live api doesn't redo any of this. it grabs the row and runs the probability math.
+- It weights opening and closing ranks from several years.
+- It calculates a predicted closing rank for the target cycle.
+- It stores a mean for each counselling round.
+- It stores a typical final round called `fill_round`.
+- It sets `sigma_eff`, which represents uncertainty.
 
-## your chance per round
+The request reads the index row. It does not rebuild the index.
 
-for each round up to `fill_round`, we line up your rank against the predicted closing rank and treat it like a normal curve:
+## Probability for each round
+
+For each round through `fill_round`, the predictor compares the submitted rank with that round's predicted closing rank.
 
 <p align="center">
-  <img src="../../../apps/web/public/tools/p/formulas/single-round-probability.svg" alt="single-round probability" width="45%">
+  <img src="../../../apps/web/public/tools/p/formulas/single-round-probability.svg" alt="Single-round probability" width="45%">
 </p>
 
-better rank (lower $r$) → higher $P_i$. same rank → around 50%.
+A lower rank number is better. A rank equal to the predicted closing rank has a probability near 50 percent.
 
-then all the rounds get squished into one headline **chance** (average cumulative probability through `fill_round`). the little round bars in the table are just that story drawn out.
+The predictor combines the round probabilities into one cumulative probability. The interface shows the cumulative value for each round. It also shows the average from round 1 through `fill_round` as the headline probability.
 
-full formulas: [prediction engine](../nerd-stuff/prediction-engine.md).
+Read [Prediction engine](../nerd-stuff/prediction-engine.md) for the formulas.
 
-## the bands
+## Probability bands
 
-bands are just so you can scan fast. the cutoffs are fixed in code:
+The thresholds are fixed in the index code. The internal keys remain stable for API compatibility.
 
-| band | threshold | meaning |
-| --- | --- | --- |
-| **safe** | $P \geq 0.85$ | high chance at this rank |
-| **iffy** | $0.40 \leq P < 0.85$ | possible, but not locked |
-| **delulu** | $0.10 \leq P < 0.40$ | low chance, long shot |
-| **doesn't matter yaar** | $P < 0.10$ | very low chance, hidden by default |
+| Display label     | Internal key    | Threshold            | Meaning                                  |
+| ----------------- | --------------- | -------------------- | ---------------------------------------- |
+| **Likely**        | `safe`          | $P \geq 0.85$        | High probability at this rank            |
+| **Possible**      | `iffy`          | $0.40 \leq P < 0.85$ | The program may be available             |
+| **Unlikely**      | `delulu`        | $0.10 \leq P < 0.40$ | Low probability                          |
+| **Very unlikely** | `doesnt-matter` | $P < 0.10$           | Very low probability. Hidden by default. |
 
-under 10% is hidden until you flip **Doesn't matter yaar → Show** in the filters (same thing as `include_all=true` in the url/api).
+Results below 10 percent remain hidden until you select **Show very unlikely results**. The URL and API option is `include_all=true`.
 
-## the closing rank column
+## Predicted closing rank
 
-**predicted closing rank** ($\hat{c}$) is our guess for where the seat closes this year. **chance** just compares your rank $r$ to that guess using $\sigma_{\mathrm{eff}}$.
+The predicted closing rank is the forecast for the target cycle. It uses historical rank data, trend limits, and uncertainty. It is not a copy of the previous year's cutoff.
 
-## sorting
+The probability compares the submitted rank with this forecast by using `sigma_eff`.
 
-default is **balanced**: institute quality $\times$ branch tier $\times$ chance. you can also sort by best chance, closing rank, or institute id. the sidebar filters (institute type, band) work on the client, so nothing re-runs the engine.
+## Sorting
 
-balanced formula: [balanced ranking](../nerd-stuff/balanced-ranking.md).
+The default sort uses the balanced score. It combines institute score, branch score, and cumulative probability.
 
-## data quality
+You can also sort by best probability, predicted closing rank, or institute name. The filters run in the browser. They do not rebuild the index.
 
-every row carries a quality tag based on how many years of history backed it:
+Read [Balanced ranking](../nerd-stuff/balanced-ranking.md) for the score formula.
 
-| tag | years | trust |
-| --- | --- | --- |
-| `sufficient` | 3+ | steadier |
-| `inferred` | 2 | more shaky |
-| `pooled` | 1 | widest sigma, treat as rough |
+## Data quality
 
-open the detail panel on a row for the tag and the round chart before you trust a number too much.
+Each row has a quality label based on the amount of supporting history.
 
-**back:** [getting started](../learn/getting-started.md)
+| Label        | Years     | Interpretation                                     |
+| ------------ | --------- | -------------------------------------------------- |
+| `sufficient` | 3 or more | More stable historical support                     |
+| `inferred`   | 2         | Limited historical support                         |
+| `pooled`     | 1         | Wide uncertainty. Treat the result as an estimate. |
+
+Open a result to view its quality label and round chart. Check the official portal before you make a decision.

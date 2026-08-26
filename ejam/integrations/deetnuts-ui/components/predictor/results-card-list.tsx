@@ -75,7 +75,7 @@ export function ResultsEmptyState({
           className="rounded-none border-border bg-transparent text-muted-foreground shadow-none hover:bg-transparent hover:text-foreground dark:bg-transparent dark:hover:bg-transparent"
           onClick={onShowLongShots}
         >
-          Show doesn't matter yaar
+          Show very unlikely results
         </Button>
       ) : isFiltered && onClearFilters ? (
         <Button

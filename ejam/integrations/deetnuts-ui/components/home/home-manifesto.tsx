@@ -29,33 +29,20 @@ export function HomeManifesto() {
             )}
           >
             <p className="whitespace-pre-line text-pretty text-left font-instrument-sans text-[clamp(1rem,2.2vw+0.5rem,1.5rem)] leading-[1.72] tracking-[-0.015em] text-white md:leading-[1.68] lg:leading-[1.64]">
-              {`ejam was never supposed to be a thing.
-it came out of pure frustration.
+              {`eJAM began with a simple goal.
+Students need admission tools that present data clearly and do not request unnecessary personal information.
 
-there are so many student tools that should just exist, but instead they are paywalled or made annoying on purpose.
+Many existing tools are closed, ad-supported, or difficult to use. eJAM provides a clear alternative.
 
-and then there is the privacy.... which makes it worse. why should we give up personal info for something so which doesn't require our infomation?
+The project starts with a college predictor. It uses historical counselling data and explains how it calculates each result.
 
-that part never sat right with me.
+This is an independent project. It will grow as more verified data and useful tools become available.
 
-big coaching institutes definitely had the means to build something better.
-they just did not.
+In summary:
 
-most of it is closed source, ads everywhere, heavily data-collecting, and overcomplicated for no fucking reason.
-
-this is just my small attempt at making something better,
-just something useful that should have existed already.
-
-it is just one tool for now.
-if it gets a good traction and actually helps,
-i would love to keep adding more.
-
-TL;DR
-
-open-souce
-no bullsh*t
-for students,
-by students.`}
+open source
+clear calculations
+for students, by students.`}
             </p>
           </div>
         </div>
