@@ -138,7 +138,7 @@ jobs:
               --header 'Content-Type: application/vnd.api+json' \
               "https://app.terraform.io/api/v2/runs/$run_id")
             status=$(jq -er '.data.attributes.status' <<<"$run_response")
-            confirmable=$(jq -r '.data.attributes["is-confirmable"]' <<<"$run_response")
+            confirmable=$(jq -r '.data.attributes.actions["is-confirmable"] // .data.attributes["is-confirmable"] // false' <<<"$run_response")
             if [[ "$status" == planned_and_saved && "$confirmable" == true ]]; then
               apply_ready=true
               break
@@ -201,7 +201,7 @@ jobs:
             "https://app.terraform.io/api/v2/runs/$RUN_ID?include=workspace")
           status=$(jq -er '.data.attributes.status' <<<"$response")
           workspace_id=$(jq -er '.included[] | select(.type == "workspaces") | .id' <<<"$response")
-          confirmable=$(jq -r '.data.attributes["is-confirmable"]' <<<"$response")
+          confirmable=$(jq -r '.data.attributes.actions["is-confirmable"] // .data.attributes["is-confirmable"] // false' <<<"$response")
           save_plan=$(jq -r '.data.attributes["save-plan"]' <<<"$response")
           plan_only=$(jq -r '.data.attributes["plan-only"]' <<<"$response")
           source=$(jq -er '.data.attributes.source' <<<"$response")
