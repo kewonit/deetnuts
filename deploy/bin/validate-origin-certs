@@ -95,10 +95,10 @@ grep -Fq 'DNS:www.deetnuts.com' <<<"$subject_alt_names" || {
 
 api_subject_alt_names=$(openssl x509 -in "$api_origin_cert" -noout -ext subjectAltName)
 mapfile -t api_dns_names < <(grep -Eo 'DNS:[^,[:space:]]+' <<<"$api_subject_alt_names")
-(( ${#api_dns_names[@]} == 1 )) && [[ ${api_dns_names[0]} == DNS:api.deetnuts.com ]] || {
+if (( ${#api_dns_names[@]} != 1 )) || [[ ${api_dns_names[0]} != DNS:api.deetnuts.com ]]; then
   echo "The API origin certificate must cover only api.deetnuts.com" >&2
   exit 1
-}
+fi
 
 origin_cert_public_key=$(
   openssl x509 -in "$origin_cert" -pubkey -noout \
