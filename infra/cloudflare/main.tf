@@ -49,6 +49,31 @@ resource "cloudflare_zero_trust_access_application" "pocketbase" {
   }
 }
 
+resource "cloudflare_zero_trust_access_application" "administrator_launcher" {
+  account_id                = var.cloudflare_account_id
+  name                      = "DEETNUTS administrator App Launcher"
+  type                      = "app_launcher"
+  allowed_idps              = [var.google_identity_provider_id]
+  auto_redirect_to_identity = true
+  session_duration          = "1h"
+
+  policies = [{
+    name       = "Allow only the designated administrator to enroll and manage MFA"
+    decision   = "allow"
+    precedence = 1
+    include = [{
+      email = { email = var.allowed_email }
+    }]
+    require = [{
+      login_method = { id = var.google_identity_provider_id }
+    }]
+  }]
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
 resource "cloudflare_authenticated_origin_pulls" "api" {
   zone_id = var.cloudflare_zone_id
   config = [{

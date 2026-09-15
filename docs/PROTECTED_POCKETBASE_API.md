@@ -48,7 +48,7 @@ screen before a paid change.
 | Cloudflare DNS, proxy, Origin CA and AOP | DNS/TLS, DDoS/WAF edge and account-specific origin mTLS | `$0` on the existing zone plan |
 | Cloudflare Zero Trust Access | One browser user, exact-email policy and MFA | `$0` while the account remains within the Free-plan allowance |
 | Google Cloud OAuth client | Dedicated Google sign-in for Cloudflare Access | `$0` direct service charge |
-| HCP Terraform | Remote state, plan and reviewed apply for three resources | `$0` on the Free plan while the organization remains below 500 managed resources |
+| HCP Terraform | Remote state, plan and reviewed apply for four resources | `$0` on the Free plan while the organization remains below 500 managed resources |
 | GitHub Actions and GHCR | Public-repository verification and four immutable images | `$0` for standard public-repository usage, subject to package/storage limits |
 | Nginx, PocketBase and the JWT verifier | Open-source runtime containers on the Droplet | `$0` beyond the Droplet |
 
@@ -140,10 +140,15 @@ the new key automatically.
 5. Under **Access controls -> Access settings**, enable independent MFA at the
    organization level. This is a prerequisite for the application and policy
    custom MFA settings; it must not be skipped.
-6. Add a new Google identity provider using the new client ID and secret.
+6. Enable the Access App Launcher with a policy limited to the same exact email
+   and dedicated Google IdP. Explicitly exempt only the launcher from
+   independent MFA so that the administrator can enroll a first authenticator;
+   keep the PocketBase application hidden from the launcher. A disabled
+   launcher makes first-device enrollment impossible.
+7. Add a new Google identity provider using the new client ID and secret.
    Name it `Google - DEETNUTS API administrator`. Do not edit or delete the
    existing mismatched IdP.
-7. Use Cloudflare's **Test** action in the Work profile. The returned email
+8. Use Cloudflare's **Test** action in the Work profile. The returned email
    claim must exactly match the sensitive `allowed_email` value. A missing
    email, alias or any other value is a failed test.
 
@@ -260,8 +265,10 @@ from the powered-off snapshot; do not attempt an in-place disk shrink.
    apply that exact `run-*`. Terraform creates the proxied A record only after
    the Access application and AOP association exist.
 5. In a clean Work-profile tab, visit `https://api.deetnuts.com/_/`. Confirm
-   automatic Google redirect, the exact Gmail identity, independent MFA, then
-   PocketBase's own superuser login. Inspect cookies without copying values.
+   automatic Google redirect and the exact Gmail identity. On first use, open
+   the exact-user App Launcher, enroll an authenticator, then revisit the API
+   and complete independent MFA before PocketBase's own superuser login.
+   Inspect cookies without copying values.
 6. Confirm an unauthenticated request never reaches PocketBase, a wrong Google
    identity is denied, `Cache-Control: private, no-store` is present, uploads
    up to 64 MiB work, larger bodies receive 413, and PocketBase realtime SSE
@@ -288,6 +295,7 @@ remain stable.
 | Verifier is unhealthy | Nginx deployment/start is blocked; no bypass route exists. |
 | Direct-IP request forges Access headers | AOP mTLS rejects it before Nginx HTTP authorization. |
 | Browser redirect loop | Confirm SameSite is Lax, third-party cookies are not blocked for the app/team domains, and incompatible Zaraz/Google tag gateway features are absent. |
+| MFA setup redirects to a disabled launcher | Apply the exact-user App Launcher resource, enroll the first authenticator there, and keep MFA required on PocketBase. Never bypass the application MFA gate. |
 | Target size or price differs | Stop before Resize; no fallback slug. |
 | Backup ZIP, SQLite, hash or counts fail | Stop before shutdown/snapshot/resize. Preserve all copies for diagnosis. |
 | Resize fails or disk does not expand | Keep DNS disabled and recover a new Droplet from the snapshot. Never shrink in place. |
