@@ -6,13 +6,14 @@ read -r -a words <<<"$command_line"
 
 case ${words[0]:-} in
   deploy)
-    [[ ${#words[@]} -ge 5 && ${#words[@]} -le 6 ]] || exit 2
+    [[ ${#words[@]} -ge 6 && ${#words[@]} -le 7 ]] || exit 2
     [[ ${words[1]} =~ ^[0-9a-f]{40}$ ]] || exit 2
     [[ ${words[2]} =~ ^ghcr\.io/kewonit/deetnuts-web@sha256:[0-9a-f]{64}$ ]] || exit 2
     [[ ${words[3]} =~ ^ghcr\.io/kewonit/deetnuts-worker@sha256:[0-9a-f]{64}$ ]] || exit 2
     [[ ${words[4]} =~ ^ghcr\.io/kewonit/deetnuts-pocketbase@sha256:[0-9a-f]{64}$ ]] || exit 2
-    if [[ ${#words[@]} -eq 6 ]]; then
-      [[ ${words[5]} == public || ${words[5]} == origin-only ]] || exit 2
+    [[ ${words[5]} =~ ^ghcr\.io/kewonit/deetnuts-access-verifier@sha256:[0-9a-f]{64}$ ]] || exit 2
+    if [[ ${#words[@]} -eq 7 ]]; then
+      [[ ${words[6]} == public || ${words[6]} == origin-only ]] || exit 2
     fi
     exec sudo -n /usr/local/sbin/deetnuts-deploy "${words[@]}"
     ;;

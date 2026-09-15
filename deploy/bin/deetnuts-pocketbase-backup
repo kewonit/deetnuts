@@ -6,6 +6,44 @@ umask 077
 APP_ROOT=${DEETNUTS_ROOT:-/opt/deetnuts}
 STATE_ENV="$APP_ROOT/state/compose.env"
 BACKUP_DIR="$APP_ROOT/backups/pocketbase"
+fresh=0
+prune=1
+
+while (( $# > 0 )); do
+  case $1 in
+    --fresh)
+      fresh=1
+      ;;
+    --no-prune)
+      prune=0
+      ;;
+    *)
+      echo "Usage: deetnuts-pocketbase-backup [--fresh] [--no-prune]" >&2
+      exit 2
+      ;;
+  esac
+  shift
+done
+
+read_env_value() {
+  local key=$1
+  awk -F= -v key="$key" '$1 == key { sub(/^[^=]*=/, ""); print; exit }' "$STATE_ENV"
+}
+
+read_secret() {
+  local path=$1
+  [[ -f "$path" && ! -L "$path" ]] || {
+    echo "A required PocketBase secret file is missing or unsafe" >&2
+    exit 1
+  }
+  local value
+  value=$(<"$path")
+  [[ -n "$value" ]] || {
+    echo "A required PocketBase secret is empty" >&2
+    exit 1
+  }
+  printf '%s' "$value"
+}
 
 compose=(
   docker compose
@@ -14,44 +52,172 @@ compose=(
   --file "$APP_ROOT/docker-compose.yml"
 )
 
+exec 9>"$APP_ROOT/state/pocketbase-backup.lock"
+flock --nonblock 9 || {
+  echo "Another PocketBase backup is already running" >&2
+  exit 1
+}
+
+install -d -o root -g root -m 0700 "$BACKUP_DIR"
+work_dir=$(mktemp -d "$BACKUP_DIR/.verify.XXXXXX")
+trap 'rm -rf -- "$work_dir"' EXIT
+
 container_id=$("${compose[@]}" ps --status running --quiet pocketbase)
 [[ -n "$container_id" ]] || {
   echo "PocketBase is not running" >&2
   exit 1
 }
 
-latest=$(docker exec "$container_id" sh -c '
-  set -eu
-  [ -d /pb/pb_data/backups ] || exit 1
-  latest_path=$(ls -1t /pb/pb_data/backups/*.zip 2>/dev/null | head -n 1)
-  basename "$latest_path"
-')
+if (( fresh )); then
+  pocketbase_ip=$(docker inspect --format '{{with index .NetworkSettings.Networks "deetnuts-application"}}{{.IPAddress}}{{end}}' "$container_id")
+  [[ "$pocketbase_ip" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]] || {
+    echo "Could not resolve the private PocketBase container address" >&2
+    exit 1
+  }
+
+  superuser_email=$(read_secret "$(read_env_value POCKETBASE_SUPERUSER_EMAIL_FILE)")
+  superuser_password=$(read_secret "$(read_env_value POCKETBASE_SUPERUSER_PASSWORD_FILE)")
+  auth_payload=$(jq -cn \
+    --arg identity "$superuser_email" \
+    --arg password "$superuser_password" \
+    '{identity: $identity, password: $password}')
+  unset superuser_email superuser_password
+
+  auth_response=$(curl --fail --silent --show-error \
+    --connect-timeout 5 \
+    --max-time 20 \
+    --header 'Content-Type: application/json' \
+    --data-binary @- \
+    "http://$pocketbase_ip:8090/api/collections/_superusers/auth-with-password" \
+    <<<"$auth_payload")
+  unset auth_payload
+  token=$(jq -er '.token | select(type == "string" and length > 20)' <<<"$auth_response")
+  unset auth_response
+
+  requested_name="deetnuts-$(date -u +%Y%m%dT%H%M%SZ)-$(openssl rand -hex 4).zip"
+  create_payload=$(jq -cn --arg name "$requested_name" '{name: $name}')
+  auth_header="$work_dir/authorization.header"
+  printf 'Authorization: %s\n' "$token" > "$auth_header"
+  unset token
+  curl --fail --silent --show-error \
+    --connect-timeout 5 \
+    --max-time 1800 \
+    --header "@$auth_header" \
+    --header 'Content-Type: application/json' \
+    --data-binary @- \
+    "http://$pocketbase_ip:8090/api/backups" \
+    <<<"$create_payload" \
+    >/dev/null
+  unset create_payload
+  rm -f -- "$auth_header"
+
+  for (( attempt = 1; attempt <= 30; attempt += 1 )); do
+    if docker exec "$container_id" test -s "/pb/pb_data/backups/$requested_name"; then
+      break
+    fi
+    sleep 2
+  done
+  docker exec "$container_id" test -s "/pb/pb_data/backups/$requested_name" || {
+    echo "PocketBase did not finish the requested backup" >&2
+    exit 1
+  }
+  latest=$requested_name
+else
+  latest=$(docker exec "$container_id" sh -c '
+    set -eu
+    [ -d /pb/pb_data/backups ] || exit 1
+    latest_path=$(ls -1t /pb/pb_data/backups/*.zip 2>/dev/null | head -n 1)
+    basename "$latest_path"
+  ')
+fi
+
 [[ "$latest" =~ ^[A-Za-z0-9._-]+\.zip$ ]] || {
   echo "No safe PocketBase backup archive was found" >&2
   exit 1
 }
 
-install -d -o root -g root -m 0700 "$BACKUP_DIR"
-temporary=$(mktemp "$BACKUP_DIR/.backup.XXXXXX")
-trap 'rm -f "$temporary"' EXIT
-docker cp "$container_id:/pb/pb_data/backups/$latest" "$temporary"
-[[ -s "$temporary" ]] || {
+archive="$work_dir/$latest"
+docker cp "$container_id:/pb/pb_data/backups/$latest" "$archive"
+[[ -s "$archive" ]] || {
   echo "Copied PocketBase backup is empty" >&2
   exit 1
 }
-unzip -tqq "$temporary"
-install -o root -g root -m 0600 "$temporary" "$BACKUP_DIR/$latest"
-rm -f "$temporary"
-trap - EXIT
+unzip -tqq "$archive"
+if unzip -Z1 "$archive" | grep -Eq '(^/|(^|/)\.\.(/|$))'; then
+  echo "PocketBase backup contains an unsafe archive path" >&2
+  exit 1
+fi
 
-mapfile -t expired < <(
-  find "$BACKUP_DIR" -maxdepth 1 -type f -name '*.zip' -printf '%T@ %p\n' \
-    | sort -nr \
-    | awk 'NR > 7 { sub(/^[^ ]+ /, ""); print }'
+mapfile -t database_entries < <(
+  unzip -Z1 "$archive" | awk '$0 == "data.db" || $0 ~ /\/data\.db$/ { print }'
 )
-for archive in "${expired[@]}"; do
-  [[ "$archive" == "$BACKUP_DIR/"*.zip ]] || continue
-  rm -f -- "$archive"
+(( ${#database_entries[@]} == 1 )) || {
+  echo "PocketBase backup must contain exactly one data.db" >&2
+  exit 1
+}
+database="$work_dir/data.db"
+unzip -p "$archive" "${database_entries[0]}" > "$database"
+[[ -s "$database" ]] || {
+  echo "PocketBase data.db is empty" >&2
+  exit 1
+}
+
+[[ $(sqlite3 -readonly "$database" 'PRAGMA integrity_check;') == ok ]] || {
+  echo "PocketBase SQLite integrity check failed" >&2
+  exit 1
+}
+[[ -z $(sqlite3 -readonly "$database" 'PRAGMA foreign_key_check;') ]] || {
+  echo "PocketBase SQLite foreign-key check failed" >&2
+  exit 1
+}
+
+counts_file="$work_dir/$latest.counts.tsv"
+printf 'table\trows\n' > "$counts_file"
+mapfile -t tables < <(
+  sqlite3 -readonly "$database" \
+    "SELECT name FROM sqlite_schema WHERE type = 'table' AND name NOT LIKE 'sqlite_%' ORDER BY name;"
+)
+for table in "${tables[@]}"; do
+  [[ "$table" != *$'\t'* && "$table" != *$'\n'* && "$table" != *$'\r'* ]] || {
+    echo "PocketBase contains a table name that cannot be represented safely" >&2
+    exit 1
+  }
+  safe_table=${table//\"/\"\"}
+  rows=$(sqlite3 -readonly "$database" "SELECT COUNT(*) FROM \"$safe_table\";")
+  [[ "$rows" =~ ^[0-9]+$ ]] || {
+    echo "Could not count PocketBase table $table" >&2
+    exit 1
+  }
+  printf '%s\t%s\n' "$table" "$rows" >> "$counts_file"
 done
 
-echo "Verified PocketBase backup copy: $latest"
+final_archive="$BACKUP_DIR/$latest"
+[[ ! -e "$final_archive" && ! -L "$final_archive" ]] || {
+  echo "Refusing to overwrite an existing verified backup" >&2
+  exit 1
+}
+install -o root -g root -m 0600 "$archive" "$final_archive"
+install -o root -g root -m 0600 "$counts_file" "$final_archive.counts.tsv"
+archive_sha=$(sha256sum "$final_archive" | awk '{ print $1 }')
+database_sha=$(sha256sum "$database" | awk '{ print $1 }')
+manifest="$work_dir/$latest.sha256"
+printf '%s  %s\n%s  %s\n' \
+  "$archive_sha" "$latest" \
+  "$database_sha" "data.db" \
+  > "$manifest"
+install -o root -g root -m 0600 "$manifest" "$final_archive.sha256"
+
+if (( prune )); then
+  mapfile -t expired < <(
+    find "$BACKUP_DIR" -maxdepth 1 -type f -name '*.zip' -printf '%T@ %p\n' \
+      | sort -nr \
+      | awk 'NR > 7 { sub(/^[^ ]+ /, ""); print }'
+  )
+  for expired_archive in "${expired[@]}"; do
+    [[ "$expired_archive" == "$BACKUP_DIR/"*.zip ]] || continue
+    rm -f -- "$expired_archive" "$expired_archive.sha256" "$expired_archive.counts.tsv"
+  done
+fi
+
+table_count=${#tables[@]}
+echo "Verified PocketBase backup copy: $latest ($table_count tables, SHA-256 $archive_sha)"

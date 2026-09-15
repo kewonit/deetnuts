@@ -12,6 +12,8 @@ compose=(
 )
 
 "$APP_ROOT/deploy/bin/validate-runtime-env" "$APP_ROOT/shared/web.env"
+"$APP_ROOT/deploy/bin/validate-access-verifier-env" \
+  "$(awk -F= '$1 == "ACCESS_VERIFIER_ENV_FILE" { sub(/^[^=]*=/, ""); print; exit }' "$STATE_ENV")"
 "$APP_ROOT/deploy/bin/validate-origin-certs" \
   "$(awk -F= '$1 == "ORIGIN_CERT_DIR" { sub(/^[^=]*=/, ""); print; exit }' "$STATE_ENV")"
 "${compose[@]}" exec -T nginx nginx -t

@@ -42,6 +42,9 @@ directory_attributes=$(stat -c '%a %u %g' "$cert_dir")
 check_attributes "$cert_dir/origin.pem" 640 0 "$tls_gid"
 check_attributes "$cert_dir/origin-key.pem" 640 0 "$tls_gid"
 check_attributes "$cert_dir/cloudflare-origin-pull-ca.pem" 640 0 "$tls_gid"
+check_attributes "$cert_dir/api-origin.pem" 640 0 "$tls_gid"
+check_attributes "$cert_dir/api-origin-key.pem" 640 0 "$tls_gid"
+check_attributes "$cert_dir/cloudflare-api-origin-pull-ca.pem" 640 0 "$tls_gid"
 
 command -v openssl >/dev/null 2>&1 || {
   echo "openssl is required to validate origin certificates" >&2
@@ -51,10 +54,16 @@ command -v openssl >/dev/null 2>&1 || {
 origin_cert="$cert_dir/origin.pem"
 origin_key="$cert_dir/origin-key.pem"
 client_ca="$cert_dir/cloudflare-origin-pull-ca.pem"
+api_origin_cert="$cert_dir/api-origin.pem"
+api_origin_key="$cert_dir/api-origin-key.pem"
+api_client_ca="$cert_dir/cloudflare-api-origin-pull-ca.pem"
 
 openssl x509 -in "$origin_cert" -noout >/dev/null
 openssl pkey -in "$origin_key" -noout -check >/dev/null
 openssl x509 -in "$client_ca" -noout >/dev/null
+openssl x509 -in "$api_origin_cert" -noout >/dev/null
+openssl pkey -in "$api_origin_key" -noout -check >/dev/null
+openssl x509 -in "$api_client_ca" -noout >/dev/null
 
 # Leave enough time to replace certificates without an emergency cutover.
 openssl x509 -in "$origin_cert" -noout -checkend 2592000 >/dev/null || {
@@ -65,6 +74,14 @@ openssl x509 -in "$client_ca" -noout -checkend 2592000 >/dev/null || {
   echo "The authenticated-origin-pull CA expires within 30 days" >&2
   exit 1
 }
+openssl x509 -in "$api_origin_cert" -noout -checkend 2592000 >/dev/null || {
+  echo "The API origin certificate expires within 30 days" >&2
+  exit 1
+}
+openssl x509 -in "$api_client_ca" -noout -checkend 2592000 >/dev/null || {
+  echo "The API authenticated-origin-pull CA expires within 30 days" >&2
+  exit 1
+}
 
 subject_alt_names=$(openssl x509 -in "$origin_cert" -noout -ext subjectAltName)
 grep -Fq 'DNS:deetnuts.com' <<<"$subject_alt_names" || {
@@ -73,6 +90,13 @@ grep -Fq 'DNS:deetnuts.com' <<<"$subject_alt_names" || {
 }
 grep -Fq 'DNS:www.deetnuts.com' <<<"$subject_alt_names" || {
   echo "The origin certificate does not cover www.deetnuts.com" >&2
+  exit 1
+}
+
+api_subject_alt_names=$(openssl x509 -in "$api_origin_cert" -noout -ext subjectAltName)
+mapfile -t api_dns_names < <(grep -Eo 'DNS:[^,[:space:]]+' <<<"$api_subject_alt_names")
+(( ${#api_dns_names[@]} == 1 )) && [[ ${api_dns_names[0]} == DNS:api.deetnuts.com ]] || {
+  echo "The API origin certificate must cover only api.deetnuts.com" >&2
   exit 1
 }
 
@@ -92,9 +116,31 @@ origin_private_key_public_key=$(
   exit 1
 }
 
+api_origin_cert_public_key=$(
+  openssl x509 -in "$api_origin_cert" -pubkey -noout \
+    | openssl pkey -pubin -outform DER \
+    | sha256sum \
+    | awk '{ print $1 }'
+)
+api_origin_private_key_public_key=$(
+  openssl pkey -in "$api_origin_key" -pubout -outform DER \
+    | sha256sum \
+    | awk '{ print $1 }'
+)
+[[ "$api_origin_cert_public_key" == "$api_origin_private_key_public_key" ]] || {
+  echo "The API origin certificate and private key do not match" >&2
+  exit 1
+}
+
 client_ca_constraints=$(openssl x509 -in "$client_ca" -noout -text)
 grep -Eq 'CA:[[:space:]]*TRUE' <<<"$client_ca_constraints" || {
   echo "The authenticated-origin-pull certificate is not a CA" >&2
+  exit 1
+}
+
+api_client_ca_constraints=$(openssl x509 -in "$api_client_ca" -noout -text)
+grep -Eq 'CA:[[:space:]]*TRUE' <<<"$api_client_ca_constraints" || {
+  echo "The API authenticated-origin-pull certificate is not a CA" >&2
   exit 1
 }
 

@@ -26,6 +26,12 @@ handoff
 # misc
 .DS_Store
 *.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+client_secret_*.json
 
 # debug
 npm-debug.log*
@@ -37,6 +43,12 @@ yarn-error.log*
 .env*.local
 
 # production runtime secrets and mutable deployment state
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+crash.log
 deploy/env/*.env
 !deploy/env/*.env.example
 deploy/secrets/*

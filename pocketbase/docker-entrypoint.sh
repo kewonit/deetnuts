@@ -53,7 +53,7 @@ unset POCKETBASE_SUPERUSER_EMAIL POCKETBASE_SUPERUSER_PASSWORD
 
 exec /usr/local/bin/pocketbase serve \
   --http=0.0.0.0:8090 \
-  --origins=https://www.deetnuts.com,https://deetnuts.com \
+  --origins=https://www.deetnuts.com,https://deetnuts.com,https://api.deetnuts.com \
   --dir=/pb/pb_data \
   --hooksDir=/pb/pb_hooks \
   --hooksPool=4 \

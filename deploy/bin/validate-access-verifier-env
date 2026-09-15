@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+env_file=${1:-}
+[[ -n "$env_file" && -f "$env_file" && ! -L "$env_file" ]] || {
+  echo "Access verifier environment file is missing or unsafe" >&2
+  exit 1
+}
+
+if (( EUID == 0 )); then
+  [[ $(stat -c '%a %U:%G' "$env_file") == '600 root:root' ]] || {
+    echo "$env_file must have mode 0600 and owner root:root" >&2
+    exit 1
+  }
+fi
+
+read_value() {
+  local key=$1
+  awk -F= -v key="$key" '$1 == key { sub(/^[^=]*=/, ""); print; exit }' "$env_file"
+}
+
+team_domain=$(read_value CF_ACCESS_TEAM_DOMAIN)
+audience=$(read_value CF_ACCESS_AUD)
+allowed_email=$(read_value CF_ACCESS_ALLOWED_EMAIL)
+
+[[ "$team_domain" == deetnuts.cloudflareaccess.com ]] || {
+  echo "CF_ACCESS_TEAM_DOMAIN must be exactly deetnuts.cloudflareaccess.com" >&2
+  exit 1
+}
+[[ "$audience" =~ ^[A-Za-z0-9_-]{32,128}$ ]] || {
+  echo "CF_ACCESS_AUD must be the Access application audience tag" >&2
+  exit 1
+}
+[[ "$audience" != 0000000000000000000000000000000000000000000000000000000000000000 ]] || {
+  echo "Replace the example CF_ACCESS_AUD before production use" >&2
+  exit 1
+}
+[[ ${#allowed_email} -le 254 && "$allowed_email" =~ ^[^[:space:]@]+@[^[:space:]@]+\.[^[:space:]@]+$ && "$allowed_email" == "${allowed_email,,}" ]] || {
+  echo "CF_ACCESS_ALLOWED_EMAIL must be a lowercase email address" >&2
+  exit 1
+}
+[[ "$allowed_email" != replace-with-allowed-google-email@example.invalid ]] || {
+  echo "Replace the example CF_ACCESS_ALLOWED_EMAIL before production use" >&2
+  exit 1
+}
+
+echo "Access verifier environment is valid"

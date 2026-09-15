@@ -10,6 +10,9 @@ SOURCE_ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 APP_ROOT=/opt/deetnuts
 DEPLOY_USER=${DEETNUTS_DEPLOY_USER:-deetnuts-deploy}
 DEPLOY_PUBLIC_KEY=${DEETNUTS_DEPLOY_PUBLIC_KEY:-}
+ADMIN_USER=${DEETNUTS_ADMIN_USER:-deetnuts-admin}
+ADMIN_PUBLIC_KEY=${DEETNUTS_ADMIN_PUBLIC_KEY:-}
+DISABLE_ROOT_SSH=${DEETNUTS_DISABLE_ROOT_SSH:-0}
 TLS_GROUP=${DEETNUTS_TLS_GROUP:-deetnuts-tls}
 TLS_GID=${DEETNUTS_TLS_GID:-1999}
 POCKETBASE_GROUP=${DEETNUTS_POCKETBASE_GROUP:-deetnuts-pocketbase}
@@ -19,6 +22,23 @@ POCKETBASE_GID=${DEETNUTS_POCKETBASE_GID:-10001}
   echo "DEETNUTS_DEPLOY_USER is invalid" >&2
   exit 1
 }
+[[ "$ADMIN_USER" =~ ^[a-z_][a-z0-9_-]{0,31}$ && "$ADMIN_USER" != "$DEPLOY_USER" ]] || {
+  echo "DEETNUTS_ADMIN_USER is invalid or conflicts with the deployment user" >&2
+  exit 1
+}
+[[ "$DISABLE_ROOT_SSH" == 0 || "$DISABLE_ROOT_SSH" == 1 ]] || {
+  echo "DEETNUTS_DISABLE_ROOT_SSH must be 0 or 1" >&2
+  exit 1
+}
+if [[ -n "$ADMIN_PUBLIC_KEY" ]]; then
+  [[ "$ADMIN_PUBLIC_KEY" == ssh-ed25519\ * && "$ADMIN_PUBLIC_KEY" != *$'\n'* && "$ADMIN_PUBLIC_KEY" != *$'\r'* ]] || {
+    echo "DEETNUTS_ADMIN_PUBLIC_KEY must be an Ed25519 public key" >&2
+    exit 1
+  }
+elif [[ "$DISABLE_ROOT_SSH" == 1 ]]; then
+  echo "DEETNUTS_ADMIN_PUBLIC_KEY is required before root SSH can be disabled" >&2
+  exit 1
+fi
 [[ "$TLS_GROUP" =~ ^[a-z_][a-z0-9_-]{0,31}$ ]] || {
   echo "DEETNUTS_TLS_GROUP is invalid" >&2
   exit 1
@@ -53,7 +73,7 @@ if [[ ${ID:-} != ubuntu || ${VERSION_ID:-} != 24.04 ]]; then
 fi
 
 apt-get update
-apt-get install -y ca-certificates curl jq openssl sudo unattended-upgrades unzip util-linux
+apt-get install -y ca-certificates curl jq openssl sqlite3 sudo unattended-upgrades unzip util-linux
 install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
   -o /etc/apt/keyrings/docker.asc
@@ -91,12 +111,50 @@ Unattended-Upgrade::Automatic-Reboot "false";
 EOF
 systemctl enable --now unattended-upgrades
 
+if ! id "$ADMIN_USER" >/dev/null 2>&1; then
+  useradd --create-home --shell /bin/bash "$ADMIN_USER"
+fi
+usermod --append --groups sudo "$ADMIN_USER"
+install -d -o "$ADMIN_USER" -g "$ADMIN_USER" -m 0700 "/home/$ADMIN_USER/.ssh"
+admin_authorized_keys="/home/$ADMIN_USER/.ssh/authorized_keys"
+if [[ "$DISABLE_ROOT_SSH" == 1 ]]; then
+  [[ -f "$admin_authorized_keys" && ! -L "$admin_authorized_keys" ]] || {
+    echo "Install and test the admin key before disabling root SSH" >&2
+    exit 1
+  }
+  [[ $(<"$admin_authorized_keys") == "$ADMIN_PUBLIC_KEY" ]] || {
+    echo "The tested admin key does not match DEETNUTS_ADMIN_PUBLIC_KEY" >&2
+    exit 1
+  }
+fi
+if [[ -n "$ADMIN_PUBLIC_KEY" ]]; then
+  temporary_admin_key=$(mktemp "/home/$ADMIN_USER/.ssh/authorized_keys.XXXXXX")
+  printf '%s\n' "$ADMIN_PUBLIC_KEY" > "$temporary_admin_key"
+  ssh-keygen -l -f "$temporary_admin_key" >/dev/null || {
+    rm -f -- "$temporary_admin_key"
+    echo "DEETNUTS_ADMIN_PUBLIC_KEY is not a valid SSH public key" >&2
+    exit 1
+  }
+  chown "$ADMIN_USER:$ADMIN_USER" "$temporary_admin_key"
+  chmod 0600 "$temporary_admin_key"
+  mv -f -- "$temporary_admin_key" "$admin_authorized_keys"
+fi
+
+root_login=prohibit-password
+if [[ "$DISABLE_ROOT_SSH" == 1 ]]; then
+  [[ $(passwd --status "$ADMIN_USER" | awk '{ print $2 }') == P ]] || {
+    echo "Set and test the $ADMIN_USER sudo password before disabling root SSH" >&2
+    exit 1
+  }
+  root_login=no
+fi
+
 install -d -o root -g root -m 0755 /etc/ssh/sshd_config.d
-cat > /etc/ssh/sshd_config.d/60-deetnuts-hardening.conf <<'EOF'
+cat > /etc/ssh/sshd_config.d/60-deetnuts-hardening.conf <<EOF
 PasswordAuthentication no
 KbdInteractiveAuthentication no
 PermitEmptyPasswords no
-PermitRootLogin prohibit-password
+PermitRootLogin $root_login
 X11Forwarding no
 AllowAgentForwarding no
 AllowTcpForwarding no
@@ -111,6 +169,7 @@ grep -qx 'kbdinteractiveauthentication no' <<<"$sshd_effective"
 grep -qx 'allowagentforwarding no' <<<"$sshd_effective"
 grep -qx 'allowtcpforwarding no' <<<"$sshd_effective"
 grep -qx 'permittunnel no' <<<"$sshd_effective"
+grep -qx "permitrootlogin $root_login" <<<"$sshd_effective"
 systemctl reload ssh
 
 if ! swapon --show=NAME --noheadings | grep -q .; then
@@ -174,7 +233,13 @@ cp -a "$SOURCE_ROOT/deploy" "$APP_ROOT/deploy"
 chown -R root:root "$APP_ROOT/deploy"
 find "$APP_ROOT/deploy/bin" -type f -exec chmod 0755 {} +
 
-for cert_name in origin.pem origin-key.pem cloudflare-origin-pull-ca.pem; do
+for cert_name in \
+  origin.pem \
+  origin-key.pem \
+  cloudflare-origin-pull-ca.pem \
+  api-origin.pem \
+  api-origin-key.pem \
+  cloudflare-api-origin-pull-ca.pem; do
   if [[ -f "$APP_ROOT/shared/certs/$cert_name" ]]; then
     chown "root:$TLS_GROUP" "$APP_ROOT/shared/certs/$cert_name"
     chmod 0640 "$APP_ROOT/shared/certs/$cert_name"
@@ -188,6 +253,7 @@ install -o root -g root -m 0755 "$SOURCE_ROOT/deploy/bin/deetnuts-reload" /usr/l
 install -o root -g root -m 0755 "$SOURCE_ROOT/deploy/bin/deetnuts-pocketbase-backup" /usr/local/sbin/deetnuts-pocketbase-backup
 install -o root -g root -m 0755 "$SOURCE_ROOT/deploy/bin/deetnuts-pocketbase-migrate" /usr/local/sbin/deetnuts-pocketbase-migrate
 install -o root -g root -m 0755 "$SOURCE_ROOT/deploy/bin/validate-pocketbase-secrets" /usr/local/sbin/validate-pocketbase-secrets
+install -o root -g root -m 0755 "$SOURCE_ROOT/deploy/bin/validate-access-verifier-env" /usr/local/sbin/validate-access-verifier-env
 install -o root -g root -m 0755 "$SOURCE_ROOT/deploy/bin/deetnuts-command" /usr/local/bin/deetnuts-command
 install -o root -g root -m 0644 "$SOURCE_ROOT/deploy/systemd/deetnuts.service" /etc/systemd/system/deetnuts.service
 install -o root -g root -m 0644 "$SOURCE_ROOT/deploy/systemd/deetnuts-pocketbase-backup.service" /etc/systemd/system/deetnuts-pocketbase-backup.service
@@ -198,6 +264,11 @@ if [[ ! -f "$APP_ROOT/shared/web.env" ]]; then
 fi
 if [[ ! -f "$APP_ROOT/shared/worker.env" ]]; then
   install -o root -g root -m 0600 "$SOURCE_ROOT/deploy/env/worker.env.example" "$APP_ROOT/shared/worker.env"
+fi
+if [[ ! -f "$APP_ROOT/shared/access-verifier.env" ]]; then
+  install -o root -g root -m 0600 \
+    "$SOURCE_ROOT/deploy/env/access-verifier.env.example" \
+    "$APP_ROOT/shared/access-verifier.env"
 fi
 if [[ ! -f "$APP_ROOT/shared/cloudflare.env" ]]; then
   install -o root -g root -m 0600 "$SOURCE_ROOT/deploy/env/cloudflare.env.example" "$APP_ROOT/shared/cloudflare.env"
@@ -225,6 +296,7 @@ if [[ ! -f "$APP_ROOT/state/compose.env" ]]; then
   sed \
     -e "s#WEB_ENV_FILE=.*#WEB_ENV_FILE=$APP_ROOT/shared/web.env#" \
     -e "s#WORKER_ENV_FILE=.*#WORKER_ENV_FILE=$APP_ROOT/shared/worker.env#" \
+    -e "s#ACCESS_VERIFIER_ENV_FILE=.*#ACCESS_VERIFIER_ENV_FILE=$APP_ROOT/shared/access-verifier.env#" \
     -e "s#NGINX_CONFIG_ROOT=.*#NGINX_CONFIG_ROOT=$APP_ROOT/deploy/nginx#" \
     -e "s#ORIGIN_CERT_DIR=.*#ORIGIN_CERT_DIR=$APP_ROOT/shared/certs#" \
     -e "s#POCKETBASE_ENCRYPTION_KEY_FILE=.*#POCKETBASE_ENCRYPTION_KEY_FILE=$APP_ROOT/shared/pocketbase/pocketbase_encryption_key#" \
@@ -248,6 +320,10 @@ ensure_compose_value POCKETBASE_IMAGE \
 ensure_compose_value DEETNUTS_MIGRATION_MODE 0
 ensure_compose_value POCKETBASE_MIGRATION_IMAGE \
   "ghcr.io/kewonit/deetnuts-pocketbase-migration@sha256:0000000000000000000000000000000000000000000000000000000000000000"
+ensure_compose_value ACCESS_VERIFIER_IMAGE \
+  "ghcr.io/kewonit/deetnuts-access-verifier@sha256:0000000000000000000000000000000000000000000000000000000000000000"
+ensure_compose_value ACCESS_VERIFIER_ENV_FILE \
+  "$APP_ROOT/shared/access-verifier.env"
 ensure_compose_value POCKETBASE_ENCRYPTION_KEY_FILE \
   "$APP_ROOT/shared/pocketbase/pocketbase_encryption_key"
 ensure_compose_value POCKETBASE_SUPERUSER_EMAIL_FILE \

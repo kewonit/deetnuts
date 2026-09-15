@@ -129,6 +129,47 @@ services:
       options:
         tag: deetnuts-{{.Name}}
 
+  access-verifier:
+    image: ${ACCESS_VERIFIER_IMAGE:?ACCESS_VERIFIER_IMAGE must be an immutable image digest}
+    init: true
+    user: "10002:10002"
+    env_file:
+      - ${ACCESS_VERIFIER_ENV_FILE:-./deploy/env/access-verifier.env.example}
+    environment:
+      NODE_ENV: production
+      PORT: "8081"
+    expose:
+      - "8081"
+    networks:
+      - application
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=8m,uid=10002,gid=10002,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    stop_grace_period: 15s
+    mem_limit: 64m
+    memswap_limit: 96m
+    cpus: 0.25
+    pids_limit: 48
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - fetch('http://127.0.0.1:8081/healthz').then(r=>{if(!r.ok)throw new Error(String(r.status))}).catch(()=>process.exit(1))
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    logging:
+      driver: journald
+      options:
+        tag: deetnuts-{{.Name}}
+
   web-blue:
     <<: *web
     image: ${WEB_BLUE_IMAGE:?WEB_BLUE_IMAGE must be an immutable image digest}
@@ -161,6 +202,11 @@ services:
       - "443:8443"
     networks:
       - application
+    depends_on:
+      access-verifier:
+        condition: service_healthy
+      pocketbase:
+        condition: service_healthy
     read_only: true
     tmpfs:
       - /tmp:rw,noexec,nosuid,size=32m,uid=101,gid=101,mode=1777

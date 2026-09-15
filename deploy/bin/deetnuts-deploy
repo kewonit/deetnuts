@@ -14,6 +14,7 @@ CLOUDFLARE_ENV="$APP_ROOT/shared/cloudflare.env"
 WEB_IMAGE_PATTERN='^ghcr\.io/kewonit/deetnuts-web@sha256:[0-9a-f]{64}$'
 WORKER_IMAGE_PATTERN='^ghcr\.io/kewonit/deetnuts-worker@sha256:[0-9a-f]{64}$'
 POCKETBASE_IMAGE_PATTERN='^ghcr\.io/kewonit/deetnuts-pocketbase@sha256:[0-9a-f]{64}$'
+ACCESS_VERIFIER_IMAGE_PATTERN='^ghcr\.io/kewonit/deetnuts-access-verifier@sha256:[0-9a-f]{64}$'
 LOCAL_IMAGE_PATTERN='^sha256:[0-9a-f]{64}$'
 RELEASE_PATTERN='^[0-9a-f]{40}$'
 
@@ -189,11 +190,12 @@ record_release() {
   local web_image=$2
   local worker_image=$3
   local pocketbase_image=$4
+  local access_verifier_image=$5
   local release_file="$RELEASE_DIR/$release_sha.env"
   local temporary
   temporary=$(mktemp "$RELEASE_DIR/release.XXXXXX")
-  printf 'RELEASE_SHA=%s\nWEB_IMAGE=%s\nWORKER_IMAGE=%s\nPOCKETBASE_IMAGE=%s\n' \
-    "$release_sha" "$web_image" "$worker_image" "$pocketbase_image" > "$temporary"
+  printf 'RELEASE_SHA=%s\nWEB_IMAGE=%s\nWORKER_IMAGE=%s\nPOCKETBASE_IMAGE=%s\nACCESS_VERIFIER_IMAGE=%s\n' \
+    "$release_sha" "$web_image" "$worker_image" "$pocketbase_image" "$access_verifier_image" > "$temporary"
   chown root:root "$temporary"
   chmod 0600 "$temporary"
   mv -f -- "$temporary" "$release_file"
@@ -264,15 +266,19 @@ deploy_release() {
   local web_image=$2
   local worker_image=$3
   local pocketbase_image=$4
-  local public_check=${5:-public}
+  local access_verifier_image=$5
+  local public_check=${6:-public}
 
   [[ "$release_sha" =~ $RELEASE_PATTERN ]] || { echo "Invalid release SHA" >&2; return 2; }
   [[ "$web_image" =~ $WEB_IMAGE_PATTERN || "$web_image" =~ $LOCAL_IMAGE_PATTERN ]] || { echo "Invalid web image reference" >&2; return 2; }
   [[ "$worker_image" =~ $WORKER_IMAGE_PATTERN || "$worker_image" =~ $LOCAL_IMAGE_PATTERN ]] || { echo "Invalid worker image reference" >&2; return 2; }
   [[ "$pocketbase_image" =~ $POCKETBASE_IMAGE_PATTERN || "$pocketbase_image" =~ $LOCAL_IMAGE_PATTERN ]] || { echo "Invalid PocketBase image reference" >&2; return 2; }
+  [[ "$access_verifier_image" =~ $ACCESS_VERIFIER_IMAGE_PATTERN || "$access_verifier_image" =~ $LOCAL_IMAGE_PATTERN ]] || { echo "Invalid Access verifier image reference" >&2; return 2; }
   [[ "$public_check" == public || "$public_check" == origin-only ]] || { echo "Invalid verification mode" >&2; return 2; }
 
   "$APP_ROOT/deploy/bin/validate-runtime-env" "$APP_ROOT/shared/web.env"
+  "$APP_ROOT/deploy/bin/validate-access-verifier-env" \
+    "$(read_env_value "$STATE_ENV" ACCESS_VERIFIER_ENV_FILE)"
   "$APP_ROOT/deploy/bin/validate-origin-certs" \
     "$(read_env_value "$STATE_ENV" ORIGIN_CERT_DIR)"
   "$APP_ROOT/deploy/bin/validate-pocketbase-secrets" \
@@ -300,6 +306,7 @@ deploy_release() {
   cp "$ACTIVE_SLOT_FILE" "$rollback_dir/active-slot"
   local switched=0
   local pocketbase_updated=0
+  local access_verifier_updated=0
 
   rollback_on_error() {
     local exit_code=${1:-$?}
@@ -311,6 +318,10 @@ deploy_release() {
     if (( pocketbase_updated )); then
       compose up -d --no-deps pocketbase
       wait_for_health pocketbase 40
+    fi
+    if (( access_verifier_updated )); then
+      compose up -d --no-deps access-verifier
+      wait_for_health access-verifier 40
     fi
     if (( switched )); then
       compose up -d --no-deps "$active_service"
@@ -337,6 +348,7 @@ deploy_release() {
   set_env_value "$sha_key" "$release_sha"
   set_env_value WORKER_IMAGE "$worker_image"
   set_env_value POCKETBASE_IMAGE "$pocketbase_image"
+  set_env_value ACCESS_VERIFIER_IMAGE "$access_verifier_image"
 
   if [[ "$web_image" =~ $LOCAL_IMAGE_PATTERN ]]; then
     docker image inspect "$web_image" >/dev/null
@@ -351,9 +363,17 @@ deploy_release() {
   else
     compose pull pocketbase
   fi
-  compose up -d --no-deps pocketbase
+  if [[ "$access_verifier_image" =~ $LOCAL_IMAGE_PATTERN ]]; then
+    docker image inspect "$access_verifier_image" >/dev/null
+  else
+    compose pull access-verifier
+  fi
   pocketbase_updated=1
+  compose up -d --no-deps pocketbase
   wait_for_health pocketbase
+  access_verifier_updated=1
+  compose up -d --no-deps access-verifier
+  wait_for_health access-verifier
   compose up -d --no-deps "$candidate_service"
   wait_for_health "$candidate_service"
   smoke_candidate "$candidate_service" "$release_sha"
@@ -388,7 +408,7 @@ deploy_release() {
     fi
   done
 
-  record_release "$release_sha" "$web_image" "$worker_image" "$pocketbase_image"
+  record_release "$release_sha" "$web_image" "$worker_image" "$pocketbase_image" "$access_verifier_image"
   compose stop --timeout 30 "$active_service" || true
   systemctl enable deetnuts.service >/dev/null
   write_active_slot "$candidate_slot"
@@ -408,13 +428,17 @@ rollback_release() {
   local release_file="$RELEASE_DIR/$release_sha.env"
   [[ -f "$release_file" ]] || { echo "Release $release_sha is not retained" >&2; return 1; }
   local pocketbase_image
+  local access_verifier_image
   pocketbase_image=$(read_env_value "$release_file" POCKETBASE_IMAGE)
   [[ -n "$pocketbase_image" ]] || pocketbase_image=$(read_env_value "$STATE_ENV" POCKETBASE_IMAGE)
+  access_verifier_image=$(read_env_value "$release_file" ACCESS_VERIFIER_IMAGE)
+  [[ -n "$access_verifier_image" ]] || access_verifier_image=$(read_env_value "$STATE_ENV" ACCESS_VERIFIER_IMAGE)
   deploy_release \
     "$release_sha" \
     "$(read_env_value "$release_file" WEB_IMAGE)" \
     "$(read_env_value "$release_file" WORKER_IMAGE)" \
     "$pocketbase_image" \
+    "$access_verifier_image" \
     "$mode"
 }
 
@@ -436,8 +460,8 @@ fi
 
 case ${1:-} in
   deploy)
-    [[ $# -ge 5 && $# -le 6 ]] || { echo "Usage: deetnuts-deploy deploy SHA WEB_IMAGE WORKER_IMAGE POCKETBASE_IMAGE [public|origin-only]" >&2; exit 2; }
-    deploy_release "$2" "$3" "$4" "$5" "${6:-public}"
+    [[ $# -ge 6 && $# -le 7 ]] || { echo "Usage: deetnuts-deploy deploy SHA WEB_IMAGE WORKER_IMAGE POCKETBASE_IMAGE ACCESS_VERIFIER_IMAGE [public|origin-only]" >&2; exit 2; }
+    deploy_release "$2" "$3" "$4" "$5" "$6" "${7:-public}"
     ;;
   rollback)
     [[ $# -ge 2 && $# -le 3 ]] || { echo "Usage: deetnuts-deploy rollback SHA [public|origin-only]" >&2; exit 2; }

@@ -1,0 +1,234 @@
+name: Plan or apply Cloudflare infrastructure
+
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: Create a new HCP Terraform plan or apply one exact reviewed run.
+        required: true
+        type: choice
+        options:
+          - plan
+          - apply-reviewed-run
+      hcp_run_id:
+        description: Required only for apply-reviewed-run; use the run-* ID printed by the plan job.
+        required: false
+        type: string
+
+concurrency:
+  group: cloudflare-infrastructure
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  TF_CLOUD_ORGANIZATION: ${{ vars.HCP_TERRAFORM_ORGANIZATION }}
+  TF_IN_AUTOMATION: "true"
+  TF_TOKEN_app_terraform_io: ${{ secrets.HCP_TERRAFORM_TOKEN }}
+  TF_WORKSPACE: deetnuts-cloudflare-production
+  TERRAFORM_VERSION: 1.16.2
+  TERRAFORM_LINUX_AMD64_SHA256: 0d17011f0c4664539b164b044903d04e296c86c13cb9f28040076c65cfb3985a
+
+jobs:
+  plan:
+    name: Create HCP plan
+    if: inputs.operation == 'plan'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install pinned Terraform CLI
+        run: |
+          archive="/tmp/terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
+          curl --fail --silent --show-error --location \
+            --output "$archive" \
+            "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
+          echo "${TERRAFORM_LINUX_AMD64_SHA256}  $archive" | sha256sum --check --strict
+          sudo unzip -q "$archive" -d /usr/local/bin
+          terraform version
+
+      - name: Validate HCP connection inputs
+        run: |
+          [[ "$TF_CLOUD_ORGANIZATION" =~ ^[A-Za-z0-9][A-Za-z0-9_-]{1,63}$ ]]
+          test -n "$TF_TOKEN_app_terraform_io"
+          [[ "$TF_WORKSPACE" == deetnuts-cloudflare-production ]]
+
+      - name: Initialize and validate
+        working-directory: infra/cloudflare
+        run: |
+          terraform init -input=false
+          terraform fmt -check -recursive
+          terraform validate
+
+      - name: Upload a provisional configuration
+        id: configuration
+        working-directory: infra/cloudflare
+        run: |
+          workspace_response=$(curl --fail --silent --show-error \
+            --header "Authorization: Bearer $TF_TOKEN_app_terraform_io" \
+            --header 'Content-Type: application/vnd.api+json' \
+            "https://app.terraform.io/api/v2/organizations/$TF_CLOUD_ORGANIZATION/workspaces/$TF_WORKSPACE")
+          workspace_id=$(jq -er '.data.id | select(startswith("ws-"))' <<<"$workspace_response")
+
+          configuration_payload=$(jq -cn \
+            '{data: {type: "configuration-versions", attributes: {"auto-queue-runs": false, speculative: false, provisional: true}}}')
+          configuration_response=$(curl --fail --silent --show-error \
+            --request POST \
+            --header "Authorization: Bearer $TF_TOKEN_app_terraform_io" \
+            --header 'Content-Type: application/vnd.api+json' \
+            --data "$configuration_payload" \
+            "https://app.terraform.io/api/v2/workspaces/$workspace_id/configuration-versions")
+          configuration_id=$(jq -er '.data.id | select(startswith("cv-"))' <<<"$configuration_response")
+          upload_url=$(jq -er '.data.attributes["upload-url"] | select(startswith("https://archivist.terraform.io/"))' <<<"$configuration_response")
+
+          tar \
+            --exclude=.terraform \
+            --exclude='*.tfstate' \
+            --exclude='*.tfstate.*' \
+            --exclude='*.tfvars' \
+            --exclude='*.tfvars.json' \
+            -czf /tmp/cloudflare-configuration.tar.gz .
+          curl --fail --silent --show-error \
+            --request PUT \
+            --header 'Content-Type: application/octet-stream' \
+            --data-binary @/tmp/cloudflare-configuration.tar.gz \
+            "$upload_url" \
+            >/dev/null
+
+          for attempt in $(seq 1 30); do
+            configuration_status=$(curl --fail --silent --show-error \
+              --header "Authorization: Bearer $TF_TOKEN_app_terraform_io" \
+              --header 'Content-Type: application/vnd.api+json' \
+              "https://app.terraform.io/api/v2/configuration-versions/$configuration_id" \
+              | jq -er '.data.attributes.status')
+            [[ "$configuration_status" == uploaded ]] && break
+            [[ "$configuration_status" != errored ]] || exit 1
+            sleep 2
+          done
+          [[ "$configuration_status" == uploaded ]]
+          echo "workspace_id=$workspace_id" >> "$GITHUB_OUTPUT"
+          echo "configuration_id=$configuration_id" >> "$GITHUB_OUTPUT"
+
+      - name: Create an exact saved plan
+        id: plan
+        env:
+          CONFIGURATION_ID: ${{ steps.configuration.outputs.configuration_id }}
+          WORKSPACE_ID: ${{ steps.configuration.outputs.workspace_id }}
+        run: |
+          run_payload=$(jq -cn \
+            --arg workspace_id "$WORKSPACE_ID" \
+            --arg configuration_id "$CONFIGURATION_ID" \
+            --arg message "GitHub Actions saved plan for commit $GITHUB_SHA" \
+            '{data: {type: "runs", attributes: {message: $message, "save-plan": true}, relationships: {workspace: {data: {type: "workspaces", id: $workspace_id}}, "configuration-version": {data: {type: "configuration-versions", id: $configuration_id}}}}}')
+          run_response=$(curl --fail --silent --show-error \
+            --request POST \
+            --header "Authorization: Bearer $TF_TOKEN_app_terraform_io" \
+            --header 'Content-Type: application/vnd.api+json' \
+            --data "$run_payload" \
+            'https://app.terraform.io/api/v2/runs')
+          run_id=$(jq -er '.data.id | select(startswith("run-"))' <<<"$run_response")
+          run_url="https://app.terraform.io/app/$TF_CLOUD_ORGANIZATION/$TF_WORKSPACE/runs/$run_id"
+
+          for attempt in $(seq 1 80); do
+            run_response=$(curl --fail --silent --show-error \
+              --header "Authorization: Bearer $TF_TOKEN_app_terraform_io" \
+              --header 'Content-Type: application/vnd.api+json' \
+              "https://app.terraform.io/api/v2/runs/$run_id")
+            status=$(jq -er '.data.attributes.status' <<<"$run_response")
+            confirmable=$(jq -r '.data.attributes["is-confirmable"]' <<<"$run_response")
+            if [[ "$status" == planned_and_saved && "$confirmable" == true ]]; then
+              apply_ready=true
+              break
+            fi
+            if [[ "$status" == planned_and_finished ]]; then
+              apply_ready=false
+              break
+            fi
+            case "$status" in
+              canceled|discarded|errored|force_canceled|policy_hard_failed)
+                exit 1
+                ;;
+            esac
+            sleep 15
+          done
+          [[ ${apply_ready:-} == true || ${apply_ready:-} == false ]]
+          echo "run_id=$run_id" >> "$GITHUB_OUTPUT"
+          echo "run_url=$run_url" >> "$GITHUB_OUTPUT"
+          echo "apply_ready=$apply_ready" >> "$GITHUB_OUTPUT"
+
+      - name: Publish immutable review target
+        env:
+          APPLY_READY: ${{ steps.plan.outputs.apply_ready }}
+          RUN_ID: ${{ steps.plan.outputs.run_id }}
+          RUN_URL: ${{ steps.plan.outputs.run_url }}
+        run: |
+          {
+            echo "### Cloudflare plan ready"
+            echo
+            echo "Review [$RUN_ID]($RUN_URL) in HCP Terraform."
+            echo
+            if [[ "$APPLY_READY" == true ]]; then
+              echo "To apply exactly this saved plan, dispatch this workflow again with operation \`apply-reviewed-run\` and run ID \`$RUN_ID\`."
+            else
+              echo "The saved plan has no changes and does not require an apply."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  apply:
+    name: Apply exact reviewed HCP run
+    if: inputs.operation == 'apply-reviewed-run'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment: cloudflare-production
+    steps:
+      - name: Validate requested run
+        id: run
+        env:
+          RUN_ID: ${{ inputs.hcp_run_id }}
+        run: |
+          [[ "$RUN_ID" =~ ^run-[A-Za-z0-9]+$ ]]
+          expected_workspace_response=$(curl --fail --silent --show-error \
+            --header "Authorization: Bearer $TF_TOKEN_app_terraform_io" \
+            --header 'Content-Type: application/vnd.api+json' \
+            "https://app.terraform.io/api/v2/organizations/$TF_CLOUD_ORGANIZATION/workspaces/$TF_WORKSPACE")
+          expected_workspace_id=$(jq -er '.data.id | select(startswith("ws-"))' <<<"$expected_workspace_response")
+          response=$(curl --fail --silent --show-error \
+            --header "Authorization: Bearer $TF_TOKEN_app_terraform_io" \
+            --header 'Content-Type: application/vnd.api+json' \
+            "https://app.terraform.io/api/v2/runs/$RUN_ID?include=workspace")
+          status=$(jq -er '.data.attributes.status' <<<"$response")
+          workspace_id=$(jq -er '.included[] | select(.type == "workspaces") | .id' <<<"$response")
+          confirmable=$(jq -r '.data.attributes["is-confirmable"]' <<<"$response")
+          save_plan=$(jq -r '.data.attributes["save-plan"]' <<<"$response")
+          plan_only=$(jq -r '.data.attributes["plan-only"]' <<<"$response")
+          source=$(jq -er '.data.attributes.source' <<<"$response")
+          [[ "$status" == planned_and_saved ]]
+          [[ "$workspace_id" == "$expected_workspace_id" ]]
+          [[ "$confirmable" == true ]]
+          [[ "$save_plan" == true ]]
+          [[ "$plan_only" == false ]]
+          [[ "$source" == tfe-api ]]
+          echo "run_url=https://app.terraform.io/app/$TF_CLOUD_ORGANIZATION/$TF_WORKSPACE/runs/$RUN_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Apply reviewed run
+        env:
+          RUN_ID: ${{ inputs.hcp_run_id }}
+        run: |
+          payload=$(jq -cn --arg comment "Approved from GitHub Actions run $GITHUB_RUN_ID" '{comment: $comment}')
+          curl --fail --silent --show-error \
+            --request POST \
+            --header "Authorization: Bearer $TF_TOKEN_app_terraform_io" \
+            --header 'Content-Type: application/vnd.api+json' \
+            --data "$payload" \
+            "https://app.terraform.io/api/v2/runs/$RUN_ID/actions/apply" \
+            >/dev/null
+
+      - name: Publish applied run
+        env:
+          RUN_ID: ${{ inputs.hcp_run_id }}
+          RUN_URL: ${{ steps.run.outputs.run_url }}
+        run: |
+          echo "Applied exact reviewed HCP Terraform run [$RUN_ID]($RUN_URL)." >> "$GITHUB_STEP_SUMMARY"

@@ -11,9 +11,16 @@ This directory contains the local, reviewable part of the Vercel-to-DigitalOcean
 - The forced deployment key can call only `deploy`, `rollback`, or `status`. It cannot open a shell or invoke arbitrary sudo commands.
 - Deployment and rollback commands use a host lock. An overlapping command fails closed.
 - Web and worker images stay private in GHCR. The Droplet uses a dedicated classic token with `read:packages` only.
-- Bootstrap disables SSH passwords and keyboard-interactive login, keeps root key-only access, enables unattended security updates without automatic reboots, and validates a hardened Docker daemon configuration.
+- Bootstrap disables SSH passwords and keyboard-interactive login, installs a
+  dedicated key-only administrator when its public key is supplied, and can
+  disable root SSH only after that administrator has a sudo password. It also
+  enables unattended security updates without automatic reboots and validates
+  a hardened Docker daemon configuration.
 - `NEXT_SERVER_ACTIONS_ENCRYPTION_KEY` is a persistent 32-byte base64 build secret. It is embedded in the Next.js output, which is why the image cannot be public.
-- PocketBase is reachable only as `http://pocketbase:8090` on the private application network. No host or public port is published.
+- PocketBase remains reachable only as `http://pocketbase:8090` on the private
+  application network. No host port is published. The protected
+  `api.deetnuts.com` route terminates at Nginx only after Cloudflare Access,
+  per-host AOP mTLS and origin-side JWT/audience/exact-email verification.
 - PocketBase encryption, superuser, and migration secrets are separate root-owned files readable only by GID `10001`. The web container receives only a 32-to-72-character backend service password through `web.env`.
 - Supabase source credentials belong only in the root-owned one-time migration environment and are never passed to a runtime container.
 - Discord command-registration credentials belong in `/opt/deetnuts/shared/discord-admin.env`. The web and worker containers do not receive them.
@@ -29,11 +36,15 @@ This directory contains the local, reviewable part of the Vercel-to-DigitalOcean
 - `/opt/deetnuts/deploy`: Nginx and deployment helpers
 - `/opt/deetnuts/shared/web.env`: web runtime secrets, mode `0600`
 - `/opt/deetnuts/shared/worker.env`: disabled worker secrets, mode `0600`
+- `/opt/deetnuts/shared/access-verifier.env`: Access team, audience and exact
+  allowed email, mode `0600`
 - `/opt/deetnuts/shared/cloudflare.env`: zone ID and cache-purge-only token, mode `0600`
 - `/opt/deetnuts/shared/discord-admin.env`: offline Discord command-registration credentials, mode `0600`
 - `/opt/deetnuts/shared/pocketbase`: PocketBase secret files, mode `0440`, owner `root:deetnuts-pocketbase`
-- `/opt/deetnuts/backups/pocketbase`: verified local PocketBase backup copies with seven-copy retention
-- `/opt/deetnuts/shared/certs`: Origin CA certificate/key and Origin Pull CA
+- `/opt/deetnuts/backups/pocketbase`: verified PocketBase ZIPs plus SHA-256 and
+  per-table count manifests, with seven-copy retention unless `--no-prune`
+- `/opt/deetnuts/shared/certs`: separate apex/www and API Origin CA keys plus
+  their separate Origin Pull CAs
 - `/opt/deetnuts/state/compose.env`: immutable slot image digests
 - `/opt/deetnuts/state/active-slot`: the only slot permitted to restart
 - `/opt/deetnuts/state/releases`: the latest three rollback manifests
@@ -52,6 +63,10 @@ This directory contains the local, reviewable part of the Vercel-to-DigitalOcean
 10. Add `NEXT_SERVER_ACTIONS_ENCRYPTION_KEY` as a repository Actions secret before publishing images. It must remain stable across releases and contain canonical base64 for exactly 32 bytes.
 11. Add `DO_HOST`, `DO_FIREWALL_ID`, `DO_API_TOKEN`, `DO_SSH_PRIVATE_KEY`, and `DO_SSH_HOST_KEY` to the GitHub Production environment after the host and firewall exist. Set `DO_DEPLOY_ENABLED=true` only when that configuration is complete. Image publication remains available while deployment is disabled.
 12. Perform the first deployment with the `origin-only` verification mode. Use normal `public` verification only after DNS points through Cloudflare.
+
+The complete protected API sequence, Work-profile account checks, exact Google
+IdP, HCP Terraform review flow, backup/resize gates, service inventory and cost
+total are in [`docs/PROTECTED_POCKETBASE_API.md`](../docs/PROTECTED_POCKETBASE_API.md).
 
 `bootstrap-host.sh` is a provisioning/update operation, not a live reload. For a later host-file update, stop `deetnuts.service`, run the reviewed bootstrap from the desired checkout, then start the service and verify it. The script refuses to replace bind-mounted configuration while the service is active and reconstructs the Nginx upstream from the retained active-slot marker.
 
