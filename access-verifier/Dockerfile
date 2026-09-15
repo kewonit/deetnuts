@@ -15,7 +15,8 @@ LABEL org.opencontainers.image.created=${OCI_CREATED} \
       org.opencontainers.image.source=${OCI_SOURCE} \
       org.opencontainers.image.title="DEETNUTS Access verifier"
 
-RUN rm -rf /usr/local/lib/node_modules/npm \
+RUN apk upgrade --no-cache && \
+    rm -rf /usr/local/lib/node_modules/npm \
         /usr/local/lib/node_modules/corepack \
         /opt/yarn-v1.22.22 && \
     rm -f /usr/local/bin/npm /usr/local/bin/npx \

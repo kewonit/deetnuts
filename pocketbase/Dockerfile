@@ -20,7 +20,8 @@ LABEL org.opencontainers.image.description="Private DEETNUTS PocketBase service"
       org.opencontainers.image.title="DEETNUTS PocketBase" \
       org.opencontainers.image.version=${POCKETBASE_VERSION}
 
-RUN addgroup -S -g 10001 pocketbase && \
+RUN apk upgrade --no-cache && \
+    addgroup -S -g 10001 pocketbase && \
     adduser -S -D -H -u 10001 -G pocketbase pocketbase && \
     mkdir -p /pb/pb_data /pb/pb_hooks /pb/pb_migrations && \
     chown -R pocketbase:pocketbase /pb

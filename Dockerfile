@@ -46,7 +46,8 @@ ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
     NODE_OPTIONS=--max-old-space-size=512
 
-RUN rm -rf /usr/local/lib/node_modules/npm \
+RUN apk upgrade --no-cache && \
+    rm -rf /usr/local/lib/node_modules/npm \
         /usr/local/lib/node_modules/corepack \
         /opt/yarn-v1.22.22 && \
     rm -f /usr/local/bin/npm /usr/local/bin/npx \
