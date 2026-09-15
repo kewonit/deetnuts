@@ -94,7 +94,7 @@ if (( fresh )); then
   token=$(jq -er '.token | select(type == "string" and length > 20)' <<<"$auth_response")
   unset auth_response
 
-  requested_name="deetnuts-$(date -u +%Y%m%dT%H%M%SZ)-$(openssl rand -hex 4).zip"
+  requested_name="deetnuts-$(date -u +%Y%m%d-%H%M%S)-$(openssl rand -hex 4).zip"
   create_payload=$(jq -cn --arg name "$requested_name" '{name: $name}')
   auth_header="$work_dir/authorization.header"
   printf 'Authorization: %s\n' "$token" > "$auth_header"

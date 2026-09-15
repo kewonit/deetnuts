@@ -75,7 +75,7 @@ jobs:
             --output "$archive" \
             "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
           echo "${TERRAFORM_LINUX_AMD64_SHA256}  $archive" | sha256sum --check --strict
-          sudo unzip -q "$archive" -d /usr/local/bin
+          sudo unzip -qo "$archive" terraform -d /usr/local/bin
           terraform -chdir=infra/cloudflare init -backend=false -input=false
           terraform -chdir=infra/cloudflare fmt -check -recursive
           terraform -chdir=infra/cloudflare validate
