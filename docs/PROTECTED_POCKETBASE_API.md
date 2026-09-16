@@ -163,17 +163,27 @@ Do not replace `origin.pem`, `origin-key.pem` or the current apex/www AOP CA.
    certificate containing only `api.deetnuts.com`. Install it on the VM as
    `api-origin.pem` and `api-origin-key.pem`.
 2. Generate a private root CA and a leaf client certificate for the per-host
-   AOP flow. The leaf must use `basicConstraints=CA:FALSE`, client-auth extended
-   key usage, a random serial number, and at most a two-year validity. Keep the
-   CA private key encrypted and off the VM.
-3. Upload the leaf certificate and its private key to Cloudflare's
+   AOP flow. Use RSA keys or a named EC curve; never use explicit EC parameters,
+   which OpenSSL 3 rejects during client-certificate verification. The leaf must
+   use `basicConstraints=CA:FALSE`, client-auth extended key usage, a random
+   serial number, and at most a two-year validity. Keep the CA private key
+   encrypted and off the VM.
+3. Verify the leaf with `openssl verify -purpose sslclient -CAfile` using the
+   same OpenSSL major version as the Nginx image before uploading it. If a
+   compatible per-host certificate is already uploaded, reuse it instead of
+   transmitting another private key.
+4. Upload the leaf certificate and its private key to Cloudflare's
    per-hostname Authenticated Origin Pulls area. Associate only
    `api.deetnuts.com` and record the returned certificate ID for Terraform.
-4. Install only the CA public certificate on the VM as
+5. Install only the CA public certificate on the VM as
    `cloudflare-api-origin-pull-ca.pem`.
-5. Set `/opt/deetnuts/shared/certs` to `root:deetnuts-tls` mode `0750` and all
+6. Set `/opt/deetnuts/shared/certs` to `root:deetnuts-tls` mode `0750` and all
    six certificate/key files to `root:deetnuts-tls` mode `0640`. Run
    `validate-origin-certs` before starting Nginx.
+
+Keep the API server's TLS session cache separate from the apex/www cache when
+the virtual hosts trust different client CAs. A shared cache can resume a
+session under the wrong client-authentication policy.
 
 Cloudflare Origin CA private keys and AOP leaf private keys are credentials.
 Create, upload and install them in one controlled session; never write them to
