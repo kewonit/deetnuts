@@ -1,73 +1,9 @@
 .jee-cutoff-shell {
-  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-instrument-sans: "Instrument Sans", var(--font-sans);
-  --font-serif-display: "Instrument Serif", ui-serif, Georgia, serif;
-  --cutoff-bg: #fafafa;
-  --cutoff-panel: #fff;
-  --cutoff-panel-raised: #f3f3f3;
-  --cutoff-ink: #18181b;
-  --cutoff-muted: #686868;
-  --cutoff-line: rgb(24 24 27 / .13);
-  --cutoff-line-strong: rgb(24 24 27 / .25);
-  --cutoff-focus: rgb(82 82 82 / .32);
-  --cutoff-inverse: #fff;
-  --cutoff-chart-grid: rgb(24 24 27 / .1);
-  --cutoff-chart-opening: #18181b;
-  --cutoff-chart-closing: #737373;
-  --cutoff-chart-dot-stroke: #fff;
-  --cutoff-chart-hover: rgb(24 24 27 / .32);
-  --cutoff-tooltip-bg: #18181b;
-  --cutoff-tooltip-ink: #fafafa;
-  --cutoff-tooltip-muted: #d4d4d4;
-  --cutoff-error: #b91c1c;
-  --cutoff-error-line: rgb(185 28 28 / .3);
-  min-height: 100vh;
-  background: var(--cutoff-bg);
-  color: var(--cutoff-ink);
-  color-scheme: light;
+  min-height: 100%;
+  background: var(--background);
+  color: var(--foreground);
+  color-scheme: light dark;
   font-family: var(--font-sans), sans-serif;
-}
-
-html.dark .jee-cutoff-shell {
-  --cutoff-bg: #0a0a0a;
-  --cutoff-panel: #0a0a0a;
-  --cutoff-panel-raised: #171717;
-  --cutoff-ink: #fafafa;
-  --cutoff-muted: #a1a1a1;
-  --cutoff-line: rgb(255 255 255 / .12);
-  --cutoff-line-strong: rgb(255 255 255 / .24);
-  --cutoff-focus: rgb(163 163 163 / .4);
-  --cutoff-inverse: #171717;
-  --cutoff-chart-grid: rgb(255 255 255 / .09);
-  --cutoff-chart-opening: #fafafa;
-  --cutoff-chart-closing: #a3a3a3;
-  --cutoff-chart-dot-stroke: #0a0a0a;
-  --cutoff-chart-hover: rgb(255 255 255 / .28);
-  --cutoff-error: #fecaca;
-  --cutoff-error-line: rgb(248 113 113 / .35);
-  color-scheme: dark;
-}
-
-@media (prefers-color-scheme: dark) {
-  html:not(.light) .jee-cutoff-shell {
-    --cutoff-bg: #0a0a0a;
-    --cutoff-panel: #0a0a0a;
-    --cutoff-panel-raised: #171717;
-    --cutoff-ink: #fafafa;
-    --cutoff-muted: #a1a1a1;
-    --cutoff-line: rgb(255 255 255 / .12);
-    --cutoff-line-strong: rgb(255 255 255 / .24);
-    --cutoff-focus: rgb(163 163 163 / .4);
-    --cutoff-inverse: #171717;
-    --cutoff-chart-grid: rgb(255 255 255 / .09);
-    --cutoff-chart-opening: #fafafa;
-    --cutoff-chart-closing: #a3a3a3;
-    --cutoff-chart-dot-stroke: #0a0a0a;
-    --cutoff-chart-hover: rgb(255 255 255 / .28);
-    --cutoff-error: #fecaca;
-    --cutoff-error-line: rgb(248 113 113 / .35);
-    color-scheme: dark;
-  }
 }
 
 .jee-cutoff-shell *,
@@ -85,21 +21,21 @@ html.dark .jee-cutoff-shell {
   flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 16px;
-  color: var(--cutoff-muted);
+  color: var(--muted-foreground);
   font-size: 12px;
 }
 .cutoff-breadcrumbs span { display: inline-flex; align-items: center; gap: 8px; }
 .cutoff-breadcrumbs a { color: inherit; text-decoration: none; }
-.cutoff-breadcrumbs a:hover { color: var(--cutoff-ink); }
+.cutoff-breadcrumbs a:hover { color: var(--foreground); }
 
 .cutoff-hero {
   padding: 32px;
-  border: 1px solid var(--cutoff-line);
-  background: var(--cutoff-panel);
+  border: 1px solid var(--border);
+  background: var(--background);
 }
 .cutoff-kicker {
   display: block;
-  color: var(--cutoff-muted);
+  color: var(--muted-foreground);
   font-size: 11px;
   font-weight: 500;
   line-height: 1.4;
@@ -113,7 +49,7 @@ html.dark .jee-cutoff-shell {
 .cutoff-lead {
   max-width: 720px;
   margin: 0;
-  color: var(--cutoff-muted);
+  color: var(--muted-foreground);
   font-size: 14px;
   line-height: 1.65;
 }
@@ -122,11 +58,11 @@ html.dark .jee-cutoff-shell {
   flex-wrap: wrap;
   gap: 16px;
   margin-top: 20px;
-  color: var(--cutoff-muted);
+  color: var(--muted-foreground);
   font-size: 11px;
   font-variant-numeric: tabular-nums;
 }
-.cutoff-hero-meta span + span { padding-left: 16px; border-left: 1px solid var(--cutoff-line); }
+.cutoff-hero-meta span + span { padding-left: 16px; border-left: 1px solid var(--border); }
 
 .cutoff-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
 .cutoff-button,
@@ -136,29 +72,29 @@ html.dark .jee-cutoff-shell {
   align-items: center;
   justify-content: center;
   padding: 0 12px;
-  border: 1px solid var(--cutoff-line);
+  border: 1px solid var(--border);
   background: transparent;
-  color: var(--cutoff-ink);
+  color: var(--foreground);
   font-size: 12px;
   font-weight: 500;
   text-decoration: none;
   transition: background-color 150ms ease, border-color 150ms ease;
 }
 .cutoff-button:hover,
-.cutoff-year-link:hover { border-color: var(--cutoff-line-strong); background: var(--cutoff-panel-raised); }
-.cutoff-button-primary { border-color: var(--cutoff-ink); background: var(--cutoff-ink); color: var(--cutoff-inverse); }
-.cutoff-button-primary:hover { border-color: var(--cutoff-ink); background: var(--cutoff-ink); }
+.cutoff-year-link:hover { border-color: var(--input); background: var(--muted); }
+.cutoff-button-primary { border-color: var(--foreground); background: var(--foreground); color: var(--primary-foreground); }
+.cutoff-button-primary:hover { border-color: var(--foreground); background: var(--foreground); }
 
 .cutoff-facts {
   display: grid;
   grid-template-columns: .8fr 1.3fr .7fr .8fr 1.4fr;
   margin: -1px 0 0;
-  border: 1px solid var(--cutoff-line);
-  background: var(--cutoff-line);
+  border: 1px solid var(--border);
+  background: var(--border);
   gap: 1px;
 }
-.cutoff-fact { min-width: 0; min-height: 76px; padding: 16px; background: var(--cutoff-panel); }
-.cutoff-fact dt { color: var(--cutoff-muted); font-size: 10px; font-weight: 500; }
+.cutoff-fact { min-width: 0; min-height: 76px; padding: 16px; background: var(--background); }
+.cutoff-fact dt { color: var(--muted-foreground); font-size: 10px; font-weight: 500; }
 .cutoff-fact dd { margin: 7px 0 0; font-size: 12px; line-height: 1.45; }
 
 .cutoff-section { padding-top: 40px; }
@@ -179,11 +115,11 @@ html.dark .jee-cutoff-shell {
 .cutoff-section-heading p,
 .cutoff-muted {
   margin: 4px 0 0;
-  color: var(--cutoff-muted);
+  color: var(--muted-foreground);
   font-size: 12px;
   line-height: 1.55;
 }
-.cutoff-inline-link { display: inline-block; margin-top: 7px; color: var(--cutoff-ink); font-size: 11px; text-underline-offset: 3px; }
+.cutoff-inline-link { display: inline-block; margin-top: 7px; color: var(--foreground); font-size: 11px; text-underline-offset: 3px; }
 
 .cutoff-search {
   display: grid;
@@ -193,13 +129,13 @@ html.dark .jee-cutoff-shell {
   min-height: 38px;
   margin-bottom: 12px;
   padding: 0 12px;
-  border: 1px solid var(--cutoff-line);
-  color: var(--cutoff-muted);
+  border: 1px solid var(--border);
+  color: var(--muted-foreground);
 }
 .cutoff-search:focus-within { border-color: #737373; box-shadow: 0 0 0 3px rgb(115 115 115 / .3); }
 .cutoff-search svg { width: 16px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-width: 1.5; }
-.cutoff-search input { min-width: 0; border: 0; outline: 0; background: transparent; color: var(--cutoff-ink); font-size: 13px; }
-.cutoff-search input::placeholder { color: var(--cutoff-muted); }
+.cutoff-search input { min-width: 0; border: 0; outline: 0; background: transparent; color: var(--foreground); font-size: 13px; }
+.cutoff-search input::placeholder { color: var(--muted-foreground); }
 .cutoff-search > span:last-child { font-size: 11px; font-variant-numeric: tabular-nums; }
 
 .cutoff-directory,
@@ -207,8 +143,8 @@ html.dark .jee-cutoff-shell {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1px;
-  border: 1px solid var(--cutoff-line);
-  background: var(--cutoff-line);
+  border: 1px solid var(--border);
+  background: var(--border);
 }
 .cutoff-exam-grid { grid-template-columns: 1fr 1fr; }
 .cutoff-college-card,
@@ -219,7 +155,7 @@ html.dark .jee-cutoff-shell {
   justify-content: space-between;
   gap: 18px;
   padding: 18px;
-  background: var(--cutoff-panel);
+  background: var(--background);
   color: inherit;
   text-decoration: none;
   transition: background-color 150ms ease;
@@ -227,166 +163,187 @@ html.dark .jee-cutoff-shell {
 .cutoff-college-card h3,
 .cutoff-exam-card h2 { margin: 20px 0 6px; font-size: 14px; font-weight: 500; line-height: 1.35; }
 .cutoff-college-card p,
-.cutoff-exam-card p { margin: 0; color: var(--cutoff-muted); font-size: 11px; line-height: 1.5; }
+.cutoff-exam-card p { margin: 0; color: var(--muted-foreground); font-size: 11px; line-height: 1.5; }
 .cutoff-college-card:hover,
-.cutoff-exam-card:hover { background: var(--cutoff-panel-raised); }
-.cutoff-card-arrow { flex: 0 0 auto; align-self: start; color: var(--cutoff-muted); font-size: 13px; }
+.cutoff-exam-card:hover { background: var(--muted); }
+.cutoff-card-arrow { flex: 0 0 auto; align-self: start; color: var(--muted-foreground); font-size: 13px; }
 .cutoff-exam-card { min-height: 174px; padding: 24px; }
 .cutoff-exam-card h2 { margin-top: 34px; font: 500 22px/1.2 var(--font-instrument-sans), sans-serif; }
 
-.cutoff-year-nav { display: flex; align-items: center; gap: 20px; margin-top: 24px; padding: 14px 0; border-block: 1px solid var(--cutoff-line); }
+.cutoff-year-nav { display: flex; align-items: center; gap: 20px; margin-top: 24px; padding: 14px 0; border-block: 1px solid var(--border); }
 .cutoff-year-nav h2 { flex: 0 0 auto; font-size: 12px; }
 .cutoff-years { display: flex; flex-wrap: wrap; gap: 6px; }
 .cutoff-year-link { min-height: 30px; padding-inline: 10px; }
-.cutoff-year-link[aria-current="page"] { border-color: var(--cutoff-ink); background: var(--cutoff-ink); color: var(--cutoff-inverse); }
+.cutoff-year-link[aria-current="page"] { border-color: var(--foreground); background: var(--foreground); color: var(--primary-foreground); }
 
 .cutoff-controls-panel {
+  position: sticky;
+  top: 0;
+  z-index: 8;
   margin-top: 24px;
-  border: 1px solid var(--cutoff-line);
-  background: var(--cutoff-panel);
+  border: 1px solid var(--border);
+  background: var(--background);
 }
-.cutoff-controls-intro { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 16px; border-bottom: 1px solid var(--cutoff-line); }
+.cutoff-controls-intro { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 16px; border-bottom: 1px solid var(--border); }
 .cutoff-controls-intro h2 { margin: 0; font-size: 14px; font-weight: 500; }
-.cutoff-controls-intro p { margin: 3px 0 0; color: var(--cutoff-muted); font-size: 11px; }
-.cutoff-loading { color: var(--cutoff-muted); font-size: 11px; }
-.cutoff-controls { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1px; background: var(--cutoff-line); }
-.cutoff-field { display: grid; min-width: 0; gap: 7px; padding: 12px; background: var(--cutoff-panel); color: var(--cutoff-muted); font-size: 11px; font-weight: 500; }
+.cutoff-controls-intro p { margin: 3px 0 0; color: var(--muted-foreground); font-size: 11px; }
+.cutoff-loading { color: var(--muted-foreground); font-size: 11px; }
+.cutoff-controls { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1px; background: var(--border); }
+.cutoff-controls-chips {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.4fr) repeat(3, minmax(0, 1fr));
+  gap: 12px 16px;
+  background: transparent;
+  padding: 14px 16px;
+}
+.cutoff-controls-chips .cutoff-field { padding: 0; background: transparent; }
+.cutoff-search [data-slot="input"] {
+  height: 32px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+.cutoff-field { display: grid; min-width: 0; gap: 7px; padding: 12px; background: var(--background); color: var(--muted-foreground); font-size: 11px; font-weight: 500; }
+.cutoff-field button,
+.cutoff-program-field button {
+  min-width: 0;
+  max-width: 100%;
+}
+.cutoff-field button span,
+.cutoff-program-field button span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .cutoff-field select {
   width: 100%;
   min-height: 34px;
   padding: 0 28px 0 9px;
-  border: 1px solid var(--cutoff-line-strong);
+  border: 1px solid var(--input);
   border-radius: 0;
   background: transparent;
-  color: var(--cutoff-ink);
+  color: var(--foreground);
   font-size: 12px;
   text-overflow: ellipsis;
 }
-.cutoff-field select:hover { border-color: var(--cutoff-ink); }
+.cutoff-field select:hover { border-color: var(--foreground); }
 .cutoff-field select:focus-visible,
 .cutoff-button:focus-visible,
 .cutoff-year-link:focus-visible,
 .cutoff-college-card:focus-visible,
-.cutoff-exam-card:focus-visible { outline: 3px solid var(--cutoff-focus); outline-offset: 2px; }
+.cutoff-exam-card:focus-visible { outline: 3px solid var(--ring); outline-offset: 2px; }
 
 .cutoff-chart-card,
 .cutoff-table-section {
   margin-top: 16px;
   padding: 20px;
-  border: 1px solid var(--cutoff-line);
-  background: var(--cutoff-panel);
+  border: 1px solid var(--border);
+  background: var(--background);
 }
 .cutoff-trend-card { margin-top: 0; }
-.cutoff-program-field { width: min(460px, 48vw); padding: 0; }
+.cutoff-program-field { width: min(460px, 48vw); max-width: 100%; min-width: 0; padding: 0; }
 .cutoff-chart-wrap { min-height: 330px; }
 .cutoff-chart-stage { position: relative; }
 .cutoff-chart { display: block; width: 100%; height: 286px; }
-.cutoff-chart-grid { stroke: var(--cutoff-chart-grid); stroke-width: 1; }
-.cutoff-chart-axis { fill: var(--cutoff-muted); font: 10px var(--font-sans), sans-serif; }
+.cutoff-chart-grid { stroke: var(--border); stroke-width: 1; }
+.cutoff-chart-axis { fill: var(--muted-foreground); font: 10px var(--font-sans), sans-serif; }
 .cutoff-chart-line { fill: none; stroke-width: 2; vector-effect: non-scaling-stroke; }
-.cutoff-chart-opening { stroke: var(--cutoff-chart-opening); }
-.cutoff-chart-closing { stroke: var(--cutoff-chart-closing); stroke-dasharray: 5 5; }
-.cutoff-chart-dot { stroke: var(--cutoff-chart-dot-stroke); stroke-width: 2; vector-effect: non-scaling-stroke; }
-.cutoff-chart-dot-opening { fill: var(--cutoff-chart-opening); }
-.cutoff-chart-dot-closing { fill: var(--cutoff-chart-closing); }
-.cutoff-chart-dot.is-active { stroke: var(--cutoff-chart-dot-stroke); stroke-width: 2.5; }
-.cutoff-chart-hover-line { stroke: var(--cutoff-chart-hover); stroke-width: 1; stroke-dasharray: 3 3; vector-effect: non-scaling-stroke; pointer-events: none; }
-.cutoff-chart-tooltip { position: absolute; top: 10px; z-index: 2; display: grid; min-width: 132px; gap: 4px; padding: 9px 10px; border: 1px solid rgb(255 255 255 / .22); background: var(--cutoff-tooltip-bg); color: var(--cutoff-tooltip-muted); font-size: 10px; line-height: 1.35; box-shadow: 0 8px 24px rgb(0 0 0 / .24); transform: translateX(-14px); pointer-events: none; }
+.cutoff-chart-opening { stroke: var(--foreground); }
+.cutoff-chart-closing { stroke: var(--muted-foreground); stroke-dasharray: 5 5; }
+.cutoff-chart-dot { stroke: var(--background); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.cutoff-chart-dot-opening { fill: var(--foreground); }
+.cutoff-chart-dot-closing { fill: var(--muted-foreground); }
+.cutoff-chart-dot.is-active { stroke: var(--background); stroke-width: 2.5; }
+.cutoff-chart-hover-line { stroke: var(--foreground); stroke-width: 1; stroke-dasharray: 3 3; vector-effect: non-scaling-stroke; pointer-events: none; }
+.cutoff-chart-tooltip { position: absolute; top: 10px; z-index: 2; display: grid; min-width: 132px; gap: 4px; padding: 9px 10px; border: 1px solid rgb(255 255 255 / .22); background: var(--foreground); color: var(--muted-foreground); font-size: 10px; line-height: 1.35; box-shadow: 0 8px 24px rgb(0 0 0 / .24); transform: translateX(-14px); pointer-events: none; }
 .cutoff-chart-tooltip.is-right { transform: translateX(calc(-100% + 14px)); }
-.cutoff-chart-tooltip strong { color: var(--cutoff-tooltip-ink); font-size: 11px; }
+.cutoff-chart-tooltip strong { color: var(--background); font-size: 11px; }
 .cutoff-chart-tooltip span { display: flex; justify-content: space-between; gap: 16px; }
-.cutoff-chart-tooltip b { color: var(--cutoff-tooltip-ink); font-weight: 600; font-variant-numeric: tabular-nums; }
-.cutoff-chart-legend { display: flex; flex-wrap: wrap; gap: 14px; padding: 4px 0 2px; color: var(--cutoff-muted); font-size: 10px; }
+.cutoff-chart-tooltip b { color: var(--background); font-weight: 600; font-variant-numeric: tabular-nums; }
+.cutoff-chart-legend { display: flex; flex-wrap: wrap; gap: 14px; padding: 4px 0 2px; color: var(--muted-foreground); font-size: 10px; }
 .cutoff-chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
-.cutoff-chart-key { display: block; width: 18px; border-top: 2px solid var(--cutoff-chart-opening); }
-.cutoff-chart-key-closing { border-color: var(--cutoff-chart-closing); border-top-style: dashed; }
-.cutoff-chart-note { margin: 8px 0 0; color: var(--cutoff-muted); font-size: 11px; }
+.cutoff-chart-key { display: block; width: 18px; border-top: 2px solid var(--foreground); }
+.cutoff-chart-key-closing { border-color: var(--muted-foreground); border-top-style: dashed; }
+.cutoff-chart-note { margin: 8px 0 0; color: var(--muted-foreground); font-size: 11px; }
 
-.cutoff-result-count { color: var(--cutoff-muted); font-size: 11px; font-variant-numeric: tabular-nums; }
-.cutoff-program-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; border: 1px solid var(--cutoff-line); background: var(--cutoff-line); }
-.cutoff-program-list a { display: grid; gap: 5px; min-width: 0; padding: 14px 16px; background: var(--cutoff-panel); color: var(--cutoff-ink); text-decoration: none; }
-.cutoff-program-list a:hover { background: var(--cutoff-panel-raised); }
+.cutoff-result-count { color: var(--muted-foreground); font-size: 11px; font-variant-numeric: tabular-nums; }
+.cutoff-program-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; border: 1px solid var(--border); background: var(--border); }
+.cutoff-program-list a { display: grid; gap: 5px; min-width: 0; padding: 14px 16px; background: var(--background); color: var(--foreground); text-decoration: none; }
+.cutoff-program-list a:hover { background: var(--muted); }
 .cutoff-program-list a:last-child:nth-child(odd) { grid-column: 1 / -1; }
 .cutoff-program-list strong { overflow: hidden; font-size: 12px; font-weight: 500; line-height: 1.4; text-overflow: ellipsis; }
-.cutoff-program-list span { color: var(--cutoff-muted); font-size: 10px; line-height: 1.45; }
-.cutoff-table-scroll { overflow-x: auto; border: 1px solid var(--cutoff-line); }
+.cutoff-program-list span { color: var(--muted-foreground); font-size: 10px; line-height: 1.45; }
+.cutoff-table-scroll { overflow-x: auto; border: 1px solid var(--border); }
 .cutoff-table { width: 100%; border-collapse: collapse; font-size: 12px; }
 .cutoff-table caption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); }
 .cutoff-table th,
-.cutoff-table td { height: 46px; padding: 10px 12px; border-top: 1px solid var(--cutoff-line); text-align: left; vertical-align: middle; }
-.cutoff-table thead th { height: 38px; border-top: 0; background: var(--cutoff-panel); color: var(--cutoff-muted); font-size: 11px; font-weight: 500; }
+.cutoff-table td { height: 46px; padding: 10px 12px; border-top: 1px solid var(--border); text-align: left; vertical-align: middle; }
+.cutoff-table thead th { height: 38px; border-top: 0; background: var(--background); color: var(--muted-foreground); font-size: 11px; font-weight: 500; }
 .cutoff-table tbody th { max-width: 460px; font-weight: 500; }
-.cutoff-table tbody th small { display: block; margin-top: 4px; color: var(--cutoff-muted); font-size: 9px; font-weight: 400; }
+.cutoff-table tbody th small { display: block; margin-top: 4px; color: var(--muted-foreground); font-size: 9px; font-weight: 400; }
 .cutoff-table tbody th a { color: inherit; text-underline-offset: 3px; }
-.cutoff-table tbody tr:hover { background: var(--cutoff-panel-raised); }
+.cutoff-table tbody tr:hover { background: var(--muted); }
 .cutoff-table td:nth-last-child(-n+2) { font-variant-numeric: tabular-nums; }
 .cutoff-table td:last-child strong { font-weight: 600; }
 
-.cutoff-error { margin-bottom: 12px; padding: 11px 12px; border: 1px solid var(--cutoff-error-line); color: var(--cutoff-error); font-size: 12px; }
-.cutoff-empty { margin: 0; padding: 32px 20px; border: 1px solid var(--cutoff-line); color: var(--cutoff-muted); text-align: center; font-size: 12px; }
+.cutoff-error { margin-bottom: 12px; padding: 11px 12px; border: 1px solid color-mix(in srgb, var(--destructive) 35%, transparent); color: var(--destructive); font-size: 12px; }
+.cutoff-empty { margin: 0; padding: 32px 20px; border: 1px solid var(--border); color: var(--muted-foreground); text-align: center; font-size: 12px; }
 .cutoff-sr-table { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); contain: strict; white-space: nowrap; }
 
-.cutoff-copy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin-top: 40px; border: 1px solid var(--cutoff-line); background: var(--cutoff-line); }
-.cutoff-info-card { padding: 20px; background: var(--cutoff-panel); }
-.cutoff-info-card p { margin: 9px 0 0; color: var(--cutoff-muted); font-size: 12px; line-height: 1.65; }
-.cutoff-info-card strong { color: var(--cutoff-ink); font-weight: 500; }
-.cutoff-source-card { display: grid; grid-template-columns: minmax(180px, .7fr) 1.3fr; gap: 18px 28px; margin-top: 16px; padding: 20px; border: 1px solid var(--cutoff-line); background: var(--cutoff-panel); }
-.cutoff-source-card p { margin: 7px 0 0; color: var(--cutoff-muted); font-size: 12px; line-height: 1.6; }
-.cutoff-source-list { display: grid; gap: 1px; margin: 0; padding: 0; background: var(--cutoff-line); list-style: none; }
-.cutoff-source-list li { display: grid; gap: 4px; padding: 10px 12px; background: var(--cutoff-panel); }
-.cutoff-source-list strong { color: var(--cutoff-ink); font-size: 11px; font-weight: 500; line-height: 1.4; }
-.cutoff-source-list span { color: var(--cutoff-muted); font-size: 9px; line-height: 1.4; }
+.cutoff-copy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin-top: 40px; border: 1px solid var(--border); background: var(--border); }
+.cutoff-info-card { padding: 20px; background: var(--background); }
+.cutoff-info-card p { margin: 9px 0 0; color: var(--muted-foreground); font-size: 12px; line-height: 1.65; }
+.cutoff-info-card strong { color: var(--foreground); font-weight: 500; }
+.cutoff-source-card { display: grid; grid-template-columns: minmax(180px, .7fr) 1.3fr; gap: 18px 28px; margin-top: 16px; padding: 20px; border: 1px solid var(--border); background: var(--background); }
+.cutoff-source-card p { margin: 7px 0 0; color: var(--muted-foreground); font-size: 12px; line-height: 1.6; }
+.cutoff-source-list { display: grid; gap: 1px; margin: 0; padding: 0; background: var(--border); list-style: none; }
+.cutoff-source-list li { display: grid; gap: 4px; padding: 10px 12px; background: var(--background); }
+.cutoff-source-list strong { color: var(--foreground); font-size: 11px; font-weight: 500; line-height: 1.4; }
+.cutoff-source-list span { color: var(--muted-foreground); font-size: 9px; line-height: 1.4; }
 .cutoff-source-links { display: flex; flex-wrap: wrap; gap: 7px; align-content: start; }
-.cutoff-source-links a { display: inline-flex; min-height: 34px; align-items: center; gap: 7px; padding: 0 10px; border: 1px solid var(--cutoff-line); color: var(--cutoff-ink); font-size: 11px; text-decoration: none; }
-.cutoff-source-links a:hover { background: var(--cutoff-panel-raised); }
-.cutoff-source-card .cutoff-disclaimer { grid-column: 1 / -1; margin-top: 0; padding-top: 16px; border-top: 1px solid var(--cutoff-line); font-size: 11px; }
-.cutoff-disclaimer a { color: var(--cutoff-ink); text-decoration: underline; text-underline-offset: 3px; }
+.cutoff-source-links a { display: inline-flex; min-height: 34px; align-items: center; gap: 7px; padding: 0 10px; border: 1px solid var(--border); color: var(--foreground); font-size: 11px; text-decoration: none; }
+.cutoff-source-links a:hover { background: var(--muted); }
+.cutoff-source-card .cutoff-disclaimer { grid-column: 1 / -1; margin-top: 0; padding-top: 16px; border-top: 1px solid var(--border); font-size: 11px; }
+.cutoff-disclaimer a { color: var(--foreground); text-decoration: underline; text-underline-offset: 3px; }
 
 .jee-cutoff-footer {
-  --cutoff-footer-bg: #f7f7f7;
-  --cutoff-footer-ink: #202020;
-  --cutoff-footer-muted: #6b6b6b;
-  --cutoff-footer-faint: #666;
-  --cutoff-footer-line: rgb(24 24 27 / .12);
-  border-top: 1px solid var(--cutoff-footer-line);
-  background: var(--cutoff-footer-bg);
-  color: var(--cutoff-footer-ink);
+  border-top: 1px solid rgb(24 24 27 / .12);
+  background: #fafafa;
+  color: #171717;
   color-scheme: light;
-  font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 html.dark .jee-cutoff-footer {
-  --cutoff-footer-bg: #0f0f0f;
-  --cutoff-footer-ink: #f5f5f5;
-  --cutoff-footer-muted: #aaa;
-  --cutoff-footer-faint: #858585;
-  --cutoff-footer-line: rgb(255 255 255 / .12);
+  border-top-color: rgb(255 255 255 / .12);
+  background: #0a0a0a;
+  color: #f5f5f5;
   color-scheme: dark;
 }
 @media (prefers-color-scheme: dark) {
   html:not(.light) .jee-cutoff-footer {
-    --cutoff-footer-bg: #0f0f0f;
-    --cutoff-footer-ink: #f5f5f5;
-    --cutoff-footer-muted: #aaa;
-    --cutoff-footer-faint: #858585;
-    --cutoff-footer-line: rgb(255 255 255 / .12);
+    border-top-color: rgb(255 255 255 / .12);
+    background: #0a0a0a;
+    color: #f5f5f5;
     color-scheme: dark;
   }
 }
 .jee-cutoff-footer-inner { width: min(1360px, 100%); margin: 0 auto; padding: 56px 32px 36px; }
 .jee-cutoff-footer-grid { display: grid; grid-template-columns: minmax(230px, 1.35fr) repeat(4, minmax(120px, 1fr)); gap: 40px clamp(28px, 4vw, 64px); }
 .jee-cutoff-footer-about { display: flex; min-width: 0; flex-direction: column; align-items: flex-start; }
-.jee-cutoff-footer .jee-cutoff-footer-brand { color: var(--cutoff-footer-ink); font-size: 25px; font-weight: 600; letter-spacing: -.03em; line-height: 1; text-decoration: none; }
-.jee-cutoff-footer-about > p { max-width: 245px; margin: 18px 0 0; color: var(--cutoff-footer-muted); font-size: 13px; line-height: 1.65; }
-.jee-cutoff-footer-about small { margin-top: 28px; color: var(--cutoff-footer-faint); font-size: 11px; }
+.jee-cutoff-footer .jee-cutoff-footer-brand { color: var(--foreground); font-size: 25px; font-weight: 600; letter-spacing: -.03em; line-height: 1; text-decoration: none; }
+.jee-cutoff-footer-about > p { max-width: 245px; margin: 18px 0 0; color: var(--muted-foreground); font-size: 13px; line-height: 1.65; }
+.jee-cutoff-footer-about small { margin-top: 28px; color: var(--muted-foreground); font-size: 11px; }
 .jee-cutoff-footer-project-links { display: flex; gap: 16px; margin-top: 18px; }
 .jee-cutoff-footer nav { display: flex; min-width: 0; flex-direction: column; align-items: flex-start; gap: 14px; }
-.jee-cutoff-footer-heading { margin: 0 0 5px; color: var(--cutoff-footer-ink); font-size: 14px; font-weight: 600; }
-.jee-cutoff-footer a { color: var(--cutoff-footer-muted); font-size: 12px; line-height: 1.45; text-decoration: none; text-underline-offset: 3px; }
-.jee-cutoff-footer button { padding: 0; border: 0; background: transparent; color: var(--cutoff-footer-muted); cursor: pointer; font: inherit; font-size: 12px; line-height: 1.45; text-align: left; }
+.jee-cutoff-footer-heading { margin: 0 0 5px; color: var(--foreground); font-size: 14px; font-weight: 600; }
+.jee-cutoff-footer a { color: var(--muted-foreground); font-size: 12px; line-height: 1.45; text-decoration: none; text-underline-offset: 3px; }
+.jee-cutoff-footer button { padding: 0; border: 0; background: transparent; color: var(--muted-foreground); cursor: pointer; font: inherit; font-size: 12px; line-height: 1.45; text-align: left; }
 .jee-cutoff-footer a:hover,
-.jee-cutoff-footer button:hover { color: var(--cutoff-footer-ink); text-decoration: underline; }
-.jee-cutoff-footer-notices { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--cutoff-footer-line); }
-.jee-cutoff-footer-notices > p { max-width: 1180px; margin: 0 0 8px; color: var(--cutoff-footer-faint); font-size: 10px; line-height: 1.7; }
+.jee-cutoff-footer button:hover { color: var(--foreground); text-decoration: underline; }
+.jee-cutoff-footer-notices { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+.jee-cutoff-footer-notices > p { max-width: 1180px; margin: 0 0 8px; color: var(--muted-foreground); font-size: 10px; line-height: 1.7; }
 .jee-cutoff-footer-legal { display: flex; flex-wrap: wrap; gap: 10px 18px; margin-top: 18px; }
 .jee-cutoff-footer-legal a { font-size: 10px; }
 
@@ -397,7 +354,11 @@ html.dark .jee-cutoff-footer {
   .cutoff-fact-wide { grid-column: 1 / -1; }
   .cutoff-directory { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .cutoff-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cutoff-controls-chips { grid-template-columns: 1fr 1fr; }
+  .cutoff-controls-panel { position: static; }
   .cutoff-copy-grid { grid-template-columns: 1fr; }
+  .cutoff-program-field { width: 100%; }
+  .cutoff-section-heading { align-items: stretch; flex-direction: column; gap: 12px; }
   .jee-cutoff-footer-grid { grid-template-columns: minmax(210px, 1.2fr) repeat(2, minmax(130px, 1fr)); }
   .jee-cutoff-footer-about { grid-row: span 2; }
 }
@@ -409,7 +370,7 @@ html.dark .jee-cutoff-footer {
   .cutoff-hero h1 { margin-block: 8px 10px; font-size: 30px; }
   .cutoff-lead { font-size: 13px; }
   .cutoff-hero-meta { gap: 8px 12px; }
-  .cutoff-hero-meta span + span { padding-left: 12px; }
+  .cutoff-hero-meta span + span { padding-left: 0; border-left: 0; }
   .cutoff-section { padding-top: 32px; }
   .cutoff-section-heading { align-items: stretch; flex-direction: column; gap: 12px; }
   .cutoff-directory,
@@ -418,19 +379,24 @@ html.dark .jee-cutoff-footer {
   .cutoff-program-list a:last-child:nth-child(odd) { grid-column: auto; }
   .cutoff-college-card { min-height: 112px; padding: 16px; }
   .cutoff-exam-card { min-height: 150px; padding: 20px; }
-  .cutoff-year-nav { display: block; overflow: hidden; }
+  .cutoff-year-nav { display: block; overflow: visible; }
   .cutoff-year-nav h2 { margin-bottom: 10px; }
-  .cutoff-years { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
-  .cutoff-years::-webkit-scrollbar { display: none; }
+  .cutoff-years { flex-wrap: wrap; overflow: visible; }
   .cutoff-year-link { flex: 0 0 auto; }
   .cutoff-controls-panel { margin-top: 16px; }
-  .cutoff-controls { grid-template-columns: 1fr 1fr; }
-  .cutoff-field:nth-child(5) { grid-column: 1 / -1; }
+  .cutoff-controls { grid-template-columns: 1fr; }
+  .cutoff-controls-chips { grid-template-columns: 1fr; }
+  .cutoff-controls-chips [role="group"] > .flex.items-center {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .cutoff-field:nth-child(5) { grid-column: auto; }
   .cutoff-chart-card,
   .cutoff-table-section { padding: 16px; }
   .cutoff-program-field { width: 100%; }
-  .cutoff-chart { height: 270px; }
-  .cutoff-chart-wrap { min-height: 310px; }
+  .cutoff-chart { height: 220px; }
+  .cutoff-chart-wrap { min-height: 250px; }
   .cutoff-table-scroll { overflow: visible; border: 0; }
   .cutoff-table,
   .cutoff-table tbody,
@@ -439,12 +405,12 @@ html.dark .jee-cutoff-footer {
   .cutoff-table td { display: block; width: 100%; }
   .cutoff-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); }
   .cutoff-table tbody { display: grid; gap: 8px; }
-  .cutoff-table tbody tr { padding: 12px 14px; border: 1px solid var(--cutoff-line); background: var(--cutoff-panel); }
+  .cutoff-table tbody tr { padding: 12px 14px; border: 1px solid var(--border); background: var(--background); }
   .cutoff-table tbody th,
   .cutoff-table tbody td { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 10px; height: auto; padding: 6px 0; border: 0; text-align: right; }
   .cutoff-table tbody th { max-width: none; text-align: right; }
   .cutoff-table tbody th::before,
-  .cutoff-table tbody td::before { content: attr(data-label); color: var(--cutoff-muted); font-size: 10px; font-weight: 400; text-align: left; }
+  .cutoff-table tbody td::before { content: attr(data-label); color: var(--muted-foreground); font-size: 10px; font-weight: 400; text-align: left; }
   .cutoff-source-card { grid-template-columns: 1fr; padding: 16px; }
   .cutoff-source-card .cutoff-disclaimer { grid-column: auto; }
   .jee-cutoff-footer-inner { padding: 40px 18px 28px; }

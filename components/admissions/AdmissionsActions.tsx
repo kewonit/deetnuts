@@ -29,7 +29,7 @@ export function ShareAdmissionsPage({ compact = false }: { compact?: boolean }) 
     <button
       type="button"
       onClick={share}
-      className="inline-flex min-h-11 items-center justify-center gap-2 border border-slate-300 bg-white px-3 text-sm font-semibold text-slate-800 hover:border-slate-500 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-700"
+      className="cutoff-button"
       aria-live="polite"
     >
       {copied ? (

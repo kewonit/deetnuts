@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import AdmissionsDetailSheet from "@/components/admissions/AdmissionsDetailSheet";
 import MhtCetDetailView from "@/components/admissions/MhtCetDetailView";
+import { EjamPageLayout } from "@/components/ejam-chrome/ejam-page-layout";
 import { getMhtCetCollegeDetail } from "@/lib/admissions/data";
 import { isAdmissionsV2Enabled } from "@/lib/admissions/flags";
 import { parseAdmissionsInteger } from "@/lib/admissions/query-state";
@@ -35,12 +36,14 @@ export default async function InterceptedCollegePage({
   }
 
   return (
-    <AdmissionsDetailSheet
-      title={model.college.name}
-      description={`MHT-CET admission details for ${model.college.name}`}
-      returnFocusHref={model.canonicalPath}
-    >
-      <MhtCetDetailView model={model} variant="sheet" />
-    </AdmissionsDetailSheet>
+    <EjamPageLayout chrome="document">
+      <AdmissionsDetailSheet
+        title={model.college.name}
+        description={`MHT-CET admission details for ${model.college.name}`}
+        returnFocusHref={model.canonicalPath}
+      >
+        <MhtCetDetailView model={model} variant="sheet" />
+      </AdmissionsDetailSheet>
+    </EjamPageLayout>
   );
 }

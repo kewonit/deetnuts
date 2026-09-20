@@ -1,6 +1,9 @@
 import { EjamPageLayout } from "@/components/ejam-chrome/ejam-page-layout";
-import "./cutoffs.css";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function CollegeDetailLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return <EjamPageLayout chrome="document">{children}</EjamPageLayout>;
 }

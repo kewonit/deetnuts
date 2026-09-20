@@ -161,6 +161,7 @@ export type CutoffPageModel = {
   filterOptions: CutoffFilterOptions;
   tableRows: CutoffServingRow[];
   tableTotal: number;
+  tableNextCursor: string | null;
   chartOffering: CutoffOffering;
   programs: CutoffOffering[];
   chart: CutoffChartPoint[];

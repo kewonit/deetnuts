@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "prebuild": "npm run verify:jee-cutoff-data",
+    "prebuild": "node scripts/build-ejam-ui-css.mjs && npm run verify:jee-cutoff-data",
+    "build:ejam-ui": "node scripts/build-ejam-ui-css.mjs",
     "dev": "next dev --turbopack",
     "build": "next build --webpack",
     "start": "next start",

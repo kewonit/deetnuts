@@ -289,6 +289,10 @@ export async function getCutoffPageModel(
     filterOptions: filterOptionsForSelection(rows, defaultSelection),
     tableRows: tableRows.slice(0, 100),
     tableTotal: tableRows.length,
+    tableNextCursor:
+      tableRows.length > 100
+        ? Buffer.from("100").toString("base64url")
+        : null,
     chartOffering,
     programs: uniqueOfferings(rows),
     chart: chartForOffering(rows, defaultSelection),

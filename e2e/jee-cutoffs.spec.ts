@@ -11,9 +11,10 @@ test("year page is source-useful in server HTML and exposes canonical SEO", asyn
   expect(html).toContain("Assam University Silchar");
   expect(html).toContain("Computer Science and Engineering");
   expect(html).toContain("Source records");
+  expect(html).toContain(`${pagePath}/programs/agricultural-engineering-b-tech-4-year-agricultural-engineering`);
   expect(html).not.toContain('"@type":"Dataset"');
   expect(html).not.toContain('"@type":"CollegeOrUniversity"');
-  expect(html).not.toContain('/ejam/ui.css');
+  expect(html).toContain('/ejam/ui.css');
 
   await page.goto(pagePath);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Assam University Silchar cutoff 2025");
@@ -23,22 +24,23 @@ test("year page is source-useful in server HTML and exposes canonical SEO", asyn
 
 test("filters cascade, persist in the fragment, and support browser history", async ({ page }) => {
   await page.goto(pagePath);
-  await page.locator("svg.cutoff-chart").waitFor({ state: "attached" });
-  await page.getByLabel("Counselling").selectOption("csab");
-  await expect(page.getByLabel("Round")).toHaveValue("3");
+  await page.locator(".cutoff-chart").waitFor({ state: "attached" });
+  await page.getByRole("group", { name: "Counselling" }).getByRole("button", { name: "CSAB" }).click();
+  await expect(page.getByRole("group", { name: "Round" }).getByRole("button", { name: "Round 3" })).toHaveAttribute("aria-pressed", "true");
   await expect(page).toHaveURL(/#body=csab&round=3/);
-  await page.getByLabel("Counselling").selectOption("josaa");
-  await expect(page.getByLabel("Round")).toHaveValue("6");
+  await page.getByRole("group", { name: "Counselling" }).getByRole("button", { name: "JoSAA" }).click();
+  await expect(page.getByRole("group", { name: "Round" }).getByRole("button", { name: "Round 6" })).toHaveAttribute("aria-pressed", "true");
   await page.goBack();
-  await expect(page.getByLabel("Counselling")).toHaveValue("csab");
-  await expect(page.getByLabel("Round")).toHaveValue("3");
+  await expect(page.getByRole("group", { name: "Counselling" }).getByRole("button", { name: "CSAB" })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("group", { name: "Round" }).getByRole("button", { name: "Round 3" })).toHaveAttribute("aria-pressed", "true");
 });
 
 test("chart hover shows the exact opening and closing ranks", async ({ page }) => {
   await page.goto(pagePath);
-  const chart = page.locator("svg.cutoff-chart").first();
+  const chart = page.locator(".cutoff-chart svg").first();
+  await chart.waitFor({ state: "attached" });
   await chart.hover();
-  const tooltip = page.locator(".cutoff-chart-tooltip").first();
+  const tooltip = page.locator(".recharts-tooltip-wrapper").first();
   await expect(tooltip).toBeVisible();
   await expect(tooltip).toContainText("Opening");
   await expect(tooltip).toContainText("Closing");
@@ -58,7 +60,7 @@ test("mobile restyles the one semantic table without horizontal page overflow", 
 test("cutoff surface has no detectable WCAG A/AA violations", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "light" });
   await page.goto(pagePath);
-  await page.locator("svg.cutoff-chart").waitFor({ state: "attached" });
+  await page.locator(".cutoff-chart").waitFor({ state: "attached" });
   const lightResults = await new AxeBuilder({ page }).include(".jee-cutoff-shell").include(".jee-cutoff-footer").analyze();
   expect(lightResults.violations).toEqual([]);
   await page.emulateMedia({ colorScheme: "dark" });
@@ -75,15 +77,21 @@ test("cutoff routes use the structured product footer", async ({ page }) => {
   expect((await footer.boundingBox())?.height ?? Infinity).toBeLessThan(960);
 });
 
-test("homepage and older site pages retain the original footer", async ({ page }) => {
-  for (const path of ["/", "/mht-cet"]) {
-    await page.goto(path);
-    await expect(page.locator(".jee-cutoff-footer")).toHaveCount(0);
-    const originalFooter = page.locator(".legacy-site-footer");
-    await expect(originalFooter).toBeVisible();
-    await expect(originalFooter).toContainText("MHT-CET");
-    await expect(originalFooter.locator("[data-legacy-wordmark] svg")).toBeVisible();
-  }
+test("homepage retains the original footer", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator(".jee-cutoff-footer")).toHaveCount(0);
+  const originalFooter = page.locator(".legacy-site-footer");
+  await expect(originalFooter).toBeVisible();
+  await expect(originalFooter).toContainText("MHT-CET");
+  await expect(originalFooter.locator("[data-legacy-wordmark] svg")).toBeVisible();
+});
+
+test("mht-cet hub uses the product footer", async ({ page }) => {
+  await page.goto("/mht-cet");
+  const footer = page.locator(".jee-cutoff-footer");
+  await expect(footer).toBeVisible();
+  await expect(page.locator("footer.bg-gradient-to-b")).toHaveCount(0);
+  await expect(footer.locator(".jee-cutoff-footer-heading")).toHaveText(["Cutoffs", "Tools", "Data", "Project"]);
 });
 
 test("cutoff surfaces follow light and dark color preferences", async ({ page }) => {
@@ -92,8 +100,8 @@ test("cutoff surfaces follow light and dark color preferences", async ({ page })
   const colors = () => page.evaluate(() => {
     const shell = getComputedStyle(document.querySelector(".jee-cutoff-shell")!);
     const footer = getComputedStyle(document.querySelector(".jee-cutoff-footer")!);
-    const openingLine = getComputedStyle(document.querySelector(".cutoff-chart-opening")!);
-    return { shell: shell.backgroundColor, footer: footer.backgroundColor, line: openingLine.stroke };
+    const openingLine = getComputedStyle(document.querySelector(".cutoff-chart-key-opening")!);
+    return { shell: shell.backgroundColor, footer: footer.backgroundColor, line: openingLine.borderTopColor };
   });
   const light = await colors();
   await page.emulateMedia({ colorScheme: "dark" });

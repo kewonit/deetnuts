@@ -44,7 +44,7 @@ function redirectUrl(request: NextRequest, pathname: string): URL {
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   if (
-    ["/jee-cutoffs", "/jee-main", "/jee-advanced", "/josaa", "/sitemaps", "/sitemap-index.xml"].some(
+    ["/sitemaps", "/sitemap-index.xml"].some(
       (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
     )
   ) {
@@ -99,7 +99,14 @@ export async function proxy(request: NextRequest) {
   }
 
   const isAdmissionsDetail = /^\/mht-cet\/colleges\/[^/]+\/?$/.test(pathname);
-  const isEjamPage = pathname === "/college-predictor";
+  const isEjamPage =
+    pathname === "/college-predictor" ||
+    pathname === "/jee-cutoffs" ||
+    pathname.startsWith("/jee-cutoffs/") ||
+    pathname.startsWith("/jee-main") ||
+    pathname.startsWith("/jee-advanced") ||
+    pathname === "/mht-cet" ||
+    /^\/mht-cet\/colleges\/[^/]+\/?$/.test(pathname);
   request.headers.set(
     "x-deetnuts-admissions-detail",
     isAdmissionsDetail ? "1" : "0",

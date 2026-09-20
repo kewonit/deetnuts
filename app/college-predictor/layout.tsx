@@ -1,8 +1,5 @@
-import { Toaster } from "sonner";
 import { COLLEGE_PREDICTOR_LCP_PRELOAD } from "@ejam/ui/lib/static-image";
-import { cn } from "@ejam/ui/lib/utils";
-import { EjamThemeBridge } from "@/app/college-predictor/ejam-theme-bridge";
-import "./route.css";
+import { EjamPageLayout } from "@/components/ejam-chrome/ejam-page-layout";
 
 export default function CollegePredictorLayout({
   children,
@@ -10,9 +7,7 @@ export default function CollegePredictorLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      {/* eslint-disable-next-line @next/next/no-css-tags -- eJAM's embedded stylesheet is generated outside Next's CSS pipeline. */}
-      <link rel="stylesheet" href="/ejam/ui.css" />
+    <EjamPageLayout chrome="tool" toaster>
       <link
         rel="preload"
         as="image"
@@ -20,20 +15,7 @@ export default function CollegePredictorLayout({
         type="image/webp"
         fetchPriority="high"
       />
-      <div
-        className={cn(
-          "deetnuts-ejam-shell min-h-screen bg-background text-foreground antialiased",
-          "font-sans",
-        )}
-        suppressHydrationWarning
-      >
-        <EjamThemeBridge />
-        {children}
-        <Toaster
-          position="bottom-right"
-          toastOptions={{ style: { fontFamily: "var(--font-sans)" } }}
-        />
-      </div>
-    </>
+      {children}
+    </EjamPageLayout>
   );
 }

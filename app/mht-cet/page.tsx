@@ -1,47 +1,35 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import FAQJsonLd, { MHTCET_FAQS } from "@/components/FAQJsonLd";
+import { EjamPageLayout } from "@/components/ejam-chrome/ejam-page-layout";
 import { PRODUCTION_SITE_URL } from "@/lib/site-url";
 
-interface Link {
-  title: string;
-  link: string;
-  icon: {
-    src: string;
-  };
-}
-
-const LINKS: { [key: string]: Link } = {
-  link1: {
-    title: "All India Cutoffs",
-    link: "/mht-cet/all-india-cutoffs",
-    icon: {
-      src: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1721510815/deetnuts/logos/MHT-CET_logo_wxbnlw-min_n5sbju.png",
-    },
+const LINKS = [
+  {
+    title: "State cutoffs",
+    href: "/mht-cet/state-cutoffs",
+    kicker: "CAP rounds",
+    description: "Search Maharashtra state counselling cutoffs by rank, category, and university.",
   },
-  link2: {
-    title: "State Level Cutoffs",
-    link: "/mht-cet/state-cutoffs",
-    icon: {
-      src: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1721510815/deetnuts/logos/MHT-CET_logo_wxbnlw-min_n5sbju.png",
-    },
+  {
+    title: "All India cutoffs",
+    href: "/mht-cet/all-india-cutoffs",
+    kicker: "AI quota",
+    description: "Browse All India quota closing ranks and percentiles by round.",
   },
-  link3: {
-    title: "Rank Predictor",
-    link: "/mht-cet/rank-predictor",
-    icon: {
-      src: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1721510815/deetnuts/logos/MHT-CET_logo_wxbnlw-min_n5sbju.png",
-    },
+  {
+    title: "College list",
+    href: "/mht-cet/colleges",
+    kicker: "Directory",
+    description: "Open a college for programs, cutoff observations, and the 2024 seat matrix.",
   },
-  link4: {
-    title: "College List",
-    link: "/mht-cet/colleges",
-    icon: {
-      src: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1721510815/deetnuts/logos/MHT-CET_logo_wxbnlw-min_n5sbju.png",
-    },
+  {
+    title: "College predictor",
+    href: "/college-predictor",
+    kicker: "Tool",
+    description: "Estimate admission chances from your rank in the eJam predictor.",
   },
-};
+];
 
 export const metadata: Metadata = {
   title: "MHT-CET 2026 Cutoffs and Admission Planning",
@@ -73,89 +61,37 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <div className=" mx-auto h-full mt-24 w-[700px] max-w-full p-8 md:p-16 xl:w-[1400px] min-h-screen">
-      {/* FAQ Schema for SEO */}
-      <FAQJsonLd faqs={MHTCET_FAQS} />
-
-      <div className="mb-20">
-        <picture>
-          <img
-            className="h-28 w-28 rounded-full xl:h-[184px] xl:w-[184px]"
-            src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1720795017/deetnuts/MHT-CET_logo_wxbnlw.png"
-            alt="profile picture"
-          />
-        </picture>
-        <div className="mt-8">
-          <h2 className="text-3xl font-heading sm:text-[44px]">MHT-CET</h2>
-          <p className="mt-4 text-base font-base sm:text-xl">
-            Maharashtra State Common Entrance Test Cell
+    <EjamPageLayout chrome="document">
+      <main className="cutoff-main">
+        <FAQJsonLd faqs={MHTCET_FAQS} />
+        <header className="cutoff-hero">
+          <span className="cutoff-kicker">Maharashtra</span>
+          <h1>MHT-CET cutoffs</h1>
+          <p className="cutoff-lead">
+            Source-backed CAP cutoffs, college pages, and a predictor — in the same eJam workspace language as JEE.
           </p>
-        </div>
-      </div>
-      <div className="justify-end xl:flex">
-        <div
-          id="grid-container"
-          className="grid w-full grid-cols-1 gap-10 md:grid-cols-3 xl:w-1/2 xl:pb-16 w450:grid-cols-1 w450:gap-7"
-        >
-          {Object.keys(LINKS).map((key) => {
-            // Only 'link1' and 'link3' are under construction
-            const isUnderConstruction = key === "link3";
-
-            if (isUnderConstruction) {
-              return (
-                <div
-                  key={key}
-                  className="relative rounded-base border-2 border-black bg-main p-5 shadow-base opacity-90 overflow-hidden"
-                >
-                  {/* Content layer with blur */}
-                  <div className="relative z-10 blur-sm">
-                    <picture>
-                      <img
-                        className="h-8 w-8 sm:h-10 sm:w-10"
-                        src={LINKS[key].icon.src}
-                        alt={LINKS[key].title}
-                      />
-                    </picture>
-                    <p className="mt-3 text-lg font-heading sm:text-xl">
-                      {LINKS[key].title}
-                    </p>
-                  </div>
-                  {/* Under Construction Overlay (sharp) */}
-                  <div className="absolute top-2 right-2 transform rotate-12 z-20 pointer-events-none">
-                    <Image
-                      className="h-20 w-20"
-                      src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1751487107/gdgc/pngimg.com_-_under_construction_PNG34_fr5yo4.webp"
-                      alt="Under Construction"
-                      width={80}
-                      height={80}
-                    />
-                  </div>
+        </header>
+        <section className="cutoff-section" aria-labelledby="mht-tools-title">
+          <div className="cutoff-section-heading">
+            <div>
+              <h2 id="mht-tools-title">Choose a tool</h2>
+              <p>State counselling, All India quota, college pages, or the rank predictor.</p>
+            </div>
+          </div>
+          <div className="cutoff-directory">
+            {LINKS.map((link) => (
+              <Link className="cutoff-college-card" href={link.href} key={link.href}>
+                <div>
+                  <span className="cutoff-kicker">{link.kicker}</span>
+                  <h3>{link.title}</h3>
+                  <p>{link.description}</p>
                 </div>
-              );
-            }
-
-            // 'State Level Cutoffs' and 'College List' are active
-            return (
-              <Link
-                className="relative rounded-base border-2 border-black bg-main p-5 shadow-base transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none ring-1 ring-blue-200 ring-offset-1"
-                key={key}
-                href={LINKS[key].link}
-              >
-                <picture>
-                  <img
-                    className="h-8 w-8 sm:h-10 sm:w-10"
-                    src={LINKS[key].icon.src}
-                    alt={LINKS[key].title}
-                  />
-                </picture>
-                <p className="mt-3 text-lg font-semibold sm:text-xl text-black">
-                  {LINKS[key].title}
-                </p>
+                <span className="cutoff-card-arrow" aria-hidden="true">↗</span>
               </Link>
-            );
-          })}
-        </div>
-      </div>
-    </div>
+            ))}
+          </div>
+        </section>
+      </main>
+    </EjamPageLayout>
   );
 }

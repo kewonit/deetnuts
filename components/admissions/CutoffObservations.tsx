@@ -1,4 +1,8 @@
+"use client";
+
 import type { AdmissionsCutoffObservation } from "@/lib/admissions/types";
+import { Input } from "@ejam/ui/components/ui/input";
+import { useMemo, useState } from "react";
 
 function formatNumber(value: number | null | undefined, digits = 0): string {
   if (value === null || value === undefined || !Number.isFinite(value)) return "—";
@@ -9,91 +13,83 @@ function formatNumber(value: number | null | undefined, digits = 0): string {
 
 export default function CutoffObservations({
   observations,
-  limit,
 }: {
   observations: AdmissionsCutoffObservation[];
   system: "mht-cet";
   limit?: number;
 }) {
-  const rowLimit = typeof limit === "number" ? limit : 100;
-  const rows = typeof rowLimit === "number" ? observations.slice(0, rowLimit) : observations;
-
-  if (rows.length === 0) {
-    return (
-      <div className="border border-dashed border-slate-300 bg-slate-50 p-6 text-center">
-        <p className="font-semibold text-slate-900">No comparable official cutoff rows</p>
-        <p className="mt-1 text-sm leading-6 text-slate-600">
-          Try another year, round, or exact seat pool. Missing data is not treated as a zero cutoff.
-        </p>
-      </div>
+  const [query, setQuery] = useState("");
+  const rows = useMemo(() => {
+    const search = query.trim().toLocaleLowerCase("en-IN");
+    if (!search) return observations;
+    return observations.filter((row) =>
+      [row.programName, row.programCode, row.category, row.gender, row.quota, row.allocation]
+        .filter(Boolean)
+        .join(" ")
+        .toLocaleLowerCase("en-IN")
+        .includes(search),
     );
+  }, [observations, query]);
+
+  if (observations.length === 0) {
+    return <p className="cutoff-empty">No comparable official cutoff rows. Try another year or round.</p>;
   }
 
   return (
     <>
-      <div
-        className="overflow-x-auto lg:border lg:border-slate-200"
-        tabIndex={0}
-        role="region"
-        aria-label="Scrollable cutoff observations table"
-      >
-        <table className="block w-full border-collapse text-left text-sm lg:table lg:min-w-[820px]">
-          <thead className="sr-only lg:not-sr-only lg:sticky lg:top-16 lg:z-10 lg:table-header-group lg:bg-slate-100 lg:text-xs lg:uppercase lg:tracking-[0.08em] lg:text-slate-600">
-            <tr>
-              <th scope="col" className="px-4 py-3 font-bold">Program</th>
-              <th scope="col" className="px-4 py-3 font-bold">Seat pool</th>
-              <th scope="col" className="px-4 py-3 font-bold">Year / round</th>
-              <th scope="col" className="px-4 py-3 text-right font-bold">Percentile</th>
-              <th scope="col" className="px-4 py-3 text-right font-bold">Last rank</th>
-            </tr>
-          </thead>
-          <tbody className="block space-y-3 lg:table-row-group lg:divide-y lg:divide-slate-200 lg:space-y-0 lg:bg-white">
-            {rows.map((row) => (
-              <tr
-                key={row.id}
-                className="relative grid grid-cols-2 gap-4 border border-slate-200 bg-white p-4 hover:bg-violet-50/50 lg:table-row lg:border-0 lg:p-0"
-              >
-                <th
-                  scope="row"
-                  className="col-span-2 min-w-0 pr-24 font-semibold text-slate-950 lg:table-cell lg:px-4 lg:py-3 lg:pr-4"
-                >
-                  {row.programName}
-                  <span className="mt-0.5 block font-mono text-xs font-normal text-slate-500">
-                    {row.programCode}
-                  </span>
-                </th>
-                <td className="col-span-2 min-w-0 text-slate-700 lg:table-cell lg:px-4 lg:py-3">
-                  <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 lg:hidden">
-                    Seat pool
-                  </span>
-                  {[row.category, row.gender, row.quota || row.allocation]
-                    .filter(Boolean)
-                    .join(" · ")}
-                </td>
-                <td className="absolute right-4 top-4 bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700 lg:static lg:table-cell lg:bg-transparent lg:px-4 lg:py-3 lg:text-sm lg:font-normal">
-                  {row.year} · Round {row.round}
-                </td>
-                <td className="min-w-0 font-semibold tabular-nums text-slate-950 lg:table-cell lg:px-4 lg:py-3 lg:text-right">
-                  <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 lg:hidden">
-                    Percentile
-                  </span>
-                  {formatNumber(row.percentileValue, 7)}
-                </td>
-                <td className="min-w-0 font-semibold tabular-nums text-slate-950 lg:table-cell lg:px-4 lg:py-3 lg:text-right">
-                  <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 lg:hidden">
-                    Last rank
-                  </span>
-                  {formatNumber(row.rankValue)}
-                </td>
+      <label className="cutoff-search">
+        <span className="cutoff-sr-table">Search cutoff rows</span>
+        <svg aria-hidden="true" viewBox="0 0 20 20">
+          <circle cx="8.5" cy="8.5" r="5.5" />
+          <path d="m12.5 12.5 4 4" />
+        </svg>
+        <Input
+          type="search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Search programs or seat pools"
+        />
+        <span>{rows.length}</span>
+      </label>
+      {rows.length === 0 ? (
+        <p className="cutoff-empty">No rows match this search.</p>
+      ) : (
+        <div className="cutoff-table-scroll">
+          <table className="cutoff-table">
+            <caption>Official cutoff observations</caption>
+            <thead>
+              <tr>
+                <th scope="col">Program</th>
+                <th scope="col">Seat pool</th>
+                <th scope="col">Year / round</th>
+                <th scope="col">Percentile</th>
+                <th scope="col">Last rank</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      {rowLimit && observations.length > rowLimit && (
-        <p className="mt-3 text-sm text-slate-500">
-          Showing {rowLimit} of {observations.length} exact rows in this view.
-        </p>
+            </thead>
+            <tbody>
+              {rows.map((row) => (
+                <tr key={row.id}>
+                  <th scope="row" data-label="Program">
+                    {row.programName}
+                    <small>{row.programCode}</small>
+                  </th>
+                  <td data-label="Seat pool">
+                    {[row.category, row.gender, row.quota || row.allocation]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </td>
+                  <td data-label="Year / round">
+                    {row.year} · Round {row.round}
+                  </td>
+                  <td data-label="Percentile">{formatNumber(row.percentileValue, 7)}</td>
+                  <td data-label="Last rank">
+                    <strong>{formatNumber(row.rankValue)}</strong>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </>
   );

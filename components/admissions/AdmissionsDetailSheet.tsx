@@ -6,7 +6,7 @@ import {
   SheetContent,
   SheetDescription,
   SheetTitle,
-} from "@/components/ui/sheet";
+} from "@ejam/ui/components/ui/sheet";
 
 export default function AdmissionsDetailSheet({
   title,
@@ -52,7 +52,7 @@ export default function AdmissionsDetailSheet({
     >
       <SheetContent
         side="right"
-        className="w-full max-w-none overflow-y-auto border-l border-slate-300 p-0 sm:w-[560px] sm:max-w-[560px]"
+        className="w-full bg-background p-0 text-foreground sm:max-w-xl"
       >
         <SheetTitle className="sr-only">{title}</SheetTitle>
         <SheetDescription className="sr-only">{description}</SheetDescription>

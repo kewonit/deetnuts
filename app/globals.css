@@ -2,14 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body:has([data-admissions-full-page]) .site-default-chrome {
-  display: none;
-}
-
-body:has([data-admissions-full-page]) {
-  background: #f6f7fb;
-}
-
 .analytics-consent {
   --consent-bg: #fff;
   --consent-ink: #111;
