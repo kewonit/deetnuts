@@ -41,25 +41,89 @@ function pageJsonLd(name: string, canonical: string, crumbs: Array<{ name: strin
   ];
 }
 
+const categoryOrder = ["OPEN", "OPEN (PwD)", "EWS", "EWS (PwD)", "OBC-NCL", "OBC-NCL (PwD)", "SC", "SC (PwD)", "ST", "ST (PwD)"];
+const quotaOrder = ["AI", "OS", "HS"];
+const genderOrder = ["Gender-Neutral", "Female-only"];
+const bodyOrder = ["josaa", "csab"];
+const diffFieldRank = { seatType: 0, gender: 1, quota: 2, body: 3 } as const;
+
+function orderIndex(value: string | null, order: readonly string[]) {
+  const index = order.indexOf(value ?? "");
+  return index === -1 ? order.length : index;
+}
+
+function roundText(count: number) {
+  return count === 1 ? "1 round" : `${count} rounds`;
+}
+
+function escapeHtml(value: string) {
+  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+function siblingCell(label: string, value: string, changed: boolean) {
+  return `<span data-label="${escapeHtml(label)}" data-changed="${changed ? "true" : "false"}">${escapeHtml(value)}</span>`;
+}
+
 function SiblingPools({ current, siblings }: { current: JeeSeoRoute; siblings: JeeSeoRoute[] }) {
   if (!siblings.length) return null;
   const items = [...siblings].sort((left, right) => {
     const leftDiff = profileDifference(current, left);
     const rightDiff = profileDifference(current, right);
-    return leftDiff.fields.length - rightDiff.fields.length || leftDiff.title.localeCompare(rightDiff.title, "en") || left.path.localeCompare(right.path);
+    const leftKey = leftDiff.fields.map((field) => diffFieldRank[field]).sort((a, b) => a - b).join(",");
+    const rightKey = rightDiff.fields.map((field) => diffFieldRank[field]).sort((a, b) => a - b).join(",");
+    return (
+      leftDiff.fields.length - rightDiff.fields.length ||
+      leftKey.localeCompare(rightKey) ||
+      orderIndex(left.seatType, categoryOrder) - orderIndex(right.seatType, categoryOrder) ||
+      orderIndex(left.gender ? genderLabel(left.gender) : null, genderOrder) - orderIndex(right.gender ? genderLabel(right.gender) : null, genderOrder) ||
+      orderIndex(left.quota, quotaOrder) - orderIndex(right.quota, quotaOrder) ||
+      orderIndex(left.body, bodyOrder) - orderIndex(right.body, bodyOrder) ||
+      left.path.localeCompare(right.path)
+    );
   });
   return (
-    <section className="cutoff-section">
+    <section className="cutoff-section" aria-labelledby="other-seat-pools-title">
       <div className="cutoff-section-heading">
-        <h2>Other seat pools</h2>
+        <div>
+          <h2 id="other-seat-pools-title">Other seat pools</h2>
+          <p>Bold values differ from this page.</p>
+        </div>
+        <span className="cutoff-result-count">{siblings.length.toLocaleString("en-IN")} pools</span>
       </div>
-      <div className="cutoff-sibling-rows">
-        {items.map((sibling) => (
-          <Link href={sibling.path} key={sibling.path}>
-            <strong>{profileDifference(current, sibling).title}</strong>
-            <span>{sibling.roundCount === 1 ? "1 round" : `${sibling.roundCount} rounds`}</span>
-          </Link>
-        ))}
+      <div className="cutoff-sibling-board">
+        <div className="cutoff-sibling-head" aria-hidden="true">
+          <span>Counselling</span>
+          <span>Quota</span>
+          <span>Category</span>
+          <span>Gender</span>
+          <span>Rounds</span>
+        </div>
+        <div className="cutoff-sibling-current" aria-current="page" aria-label={`${profileLabel(current)}, this page`}>
+          <span data-label="Counselling">{current.body ? bodyLabel(current.body) : "—"}</span>
+          <span data-label="Quota">{current.quota}</span>
+          <span data-label="Category">{current.seatType}</span>
+          <span data-label="Gender">{current.gender ? genderLabel(current.gender) : "—"}</span>
+          <span>This page</span>
+        </div>
+        {items.map((sibling) => {
+          const changed = new Set(profileDifference(current, sibling).fields);
+          return (
+            <a
+              href={sibling.path}
+              key={sibling.path}
+              aria-label={`${profileLabel(sibling)}, ${roundText(sibling.roundCount)}`}
+              dangerouslySetInnerHTML={{
+                __html: [
+                  siblingCell("Counselling", sibling.body ? bodyLabel(sibling.body) : "—", changed.has("body")),
+                  siblingCell("Quota", sibling.quota ?? "—", changed.has("quota")),
+                  siblingCell("Category", sibling.seatType ?? "—", changed.has("seatType")),
+                  siblingCell("Gender", sibling.gender ? genderLabel(sibling.gender) : "—", changed.has("gender")),
+                  `<span data-label="Rounds">${sibling.roundCount}</span>`,
+                ].join(""),
+              }}
+            />
+          );
+        })}
       </div>
     </section>
   );

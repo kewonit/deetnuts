@@ -65,10 +65,29 @@ html.dark .deetnuts-ejam-shell {
   display: none;
 }
 
+/* Host `.bg-background` is `hsl(var(--background))`, which is invalid once the shell uses oklch. */
+.deetnuts-ejam-shell[data-ejam-chrome="tool"] [data-sidebar="sidebar"],
+body:has(.deetnuts-ejam-shell[data-ejam-chrome="tool"]) [data-slot="sidebar"][data-mobile="true"] {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.deetnuts-ejam-shell[data-ejam-chrome="tool"] [data-sidebar="sidebar"] .bg-primary,
+body:has(.deetnuts-ejam-shell[data-ejam-chrome="tool"]) [data-slot="sidebar"][data-mobile="true"] .bg-primary {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
 @media (min-width: 768px) {
+  /* Host Tailwind `.hidden` is unlayered and beats eJam's layered `md:block`. */
+  .deetnuts-ejam-shell[data-ejam-chrome="tool"] [data-slot="sidebar"]:not([data-mobile="true"]) {
+    display: block;
+  }
+
   .deetnuts-ejam-shell[data-ejam-chrome="tool"] [data-slot="sidebar-container"] {
     top: 88px;
     bottom: auto;
+    display: flex;
     height: calc(100dvh - 88px);
   }
 }

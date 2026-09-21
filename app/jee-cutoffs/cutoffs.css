@@ -355,29 +355,43 @@
 .cutoff-table tbody th[data-same="true"],
 .cutoff-table tbody td[data-same="true"] { color: var(--muted-foreground); font-weight: 400; }
 .cutoff-pool-group .cutoff-table tbody a { font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
-.cutoff-sibling-rows {
+.cutoff-sibling-board { border: 1px solid var(--border); }
+.cutoff-sibling-head,
+.cutoff-sibling-current,
+.cutoff-sibling-board > a {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1px;
-  border: 1px solid var(--border);
-  background: var(--border);
-}
-.cutoff-sibling-rows a {
-  display: flex;
+  grid-template-columns: minmax(88px, 0.7fr) minmax(44px, 0.4fr) minmax(96px, 1.1fr) minmax(120px, 1.15fr) 72px;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  min-width: 0;
+  column-gap: 12px;
   min-height: 42px;
   padding: 8px 12px;
   background: var(--background);
   color: var(--foreground);
   font-size: 12px;
+}
+.cutoff-sibling-head {
+  min-height: 36px;
+  color: var(--muted-foreground);
+  font-size: 11px;
+  font-weight: 500;
+}
+.cutoff-sibling-current,
+.cutoff-sibling-board > a { border-top: 1px solid var(--border); }
+.cutoff-sibling-current { background: var(--muted); }
+.cutoff-sibling-current > span:last-child { color: var(--muted-foreground); font-size: 11px; text-align: right; }
+.cutoff-sibling-board > a {
+  color: inherit;
   text-decoration: none;
 }
-.cutoff-sibling-rows a:hover { background: var(--muted); }
-.cutoff-sibling-rows strong { min-width: 0; font-weight: 600; line-height: 1.35; }
-.cutoff-sibling-rows span { flex: 0 0 auto; color: var(--muted-foreground); font-size: 11px; }
+.cutoff-sibling-board > a:hover { background: var(--muted); }
+.cutoff-sibling-board > a:focus-visible { outline: 2px solid var(--foreground); outline-offset: -2px; }
+.cutoff-sibling-board > a > span[data-changed="false"] { color: var(--muted-foreground); font-weight: 400; }
+.cutoff-sibling-board > a > span[data-changed="true"] { font-weight: 600; }
+.cutoff-sibling-board > a > span:last-child {
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  text-align: right;
+}
 .cutoff-table tbody th a,
 .cutoff-table tbody td a { color: inherit; text-underline-offset: 3px; }
 .cutoff-table tbody th small,
@@ -388,13 +402,11 @@
 .cutoff-table td:last-child strong { font-weight: 600; }
 .cutoff-table [data-field="latest-round"] { font-variant-numeric: tabular-nums; }
 .cutoff-pool-group + .cutoff-pool-group { margin-top: 20px; }
-.cutoff-pool-group h3,
-.cutoff-sibling-group h3 {
+.cutoff-pool-group h3 {
   margin: 0 0 8px;
   color: var(--muted-foreground);
   font: 500 12px/1.3 var(--font-sans), sans-serif;
 }
-.cutoff-sibling-groups { display: grid; gap: 20px; }
 
 .cutoff-error { margin-bottom: 12px; padding: 11px 12px; border: 1px solid color-mix(in srgb, var(--destructive) 35%, transparent); color: var(--destructive); font-size: 12px; }
 .cutoff-empty { margin: 0; padding: 32px 20px; border: 1px solid var(--border); color: var(--muted-foreground); text-align: center; font-size: 12px; }
@@ -516,7 +528,32 @@ html.dark .jee-cutoff-footer {
   .cutoff-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); }
   .cutoff-table tbody { display: grid; gap: 8px; }
   .cutoff-table tbody tr { padding: 12px 14px; border: 1px solid var(--border); background: var(--background); }
-  .cutoff-sibling-rows { grid-template-columns: 1fr; }
+  .cutoff-sibling-board { display: grid; gap: 8px; border: 0; }
+  .cutoff-sibling-head { display: none; }
+  .cutoff-sibling-current,
+  .cutoff-sibling-board > a {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 16px;
+    border: 1px solid var(--border);
+  }
+  .cutoff-sibling-current > span,
+  .cutoff-sibling-board > a > span {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 2px;
+    text-align: left;
+  }
+  .cutoff-sibling-current > span[data-label]::before,
+  .cutoff-sibling-board > a > span[data-label]::before {
+    content: attr(data-label);
+    color: var(--muted-foreground);
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .cutoff-sibling-current > span:last-child,
+  .cutoff-sibling-board > a > span:last-child { text-align: left; }
   .cutoff-pool-filter { grid-template-columns: 1fr; gap: 6px; }
   .cutoff-pool-filter > span { padding-top: 0; }
   .cutoff-table tbody th,

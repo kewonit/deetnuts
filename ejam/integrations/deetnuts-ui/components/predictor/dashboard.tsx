@@ -97,8 +97,7 @@ export function Dashboard() {
       const flushedRank = rankInputRef.current?.flush() ?? state.rank;
       void query.trigger(flushedRank, { include_all: true });
     },
-    onOpenSetup:
-      isMobile && query.data === null ? () => setOpenMobile(true) : undefined,
+    onOpenSetup: isMobile ? () => setOpenMobile(true) : undefined,
     programs,
     filteredPrograms,
     sortBy,
@@ -237,6 +236,7 @@ function renderMiddle({
       selectedId={selectedId}
       onSelect={onSelect}
       onClearFilters={onClearFilters}
+      onOpenSetup={onOpenSetup}
       hasActiveFilters={hasActiveFilters}
       hiddenRows={includeAll ? 0 : hiddenRows}
       onShowLongShots={onShowLongShots}

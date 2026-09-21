@@ -94,31 +94,32 @@ export function EmptyState({
             {getEmptyStateDescription({ hasPredicted, metadata, exam })}
           </EmptyDescription>
         </EmptyHeader>
-        {showLongShotsAction ? (
+        {showLongShotsAction || onOpenSetup ? (
           <EmptyContent>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className={emptyStateActionClass}
-              onClick={() => deferAfterPress(onShowLongShots)}
-            >
-              Show very unlikely results
-            </Button>
-          </EmptyContent>
-        ) : onOpenSetup ? (
-          <EmptyContent>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className={emptyStateActionClass}
-              onClick={() => deferAfterPress(onOpenSetup)}
-            >
-              {exam === "mht-cet"
-                ? "Set up MHT-CET prediction"
-                : "Set up prediction"}
-            </Button>
+            {showLongShotsAction ? (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className={emptyStateActionClass}
+                onClick={() => deferAfterPress(onShowLongShots)}
+              >
+                Show very unlikely results
+              </Button>
+            ) : null}
+            {onOpenSetup ? (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className={emptyStateActionClass}
+                onClick={() => deferAfterPress(onOpenSetup)}
+              >
+                {exam === "mht-cet"
+                  ? "Set up MHT-CET prediction"
+                  : "Set up prediction"}
+              </Button>
+            ) : null}
           </EmptyContent>
         ) : (
           <EmptyContent />

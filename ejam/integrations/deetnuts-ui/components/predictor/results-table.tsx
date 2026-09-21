@@ -20,6 +20,7 @@ import { ResultsSearch } from "@ejam/ui/components/predictor/results-search";
 import { ResultsSort } from "@ejam/ui/components/predictor/results-sort";
 import type { ResultsSortKey } from "@ejam/ui/components/predictor/results-sort-logic";
 import { DigitGroup } from "@ejam/ui/components/transitions/digit-group";
+import { Button } from "@ejam/ui/components/ui/button";
 import {
   Table,
   TableBody,
@@ -47,6 +48,7 @@ interface ResultsTableProps {
   selectedId: string | null;
   onSelect: (program: PredictorDisplayProgram) => void;
   onClearFilters?: () => void;
+  onOpenSetup?: () => void;
   hasActiveFilters?: boolean;
   hiddenRows?: number;
   onShowLongShots?: () => void;
@@ -72,6 +74,7 @@ export function ResultsTable({
   selectedId,
   onSelect,
   onClearFilters,
+  onOpenSetup,
   hasActiveFilters,
   hiddenRows = 0,
   onShowLongShots,
@@ -134,7 +137,22 @@ export function ResultsTable({
           </div>
         </div>
       }
-      headerExtra={headerExtra}
+      headerExtra={
+        <>
+          {onOpenSetup ? (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="shrink-0 md:hidden"
+              onClick={onOpenSetup}
+            >
+              Edit setup
+            </Button>
+          ) : null}
+          {headerExtra}
+        </>
+      }
     >
       {warnings.length > 0 ? (
         <div
