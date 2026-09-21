@@ -26,13 +26,13 @@ test("filters cascade, persist in the fragment, and support browser history", as
   await page.goto(pagePath);
   await page.locator(".cutoff-chart").waitFor({ state: "attached" });
   await page.getByRole("group", { name: "Counselling" }).getByRole("button", { name: "CSAB" }).click();
-  await expect(page.getByRole("group", { name: "Round" }).getByRole("button", { name: "Round 3" })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("group", { name: "Round" }).getByRole("button", { name: "3" })).toHaveAttribute("aria-pressed", "true");
   await expect(page).toHaveURL(/#body=csab&round=3/);
   await page.getByRole("group", { name: "Counselling" }).getByRole("button", { name: "JoSAA" }).click();
-  await expect(page.getByRole("group", { name: "Round" }).getByRole("button", { name: "Round 6" })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("group", { name: "Round" }).getByRole("button", { name: "6" })).toHaveAttribute("aria-pressed", "true");
   await page.goBack();
   await expect(page.getByRole("group", { name: "Counselling" }).getByRole("button", { name: "CSAB" })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.getByRole("group", { name: "Round" }).getByRole("button", { name: "Round 3" })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("group", { name: "Round" }).getByRole("button", { name: "3" })).toHaveAttribute("aria-pressed", "true");
 });
 
 test("chart hover shows the exact opening and closing ranks", async ({ page }) => {
@@ -160,7 +160,10 @@ test("program and profile pages expose complete server-rendered facts", async ({
   expect(html).toContain("Source records");
   await page.goto(program);
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Agricultural Engineering cutoff 2025");
-  await expect(page.getByRole("link", { name: /CSAB · AI quota · OPEN · Gender-Neutral/ }).first()).toBeVisible();
+  await expect(page.locator(`a[href="${profile}"]`)).toBeVisible();
+  await expect(page.locator(`a[href="${profile}"]`)).toContainText("OPEN");
+  await expect(page.getByRole("heading", { name: "CSAB", level: 3 })).toBeVisible();
+  await expect(page.getByText("Gender-Neutral").first()).toBeVisible();
 });
 
 test("one-round profiles remain useful and are noindex,follow", async ({ page }) => {

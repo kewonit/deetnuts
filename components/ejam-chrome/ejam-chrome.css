@@ -3,9 +3,46 @@ body:has(.deetnuts-ejam-shell) {
 }
 
 .deetnuts-ejam-shell {
+  /* Caption/meta text was oklch(0.556) (~4.6:1). 0.40 is ~8:1 on white so 11px copy and 80% muted captions stay AA. */
+  --muted-foreground: oklch(0.4 0 0);
+  --border: oklch(0.82 0 0);
+  --input: oklch(0.7 0 0);
+  --ring: oklch(0.45 0 0);
+  --chart-1: oklch(0.32 0 0);
+  --chart-2: oklch(0.48 0.16 264);
+  --chart-3: oklch(0.42 0.1 160);
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+.deetnuts-ejam-shell.dark,
+html.dark .deetnuts-ejam-shell {
+  --muted-foreground: oklch(0.78 0 0);
+  --border: oklch(0.34 0 0);
+  --input: oklch(0.46 0 0);
+  --ring: oklch(0.78 0 0);
+  --chart-1: oklch(0.9 0 0);
+  --chart-2: oklch(0.78 0.12 250);
+  --chart-3: oklch(0.8 0.08 160);
+}
+
+.deetnuts-ejam-shell [data-slot="chart"] .recharts-area-curve,
+.deetnuts-ejam-shell [data-slot="chart"] .recharts-line-curve {
+  stroke-width: 2.25px;
+  stroke-opacity: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.deetnuts-ejam-shell [data-slot="chart"] .recharts-cartesian-axis-tick text {
+  fill: var(--foreground);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.deetnuts-ejam-shell [data-slot="chart"] .recharts-cartesian-grid line {
+  stroke: var(--foreground);
+  stroke-opacity: 0.18;
 }
 
 .deetnuts-ejam-shell[data-ejam-chrome="document"] {

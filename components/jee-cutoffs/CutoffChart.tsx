@@ -6,10 +6,10 @@ import {
   Dot,
   EvilAreaChart,
   Grid,
-  Tooltip,
   XAxis,
   YAxis,
 } from "@ejam/ui/components/evilcharts/charts/area-chart";
+import { ChartTooltip } from "@ejam/ui/components/evilcharts/ui/tooltip";
 import type { ChartConfig } from "@ejam/ui/components/evilcharts/ui/chart-types";
 import type { CutoffChartPoint } from "@/lib/jee-cutoffs/types";
 
@@ -29,6 +29,35 @@ const chartConfig = {
     },
   },
 } satisfies ChartConfig;
+
+function formatRank(value: unknown) {
+  return typeof value === "number" ? value.toLocaleString("en-IN") : "—";
+}
+
+function CutoffHoverTooltip({
+  active,
+  payload,
+  label,
+}: {
+  active?: boolean;
+  payload?: Array<{ dataKey?: string | number; value?: unknown }>;
+  label?: string | number;
+}) {
+  if (!active || !payload?.length) return null;
+  const opening = payload.find((item) => item.dataKey === "openingRank");
+  const closing = payload.find((item) => item.dataKey === "closingRank");
+  return (
+    <div className="cutoff-chart-tooltip">
+      <strong>{String(label ?? "")}</strong>
+      <span>
+        Opening <b>{formatRank(opening?.value)}</b>
+      </span>
+      <span>
+        Closing <b>{formatRank(closing?.value)}</b>
+      </span>
+    </div>
+  );
+}
 
 export default function CutoffChart({
   points,
@@ -77,11 +106,9 @@ export default function CutoffChart({
         <Grid />
         <XAxis dataKey="label" interval={0} />
         <YAxis domain={[1, maxRank]} reversed />
-        <Tooltip
-          cursor={false}
-          valueFormatter={(value) =>
-            typeof value === "number" ? value.toLocaleString("en-IN") : "—"
-          }
+        <ChartTooltip
+          cursor={{ strokeDasharray: "3 3", strokeWidth: 1 }}
+          content={<CutoffHoverTooltip />}
         />
         <Area dataKey="openingRank" variant="solid" strokeVariant="solid" areaProps={{ className: "cutoff-chart-opening" }}>
           <Dot variant="default" />

@@ -257,11 +257,10 @@
 .cutoff-chart-dot-closing { fill: var(--muted-foreground); }
 .cutoff-chart-dot.is-active { stroke: var(--background); stroke-width: 2.5; }
 .cutoff-chart-hover-line { stroke: var(--foreground); stroke-width: 1; stroke-dasharray: 3 3; vector-effect: non-scaling-stroke; pointer-events: none; }
-.cutoff-chart-tooltip { position: absolute; top: 10px; z-index: 2; display: grid; min-width: 132px; gap: 4px; padding: 9px 10px; border: 1px solid rgb(255 255 255 / .22); background: var(--foreground); color: var(--muted-foreground); font-size: 10px; line-height: 1.35; box-shadow: 0 8px 24px rgb(0 0 0 / .24); transform: translateX(-14px); pointer-events: none; }
-.cutoff-chart-tooltip.is-right { transform: translateX(calc(-100% + 14px)); }
-.cutoff-chart-tooltip strong { color: var(--background); font-size: 11px; }
-.cutoff-chart-tooltip span { display: flex; justify-content: space-between; gap: 16px; }
-.cutoff-chart-tooltip b { color: var(--background); font-weight: 600; font-variant-numeric: tabular-nums; }
+.cutoff-chart-tooltip { display: grid; min-width: 148px; gap: 4px; padding: 9px 10px; border: 1px solid var(--border); background: var(--background); color: var(--foreground); font-size: 12px; line-height: 1.35; box-shadow: 0 8px 24px rgb(0 0 0 / .24); pointer-events: none; }
+.cutoff-chart-tooltip strong { color: var(--foreground); font-size: 12px; }
+.cutoff-chart-tooltip span { display: flex; justify-content: space-between; gap: 16px; color: var(--muted-foreground); }
+.cutoff-chart-tooltip b { color: var(--foreground); font-weight: 600; font-variant-numeric: tabular-nums; }
 .cutoff-chart-legend { display: flex; flex-wrap: wrap; gap: 14px; padding: 4px 0 2px; color: var(--muted-foreground); font-size: 10px; }
 .cutoff-chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
 .cutoff-chart-key { display: block; width: 18px; border-top: 2px solid var(--foreground); }
@@ -269,12 +268,83 @@
 .cutoff-chart-note { margin: 8px 0 0; color: var(--muted-foreground); font-size: 11px; }
 
 .cutoff-result-count { color: var(--muted-foreground); font-size: 11px; font-variant-numeric: tabular-nums; }
+.cutoff-shortlist { display: flex; flex-wrap: wrap; gap: 4px 8px; margin: 0 0 12px; }
+.cutoff-pool-shortlist { display: grid; gap: 10px; margin: 0 0 16px; }
+.cutoff-pool-filter {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 6px 12px;
+  align-items: start;
+}
+.cutoff-pool-filter > span {
+  padding-top: 8px;
+  color: var(--muted-foreground);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .04em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+.cutoff-pool-filter > div { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
+.cutoff-pool-filter .filter-chip {
+  max-width: 100%;
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+}
+.cutoff-pool-filter .filter-chip[aria-pressed="true"] {
+  border-color: var(--foreground);
+  background: var(--foreground);
+  color: var(--background);
+}
+.cutoff-pool-filter .filter-chip:hover:not([aria-pressed="true"]) {
+  border-color: var(--foreground);
+}
+.cutoff-disclosure {
+  margin-top: 24px;
+  border: 1px solid var(--border);
+  background: var(--background);
+}
+.cutoff-disclosure > summary {
+  display: block;
+  cursor: pointer;
+  list-style: none;
+}
+.cutoff-disclosure > summary::-webkit-details-marker,
+.cutoff-disclosure > summary::marker { display: none; content: ""; }
+.cutoff-disclosure-summary {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  pointer-events: none;
+}
+.cutoff-disclosure-summary h2 { margin: 0; font: 500 16px/1.3 var(--font-sans), sans-serif; }
+.cutoff-disclosure-summary p { margin: 4px 0 0; color: var(--muted-foreground); font-size: 12px; line-height: 1.55; }
+.cutoff-disclosure-summary::after {
+  flex: 0 0 auto;
+  color: var(--muted-foreground);
+  content: "Show";
+  font-size: 11px;
+  font-weight: 500;
+}
+.cutoff-disclosure[open] > summary {
+  border-bottom: 1px solid var(--border);
+}
+.cutoff-disclosure[open] .cutoff-disclosure-summary::after { content: "Hide"; }
+.cutoff-disclosure-body { padding: 16px; }
+.cutoff-disclosure .cutoff-copy-grid { margin-top: 0; border: 0; }
+.cutoff-disclosure .cutoff-search { margin-bottom: 12px; }
+.cutoff-disclosure .cutoff-empty { border: 0; }
+.cutoff-disclosure .cutoff-disclaimer { margin: 16px 0 0; font-size: 11px; color: var(--muted-foreground); }
+.cutoff-disclosure .cutoff-disclaimer a { color: var(--foreground); text-underline-offset: 3px; }
 .cutoff-program-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; border: 1px solid var(--border); background: var(--border); }
 .cutoff-program-list a { display: grid; gap: 5px; min-width: 0; padding: 14px 16px; background: var(--background); color: var(--foreground); text-decoration: none; }
 .cutoff-program-list a:hover { background: var(--muted); }
 .cutoff-program-list a:last-child:nth-child(odd) { grid-column: 1 / -1; }
 .cutoff-program-list strong { overflow: hidden; font-size: 12px; font-weight: 500; line-height: 1.4; text-overflow: ellipsis; }
-.cutoff-program-list span { color: var(--muted-foreground); font-size: 10px; line-height: 1.45; }
+.cutoff-program-list span { color: var(--muted-foreground); font-size: 12px; line-height: 1.45; }
 .cutoff-table-scroll { overflow-x: auto; border: 1px solid var(--border); }
 .cutoff-table { width: 100%; border-collapse: collapse; font-size: 12px; }
 .cutoff-table caption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); }
@@ -282,11 +352,49 @@
 .cutoff-table td { height: 46px; padding: 10px 12px; border-top: 1px solid var(--border); text-align: left; vertical-align: middle; }
 .cutoff-table thead th { height: 38px; border-top: 0; background: var(--background); color: var(--muted-foreground); font-size: 11px; font-weight: 500; }
 .cutoff-table tbody th { max-width: 460px; font-weight: 500; }
-.cutoff-table tbody th small { display: block; margin-top: 4px; color: var(--muted-foreground); font-size: 9px; font-weight: 400; }
-.cutoff-table tbody th a { color: inherit; text-underline-offset: 3px; }
+.cutoff-table tbody th[data-same="true"],
+.cutoff-table tbody td[data-same="true"] { color: var(--muted-foreground); font-weight: 400; }
+.cutoff-pool-group .cutoff-table tbody a { font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.cutoff-sibling-rows {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  border: 1px solid var(--border);
+  background: var(--border);
+}
+.cutoff-sibling-rows a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  min-height: 42px;
+  padding: 8px 12px;
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 12px;
+  text-decoration: none;
+}
+.cutoff-sibling-rows a:hover { background: var(--muted); }
+.cutoff-sibling-rows strong { min-width: 0; font-weight: 600; line-height: 1.35; }
+.cutoff-sibling-rows span { flex: 0 0 auto; color: var(--muted-foreground); font-size: 11px; }
+.cutoff-table tbody th a,
+.cutoff-table tbody td a { color: inherit; text-underline-offset: 3px; }
+.cutoff-table tbody th small,
+.cutoff-table tbody td small { display: block; margin-top: 4px; color: var(--muted-foreground); font-size: 9px; font-weight: 400; }
 .cutoff-table tbody tr:hover { background: var(--muted); }
+.cutoff-table tbody tr[id^="round-"] { scroll-margin-top: 96px; }
 .cutoff-table td:nth-last-child(-n+2) { font-variant-numeric: tabular-nums; }
 .cutoff-table td:last-child strong { font-weight: 600; }
+.cutoff-table [data-field="latest-round"] { font-variant-numeric: tabular-nums; }
+.cutoff-pool-group + .cutoff-pool-group { margin-top: 20px; }
+.cutoff-pool-group h3,
+.cutoff-sibling-group h3 {
+  margin: 0 0 8px;
+  color: var(--muted-foreground);
+  font: 500 12px/1.3 var(--font-sans), sans-serif;
+}
+.cutoff-sibling-groups { display: grid; gap: 20px; }
 
 .cutoff-error { margin-bottom: 12px; padding: 11px 12px; border: 1px solid color-mix(in srgb, var(--destructive) 35%, transparent); color: var(--destructive); font-size: 12px; }
 .cutoff-empty { margin: 0; padding: 32px 20px; border: 1px solid var(--border); color: var(--muted-foreground); text-align: center; font-size: 12px; }
@@ -301,7 +409,7 @@
 .cutoff-source-list { display: grid; gap: 1px; margin: 0; padding: 0; background: var(--border); list-style: none; }
 .cutoff-source-list li { display: grid; gap: 4px; padding: 10px 12px; background: var(--background); }
 .cutoff-source-list strong { color: var(--foreground); font-size: 11px; font-weight: 500; line-height: 1.4; }
-.cutoff-source-list span { color: var(--muted-foreground); font-size: 9px; line-height: 1.4; }
+.cutoff-source-list span { color: var(--muted-foreground); font-size: 11px; line-height: 1.4; }
 .cutoff-source-links { display: flex; flex-wrap: wrap; gap: 7px; align-content: start; }
 .cutoff-source-links a { display: inline-flex; min-height: 34px; align-items: center; gap: 7px; padding: 0 10px; border: 1px solid var(--border); color: var(--foreground); font-size: 11px; text-decoration: none; }
 .cutoff-source-links a:hover { background: var(--muted); }
@@ -343,7 +451,7 @@ html.dark .jee-cutoff-footer {
 .jee-cutoff-footer a:hover,
 .jee-cutoff-footer button:hover { color: var(--foreground); text-decoration: underline; }
 .jee-cutoff-footer-notices { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
-.jee-cutoff-footer-notices > p { max-width: 1180px; margin: 0 0 8px; color: var(--muted-foreground); font-size: 10px; line-height: 1.7; }
+.jee-cutoff-footer-notices > p { max-width: 1180px; margin: 0 0 8px; color: var(--muted-foreground); font-size: 12px; line-height: 1.7; }
 .jee-cutoff-footer-legal { display: flex; flex-wrap: wrap; gap: 10px 18px; margin-top: 18px; }
 .jee-cutoff-footer-legal a { font-size: 10px; }
 
@@ -373,6 +481,8 @@ html.dark .jee-cutoff-footer {
   .cutoff-hero-meta span + span { padding-left: 0; border-left: 0; }
   .cutoff-section { padding-top: 32px; }
   .cutoff-section-heading { align-items: stretch; flex-direction: column; gap: 12px; }
+  .cutoff-disclosure-summary { align-items: flex-start; flex-direction: column; }
+  .cutoff-disclosure-summary::after { margin-left: auto; }
   .cutoff-directory,
   .cutoff-exam-grid,
   .cutoff-program-list { grid-template-columns: 1fr; }
@@ -406,11 +516,17 @@ html.dark .jee-cutoff-footer {
   .cutoff-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); }
   .cutoff-table tbody { display: grid; gap: 8px; }
   .cutoff-table tbody tr { padding: 12px 14px; border: 1px solid var(--border); background: var(--background); }
+  .cutoff-sibling-rows { grid-template-columns: 1fr; }
+  .cutoff-pool-filter { grid-template-columns: 1fr; gap: 6px; }
+  .cutoff-pool-filter > span { padding-top: 0; }
   .cutoff-table tbody th,
   .cutoff-table tbody td { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 10px; height: auto; padding: 6px 0; border: 0; text-align: right; }
   .cutoff-table tbody th { max-width: none; text-align: right; }
   .cutoff-table tbody th::before,
   .cutoff-table tbody td::before { content: attr(data-label); color: var(--muted-foreground); font-size: 10px; font-weight: 400; text-align: left; }
+  .cutoff-table tbody td > a,
+  .cutoff-table tbody th > a { min-width: 0; overflow-wrap: anywhere; }
+  .cutoff-table tbody td > small { grid-column: 2; margin-top: 2px; text-align: right; }
   .cutoff-source-card { grid-template-columns: 1fr; padding: 16px; }
   .cutoff-source-card .cutoff-disclaimer { grid-column: auto; }
   .jee-cutoff-footer-inner { padding: 40px 18px 28px; }

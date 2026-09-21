@@ -7,8 +7,11 @@ import {
   getJeeSeoRoutes,
   getProfilePageModel,
   getProgramPageModel,
+  profileDifference,
   profileLabel,
+  seatPoolShortLabel,
 } from "@/lib/jee-cutoffs/seo";
+import { SeatPoolTable } from "./SeatPoolTable";
 import type { CutoffSourceRegistryEntry, JeeExamId, JeeSeoRoute } from "@/lib/jee-cutoffs/types";
 import { PRODUCTION_SITE_URL } from "@/lib/site-url";
 
@@ -36,6 +39,30 @@ function pageJsonLd(name: string, canonical: string, crumbs: Array<{ name: strin
     { "@context": "https://schema.org", "@type": "WebPage", name, url: canonical },
     { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: crumbs.map((crumb, index) => ({ "@type": "ListItem", position: index + 1, ...crumb })) },
   ];
+}
+
+function SiblingPools({ current, siblings }: { current: JeeSeoRoute; siblings: JeeSeoRoute[] }) {
+  if (!siblings.length) return null;
+  const items = [...siblings].sort((left, right) => {
+    const leftDiff = profileDifference(current, left);
+    const rightDiff = profileDifference(current, right);
+    return leftDiff.fields.length - rightDiff.fields.length || leftDiff.title.localeCompare(rightDiff.title, "en") || left.path.localeCompare(right.path);
+  });
+  return (
+    <section className="cutoff-section">
+      <div className="cutoff-section-heading">
+        <h2>Other seat pools</h2>
+      </div>
+      <div className="cutoff-sibling-rows">
+        {items.map((sibling) => (
+          <Link href={sibling.path} key={sibling.path}>
+            <strong>{profileDifference(current, sibling).title}</strong>
+            <span>{sibling.roundCount === 1 ? "1 round" : `${sibling.roundCount} rounds`}</span>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
 }
 
 function SourceContext({ sources }: { sources: CutoffSourceRegistryEntry[] }) {
@@ -77,6 +104,7 @@ export async function ProgramPage({ exam, college, year, programSlug }: { exam: 
   const collegePath = `/${exam}/colleges/${college}`;
   const yearPath = `${collegePath}/cutoffs/${year}`;
   const canonical = `${baseUrl}${model.route.path}`;
+  const includeBody = new Set(model.profiles.map((profile) => profile.route.body)).size > 1;
   const jsonLd = pageJsonLd(`${model.college.name} ${model.offering.name} cutoff ${year}`, canonical, [
     { name: "JEE cutoffs", item: `${baseUrl}/jee-cutoffs` },
     { name: `${examLabel(exam)} colleges`, item: `${baseUrl}/${exam}/colleges` },
@@ -86,8 +114,30 @@ export async function ProgramPage({ exam, college, year, programSlug }: { exam: 
   ]);
   return <main className="cutoff-main"><JsonLd value={jsonLd} /><Breadcrumbs items={[{ label: "JEE cutoffs", href: "/jee-cutoffs" }, { label: `${examLabel(exam)} colleges`, href: `/${exam}/colleges` }, { label: model.college.seoName, href: collegePath }, { label: String(year), href: yearPath }, { label: model.offering.name }]} />
     <header className="cutoff-hero"><span className="cutoff-kicker">{examLabel(exam)} · {model.offering.degree} · {model.offering.durationYears} years</span><h1>{model.college.seoName} {model.offering.name} cutoff {year}</h1><p className="cutoff-lead">Every published counselling, quota, category and gender profile for this exact offering.</p><div className="cutoff-hero-meta"><span>{model.profiles.length.toLocaleString("en-IN")} profiles</span><span>{model.route.rowCount.toLocaleString("en-IN")} rank records</span><span>Release {model.release}</span></div></header>
-    <section className="cutoff-section"><div className="cutoff-section-heading"><div><h2>Comparable round trend</h2><p>{profileLabel(model.defaultProfile.route)}</p></div><Link className="cutoff-button" href={model.defaultProfile.route.path}>Open exact profile</Link></div><div className="cutoff-chart-card cutoff-trend-card"><CutoffChart points={model.chart} label={`${model.offering.name} round cutoff trend`} /></div></section>
-    <section className="cutoff-section" aria-labelledby="profile-list-title"><div className="cutoff-section-heading"><div><h2 id="profile-list-title">Seat-pool profiles</h2><p>Rounds are kept separate within each exact rank list.</p></div></div><div className="cutoff-table-scroll"><table className="cutoff-table" data-release={model.release}><caption>Available counselling profiles for {model.offering.name}</caption><thead><tr><th scope="col">Profile</th><th scope="col">Rounds</th><th scope="col">Latest round</th><th scope="col">Opening</th><th scope="col">Closing</th></tr></thead><tbody>{model.profiles.map((profile) => <tr key={profile.route.path}><th scope="row" data-label="Profile" data-field="profile"><Link href={profile.route.path}>{profileLabel(profile.route)}</Link>{profile.route.indexable ? null : <small>One published round</small>}</th><td data-label="Rounds" data-field="round-count">{profile.route.roundCount}</td><td data-label="Latest" data-field="latest-round">Round {profile.latestRound}</td><td data-label="Opening" data-field="opening-rank">{profile.openingRank.toLocaleString("en-IN")}</td><td data-label="Closing" data-field="closing-rank"><strong>{profile.closingRank.toLocaleString("en-IN")}</strong></td></tr>)}</tbody></table></div></section>
+    <section className="cutoff-section"><div className="cutoff-section-heading"><div><h2>Comparable round trend</h2><p>{seatPoolShortLabel(model.defaultProfile.route, includeBody)}</p></div><Link className="cutoff-button" href={model.defaultProfile.route.path}>Open this seat pool</Link></div><div className="cutoff-chart-card cutoff-trend-card"><CutoffChart points={model.chart} label={`${model.offering.name} round cutoff trend`} /></div></section>
+    <section className="cutoff-section" aria-labelledby="profile-list-title"><div className="cutoff-section-heading"><div><h2 id="profile-list-title">Seat pools</h2><p>Latest closing rank for each quota, category and gender.</p></div></div>
+      <SeatPoolTable
+        offeringName={model.offering.name}
+        release={model.release}
+        profiles={model.profiles.flatMap((profile) => {
+          const route = profile.route;
+          if (!route.body || !route.quota || !route.seatType || !route.gender) return [];
+          return [{
+            path: route.path,
+            body: route.body,
+            bodyLabel: bodyLabel(route.body),
+            quota: route.quota,
+            seatType: route.seatType,
+            gender: route.gender,
+            genderLabel: genderLabel(route.gender),
+            latestRound: profile.latestRound,
+            openingRank: profile.openingRank,
+            closingRank: profile.closingRank,
+            indexable: route.indexable,
+          }];
+        })}
+      />
+    </section>
     {model.adjacentYears.length ? <section className="cutoff-year-nav"><h2>Other years</h2><div className="cutoff-years">{model.adjacentYears.map((route) => <Link className="cutoff-year-link" href={route.path} key={route.path}>{route.year}</Link>)}</div></section> : null}
     <SourceContext sources={model.sources} />
   </main>;
@@ -101,8 +151,6 @@ export async function ProfilePage({ routePath }: { routePath: string }) {
   const canonical = `${baseUrl}${model.route.path}`;
   const label = profileLabel(model.route);
   const first = model.rows[0];
-  const last = model.rows.at(-1)!;
-  const difference = last.closing_rank - first.closing_rank;
   const jsonLd = pageJsonLd(`${model.college.name} ${model.offering.name} ${label} cutoff`, canonical, [
     { name: "JEE cutoffs", item: `${baseUrl}/jee-cutoffs` },
     { name: model.college.name, item: `${baseUrl}/${model.route.examId}/colleges/${model.route.collegeId}` },
@@ -110,11 +158,86 @@ export async function ProfilePage({ routePath }: { routePath: string }) {
     { name: model.offering.name, item: `${baseUrl}${model.programPath}` },
     { name: label, item: canonical },
   ]);
-  return <main className="cutoff-main"><JsonLd value={jsonLd} /><Breadcrumbs items={[{ label: "JEE cutoffs", href: "/jee-cutoffs" }, { label: model.college.seoName, href: `/${model.route.examId}/colleges/${model.route.collegeId}` }, { label: String(model.route.year), href: yearPath }, { label: model.offering.name, href: model.programPath }, { label }]} />
-    <header className="cutoff-hero"><span className="cutoff-kicker">{examLabel(model.route.examId!)} · {bodyLabel(model.route.body!)}</span><h1>{model.college.seoName} {model.offering.name} cutoff {model.route.year}</h1><p className="cutoff-lead">{model.route.quota} quota · {model.route.seatType} · {genderLabel(model.route.gender!)} · {model.offering.degree}, {model.offering.durationYears} years.</p><div className="cutoff-hero-meta"><span>{model.rows.length} published round{model.rows.length === 1 ? "" : "s"}</span><span>{model.route.indexable ? "Multi-round profile" : "One published round"}</span><span>Release {model.release}</span></div></header>
-    <section className="cutoff-section"><div className="cutoff-section-heading"><div><h2>Opening and closing ranks</h2><p>Lower is better. Missing counselling rounds are shown as gaps.</p></div></div><div className="cutoff-chart-card cutoff-trend-card"><CutoffChart points={model.chart} label={`${label} opening and closing ranks`} /></div></section>
-    <section className="cutoff-table-section"><div className="cutoff-section-heading"><div><h2>Published rounds</h2><p>{label}</p></div></div><div className="cutoff-table-scroll"><table className="cutoff-table" data-release={model.release}><caption>Round-by-round opening and closing ranks for {label}</caption><thead><tr><th scope="col">Round</th><th scope="col">Opening rank</th><th scope="col">Closing rank</th><th scope="col">Source record</th></tr></thead><tbody>{model.rows.map((row) => <tr id={`round-${row.round}`} key={row.round}><th scope="row" data-label="Round" data-field="round">Round {row.round}</th><td data-label="Opening" data-field="opening-rank">{row.opening_rank.toLocaleString("en-IN")}</td><td data-label="Closing" data-field="closing-rank"><strong>{row.closing_rank.toLocaleString("en-IN")}</strong></td><td data-label="Source" data-field="source-id">{row.source_id}</td></tr>)}</tbody></table></div>{model.rows.length > 1 ? <p className="cutoff-muted">Closing rank moved from {first.closing_rank.toLocaleString("en-IN")} in Round {first.round} to {last.closing_rank.toLocaleString("en-IN")} in Round {last.round} ({difference >= 0 ? "+" : ""}{difference.toLocaleString("en-IN")}).</p> : <p className="cutoff-muted">Only Round {first.round} is present for this exact source profile; no trend is inferred.</p>}</section>
-    {model.siblingProfiles.length ? <section className="cutoff-section"><div className="cutoff-section-heading"><div><h2>Other profiles</h2><p>Same college, year and exact offering.</p></div></div><div className="cutoff-program-list">{model.siblingProfiles.map((route: JeeSeoRoute) => <Link href={route.path} key={route.path}><strong>{profileLabel(route)}</strong><span>{route.roundCount} round{route.roundCount === 1 ? "" : "s"}</span></Link>)}</div></section> : null}
-    <SourceContext sources={model.sources} />
-  </main>;
+  return (
+    <main className="cutoff-main">
+      <JsonLd value={jsonLd} />
+      <Breadcrumbs
+        items={[
+          { label: "JEE cutoffs", href: "/jee-cutoffs" },
+          { label: model.college.seoName, href: `/${model.route.examId}/colleges/${model.route.collegeId}` },
+          { label: String(model.route.year), href: yearPath },
+          { label: model.offering.name, href: model.programPath },
+          { label },
+        ]}
+      />
+      <header className="cutoff-hero">
+        <span className="cutoff-kicker">
+          {examLabel(model.route.examId!)} · {bodyLabel(model.route.body!)}
+        </span>
+        <h1>
+          {model.college.seoName} {model.offering.name} cutoff {model.route.year}
+        </h1>
+        <p className="cutoff-lead">
+          {model.route.quota} quota · {model.route.seatType} · {genderLabel(model.route.gender!)} · {model.offering.degree}, {model.offering.durationYears} years.
+        </p>
+        <div className="cutoff-hero-meta">
+          <span>
+            {model.rows.length} published round{model.rows.length === 1 ? "" : "s"}
+          </span>
+          <span>{model.route.indexable ? "Multi-round profile" : "One published round"}</span>
+          <span>Release {model.release}</span>
+        </div>
+      </header>
+      <section className="cutoff-section">
+        <div className="cutoff-section-heading">
+          <div>
+            <h2>Opening and closing ranks</h2>
+            <p>Lower is better. Missing counselling rounds are shown as gaps.</p>
+          </div>
+        </div>
+        <div className="cutoff-chart-card cutoff-trend-card">
+          <CutoffChart points={model.chart} label={`${seatPoolShortLabel(model.route)} opening and closing ranks`} />
+        </div>
+      </section>
+      <section className="cutoff-table-section">
+        <div className="cutoff-section-heading">
+          <h2>Published rounds</h2>
+        </div>
+        <div className="cutoff-table-scroll">
+          <table className="cutoff-table" data-release={model.release}>
+            <caption>Opening and closing ranks by round</caption>
+            <thead>
+              <tr>
+                <th scope="col">Round</th>
+                <th scope="col">Opening rank</th>
+                <th scope="col">Closing rank</th>
+              </tr>
+            </thead>
+            <tbody>
+              {model.rows.map((row) => (
+                <tr id={`round-${row.round}`} key={row.round}>
+                  <th scope="row" data-label="Round" data-field="round">
+                    {row.round}
+                  </th>
+                  <td data-label="Opening" data-field="opening-rank">
+                    {row.opening_rank.toLocaleString("en-IN")}
+                  </td>
+                  <td data-label="Closing" data-field="closing-rank">
+                    <strong>{row.closing_rank.toLocaleString("en-IN")}</strong>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {model.rows.length === 1 ? (
+          <p className="cutoff-muted">
+            Only Round {first.round} is present for this exact source profile; no trend is inferred.
+          </p>
+        ) : null}
+      </section>
+      <SiblingPools current={model.route} siblings={model.siblingProfiles} />
+      <SourceContext sources={model.sources} />
+    </main>
+  );
 }

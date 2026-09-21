@@ -295,3 +295,66 @@ export function profileLabel(route: JeeSeoRoute): string {
   if (!route.body || !route.quota || !route.seatType || !route.gender) return "Cutoff profile";
   return `${bodyLabel(route.body)} · ${route.quota} quota · ${route.seatType} · ${genderLabel(route.gender)}`;
 }
+
+export function seatPoolShortLabel(route: JeeSeoRoute, includeBody = false): string {
+  if (!route.quota || !route.seatType || !route.gender) return profileLabel(route);
+  const parts = [route.seatType, genderLabel(route.gender), route.quota];
+  if (includeBody && route.body) parts.unshift(bodyLabel(route.body));
+  return parts.join(" · ");
+}
+
+export type ProfileDiffField = "body" | "quota" | "seatType" | "gender";
+
+export function profileDifference(current: JeeSeoRoute, other: JeeSeoRoute): {
+  fields: ProfileDiffField[];
+  title: string;
+} {
+  const fields: ProfileDiffField[] = [];
+  if (other.body !== current.body) fields.push("body");
+  if (other.quota !== current.quota) fields.push("quota");
+  if (other.seatType !== current.seatType) fields.push("seatType");
+  if (other.gender !== current.gender) fields.push("gender");
+  const parts: string[] = [];
+  for (const field of fields) {
+    if (field === "body" && other.body) parts.push(bodyLabel(other.body));
+    if (field === "quota" && other.quota) parts.push(other.quota);
+    if (field === "seatType" && other.seatType) parts.push(other.seatType);
+    if (field === "gender" && other.gender) parts.push(genderLabel(other.gender));
+  }
+  return { fields, title: parts.join(" · ") || profileLabel(other) };
+}
+
+export function siblingVarianceLabel(current: JeeSeoRoute, siblings: JeeSeoRoute[]): string {
+  const varied = new Set<ProfileDiffField>();
+  for (const sibling of siblings) {
+    for (const field of profileDifference(current, sibling).fields) varied.add(field);
+  }
+  const labels: string[] = [];
+  if (varied.has("seatType")) labels.push("category");
+  if (varied.has("gender")) labels.push("gender");
+  if (varied.has("quota")) labels.push("quota");
+  if (varied.has("body")) labels.push("counselling");
+  if (labels.length === 0) return "Other published seat pools for this program.";
+  if (labels.length === 1) return `Different ${labels[0]}.`;
+  if (labels.length === 2) return `Different ${labels[0]} or ${labels[1]}.`;
+  return `Different ${labels.slice(0, -1).join(", ")}, or ${labels.at(-1)}.`;
+}
+
+export function groupSiblingProfiles(current: JeeSeoRoute, siblings: JeeSeoRoute[]) {
+  const groups: Record<"gender" | "category" | "quota" | "counselling" | "other", JeeSeoRoute[]> = {
+    gender: [],
+    category: [],
+    quota: [],
+    counselling: [],
+    other: [],
+  };
+  for (const sibling of siblings) {
+    const { fields } = profileDifference(current, sibling);
+    if (fields.length === 1 && fields[0] === "gender") groups.gender.push(sibling);
+    else if (fields.length === 1 && fields[0] === "seatType") groups.category.push(sibling);
+    else if (fields.length === 1 && fields[0] === "quota") groups.quota.push(sibling);
+    else if (fields.length === 1 && fields[0] === "body") groups.counselling.push(sibling);
+    else groups.other.push(sibling);
+  }
+  return groups;
+}

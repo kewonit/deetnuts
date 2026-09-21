@@ -76,6 +76,8 @@ export function CutoffExplorer(props: {
   const [error, setError] = useState<string | null>(null);
   const [announcement, setAnnouncement] = useState("");
   const [search, setSearch] = useState("");
+  const [degreeFilter, setDegreeFilter] = useState<string | null>(null);
+  const [thisProgramOnly, setThisProgramOnly] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [loadingMore, setLoadingMore] = useState(false);
   const exactProfile = props.profileRoutes.find(
@@ -233,16 +235,25 @@ export function CutoffExplorer(props: {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const degrees = useMemo(() => {
+    const unique = new Set(
+      filters.offerings.map((offering) => offering.degree).filter(Boolean),
+    );
+    return [...unique].sort((left, right) => left.localeCompare(right, "en"));
+  }, [filters.offerings]);
+
   const visibleRows = useMemo(() => {
     const query = search.trim().toLocaleLowerCase("en-IN");
-    if (!query) return rows;
-    return rows.filter((row) =>
-      [row.source_program_name, row.degree]
+    return rows.filter((row) => {
+      if (thisProgramOnly && row.offering_id !== selection.offeringId) return false;
+      if (degreeFilter && row.degree !== degreeFilter) return false;
+      if (!query) return true;
+      return [row.source_program_name, row.degree]
         .join(" ")
         .toLocaleLowerCase("en-IN")
-        .includes(query),
-    );
-  }, [rows, search]);
+        .includes(query);
+    });
+  }, [rows, search, degreeFilter, thisProgramOnly, selection.offeringId]);
 
   const bodyIndex = filters.bodies.indexOf(selection.body);
 
@@ -295,7 +306,7 @@ export function CutoffExplorer(props: {
                 <FilterChip
                   key={round}
                   instant
-                  label={`Round ${round}`}
+                  label={`${round}`}
                   active={selection.round === round}
                   onClick={() => void load({ round }, true, "round")}
                 />
@@ -377,7 +388,24 @@ export function CutoffExplorer(props: {
               {selection.seatType} · {genderLabel(selection.gender)}
             </p>
           </div>
-          <span className="cutoff-result-count">{total.toLocaleString("en-IN")} results</span>
+          <span className="cutoff-result-count">{visibleRows.length.toLocaleString("en-IN")} of {total.toLocaleString("en-IN")}</span>
+        </div>
+        <div className="cutoff-shortlist" role="group" aria-label="Shortlist programs">
+          <FilterChip
+            instant
+            label="This program only"
+            active={thisProgramOnly}
+            onClick={() => setThisProgramOnly((current) => !current)}
+          />
+          {degrees.map((degree) => (
+            <FilterChip
+              key={degree}
+              instant
+              label={degree}
+              active={degreeFilter === degree}
+              onClick={() => setDegreeFilter((current) => (current === degree ? null : degree))}
+            />
+          ))}
         </div>
         <label className="cutoff-search">
           <span className="cutoff-sr-table">Search programs</span>
@@ -445,7 +473,7 @@ export function CutoffExplorer(props: {
         ) : (
           <EmptyPanel description="No programs match this combination. Try a different category, quota, or search." />
         )}
-        {nextCursor && !search.trim() ? (
+        {nextCursor && !search.trim() && !degreeFilter && !thisProgramOnly ? (
           <div className="cutoff-actions">
             <Button
               type="button"
