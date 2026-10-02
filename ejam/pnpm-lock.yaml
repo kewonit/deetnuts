@@ -130,8 +130,8 @@ importers:
         specifier: ^4.0.9
         version: 4.0.9
       hyparquet:
-        specifier: ^1.29.1
-        version: 1.29.1
+        specifier: ^1.29.2
+        version: 1.29.2
       hyparquet-compressors:
         specifier: ^1.1.1
         version: 1.1.1
@@ -2440,8 +2440,8 @@ packages:
   hyparquet-compressors@1.1.1:
     resolution: {integrity: sha512-yx7aA3Rhj0YycbdV71+XznQSLAefa4cT0urpgNXy4aM6eSeCknaVDNne8y45Uz74Fb15yyXUzOStlceOJBan7A==}
 
-  hyparquet@1.29.1:
-    resolution: {integrity: sha512-Wa57A2KxGFtRTeDTJp4pT0TaqN8btb7/XTrMs17iM+xJxsbBxRyzaGaRRPQ4lOPbmso/qohDafJD7b+cFMZq8A==}
+  hyparquet@1.29.2:
+    resolution: {integrity: sha512-2LxinZ8X0JqToST+9OXcy9t3t5Q7ZneMTkSqUx/36Hv18pCTk/N71IWZc7APTSNG1Me39l/jjEvzZSZ0R+Knbw==}
 
   hysnappy@1.0.0:
     resolution: {integrity: sha512-MNrC4NfwDGPb889O6gIfEtbvEZCSWUsSEhsz4Oq2FRcpGtXHfeVz3KciSPp5Pnnz1NjFMgDQNfxdJozymJEDDA==}
@@ -5533,7 +5533,7 @@ snapshots:
       fzstd: 0.1.1
       hysnappy: 1.0.0
 
-  hyparquet@1.29.1: {}
+  hyparquet@1.29.2: {}
 
   hysnappy@1.0.0: {}
 
