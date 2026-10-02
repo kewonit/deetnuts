@@ -21,7 +21,7 @@ The current codebase covers the following data domains:
 
 Runtime architecture:
 
-- Next.js 16.2.12 with the App Router
+- Next.js 16.3.7 with the App Router
 - React 19.2.8 with React Compiler enabled
 - TypeScript across application and scripts
 - Self-hosted PocketBase for auth, application data, and private avatar storage
@@ -76,6 +76,7 @@ Install and start the app:
 git clone https://github.com/kewonit/deetnuts
 cd deetnuts
 npm ci
+npm exec --yes --package=pnpm@11.1.3 -- pnpm --dir ejam install --frozen-lockfile
 cp .env.example .env.local
 npm run dev
 ```
@@ -118,10 +119,12 @@ Deployment operations are documented in [deploy/README.md](./deploy/README.md).
 
 ### eJAM predictor runtime
 
-The JEE Main and JEE Advanced predictor uses the minimum vendored eJAM runtime
-under `ejam/`: predictor/data source modules, verified release data, and the
-upstream licence and attribution files. The standalone eJAM web app, workspace
-tooling, build caches, and duplicate UI source are intentionally excluded.
+The JEE Main and JEE Advanced predictor uses the eJAM workspace under `ejam/`,
+including predictor/data source modules, verified release data, shared UI
+tooling, and upstream licence and attribution files. The root production build
+uses the workspace's Tailwind toolchain to generate `public/ejam/ui.css`.
+Install both the root npm dependencies and the frozen eJAM pnpm dependencies
+before building. Production CI and the Docker image use the same two lockfiles.
 
 The checked-in MHT-CET eligibility-map generator reads eJAM reference data from
 this in-repository runtime rather than relying on a sibling checkout.

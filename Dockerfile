@@ -11,6 +11,7 @@ FROM ${NODE_IMAGE} AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+RUN npm exec --yes --package=pnpm@11.1.3 -- pnpm --dir ejam install --frozen-lockfile
 
 ARG NEXT_PUBLIC_APP_URL
 ARG NEXT_PUBLIC_SOURCE_COMMIT
