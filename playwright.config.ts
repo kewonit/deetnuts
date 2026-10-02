@@ -27,10 +27,12 @@ export default defineConfig({
   webServer: process.env.PLAYWRIGHT_BASE_URL
     ? undefined
     : {
-        command: "npm run dev -- --hostname 127.0.0.1 --port 3107",
+        command: process.env.CI
+          ? "npm run build && npm run start -- --hostname 127.0.0.1 --port 3107"
+          : "npm run dev -- --hostname 127.0.0.1 --port 3107",
         url: baseURL,
         reuseExistingServer: !process.env.CI,
-        timeout: 120_000,
+        timeout: process.env.CI ? 300_000 : 120_000,
         env: {
           ...process.env,
           ADMISSIONS_V2_MHT_CET: "true",

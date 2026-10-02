@@ -105,6 +105,7 @@ test("cutoff surfaces follow light and dark color preferences", async ({ page })
   });
   const light = await colors();
   await page.emulateMedia({ colorScheme: "dark" });
+  await expect(page.locator(".jee-cutoff-shell")).toHaveClass(/\bdark\b/);
   const dark = await colors();
   expect(light.shell).not.toBe(dark.shell);
   expect(light.footer).not.toBe(dark.footer);
