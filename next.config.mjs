@@ -8,7 +8,9 @@ const selfHostedCacheHandler = fileURLToPath(
 );
 
 if (deploymentId && !/^[A-Za-z0-9._-]{7,64}$/.test(deploymentId)) {
-  throw new Error("NEXT_DEPLOYMENT_ID must be a 7-64 character release identifier");
+  throw new Error(
+    "NEXT_DEPLOYMENT_ID must be a 7-64 character release identifier",
+  );
 }
 
 const contentSecurityPolicy = [
@@ -61,6 +63,9 @@ const nextConfig = {
     "/jee-advanced/colleges/**/*": [
       "ejam/data/catalog/**/*",
       "ejam/data/tools/college-cutoffs/**/*",
+    ],
+    "/mht-cet/colleges/**/*": [
+      "ejam/data/reference/engineering/mht-cet/seat-pools-2026.json",
     ],
     "/compliance/data-sources-and-licensing": [
       "ejam/data/catalog/**/*",

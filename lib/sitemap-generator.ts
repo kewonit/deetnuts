@@ -16,10 +16,6 @@ export async function generateAllUrls(): Promise<SitemapUrl[]> {
       lastModified: seoLastUpdated,
     },
     {
-      url: `${PRODUCTION_SITE_URL}/datasource`,
-      lastModified: seoLastUpdated,
-    },
-    {
       url: `${PRODUCTION_SITE_URL}/jee-cutoffs`,
     },
     {

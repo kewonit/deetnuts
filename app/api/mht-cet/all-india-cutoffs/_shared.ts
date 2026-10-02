@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getPocketBase } from "@/lib/pocketbaseClient";
+import { ClientResponseError, getPocketBase } from "@/lib/pocketbaseClient";
 
 type QueryConfig = {
   page: number;
@@ -167,7 +167,11 @@ export async function handleAllIndiaCutoffsRequest(
   } catch (error) {
     console.error(`Error fetching 2024 All India ${roundLabel} data:`, error);
     const errorMessage =
-      error instanceof Error ? error.message : "An unknown error occurred";
+      error instanceof ClientResponseError && error.status === 0
+        ? "MHT-CET all-India cutoffs are unavailable"
+        : error instanceof Error
+          ? error.message
+          : "An unknown error occurred";
 
     return NextResponse.json(
       {

@@ -1,0 +1,10 @@
+---
+description: Keep git authorship with the user and do not attribute work to Cursor
+alwaysApply: true
+---
+
+# Authorship
+
+Do not add Cursor as a git commit or pull request co-author. Do not include `Co-authored-by: Cursor`, `cursoragent@cursor.com`, `Made with Cursor`, or any other Cursor attribution in commit messages, pull request titles, or pull request bodies. Keep the git author as the user only.
+
+Do not mention Cursor in commit messages, pull requests, code comments, documentation, or user-facing copy.

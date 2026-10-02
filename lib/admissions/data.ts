@@ -4,6 +4,7 @@ import { cache } from "react";
 import { unstable_cache } from "next/cache";
 import { ClientResponseError, getPocketBase } from "@/lib/pocketbaseClient";
 import { getMhtCetCollegePath } from "@/lib/admissions/canonical";
+import { getCanonicalMhtCetCollegePath } from "@/lib/admissions/proxy-canonical";
 import type {
   AdmissionsCutoffObservation,
   AdmissionsProgram,
@@ -11,6 +12,9 @@ import type {
   MhtCetCollegeIdentity,
   MhtCetSeatMatrixRow,
 } from "@/lib/admissions/types";
+import { readLocalMhtCetCollegeCutoffs } from "@/lib/admissions/local-mht-cet-archive";
+import { describeMhtCetSeatPool } from "@/lib/admissions/mht-cet-seat-pool";
+import { lookupMhtCetSeatPool } from "@/lib/admissions/mht-cet-seat-pool-registry";
 import {
   DEFAULT_ROUND,
   DEFAULT_YEAR,
@@ -86,14 +90,17 @@ function mode(values: Array<string | null | undefined>): string | null {
     counts.set(normalized, (counts.get(normalized) ?? 0) + 1);
   }
   return (
-    [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0]?.[0] ??
-    null
+    [...counts.entries()].sort(
+      (a, b) => b[1] - a[1] || a[0].localeCompare(b[0]),
+    )[0]?.[0] ?? null
   );
 }
 
 function mhtCollegeCodes(id: string): string[] {
   const numeric = String(Number(id));
-  return [...new Set([numeric, numeric.padStart(4, "0"), numeric.padStart(5, "0")])];
+  return [
+    ...new Set([numeric, numeric.padStart(4, "0"), numeric.padStart(5, "0")]),
+  ];
 }
 
 function collegeCodeFilter(id: string): string {
@@ -102,17 +109,23 @@ function collegeCodeFilter(id: string): string {
     .join(" || ");
 }
 
-export const getCachedMhtCetCollegeCutoffs = unstable_cache(
-  async (collegeId: string, year: number, round: number): Promise<MhtCetCutoffRow[]> => {
+const getCachedMhtCetCollegeCutoffsFromSource = unstable_cache(
+  async (
+    collegeId: string,
+    year: number,
+    round: number,
+  ): Promise<MhtCetCutoffRow[]> => {
     if (!isRoundAvailableForYear(round, year)) return [];
     const table = getCollectionForRound(round, year);
     const fields = `${MHT_BASE_CUTOFF_FIELDS}${year >= 2026 ? MHT_2026_PROVENANCE_FIELDS : ""}`;
     try {
-      return await getPocketBase().collection(table).getFullList<MhtCetCutoffRow>({
-        fields,
-        filter: `(${collegeCodeFilter(collegeId)})`,
-        sort: "course_name,category",
-      });
+      return await getPocketBase()
+        .collection(table)
+        .getFullList<MhtCetCutoffRow>({
+          fields,
+          filter: `(${collegeCodeFilter(collegeId)})`,
+          sort: "course_name,category",
+        });
     } catch (error) {
       throw new AdmissionsDataError(
         `MHT-CET ${year} Round ${round} cutoffs are unavailable`,
@@ -125,6 +138,31 @@ export const getCachedMhtCetCollegeCutoffs = unstable_cache(
   { revalidate: 60 * 60 },
 );
 
+export async function getCachedMhtCetCollegeCutoffs(
+  collegeId: string,
+  year: number,
+  round: number,
+): Promise<MhtCetCutoffRow[]> {
+  try {
+    return await getCachedMhtCetCollegeCutoffsFromSource(
+      collegeId,
+      year,
+      round,
+    );
+  } catch (error) {
+    if (
+      error instanceof AdmissionsDataError &&
+      error.cause instanceof ClientResponseError &&
+      error.cause.status === 0
+    ) {
+      // An optional archive must not replace healthy source data in the persistent cache.
+      const localRows = readLocalMhtCetCollegeCutoffs(collegeId, year, round);
+      if (localRows !== null) return localRows;
+    }
+    throw error;
+  }
+}
+
 const getCachedMhtCetMasterCollege = unstable_cache(
   async (collegeId: string): Promise<MhtCetMasterCollegeRow | null> => {
     try {
@@ -136,7 +174,11 @@ const getCachedMhtCetMasterCollege = unstable_cache(
         });
       return result.items[0] ?? null;
     } catch (error) {
-      throw new AdmissionsDataError("MHT-CET college directory is unavailable", "UNAVAILABLE", error);
+      throw new AdmissionsDataError(
+        "MHT-CET college directory is unavailable",
+        "UNAVAILABLE",
+        error,
+      );
     }
   },
   ["admissions-v2-mht-master-college"],
@@ -156,8 +198,14 @@ const getCachedMhtCetSeatMatrix = unstable_cache(
           sort: "course_name",
         });
     } catch (error) {
-      if (error instanceof ClientResponseError && error.status === 404) return [];
-      throw new AdmissionsDataError("The 2024 seat matrix is unavailable", "UNAVAILABLE", error);
+      if (error instanceof ClientResponseError && error.status === 404) {
+        return [];
+      }
+      throw new AdmissionsDataError(
+        "The 2024 seat matrix is unavailable",
+        "UNAVAILABLE",
+        error,
+      );
     }
     return data.map((row) => ({
       ...row,
@@ -191,6 +239,11 @@ function mapMhtObservation(
   const percentile = asFiniteNumber(row.cutoff_score);
   const closingValue = rank && rank > 0 ? rank : percentile;
   if (closingValue === null) return null;
+  const pool = describeMhtCetSeatPool({
+    category: row.category,
+    allocation: row.seat_allocation_section,
+    entry: lookupMhtCetSeatPool(row.category),
+  });
   return {
     id: row.id,
     programId: row.course_code,
@@ -208,6 +261,11 @@ function mapMhtObservation(
     sourcePage: row.source_page,
     sourceUrl: row.source_index_url,
     sourceHash: row.source_pdf_sha256,
+    poolLabel: pool.label,
+    poolScope: pool.scope,
+    poolFamily: pool.family,
+    poolOrder: pool.order,
+    openGeneral: pool.openGeneral,
   };
 }
 
@@ -216,111 +274,162 @@ export interface MhtCetDetailSelection {
   round?: number;
 }
 
-export const getMhtCetCollegeDetail = cache(
-  async (
-    identifier: string,
-    selection: MhtCetDetailSelection = {},
-  ): Promise<MhtCetCollegeDetailModel | null> => {
-    const collegeId = parseCollegeIdentifier(identifier);
-    if (!collegeId) return null;
-    const selectedYear = Object.hasOwn(ROUNDS_BY_YEAR, selection.year || 0)
-      ? (selection.year as number)
-      : DEFAULT_YEAR;
-    const selectedRound = isRoundAvailableForYear(selection.round || 0, selectedYear)
-      ? (selection.round as number)
-      : selectedYear === DEFAULT_YEAR
-        ? DEFAULT_ROUND
-        : ROUNDS_BY_YEAR[selectedYear][0];
+export interface MhtCetDetailRepository {
+  getCollegeCutoffs(
+    collegeId: string,
+    year: number,
+    round: number,
+  ): Promise<MhtCetCutoffRow[]>;
+  getMasterCollege(collegeId: string): Promise<MhtCetMasterCollegeRow | null>;
+  getSeatMatrix(collegeId: string): Promise<MhtCetSeatMatrixRow[]>;
+}
 
-    const selectedCutoffsPromise = getCachedMhtCetCollegeCutoffs(
-      collegeId,
-      selectedYear,
-      selectedRound,
-    );
-    const currentCutoffsPromise =
-      selectedYear === DEFAULT_YEAR && selectedRound === DEFAULT_ROUND
-        ? selectedCutoffsPromise
-        : getCachedMhtCetCollegeCutoffs(collegeId, DEFAULT_YEAR, DEFAULT_ROUND);
-    const [masterResult, selectedRowsResult, currentRowsResult, seatMatrixResult] = await Promise.allSettled([
-      getCachedMhtCetMasterCollege(collegeId),
-      selectedCutoffsPromise,
-      currentCutoffsPromise,
-      getCachedMhtCetSeatMatrix(collegeId),
-    ]);
-    if (selectedRowsResult.status === "rejected") throw selectedRowsResult.reason;
+const liveDetailRepository: MhtCetDetailRepository = {
+  getCollegeCutoffs: getCachedMhtCetCollegeCutoffs,
+  getMasterCollege: getCachedMhtCetMasterCollege,
+  getSeatMatrix: getCachedMhtCetSeatMatrix,
+};
+
+export async function loadMhtCetCollegeDetail(
+  identifier: string,
+  selection: MhtCetDetailSelection = {},
+  repository: MhtCetDetailRepository = liveDetailRepository,
+): Promise<MhtCetCollegeDetailModel | null> {
+  const collegeId = parseCollegeIdentifier(identifier);
+  if (!collegeId) return null;
+  const selectedYear = Object.hasOwn(ROUNDS_BY_YEAR, selection.year || 0)
+    ? (selection.year as number)
+    : DEFAULT_YEAR;
+  const selectedRound = isRoundAvailableForYear(
+    selection.round || 0,
+    selectedYear,
+  )
+    ? (selection.round as number)
+    : selectedYear === DEFAULT_YEAR
+      ? DEFAULT_ROUND
+      : ROUNDS_BY_YEAR[selectedYear][0];
+
+  const selectedCutoffsPromise = repository.getCollegeCutoffs(
+    collegeId,
+    selectedYear,
+    selectedRound,
+  );
+  const currentCutoffsPromise =
+    selectedYear === DEFAULT_YEAR && selectedRound === DEFAULT_ROUND
+      ? selectedCutoffsPromise
+      : repository.getCollegeCutoffs(collegeId, DEFAULT_YEAR, DEFAULT_ROUND);
+  const [
+    masterResult,
+    selectedRowsResult,
+    currentRowsResult,
+    seatMatrixResult,
+  ] = await Promise.allSettled([
+    repository.getMasterCollege(collegeId),
+    selectedCutoffsPromise,
+    currentCutoffsPromise,
+    repository.getSeatMatrix(collegeId),
+  ]);
+  if (selectedRowsResult.status === "rejected") throw selectedRowsResult.reason;
+  const selectedRows = selectedRowsResult.value;
+  const currentRows =
+    currentRowsResult.status === "fulfilled" ? currentRowsResult.value : [];
+  if (
+    masterResult.status === "rejected" &&
+    currentRows.length === 0 &&
+    selectedRows.length === 0
+  ) {
+    throw masterResult.reason;
+  }
+  const master =
+    masterResult.status === "fulfilled" ? masterResult.value : null;
+  const seatMatrix =
+    seatMatrixResult.status === "fulfilled" ? seatMatrixResult.value : [];
+  if (!master && currentRows.length === 0 && selectedRows.length === 0) {
     if (currentRowsResult.status === "rejected") throw currentRowsResult.reason;
-    const selectedRows = selectedRowsResult.value;
-    const currentRows = currentRowsResult.value;
-    if (
-      masterResult.status === "rejected" &&
-      currentRows.length === 0 &&
-      selectedRows.length === 0
-    ) {
-      throw masterResult.reason;
-    }
-    const master = masterResult.status === "fulfilled" ? masterResult.value : null;
-    const seatMatrix = seatMatrixResult.status === "fulfilled" ? seatMatrixResult.value : [];
-    if (!master && currentRows.length === 0 && selectedRows.length === 0) return null;
+    return null;
+  }
 
-    const identityRows = currentRows.length > 0 ? currentRows : selectedRows;
-    const college: MhtCetCollegeIdentity = {
-      recordId: master?.id,
-      collegeId,
-      name: mode(identityRows.map((row) => row.college_name)) || master?.college_name || `College ${collegeId}`,
-      status: mode(identityRows.map((row) => row.status)) || master?.status || null,
-      homeUniversity:
-        mode(identityRows.map((row) => row.home_university)) || master?.home_university || null,
-    };
-    const canonicalName = college.name;
-    const programsById = new Map<string, AdmissionsProgram>();
-    for (const row of selectedRows) {
-      if (!programsById.has(row.course_code)) {
-        programsById.set(row.course_code, {
-          id: row.course_code,
-          code: row.course_code,
-          name: row.course_name,
-        });
-      }
+  const identityRows = currentRows.length > 0 ? currentRows : selectedRows;
+  const college: MhtCetCollegeIdentity = {
+    recordId: master?.id,
+    collegeId,
+    name:
+      mode(identityRows.map((row) => row.college_name)) ||
+      master?.college_name ||
+      `College ${collegeId}`,
+    status:
+      mode(identityRows.map((row) => row.status)) || master?.status || null,
+    homeUniversity:
+      mode(identityRows.map((row) => row.home_university)) ||
+      master?.home_university ||
+      null,
+    homeUniversityId: mode(
+      identityRows.map((row) => row.institute_home_university_id),
+    ),
+  };
+  const canonicalName = college.name;
+  const programsById = new Map<string, AdmissionsProgram>();
+  for (const row of selectedRows) {
+    if (!programsById.has(row.course_code)) {
+      programsById.set(row.course_code, {
+        id: row.course_code,
+        code: row.course_code,
+        name: row.course_name,
+      });
     }
-    const observations = selectedRows
-      .map((row) => mapMhtObservation(row, selectedYear, selectedRound))
-      .filter((row): row is AdmissionsCutoffObservation => Boolean(row));
-    const sourceRow = selectedRows.find((row) => row.source_pdf || row.source_index_url);
+  }
+  const observations = selectedRows
+    .map((row) => mapMhtObservation(row, selectedYear, selectedRound))
+    .filter((row): row is AdmissionsCutoffObservation => Boolean(row));
+  const sourceRow = selectedRows.find(
+    (row) => row.source_pdf || row.source_index_url,
+  );
+  const coverageNotes = [
+    master ? null : "The college directory record is unavailable.",
+    currentRows.length > 0 ? null : "2026 Round 1 cutoffs are unavailable.",
+    seatMatrix.length > 0 ? null : "2024 seat matrix is unavailable.",
+  ].filter((note): note is string => Boolean(note));
 
-    return {
-      system: "mht-cet",
-      kind: "college",
-      status:
-        master &&
-        currentRows.length > 0 &&
-        seatMatrixResult.status === "fulfilled" &&
-        seatMatrix.length > 0
-          ? "ok"
-          : "partial",
-      canonicalPath: getMhtCetCollegePath(canonicalName, collegeId),
-      college,
-      programs: [...programsById.values()].sort((a, b) => a.name.localeCompare(b.name)),
-      observations,
-      seatMatrix,
-      availableYears: Object.keys(ROUNDS_BY_YEAR)
-        .map(Number)
-        .sort((a, b) => b - a),
-      availableRounds: [...ROUNDS_BY_YEAR[selectedYear]],
-      selectedYear,
-      selectedRound,
-      provenance: {
-        sourceName: "Maharashtra State CET Cell",
-        year: selectedYear,
-        round: selectedRound,
-        sourceDocument: sourceRow?.source_pdf,
-        sourcePage: sourceRow?.source_page,
-        sourceUrl: sourceRow?.source_index_url,
-        sourceHash: sourceRow?.source_pdf_sha256,
-        note:
-          selectedYear === 2026
-            ? "Cutoff rows retain their official PDF, page, and source hash when available."
-            : "Older imported cutoff rows may not include row-level source metadata.",
-      },
-    };
-  },
-);
+  return {
+    system: "mht-cet",
+    kind: "college",
+    status:
+      master &&
+      currentRows.length > 0 &&
+      seatMatrixResult.status === "fulfilled" &&
+      seatMatrix.length > 0
+        ? "ok"
+        : "partial",
+    canonicalPath:
+      getCanonicalMhtCetCollegePath(collegeId) ??
+      getMhtCetCollegePath(canonicalName, collegeId),
+    college,
+    programs: [...programsById.values()].sort((a, b) =>
+      a.name.localeCompare(b.name),
+    ),
+    observations,
+    seatMatrix,
+    availableYears: Object.keys(ROUNDS_BY_YEAR)
+      .map(Number)
+      .sort((a, b) => b - a),
+    availableRounds: [...ROUNDS_BY_YEAR[selectedYear]],
+    selectedYear,
+    selectedRound,
+    coverageNotes,
+    provenance: {
+      sourceName: "Maharashtra State CET Cell",
+      year: selectedYear,
+      round: selectedRound,
+      sourceDocument: sourceRow?.source_pdf,
+      sourcePage: sourceRow?.source_page,
+      sourceUrl: sourceRow?.source_index_url,
+      sourceHash: sourceRow?.source_pdf_sha256,
+      note:
+        selectedYear === 2026
+          ? "Cutoff rows retain their official PDF, page, and source hash when available."
+          : "Older imported cutoff rows may not include row-level source metadata.",
+    },
+  };
+}
+
+export const getMhtCetCollegeDetail = cache(loadMhtCetCollegeDetail);

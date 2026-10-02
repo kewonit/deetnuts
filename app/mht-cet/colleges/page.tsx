@@ -1,6 +1,15 @@
+import type { Metadata } from "next";
+
 import CollegeGrid from "@/components/CollegeGrid";
 import Link from "next/link";
 import { getCollegesData } from "@/lib/college-data";
+
+export const metadata: Metadata = {
+  title: "MHT-CET Colleges",
+  description:
+    "Browse Maharashtra engineering colleges, official MHT-CET cutoff evidence, and dated seat information.",
+  alternates: { canonical: "/mht-cet/colleges" },
+};
 
 export const dynamic = "force-dynamic";
 

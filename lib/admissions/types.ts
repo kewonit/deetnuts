@@ -42,6 +42,11 @@ export interface AdmissionsCutoffObservation {
   sourcePage?: number | null;
   sourceUrl?: string | null;
   sourceHash?: string | null;
+  poolLabel: string;
+  poolScope: string | null;
+  poolFamily: string;
+  poolOrder: number;
+  openGeneral: boolean;
 }
 
 export interface MhtCetCollegeIdentity {
@@ -50,6 +55,7 @@ export interface MhtCetCollegeIdentity {
   name: string;
   status?: string | null;
   homeUniversity?: string | null;
+  homeUniversityId?: string | null;
 }
 
 export interface MhtCetSeatMatrixRow {
@@ -80,6 +86,7 @@ export interface MhtCetCollegeDetailModel {
   availableRounds: number[];
   selectedYear: number;
   selectedRound: number;
+  coverageNotes: string[];
   provenance: DataProvenance;
 }
 

@@ -2,6 +2,7 @@
 
 import { useState, useMemo, memo } from "react";
 import Link from "next/link";
+import { getCanonicalMhtCetCollegePath } from "@/lib/admissions/proxy-canonical";
 import { getMhtCetCollegePath } from "@/lib/admissions/canonical";
 import fuzzysort from "fuzzysort";
 
@@ -23,10 +24,9 @@ const CollegeCard = memo(function CollegeCard({
 }: {
   college: College;
 }) {
-  const collegePath = getMhtCetCollegePath(
-    college.college_name,
-    college.college_id,
-  );
+  const collegePath =
+    getCanonicalMhtCetCollegePath(college.college_id) ??
+    getMhtCetCollegePath(college.college_name, college.college_id);
 
   return (
     <div className="group bg-white border-4 border-black rounded-base shadow-base hover:shadow-lg transition-all duration-300 overflow-hidden hover:border-main flex flex-col">

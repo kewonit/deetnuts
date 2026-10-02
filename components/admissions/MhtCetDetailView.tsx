@@ -2,15 +2,15 @@ import Link from "next/link";
 import AdmissionsFitGate from "@/components/admissions/AdmissionsFitGate";
 import AdmissionsFilters from "@/components/admissions/AdmissionsFilters";
 import AdmissionsJsonLd from "@/components/admissions/AdmissionsJsonLd";
-import AdmissionsShell, {
-  AdmissionsFacts,
-  AdmissionsSectionNav,
-} from "@/components/admissions/AdmissionsShell";
+import CopyCollegeCode from "@/components/admissions/CopyCollegeCode";
 import CutoffObservations from "@/components/admissions/CutoffObservations";
 import ProvenanceCard from "@/components/admissions/ProvenanceCard";
 import type { MhtCetCollegeDetailModel } from "@/lib/admissions/types";
 import { withNeutralAdmissionsQuery } from "@/lib/admissions/query-state";
-import { ROUNDS_BY_YEAR } from "@/lib/mht-cet/state-cutoffs/config";
+
+const serif = "[font-family:var(--font-serif-display)] italic";
+const card =
+  "mht-profile-card mht-college-section overflow-hidden rounded-xl border border-zinc-200";
 
 export default function MhtCetDetailView({
   model,
@@ -19,39 +19,16 @@ export default function MhtCetDetailView({
   model: MhtCetCollegeDetailModel;
   variant?: "full" | "sheet";
 }) {
+  const collegeCode = model.college.collegeId.padStart(5, "0");
+  const initial = model.college.name.trim().charAt(0).toUpperCase() || "—";
   const sectionItems = [
     { href: "#fit", label: "Historical fit" },
-    { href: "#cutoffs", label: "Cutoff explorer" },
-    { href: "#programs", label: "Programs" },
-    { href: "#seats", label: "2024 seat matrix" },
-    { href: "#source", label: "Source and method" },
+    { href: "#cutoffs", label: "Cutoffs" },
+    ...(model.seatMatrix.length > 0
+      ? [{ href: "#seats", label: "2024 seat matrix" }]
+      : []),
+    { href: "#source", label: "Source" },
   ];
-  const filters = [
-    {
-      name: "year",
-      label: "Year",
-      value: String(model.selectedYear),
-      options: model.availableYears.map((year) => ({
-        value: String(year),
-        label: String(year),
-      })),
-    },
-    {
-      name: "round",
-      label: "Round",
-      value: String(model.selectedRound),
-      options: (ROUNDS_BY_YEAR[model.selectedYear] || model.availableRounds).map(
-        (round) => ({
-          value: String(round),
-          label: `Round ${round}`,
-        }),
-      ),
-    },
-  ];
-  const totalSeats = model.seatMatrix.reduce(
-    (sum, row) => sum + (row.SI || row.Total || 0),
-    0,
-  );
 
   return (
     <>
@@ -62,126 +39,164 @@ export default function MhtCetDetailView({
         location={{ region: "Maharashtra" }}
         system="MHT-CET"
       />
-      <AdmissionsShell
-        variant={variant}
-        systemLabel="MHT-CET admissions"
-        title={model.college.name}
-        subtitle={model.college.homeUniversity}
-        canonicalPath={model.canonicalPath}
-        backPath="/mht-cet/colleges"
-        backLabel="All colleges"
-        status={model.status}
-        badges={
-          <>
-            <span>College {model.college.collegeId.padStart(5, "0")}</span>
-            {model.college.status ? <span>{model.college.status}</span> : null}
-          </>
+      <div
+        className={
+          variant === "sheet"
+            ? "mht-college mht-college-in-sheet"
+            : "mht-college"
         }
-        facts={
-          <AdmissionsFacts
-            facts={[
-              { label: "Latest cutoff evidence", value: "2026 · Round 1" },
-              {
-                label: `Programs in ${model.selectedYear} R${model.selectedRound}`,
-                value: model.programs.length,
-              },
-              {
-                label: "Seat matrix",
-                value:
-                  model.seatMatrix.length > 0
-                    ? `${totalSeats.toLocaleString("en-IN")} seats · 2024`
-                    : "2024 data unavailable",
-              },
-            ]}
-          />
-        }
-        aside={<AdmissionsSectionNav items={sectionItems} />}
       >
-        <AdmissionsFitGate
-          system="mht-cet"
-          year={model.selectedYear}
-          round={model.selectedRound}
-          collegeId={model.college.collegeId}
-        />
-
-        <section id="cutoffs" className="cutoff-table-section" aria-labelledby="mht-cutoffs-title">
-          <div className="cutoff-section-heading">
-            <div>
-              <h2 id="mht-cutoffs-title">
-                {model.selectedYear} Round {model.selectedRound} cutoff explorer
-              </h2>
-              <p>
-                Percentile and last-rank values are shown together exactly as imported from the
-                counselling source.
-              </p>
+        <div className="mx-auto w-full max-w-6xl space-y-6 p-4">
+          {variant === "full" ? (
+            <nav
+              aria-label="Breadcrumb"
+              className="flex flex-wrap gap-2 text-sm text-zinc-500"
+            >
+              <Link href="/mht-cet">MHT-CET</Link>
+              <span aria-hidden="true">/</span>
+              <Link href="/mht-cet/colleges">Colleges</Link>
+              <span aria-hidden="true">/</span>
+              <span aria-current="page">{model.college.name}</span>
+            </nav>
+          ) : null}
+          <div className="mht-college-mark">
+            <div className="mht-profile-banner" aria-hidden="true" />
+            <div className="mht-college-logo" aria-hidden="true">
+              <span>{initial}</span>
             </div>
+            <header className="mht-college-identity">
+              <h1 className={serif}>{model.college.name}</h1>
+              <p className="mht-college-meta">
+                <span className="mht-college-code">
+                  <span className="font-mono">{collegeCode}</span>
+                  <CopyCollegeCode code={collegeCode} />
+                </span>
+                {model.college.status ? (
+                  <span>{model.college.status}</span>
+                ) : null}
+                {model.college.homeUniversity ? (
+                  <span>{model.college.homeUniversity}</span>
+                ) : null}
+              </p>
+            </header>
           </div>
-          <AdmissionsFilters fields={filters} />
-          <div className="mt-5">
-            <CutoffObservations observations={model.observations} system="mht-cet" />
-            {model.observations.length > 100 && (
-              <Link
-                href={withNeutralAdmissionsQuery("/mht-cet/state-cutoffs", {
-                  year: model.selectedYear,
-                  round: model.selectedRound,
-                  search: model.college.collegeId,
-                })}
-                className="cutoff-inline-link"
+          <section
+            id="cutoffs"
+            className={card}
+            aria-labelledby="mht-cutoffs-title"
+          >
+            <div id="programs" className="mht-college-section" />
+            <div className="space-y-4 p-5">
+              <h2
+                id="mht-cutoffs-title"
+                className={`${serif} text-xl text-zinc-800`}
               >
-                Search all rows in the state cutoff explorer
-              </Link>
-            )}
-          </div>
-        </section>
-
-        <section id="programs" className="cutoff-section" aria-labelledby="mht-programs-title">
-          <div className="cutoff-section-heading">
-            <div>
-              <h2 id="mht-programs-title">Programs with cutoff observations</h2>
-              <p>{model.programs.length} programs in this year and round.</p>
+                {model.selectedYear} Round {model.selectedRound} cutoffs
+              </h2>
+              <CutoffObservations
+                observations={model.observations}
+                system="mht-cet"
+                collegeHomeUniversityId={model.college.homeUniversityId}
+                yearRound={
+                  <AdmissionsFilters
+                    key="year-round"
+                    year={model.selectedYear}
+                    round={model.selectedRound}
+                    years={model.availableYears}
+                  />
+                }
+              />
+              {model.observations.length > 100 ? (
+                <Link
+                  href={withNeutralAdmissionsQuery("/mht-cet/state-cutoffs", {
+                    year: model.selectedYear,
+                    round: model.selectedRound,
+                    search: model.college.collegeId,
+                  })}
+                  className="inline-flex text-sm text-zinc-600 underline underline-offset-2 hover:text-zinc-900"
+                >
+                  Search all rows in the state cutoff explorer
+                </Link>
+              ) : null}
             </div>
-          </div>
-          <div className="cutoff-program-list">
-            {model.programs.map((program) => (
-              <div key={program.id}>
-                <strong>{program.name}</strong>
-                <span>{program.code}</span>
-              </div>
-            ))}
-          </div>
-        </section>
+          </section>
 
-        <section id="seats" className="cutoff-section" aria-labelledby="mht-seats-title">
-          <div className="cutoff-section-heading">
+          {model.coverageNotes.length > 0 || sectionItems.length > 0 ? (
             <div>
-              <h2 id="mht-seats-title">2024 seat matrix</h2>
-              <p>
-                Seat counts below are explicitly from 2024 and must not be assumed to represent the{" "}
-                {model.selectedYear} intake.
-              </p>
-            </div>
-          </div>
-          {model.seatMatrix.length === 0 ? (
-            <p className="cutoff-empty">
-              No verified 2024 seat matrix rows are available for this college.
-            </p>
-          ) : (
-            <div className="cutoff-program-list">
-              {model.seatMatrix.map((row) => (
-                <article key={row.id}>
-                  <strong>{row.course_name}</strong>
-                  <span>
-                    {row.choice_code} · {row.SI || row.Total || "—"} seats ·{" "}
-                    {row.seat_type || "Not listed"}
-                  </span>
-                </article>
+              {model.coverageNotes.map((note) => (
+                <p key={note} className="mt-1 text-sm text-zinc-500">
+                  {note}
+                </p>
               ))}
+              <nav
+                aria-label="On this page"
+                className="mt-3 flex flex-wrap gap-x-4 gap-y-1"
+              >
+                {sectionItems.map((item) => (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    className="text-sm text-zinc-600 underline-offset-2 hover:text-zinc-950 hover:underline"
+                  >
+                    {item.label}
+                  </a>
+                ))}
+              </nav>
             </div>
-          )}
-        </section>
+          ) : null}
 
-        <ProvenanceCard provenance={model.provenance} />
-      </AdmissionsShell>
+          <AdmissionsFitGate
+            system="mht-cet"
+            year={model.selectedYear}
+            round={model.selectedRound}
+            collegeId={model.college.collegeId}
+          />
+
+          {model.seatMatrix.length > 0 ? (
+            <section
+              id="seats"
+              className={card}
+              aria-labelledby="mht-seats-title"
+            >
+              <div className="space-y-4 p-5">
+                <div>
+                  <h2
+                    id="mht-seats-title"
+                    className={`${serif} text-xl text-zinc-800`}
+                  >
+                    2024 seat matrix
+                  </h2>
+                  <p className="mt-2 text-sm text-zinc-500">
+                    Seat counts below are from 2024 and are not the{" "}
+                    {model.selectedYear} intake.
+                  </p>
+                </div>
+                <div className="grid gap-3">
+                  {model.seatMatrix.map((row) => (
+                    <article
+                      key={row.id}
+                      className="rounded-lg border border-zinc-200/50 bg-white/60 p-4"
+                    >
+                      <h3 className="text-sm font-medium text-zinc-800">
+                        {row.course_name}
+                      </h3>
+                      <p className="mt-1 font-mono text-xs text-zinc-500">
+                        {row.choice_code}
+                      </p>
+                      <p className="mt-2 text-sm text-zinc-600">
+                        {row.SI || row.Total || "—"} seats ·{" "}
+                        {row.seat_type || "Seat type not listed"}
+                      </p>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            </section>
+          ) : null}
+
+          <ProvenanceCard provenance={model.provenance} />
+        </div>
+      </div>
     </>
   );
 }

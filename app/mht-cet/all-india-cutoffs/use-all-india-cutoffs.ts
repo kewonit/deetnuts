@@ -113,9 +113,11 @@ export function useAllIndiaCutoffs({
           });
 
           if (!response.ok) {
-            const errorData = await response.json();
+            const errorData = await response.json().catch(() => ({}));
             throw new Error(
-              errorData.details || `HTTP error! status: ${response.status}`,
+              errorData.details ||
+                errorData.error ||
+                `HTTP error! status: ${response.status}`,
             );
           }
 
@@ -134,7 +136,6 @@ export function useAllIndiaCutoffs({
             return;
           }
 
-          console.error(`Error fetching ${round} data:`, err);
           if (isMountedRef.current) {
             setError(
               err instanceof Error ? err.message : "An unknown error occurred",

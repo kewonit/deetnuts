@@ -201,11 +201,18 @@ export default function AdmissionsFitPanel(props: AdmissionsFitPanelProps) {
   const best = result?.observations[0];
 
   return (
-    <section id="fit" className="admissions-panel p-5 sm:p-6" aria-labelledby="fit-title">
-      <div className="flex flex-col gap-4 border-b border-slate-200 pb-5 sm:flex-row sm:items-start sm:justify-between">
+    <section
+      id="fit"
+      className="admissions-panel mht-profile-card mht-college-section overflow-hidden rounded-xl border border-zinc-200 p-5 sm:p-6"
+      aria-labelledby="fit-title"
+    >
+      <div className="flex flex-col gap-4 border-b border-dashed border-zinc-200 pb-5 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.15em] text-violet-700">Historical fit</p>
-          <h2 id="fit-title" className="mt-1 text-2xl font-bold tracking-tight text-slate-950">
+          <p className="text-xs text-zinc-400">Historical fit</p>
+          <h2
+            id="fit-title"
+            className="mt-1 text-2xl text-zinc-800 [font-family:var(--font-serif-display)] italic"
+          >
             Compare your exact seat pool
           </h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">

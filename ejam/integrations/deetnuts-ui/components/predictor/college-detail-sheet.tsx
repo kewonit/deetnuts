@@ -329,8 +329,8 @@ const roundChartConfig = {
   chance: {
     label: "Chance",
     colors: {
-      light: ["#525252"],
-      dark: ["#d4d4d4"],
+      light: ["#171717"],
+      dark: ["#f5f5f5"],
     },
   },
 } satisfies ChartConfig;
@@ -368,9 +368,14 @@ function RoundProbabilityChart({
         <XAxis dataKey="round" interval={0} />
         <YAxis domain={[0, 100]} hide />
         <Tooltip cursor={false} valueFormatter={(value) => `${value}%`} />
-        <Area dataKey="chance" variant="gradient">
+        <Area
+          dataKey="chance"
+          variant="gradient"
+          strokeVariant="solid"
+          areaProps={{ strokeWidth: 2.5, strokeOpacity: 1 }}
+        >
           <Dot variant="default" />
-          <ActiveDot variant="default" />
+          <ActiveDot variant="border" />
         </Area>
       </EvilAreaChart>
       {program.exam === "mht-cet" && program.roundDetails ? (

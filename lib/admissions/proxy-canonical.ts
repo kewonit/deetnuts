@@ -4,6 +4,12 @@ const canonicalManifest = manifest as {
   mhtCetColleges: Record<string, string>;
 };
 
+export function getCanonicalMhtCetCollegePath(
+  collegeId: string | number,
+): string | null {
+  return canonicalManifest.mhtCetColleges[String(Number(collegeId))] ?? null;
+}
+
 export function getCanonicalMhtCetCollegePaths(): string[] {
   return [...new Set(Object.values(canonicalManifest.mhtCetColleges))].sort(
     (a, b) => a.localeCompare(b),
@@ -42,8 +48,7 @@ export function getAdmissionsCanonicalRouteDecision(
     const decoded = decodeSegment(segments[2]);
     const match = decoded?.match(/(?:^|-)(\d{1,5})$/);
     if (!match) return { type: "not-found", system: "mht-cet" };
-    const canonicalPath =
-      canonicalManifest.mhtCetColleges[String(Number(match[1]))];
+    const canonicalPath = getCanonicalMhtCetCollegePath(match[1]);
     if (!canonicalPath) return { type: "not-found", system: "mht-cet" };
     return canonicalPath !== pathname
       ? { type: "redirect", pathname: canonicalPath }

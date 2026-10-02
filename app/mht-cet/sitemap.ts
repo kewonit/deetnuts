@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { getCanonicalMhtCetCollegePaths } from "@/lib/admissions/proxy-canonical";
 import { PRODUCTION_SITE_URL } from "@/lib/site-url";
+import { isAdmissionsV2Enabled } from "@/lib/admissions/flags";
 
 // Force dynamic rendering for sitemap generation
 export const dynamic = "force-dynamic";
@@ -28,10 +29,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  const collegePages: MetadataRoute.Sitemap =
-    getCanonicalMhtCetCollegePaths().map((path) => ({
-      url: `${PRODUCTION_SITE_URL}${path}`,
-    }));
+  const collegePages: MetadataRoute.Sitemap = (
+    isAdmissionsV2Enabled("mht-cet") ? getCanonicalMhtCetCollegePaths() : []
+  ).map((path) => ({
+    url: `${PRODUCTION_SITE_URL}${path}`,
+  }));
 
   return [...staticPages, ...collegePages];
 }
