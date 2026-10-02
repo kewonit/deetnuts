@@ -241,7 +241,7 @@ test("unknown routes and invalid API releases fail explicitly", async ({ request
 
   const wrongExam = await request.get("/jee-main/colleges/iit-bhilai", { maxRedirects: 0 });
   expect(wrongExam.status()).toBe(308);
-  expect(wrongExam.headers().location).toBe("/jee-advanced/colleges/iit-bhilai");
+  expect(wrongExam.headers().location).toBe("https://www.deetnuts.com/jee-advanced/colleges/iit-bhilai");
 
   const missingRelease = await request.get("/api/jee-cutoffs/jee-main/assam-university/2025");
   expect(missingRelease.status()).toBe(400);

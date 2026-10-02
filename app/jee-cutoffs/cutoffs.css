@@ -429,6 +429,9 @@
 .cutoff-disclaimer a { color: var(--foreground); text-decoration: underline; text-underline-offset: 3px; }
 
 .jee-cutoff-footer {
+  --foreground: #171717;
+  --muted-foreground: #595959;
+  --border: rgb(24 24 27 / .12);
   border-top: 1px solid rgb(24 24 27 / .12);
   background: #fafafa;
   color: #171717;
@@ -436,6 +439,9 @@
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 html.dark .jee-cutoff-footer {
+  --foreground: #f5f5f5;
+  --muted-foreground: #a3a3a3;
+  --border: rgb(255 255 255 / .12);
   border-top-color: rgb(255 255 255 / .12);
   background: #0a0a0a;
   color: #f5f5f5;
@@ -443,6 +449,9 @@ html.dark .jee-cutoff-footer {
 }
 @media (prefers-color-scheme: dark) {
   html:not(.light) .jee-cutoff-footer {
+    --foreground: #f5f5f5;
+    --muted-foreground: #a3a3a3;
+    --border: rgb(255 255 255 / .12);
     border-top-color: rgb(255 255 255 / .12);
     background: #0a0a0a;
     color: #f5f5f5;
@@ -566,12 +575,13 @@ html.dark .jee-cutoff-footer {
   .cutoff-table tbody td > small { grid-column: 2; margin-top: 2px; text-align: right; }
   .cutoff-source-card { grid-template-columns: 1fr; padding: 16px; }
   .cutoff-source-card .cutoff-disclaimer { grid-column: auto; }
-  .jee-cutoff-footer-inner { padding: 40px 18px 28px; }
-  .jee-cutoff-footer-grid { grid-template-columns: 1fr 1fr; gap: 34px 24px; }
+  .jee-cutoff-footer-inner { padding: 32px 18px 24px; }
+  .jee-cutoff-footer-grid { grid-template-columns: 1fr 1fr; gap: 22px 24px; }
+  .jee-cutoff-footer nav { gap: 8px; }
   .jee-cutoff-footer-about { grid-column: 1 / -1; grid-row: auto; }
   .jee-cutoff-footer-about > p { max-width: 320px; }
   .jee-cutoff-footer-about small { margin-top: 20px; }
-  .jee-cutoff-footer-notices { margin-top: 38px; }
+  .jee-cutoff-footer-notices { margin-top: 28px; }
 }
 
 .mht-college,
