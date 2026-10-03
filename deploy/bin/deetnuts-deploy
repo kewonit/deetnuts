@@ -368,6 +368,10 @@ deploy_release() {
   else
     compose pull access-verifier
   fi
+  echo "Preparing the stopped $candidate_slot prerender cache"
+  compose stop --timeout 30 "$candidate_service"
+  compose up --no-start --no-deps "$candidate_service"
+  prune_slot_prerender_cache "$candidate_slot" "$web_image"
   pocketbase_updated=1
   compose up -d --no-deps pocketbase
   wait_for_health pocketbase

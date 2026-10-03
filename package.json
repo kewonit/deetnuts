@@ -45,6 +45,7 @@
     "test:e2e:jee-cutoffs": "playwright test e2e/jee-cutoffs.spec.ts",
     "verify:jee-cutoff-data": "node --import tsx ejam/packages/data-cli/src/release/fetch-data.ts && node --import tsx ejam/packages/data-cli/src/jee/cutoff-pages/verify.ts",
     "verify:production": "node scripts/verify-production.mjs",
+    "deploy:production": "gh workflow run production.yaml --repo kewonit/deetnuts --ref main -f verification_mode=public",
     "verify:seo-parity": "node scripts/verify-seo-parity.mjs",
     "test:performance": "node scripts/load-test.mjs"
   },

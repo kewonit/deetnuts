@@ -61,7 +61,7 @@ This directory contains the local, reviewable part of the Vercel-to-DigitalOcean
 8. Configure the Google OAuth web client with the exact redirect URI `https://www.deetnuts.com/auth/callback`, then store its client ID and secret only in the root-owned one-time migration environment.
 9. Run `deetnuts-pocketbase-migrate` against the read-only Supabase source. Do not cut over until its global count/digest, Google identity, storage byte/hash, and backup checks pass.
 10. Add `NEXT_SERVER_ACTIONS_ENCRYPTION_KEY` as a repository Actions secret before publishing images. It must remain stable across releases and contain canonical base64 for exactly 32 bytes.
-11. Add `DO_HOST`, `DO_FIREWALL_ID`, `DO_API_TOKEN`, `DO_SSH_PRIVATE_KEY`, and `DO_SSH_HOST_KEY` to the GitHub Production environment after the host and firewall exist. Set `DO_DEPLOY_ENABLED=true` only when that configuration is complete. Image publication remains available while deployment is disabled.
+11. Add `DO_HOST`, `DO_FIREWALL_ID`, `DO_API_TOKEN`, `DO_SSH_PRIVATE_KEY`, and `DO_SSH_HOST_KEY` to the GitHub Production environment after the host and firewall exist. The DigitalOcean token needs only `firewall:read` and `firewall:update`; use the forced-command deployment account's dedicated SSH key, and pin the existing host key. Set repository variable `DO_DEPLOY_ENABLED=true` only when that configuration is complete. Image publication remains available while deployment is disabled.
 12. Perform the first deployment with the `origin-only` verification mode. Use normal `public` verification only after DNS points through Cloudflare.
 
 The complete protected API sequence, Work-profile account checks, exact Google
@@ -72,7 +72,17 @@ total are in [`docs/PROTECTED_POCKETBASE_API.md`](../docs/PROTECTED_POCKETBASE_A
 
 The Reddit worker is a disabled Compose profile. Do not start it during web deployment. Its later activation begins with dry-run mode and separate credential validation.
 
+## Deploying updates
+
+Push to `main` to run the [production workflow](https://github.com/kewonit/deetnuts/actions/workflows/production.yaml). Tests, browser checks, image scans and attestations must pass before it deploys the exact verified digests. The workflow temporarily permits only its runner's SSH address and removes that exception afterward. The host checks the new release for ten minutes and restores the previous slot if deployment fails.
+
+To rebuild and deploy `main` on demand, run `npm run deploy:production` from a checkout with an authenticated GitHub CLI, or select **Run workflow** on that Actions page with the `public` verification mode. Follow **Deploy verified digests** to confirm completion; a successful build alone does not confirm deployment.
+
+When renewing the DigitalOcean token, replace `DO_API_TOKEN` in the GitHub `production` environment before the old token expires. Keep the token and deployment private key out of the repository.
+
 ## Cache-safe deployments
+
+The inactive slot is stopped and its release-scoped prerender cache is cleared before the candidate starts. This keeps a large obsolete cache from blocking the candidate's first health request while Next.js removes it synchronously. Retained rollback images and manifests remain available; their pages regenerate when needed.
 
 Public deployments purge only the `www.deetnuts.com` hostname immediately after Nginx switches to the healthy candidate. A purge failure triggers the normal rollback path. This prevents cached HTML or React Server Component responses from referencing static assets that disappeared in the new immutable image. The purge must never target the whole Cloudflare zone because `api.deetnuts.com` and unrelated hostnames are outside the web migration.
 
