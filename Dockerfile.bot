@@ -5,6 +5,7 @@ ARG NODE_IMAGE=node:22-alpine@sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f716
 FROM ${NODE_IMAGE} AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
+COPY vendor/braces ./vendor/braces
 RUN npm ci --no-audit --no-fund
 
 FROM ${NODE_IMAGE} AS builder
