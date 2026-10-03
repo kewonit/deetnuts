@@ -3,10 +3,12 @@ import AdmissionsFitGate from "@/components/admissions/AdmissionsFitGate";
 import AdmissionsFilters from "@/components/admissions/AdmissionsFilters";
 import AdmissionsJsonLd from "@/components/admissions/AdmissionsJsonLd";
 import CopyCollegeCode from "@/components/admissions/CopyCollegeCode";
+import CollegeIdentityMedia from "@/components/admissions/CollegeIdentityMedia";
 import CutoffObservations from "@/components/admissions/CutoffObservations";
 import ProvenanceCard from "@/components/admissions/ProvenanceCard";
 import type { MhtCetCollegeDetailModel } from "@/lib/admissions/types";
 import { withNeutralAdmissionsQuery } from "@/lib/admissions/query-state";
+import { getMhtCetCollegeMedia } from "@/lib/admissions/college-media";
 
 const serif = "[font-family:var(--font-serif-display)] italic";
 const card =
@@ -60,10 +62,12 @@ export default function MhtCetDetailView({
             </nav>
           ) : null}
           <div className="mht-college-mark">
-            <div className="mht-profile-banner" aria-hidden="true" />
-            <div className="mht-college-logo" aria-hidden="true">
-              <span>{initial}</span>
-            </div>
+            <CollegeIdentityMedia
+              key={collegeCode}
+              media={getMhtCetCollegeMedia(model.college.collegeId)}
+              initial={initial}
+              variant={variant}
+            />
             <header className="mht-college-identity">
               <h1 className={serif}>{model.college.name}</h1>
               <p className="mht-college-meta">

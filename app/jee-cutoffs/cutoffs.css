@@ -638,6 +638,8 @@ html.dark .jee-cutoff-footer {
 }
 
 .mht-profile-banner {
+  position: relative;
+  overflow: hidden;
   height: 8rem;
   border-radius: 0.5rem;
   background-color: var(--mht-banner-from);
@@ -667,6 +669,11 @@ html.dark .jee-cutoff-footer {
 .mht-college-sheet {
   background-color: var(--mht-paper);
   color: var(--mht-ink);
+}
+
+.mht-college-logo--image {
+  overflow: hidden;
+  background-color: #fff;
 }
 
 .mht-college-in-sheet {

@@ -1,0 +1,439 @@
+{
+  "totalColleges": 390,
+  "reviewedColleges": 390,
+  "logos": 375,
+  "campusBackgrounds": 362,
+  "photoAvatars": 9,
+  "initialAvatars": 6,
+  "neutralBackgrounds": 28,
+  "officialAssets": 567,
+  "secondaryAssets": 170,
+  "decodedAssets": 737,
+  "losslessLogos": 375,
+  "assetBytes": 54634258,
+  "unavailableLogos": [
+    "02805",
+    "03546",
+    "04762",
+    "05171",
+    "05682",
+    "05683",
+    "05686",
+    "06122",
+    "06155",
+    "06311",
+    "06625",
+    "06755",
+    "06759",
+    "14005",
+    "16371"
+  ],
+  "unavailableBackgrounds": [
+    "02021",
+    "02282",
+    "02637",
+    "02666",
+    "02770",
+    "02772",
+    "02805",
+    "03546",
+    "03723",
+    "03724",
+    "05395",
+    "05409",
+    "05413",
+    "05497",
+    "05509",
+    "05513",
+    "05545",
+    "05597",
+    "05682",
+    "05683",
+    "05686",
+    "06183",
+    "06714",
+    "06814",
+    "16121",
+    "16126",
+    "16371",
+    "16372"
+  ],
+  "unavailable": [
+    {
+      "code": "02805",
+      "name": "Urvara Pathrikar Engineering College",
+      "missing": [
+        "logo",
+        "campus"
+      ],
+      "notes": "Official home/campus description inspected and exact CET2026 code02805 address verified (Pathri, Chhatrapati Sambhajinagar). Site exposes text branding, fake-avatar testimonial pictures and one unidentified classroom hero photo without confirming college or campus evidence; no actual logo or verified campus building image was found. Matched Shiksha profile uses generic logo/header placeholders and mislabels the district, so its imagery was rejected."
+    },
+    {
+      "code": "03546",
+      "name": "Devi Mahalaxmi College of Engineering and Technology",
+      "missing": [
+        "logo",
+        "campus"
+      ],
+      "notes": "Former polytechnic website did not resolve; matched college listing was blocked. Exact engineering-college CampusJourney and Shiksha profiles plus older polytechnic profile inspected. CampusJourney provides a generated DM initials avatar, and Shiksha supplies generic default logos/header art; these were rejected. No authentic institution logo or verifiable same-campus photograph was found after these concrete source attempts."
+    },
+    {
+      "code": "05682",
+      "name": "Sai College of Engineering and Technology",
+      "missing": [
+        "logo",
+        "campus"
+      ],
+      "notes": "Official CAP entry confirms Ahilyanagar district but publishes only the institution name as its address. Proposed Saibaba engineering website could not resolve; Sai Polytechnic page resolves to a Yavatmal institution and was rejected. Exact-name and Ahilyanagar/Ahmednagar campus/logo searches returned no verified matching assets; S.A. Chennai and Sai Group marks were excluded. No suitable own-college photograph or emblem could be verified."
+    },
+    {
+      "code": "05683",
+      "name": "Saptashrungi College of Engineering and Polytechnic",
+      "missing": [
+        "logo",
+        "campus"
+      ],
+      "notes": "Verified new college identity and Manori, Dindori, Nashik address from official CAP and matched MahaAdmission record. No official website could be identified. Exact-name, Manori and campus/logo searches returned unrelated colleges (Armori/Ratnagiri/Nashik commerce institutions); those images were rejected. No verified own-college photograph or crest found."
+    },
+    {
+      "code": "05686",
+      "name": "Loknete Suhas Dwarkanath Kande College of Engineering Management and Research",
+      "missing": [
+        "logo",
+        "campus"
+      ],
+      "notes": "Verified Phule Nagar, Nandgaon identity and former Gurukul MBA college from the SPPU directory. Its listed official gurukulmba.org website does not resolve. Matched FacultyPlus job notice and named campus/logo image searches were inspected; results predominantly belong to K K Wagh/Gangamai/Wainganga and were rejected. No verified own exterior or standalone institutional mark selected. The FacultyPlus recruitment advertisement was visually reviewed: its tiny monochrome corner mark is too small to be readable as an avatar, and the rest is text; no usable same-college photo is present."
+    },
+    {
+      "code": "16371",
+      "name": "Kai. Nirmalatai Pingle Institute of Engineering & Management studies",
+      "missing": [
+        "logo",
+        "campus"
+      ],
+      "notes": "Official CAP identity and Gat 93/2 Chakan near Chalkreshwar Temple address verified. No official institution website could be identified. The NIET site returned by a name/acronym search belongs to Noida, Uttar Pradesh, and was rejected. Exact Nirmalatai Pingle/Chakan campus/logo and alternate spelling searches returned no verified matching assets. Initials/neutral fallback retained."
+    }
+  ],
+  "partial": [
+    {
+      "code": "02021",
+      "name": "University Department of Chemical Technology, Aurangabad",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Official BAMU department URL and bare-domain variant could not be retrieved securely; HTTP path also failed. Exact UDCT Aurangabad secondary logo article matched the department name and university crest. UDCT wordmark retained with ISO certification line excluded. Official and matched campus search supplied no verifiable department building photograph."
+    },
+    {
+      "code": "02282",
+      "name": "Mitthulalji Sarada Institute Of Technology, Nalwandi Road, Beed",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Registered msiot.in site inaccessible. Institution ERP host inspected and exact institute-code2282 secondary profile matched. Published Aditya Education Trust seal retained as the institution identity; no campus photograph was exposed by the official portal or matched indexed sources."
+    },
+    {
+      "code": "02637",
+      "name": "Jijau Institute of Engineering Technology and Management, Khandgaon (Bendri), Taluka Naigaon, District Nanded",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Official home, infrastructure/facilities routes and former polytechnic website inspected; indexed matched campus search found no verifiable exterior. Available home pictures are generic stock technology graphics. Actual college emblem isolated from its official header."
+    },
+    {
+      "code": "02666",
+      "name": "Mangaldeep College of Engineering",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Official home and Gallary page plus matched college search inspected. Gallery contains institution seal and generic circuit artwork; proposed building is an architectural rendering and was rejected. No real campus photograph could be verified."
+    },
+    {
+      "code": "02770",
+      "name": "Shetkari Shikshan Prasarak Mandal's Mahesh Institute of Engineering and Technology , Ashti",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Institution-specific Careers360 profile supplies this Shetkari/Mahesh institute seal. Matched Ashti searches found no verifiable campus photo. The suggested miet.ac.in domain resolves to a different institute in Meerut and was rejected; no confirmed official website found."
+    },
+    {
+      "code": "02772",
+      "name": "JSPM College of Engineering, Latur",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Official home, Facilities and Gallery pages inspected, plus matched Latur college search. College gallery contains gathering/event photographs without a suitable clean campus exterior; no verified campus image was located. Official JSPM identity mark retained."
+    },
+    {
+      "code": "03723",
+      "name": "Navjeevan Education Society's College of Engineering, Bhandup(W), Mumbai",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Engineering college emblem verified against CET name/address. Official shared-campus hero has a visible four-point generative-editor mark and was rejected without removing that mark. Official gallery shows repeated lab photographs; independent Shiksha gallery has only publisher defaults and the matched CollegeDunia gallery returns 404. No sufficiently corroborated authentic campus photograph was available."
+    },
+    {
+      "code": "03724",
+      "name": "Thakur Shree DPS College of Engineering & Management",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Official college home, alternate domain and trust/about page inspected, plus matched campus photo search. Home image is an architectural rendering and was rejected. Actual TSDCEM institutional seal verified; no suitable real campus photograph located."
+    },
+    {
+      "code": "04762",
+      "name": "Mata Mahakali College of Engineering & Technology, Warora",
+      "missing": [
+        "logo"
+      ],
+      "notes": "Mata Mahakali Parsoda, Warora: corrected official degree-college website and contact address match the CAP identity. A clear actual interior photograph from the college gallery is selected for both background and photo avatar. No verified individual college emblem is published; the older parent-trust graphic and generic modern-campus concept assets were excluded."
+    },
+    {
+      "code": "05171",
+      "name": "Godavari Foundation's Godavari College Of Engineering, Jalgaon",
+      "missing": [
+        "logo"
+      ],
+      "notes": "Godavari Jalgaon courtyard and academic building photo matched to its exact college name/address on CollegeBatch. Official gfgcoe.ac.in attempts fail to resolve and old gfgcoe.in is parked. Exact college/logo searches inspected; secondary listings show contradictory marks or other Jalgaon colleges, so none was selected as a verified Godavari emblem. Same-college photograph supplies avatar fallback; formal logo unavailable. Desktop and mobile banner cover crops reviewed with the recorded focal position."
+    },
+    {
+      "code": "05395",
+      "name": "Ashok Institute of Engineering & Technology",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Official Ashok Institute Ashoknagar/Shirampur emblem was individually inspected and cropped without founder portraits. Official homepage images and exact institute/location secondary search reviewed. Hostel promotion and event images were unsuitable; similarly named Ashoka colleges in Telangana, Varanasi and Chhattisgarh were excluded. No clean verified same-campus photograph was available; neutral banner retained."
+    },
+    {
+      "code": "05409",
+      "name": "Rajiv Gandhi College of Engineering, At Post Karjule Hariya Tal.Parner, Dist.Ahmednagar",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Official RGCOE Karjule Harya Parner identity and own emblem verified. Official campus collage combines a rendering with a photograph and was rejected. Exact Karjule Harya/Ahmednagar campus searches returned Rajiv Gandhi colleges in Chennai, Nagpur and Himachal Pradesh; those different campuses were excluded. No suitable verified own-campus photograph selected; neutral banner retained."
+    },
+    {
+      "code": "05413",
+      "name": "Netaji Subhashchandra Bose Edu Trust,Netaji Polytechnic.,Dhule",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Official Netaji Polytechnic Dhule emblem inspected and cropped intact. Homepage and matched secondary college profile contain student events/project demonstrations. Nikam, Adarsh, Government and SSVPS Dhule campuses were excluded as different institutions. No clear same-college campus photograph verified; neutral banner retained."
+    },
+    {
+      "code": "05497",
+      "name": "P.G. College of Engineering & Technology, Nandurbar",
+      "missing": [
+        "campus"
+      ],
+      "notes": "PGCET Nandurbar identity and official college crest individually verified. Homepage/gallery and exact named campus search inspected. Available engineering slider is a student/promotional image; DN Patel engineering, GT Patil arts/science, PG hospital and pharmacy photographs were excluded because the engineering building/shared-campus identity was not established. No suitable verified college photo; neutral banner retained."
+    },
+    {
+      "code": "05509",
+      "name": "Shri Swami Samarth Institute of Management and Technology, Malwadi-Bota",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Shri Baleshwar Foundation official Swami Samarth Malwadi-Bota identity and explicitly used shared emblem verified and cropped intact. Homepage and exact Malwadi-Bota campus search inspected. Founder portraits, unrelated SMBT Dhamangaon and Samarth Belhe college imagery excluded. No clean verified own-campus photo identified; neutral banner retained."
+    },
+    {
+      "code": "05513",
+      "name": "MKD Institute of Technology, Nadurbar",
+      "missing": [
+        "campus"
+      ],
+      "notes": "MKD Institute of Technology Nandurbar identity and own named crest verified from official header. Official homepage/department images and exact college-building search inspected; stock students, occupied teaching labs and workshop images were unsuitable for a clean campus background. No suitable verified exterior selected; neutral banner retained."
+    },
+    {
+      "code": "05545",
+      "name": "Shri Vile Parle Kelavani Mandal's College of Engineering, Shirpur",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Official SVKM College of Engineering Shirpur identity and its explicitly used SVKM mark verified, distinct from IOT Dhule and NMIMS Shirpur. Official infrastructure page and exact named campus searches inspected. Available proposed-building renders and stock scenes were rejected; NMIMS technology park was excluded as a different college. No suitable verified real college-campus photo selected; neutral banner retained."
+    },
+    {
+      "code": "05597",
+      "name": "VAMANRAO ITHAPE COLLEGE OF ENGINEERING AND MANAGEMENT",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Official Vamanrao Ithape College of Engineering and Management name and own engineering crest individually checked, preferring that mark over the broad institutes wordmark. Official homepage/contact and exact college/location image search inspected. Images name a homoeopathic hospital or polytechnic and include event/admission overlays; their use for the engineering campus was not established. No suitable verified same-college photo selected; neutral banner retained."
+    },
+    {
+      "code": "06122",
+      "name": "TSSMS's Pd. Vasantdada Patil Institute of Technology, Bavdhan, Pune",
+      "missing": [
+        "logo"
+      ],
+      "notes": "Verified PVPIT Bavdhan Pune identity and genuine named college exterior from its matched gallery, distinct from Budhgaon Sangli. Official home/institute-at-glance page and indexed footer_logo.png attempted; official assets returned403. Named secondary logo search provided no accessible corroborated complete mark. Same-college exterior supplies avatar fallback; formal logo unavailable. Desktop and mobile banner cover crops reviewed with the recorded focal position."
+    },
+    {
+      "code": "06155",
+      "name": "G.H.Raisoni College of Engineering & Management, Wagholi, Pune",
+      "missing": [
+        "logo"
+      ],
+      "notes": "Wagholi Pune Domkhel Road campus verified, now represented by G H Raisoni International Skill Tech University, matching the former GHR College of Engineering & Management address. Own labelled building photo retained. Group header returned a GHRCE Nagpur building and was rejected; white-only marks were unreadable on the avatar. Exact Pune college-logo search inspected; partner’s matching logo URL returned404 and Jalgaon/Nagpur marks were excluded. Same-college photo supplies avatar fallback; readable verified logo unavailable. Desktop and mobile banner cover crops reviewed with the recorded focal position."
+    },
+    {
+      "code": "06183",
+      "name": "Al-Ameen Educational and Medical Foundation, College of Engineering, Koregaon, Bhima",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Official Al-Ameen Koregaon Bhima college name and own crest verified. Homepage and exact Koregaon Bhima/Pune college-building search inspected. Available own pages show occupied laboratories/events; Al-Ameen Bijapur, Karnataka and MAE Alandi imagery was excluded as different colleges. No clear verified college exterior identified; neutral banner retained."
+    },
+    {
+      "code": "06311",
+      "name": "Jayawant Shikshan Prasarak Mandal, Bhivarabai Sawant Institute of Technology & Research, Wagholi",
+      "missing": [
+        "logo"
+      ],
+      "notes": "Exact Bhivarabai Sawant Institute of Technology & Research Wagholi name/address verified on the clean entrance photo. Official JSPM BSIOTR site returned403. Named secondary logo and campus galleries inspected; no accessible complete college emblem identified, and Motorola-stamped façade/other institute marks excluded. Same-college entrance photo supplies avatar fallback; logo unavailable. Desktop and mobile banner cover crops reviewed with the recorded focal position."
+    },
+    {
+      "code": "06625",
+      "name": "Universal College of Engineering & Research, Sasewadi",
+      "missing": [
+        "logo"
+      ],
+      "notes": "Universal College of Engineering & Research Sasewadi Pune identity and real named campus entrance individually verified on the matched CollegeBatch gallery. Official ucer.in attempts fail to resolve. Exact Sasewadi college-logo search inspected; Wainganga and Universal Vasai identities were excluded. No accessible verified Sasewadi logo identified; same-college photo supplies avatar fallback. Desktop and mobile banner cover crops reviewed with the recorded focal position."
+    },
+    {
+      "code": "06714",
+      "name": "APPASAHEB ALIAS SA.RE.PATIL INSTITUTE OF TECHNOLOGY, Dattanagar Tal-Shirol, Dist Kolhapur",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Official Appasaheb Sa.Re.Patil Institute Dattanagar Shirol identity and institute mark individually verified. Homepage and exact named/located secondary campus searches inspected. Available home imagery was promotional, event material or uncertain collage; RCPIT Shirpur and A G Patil Solapur matches were excluded as different institutions. No suitable verified own-campus photograph selected; neutral banner retained."
+    },
+    {
+      "code": "06755",
+      "name": "JSPM Narhe Technical Campus, Pune.",
+      "missing": [
+        "logo"
+      ],
+      "notes": "JSPM Narhe Technical Campus Pune name/address verified on its genuine named building photo. Official jspmntc.edu.in page returned403. Exact named logo search and matched galleries inspected; no accessible complete institution-specific emblem identified. Same-college photo supplies avatar fallback; logo unavailable. Desktop and mobile banner cover crops reviewed with the recorded focal position."
+    },
+    {
+      "code": "06759",
+      "name": "Shree Ramchandra College of Engineering, Lonikand,Pune",
+      "missing": [
+        "logo"
+      ],
+      "notes": "Shree Ramchandra College of Engineering Lonikand Pune name/address verified on its genuine named campus building. Official srcoepune.com attempts fail to resolve. Exact Lonikand logo search inspected; similarly named Ramachandra colleges outside Pune were excluded and no accessible corroborated own crest was identified. Same-college photo supplies avatar fallback; logo unavailable. Desktop and mobile banner cover crops reviewed with the recorded focal position."
+    },
+    {
+      "code": "06814",
+      "name": "K.P. Patil Institute ( Polytechnic ), Bhudargad, Dist.Kolhapur",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Official K P Patil Polytechnic Mudal identity and own mark individually verified. Homepage/facility pages and exact college/location secondary search inspected. Proposed-building rendering, buses, gathering photos and unrelated pharmacy campuses excluded. No clean verified physical campus photograph selected; neutral banner retained."
+    },
+    {
+      "code": "14005",
+      "name": "Laxminarayan Innovation Technological University, Nagpur",
+      "missing": [
+        "logo"
+      ],
+      "notes": "Actual LITU Nagpur clock-tower campus and physical LIT lettering verified against the matched gallery and canonical Amravati Road address. Official homepage is a client-rendered app. Exact named logo search identifies an indexed Marathi university emblem, but the official assets/images/marathi_logo_litu.jpeg path returns HTML rather than an image; unrelated Lucknow/IPU marks were excluded. Same-college photo supplies avatar fallback; accessible verified logo unavailable. Desktop and mobile banner cover crops reviewed with the recorded focal position."
+    },
+    {
+      "code": "16121",
+      "name": "Shri. Anandrao Abitkar College of Engineering, Pal",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Official Anandrao Abitkar College Pal identity and genuine college emblem individually reviewed. Homepage image IMG-20231231-WA0011.jpg was downloaded and visually identified as a building rendering, so rejected. Exact Pal/Bhudargad/Kolhapur campus searches returned other colleges and pharmacy buildings; none was verified as this engineering campus. No suitable real campus photo; neutral banner retained."
+    },
+    {
+      "code": "16126",
+      "name": "Tatyasaheb Kore Institute of Engineering and Technology, Yelur",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Historical CAP 16126 identifies the separate TKIET Yelur off-campus institute. The official AICTE 2024–25 approval confirms the Yelur campus and its parent institution. The parent institute crest was cropped intact from its official header, excluding the founder portrait, and visually inspected. Official campus pages, approval material and image search did not yield an identifiable Yelur exterior. Main Warananagar campus photographs were excluded because they do not verify the separate Yelur location; retain a neutral banner."
+    },
+    {
+      "code": "16372",
+      "name": "Sawkar Women's Institute of Technology",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Official Sawkar Women’s Institute of Technology Satara identity and its explicitly used Samarth Educational Trust/Sawkar Institutes mark verified. Shared mark with Arvind Gavali is intentional because both colleges publish it on their own official headers. Homepage and exact named secondary search inspected; slider scenes are stock/staged study/robotics material, and medical/pharmacy campuses were not established as the engineering campus. No suitable real college photograph; neutral banner retained."
+    }
+  ],
+  "sharedAssets": [
+    [
+      {
+        "code": "05151",
+        "kind": "logo"
+      },
+      {
+        "code": "05244",
+        "kind": "logo"
+      }
+    ],
+    [
+      {
+        "code": "05239",
+        "kind": "campus"
+      },
+      {
+        "code": "05322",
+        "kind": "campus"
+      }
+    ],
+    [
+      {
+        "code": "06177",
+        "kind": "logo"
+      },
+      {
+        "code": "06178",
+        "kind": "logo"
+      },
+      {
+        "code": "06182",
+        "kind": "logo"
+      },
+      {
+        "code": "06185",
+        "kind": "logo"
+      },
+      {
+        "code": "06187",
+        "kind": "logo"
+      },
+      {
+        "code": "06769",
+        "kind": "logo"
+      },
+      {
+        "code": "06770",
+        "kind": "logo"
+      }
+    ],
+    [
+      {
+        "code": "06184",
+        "kind": "logo"
+      },
+      {
+        "code": "06634",
+        "kind": "logo"
+      }
+    ],
+    [
+      {
+        "code": "06545",
+        "kind": "logo"
+      },
+      {
+        "code": "16372",
+        "kind": "logo"
+      }
+    ]
+  ]
+}
