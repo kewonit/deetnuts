@@ -191,7 +191,7 @@ jobs:
 
       - name: Build and push web image
         id: web
-        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         with:
           context: .
           file: Dockerfile
@@ -215,7 +215,7 @@ jobs:
 
       - name: Build and push worker image
         id: worker
-        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         with:
           context: .
           file: Dockerfile.bot
@@ -233,7 +233,7 @@ jobs:
 
       - name: Build and push PocketBase image
         id: pocketbase
-        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         with:
           context: pocketbase
           file: pocketbase/Dockerfile
@@ -247,7 +247,7 @@ jobs:
 
       - name: Build and push Access verifier image
         id: access-verifier
-        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         with:
           context: access-verifier
           file: access-verifier/Dockerfile
