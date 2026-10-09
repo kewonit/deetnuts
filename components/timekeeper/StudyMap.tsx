@@ -1,7 +1,8 @@
 "use client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { LayerGroup, Map as LeafletMap } from "leaflet";
-import { Maximize, RefreshCw } from "lucide-react";
+import type { GeoJsonObject } from "geojson";
+import { LocateFixed, Maximize, RefreshCw } from "lucide-react";
 import { z } from "zod";
 import {
   displaySessions,
@@ -41,6 +42,8 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
   const canvas = useRef<HTMLDivElement>(null);
   const map = useRef<LeafletMap | null>(null);
   const markers = useRef<LayerGroup | null>(null);
+  const resetView = useRef<(() => void) | null>(null);
+  const [mapReady, setMapReady] = useState(false);
   const now = useNow();
   const [selection, setSelection] = useState(examSlug ?? "");
   const [sessionName, setSessionName] = useState("");
@@ -81,33 +84,68 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
     let cleanup: (() => void) | undefined;
     let polling: ReturnType<typeof setInterval> | undefined;
     async function initialize() {
-      const L = await import("leaflet");
+      const [L, outlineResponse] = await Promise.all([
+        import("leaflet"),
+        fetch("/exam-countdown/maps/india-outline.geojson", {
+          cache: "force-cache",
+        }),
+      ]);
+      if (!outlineResponse.ok) throw new Error("Could not load India map");
+      const outline: GeoJsonObject = await outlineResponse.json();
       if (cancelled || !canvas.current) return;
+      const reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
       const instance = L.map(canvas.current, {
         scrollWheelZoom: false,
-      }).setView([22.5, 79], 4);
+        trackResize: false,
+        zoomSnap: 0.25,
+        maxZoom: 8,
+        zoomAnimation: !reducedMotion,
+        markerZoomAnimation: !reducedMotion,
+        inertia: !reducedMotion,
+      });
       map.current = instance;
       markers.current = L.layerGroup().addTo(instance);
-      L.tileLayer(
-        "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png",
-        {
-          subdomains: "abcd",
-          maxZoom: 18,
-          attribution:
-            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        },
-      ).addTo(instance);
-      L.tileLayer(
-        "https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png",
-        { subdomains: "abcd", maxZoom: 18 },
-      ).addTo(instance);
-      const resize = new ResizeObserver(() => instance.invalidateSize());
+      const geography = L.geoJSON(outline, {
+        interactive: false,
+        style: { className: "tk-india-outline", weight: 1.25 },
+        attribution:
+          'India outline: <a href="https://github.com/datameet/maps/tree/master/Country">DataMeet</a> (CC0)',
+      }).addTo(instance);
+      const bounds = geography.getBounds();
+      const fitIndia = () => {
+        instance.invalidateSize({ pan: false });
+        instance.setMinZoom(0);
+        instance.fitBounds(bounds, { padding: [24, 24], animate: false });
+        instance.setMinZoom(instance.getZoom());
+      };
+      resetView.current = fitIndia;
+      fitIndia();
+      for (const [label, latitude, longitude] of [
+        ["INDIA", 23.5, 80.5],
+        ["Lakshadweep", 10.4, 72.1],
+        ["Andaman & Nicobar", 10, 94.5],
+      ] as const) {
+        L.marker([latitude, longitude], {
+          interactive: false,
+          icon: L.divIcon({
+            html: label,
+            className: "tk-map-place-label",
+            iconSize: [120, 20],
+            iconAnchor: [60, 10],
+          }),
+        }).addTo(instance);
+      }
+      setMapReady(true);
+      const resize = new ResizeObserver(fitIndia);
       resize.observe(canvas.current);
       cleanup = () => {
         resize.disconnect();
         instance.remove();
         map.current = null;
         markers.current = null;
+        resetView.current = null;
       };
       const client = await getStudyClient();
       await ensureStudyIdentity(client);
@@ -174,6 +212,7 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
         picture.className = `tk-avatar${student.is_demonstration ? " tk-avatar-demo" : ""}`;
         picture.referrerPolicy = "no-referrer";
         const marker = L.marker([student.latitude, student.longitude], {
+          zIndexOffset: student.is_demonstration ? 0 : 1000,
           icon: L.divIcon({
             html: picture,
             className: "",
@@ -202,7 +241,7 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
     return () => {
       cancelled = true;
     };
-  }, [sessions, demonstrations]);
+  }, [sessions, demonstrations, mapReady]);
 
   useEffect(() => {
     if (!joined) return;
@@ -287,8 +326,7 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
     <div>
       <div
         ref={element}
-        className="tk-map"
-        style={examSlug ? { height: 400 } : undefined}
+        className={`tk-map${examSlug ? " tk-map-embedded" : ""}`}
       >
         <div
           ref={canvas}
@@ -302,6 +340,14 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
             <strong>{sessions.length}</strong> studying now
           </div>
           <div className="flex gap-1">
+            <button
+              type="button"
+              className="tk-button"
+              aria-label="Show all of India"
+              onClick={() => resetView.current?.()}
+            >
+              <LocateFixed size={16} />
+            </button>
             <button
               type="button"
               className="tk-button"

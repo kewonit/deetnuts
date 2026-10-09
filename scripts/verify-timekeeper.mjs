@@ -87,6 +87,7 @@ export async function verifyTimekeeper({
     );
   const assets = new Set([
     "/exam-countdown/favicon.svg",
+    "/exam-countdown/maps/india-outline.geojson",
     "/exam-countdown/icon-192.png",
     "/exam-countdown/icon-512.png",
     "/exam-countdown/fonts/inter.woff2",

@@ -175,6 +175,16 @@ const nextConfig = {
           { key: "Cache-Control", value: "no-cache, max-age=0, must-revalidate" },
         ],
       },
+      {
+        source: "/exam-countdown/maps/india-outline.geojson",
+        headers: [
+          {
+            key: "Cache-Control",
+            value:
+              "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800",
+          },
+        ],
+      },
       // Public filenames are not guaranteed to be content-hashed.
       {
         source: "/:all*(svg|jpg|png|gif|ico|jpeg|webp|woff2|woff|ttf|eot)",

@@ -123,13 +123,11 @@ async function mockMap(page: Page) {
       json: { loc: "19.0760,72.8777", city: "Mumbai", region: "Maharashtra" },
     }),
   );
-  await page.route(
-    /https:\/\/([abcd]\.basemaps\.cartocdn\.com|api\.dicebear\.com)\//,
-    (route) =>
-      route.fulfill({
-        contentType: "image/svg+xml",
-        body: '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><rect width="80" height="80" fill="#eee"/></svg>',
-      }),
+  await page.route(/https:\/\/api\.dicebear\.com\//, (route) =>
+    route.fulfill({
+      contentType: "image/svg+xml",
+      body: '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><rect width="80" height="80" fill="#eee"/></svg>',
+    }),
   );
   return rpcCalls;
 }
@@ -584,6 +582,57 @@ test("timer expiry and feature service-worker caches stay in the browser", async
   ).toBe(true);
 });
 
+test("India map renders locally, fits the viewport and resets after zooming", async ({
+  page,
+}) => {
+  const externalTiles: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().includes("basemaps.cartocdn.com"))
+      externalTiles.push(request.url());
+  });
+  const outlineResponse = page.waitForResponse((response) =>
+    response.url().endsWith("/exam-countdown/maps/india-outline.geojson"),
+  );
+  await page.goto(`${path}/study-map`);
+  expect((await outlineResponse).status()).toBe(200);
+  const outline = page.locator(".tk-india-outline");
+  await expect(outline).toBeVisible();
+  await expect(page.locator(".leaflet-control-attribution")).toContainText(
+    "DataMeet",
+  );
+  const assertFits = () =>
+    expect(async () => {
+      const country = await outline.boundingBox();
+      const viewport = await page.locator(".tk-map-canvas").boundingBox();
+      expect(country).not.toBeNull();
+      expect(viewport).not.toBeNull();
+      expect(country!.x).toBeGreaterThanOrEqual(viewport!.x);
+      expect(country!.y).toBeGreaterThanOrEqual(viewport!.y);
+      expect(country!.x + country!.width).toBeLessThanOrEqual(
+        viewport!.x + viewport!.width,
+      );
+      expect(country!.y + country!.height).toBeLessThanOrEqual(
+        viewport!.y + viewport!.height,
+      );
+    }).toPass();
+  await assertFits();
+  await page.getByRole("button", { name: "Zoom in", exact: true }).click();
+  await page.getByRole("button", { name: "Show all of India" }).click();
+  await assertFits();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await assertFits();
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await assertFits();
+  await page.getByRole("button", { name: "Fullscreen study map" }).click();
+  await expect(page.locator(".tk-map:fullscreen")).toBeVisible();
+  await assertFits();
+  await page.getByRole("button", { name: "Fullscreen study map" }).click();
+  await expect(page.locator(".tk-map:fullscreen")).toHaveCount(0);
+  await assertFits();
+  expect(externalTiles).toEqual([]);
+  expect(await page.locator(".leaflet-tile").count()).toBe(0);
+});
+
 test("study map connects, starts and ends through the existing RPC contract without HTML injection", async ({
   page,
 }) => {
@@ -607,8 +656,7 @@ test("study map connects, starts and ends through the existing RPC contract with
     ".leaflet-marker-icon:has(.tk-avatar:not(.tk-avatar-demo))",
   );
   if ((page.viewportSize()?.width ?? 0) < 640) {
-    // The source map overlays its timer on narrow screens. Its markers must
-    // still expose the same popup through Leaflet's keyboard interaction.
+    // Exercise Leaflet's keyboard popup interaction on touch-sized layouts.
     await marker.press("Enter");
   } else {
     await marker.click();
