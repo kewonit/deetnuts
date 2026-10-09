@@ -62,6 +62,26 @@ test("canary is non-cacheable, timed and restricted to the teaching category", a
   );
 });
 
+test("fallback paths cannot change the pinned source origin or forward credentials", async () => {
+  for (const path of ["//attacker.example/path", "/exams/jee-main"])
+    await handleRequest(
+      new Request(`${manifest.oldOrigin}${path}?q=one%20two&q=three`, {
+        headers: { cookie: "private=session", authorization: "Bearer private" },
+      }),
+      { ROLLOUT_PHASE: "serve" },
+      async (request) => {
+        const source = new URL(request.url);
+        assert.equal(source.origin, manifest.immutableSourceOrigin);
+        assert.equal(source.pathname, path);
+        assert.equal(source.search, "?q=one%20two&q=three");
+        assert.equal(request.headers.has("cookie"), false);
+        assert.equal(request.headers.has("authorization"), false);
+        assert.equal(request.redirect, "manual");
+        return new Response("pinned application");
+      },
+    );
+});
+
 test("unknown pages are 404, retired example is 410, helper and old assets stay available", async () => {
   const env = { ROLLOUT_PHASE: "retired" };
   for (const path of [...manifest.knownMissing, "/invented", "/exams/not-real"])

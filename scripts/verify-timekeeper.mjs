@@ -125,10 +125,11 @@ export async function verifyTimekeeper({
         `${path}: public page is not cacheable`,
       );
     const csp = response.headers.get("content-security-policy") ?? "";
+    const cspSources = csp.split(/[\s;]+/);
     requireThat(
       csp.split("default-src").length === 2 &&
-        csp.includes("api.dicebear.com") &&
-        csp.includes("ivmobluuegkikmbwbfhe.supabase.co") &&
+        cspSources.includes("https://api.dicebear.com") &&
+        cspSources.includes("https://ivmobluuegkikmbwbfhe.supabase.co") &&
         (!production || !csp.includes("'unsafe-eval'")),
       `${path}: incorrect feature CSP`,
     );

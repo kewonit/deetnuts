@@ -50,8 +50,43 @@
     "windowStart": "2026-07-07",
     "windowEnd": "2026-10-06",
     "landingRows": 79,
-    "reports": "Performance and page-indexing CSV exports captured privately. Old ownership verified; destination ownership and sitemap reports still need confirmation before cutover.",
-    "oldOwnership": "Verified owner, confirmed in authenticated Chrome settings"
+    "reports": "Old performance and page-indexing CSV exports and both sitemap reports captured privately. Ownership of both domain properties confirmed in the same authenticated Chrome account.",
+    "oldOwnership": "Verified owner, confirmed in authenticated Chrome settings",
+    "destinationProperty": "sc-domain:deetnuts.com",
+    "destinationOwnership": "Verified owner, confirmed in authenticated Chrome settings",
+    "oldIndexing": {
+      "lastUpdated": "2026-10-04",
+      "indexed": 70,
+      "notIndexed": 82
+    },
+    "oldSitemaps": [
+      {
+        "url": "https://timekeeper.edbn.me/sitemap.xml",
+        "status": "Success",
+        "lastRead": "2026-10-05",
+        "discoveredPages": 76
+      },
+      {
+        "url": "https://timekeeper.edbn.me/sitemap.xml/",
+        "status": "1 error",
+        "lastRead": "2025-08-29",
+        "discoveredPages": 0
+      }
+    ],
+    "destinationSitemaps": [
+      {
+        "url": "https://deetnuts.com/sitemap-index.xml",
+        "status": "Success",
+        "lastRead": "2026-10-04",
+        "discoveredPages": 97256
+      },
+      {
+        "url": "https://deetnuts.com/sitemap.xml",
+        "status": "Success",
+        "lastRead": "2026-10-05",
+        "discoveredPages": 143
+      }
+    ]
   },
   "recovery": {
     "sourceHistory": "Full Git bundle including all 94 refs; verified complete",
@@ -68,7 +103,7 @@
   },
   "cutoverGates": {
     "dnsTlsAndRulesCaptured": false,
-    "searchConsoleOwnershipVerified": false,
+    "searchConsoleOwnershipVerified": true,
     "allMappedRoutesVerified": false,
     "browserFeatureChecksPassed": false,
     "productionChecksPassed": false,
@@ -107,7 +142,7 @@
       1024,
       1440
     ],
-    "migrationUnitTests": 20,
+    "migrationUnitTests": 21,
     "pocketbaseIntegrationTests": 4,
     "jeeUnitTests": 13,
     "lint": true,

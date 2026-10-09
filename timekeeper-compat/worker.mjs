@@ -137,10 +137,9 @@ export async function handleRequest(request, env = {}, fetchSource = fetch) {
   }
   // Always use the immutable deployment. Fetching the old public hostname
   // here would loop after this worker is attached to that hostname.
-  const source = new URL(
-    url.pathname + url.search,
-    manifest.immutableSourceOrigin,
-  );
+  const source = new URL(manifest.immutableSourceOrigin);
+  source.pathname = url.pathname;
+  source.search = url.search;
   const headers = new Headers(request.headers);
   headers.delete("cookie");
   headers.delete("authorization");

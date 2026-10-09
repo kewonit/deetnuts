@@ -30,7 +30,7 @@ EJAM_DATA_ROOT=ejam/data npm run build
 
 The PocketBase tests create and delete only their own temporary database. CI downloads the same official version as the deployed container and verifies its checksum before running them. CI also runs the feature browser tests alongside the existing JEE checks at 320, 390, 768, 1024 and 1440 pixels. Map and transfer requests in browser tests are fixtures; tests do not create study sessions on the live backend.
 
-Local verification on 2026-10-09 passed the production build, all 74 routes and 38 assets, 147 browser checks, 20 migration unit tests, four real PocketBase integration tests and 13 JEE unit tests. Three existing JEE mobile-only assertions are skipped at wider viewports. Lint and typecheck passed, and a single read-only `get_active_study_sessions` call returned 200 from the retained Supabase backend. These checks do not establish live deployment capacity or complete any observation period; production rollout gates remain closed.
+Local verification on 2026-10-09 passed the production build, all 74 routes and 38 assets, 147 browser checks, 21 migration unit tests, four real PocketBase integration tests and 13 JEE unit tests. Three existing JEE mobile-only assertions are skipped at wider viewports. Lint and typecheck passed, and a single read-only `get_active_study_sessions` call returned 200 from the retained Supabase backend. These checks do not establish live deployment capacity or complete any observation period; production rollout gates remain closed.
 
 Against an isolated running candidate:
 

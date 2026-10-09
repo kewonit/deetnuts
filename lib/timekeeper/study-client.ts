@@ -81,8 +81,9 @@ export async function studyLocation() {
       throw new Error("Location outside the study map");
     // Share an approximate city position only; the original coordinates never
     // enter browser storage or the session RPC.
-    const angle = Math.random() * Math.PI * 2;
-    const radius = Math.sqrt(Math.random()) * 0.045;
+    const random = crypto.getRandomValues(new Uint32Array(2));
+    const angle = (random[0] / 2 ** 32) * Math.PI * 2;
+    const radius = Math.sqrt(random[1] / 2 ** 32) * 0.045;
     return {
       latitude: latitude + Math.cos(angle) * radius,
       longitude: longitude + Math.sin(angle) * radius,
