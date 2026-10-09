@@ -1,6 +1,6 @@
 {
   "candidate": {
-    "origin": "http://127.0.0.1:3109",
+    "origin": "http://web:3000",
     "releaseSha": "a871ae8dd5eeb6bf5d97692fe16344a85bdc2e26",
     "isolated": true,
     "productionEquivalentResources": true,

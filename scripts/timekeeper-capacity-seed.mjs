@@ -3,13 +3,10 @@ import { resolve } from "node:path";
 
 const directory = resolve(process.argv[2]);
 const fixture = JSON.parse(await readFile(process.argv[3], "utf8"));
-const origin = "http://127.0.0.1:8099";
-const identity = (
-  await readFile(`${directory}/secrets/pocketbase_superuser_email`, "utf8")
-).trim();
-const password = (
-  await readFile(`${directory}/secrets/pocketbase_superuser_password`, "utf8")
-).trim();
+const origin = "http://pocketbase:8090";
+const { identity, password } = JSON.parse(
+  await readFile(`${directory}/seed.json`, "utf8"),
+);
 async function request(path, body, token) {
   const response = await fetch(`${origin}${path}`, {
     method: "POST",
