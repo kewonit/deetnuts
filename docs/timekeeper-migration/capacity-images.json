@@ -1,0 +1,8 @@
+{
+  "releaseSha": "a871ae8dd5eeb6bf5d97692fe16344a85bdc2e26",
+  "ciRun": "https://github.com/kewonit/deetnuts/actions/runs/37966660465",
+  "images": {
+    "web": "ghcr.io/kewonit/deetnuts-web@sha256:3d3c801776411d5032986ad9f4637d02703d561e5c7caa7791b3b3e12116af44",
+    "pocketbase": "ghcr.io/kewonit/deetnuts-pocketbase@sha256:f54df72b75f9d4557f97d4e12792acee45078f11189e2b9786f493b65d9d6741"
+  }
+}

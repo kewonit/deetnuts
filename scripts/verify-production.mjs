@@ -1,3 +1,5 @@
+import { verifyTimekeeper } from "./verify-timekeeper.mjs";
+
 const canonicalOrigin = "https://www.deetnuts.com";
 const expectedSha = process.env.EXPECTED_DEPLOYMENT_SHA?.trim();
 
@@ -86,4 +88,5 @@ if (/https:\/\/deetnuts\.com\//.test(sitemapText)) {
   throw new Error("Sitemap index still contains apex URLs");
 }
 
+await verifyTimekeeper({ expectedSha });
 console.log(`Production verification passed for ${expectedSha}`);

@@ -1,0 +1,295 @@
+{
+  "capturedOn": "2026-10-09",
+  "sourceRepository": "https://github.com/kewonit/Timekeeper",
+  "productionBranch": "Version-3",
+  "sourceCommit": "8cb737981c61f06e7b0baca248f7e237c763abd4",
+  "cloudflare": {
+    "accountId": "1f859c2c2ed610755277b10e37f7005e",
+    "project": "timekeeper",
+    "deploymentId": "7d4c1fd6-e703-47c6-ba1b-e43dec22ee68",
+    "immutableOrigin": "https://7d4c1fd6.timekeeper-933.pages.dev",
+    "productionHosts": [
+      "timekeeper.edbn.me",
+      "timekeeper-933.pages.dev"
+    ],
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist",
+    "rootDirectory": "",
+    "buildSystem": 3,
+    "automaticDeployments": true,
+    "watchPaths": [
+      "*"
+    ],
+    "buildCache": false,
+    "compatibilityDate": "2025-06-29",
+    "failOpen": true,
+    "bindings": [],
+    "secretNames": [
+      "PUBLIC_SUPABASE_URL",
+      "PUBLIC_SUPABASE_ANON_KEY"
+    ],
+    "confirmation": "Read from authenticated production deployment and settings in Chrome. main/5804e98 is a preview, not the production source.",
+    "dns": {
+      "zoneId": "6678f645e6e2a7217d702cf858b8c115",
+      "status": "active",
+      "type": "CNAME",
+      "name": "timekeeper",
+      "target": "timekeeper-933.pages.dev",
+      "proxied": true,
+      "ttl": "Auto"
+    },
+    "tlsMode": "Full (strict)",
+    "edgeCertificate": {
+      "hosts": ["*.edbn.me", "edbn.me"],
+      "type": "Universal",
+      "status": "Active",
+      "expiresOn": "2026-12-06"
+    },
+    "alwaysUseHttps": true,
+    "httpRedirectVerification": "Verify actual HTTP and HTTPS edge responses before permanent cutover; the existing HTTPS upgrade may affect the one-hop requirement.",
+    "accountBulkRedirectInventory": {
+      "enabledRules": 1,
+      "ruleName": "jeeneetards",
+      "ruleId": "b4a10fdf7c2c4d9dbfe74feaa57f0d8c",
+      "listId": "7e9f6a98b75746668a2236c89299fef2",
+      "source": "www.jeeneetards.online/",
+      "destination": "https://jeeneetards.online",
+      "status": 301,
+      "preserveQueryString": false,
+      "subpathMatching": false,
+      "expression": "http.request.full_uri in $jeeneetards",
+      "timekeeperOverlap": false
+    },
+    "secondaryPagesProject": {
+      "project": "exam-timekeeper",
+      "productionBranch": "main",
+      "productionCommit": "5804e98aad21df39fb6b3ad08023138bceede6e3",
+      "deploymentId": "99d56108-8b1f-4406-9034-3d8d53c7285b",
+      "immutableOrigin": "https://99d56108.exam-timekeeper.pages.dev",
+      "customDomains": [],
+      "automaticDeployments": true,
+      "buildCommand": "npm run build",
+      "outputDirectory": "dist",
+      "buildSystem": 3
+    },
+    "compatibilityPreview": {
+      "worker": "deetnuts-timekeeper-compat",
+      "version": "74cb74bd",
+      "origin": "https://deetnuts-timekeeper-compat.cat-meowed-in.workers.dev",
+      "phase": "serve",
+      "mappedSourcePagesVerified": 74,
+      "assetsVerified": 9,
+      "noindex": true,
+      "noStore": true,
+      "liveRoutesAttached": true,
+      "liveRouteScope": "Only the two import-helper paths; existing exam/category documents remain on the original Pages application. No full-host route or page redirects are active."
+    },
+    "workersRoutes": [
+      "timekeeper.edbn.me/migrate-to-deetnuts*",
+      "timekeeper.edbn.me/timekeeper-migration.js*"
+    ],
+    "pageRules": []
+  },
+  "supabaseOrigin": "https://ivmobluuegkikmbwbfhe.supabase.co",
+  "historicalAnalyticsProperty": "G-Q2J1V5S9K5",
+  "destinationAnalyticsProperty": "G-PF9S037SJQ",
+  "searchConsole": {
+    "property": "sc-domain:timekeeper.edbn.me",
+    "windowStart": "2026-07-07",
+    "windowEnd": "2026-10-06",
+    "landingRows": 79,
+    "reports": "Old performance and page-indexing CSV exports and both sitemap reports captured privately. Ownership of both domain properties confirmed in the same authenticated Chrome account.",
+    "oldOwnership": "Verified owner, confirmed in authenticated Chrome settings",
+    "destinationProperty": "sc-domain:deetnuts.com",
+    "destinationOwnership": "Verified owner, confirmed in authenticated Chrome settings",
+    "destinationIndexing": {
+      "lastUpdated": "2026-10-04",
+      "indexed": 59359,
+      "notIndexed": 75141
+    },
+    "destinationPerformance": {
+      "windowStart": "2026-07-07",
+      "windowEnd": "2026-10-06",
+      "clicksApproximate": 1080,
+      "impressionsApproximate": 244000,
+      "landingRowsExported": 1000,
+      "scope": "Whole domain property, including other subdomains; monitor the new feature by final hostname and path."
+    },
+    "oldIndexing": {
+      "lastUpdated": "2026-10-04",
+      "indexed": 70,
+      "notIndexed": 82
+    },
+    "oldSitemaps": [
+      {
+        "url": "https://timekeeper.edbn.me/sitemap.xml",
+        "status": "Success",
+        "lastRead": "2026-10-05",
+        "discoveredPages": 76
+      },
+      {
+        "url": "https://timekeeper.edbn.me/sitemap.xml/",
+        "status": "1 error",
+        "lastRead": "2025-08-29",
+        "discoveredPages": 0
+      }
+    ],
+    "destinationSitemaps": [
+      {
+        "url": "https://deetnuts.com/sitemap-index.xml",
+        "status": "Success",
+        "lastRead": "2026-10-04",
+        "discoveredPages": 97256
+      },
+      {
+        "url": "https://deetnuts.com/sitemap.xml",
+        "status": "Success",
+        "lastRead": "2026-10-05",
+        "discoveredPages": 143
+      }
+    ]
+  },
+  "recovery": {
+    "sourceHistory": "Full Git bundle including all 94 refs; verified complete",
+    "artifact": "Pinned immutable deployment retained; source recovery build from the confirmed commit and lockfile passed all 74 mapped pages and its referenced assets. The complete rebuilt dist archive is stored privately; it is not a byte-identical hosting export.",
+    "localDirectory": ".migration-recovery/timekeeper",
+    "deetnutsBaselineCommit": "4ce1a36430b82cccbf307af674ab1ed05b0f2769",
+    "previousReleaseDigest": "sha256:142e0a9bcfc22df2231d67168f62cd7f00ba6681bf5e67333e5cb794b86849f8",
+    "deetnutsObservedLiveCommit": "76f0efbb09f9f1e0ca7e5c140d62fda2c662cdee",
+    "activeSlot": "green",
+    "runtimeSnapshot": "Root-only runtime/configuration archive and current image references retained on the production host; existing images tagged for recovery without changing running services.",
+    "pocketbaseBackup": "Fresh online backup on 2026-10-09 passed archive, SQLite integrity and foreign-key checks; no backups pruned.",
+    "pocketbaseRestoration": "The preserved backup started successfully with the original encryption key and existing PocketBase image in a temporary container with networking disabled. All 81 table row counts were preserved. The patched 0.40.5 candidate also restored all existing counts and passed private ticket minting, expiry, redemption and replay checks with networking disabled before deployment.",
+    "rebuiltSourceArtifactSha256": "91178ec30ea086e01488ead664209f97dd72bcb83c5ac2a262234788ab42bb20",
+    "offlineCopy": "Encrypted runtime/PocketBase recovery bundle downloaded to the ignored private recovery directory. Ciphertext and decrypted plaintext checksums both verified without storing plaintext on the workstation; temporary server encryption passphrase removed after verification."
+  },
+  "cutoverGates": {
+    "dnsTlsAndRulesCaptured": true,
+    "searchConsoleOwnershipVerified": true,
+    "allMappedRoutesVerified": true,
+    "browserFeatureChecksPassed": true,
+    "productionChecksPassed": true,
+    "combinedPeakRequestsPerSecond": 36.63333333333333,
+    "isolatedCapacityReport": "https://github.com/kewonit/deetnuts/actions/runs/37972498186",
+    "candidateDeployedAt": "2026-10-09T17:58:55Z",
+    "observation24HoursPassed": false,
+    "observationStartedAt": "2026-10-09T18:30:53.086521Z",
+    "canary30MinutesPassed": false,
+    "testedRollbackWithNewRoutes": "a871ae8dd5eeb6bf5d97692fe16344a85bdc2e26",
+    "singleHopHttpAndHttpsRedirectsVerified": false,
+    "permanentRedirectStartedAt": null,
+    "stable30DaysPassed": false
+  },
+  "deetnutsHosting": {
+    "provider": "DigitalOcean",
+    "name": "deetnuts-prod-origin-01",
+    "dropletId": "594588883",
+    "region": "FRA1",
+    "memoryGb": 2,
+    "intelVcpus": 1,
+    "diskGb": 70,
+    "os": "Ubuntu 24.04 (LTS) x64",
+    "confirmation": "Authenticated DigitalOcean lists the host. The approved temporary workstation /32 rule restored SSH reachability; an existing workstation key successfully authenticated as root. The dedicated admin key was not accepted. The healthy green slot and immutable image metadata were inspected without switching traffic.",
+    "deploymentDecision": "The user explicitly requires the existing Droplet and existing Deetnuts blue/green workflow. No new Droplet was created. The inactive slot shares the live host and cannot establish isolated capacity."
+  },
+  "currentDeployment": {
+    "releaseSha": "a871ae8dd5eeb6bf5d97692fe16344a85bdc2e26",
+    "webDigest": "sha256:3d3c801776411d5032986ad9f4637d02703d561e5c7caa7791b3b3e12116af44",
+    "deployedAt": "2026-10-09T17:58:55Z",
+    "activeSlot": "blue",
+    "rollbackSwitchedAt": "2026-10-09T18:11:00Z",
+    "rollbackVerificationAt": "2026-10-09T18:20:56.841Z",
+    "rollbackPin": "/opt/deetnuts/state/timekeeper-rollback-sha",
+    "rollbackPinInstalled": true,
+    "permanentRedirectMarkerInstalled": false,
+    "normalDeployAndRollbackHealthChecks": "Both completed the existing ten-minute public health observation; all 74 routes and 38 assets passed after the rollback drill.",
+    "oldOriginImport": "Actual old-host helper, private PocketBase ticket and destination browser import passed at 2026-10-09T18:24:35.240Z. Original storage was retained.",
+    "serviceWorkerCacheRule": {
+      "zoneId": "b6045894884e1ff533ff6513e82ef8a7",
+      "ruleId": "2a2fd691e3ce4113a2872fd12635a675",
+      "name": "TimeKeeper service worker updates",
+      "expression": "(http.host eq \"www.deetnuts.com\" and http.request.uri.path eq \"/exam-countdown/sw.js\")",
+      "edgeCache": "Bypass",
+      "browserTtl": "Respect origin"
+    },
+    "observation": "Starts after recovery verification at 2026-10-09T18:30:53.086521Z. Elapsed time alone must not complete this gate; review actual errors, latency and traffic on both hosts."
+  },
+  "trafficBaseline": {
+    "deetnutsOrigin": {
+      "hostname": "www.deetnuts.com",
+      "windowStart": "2026-10-08T16:15:29Z",
+      "windowEnd": "2026-10-09T16:15:29Z",
+      "resolutionSeconds": 60,
+      "requests": 72134,
+      "peakRequestsPerMinute": 284,
+      "existingSuccessfulLatency": {
+        "samples": 68667,
+        "p95Ms": 175,
+        "p99Ms": 298
+      },
+      "uncachedSuccessfulLatency": { "samples": 76, "p95Ms": 21, "p99Ms": 82 },
+      "scope": "Read-only Nginx aggregation. Excludes CDN cache hits, so it does not establish the combined edge peak."
+    },
+    "cloudflareMinuteMetrics": {
+      "windowStart": "2026-10-02T17:47:00Z",
+      "windowEnd": "2026-10-09T17:47:00Z",
+      "resolutionSeconds": 60,
+      "timekeeperHostname": "timekeeper.edbn.me",
+      "timekeeperPeakRequestsPerMinute": 354,
+      "deetnutsHostname": "www.deetnuts.com",
+      "deetnutsPeakRequestsPerMinute": 1844,
+      "combinedPeakRequestsPerSecond": 36.63333333333333,
+      "requiredCapacityRequestsPerSecond": 74,
+      "scope": "Complete seven-day capture using non-overlapping daily queries below record limits. Exact hostnames and eyeball requests only. Adaptive counts are estimates; sampled intervals and every minute group are retained privately. The sum of individual peaks is conservative.",
+      "access": "Two approved temporary Zone Analytics Read tokens, each limited to its zone and expiring at 2026-10-10T17:46:00Z. No production token permissions were expanded."
+    },
+    "sourceLogs": "The initial 2000-record source export was insufficient for peak evidence. The complete minute-level capture above supersedes it.",
+    "liveLatencyBaseline": "100 low-rate full-response samples per feature, existing-page and uncached-read group; 300 requests total, at most 2 RPS, zero errors. Measurements include operator network latency and are retained privately."
+  },
+  "deployedVerification": {
+    "releaseSha": "a871ae8dd5eeb6bf5d97692fe16344a85bdc2e26",
+    "productionRoutes": 74,
+    "assets": 38,
+    "browserPassed": 147,
+    "browserSkipped": 3,
+    "browserWidths": [320, 390, 768, 1024, 1440],
+    "existingProductionChecks": true,
+    "isolatedCapacity": {
+      "run": "https://github.com/kewonit/deetnuts/actions/runs/37972498186",
+      "testedRequestsPerSecond": 74,
+      "warmSeconds": 300,
+      "cacheMissSeconds": 300,
+      "requests": 44400,
+      "failedRequests": 0,
+      "droppedRequests": 0,
+      "isolation": "Ephemeral Ubuntu runner, internal Docker network, disposable database, public-only college fixture, no production credentials or volumes, direct origin requests without a CDN.",
+      "resources": "Exact candidate images. Web 1 CPU/1024 MiB and PocketBase 1 CPU/448 MiB share one CPU core and a 1536-MiB parent limit; generator uses a separate CPU. Reserve 512 MiB for the production OS and other services.",
+      "limitation": "Runner CPU hardware differs from DigitalOcean. Matching resource ceilings and the passing origin test do not establish identical hardware performance; actual production latency and the full observation remain required."
+    },
+    "references": "Private route, browser, production, import, rollback, isolation and capacity reports in .migration-recovery/timekeeper/evidence.json. No 307 or 301 has begun."
+  },
+  "localVerification": {
+    "checkedOn": "2026-10-09",
+    "sourceBaseCommit": "4ce1a36430b82cccbf307af674ab1ed05b0f2769",
+    "productionBuild": true,
+    "staticRoutes": 74,
+    "assetChecks": 38,
+    "browserPassed": 147,
+    "browserSkipped": 3,
+    "browserWidths": [
+      320,
+      390,
+      768,
+      1024,
+      1440
+    ],
+    "migrationUnitTests": 22,
+    "pocketbaseIntegrationTests": 4,
+    "pocketbaseTestVersion": "0.40.5",
+    "jeeUnitTests": 13,
+    "lint": true,
+    "typecheck": true,
+    "studyBackendReadOnlyRpcStatus": 200,
+    "scope": "Local build and fixture browser tests; not proof of deployed capacity, live stability, destination ownership or cutover readiness."
+  }
+}

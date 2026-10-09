@@ -68,15 +68,16 @@ test("every indexable JEE route appears once in the actual core and shard output
   assert.ok(excluded.every((url) => !all.has(url)));
 });
 
-test("sitemap index discovers every JEE shard plus the runtime MHT-CET sitemap", async () => {
+test("sitemap index discovers every JEE shard, MHT-CET and exam countdowns", async () => {
   const response = await sitemapIndex();
   assert.equal(response.status, 200);
   const xml = await response.text();
   const urls = locations(xml);
-  assert.equal(urls.length, 22);
+  assert.equal(urls.length, 23);
   assert.equal(new Set(urls).size, urls.length);
   assert.ok(urls.includes(PRODUCTION_SITE_URL + "/sitemap.xml"));
   assert.ok(urls.includes(PRODUCTION_SITE_URL + "/mht-cet/sitemap.xml"));
+  assert.ok(urls.includes(PRODUCTION_SITE_URL + "/exam-countdown/sitemap.xml"));
   for (const { exam, year } of await generateStaticParams()) {
     assert.ok(
       urls.includes(PRODUCTION_SITE_URL + "/sitemaps/" + exam + "/" + year),

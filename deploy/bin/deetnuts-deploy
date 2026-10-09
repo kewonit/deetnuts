@@ -79,6 +79,7 @@ wait_for_health() {
 smoke_candidate() {
   local service=$1
   local expected_sha=$2
+  local require_timekeeper=${3:-1}
   local container_id
   container_id=$(compose ps --quiet "$service")
   docker exec -e EXPECTED_SHA="$expected_sha" "$container_id" node -e '
@@ -102,6 +103,12 @@ smoke_candidate() {
       }
     })().catch((error) => { console.error(error); process.exit(1); });
   '
+  if [[ "$require_timekeeper" == 1 ]]; then
+    docker exec -e EXPECTED_DEPLOYMENT_SHA="$expected_sha" \
+      -e TIMEKEEPER_VERIFY_ORIGIN=http://127.0.0.1:3000 \
+      -e TIMEKEEPER_VERIFY_HOST=www.deetnuts.com \
+      "$container_id" node /app/scripts/verify-timekeeper.mjs
+  fi
 }
 
 write_upstream() {
@@ -207,6 +214,12 @@ record_release() {
   )
   for old_release in "${old_releases[@]}"; do
     [[ "$old_release" == "$RELEASE_DIR/"*.env ]] || continue
+    if [[ -f "$STATE_DIR/timekeeper-rollback-sha" ]]; then
+      local pinned_sha
+      pinned_sha=$(tr -d '[:space:]' < "$STATE_DIR/timekeeper-rollback-sha")
+      [[ "$pinned_sha" =~ $RELEASE_PATTERN ]] || { echo "Invalid pinned TimeKeeper rollback release" >&2; return 1; }
+      [[ "$old_release" == "$RELEASE_DIR/$pinned_sha.env" ]] && continue
+    fi
     rm -f -- "$old_release"
   done
 }
@@ -268,6 +281,8 @@ deploy_release() {
   local pocketbase_image=$4
   local access_verifier_image=$5
   local public_check=${6:-public}
+  local require_timekeeper=${7:-1}
+  [[ -f "$STATE_DIR/timekeeper-redirects-active" ]] && require_timekeeper=1
 
   [[ "$release_sha" =~ $RELEASE_PATTERN ]] || { echo "Invalid release SHA" >&2; return 2; }
   [[ "$web_image" =~ $WEB_IMAGE_PATTERN || "$web_image" =~ $LOCAL_IMAGE_PATTERN ]] || { echo "Invalid web image reference" >&2; return 2; }
@@ -380,7 +395,7 @@ deploy_release() {
   wait_for_health access-verifier
   compose up -d --no-deps "$candidate_service"
   wait_for_health "$candidate_service"
-  smoke_candidate "$candidate_service" "$release_sha"
+  smoke_candidate "$candidate_service" "$release_sha" "$require_timekeeper"
 
   write_upstream "$candidate_slot"
   switched=1
@@ -443,7 +458,8 @@ rollback_release() {
     "$(read_env_value "$release_file" WORKER_IMAGE)" \
     "$pocketbase_image" \
     "$access_verifier_image" \
-    "$mode"
+    "$mode" \
+    0
 }
 
 status() {

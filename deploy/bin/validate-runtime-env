@@ -40,6 +40,8 @@ required=(
   POCKETBASE_SERVICE_PASSWORD
   AUTH_STATE_SECRET
   BOT_API_TOKEN
+  TIMEKEEPER_SUPABASE_URL
+  TIMEKEEPER_SUPABASE_ANON_KEY
 )
 
 for key in "${required[@]}"; do
@@ -82,8 +84,26 @@ bot_token=$(read_value BOT_API_TOKEN)
   exit 1
 }
 
-if grep -Eq '^(NEXT_PUBLIC_SUPABASE_|SUPABASE_SERVICE_ROLE_KEY=)' "$env_file"; then
-  echo "Supabase credentials must not be present in the application runtime environment" >&2
+[[ $(read_value TIMEKEEPER_SUPABASE_URL) == https://ivmobluuegkikmbwbfhe.supabase.co ]] || {
+  echo "TIMEKEEPER_SUPABASE_URL must retain the existing TimeKeeper study backend" >&2
+  exit 1
+}
+timekeeper_key=$(read_value TIMEKEEPER_SUPABASE_ANON_KEY)
+if [[ ! "$timekeeper_key" =~ ^sb_publishable_[A-Za-z0-9_-]+$ ]]; then
+  key_payload=${timekeeper_key#*.}
+  key_payload=${key_payload%%.*}
+  key_payload=${key_payload//-/+}
+  key_payload=${key_payload//_/\/}
+  while (( ${#key_payload} % 4 != 0 )); do key_payload+="="; done
+  if [[ ! "$timekeeper_key" =~ ^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$ ]] ||
+     ! printf '%s' "$key_payload" | base64 --decode 2>/dev/null | jq -e '.role == "anon"' >/dev/null 2>&1; then
+    echo "TIMEKEEPER_SUPABASE_ANON_KEY must be a public publishable or anon key; privileged keys are forbidden" >&2
+    exit 1
+  fi
+fi
+
+if grep -Eq '^(NEXT_PUBLIC_SUPABASE_|SUPABASE_SERVICE_ROLE_KEY=|TIMEKEEPER_SUPABASE_(SERVICE_ROLE|SECRET))' "$env_file"; then
+  echo "Only the dedicated TimeKeeper public Supabase configuration is permitted in runtime" >&2
   exit 1
 fi
 

@@ -18,7 +18,7 @@ const cutoffLinks: LinkItem[] = [
   { href: "/jee-cutoffs", title: "JEE Main & Advanced", subtitle: "JoSAA & CSAB opening and closing ranks" },
 ];
 
-const toolLinks: LinkItem[] = [{ href: "#", title: "/", subtitle: "/" }];
+const toolLinks: LinkItem[] = [{ href: "/exam-countdown", title: "Exam Countdown", subtitle: "TimeKeeper timers & study map" }];
 
 interface DropdownProps {
   title: string;
@@ -29,9 +29,11 @@ function Dropdown({ title, links }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="relative">
+    <div className="relative" onBlur={(event) => {
+      if (!event.currentTarget.contains(event.relatedTarget)) setIsOpen(false);
+    }}>
       <button
-        onBlur={() => setIsOpen(false)}
+        aria-expanded={isOpen}
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 text-xl font-base"
       >

@@ -4,6 +4,11 @@ const MAIN_SIDEBAR = [
     href: '/mht-cet',
     text: 'MHT-CET',
   },
+  'Tools',
+  {
+    href: '/exam-countdown',
+    text: 'Exam Countdown',
+  },
   'Data Source',
   {
     href: '/datasource',

@@ -160,10 +160,19 @@ const nextConfig = {
             value:
               "camera=(), microphone=(), geolocation=(), interest-cohort=()",
           },
-          {
-            key: "Content-Security-Policy",
-            value: contentSecurityPolicy,
-          },
+        ],
+      },
+      // TimeKeeper gets its single runtime CSP from proxy.ts, with the exact
+      // existing Supabase host. Keep the original policy on all other routes.
+      {
+        source: "/:path((?!exam-countdown(?:/|$)).*)",
+        headers: [{ key: "Content-Security-Policy", value: contentSecurityPolicy }],
+      },
+      {
+        source: "/exam-countdown/sw.js",
+        headers: [
+          { key: "Service-Worker-Allowed", value: "/exam-countdown" },
+          { key: "Cache-Control", value: "no-cache, max-age=0, must-revalidate" },
         ],
       },
       // Public filenames are not guaranteed to be content-hashed.

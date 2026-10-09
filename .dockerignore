@@ -44,7 +44,10 @@ desktop.ini
 *.log
 .env*
 !.env.example
-docs
+docs/*
+!docs/timekeeper-migration
+docs/timekeeper-migration/*
+!docs/timekeeper-migration/manifest.json
 legacy
 supabase
 .agents
@@ -56,6 +59,8 @@ ejam/apps/web/.vercel
 .eslintrc*
 .prettierrc*
 .git
+.migration-recovery
+timekeeper-compat
 .github
 .husky
 .gitlab

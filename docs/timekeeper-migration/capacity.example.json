@@ -1,0 +1,48 @@
+{
+  "candidate": {
+    "origin": null,
+    "releaseSha": null,
+    "isolated": false,
+    "productionEquivalentResources": false,
+    "isolationEvidence": null,
+    "resourceEvidence": null,
+    "cacheMissMode": null,
+    "cacheMissEvidence": null
+  },
+  "measurements": {
+    "timekeeper": {
+      "hostname": "timekeeper.edbn.me",
+      "peakRps": null,
+      "resolutionSeconds": null,
+      "windowStart": null,
+      "windowEnd": null,
+      "reference": null
+    },
+    "deetnuts": {
+      "hostname": "www.deetnuts.com",
+      "peakRps": null,
+      "resolutionSeconds": null,
+      "windowStart": null,
+      "windowEnd": null,
+      "reference": null
+    }
+  },
+  "baseline": {
+    "feature": {
+      "p95Ms": null,
+      "p99Ms": null,
+      "reference": null
+    },
+    "existing": {
+      "p95Ms": null,
+      "p99Ms": null,
+      "reference": null
+    },
+    "uncached": {
+      "p95Ms": null,
+      "p99Ms": null,
+      "reference": null
+    }
+  },
+  "durationSeconds": 300
+}

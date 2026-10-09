@@ -1,0 +1,59 @@
+{
+  "sourceCommit": "8cb737981c61f06e7b0baca248f7e237c763abd4",
+  "releaseSha": null,
+  "dnsTlsAndRulesCaptured": false,
+  "searchConsoleOwnershipVerified": false,
+  "recoveryArtifactsVerified": false,
+  "oldOriginImportVerified": false,
+  "rollbackDrillPassed": false,
+  "singleHopRedirectsVerified": false,
+  "rollbackMarkerInstalled": false,
+  "compatibilityServiceIndependent": false,
+  "hostnameDnsTlsRetained": false,
+  "routes": null,
+  "browser": null,
+  "productionChecks": null,
+  "capacity": null,
+  "candidateDeployedAt": null,
+  "observation": {
+    "start": null,
+    "end": null,
+    "passed": false,
+    "unresolvedErrors": null
+  },
+  "rollback": {
+    "releaseSha": null,
+    "webDigest": null,
+    "pinned": false,
+    "routes": null
+  },
+  "canaryWindow": {
+    "start": null,
+    "end": null,
+    "observedRps": null,
+    "measurementReference": null
+  },
+  "canary": {
+    "path": "/category/teaching",
+    "status": 307,
+    "cacheControl": "no-store, max-age=0",
+    "start": null,
+    "end": null,
+    "passed": false,
+    "unresolvedErrors": null
+  },
+  "permanentRedirectStartedAt": null,
+  "stability": {
+    "start": null,
+    "end": null,
+    "passed": false,
+    "unresolvedErrors": null
+  },
+  "searchMigration": {
+    "sitemapSubmitted": false,
+    "changeOfAddressSubmitted": false,
+    "canonicalSelectionReviewed": false,
+    "indexedReplacementsReviewed": false,
+    "organicLandingTrafficReviewed": false
+  }
+}

@@ -22,7 +22,7 @@ This directory contains the local, reviewable part of the Vercel-to-DigitalOcean
   `api.deetnuts.com` route terminates at Nginx only after Cloudflare Access,
   per-host AOP mTLS and origin-side JWT/audience/exact-email verification.
 - PocketBase encryption, superuser, and migration secrets are separate root-owned files readable only by GID `10001`. The web container receives only a 32-to-72-character backend service password through `web.env`.
-- Supabase source credentials belong only in the root-owned one-time migration environment and are never passed to a runtime container.
+- Deetnuts migration-source Supabase credentials belong only in the root-owned one-time migration environment. The dedicated TimeKeeper public URL/key belong in `web.env`; retain `https://ivmobluuegkikmbwbfhe.supabase.co` and its existing public publishable/anon key. Runtime validation rejects privileged keys and any replacement backend. The browser obtains only these public values from `/api/exam-countdown/config` with `no-store` caching; they are not embedded at build time.
 - Discord command-registration credentials belong in `/opt/deetnuts/shared/discord-admin.env`. The web and worker containers do not receive them.
 - The Cloudflare token in `/opt/deetnuts/shared/cloudflare.env` is root-only and must be scoped to `Zone / Cache Purge` for only the `deetnuts.com` zone. It is never passed to an application container.
 - Origin TLS material is owned by `root:deetnuts-tls` with mode `0640`. The Nginx container receives only that supplementary GID.

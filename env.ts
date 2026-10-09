@@ -14,6 +14,10 @@ export const env = createEnv({
     POCKETBASE_SERVICE_EMAIL: z.string().email(),
     POCKETBASE_SERVICE_PASSWORD: z.string().min(32),
     AUTH_STATE_SECRET: z.string().min(32),
+    // Validated together when the lazy study map requests its runtime config.
+    // These runtime-only values are deliberately absent from image builds.
+    TIMEKEEPER_SUPABASE_URL: z.string().url().optional(),
+    TIMEKEEPER_SUPABASE_ANON_KEY: z.string().min(1).optional(),
   },
 
   /**
@@ -35,6 +39,8 @@ export const env = createEnv({
     POCKETBASE_SERVICE_EMAIL: process.env.POCKETBASE_SERVICE_EMAIL,
     POCKETBASE_SERVICE_PASSWORD: process.env.POCKETBASE_SERVICE_PASSWORD,
     AUTH_STATE_SECRET: process.env.AUTH_STATE_SECRET,
+    TIMEKEEPER_SUPABASE_URL: process.env.TIMEKEEPER_SUPABASE_URL,
+    TIMEKEEPER_SUPABASE_ANON_KEY: process.env.TIMEKEEPER_SUPABASE_ANON_KEY,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   },
   /**

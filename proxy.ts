@@ -4,6 +4,7 @@ import { parseLegacyMhtCetCutoffRoute } from "@/lib/admissions/legacy-route";
 import { parseMhtCetDetailSelection } from "@/lib/admissions/query-state";
 import { getJeeCollegeCanonicalRedirectPath } from "@/lib/jee-cutoffs/canonical";
 import { getRequestOrigin } from "@/lib/site-url";
+import { timekeeperCsp } from "@/lib/timekeeper/csp";
 
 const PREDICTOR_QUERY_KEYS = [
   "band",
@@ -45,6 +46,12 @@ function redirectUrl(request: NextRequest, pathname: string): URL {
 
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
+  if (pathname === "/exam-countdown" || pathname.startsWith("/exam-countdown/")) {
+    const response = NextResponse.next();
+    response.headers.set("Content-Security-Policy", timekeeperCsp(process.env.TIMEKEEPER_SUPABASE_URL, process.env.NODE_ENV === "production"));
+    if ((request.headers.get("host") ?? request.nextUrl.host) !== "www.deetnuts.com") response.headers.set("X-Robots-Tag", "noindex, nofollow");
+    return response;
+  }
   if (
     ["/sitemaps", "/sitemap-index.xml"].some(
       (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),

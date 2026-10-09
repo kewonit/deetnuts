@@ -19,6 +19,8 @@ function isMhtDocumentRoute(pathname: string) {
 export default function RouteAwareFooter() {
   const pathname = usePathname();
 
+  if (pathname === "/exam-countdown" || pathname.startsWith("/exam-countdown/")) return null;
+
   if (JEE_CUTOFF_ROUTES.some((route) => pathname === route || pathname.startsWith(`${route}/`))) {
     return <ProductFooter />;
   }

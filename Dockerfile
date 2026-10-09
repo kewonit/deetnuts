@@ -63,6 +63,9 @@ RUN apk upgrade --no-cache && \
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/scripts/verify-timekeeper.mjs ./scripts/verify-timekeeper.mjs
+COPY --from=builder --chown=nextjs:nodejs /app/docs/timekeeper-migration/manifest.json ./docs/timekeeper-migration/manifest.json
+COPY --from=builder --chown=nextjs:nodejs /app/lib/timekeeper/exam-metadata.json ./lib/timekeeper/exam-metadata.json
 
 USER nextjs
 EXPOSE 3000

@@ -98,7 +98,8 @@ AUTH_STATE_SECRET=at-least-32-random-characters
 Notes:
 
 - The browser never receives PocketBase administrator or service credentials.
-- Supabase variables are accepted only by the explicit one-time source migration. They must not appear in the application runtime environment.
+- `/exam-countdown` retains TimeKeeper's existing study-map backend through runtime-only `TIMEKEEPER_SUPABASE_URL` and `TIMEKEEPER_SUPABASE_ANON_KEY`. The URL must be `https://ivmobluuegkikmbwbfhe.supabase.co`; the key must be public (publishable or `anon`). Public pages and timers work without this configuration; the map reports unavailable. Production validation requires it before a candidate can switch slots.
+- Other Supabase source credentials are accepted only by the explicit one-time source migration and must not appear in the application runtime environment. TimeKeeper does not use a Supabase service-role key.
 - Most `scripts/` entrypoints load `.env`. The web app uses the standard Next.js `.env.local` flow. If you run a CLI utility directly, keep the required values in your shell or a local `.env` file.
 
 ## Development Commands
@@ -150,7 +151,7 @@ The repository contains the complete Supabase-to-PocketBase migration path:
 - `lib/pocketbaseClient.ts` is the private service adapter used by runtime data access.
 - Upload and maintenance scripts use the official PocketBase SDK.
 - `scripts/migrate-supabase-to-pocketbase.ts` takes a read-only repeatable snapshot, imports auth/data/storage, verifies exact counts and digests, configures Google OAuth, and creates a pre-cutover backup.
-- The source Supabase project is rollback-only after cutover and is not a runtime dependency.
+- The original Deetnuts source Supabase project is rollback-only after its cutover. TimeKeeper's separate study-map project remains a runtime dependency during repository consolidation.
 
 Run the migration only through `deploy/bin/deetnuts-pocketbase-migrate`. The command controls the temporary import hook. It disables batch migration features when verification finishes.
 

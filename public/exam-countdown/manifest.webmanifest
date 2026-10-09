@@ -1,0 +1,15 @@
+{
+  "id": "/exam-countdown",
+  "name": "TimeKeeper on Deetnuts",
+  "short_name": "TimeKeeper",
+  "description": "Live exam countdowns and a study map across India",
+  "start_url": "/exam-countdown",
+  "scope": "/exam-countdown",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    { "src": "/exam-countdown/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/exam-countdown/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "candidate": {
+    "origin": "http://web:3000",
+    "releaseSha": "a871ae8dd5eeb6bf5d97692fe16344a85bdc2e26",
+    "isolated": true,
+    "productionEquivalentResources": true,
+    "isolationEvidence": "Ephemeral GitHub Actions Ubuntu 24.04 runner. Internal Docker network, test-only credentials, public-only college fixture, no production volumes or secrets. Verify generated isolation.json before accepting the report.",
+    "resourceEvidence": "Exact immutable production images. Web 1 CPU/1024 MiB and PocketBase 1 CPU/448 MiB share one CPU core and a parent capped at 1 CPU/1536 MiB. Reserve 512 MiB of the production 2 GiB for OS and other services. Record runner CPU model: hardware differs, so matching resource ceilings alone do not establish identical hardware performance.",
+    "cacheMissMode": "origin-only",
+    "cacheMissEvidence": "Direct HTTP to the isolated Next.js origin, with no Cloudflare or proxy cache. Internal Docker network prevents application access to production backends."
+  },
+  "measurements": {
+    "timekeeper": {
+      "hostname": "timekeeper.edbn.me",
+      "peakRps": 5.9,
+      "resolutionSeconds": 60,
+      "windowStart": "2026-10-02T17:47:00Z",
+      "windowEnd": "2026-10-09T17:47:00Z",
+      "reference": "Private complete Cloudflare minute-level capture .migration-recovery/timekeeper/cloudflare-edge-traffic-seven-days.json; non-overlapping daily queries below record limits. Adaptive counts are estimates; sampled intervals retained. Peak minute 2026-10-08T01:06:00Z"
+    },
+    "deetnuts": {
+      "hostname": "www.deetnuts.com",
+      "peakRps": 30.733333333333334,
+      "resolutionSeconds": 60,
+      "windowStart": "2026-10-02T17:47:00Z",
+      "windowEnd": "2026-10-09T17:47:00Z",
+      "reference": "Private complete Cloudflare minute-level capture .migration-recovery/timekeeper/cloudflare-edge-traffic-seven-days.json; non-overlapping daily queries below record limits. Adaptive counts are estimates; sampled intervals retained. Peak minute 2026-10-09T17:24:00Z"
+    }
+  },
+  "baseline": {
+    "feature": {
+      "samples": 100,
+      "p95Ms": 183,
+      "p99Ms": 205,
+      "reference": ".migration-recovery/timekeeper/live-latency-baseline.json"
+    },
+    "existing": {
+      "samples": 100,
+      "p95Ms": 421,
+      "p99Ms": 664,
+      "reference": ".migration-recovery/timekeeper/live-latency-baseline.json"
+    },
+    "uncached": {
+      "samples": 100,
+      "p95Ms": 246,
+      "p99Ms": 289,
+      "reference": ".migration-recovery/timekeeper/live-latency-baseline.json"
+    }
+  },
+  "durationSeconds": 300
+}

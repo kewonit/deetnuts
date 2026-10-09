@@ -20,9 +20,11 @@ export default function StandardSiteShell({
         </div>
       </RouteAwareHeader>
       <MotionWrapper>{children}</MotionWrapper>
-      <div className="site-default-chrome" aria-hidden="true">
-        <GrainEffect />
-      </div>
+      <RouteAwareHeader>
+        <div className="site-default-chrome" aria-hidden="true">
+          <GrainEffect />
+        </div>
+      </RouteAwareHeader>
       <SanitizedGoogleAnalytics />
       <CookieConsent />
       <ThemeSettings />
