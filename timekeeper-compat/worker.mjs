@@ -39,7 +39,7 @@ function errorResponse(status, method) {
   );
 }
 
-export async function handleRequest(request, env = {}, fetchSource = fetch) {
+async function routeRequest(request, env = {}, fetchSource = fetch) {
   const url = new URL(request.url);
   const path = url.pathname.replace(/\/+$/, "") || "/";
   if (!["GET", "HEAD"].includes(request.method))
@@ -151,6 +151,24 @@ export async function handleRequest(request, env = {}, fetchSource = fetch) {
       redirect: "manual",
     }),
   );
+}
+
+export async function handleRequest(request, env = {}, fetchSource = fetch) {
+  const response = await routeRequest(request, env, fetchSource);
+  if (
+    ["timekeeper.edbn.me", "timekeeper-933.pages.dev"].includes(
+      new URL(request.url).hostname,
+    )
+  )
+    return response;
+  const headers = new Headers(response.headers);
+  headers.set("X-Robots-Tag", "noindex, nofollow");
+  headers.set("Cache-Control", "no-store");
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
 }
 
 export default {

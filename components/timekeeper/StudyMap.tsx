@@ -293,6 +293,7 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
         <div
           ref={canvas}
           className="tk-map-canvas"
+          role="region"
           aria-label="Live study sessions across India"
         />
         <div className="tk-map-toolbar">

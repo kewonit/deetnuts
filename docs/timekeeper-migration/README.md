@@ -12,7 +12,7 @@ Apply the additive PocketBase ticket migration and backend service hooks through
 
 The integration uses Deetnuts' existing consent and analytics components. Retain the old GA property `G-Q2J1V5S9K5` and its historical reports. New traffic uses the existing Deetnuts property `G-PF9S037SJQ`.
 
-Fonts, icons, manifest and service worker are local to the feature. The worker caches only its own fonts and favicon; it never caches HTML, API responses or transfer tickets. CSS and theme preferences are scoped to TimeKeeper. Only feature pages receive the map/avatar/backend CSP. Preview hostnames receive `X-Robots-Tag: noindex, nofollow`; production canonicals and sitemap URLs use `https://www.deetnuts.com`.
+Fonts, icons, manifest and service worker are local to the feature. The worker caches only its own fonts and favicon; it never caches HTML, API responses or transfer tickets. CSS and theme preferences are scoped to TimeKeeper. Only feature pages receive the map/avatar/backend CSP. Preview hostnames receive `X-Robots-Tag: noindex, nofollow`; production canonicals and sitemap URLs use `https://www.deetnuts.com`. The production Cloudflare cache rule `TimeKeeper service worker updates` matches only `www.deetnuts.com/exam-countdown/sw.js`, bypasses edge caching and respects the origin browser TTL. It prevents the zone-wide four-hour browser TTL from extending service-worker updates; keep this scoped exception during deployment and recovery.
 
 ## Verification
 
@@ -30,7 +30,7 @@ EJAM_DATA_ROOT=ejam/data npm run build
 
 The PocketBase tests create and delete only their own temporary database. CI downloads the same official version as the candidate container and verifies its checksum before running them. The candidate pins PocketBase 0.40.5: its official Go security patch resolves the two high-severity findings that blocked the 0.40.0 image. Verify the retained production backup with the patched image and additive ticket migration before updating the live backend. CI also runs the feature browser tests alongside the existing JEE checks at 320, 390, 768, 1024 and 1440 pixels. Map and transfer requests in browser tests are fixtures; tests do not create study sessions on the live backend.
 
-Local verification on 2026-10-09 passed the production build, all 74 routes and 38 assets, 147 browser checks, 21 migration unit tests, four real PocketBase integration tests and 13 JEE unit tests. Three existing JEE mobile-only assertions are skipped at wider viewports. Lint and typecheck passed, and a single read-only `get_active_study_sessions` call returned 200 from the retained Supabase backend. These checks do not establish live deployment capacity or complete any observation period; production rollout gates remain closed.
+Local verification on 2026-10-09 passed the production build, all 74 routes and 38 assets, 147 browser checks, 22 migration unit tests, four real PocketBase integration tests and 13 JEE unit tests. Three existing JEE mobile-only assertions are skipped at wider viewports. Lint and typecheck passed, and a single read-only `get_active_study_sessions` call returned 200 from the retained Supabase backend. These checks do not establish live deployment capacity or complete any observation period; production rollout gates remain closed.
 
 Against an isolated running candidate:
 
@@ -66,7 +66,7 @@ Both warm and cache-miss phases offer at least twice the observed combined peak 
 
 `timekeeper-compat/worker.mjs` is maintained from this repository. Its default phase is `serve`; `wrangler.jsonc` intentionally has no production routes. It fetches legacy documents/assets from the pinned immutable Pages deployment, never from the old public hostname, which would cause a loop after binding.
 
-Before adding a full-host route, test the Worker on an isolated Cloudflare preview. Prove that it can fetch the immutable source deployment: direct terminal requests to that deployment currently receive Cloudflare 403/1010 responses. Do not assume Worker-to-Pages requests will work or bypass that protection. If they fail, provision a verified retained static artifact as the fallback before proceeding.
+The unbound Cloudflare preview verified all 74 preserved source pages and nine referenced assets through the immutable deployment. Preview responses are unindexed and use `no-store`. Direct terminal requests to that deployment receive Cloudflare 403/1010 responses; the actual Worker-to-Pages preview passed without bypassing protection. Re-run this fallback verification before adding a full-host route. If it fails, provision a verified retained static artifact before proceeding.
 
 Once the native API is live, attach only these helper routes first, leaving existing documents untouched:
 

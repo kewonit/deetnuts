@@ -47,7 +47,42 @@
     },
     "alwaysUseHttps": true,
     "httpRedirectVerification": "Verify actual HTTP and HTTPS edge responses before permanent cutover; the existing HTTPS upgrade may affect the one-hop requirement.",
-    "accountBulkRedirectInventory": null,
+    "accountBulkRedirectInventory": {
+      "enabledRules": 1,
+      "ruleName": "jeeneetards",
+      "ruleId": "b4a10fdf7c2c4d9dbfe74feaa57f0d8c",
+      "listId": "7e9f6a98b75746668a2236c89299fef2",
+      "source": "www.jeeneetards.online/",
+      "destination": "https://jeeneetards.online",
+      "status": 301,
+      "preserveQueryString": false,
+      "subpathMatching": false,
+      "expression": "http.request.full_uri in $jeeneetards",
+      "timekeeperOverlap": false
+    },
+    "secondaryPagesProject": {
+      "project": "exam-timekeeper",
+      "productionBranch": "main",
+      "productionCommit": "5804e98aad21df39fb6b3ad08023138bceede6e3",
+      "deploymentId": "99d56108-8b1f-4406-9034-3d8d53c7285b",
+      "immutableOrigin": "https://99d56108.exam-timekeeper.pages.dev",
+      "customDomains": [],
+      "automaticDeployments": true,
+      "buildCommand": "npm run build",
+      "outputDirectory": "dist",
+      "buildSystem": 3
+    },
+    "compatibilityPreview": {
+      "worker": "deetnuts-timekeeper-compat",
+      "version": "74cb74bd",
+      "origin": "https://deetnuts-timekeeper-compat.cat-meowed-in.workers.dev",
+      "phase": "serve",
+      "mappedSourcePagesVerified": 74,
+      "assetsVerified": 9,
+      "noindex": true,
+      "noStore": true,
+      "liveRoutesAttached": false
+    },
     "workersRoutes": [],
     "pageRules": []
   },
@@ -120,12 +155,12 @@
     "activeSlot": "green",
     "runtimeSnapshot": "Root-only runtime/configuration archive and current image references retained on the production host; existing images tagged for recovery without changing running services.",
     "pocketbaseBackup": "Fresh online backup on 2026-10-09 passed archive, SQLite integrity and foreign-key checks; no backups pruned.",
-    "pocketbaseRestoration": "The preserved backup started successfully with the original encryption key and existing PocketBase image in a temporary container with networking disabled. All 81 table row counts were preserved. The patched candidate and new ticket migration still require the same restoration check before deployment.",
+    "pocketbaseRestoration": "The preserved backup started successfully with the original encryption key and existing PocketBase image in a temporary container with networking disabled. All 81 table row counts were preserved. The patched 0.40.5 candidate also restored all existing counts and passed private ticket minting, expiry, redemption and replay checks with networking disabled before deployment.",
     "rebuiltSourceArtifactSha256": "91178ec30ea086e01488ead664209f97dd72bcb83c5ac2a262234788ab42bb20",
     "offlineCopy": "Encrypted runtime/PocketBase recovery bundle downloaded to the ignored private recovery directory. Ciphertext and decrypted plaintext checksums both verified without storing plaintext on the workstation; temporary server encryption passphrase removed after verification."
   },
   "cutoverGates": {
-    "dnsTlsAndRulesCaptured": false,
+    "dnsTlsAndRulesCaptured": true,
     "searchConsoleOwnershipVerified": true,
     "allMappedRoutesVerified": false,
     "browserFeatureChecksPassed": false,
@@ -185,7 +220,7 @@
       1024,
       1440
     ],
-    "migrationUnitTests": 21,
+    "migrationUnitTests": 22,
     "pocketbaseIntegrationTests": 4,
     "pocketbaseTestVersion": "0.40.5",
     "jeeUnitTests": 13,

@@ -82,6 +82,28 @@ test("fallback paths cannot change the pinned source origin or forward credentia
     );
 });
 
+test("compatibility previews are unindexed and non-cacheable, including source fallback and redirects", async () => {
+  for (const phase of ["serve", "permanent"]) {
+    const response = await handleRequest(
+      new Request("https://candidate.workers.dev/exams/jee-main"),
+      { ROLLOUT_PHASE: phase },
+      async () =>
+        new Response("source page", {
+          headers: { "Cache-Control": "public, max-age=300" },
+        }),
+    );
+    assert.equal(response.status, phase === "serve" ? 200 : 301);
+    assert.equal(response.headers.get("x-robots-tag"), "noindex, nofollow");
+    assert.equal(response.headers.get("cache-control"), "no-store");
+  }
+  const production = await handleRequest(
+    new Request(`${manifest.oldOrigin}/exams/jee-main`),
+    { ROLLOUT_PHASE: "permanent" },
+  );
+  assert.equal(production.headers.get("x-robots-tag"), null);
+  assert.match(production.headers.get("cache-control"), /public/);
+});
+
 test("unknown pages are 404, retired example is 410, helper and old assets stay available", async () => {
   const env = { ROLLOUT_PHASE: "retired" };
   for (const path of [...manifest.knownMissing, "/invented", "/exams/not-real"])

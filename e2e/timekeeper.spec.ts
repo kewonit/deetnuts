@@ -198,9 +198,10 @@ test("every mapped destination has static content, correct canonical and one sco
   expect(await (await request.get("/sitemap-index.xml")).text()).toContain(
     `${origin}${path}/sitemap.xml`,
   );
-  expect((await request.get(path)).headers()["x-robots-tag"]).toContain(
-    "noindex",
-  );
+  const robots = (await request.get(path)).headers()["x-robots-tag"] ?? "";
+  if (process.env.PLAYWRIGHT_BASE_URL === origin)
+    expect(robots).not.toContain("noindex");
+  else expect(robots).toContain("noindex");
   for (const asset of [
     "favicon.svg",
     "icon-192.png",
@@ -426,6 +427,7 @@ test("old-origin helper transfers only saved preferences and retains the origina
   expect(
     await page.evaluate(() => localStorage.getItem("timekeeper-auth")),
   ).toBe("PRIVATE_TEST_TOKEN");
+  await page.unrouteAll({ behavior: "wait" });
 });
 
 test("timer session selection, fullscreen, sharing and unsupported PiP fallback work", async ({
@@ -556,6 +558,7 @@ test("timer expiry and feature service-worker caches stay in the browser", async
       ),
     )
     .toEqual([path]);
+  await page.evaluate(() => navigator.serviceWorker.ready.then(() => true));
   const cached = await page.evaluate(async () => {
     const keys = await caches.keys();
     return Promise.all(
@@ -650,6 +653,10 @@ test("real browser redirects inherit fragments in a single hop", async ({
 
 test("countdown surface is accessible in every theme", async ({ page }) => {
   await page.goto(`${path}/exams/jee-main`);
+  await page
+    .getByRole("heading", { name: "Live Study Map", exact: true })
+    .scrollIntoViewIfNeeded();
+  await expect(page.locator(".tk-map-canvas")).toBeVisible();
   for (const theme of ["Light", "Dark", "Ocean", "Valentine", "Cupcake"]) {
     await page
       .getByRole("button", { name: `${theme} theme`, exact: true })
