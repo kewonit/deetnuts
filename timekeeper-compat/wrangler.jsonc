@@ -1,0 +1,10 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "deetnuts-timekeeper-compat",
+  "main": "worker.mjs",
+  "account_id": "1f859c2c2ed610755277b10e37f7005e",
+  "compatibility_date": "2026-10-09",
+  "workers_dev": false,
+  "preview_urls": false,
+  "vars": { "ROLLOUT_PHASE": "serve", "CANARY_UNTIL": "" }
+}

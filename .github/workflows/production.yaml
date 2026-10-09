@@ -109,6 +109,23 @@ jobs:
       - name: Test JEE cutoff behavior
         run: npm run test:jee-cutoffs
 
+      - name: Verify TimeKeeper inventory and migration behavior
+        run: |
+          npm run verify:timekeeper-manifest
+          npm run test:timekeeper
+
+      - name: Test private single-use migration tickets with PocketBase
+        env:
+          POCKETBASE_TEST_BINARY: /tmp/timekeeper-pocketbase/pocketbase
+        run: |
+          mkdir -p /tmp/timekeeper-pocketbase
+          curl --fail --silent --show-error --location \
+            --output /tmp/timekeeper-pocketbase.zip \
+            https://github.com/pocketbase/pocketbase/releases/download/v0.40.0/pocketbase_0.40.0_linux_amd64.zip
+          echo '983740a4e5cc3b60c03d018c5a97ffe32ea560d6f55a53e2bca1ce3aae2cf8cb  /tmp/timekeeper-pocketbase.zip' | sha256sum --check --strict
+          unzip -q /tmp/timekeeper-pocketbase.zip pocketbase -d /tmp/timekeeper-pocketbase
+          npm run test:timekeeper-tickets
+
       - name: Audit dependencies
         run: npm audit --audit-level=high
 
@@ -146,7 +163,9 @@ jobs:
         env:
           NEXT_PUBLIC_SOURCE_COMMIT: ${{ github.sha }}
           NEXT_DEPLOYMENT_ID: ${{ github.sha }}
-        run: npm run test:e2e:jee-cutoffs
+          TIMEKEEPER_SUPABASE_URL: https://ivmobluuegkikmbwbfhe.supabase.co
+          TIMEKEEPER_SUPABASE_ANON_KEY: sb_publishable_test_only
+        run: npm run test:e2e:production
 
   images:
     name: Build and secure images

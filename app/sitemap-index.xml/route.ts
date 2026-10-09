@@ -47,6 +47,10 @@ export async function GET() {
       location: PRODUCTION_SITE_URL + "/mht-cet/sitemap.xml",
       lastModified: "",
     },
+    {
+      location: PRODUCTION_SITE_URL + "/exam-countdown/sitemap.xml",
+      lastModified: "",
+    },
     ...Array.from(shardDates, ([location, lastModified]) => ({
       location,
       lastModified,

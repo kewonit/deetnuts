@@ -260,6 +260,12 @@ class ServicePocketBase implements PocketBaseLike {
     };
   }
 
+  sendTimekeeper<T>(operation: "mint" | "redeem", body: Record<string, unknown>): Promise<T> {
+    return this.withAuthentication(() => this.client.send<T>(`/internal/timekeeper/${operation}`, {
+      method: "POST", body,
+    }));
+  }
+
   downloadProtectedFile(
     record: RecordModel,
     filename: string,
@@ -295,4 +301,9 @@ let serviceClient: ServicePocketBase | null = null;
 export function getPocketBase(): PocketBaseLike {
   if (!serviceClient) serviceClient = new ServicePocketBase();
   return serviceClient;
+}
+
+export function sendTimekeeperRequest<T>(operation: "mint" | "redeem", body: Record<string, unknown>): Promise<T> {
+  if (!serviceClient) serviceClient = new ServicePocketBase();
+  return serviceClient.sendTimekeeper<T>(operation, body);
 }

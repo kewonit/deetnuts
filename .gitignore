@@ -68,3 +68,6 @@ next-env.d.ts
 /data/output/
 /.superpowers/
 /plans/
+
+# Private migration snapshots and Search Console exports
+/.migration-recovery/

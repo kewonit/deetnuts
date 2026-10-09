@@ -1,0 +1,455 @@
+@font-face {
+  font-family: "TimeKeeper Inter";
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url("/exam-countdown/fonts/inter.woff2") format("woff2");
+}
+@font-face {
+  font-family: "TimeKeeper Playfair";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/exam-countdown/fonts/playfair-italic.woff2") format("woff2");
+}
+.timekeeper {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: "TimeKeeper Inter", sans-serif;
+  min-height: 100vh;
+  isolation: isolate;
+  line-height: 1.5;
+}
+.timekeeper .font-serif {
+  font-family: "TimeKeeper Playfair", serif;
+  font-style: italic;
+}
+.timekeeper button,
+.timekeeper select,
+.timekeeper input,
+.timekeeper textarea {
+  font: inherit;
+  color: inherit;
+}
+.timekeeper button {
+  cursor: pointer;
+}
+.timekeeper button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+.timekeeper a {
+  color: inherit;
+}
+.timekeeper :focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 4px;
+}
+.timekeeper[data-theme="light"] {
+  --bg-primary: rgb(255, 255, 255);
+  --bg-secondary: rgb(248, 250, 252);
+  --bg-tertiary: rgb(241, 245, 249);
+  --border-primary: rgb(203, 213, 225);
+  --border-secondary: rgb(226, 232, 240);
+  --text-primary: rgb(15, 23, 42);
+  --text-secondary: rgb(71, 85, 105);
+  --text-tertiary: rgb(71, 85, 105);
+  --accent-primary: rgb(59, 130, 246);
+  --accent-hover: rgb(37, 99, 235);
+  --success: rgb(16, 185, 129);
+  --warning: rgb(245, 158, 11);
+  --error: rgb(239, 68, 68);
+  --shadow: rgba(0, 0, 0, 0.1);
+  --disclaimer-bg: rgb(255, 251, 235);
+  --disclaimer-border: rgb(252, 211, 77);
+  --disclaimer-text: rgb(146, 64, 14);
+  --disclaimer-accent: rgb(217, 119, 6);
+}
+.timekeeper[data-theme="dark"] {
+  --bg-primary: rgb(0, 0, 0);
+  --bg-secondary: rgb(17, 17, 17);
+  --bg-tertiary: rgb(38, 38, 38);
+  --border-primary: rgb(64, 64, 64);
+  --border-secondary: rgb(115, 115, 115);
+  --text-primary: rgb(255, 255, 255);
+  --text-secondary: rgb(229, 229, 229);
+  --text-tertiary: rgb(163, 163, 163);
+  --accent-primary: rgb(96, 165, 250);
+  --accent-hover: rgb(59, 130, 246);
+  --success: rgb(34, 197, 94);
+  --warning: rgb(251, 191, 36);
+  --error: rgb(248, 113, 113);
+  --shadow: rgba(255, 255, 255, 0.1);
+  --disclaimer-bg: rgb(20, 20, 20);
+  --disclaimer-border: rgb(64, 64, 64);
+  --disclaimer-text: rgb(255, 255, 255);
+  --disclaimer-accent: rgb(251, 191, 36);
+}
+.timekeeper[data-theme="valentine"] {
+  --bg-primary: rgb(255, 241, 242);
+  --bg-secondary: rgb(254, 226, 226);
+  --bg-tertiary: rgb(252, 165, 165);
+  --border-primary: rgb(244, 114, 182);
+  --border-secondary: rgb(249, 168, 212);
+  --text-primary: rgb(136, 19, 55);
+  --text-secondary: rgb(136, 19, 55);
+  --text-tertiary: rgb(136, 19, 55);
+  --accent-primary: rgb(236, 72, 153);
+  --accent-hover: rgb(219, 39, 119);
+  --success: rgb(34, 197, 94);
+  --warning: rgb(245, 158, 11);
+  --error: rgb(239, 68, 68);
+  --shadow: rgba(236, 72, 153, 0.2);
+  --disclaimer-bg: rgb(254, 202, 202);
+  --disclaimer-border: rgb(244, 114, 182);
+  --disclaimer-text: rgb(136, 19, 55);
+  --disclaimer-accent: rgb(190, 24, 93);
+}
+.timekeeper[data-theme="cupcake"] {
+  --bg-primary: rgb(253, 242, 248);
+  --bg-secondary: rgb(252, 231, 243);
+  --bg-tertiary: rgb(251, 207, 232);
+  --border-primary: rgb(219, 112, 147);
+  --border-secondary: rgb(240, 171, 252);
+  --text-primary: rgb(112, 26, 117);
+  --text-secondary: rgb(126, 34, 206);
+  --text-tertiary: rgb(126, 34, 206);
+  --accent-primary: rgb(168, 85, 247);
+  --accent-hover: rgb(147, 51, 234);
+  --success: rgb(34, 197, 94);
+  --warning: rgb(245, 158, 11);
+  --error: rgb(239, 68, 68);
+  --shadow: rgba(168, 85, 247, 0.2);
+  --disclaimer-bg: rgb(251, 207, 232);
+  --disclaimer-border: rgb(219, 112, 147);
+  --disclaimer-text: rgb(112, 26, 117);
+  --disclaimer-accent: rgb(147, 51, 234);
+}
+.timekeeper[data-theme="ocean"] {
+  --bg-primary: rgb(240, 249, 255);
+  --bg-secondary: rgb(224, 242, 254);
+  --bg-tertiary: rgb(186, 230, 253);
+  --border-primary: rgb(125, 211, 252);
+  --border-secondary: rgb(165, 216, 252);
+  --text-primary: rgb(12, 74, 110);
+  --text-secondary: rgb(21, 94, 117);
+  --text-tertiary: rgb(21, 94, 117);
+  --accent-primary: rgb(14, 165, 233);
+  --accent-hover: rgb(2, 132, 199);
+  --success: rgb(34, 197, 94);
+  --warning: rgb(245, 158, 11);
+  --error: rgb(239, 68, 68);
+  --shadow: rgba(14, 165, 233, 0.2);
+  --disclaimer-bg: rgb(224, 242, 254);
+  --disclaimer-border: rgb(125, 211, 252);
+  --disclaimer-text: rgb(12, 74, 110);
+  --disclaimer-accent: rgb(14, 116, 144);
+}
+.timekeeper .themed-bg {
+  background-color: var(--bg-primary);
+}
+.timekeeper .themed-bg-secondary {
+  background-color: var(--bg-secondary);
+}
+.timekeeper .themed-bg-tertiary {
+  background-color: var(--bg-tertiary);
+}
+.timekeeper .themed-border {
+  border-color: var(--border-primary);
+}
+.timekeeper .themed-border-secondary {
+  border-color: var(--border-secondary);
+}
+.timekeeper .themed-text {
+  color: var(--text-primary);
+}
+.timekeeper .themed-text-secondary {
+  color: var(--text-secondary);
+}
+.timekeeper .themed-text-tertiary {
+  color: var(--text-tertiary);
+}
+.timekeeper .themed-disclaimer {
+  background: var(--disclaimer-bg);
+  border-color: var(--disclaimer-border);
+  color: var(--disclaimer-text);
+}
+.timekeeper .theme-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--border-primary);
+  transition: transform 0.2s ease;
+}
+.timekeeper .theme-circle:hover {
+  transform: scale(1.1);
+}
+.timekeeper .theme-circle[aria-pressed="true"] {
+  box-shadow:
+    0 0 0 2px var(--bg-primary),
+    0 0 0 4px var(--accent-primary);
+}
+.timekeeper .theme-circle[data-theme="light"] {
+  background: linear-gradient(135deg, #fff, #e2e8f0);
+}
+.timekeeper .theme-circle[data-theme="dark"] {
+  background: linear-gradient(135deg, #000, #262626);
+}
+.timekeeper .theme-circle[data-theme="ocean"] {
+  background: linear-gradient(135deg, #f0f9ff, #0ea5e9);
+}
+.timekeeper .theme-circle[data-theme="valentine"] {
+  background: linear-gradient(135deg, #fff1f2, #ec4899);
+}
+.timekeeper .theme-circle[data-theme="cupcake"] {
+  background: linear-gradient(135deg, #fdf2f8, #a855f7);
+}
+.timekeeper .tk-sidebar {
+  width: 16rem;
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 45;
+  overflow-y: auto;
+  transform: translateX(-100%);
+  transition: transform 0.2s ease;
+  background: var(--bg-primary);
+  border-right: 1px dashed var(--border-primary);
+}
+.timekeeper .tk-sidebar[data-open="true"] {
+  transform: translateX(0);
+}
+.timekeeper .tk-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: #0008;
+}
+.timekeeper .tk-menu-toggle {
+  display: block;
+}
+.timekeeper .tk-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.timekeeper .tk-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 40px;
+  padding: 0.4rem 0.8rem;
+  border: 1px dashed var(--border-primary);
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+.timekeeper .tk-button:hover {
+  background: var(--bg-secondary);
+}
+.timekeeper .tk-countdown-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.timekeeper .tk-countdown-number {
+  font-size: clamp(1.75rem, 5vw, 4.5rem);
+  font-weight: 600;
+  line-height: 1.1;
+}
+.timekeeper .tk-countdown-label {
+  font-size: clamp(0.75rem, 1.8vw, 1rem);
+  margin-top: 0.5rem;
+  color: var(--text-secondary);
+}
+.timekeeper .tk-compact .tk-countdown-number {
+  font-size: clamp(1.1rem, 2vw, 1.75rem);
+}
+.timekeeper .tk-compact .tk-countdown-label {
+  font-size: 0.625rem;
+  margin-top: 0.2rem;
+}
+.timekeeper .tk-compact {
+  gap: 0.3rem;
+}
+.timekeeper .tk-dialog {
+  margin: 0;
+  max-width: none;
+  max-height: none;
+  width: 100vw;
+  height: 100dvh;
+  border: 0;
+  padding: 1.5rem;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+.timekeeper .tk-dialog::backdrop {
+  background: #0008;
+}
+.timekeeper .tk-dialog-content {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 2rem;
+  text-align: center;
+}
+.timekeeper .tk-dialog .tk-countdown-grid {
+  width: min(100%, 900px);
+}
+.timekeeper .tk-dialog .tk-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+.timekeeper .tk-field {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px dashed var(--border-primary);
+  border-radius: 0.375rem;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+.timekeeper .tk-map {
+  height: 500px;
+  min-height: 400px;
+  position: relative;
+  border: 1px dashed var(--border-primary);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  --stm-bg: var(--bg-primary);
+  --stm-text: var(--text-primary);
+  --stm-card-bg: var(--bg-primary);
+  --stm-text-secondary: var(--text-secondary);
+  --stm-accent: #10b981;
+}
+.timekeeper .tk-map-canvas {
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+  background: var(--bg-secondary);
+}
+.timekeeper .tk-map-toolbar {
+  position: absolute;
+  top: 1rem;
+  left: 4rem;
+  right: 1rem;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  pointer-events: none;
+}
+.timekeeper .tk-map-toolbar > * {
+  pointer-events: auto;
+  background: var(--bg-primary);
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  box-shadow: 0 2px 8px #0002;
+  font-size: 0.75rem;
+}
+.timekeeper .tk-map-join {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: var(--bg-primary);
+  border-radius: 1rem;
+  padding: 1rem;
+  z-index: 10;
+  box-shadow: 0 4px 16px #0002;
+}
+.timekeeper .tk-map-timer {
+  position: absolute;
+  bottom: 7rem;
+  right: 1rem;
+  width: min(300px, calc(100% - 2rem));
+  padding: 1rem;
+  background: var(--bg-primary);
+  border-radius: 1rem;
+  z-index: 10;
+  box-shadow: 0 4px 16px #0002;
+}
+.timekeeper .tk-avatar {
+  border: 3px solid #10b981;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px #0003;
+}
+.timekeeper .tk-avatar-demo {
+  border-color: #94a3b8;
+}
+.timekeeper .leaflet-popup-content-wrapper {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+.timekeeper .leaflet-control-attribution {
+  font-size: 9px;
+}
+.timekeeper[data-theme="dark"] .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.7);
+}
+.timekeeper .tk-map:fullscreen {
+  border: 0;
+  border-radius: 0;
+  width: 100vw;
+  height: 100dvh;
+}
+@media (min-width: 1024px) {
+  .timekeeper .tk-sidebar {
+    transform: translateX(0);
+  }
+  .timekeeper .tk-with-sidebar {
+    margin-left: 16rem;
+  }
+  .timekeeper .tk-menu-toggle {
+    display: none;
+  }
+  .timekeeper .tk-overlay {
+    display: none;
+  }
+}
+@media (max-width: 639px) {
+  .timekeeper .tk-countdown-grid:not(.tk-compact) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .timekeeper .tk-countdown-number {
+    font-size: 2rem;
+  }
+  .timekeeper .tk-dialog .tk-countdown-number {
+    font-size: 3rem;
+  }
+  .timekeeper .tk-map-toolbar {
+    left: 3.5rem;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+  .timekeeper .tk-map-join {
+    gap: 0.5rem;
+    padding: 0.75rem;
+    font-size: 0.75rem;
+  }
+  .timekeeper .tk-map-toolbar .tk-button {
+    min-height: 32px;
+    padding: 0.25rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .timekeeper *,
+  .timekeeper *::before,
+  .timekeeper *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
