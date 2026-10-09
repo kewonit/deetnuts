@@ -406,6 +406,8 @@ test("old-origin helper transfers only saved preferences and retains the origina
       }
     } else if (url.pathname.endsWith("/migration/redeem"))
       await route.fulfill({ json: transferred });
+    else if (process.env.PLAYWRIGHT_BASE_URL === origin)
+      await route.fallback();
     else
       await route.fulfill({
         response: await route.fetch({
