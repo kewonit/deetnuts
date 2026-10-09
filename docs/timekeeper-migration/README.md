@@ -4,6 +4,10 @@ TimeKeeper is implemented as native routes in Deetnuts at `/exam-countdown`. The
 
 `manifest.json` records every valid page, historical alias, observed Search Console landing path, removed page and known missing page. `preflight.json` records captured facts and outstanding gates. Missing evidence stays missing; successful local tests do not establish production capacity, ownership, stability or indexing.
 
+The native integration is live on the existing Droplet at release `a871ae8dd5eeb6bf5d97692fe16344a85bdc2e26`. Public production checks, all 74 routes and 38 assets, and 147 browser checks passed. A real blue/green rollback to that release passed and its immutable manifest is pinned. The old-origin import helper passed an actual browser transfer. The isolated [capacity run](https://github.com/kewonit/deetnuts/actions/runs/37972498186) sustained 74 RPS in both five-minute phases, including direct-origin cache misses, with zero failed or dropped requests.
+
+The clean production observation started at `2026-10-09T18:30:53Z` (10 October, 00:00:53 IST), after recovery verification. Its earliest completion is 24 hours later; actual traffic, errors and latency must also pass. The 30-minute teaching canary, HTTP/HTTPS one-hop verification, permanent redirects, Search Console move and 30-day retirement gates remain outstanding. Existing page URLs and source deployments still serve TimeKeeper.
+
 ## Configuration and retained services
 
 The existing study backend remains `https://ivmobluuegkikmbwbfhe.supabase.co`. Supply `TIMEKEEPER_SUPABASE_URL` and `TIMEKEEPER_SUPABASE_ANON_KEY` in the existing root-owned runtime `web.env`. Only its public anon/publishable key is permitted. The feature loads these values through a non-cacheable runtime endpoint; build images contain neither backend credentials nor private transfer data. Do not execute the source repository's Supabase schema: it contains destructive operations and is unnecessary for this migration.
@@ -30,7 +34,7 @@ EJAM_DATA_ROOT=ejam/data npm run build
 
 The PocketBase tests create and delete only their own temporary database. CI downloads the same official version as the candidate container and verifies its checksum before running them. The candidate pins PocketBase 0.40.5: its official Go security patch resolves the two high-severity findings that blocked the 0.40.0 image. Verify the retained production backup with the patched image and additive ticket migration before updating the live backend. CI also runs the feature browser tests alongside the existing JEE checks at 320, 390, 768, 1024 and 1440 pixels. Map and transfer requests in browser tests are fixtures; tests do not create study sessions on the live backend.
 
-Local verification on 2026-10-09 passed the production build, all 74 routes and 38 assets, 147 browser checks, 22 migration unit tests, four real PocketBase integration tests and 13 JEE unit tests. Three existing JEE mobile-only assertions are skipped at wider viewports. Lint and typecheck passed, and a single read-only `get_active_study_sessions` call returned 200 from the retained Supabase backend. These checks do not establish live deployment capacity or complete any observation period; production rollout gates remain closed.
+Local verification on 2026-10-09 passed the production build, all 74 routes and 38 assets, 147 browser checks, 22 migration unit tests, four real PocketBase integration tests and 13 JEE unit tests. Three existing JEE mobile-only assertions are skipped at wider viewports. Lint and typecheck passed, and a single read-only `get_active_study_sessions` call returned 200 from the retained Supabase backend. The deployed verification and isolated capacity evidence are recorded separately in `preflight.json`; none completes the required observation periods.
 
 Against an isolated running candidate:
 
@@ -57,6 +61,8 @@ The production workflow's manual `capacity` mode runs only the isolated test on 
 
 The web and PocketBase containers use their production CPU/RAM ceilings and share one CPU core and a 1536-MiB parent limit, reserving 512 MiB of the production host's 2 GiB for the OS and other services. The generator uses a separate CPU outside that limit. CI verifies these constraints and records the CPU model. Runner hardware differs from the DigitalOcean host; matching resource ceilings and a passing origin test do not establish identical hardware performance. Review the report together with actual production latency and the full migration observation before cutover.
 
+During preparation, an export process loaded the backup database into memory and was killed by the host's memory limit. No production container was killed or restarted. The corrected export streams the backup with strict memory/CPU limits, and recovery checks passed before the observation above began. Keep the incident and recovery evidence in private operator records; avoid unbounded database exports on the shared host.
+
 ## Prepare recovery and deploy
 
 1. Preserve the full Timekeeper Git bundle, source checkout, pinned deployment, hosting configuration and Search Console reports. Recovery files are in the ignored `.migration-recovery/timekeeper` directory; retain a separate durable copy before cutover. The confirmed source and lockfile produced a complete recovery build with all 74 mapped pages and their referenced assets. Its archived output is retained privately alongside representative immutable-deployment HTML/assets; it is not a byte-identical Cloudflare export. Verify the retained artifact or pinned source fallback on an isolated host before binding the old hostname.
@@ -80,6 +86,8 @@ timekeeper.edbn.me/timekeeper-migration.js*
 ```
 
 Verify old-origin storage recovery in a normal authenticated browser profile, private transfer expiry/replay behavior, JSON recovery and unchanged original storage. Then add the full-host route only after the source fallback and every rollout gate pass. Route configuration must affect only TimeKeeper. Keep the CNAME, DNS, certificates and TLS active; do not delete the old Pages project or pinned artifact used for recovery/assets.
+
+Both helper routes are now attached, and the actual helper-to-ticket-to-destination transfer passed in a disposable browser context without reading an existing visitor's data. The original countdown, theme, avatar seed and unrelated sentinel remained in old-origin storage. The full-host route remains unattached.
 
 ## Canary, permanent redirects and recovery
 

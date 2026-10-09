@@ -81,9 +81,13 @@
       "assetsVerified": 9,
       "noindex": true,
       "noStore": true,
-      "liveRoutesAttached": false
+      "liveRoutesAttached": true,
+      "liveRouteScope": "Only the two import-helper paths; existing exam/category documents remain on the original Pages application. No full-host route or page redirects are active."
     },
-    "workersRoutes": [],
+    "workersRoutes": [
+      "timekeeper.edbn.me/migrate-to-deetnuts*",
+      "timekeeper.edbn.me/timekeeper-migration.js*"
+    ],
     "pageRules": []
   },
   "supabaseOrigin": "https://ivmobluuegkikmbwbfhe.supabase.co",
@@ -162,15 +166,17 @@
   "cutoverGates": {
     "dnsTlsAndRulesCaptured": true,
     "searchConsoleOwnershipVerified": true,
-    "allMappedRoutesVerified": false,
-    "browserFeatureChecksPassed": false,
-    "productionChecksPassed": false,
-    "combinedPeakRequestsPerSecond": null,
-    "isolatedCapacityReport": null,
-    "candidateDeployedAt": null,
+    "allMappedRoutesVerified": true,
+    "browserFeatureChecksPassed": true,
+    "productionChecksPassed": true,
+    "combinedPeakRequestsPerSecond": 36.63333333333333,
+    "isolatedCapacityReport": "https://github.com/kewonit/deetnuts/actions/runs/37972498186",
+    "candidateDeployedAt": "2026-10-09T17:58:55Z",
     "observation24HoursPassed": false,
+    "observationStartedAt": "2026-10-09T18:30:53.086521Z",
     "canary30MinutesPassed": false,
-    "testedRollbackWithNewRoutes": null,
+    "testedRollbackWithNewRoutes": "a871ae8dd5eeb6bf5d97692fe16344a85bdc2e26",
+    "singleHopHttpAndHttpsRedirectsVerified": false,
     "permanentRedirectStartedAt": null,
     "stable30DaysPassed": false
   },
@@ -185,6 +191,28 @@
     "os": "Ubuntu 24.04 (LTS) x64",
     "confirmation": "Authenticated DigitalOcean lists the host. The approved temporary workstation /32 rule restored SSH reachability; an existing workstation key successfully authenticated as root. The dedicated admin key was not accepted. The healthy green slot and immutable image metadata were inspected without switching traffic.",
     "deploymentDecision": "The user explicitly requires the existing Droplet and existing Deetnuts blue/green workflow. No new Droplet was created. The inactive slot shares the live host and cannot establish isolated capacity."
+  },
+  "currentDeployment": {
+    "releaseSha": "a871ae8dd5eeb6bf5d97692fe16344a85bdc2e26",
+    "webDigest": "sha256:3d3c801776411d5032986ad9f4637d02703d561e5c7caa7791b3b3e12116af44",
+    "deployedAt": "2026-10-09T17:58:55Z",
+    "activeSlot": "blue",
+    "rollbackSwitchedAt": "2026-10-09T18:11:00Z",
+    "rollbackVerificationAt": "2026-10-09T18:20:56.841Z",
+    "rollbackPin": "/opt/deetnuts/state/timekeeper-rollback-sha",
+    "rollbackPinInstalled": true,
+    "permanentRedirectMarkerInstalled": false,
+    "normalDeployAndRollbackHealthChecks": "Both completed the existing ten-minute public health observation; all 74 routes and 38 assets passed after the rollback drill.",
+    "oldOriginImport": "Actual old-host helper, private PocketBase ticket and destination browser import passed at 2026-10-09T18:24:35.240Z. Original storage was retained.",
+    "serviceWorkerCacheRule": {
+      "zoneId": "b6045894884e1ff533ff6513e82ef8a7",
+      "ruleId": "2a2fd691e3ce4113a2872fd12635a675",
+      "name": "TimeKeeper service worker updates",
+      "expression": "(http.host eq \"www.deetnuts.com\" and http.request.uri.path eq \"/exam-countdown/sw.js\")",
+      "edgeCache": "Bypass",
+      "browserTtl": "Respect origin"
+    },
+    "observation": "Starts after recovery verification at 2026-10-09T18:30:53.086521Z. Elapsed time alone must not complete this gate; review actual errors, latency and traffic on both hosts."
   },
   "trafficBaseline": {
     "deetnutsOrigin": {
@@ -202,8 +230,43 @@
       "uncachedSuccessfulLatency": { "samples": 76, "p95Ms": 21, "p99Ms": 82 },
       "scope": "Read-only Nginx aggregation. Excludes CDN cache hits, so it does not establish the combined edge peak."
     },
-    "cloudflareMinuteMetrics": "The existing production API token lacks Zone Analytics Read for both zones. No token permissions were expanded.",
-    "sourceLogs": "Captured privately from the exact source hostname. The adaptive dataset export is truncated at 2000 records and does not establish complete minute-level peaks."
+    "cloudflareMinuteMetrics": {
+      "windowStart": "2026-10-02T17:47:00Z",
+      "windowEnd": "2026-10-09T17:47:00Z",
+      "resolutionSeconds": 60,
+      "timekeeperHostname": "timekeeper.edbn.me",
+      "timekeeperPeakRequestsPerMinute": 354,
+      "deetnutsHostname": "www.deetnuts.com",
+      "deetnutsPeakRequestsPerMinute": 1844,
+      "combinedPeakRequestsPerSecond": 36.63333333333333,
+      "requiredCapacityRequestsPerSecond": 74,
+      "scope": "Complete seven-day capture using non-overlapping daily queries below record limits. Exact hostnames and eyeball requests only. Adaptive counts are estimates; sampled intervals and every minute group are retained privately. The sum of individual peaks is conservative.",
+      "access": "Two approved temporary Zone Analytics Read tokens, each limited to its zone and expiring at 2026-10-10T17:46:00Z. No production token permissions were expanded."
+    },
+    "sourceLogs": "The initial 2000-record source export was insufficient for peak evidence. The complete minute-level capture above supersedes it.",
+    "liveLatencyBaseline": "100 low-rate full-response samples per feature, existing-page and uncached-read group; 300 requests total, at most 2 RPS, zero errors. Measurements include operator network latency and are retained privately."
+  },
+  "deployedVerification": {
+    "releaseSha": "a871ae8dd5eeb6bf5d97692fe16344a85bdc2e26",
+    "productionRoutes": 74,
+    "assets": 38,
+    "browserPassed": 147,
+    "browserSkipped": 3,
+    "browserWidths": [320, 390, 768, 1024, 1440],
+    "existingProductionChecks": true,
+    "isolatedCapacity": {
+      "run": "https://github.com/kewonit/deetnuts/actions/runs/37972498186",
+      "testedRequestsPerSecond": 74,
+      "warmSeconds": 300,
+      "cacheMissSeconds": 300,
+      "requests": 44400,
+      "failedRequests": 0,
+      "droppedRequests": 0,
+      "isolation": "Ephemeral Ubuntu runner, internal Docker network, disposable database, public-only college fixture, no production credentials or volumes, direct origin requests without a CDN.",
+      "resources": "Exact candidate images. Web 1 CPU/1024 MiB and PocketBase 1 CPU/448 MiB share one CPU core and a 1536-MiB parent limit; generator uses a separate CPU. Reserve 512 MiB for the production OS and other services.",
+      "limitation": "Runner CPU hardware differs from DigitalOcean. Matching resource ceilings and the passing origin test do not establish identical hardware performance; actual production latency and the full observation remain required."
+    },
+    "references": "Private route, browser, production, import, rollback, isolation and capacity reports in .migration-recovery/timekeeper/evidence.json. No 307 or 301 has begun."
   },
   "localVerification": {
     "checkedOn": "2026-10-09",
