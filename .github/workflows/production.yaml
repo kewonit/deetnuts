@@ -121,8 +121,8 @@ jobs:
           mkdir -p /tmp/timekeeper-pocketbase
           curl --fail --silent --show-error --location \
             --output /tmp/timekeeper-pocketbase.zip \
-            https://github.com/pocketbase/pocketbase/releases/download/v0.40.0/pocketbase_0.40.0_linux_amd64.zip
-          echo '983740a4e5cc3b60c03d018c5a97ffe32ea560d6f55a53e2bca1ce3aae2cf8cb  /tmp/timekeeper-pocketbase.zip' | sha256sum --check --strict
+            https://github.com/pocketbase/pocketbase/releases/download/v0.40.5/pocketbase_0.40.5_linux_amd64.zip
+          echo '1dbea1b01eb3dfe64953513859d01e759c96650c4e3264fa4eecd54b769382e4  /tmp/timekeeper-pocketbase.zip' | sha256sum --check --strict
           unzip -q /tmp/timekeeper-pocketbase.zip pocketbase -d /tmp/timekeeper-pocketbase
           npm run test:timekeeper-tickets
 

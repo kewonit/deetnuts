@@ -13,11 +13,11 @@ import { createServer } from "node:net";
 const binary = process.env.POCKETBASE_TEST_BINARY;
 if (!binary)
   throw new Error(
-    "Set POCKETBASE_TEST_BINARY to the checksum-verified PocketBase 0.40.0 binary",
+    "Set POCKETBASE_TEST_BINARY to the checksum-verified PocketBase 0.40.5 binary",
   );
 assert.match(
   execFileSync(binary, ["--version"], { encoding: "utf8" }),
-  /0\.40\.0/,
+  /0\.40\.5/,
 );
 let directory, server, origin, adminToken, backendToken, userToken, database;
 const password = randomBytes(24).toString("hex");

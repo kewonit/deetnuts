@@ -39,6 +39,15 @@
       "ttl": "Auto"
     },
     "tlsMode": "Full (strict)",
+    "edgeCertificate": {
+      "hosts": ["*.edbn.me", "edbn.me"],
+      "type": "Universal",
+      "status": "Active",
+      "expiresOn": "2026-12-06"
+    },
+    "alwaysUseHttps": true,
+    "httpRedirectVerification": "Verify actual HTTP and HTTPS edge responses before permanent cutover; the existing HTTPS upgrade may affect the one-hop requirement.",
+    "accountBulkRedirectInventory": null,
     "workersRoutes": [],
     "pageRules": []
   },
@@ -54,6 +63,19 @@
     "oldOwnership": "Verified owner, confirmed in authenticated Chrome settings",
     "destinationProperty": "sc-domain:deetnuts.com",
     "destinationOwnership": "Verified owner, confirmed in authenticated Chrome settings",
+    "destinationIndexing": {
+      "lastUpdated": "2026-10-04",
+      "indexed": 59359,
+      "notIndexed": 75141
+    },
+    "destinationPerformance": {
+      "windowStart": "2026-07-07",
+      "windowEnd": "2026-10-06",
+      "clicksApproximate": 1080,
+      "impressionsApproximate": 244000,
+      "landingRowsExported": 1000,
+      "scope": "Whole domain property, including other subdomains; monitor the new feature by final hostname and path."
+    },
     "oldIndexing": {
       "lastUpdated": "2026-10-04",
       "indexed": 70,
@@ -98,6 +120,7 @@
     "activeSlot": "green",
     "runtimeSnapshot": "Root-only runtime/configuration archive and current image references retained on the production host; existing images tagged for recovery without changing running services.",
     "pocketbaseBackup": "Fresh online backup on 2026-10-09 passed archive, SQLite integrity and foreign-key checks; no backups pruned.",
+    "pocketbaseRestoration": "The preserved backup started successfully with the original encryption key and existing PocketBase image in a temporary container with networking disabled. All 81 table row counts were preserved. The patched candidate and new ticket migration still require the same restoration check before deployment.",
     "rebuiltSourceArtifactSha256": "91178ec30ea086e01488ead664209f97dd72bcb83c5ac2a262234788ab42bb20",
     "offlineCopy": "Encrypted runtime/PocketBase recovery bundle downloaded to the ignored private recovery directory. Ciphertext and decrypted plaintext checksums both verified without storing plaintext on the workstation; temporary server encryption passphrase removed after verification."
   },
@@ -125,7 +148,27 @@
     "intelVcpus": 1,
     "diskGb": 70,
     "os": "Ubuntu 24.04 (LTS) x64",
-    "confirmation": "Authenticated DigitalOcean lists the host. The approved temporary workstation /32 rule restored SSH reachability; an existing workstation key successfully authenticated as root. The dedicated admin key was not accepted. The healthy green slot and immutable image metadata were inspected without switching traffic."
+    "confirmation": "Authenticated DigitalOcean lists the host. The approved temporary workstation /32 rule restored SSH reachability; an existing workstation key successfully authenticated as root. The dedicated admin key was not accepted. The healthy green slot and immutable image metadata were inspected without switching traffic.",
+    "deploymentDecision": "The user explicitly requires the existing Droplet and existing Deetnuts blue/green workflow. No new Droplet was created. The inactive slot shares the live host and cannot establish isolated capacity."
+  },
+  "trafficBaseline": {
+    "deetnutsOrigin": {
+      "hostname": "www.deetnuts.com",
+      "windowStart": "2026-10-08T16:15:29Z",
+      "windowEnd": "2026-10-09T16:15:29Z",
+      "resolutionSeconds": 60,
+      "requests": 72134,
+      "peakRequestsPerMinute": 284,
+      "existingSuccessfulLatency": {
+        "samples": 68667,
+        "p95Ms": 175,
+        "p99Ms": 298
+      },
+      "uncachedSuccessfulLatency": { "samples": 76, "p95Ms": 21, "p99Ms": 82 },
+      "scope": "Read-only Nginx aggregation. Excludes CDN cache hits, so it does not establish the combined edge peak."
+    },
+    "cloudflareMinuteMetrics": "The existing production API token lacks Zone Analytics Read for both zones. No token permissions were expanded.",
+    "sourceLogs": "Captured privately from the exact source hostname. The adaptive dataset export is truncated at 2000 records and does not establish complete minute-level peaks."
   },
   "localVerification": {
     "checkedOn": "2026-10-09",
@@ -144,6 +187,7 @@
     ],
     "migrationUnitTests": 21,
     "pocketbaseIntegrationTests": 4,
+    "pocketbaseTestVersion": "0.40.5",
     "jeeUnitTests": 13,
     "lint": true,
     "typecheck": true,

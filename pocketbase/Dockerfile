@@ -3,8 +3,8 @@
 ARG ALPINE_IMAGE=alpine:3.23.5@sha256:fd791d74b68913cbb027c6546007b3f0d3bc45125f797758156952bc2d6daf40
 
 FROM ${ALPINE_IMAGE} AS downloader
-ARG POCKETBASE_VERSION=0.40.0
-ARG POCKETBASE_LINUX_AMD64_SHA256=983740a4e5cc3b60c03d018c5a97ffe32ea560d6f55a53e2bca1ce3aae2cf8cb
+ARG POCKETBASE_VERSION=0.40.5
+ARG POCKETBASE_LINUX_AMD64_SHA256=1dbea1b01eb3dfe64953513859d01e759c96650c4e3264fa4eecd54b769382e4
 WORKDIR /download
 RUN wget -q -O pocketbase.zip \
       "https://github.com/pocketbase/pocketbase/releases/download/v${POCKETBASE_VERSION}/pocketbase_${POCKETBASE_VERSION}_linux_amd64.zip" && \
@@ -13,7 +13,7 @@ RUN wget -q -O pocketbase.zip \
     chmod 0555 pocketbase
 
 FROM ${ALPINE_IMAGE}
-ARG POCKETBASE_VERSION=0.40.0
+ARG POCKETBASE_VERSION=0.40.5
 LABEL org.opencontainers.image.description="Private DEETNUTS PocketBase service" \
       org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.source="https://github.com/pocketbase/pocketbase" \
