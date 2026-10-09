@@ -176,9 +176,19 @@
     "observationStartedAt": "2026-10-09T18:30:53.086521Z",
     "canary30MinutesPassed": false,
     "testedRollbackWithNewRoutes": "a871ae8dd5eeb6bf5d97692fe16344a85bdc2e26",
-    "singleHopHttpAndHttpsRedirectsVerified": false,
-    "permanentRedirectStartedAt": null,
-    "stable30DaysPassed": false
+    "singleHopHttpAndHttpsRedirectsVerified": true,
+    "permanentRedirectStartedAt": "2026-10-09T19:15:02Z",
+    "stable30DaysPassed": false,
+    "ownerApprovedWaiver": {
+      "recordedAt": "2026-10-09T19:08:11.949Z",
+      "instruction": "Approve cutover and archive now",
+      "waived": [
+        "24-hour observation",
+        "30-minute trial",
+        "30-day retirement wait"
+      ],
+      "scope": "Activate permanent 301 redirects and archive now; retain tested rollback and old DNS/TLS/import service. Timed gates remain unpassed."
+    }
   },
   "deetnutsHosting": {
     "provider": "DigitalOcean",
@@ -201,7 +211,7 @@
     "rollbackVerificationAt": "2026-10-09T18:20:56.841Z",
     "rollbackPin": "/opt/deetnuts/state/timekeeper-rollback-sha",
     "rollbackPinInstalled": true,
-    "permanentRedirectMarkerInstalled": false,
+    "permanentRedirectMarkerInstalled": true,
     "normalDeployAndRollbackHealthChecks": "Both completed the existing ten-minute public health observation; all 74 routes and 38 assets passed after the rollback drill.",
     "oldOriginImport": "Actual old-host helper, private PocketBase ticket and destination browser import passed at 2026-10-09T18:24:35.240Z. Original storage was retained.",
     "serviceWorkerCacheRule": {
@@ -212,7 +222,7 @@
       "edgeCache": "Bypass",
       "browserTtl": "Respect origin"
     },
-    "observation": "Starts after recovery verification at 2026-10-09T18:30:53.086521Z. Elapsed time alone must not complete this gate; review actual errors, latency and traffic on both hosts."
+    "observation": "Started after recovery verification at 2026-10-09T18:30:53.086521Z. The owner explicitly waived the 24-hour wait before immediate cutover; this gate is not marked passed."
   },
   "trafficBaseline": {
     "deetnutsOrigin": {
@@ -264,9 +274,36 @@
       "droppedRequests": 0,
       "isolation": "Ephemeral Ubuntu runner, internal Docker network, disposable database, public-only college fixture, no production credentials or volumes, direct origin requests without a CDN.",
       "resources": "Exact candidate images. Web 1 CPU/1024 MiB and PocketBase 1 CPU/448 MiB share one CPU core and a 1536-MiB parent limit; generator uses a separate CPU. Reserve 512 MiB for the production OS and other services.",
-      "limitation": "Runner CPU hardware differs from DigitalOcean. Matching resource ceilings and the passing origin test do not establish identical hardware performance; actual production latency and the full observation remain required."
+      "limitation": "Runner CPU hardware differs from DigitalOcean. Matching resource ceilings and the passing origin test do not establish identical hardware performance. The owner waived the original timed production observation."
     },
-    "references": "Private route, browser, production, import, rollback, isolation and capacity reports in .migration-recovery/timekeeper/evidence.json. No 307 or 301 has begun."
+    "references": "Private route, browser, production, import, rollback, isolation, capacity and final redirect reports in .migration-recovery/timekeeper/evidence.json. Permanent 301 redirects are active; the 307 trial was explicitly waived."
+  },
+  "completedCutover": {
+    "redirectMappings": 81,
+    "httpHttpsRedirectChecks": 322,
+    "failedRedirectChecks": 0,
+    "queryStringsPreserved": true,
+    "browserFragmentPreserved": true,
+    "bulkRedirectListId": "f62410c6d5714ac0b86408bda2b541c2",
+    "bulkRedirectRuleId": "6d883314f28a4353b1460e89f3cb736c",
+    "bulkRedirectEntries": 161,
+    "compatibilityPhase": "retired",
+    "sourceGitIntegrationsDisconnected": ["timekeeper", "exam-timekeeper"],
+    "pagesAliasesUseCompatibilityBundles": true,
+    "sourceRepositoryArchived": true,
+    "migrationNoticeCommit": "80eea435e7c5e2b8cac6a30e9e889ed77fec69f1",
+    "oldHostnameDnsTlsAssetsAndImportRetained": true,
+    "searchConsoleSitemap": {
+      "url": "https://www.deetnuts.com/exam-countdown/sitemap.xml",
+      "status": "Success",
+      "discoveredPages": 74
+    },
+    "changeOfAddress": {
+      "source": "sc-domain:timekeeper.edbn.me",
+      "destination": "sc-domain:deetnuts.com",
+      "status": "This site is currently moving"
+    },
+    "recrawlAndOrganicTrafficOutcomes": "Pending; the owner waived waiting before retirement."
   },
   "localVerification": {
     "checkedOn": "2026-10-09",

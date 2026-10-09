@@ -1,12 +1,14 @@
 # TimeKeeper migration
 
-TimeKeeper is implemented as native routes in Deetnuts at `/exam-countdown`. The imported production source is `Version-3`, commit `8cb737981c61f06e7b0baca248f7e237c763abd4`, confirmed in the authenticated Cloudflare deployment. The integration contains 58 exams, 13 categories and 74 indexable pages. The old application continues to serve its current URLs until the rollout evidence passes.
+TimeKeeper is implemented as native routes in Deetnuts at `/exam-countdown`. The imported production source is `Version-3`, commit `8cb737981c61f06e7b0baca248f7e237c763abd4`, confirmed in the authenticated Cloudflare deployment. The integration contains 58 exams, 13 categories and 74 indexable pages. The old URLs now redirect to their corresponding Deetnuts pages, and the Timekeeper repository is archived.
 
 `manifest.json` records every valid page, historical alias, observed Search Console landing path, removed page and known missing page. `preflight.json` records captured facts and outstanding gates. Missing evidence stays missing; successful local tests do not establish production capacity, ownership, stability or indexing.
 
 The native integration is live on the existing Droplet at release `a871ae8dd5eeb6bf5d97692fe16344a85bdc2e26`. Public production checks, all 74 routes and 38 assets, and 147 browser checks passed. A real blue/green rollback to that release passed and its immutable manifest is pinned. The old-origin import helper passed an actual browser transfer. The isolated [capacity run](https://github.com/kewonit/deetnuts/actions/runs/37972498186) sustained 74 RPS in both five-minute phases, including direct-origin cache misses, with zero failed or dropped requests.
 
-The clean production observation started at `2026-10-09T18:30:53Z` (10 October, 00:00:53 IST), after recovery verification. Its earliest completion is 24 hours later; actual traffic, errors and latency must also pass. The 30-minute teaching canary, HTTP/HTTPS one-hop verification, permanent redirects, Search Console move and 30-day retirement gates remain outstanding. Existing page URLs and source deployments still serve TimeKeeper.
+Permanent redirects were verified at `2026-10-09T19:15:02Z` (10 October, 00:45:02 IST). All 81 page/alias mappings passed 322 HTTP/HTTPS checks, including trailing slashes and query strings. A live browser also retained its fragment. Unknown pages return 404 and the retired example returns 410; imports, old service-worker updates and pinned assets remain available. Google accepted the new sitemap with 74 discovered pages and confirmed the Change of Address from `timekeeper.edbn.me` to the verified `deetnuts.com` property; redirects supply the final `/exam-countdown` paths.
+
+The owner explicitly approved immediate cutover and archive, waiving the original 24-hour observation, 30-minute canary and 30-day retirement wait. These periods remain unpassed in the evidence. The original staged procedure below is retained as a reference; its read-only guard still requires those periods and was not reported as passing. Both source Git integrations are disconnected. The old Pages aliases now serve compatibility bundles generated from the Deetnuts Worker, retaining their original immutable asset deployments. The tested destination rollback release and root-owned redirect marker remain active. Google recrawl, replacement indexing and organic traffic outcomes are still pending.
 
 ## Configuration and retained services
 
@@ -74,7 +76,7 @@ During preparation, an export process loaded the backup database into memory and
 
 ## Old-origin compatibility service
 
-`timekeeper-compat/worker.mjs` is maintained from this repository. Its default phase is `serve`; `wrangler.jsonc` intentionally has no production routes. It fetches legacy documents/assets from the pinned immutable Pages deployment, never from the old public hostname, which would cause a loop after binding.
+`timekeeper-compat/worker.mjs` is maintained from this repository. Production `wrangler.jsonc` records `retired` mode and the scoped old-host routes. The Worker also supports `serve` for recovery. It fetches retained assets from the pinned immutable Pages deployment, never from the old public hostname, which would cause a loop after binding. The 161-entry exact Cloudflare Bulk Redirect list handles both protocols before the existing HTTPS upgrade, avoiding an extra redirect hop; preserve query strings and leave subdomain/subpath matching disabled.
 
 The unbound Cloudflare preview verified all 74 preserved source pages and nine referenced assets through the immutable deployment. Preview responses are unindexed and use `no-store`. Direct terminal requests to that deployment receive Cloudflare 403/1010 responses; the actual Worker-to-Pages preview passed without bypassing protection. Re-run this fallback verification before adding a full-host route. If it fails, provision a verified retained static artifact before proceeding.
 
@@ -87,7 +89,7 @@ timekeeper.edbn.me/timekeeper-migration.js*
 
 Verify old-origin storage recovery in a normal authenticated browser profile, private transfer expiry/replay behavior, JSON recovery and unchanged original storage. Then add the full-host route only after the source fallback and every rollout gate pass. Route configuration must affect only TimeKeeper. Keep the CNAME, DNS, certificates and TLS active; do not delete the old Pages project or pinned artifact used for recovery/assets.
 
-Both helper routes are now attached, and the actual helper-to-ticket-to-destination transfer passed in a disposable browser context without reading an existing visitor's data. The original countdown, theme, avatar seed and unrelated sentinel remained in old-origin storage. The full-host route remains unattached.
+Both helper routes and `timekeeper.edbn.me/*` are attached. The actual helper-to-ticket-to-destination transfer passed in a disposable browser context without reading an existing visitor's data. The original countdown, theme, avatar seed and unrelated sentinel remained in old-origin storage. Both Pages projects retain their immutable artifacts with Git disconnected. Their production aliases use bundled copies of this Worker with `ROLLOUT_PHASE=retired`; the secondary alias retains `https://99d56108.exam-timekeeper.pages.dev` as its asset origin. Automatic ticket transfer is scoped to `https://timekeeper.edbn.me`; visitors with data on a Pages alias can use JSON export/import.
 
 ## Canary, permanent redirects and recovery
 
