@@ -26,8 +26,6 @@ Run from the repository root:
 
 ```sh
 npm run verify:timekeeper-manifest
-npm run test:timekeeper
-POCKETBASE_TEST_BINARY=/absolute/path/to/verified/pocketbase npm run test:timekeeper-tickets
 npm run lint
 npm run typecheck
 npm audit --audit-level=high
