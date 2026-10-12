@@ -1,4 +1,4 @@
-import manifest from "../docs/timekeeper-migration/manifest.json" with { type: "json" };
+import manifest from "../data/timekeeper-migration/manifest.json" with { type: "json" };
 import {
   importHtml,
   importScript,

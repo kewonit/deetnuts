@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { performance } from "node:perf_hooks";
-import manifest from "../docs/timekeeper-migration/manifest.json" with { type: "json" };
+import manifest from "../data/timekeeper-migration/manifest.json" with { type: "json" };
 
 export function validateCapacityConfiguration(config) {
   const requireThat = (condition, message) => {

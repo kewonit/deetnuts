@@ -1,4 +1,4 @@
-import manifest from "../docs/timekeeper-migration/manifest.json" with { type: "json" };
+import manifest from "../data/timekeeper-migration/manifest.json" with { type: "json" };
 import metadata from "../lib/timekeeper/exam-metadata.json" with { type: "json" };
 import { pathToFileURL } from "node:url";
 import { request as httpRequest } from "node:http";

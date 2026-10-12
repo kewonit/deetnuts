@@ -4,8 +4,8 @@ import { fileURLToPath } from "node:url";
 const root = new URL("../", import.meta.url);
 const readJson = async (path) => JSON.parse(await readFile(new URL(path, root), "utf8"));
 const metadata = (await readJson("lib/timekeeper/exam-metadata.json")).metadata;
-const preflight = await readJson("docs/timekeeper-migration/preflight.json");
-const observedLandingPaths = await readJson("docs/timekeeper-migration/observed-paths.json");
+const preflight = await readJson("data/timekeeper-migration/preflight.json");
+const observedLandingPaths = await readJson("data/timekeeper-migration/observed-paths.json");
 const exams = Object.values(metadata);
 const categories = [...new Set(exams.map((exam) => exam.category.toLowerCase().replace(/\s+/g, "-")))];
 const routes = ["/", "/countdown", "/study-map", ...exams.map((exam) => `/exams/${exam.slug}`), ...categories.map((category) => `/category/${category}`)];
@@ -32,7 +32,7 @@ const manifest = {
   knownMissing: ["/about", "/contact", "/privacy", "/terms", "/exams/${exam.slug}", "/exams/jee-main/2027", "/exams/jee-main/timekeeper"],
   observedLandingPaths,
 };
-const destination = new URL("docs/timekeeper-migration/manifest.json", root);
+const destination = new URL("data/timekeeper-migration/manifest.json", root);
 const serialized = `${JSON.stringify(manifest, null, 2)}\n`;
 if (process.argv.includes("--check")) {
   if (await readFile(destination, "utf8") !== serialized) throw new Error("TimeKeeper manifest differs from its production route inventory. Regenerate and review it.");

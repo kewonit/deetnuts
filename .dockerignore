@@ -44,10 +44,9 @@ desktop.ini
 *.log
 .env*
 !.env.example
-docs/*
-!docs/timekeeper-migration
-docs/timekeeper-migration/*
-!docs/timekeeper-migration/manifest.json
+docs
+data/timekeeper-migration/*
+!data/timekeeper-migration/manifest.json
 legacy
 supabase
 .agents

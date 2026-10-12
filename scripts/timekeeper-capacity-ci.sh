@@ -41,7 +41,7 @@ cleanup() {
 trap cleanup EXIT
 
 read -r tk_sha tk_web_image tk_pb_image < <(node -e '
-const m=require("./docs/timekeeper-migration/capacity-images.json");
+const m=require("./data/timekeeper-migration/capacity-images.json");
 if(!/^[0-9a-f]{40}$/.test(m.releaseSha)||![m.images.web,m.images.pocketbase].every(x=>/^ghcr.io\/kewonit\/deetnuts-[a-z]+@sha256:[0-9a-f]{64}$/.test(x)))process.exit(1);
 console.log(m.releaseSha,m.images.web,m.images.pocketbase);')
 docker pull "$tk_web_image" >/dev/null
@@ -83,7 +83,7 @@ for tk_attempt in $(seq 1 40); do
   sleep 2
 done
 docker exec "$tk_prefix-pocketbase" wget -q -O /dev/null http://127.0.0.1:8090/api/health >/dev/null
-docker run --rm --name "$tk_prefix-seed" --network "$tk_network" --cpuset-cpus "$tk_generator_cpu" --cpus 1 --memory 256m --read-only --user 1001:1001 --cap-drop ALL --security-opt no-new-privileges --entrypoint node --workdir /workspace --mount "type=bind,source=$tk_root/scripts,target=/workspace/scripts,readonly" --mount "type=bind,source=$tk_root/docs,target=/workspace/docs,readonly" --mount "type=bind,source=$tk_work,target=/run/capacity,readonly" "$tk_web_image" scripts/timekeeper-capacity-seed.mjs /run/capacity docs/timekeeper-migration/capacity-public-colleges.json
+docker run --rm --name "$tk_prefix-seed" --network "$tk_network" --cpuset-cpus "$tk_generator_cpu" --cpus 1 --memory 256m --read-only --user 1001:1001 --cap-drop ALL --security-opt no-new-privileges --entrypoint node --workdir /workspace --mount "type=bind,source=$tk_root/scripts,target=/workspace/scripts,readonly" --mount "type=bind,source=$tk_root/data/timekeeper-migration,target=/workspace/data/timekeeper-migration,readonly" --mount "type=bind,source=$tk_work,target=/run/capacity,readonly" "$tk_web_image" scripts/timekeeper-capacity-seed.mjs /run/capacity data/timekeeper-migration/capacity-public-colleges.json
 
 docker run -d --name "$tk_prefix-web" --network "$tk_network" --network-alias web --cgroup-parent "$tk_parent" --cpuset-cpus "$tk_cpu" --cpus 1 --memory 1024m --memory-swap 1280m --pids-limit 256 --read-only --cap-drop ALL --security-opt no-new-privileges --tmpfs /tmp:rw,noexec,nosuid,size=64m,uid=1001,gid=1001,mode=1777 --mount "type=bind,source=$tk_work/cache,target=/app/.next/cache" --env-file "$tk_work/web.env" --env "DEPLOYMENT_SHA=$tk_sha" --env NODE_ENV=production --env HOSTNAME=0.0.0.0 --env PORT=3000 --env NEXT_TELEMETRY_DISABLED=1 "$tk_web_image" >/dev/null
 for tk_attempt in $(seq 1 40); do
@@ -92,7 +92,7 @@ for tk_attempt in $(seq 1 40); do
 done
 docker exec "$tk_prefix-web" node -e 'fetch("http://127.0.0.1:3000/api/health").then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))' >/dev/null
 
-docker create --name "$tk_prefix-generator" --network "$tk_network" --cpuset-cpus "$tk_generator_cpu" --cpus 1 --memory 512m --memory-swap 512m --pids-limit 96 --read-only --user 1001:1001 --cap-drop ALL --security-opt no-new-privileges --entrypoint node --workdir /workspace --mount "type=bind,source=$tk_root/scripts,target=/workspace/scripts,readonly" --mount "type=bind,source=$tk_root/docs,target=/workspace/docs,readonly" --mount "type=bind,source=$tk_output,target=/capacity-output" "$tk_web_image" scripts/timekeeper-capacity.mjs --config=docs/timekeeper-migration/capacity-observed.json --report=/capacity-output/capacity.json >/dev/null
+docker create --name "$tk_prefix-generator" --network "$tk_network" --cpuset-cpus "$tk_generator_cpu" --cpus 1 --memory 512m --memory-swap 512m --pids-limit 96 --read-only --user 1001:1001 --cap-drop ALL --security-opt no-new-privileges --entrypoint node --workdir /workspace --mount "type=bind,source=$tk_root/scripts,target=/workspace/scripts,readonly" --mount "type=bind,source=$tk_root/data/timekeeper-migration,target=/workspace/data/timekeeper-migration,readonly" --mount "type=bind,source=$tk_output,target=/capacity-output" "$tk_web_image" scripts/timekeeper-capacity.mjs --config=data/timekeeper-migration/capacity-observed.json --report=/capacity-output/capacity.json >/dev/null
 docker inspect "$tk_prefix-generator" > "$tk_work/generator.json"
 docker inspect "$tk_prefix-web" "$tk_prefix-pocketbase" > "$tk_work/inspect.json"
 docker network inspect "$tk_network" > "$tk_work/network.json"

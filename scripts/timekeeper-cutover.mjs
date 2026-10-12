@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
-import manifest from "../docs/timekeeper-migration/manifest.json" with { type: "json" };
+import manifest from "../data/timekeeper-migration/manifest.json" with { type: "json" };
 
 export function cutoverFailures(evidence, phase, now = Date.now()) {
   const failures = [];

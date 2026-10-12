@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 import { exams } from "../lib/timekeeper/exams";
-import manifest from "../docs/timekeeper-migration/manifest.json";
+import manifest from "../data/timekeeper-migration/manifest.json";
 import { handleRequest } from "../timekeeper-compat/worker.mjs";
 
 const origin = "https://www.deetnuts.com";
