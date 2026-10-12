@@ -74,9 +74,9 @@ The Reddit worker is a disabled Compose profile. Do not start it during web depl
 
 ## Deploying updates
 
-Push to `main` to run the [production workflow](https://github.com/kewonit/deetnuts/actions/workflows/production.yaml). Tests, browser checks, image scans and attestations must pass before it deploys the exact verified digests. The workflow temporarily permits only its runner's SSH address and removes that exception afterward. The host checks the new release for ten minutes and restores the previous slot if deployment fails.
+Push to `main` to run the [production workflow](https://github.com/kewonit/deetnuts/actions/workflows/production.yaml). It builds the four images and deploys their exact digests. The workflow temporarily permits only its runner's SSH address and removes that exception afterward. The host checks the new release for ten minutes and restores the previous slot if deployment fails.
 
-To rebuild and deploy `main` on demand, run `npm run deploy:production` from a checkout with an authenticated GitHub CLI, or select **Run workflow** on that Actions page with the `public` verification mode. Follow **Deploy verified digests** to confirm completion; a successful build alone does not confirm deployment.
+To rebuild and deploy `main` on demand, run `npm run deploy:production` from a checkout with an authenticated GitHub CLI, or select **Run workflow** on that Actions page. Follow the **Deploy** job to confirm completion; a successful build alone does not confirm deployment.
 
 When renewing the DigitalOcean token, replace `DO_API_TOKEN` in the GitHub `production` environment before the old token expires. Keep the token and deployment private key out of the repository.
 

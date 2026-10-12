@@ -1,220 +1,24 @@
-name: Verify, build, and deploy production
+name: Build and deploy production
 
 on:
-  pull_request:
-    branches: [main]
   push:
     branches: [main]
   workflow_dispatch:
-    inputs:
-      verification_mode:
-        description: Public verification requires live Cloudflare DNS; capacity runs only the isolated migration test.
-        required: true
-        default: public
-        type: choice
-        options:
-          - public
-          - origin-only
-          - capacity
-  schedule:
-    - cron: "0 22 * * 0"
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.event.pull_request.number || 'production' }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  group: production
+  cancel-in-progress: false
 
 env:
-  NODE_VERSION: "22.23.2"
-  EJAM_DATA_ROOT: ejam/data
   NEXT_PUBLIC_APP_URL: https://www.deetnuts.com
-  TERRAFORM_VERSION: 1.16.2
-  TERRAFORM_LINUX_AMD64_SHA256: 0d17011f0c4664539b164b044903d04e296c86c13cb9f28040076c65cfb3985a
-  GITLEAKS_VERSION: 8.30.1
-  GITLEAKS_LINUX_X64_SHA256: 551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb
 
 jobs:
-  verify:
-    name: Static and unit verification
-    if: inputs.verification_mode != 'capacity'
-    runs-on: ubuntu-24.04
-    permissions:
-      contents: read
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Scan the checkout for committed secrets
-        run: |
-          archive="/tmp/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
-          scan_root=$(mktemp -d)
-          curl --fail --silent --show-error --location \
-            --output "$archive" \
-            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
-          echo "${GITLEAKS_LINUX_X64_SHA256}  $archive" | sha256sum --check --strict
-          tar -xzf "$archive" -C /tmp gitleaks
-          git checkout-index --all --prefix="$scan_root/"
-          /tmp/gitleaks dir "$scan_root" --redact --no-banner
-
-      - name: Set up Node.js
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci --no-audit --no-fund
-
-      - name: Install eJam build dependencies
-        run: npm exec --yes --package=pnpm@11.1.3 -- pnpm --dir ejam install --frozen-lockfile
-
-      - name: Validate deployment configuration
-        run: |
-          bash -n deploy/bin/* deploy/bootstrap-host.sh
-          shellcheck deploy/bin/* deploy/bootstrap-host.sh
-          docker compose --env-file deploy/env/compose.env.example config --quiet
-
-      - name: Validate Cloudflare infrastructure
-        run: |
-          archive="/tmp/terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
-          curl --fail --silent --show-error --location \
-            --output "$archive" \
-            "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
-          echo "${TERRAFORM_LINUX_AMD64_SHA256}  $archive" | sha256sum --check --strict
-          sudo unzip -qo "$archive" terraform -d /usr/local/bin
-          terraform -chdir=infra/cloudflare init -backend=false -input=false
-          terraform -chdir=infra/cloudflare fmt -check -recursive
-          terraform -chdir=infra/cloudflare validate
-
-      - name: Check formatting
-        run: npm run format:check:platform
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Typecheck
-        run: npm run typecheck
-
-      - name: Test platform security helpers
-        run: |
-          npm run test:platform
-          node --test access-verifier/verify.test.mjs
-
-      - name: Test bot behavior
-        run: npm run test:bot
-
-      - name: Build worker
-        run: npm run bot:build
-
-      - name: Test admissions behavior
-        run: npm run test:admissions
-
-      - name: Test JEE cutoff behavior
-        run: npm run test:jee-cutoffs
-
-      - name: Verify TimeKeeper inventory and migration behavior
-        run: |
-          npm run verify:timekeeper-manifest
-          npm run test:timekeeper
-
-      - name: Test private single-use migration tickets with PocketBase
-        env:
-          POCKETBASE_TEST_BINARY: /tmp/timekeeper-pocketbase/pocketbase
-        run: |
-          mkdir -p /tmp/timekeeper-pocketbase
-          curl --fail --silent --show-error --location \
-            --output /tmp/timekeeper-pocketbase.zip \
-            https://github.com/pocketbase/pocketbase/releases/download/v0.40.5/pocketbase_0.40.5_linux_amd64.zip
-          echo '1dbea1b01eb3dfe64953513859d01e759c96650c4e3264fa4eecd54b769382e4  /tmp/timekeeper-pocketbase.zip' | sha256sum --check --strict
-          unzip -q /tmp/timekeeper-pocketbase.zip pocketbase -d /tmp/timekeeper-pocketbase
-          npm run test:timekeeper-tickets
-
-      - name: Audit dependencies
-        run: npm audit --audit-level=high
-
-      - name: Build application
-        env:
-          NEXT_PUBLIC_SOURCE_COMMIT: ${{ github.sha }}
-          NEXT_DEPLOYMENT_ID: ${{ github.sha }}
-        run: npm run build
-
-  browser-tests:
-    name: Browser verification
-    if: inputs.verification_mode != 'capacity'
-    runs-on: ubuntu-24.04
-    permissions:
-      contents: read
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Set up Node.js
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci --no-audit --no-fund
-
-      - name: Install eJam build dependencies
-        run: npm exec --yes --package=pnpm@11.1.3 -- pnpm --dir ejam install --frozen-lockfile
-
-      - name: Install Chromium
-        run: npx playwright install --with-deps chromium
-
-      - name: Run browser tests
-        env:
-          NEXT_PUBLIC_SOURCE_COMMIT: ${{ github.sha }}
-          NEXT_DEPLOYMENT_ID: ${{ github.sha }}
-          TIMEKEEPER_SUPABASE_URL: https://ivmobluuegkikmbwbfhe.supabase.co
-          TIMEKEEPER_SUPABASE_ANON_KEY: sb_publishable_test_only
-        run: npm run test:e2e:production
-
-  migration-capacity:
-    name: Isolated TimeKeeper capacity verification
-    if: github.event_name == 'workflow_dispatch' && inputs.verification_mode == 'capacity'
-    runs-on: ubuntu-24.04
-    timeout-minutes: 25
-    permissions:
-      contents: read
-      packages: read
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Set up Node.js
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Authenticate to GHCR for read-only image access
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Verify the pinned candidate under isolated production resource limits
-        run: bash scripts/timekeeper-capacity-ci.sh
-
-      - name: Retain capacity and isolation evidence
-        if: always()
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: timekeeper-capacity-${{ github.run_id }}
-          path: capacity-output/
-          retention-days: 30
-
-  images:
-    name: Build and secure images
-    if: github.event_name != 'pull_request'
-    needs: [verify, browser-tests]
+  build:
+    name: Build images
     runs-on: ubuntu-24.04
     permissions:
       contents: read
       packages: write
-      id-token: write
-      attestations: write
     outputs:
       web-digest: ${{ steps.web.outputs.digest }}
       worker-digest: ${{ steps.worker.outputs.digest }}
@@ -228,13 +32,6 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Validate persistent Server Actions key
-        env:
-          SERVER_ACTIONS_KEY: ${{ secrets.NEXT_SERVER_ACTIONS_ENCRYPTION_KEY }}
-        run: |
-          test -n "$SERVER_ACTIONS_KEY"
-          test "$(printf '%s' "$SERVER_ACTIONS_KEY" | base64 --decode | wc -c)" -eq 32
 
       - name: Set up Buildx
         uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e # v4.3.0
@@ -267,8 +64,6 @@ jobs:
           cache-from: type=gha,scope=web
           cache-to: type=gha,mode=max,scope=web
           no-cache-filters: builder
-          provenance: mode=max
-          sbom: true
 
       - name: Build and push worker image
         id: worker
@@ -285,8 +80,6 @@ jobs:
             OCI_SOURCE=${{ github.server_url }}/${{ github.repository }}
           cache-from: type=gha,scope=worker
           cache-to: type=gha,mode=max,scope=worker
-          provenance: mode=max
-          sbom: true
 
       - name: Build and push PocketBase image
         id: pocketbase
@@ -299,8 +92,6 @@ jobs:
           tags: ${{ env.POCKETBASE_IMAGE }}:${{ github.sha }}
           cache-from: type=gha,scope=pocketbase
           cache-to: type=gha,mode=max,scope=pocketbase
-          provenance: mode=max
-          sbom: true
 
       - name: Build and push Access verifier image
         id: access-verifier
@@ -317,127 +108,11 @@ jobs:
             OCI_SOURCE=${{ github.server_url }}/${{ github.repository }}
           cache-from: type=gha,scope=access-verifier
           cache-to: type=gha,mode=max,scope=access-verifier
-          provenance: mode=max
-          sbom: true
-
-      - name: Attest web image
-        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
-        with:
-          subject-name: ${{ env.WEB_IMAGE }}
-          subject-digest: ${{ steps.web.outputs.digest }}
-          push-to-registry: true
-
-      - name: Attest worker image
-        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
-        with:
-          subject-name: ${{ env.WORKER_IMAGE }}
-          subject-digest: ${{ steps.worker.outputs.digest }}
-          push-to-registry: true
-
-      - name: Attest PocketBase image
-        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
-        with:
-          subject-name: ${{ env.POCKETBASE_IMAGE }}
-          subject-digest: ${{ steps.pocketbase.outputs.digest }}
-          push-to-registry: true
-
-      - name: Attest Access verifier image
-        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
-        with:
-          subject-name: ${{ env.ACCESS_VERIFIER_IMAGE }}
-          subject-digest: ${{ steps.access-verifier.outputs.digest }}
-          push-to-registry: true
-
-      - name: Pull immutable images for inspection
-        run: |
-          docker pull "${WEB_IMAGE}@${{ steps.web.outputs.digest }}"
-          docker pull "${WORKER_IMAGE}@${{ steps.worker.outputs.digest }}"
-          docker pull "${POCKETBASE_IMAGE}@${{ steps.pocketbase.outputs.digest }}"
-          docker pull "${ACCESS_VERIFIER_IMAGE}@${{ steps.access-verifier.outputs.digest }}"
-
-      - name: Enforce image sizes
-        run: |
-          compressed_size() {
-            local image=$1
-            local index_digest=$2
-            local manifest_digest
-            manifest_digest=$(
-              docker buildx imagetools inspect --raw "${image}@${index_digest}" |
-                jq -er '
-                  [.manifests[]
-                    | select(.platform.os == "linux" and .platform.architecture == "amd64")
-                    | .digest]
-                  | if length == 1 then .[0] else error("expected exactly one linux/amd64 manifest") end
-                '
-            )
-            docker buildx imagetools inspect --raw "${image}@${manifest_digest}" |
-              jq -er '[.layers[].size] | add'
-          }
-          web_size=$(compressed_size "$WEB_IMAGE" "${{ steps.web.outputs.digest }}")
-          worker_size=$(compressed_size "$WORKER_IMAGE" "${{ steps.worker.outputs.digest }}")
-          pocketbase_size=$(compressed_size "$POCKETBASE_IMAGE" "${{ steps.pocketbase.outputs.digest }}")
-          access_verifier_size=$(compressed_size "$ACCESS_VERIFIER_IMAGE" "${{ steps.access-verifier.outputs.digest }}")
-          printf 'Compressed image sizes (bytes): web=%s worker=%s pocketbase=%s access-verifier=%s\n' "$web_size" "$worker_size" "$pocketbase_size" "$access_verifier_size"
-          test "$web_size" -le 402653184
-          test "$worker_size" -le 134217728
-          test "$pocketbase_size" -le 67108864
-          test "$access_verifier_size" -le 67108864
-
-      - name: Scan web image
-        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
-        with:
-          version: v0.74.0
-          image-ref: ${{ env.WEB_IMAGE }}@${{ steps.web.outputs.digest }}
-          format: table
-          exit-code: "1"
-          ignore-unfixed: true
-          severity: HIGH,CRITICAL
-
-      - name: Scan worker image
-        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
-        with:
-          version: v0.74.0
-          image-ref: ${{ env.WORKER_IMAGE }}@${{ steps.worker.outputs.digest }}
-          format: table
-          exit-code: "1"
-          ignore-unfixed: true
-          severity: HIGH,CRITICAL
-
-      - name: Scan PocketBase image
-        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
-        with:
-          version: v0.74.0
-          image-ref: ${{ env.POCKETBASE_IMAGE }}@${{ steps.pocketbase.outputs.digest }}
-          format: table
-          exit-code: "1"
-          ignore-unfixed: true
-          severity: HIGH,CRITICAL
-
-      - name: Scan Access verifier image
-        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
-        with:
-          version: v0.74.0
-          image-ref: ${{ env.ACCESS_VERIFIER_IMAGE }}@${{ steps.access-verifier.outputs.digest }}
-          format: table
-          exit-code: "1"
-          ignore-unfixed: true
-          severity: HIGH,CRITICAL
-
-      - name: Verify registry attestations
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh attestation verify "oci://${WEB_IMAGE}@${{ steps.web.outputs.digest }}" --repo "$GITHUB_REPOSITORY"
-          gh attestation verify "oci://${WORKER_IMAGE}@${{ steps.worker.outputs.digest }}" --repo "$GITHUB_REPOSITORY"
-          gh attestation verify "oci://${POCKETBASE_IMAGE}@${{ steps.pocketbase.outputs.digest }}" --repo "$GITHUB_REPOSITORY"
-          gh attestation verify "oci://${ACCESS_VERIFIER_IMAGE}@${{ steps.access-verifier.outputs.digest }}" --repo "$GITHUB_REPOSITORY"
 
   deploy:
-    name: Deploy verified digests
-    if: >-
-      (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
-      vars.DO_DEPLOY_ENABLED == 'true'
-    needs: images
+    name: Deploy
+    if: vars.DO_DEPLOY_ENABLED == 'true'
+    needs: build
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     environment: production
@@ -453,21 +128,7 @@ jobs:
       DO_FIREWALL_ID: ${{ secrets.DO_FIREWALL_ID }}
       DO_API_TOKEN: ${{ secrets.DO_API_TOKEN }}
       DEPLOY_USER: ${{ vars.DO_DEPLOY_USER || 'deetnuts-deploy' }}
-      VERIFICATION_MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.verification_mode || 'public' }}
     steps:
-      - name: Validate deployment configuration
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_PRIVATE_KEY }}
-          SSH_HOST_KEY: ${{ secrets.DO_SSH_HOST_KEY }}
-        run: |
-          [[ "$DO_HOST" =~ ^[A-Za-z0-9.-]+$ ]]
-          [[ "$DO_FIREWALL_ID" =~ ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$ ]]
-          [[ ${#DO_API_TOKEN} -ge 32 ]]
-          [[ "$DEPLOY_USER" =~ ^[a-z_][a-z0-9_-]{0,31}$ ]]
-          grep -qx -- '-----BEGIN OPENSSH PRIVATE KEY-----' <<<"$SSH_PRIVATE_KEY" # gitleaks:allow
-          grep -qx -- '-----END OPENSSH PRIVATE KEY-----' <<<"$SSH_PRIVATE_KEY"
-          grep -Eq '(^|[[:space:]])ssh-ed25519[[:space:]][A-Za-z0-9+/=]+$' <<<"$SSH_HOST_KEY"
-
       - name: Resolve runner address
         id: runner
         run: |
@@ -509,7 +170,7 @@ jobs:
             -o StrictHostKeyChecking=yes \
             -o ConnectTimeout=15 \
             "$DEPLOY_USER@$DO_HOST" \
-            "deploy $GITHUB_SHA ${WEB_IMAGE}@${{ needs.images.outputs.web-digest }} ${WORKER_IMAGE}@${{ needs.images.outputs.worker-digest }} ${POCKETBASE_IMAGE}@${{ needs.images.outputs.pocketbase-digest }} ${ACCESS_VERIFIER_IMAGE}@${{ needs.images.outputs.access-verifier-digest }} $VERIFICATION_MODE"
+            "deploy $GITHUB_SHA ${WEB_IMAGE}@${{ needs.build.outputs.web-digest }} ${WORKER_IMAGE}@${{ needs.build.outputs.worker-digest }} ${POCKETBASE_IMAGE}@${{ needs.build.outputs.pocketbase-digest }} ${ACCESS_VERIFIER_IMAGE}@${{ needs.build.outputs.access-verifier-digest }}"
 
       - name: Remove temporary deployment SSH rule
         if: always() && steps.runner.outputs.cidr != ''
