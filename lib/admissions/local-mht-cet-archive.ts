@@ -55,6 +55,17 @@ function loadIndex(
   }
 }
 
+export function readLocalMhtCetCutoffArchive(
+  year: number,
+  round: number,
+  archiveRoot: string = process.cwd(),
+): MhtCetCutoffRow[] | null {
+  const relativePath = LOCAL_ARCHIVES[year]?.[round];
+  if (!relativePath) return null;
+  const index = loadIndex(resolve(archiveRoot, relativePath));
+  return index ? [...index.values()].flat() : null;
+}
+
 export function readLocalMhtCetCollegeCutoffs(
   collegeId: string,
   year: number,

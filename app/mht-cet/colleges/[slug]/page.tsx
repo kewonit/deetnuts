@@ -7,6 +7,7 @@ import {
 } from "@/lib/admissions/detail-page";
 import { matchesCanonicalSegment } from "@/lib/admissions/canonical";
 import { isAdmissionsV2Enabled } from "@/lib/admissions/flags";
+import { getMhtCetPeerColleges } from "@/lib/admissions/mht-cet-peers";
 import {
   parseMhtCetDetailSelection,
   withNeutralAdmissionsQuery,
@@ -34,5 +35,6 @@ export default async function CollegePage({
       withNeutralAdmissionsQuery(model.canonicalPath, selection),
     );
   }
-  return <MhtCetDetailView model={model} />;
+  const peers = await getMhtCetPeerColleges(model.college.collegeId);
+  return <MhtCetDetailView model={model} peers={peers} />;
 }

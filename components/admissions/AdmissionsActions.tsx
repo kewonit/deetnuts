@@ -3,7 +3,13 @@
 import { useState } from "react";
 import { Check, Share2 } from "lucide-react";
 
-export function ShareAdmissionsPage({ compact = false }: { compact?: boolean }) {
+export function ShareAdmissionsPage({
+  compact = false,
+  className = "cutoff-button",
+}: {
+  compact?: boolean;
+  className?: string;
+}) {
   const [copied, setCopied] = useState(false);
 
   async function share() {
@@ -29,7 +35,7 @@ export function ShareAdmissionsPage({ compact = false }: { compact?: boolean }) 
     <button
       type="button"
       onClick={share}
-      className="cutoff-button"
+      className={className}
       aria-live="polite"
     >
       {copied ? (

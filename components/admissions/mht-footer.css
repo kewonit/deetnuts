@@ -1,0 +1,61 @@
+/* Footer for full MHT-CET college pages. Renders inside .mht-college, so it
+   reads the page's --mht-* tokens and follows its light and dark themes. */
+
+.mht-footer { padding-top: 1rem; padding-bottom: 3rem; }
+
+.mht-footer .mht-foot-cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem 1.5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--mht-line);
+}
+.mht-footer .mht-foot-cols h2 {
+  margin: 0 0 0.85rem;
+  color: var(--mht-ink);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.4;
+}
+.mht-footer .mht-foot-cols :is(a, button) {
+  display: block;
+  width: fit-content;
+  padding: 0.2rem 0;
+  border: 0;
+  background: none;
+  color: var(--mht-muted);
+  font: inherit;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+.mht-footer .mht-foot-cols :is(a, button):hover { color: var(--mht-ink); }
+
+.mht-foot-notice {
+  max-width: 60ch;
+  margin-top: 2.5rem;
+  color: var(--mht-muted);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+.mht-foot-base {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  margin-top: 2rem;
+  color: var(--mht-muted);
+  font-size: 0.8125rem;
+}
+.mht-foot-base > span:last-child { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
+.mht-foot-base a { color: var(--mht-muted); text-decoration: none; transition: color 0.15s ease; }
+.mht-foot-base a:hover { color: var(--mht-ink); }
+
+@media (min-width: 640px) {
+  .mht-footer .mht-foot-cols { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}

@@ -11,8 +11,11 @@ const FOOTERLESS_ROUTES = new Set([
 
 const JEE_CUTOFF_ROUTES = ["/jee-cutoffs", "/jee-main", "/jee-advanced", "/josaa"];
 
-function isMhtDocumentRoute(pathname: string) {
-  if (pathname === "/mht-cet" || pathname === "/mht-cet/") return true;
+function isMhtHubRoute(pathname: string) {
+  return pathname === "/mht-cet" || pathname === "/mht-cet/";
+}
+
+function isMhtCollegeRoute(pathname: string) {
   return /^\/mht-cet\/colleges\/[^/]+\/?$/.test(pathname);
 }
 
@@ -25,7 +28,10 @@ export default function RouteAwareFooter() {
     return <ProductFooter />;
   }
 
-  if (isMhtDocumentRoute(pathname)) {
+  // College pages render MhtFooter inside the page, in the page's own theme.
+  if (isMhtCollegeRoute(pathname)) return null;
+
+  if (isMhtHubRoute(pathname)) {
     return <ProductFooter />;
   }
 

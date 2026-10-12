@@ -42,7 +42,7 @@ export default function CollegeIdentityMedia({
             sizes={
               variant === "sheet"
                 ? "(max-width: 640px) 100vw, 576px"
-                : "(max-width: 1152px) 100vw, 1120px"
+                : "(max-width: 1536px) 100vw, 1536px"
             }
             loading="eager"
             fetchPriority={variant === "full" ? "high" : undefined}

@@ -106,7 +106,13 @@ export function seatCandidates<T extends SeatRow>(rows: T[], view: MhtCetSeatVie
   const inFamily = rows.filter((row) => row.poolFamily === family);
   if (view.special !== "none") {
     const general = inFamily.filter((row) => !isLadies(row));
-    return general.length > 0 ? general : inFamily;
+    const pool = general.length > 0 ? general : inFamily;
+    // Defence and PWD seats are published per category, e.g. "Defence, OBC".
+    const category = MHT_CET_CATEGORY_OPTIONS.find((option) => option.value === view.categoryId)?.label;
+    const sameCategory = category
+      ? pool.filter((row) => row.poolLabel.split(", ").includes(category))
+      : [];
+    return sameCategory.length > 0 ? sameCategory : pool;
   }
   return inFamily.filter((row) => isLadies(row) === (view.gender === "ladies"));
 }
@@ -138,6 +144,20 @@ export function matchProgramSeat<T extends SeatRow>(
 
   const atHome = collegeHomeUniversityId != null && view.homeUniversityId === collegeHomeUniversityId;
   return pool.find((row) => row.poolScope === (atHome ? HOME_SCOPE : OTHER_SCOPE)) ?? null;
+}
+
+// One column of the all-categories grid: the seat for `family` with the reader's
+// gender and home university applied.
+export function matchFamilySeat<T extends SeatRow>(
+  rows: T[],
+  family: string,
+  view: MhtCetSeatView,
+  collegeHomeUniversityId: string | null,
+): T | null {
+  const familyView: MhtCetSeatView = isCategoryId(family)
+    ? { ...view, categoryId: family, special: "none" }
+    : { ...view, special: family as MhtCetSeatSpecial };
+  return matchProgramSeat(rows, familyView, collegeHomeUniversityId);
 }
 
 export function seatPlaceLine(

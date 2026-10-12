@@ -13,6 +13,7 @@ import {
   setProfileFragmentInUrl,
 } from "@/lib/admissions/profile-codec";
 import type { FitResponseV1 } from "@/lib/admissions/types";
+import FitSection from "@/components/admissions/FitSection";
 import {
   MHT_CET_CANDIDATURE_OPTIONS,
   MHT_CET_CATEGORY_OPTIONS,
@@ -65,12 +66,22 @@ function formatMargin(value: number, metric: "rank" | "percentile") {
   }).format(Math.abs(value));
 }
 
-function FieldLabel({ children }: { children: React.ReactNode }) {
-  return <span className="mb-1.5 block text-sm font-semibold text-slate-700">{children}</span>;
+function Field({
+  label,
+  className,
+  children,
+}: {
+  label: React.ReactNode;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <label className={className ? `mht-field ${className}` : "mht-field"}>
+      <span>{label}</span>
+      {children}
+    </label>
+  );
 }
-
-const fieldClass =
-  "min-h-11 w-full border border-slate-300 bg-white px-3 text-sm text-slate-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-700";
 
 function CheckboxField({
   checked,
@@ -82,16 +93,19 @@ function CheckboxField({
   children: React.ReactNode;
 }) {
   return (
-    <label className="flex min-h-11 cursor-pointer items-center gap-3 border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-800">
+    <label className="mht-check">
       <input
         type="checkbox"
         checked={checked}
         onChange={(event) => onChange(event.target.checked)}
-        className="h-5 w-5 accent-violet-700"
       />
       {children}
     </label>
   );
+}
+
+function marginText(observation: { outcome: "cleared" | "missed"; margin: number; metric: "rank" | "percentile" }) {
+  return `${observation.outcome === "cleared" ? "Cleared by" : "Missed by"} ${formatMargin(observation.margin, observation.metric)} ${observation.metric === "rank" ? "ranks" : "percentile points"}`;
 }
 
 export default function AdmissionsFitPanel(props: AdmissionsFitPanelProps) {
@@ -201,326 +215,263 @@ export default function AdmissionsFitPanel(props: AdmissionsFitPanelProps) {
   const best = result?.observations[0];
 
   return (
-    <section
-      id="fit"
-      className="admissions-panel mht-profile-card mht-college-section overflow-hidden rounded-xl border border-zinc-200 p-5 sm:p-6"
-      aria-labelledby="fit-title"
-    >
-      <div className="flex flex-col gap-4 border-b border-dashed border-zinc-200 pb-5 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <p className="text-xs text-zinc-400">Historical fit</p>
-          <h2
-            id="fit-title"
-            className="mt-1 text-2xl text-zinc-800 [font-family:var(--font-serif-display)] italic"
-          >
-            Compare your exact seat pool
-          </h2>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
-            This compares official closing cutoffs only and rejects incompatible rank types.
-          </p>
-        </div>
-        {loaded && savedSource && (
-          <button
-            type="button"
-            onClick={clearProfile}
-            className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 border border-slate-300 bg-white px-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-700"
-          >
-            <Eraser aria-hidden="true" className="h-4 w-4" />
-            Clear profile
-          </button>
-        )}
-      </div>
-
-      <form onSubmit={submit} className="mt-5 space-y-5">
-        <>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              <label>
-                <FieldLabel>Score type</FieldLabel>
-                <select
-                  value={mhtScoreMode}
-                  onChange={(event) => setMhtScoreMode(event.target.value as "rank" | "percentile")}
-                  className={fieldClass}
-                >
-                  <option value="percentile">MHT-CET percentile</option>
-                  <option value="rank">State merit rank</option>
-                </select>
-              </label>
-              <label>
-                <FieldLabel>{mhtScoreMode === "rank" ? "State merit rank" : "Percentile"}</FieldLabel>
-                <input
-                  type="number"
-                  min={mhtScoreMode === "rank" ? 1 : 0}
-                  max={mhtScoreMode === "rank" ? 1_000_000 : 100}
-                  step={mhtScoreMode === "rank" ? 1 : "any"}
-                  value={mhtScore}
-                  onChange={(event) => setMhtScore(event.target.value)}
-                  className={fieldClass}
-                  required
-                />
-              </label>
-              <label>
-                <FieldLabel>Candidature type</FieldLabel>
-                <select
-                  value={mhtCandidate.candidatureType}
-                  onChange={(event) => {
-                    const candidatureType = event.target.value as MhtCetCandidateForm["candidatureType"];
-                    setMhtCandidate((candidate) => ({
-                      ...candidate,
-                      candidatureType,
-                      homeUniversityId:
-                        !candidatureType || candidatureType === "type-e"
-                          ? undefined
-                          : candidate.homeUniversityId,
-                      eligibilities:
-                        candidatureType === "type-a" || candidatureType === "type-b"
-                          ? candidate.eligibilities
-                          : {
-                              ...candidate.eligibilities,
-                              pwd:
-                                candidatureType === "type-e"
-                                  ? false
-                                  : candidate.eligibilities.pwd,
-                              minorityCommunityId: undefined,
-                            },
-                    }));
-                  }}
-                  className={fieldClass}
-                  required
-                >
-                  <option value="">Choose candidature type</option>
-                  {MHT_CET_CANDIDATURE_OPTIONS.map((option) => (
-                    <option key={option.value} value={option.value}>{option.label} — {option.description}</option>
-                  ))}
-                </select>
-              </label>
-              {mhtCandidate.candidatureType && mhtCandidate.candidatureType !== "type-e" && (
-                <label className="sm:col-span-2">
-                  <FieldLabel>Home university</FieldLabel>
-                  <select
-                    value={mhtCandidate.homeUniversityId || ""}
-                    onChange={(event) => setMhtCandidate((candidate) => ({
-                      ...candidate,
-                      homeUniversityId: event.target.value as MhtCetCandidateProfile["homeUniversityId"],
-                    }))}
-                    className={fieldClass}
-                    required
-                  >
-                    <option value="">Choose home university</option>
-                    {MHT_CET_HOME_UNIVERSITIES.map((option) => (
-                      <option key={option.id} value={option.id}>{option.label}</option>
-                    ))}
-                  </select>
-                </label>
-              )}
-              <label>
-                <FieldLabel>Category</FieldLabel>
-                <select
-                  value={mhtCandidate.categoryId}
-                  onChange={(event) => {
-                    const categoryId = event.target.value as MhtCetCandidateProfile["categoryId"];
-                    setMhtCandidate((candidate) => ({
-                      ...candidate,
-                      categoryId,
-                      eligibilities: {
-                        ...candidate.eligibilities,
-                        ewsCertificate:
-                          categoryId === "open" && candidate.eligibilities.ewsCertificate,
-                      },
-                    }));
-                  }}
-                  className={fieldClass}
-                >
-                  {MHT_CET_CATEGORY_OPTIONS.map((option) => (
-                    <option key={option.value} value={option.value}>{option.label}</option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                <FieldLabel>Minority community (if applicable)</FieldLabel>
-                <select
-                  value={mhtCandidate.eligibilities.minorityCommunityId || "none"}
-                  onChange={(event) => setMhtCandidate((candidate) => ({
+    <FitSection>
+      <div className="mht-card mht-card-body admissions-panel">
+        <form onSubmit={submit} className="mht-form">
+          <div className="mht-fields">
+            <Field label="Score type">
+              <select
+                value={mhtScoreMode}
+                onChange={(event) => setMhtScoreMode(event.target.value as "rank" | "percentile")}
+                className="mht-input"
+              >
+                <option value="percentile">MHT-CET percentile</option>
+                <option value="rank">State merit rank</option>
+              </select>
+            </Field>
+            <Field label={mhtScoreMode === "rank" ? "State merit rank" : "Percentile"}>
+              <input
+                type="number"
+                inputMode="decimal"
+                min={mhtScoreMode === "rank" ? 1 : 0}
+                max={mhtScoreMode === "rank" ? 1_000_000 : 100}
+                step={mhtScoreMode === "rank" ? 1 : "any"}
+                value={mhtScore}
+                onChange={(event) => setMhtScore(event.target.value)}
+                placeholder={mhtScoreMode === "rank" ? "e.g. 4500" : "e.g. 97.85"}
+                className="mht-input"
+                required
+              />
+            </Field>
+            <Field label="Candidature type">
+              <select
+                value={mhtCandidate.candidatureType}
+                onChange={(event) => {
+                  const candidatureType = event.target.value as MhtCetCandidateForm["candidatureType"];
+                  setMhtCandidate((candidate) => ({
                     ...candidate,
+                    candidatureType,
+                    homeUniversityId:
+                      !candidatureType || candidatureType === "type-e"
+                        ? undefined
+                        : candidate.homeUniversityId,
+                    eligibilities:
+                      candidatureType === "type-a" || candidatureType === "type-b"
+                        ? candidate.eligibilities
+                        : {
+                            ...candidate.eligibilities,
+                            pwd:
+                              candidatureType === "type-e"
+                                ? false
+                                : candidate.eligibilities.pwd,
+                            minorityCommunityId: undefined,
+                          },
+                  }));
+                }}
+                className="mht-input"
+                required
+              >
+                <option value="">Choose candidature type</option>
+                {MHT_CET_CANDIDATURE_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>{option.label} — {option.description}</option>
+                ))}
+              </select>
+            </Field>
+            <Field label="Category">
+              <select
+                value={mhtCandidate.categoryId}
+                onChange={(event) => {
+                  const categoryId = event.target.value as MhtCetCandidateProfile["categoryId"];
+                  setMhtCandidate((candidate) => ({
+                    ...candidate,
+                    categoryId,
                     eligibilities: {
                       ...candidate.eligibilities,
-                      minorityCommunityId:
-                        event.target.value === "none"
-                          ? undefined
-                          : event.target.value as MhtCetCandidateProfile["eligibilities"]["minorityCommunityId"],
+                      ewsCertificate:
+                        categoryId === "open" && candidate.eligibilities.ewsCertificate,
                     },
+                  }));
+                }}
+                className="mht-input"
+              >
+                {MHT_CET_CATEGORY_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+            </Field>
+            {mhtCandidate.candidatureType && mhtCandidate.candidatureType !== "type-e" && (
+              <Field label="Home university">
+                <select
+                  value={mhtCandidate.homeUniversityId || ""}
+                  onChange={(event) => setMhtCandidate((candidate) => ({
+                    ...candidate,
+                    homeUniversityId: event.target.value as MhtCetCandidateProfile["homeUniversityId"],
                   }))}
-                  className={fieldClass}
+                  className="mht-input"
+                  required
                 >
-                  <option value="none">None</option>
-                  {MHT_CET_MINORITY_OPTIONS.map((option) => (
-                    <option key={option.value} value={option.value}>{option.label}</option>
+                  <option value="">Choose home university</option>
+                  {MHT_CET_HOME_UNIVERSITIES.map((option) => (
+                    <option key={option.id} value={option.id}>{option.label}</option>
                   ))}
                 </select>
-              </label>
-            </div>
-            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-              <CheckboxField
-                checked={mhtCandidate.ladiesSeatEligible}
-                onChange={(checked) => setMhtCandidate((candidate) => ({ ...candidate, ladiesSeatEligible: checked }))}
-              >
-                Include ladies seat pools
-              </CheckboxField>
-              <CheckboxField
-                checked={mhtCandidate.eligibilities.ewsCertificate}
-                onChange={(checked) => setMhtCandidate((candidate) => ({
-                  ...candidate,
-                  eligibilities: { ...candidate.eligibilities, ewsCertificate: checked },
-                }))}
-              >
-                Valid EWS certificate
-              </CheckboxField>
-              <CheckboxField
-                checked={mhtCandidate.eligibilities.tfwsEligible}
-                onChange={(checked) => setMhtCandidate((candidate) => ({
-                  ...candidate,
-                  eligibilities: { ...candidate.eligibilities, tfwsEligible: checked },
-                }))}
-              >
-                TFWS eligible
-              </CheckboxField>
-              <CheckboxField
-                checked={mhtCandidate.eligibilities.pwd}
-                onChange={(checked) => setMhtCandidate((candidate) => ({
-                  ...candidate,
-                  eligibilities: { ...candidate.eligibilities, pwd: checked },
-                }))}
-              >
-                PwD reservation
-              </CheckboxField>
-              <CheckboxField
-                checked={mhtCandidate.eligibilities.orphanCertificate}
-                onChange={(checked) => setMhtCandidate((candidate) => ({
-                  ...candidate,
-                  eligibilities: { ...candidate.eligibilities, orphanCertificate: checked },
-                }))}
-              >
-                Orphan certificate
-              </CheckboxField>
-            </div>
-</>
-
-        <div className="flex flex-col gap-3 border-t border-slate-200 pt-5 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-start gap-2 text-xs leading-5 text-slate-500">
-            <LockKeyhole aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
-            <p>
-              {savedSource
-                ? "Saved on this device and encoded in the URL fragment."
-                : "When saved, this profile stays on this device and is encoded in the URL fragment."}{" "}
-              The fragment is not part of the page request, but anyone you share the link with can read it. Submitted values are sent to the no-store comparison endpoint to calculate the result.
-              {savedSource
-                ? ` Loaded from ${savedSource === "link" ? "this link" : "this device"}.`
-                : ""}
-            </p>
-            {savedSource && (
-              <span className="shrink-0 bg-violet-100 px-2 py-1 font-semibold text-violet-900">
-                Profile included when sharing
-              </span>
+              </Field>
             )}
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 border border-violet-800 bg-violet-700 px-5 text-sm font-bold text-white hover:bg-violet-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-700 disabled:cursor-wait disabled:opacity-60"
-          >
-            <Save aria-hidden="true" className="h-4 w-4" />
-            {loading ? "Checking…" : "Save and check cutoffs"}
-          </button>
-        </div>
-      </form>
-
-      <div className="mt-5" aria-live="polite" aria-busy={loading}>
-        {error && (
-          <div role="alert" className="flex items-start gap-3 border border-red-200 bg-red-50 p-4 text-sm text-red-950">
-            <CircleAlert aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0" />
-            <p>{error}</p>
-          </div>
-        )}
-        {result?.status === "no-comparable-data" && (
-          <div className="border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
-            No comparable official cutoff exists for this exact program and seat pool in {props.year} Round {props.round}.
-          </div>
-        )}
-        {best && (
-          <div className={`border p-5 ${best.outcome === "cleared" ? "border-emerald-200 bg-emerald-50" : "border-amber-200 bg-amber-50"}`}>
-            <div className="flex items-start gap-3">
-              {best.outcome === "cleared" ? (
-                <CheckCircle2 aria-hidden="true" className="mt-0.5 h-6 w-6 shrink-0 text-emerald-800" />
-              ) : (
-                <CircleAlert aria-hidden="true" className="mt-0.5 h-6 w-6 shrink-0 text-amber-800" />
-              )}
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-600">
-                  Best observed margin
-                </p>
-                <p className="text-lg font-bold text-slate-950">
-                  {best.outcome === "cleared" ? "Cleared" : "Missed"} {best.year} Round {best.round} closing {best.metric === "rank" ? "rank" : "percentile"} by {formatMargin(best.margin, best.metric)} {best.metric === "rank" ? "ranks" : "percentile points"}
-                </p>
-                <p className="mt-1 text-sm text-slate-700">
-                  {best.programName} · {best.seatPool}
-                </p>
-              </div>
-            </div>
-            {result.history && (
-              <p className="mt-4 border-t border-black/10 pt-4 text-sm font-semibold text-slate-800">
-                The same exact criteria would have cleared {result.history.clearedYears} of {result.history.comparableYears} comparable years.
-              </p>
-            )}
-            <details className="mt-4 border-t border-black/10 pt-4">
-              <summary className="min-h-11 cursor-pointer py-3 text-sm font-bold text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-700">
-                View all {result.observations.length} exact {result.observations.length === 1 ? "result" : "results"}
-              </summary>
-              <div className="mt-3 space-y-2 lg:hidden">
-                {result.observations.map((observation) => (
-                  <article key={observation.id} className="border border-black/10 bg-white/80 p-3 text-sm">
-                    <p className="font-semibold text-slate-950">{observation.programName}</p>
-                    <p className="mt-1 text-slate-600">{observation.seatPool}</p>
-                    <p className="mt-2 font-semibold text-slate-900">
-                      {observation.outcome === "cleared" ? "Cleared by" : "Missed by"} {formatMargin(observation.margin, observation.metric)} {observation.metric === "rank" ? "ranks" : "percentile points"}
-                    </p>
-                  </article>
+            <Field label="Minority community (if applicable)">
+              <select
+                value={mhtCandidate.eligibilities.minorityCommunityId || "none"}
+                onChange={(event) => setMhtCandidate((candidate) => ({
+                  ...candidate,
+                  eligibilities: {
+                    ...candidate.eligibilities,
+                    minorityCommunityId:
+                      event.target.value === "none"
+                        ? undefined
+                        : event.target.value as MhtCetCandidateProfile["eligibilities"]["minorityCommunityId"],
+                  },
+                }))}
+                className="mht-input"
+              >
+                <option value="none">None</option>
+                {MHT_CET_MINORITY_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
                 ))}
+              </select>
+            </Field>
+          </div>
+          <div className="mht-checks">
+            <CheckboxField
+              checked={mhtCandidate.ladiesSeatEligible}
+              onChange={(checked) => setMhtCandidate((candidate) => ({ ...candidate, ladiesSeatEligible: checked }))}
+            >
+              Ladies seat pools
+            </CheckboxField>
+            <CheckboxField
+              checked={mhtCandidate.eligibilities.ewsCertificate}
+              onChange={(checked) => setMhtCandidate((candidate) => ({
+                ...candidate,
+                eligibilities: { ...candidate.eligibilities, ewsCertificate: checked },
+              }))}
+            >
+              EWS certificate
+            </CheckboxField>
+            <CheckboxField
+              checked={mhtCandidate.eligibilities.tfwsEligible}
+              onChange={(checked) => setMhtCandidate((candidate) => ({
+                ...candidate,
+                eligibilities: { ...candidate.eligibilities, tfwsEligible: checked },
+              }))}
+            >
+              TFWS eligible
+            </CheckboxField>
+            <CheckboxField
+              checked={mhtCandidate.eligibilities.pwd}
+              onChange={(checked) => setMhtCandidate((candidate) => ({
+                ...candidate,
+                eligibilities: { ...candidate.eligibilities, pwd: checked },
+              }))}
+            >
+              PwD reservation
+            </CheckboxField>
+            <CheckboxField
+              checked={mhtCandidate.eligibilities.orphanCertificate}
+              onChange={(checked) => setMhtCandidate((candidate) => ({
+                ...candidate,
+                eligibilities: { ...candidate.eligibilities, orphanCertificate: checked },
+              }))}
+            >
+              Orphan certificate
+            </CheckboxField>
+          </div>
+
+          <div className="mht-form-foot">
+            <div className="mht-privacy">
+              <LockKeyhole aria-hidden="true" />
+              <p>
+                {savedSource
+                  ? "Saved on this device and encoded in the URL fragment."
+                  : "When saved, this profile stays on this device and is encoded in the URL fragment."}{" "}
+                The fragment is not part of the page request, but anyone you share the link with can read it. Submitted values are sent to the no-store comparison endpoint to calculate the result.
+                {savedSource
+                  ? ` Loaded from ${savedSource === "link" ? "this link" : "this device"}. Profile included when sharing.`
+                  : ""}
+              </p>
+            </div>
+            <div className="mht-cta" style={{ marginTop: 0 }}>
+              {loaded && savedSource && (
+                <button type="button" onClick={clearProfile} className="mht-btn">
+                  <Eraser aria-hidden="true" />
+                  Clear
+                </button>
+              )}
+              <button type="submit" disabled={loading} className="mht-btn mht-btn-primary">
+                <Save aria-hidden="true" />
+                {loading ? "Checking…" : "Save and check"}
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <div aria-live="polite" aria-busy={loading}>
+          {error && (
+            <div role="alert" className="mht-alert" style={{ marginTop: "1.25rem" }}>
+              <CircleAlert aria-hidden="true" />
+              <p>{error}</p>
+            </div>
+          )}
+          {result?.status === "no-comparable-data" && (
+            <div className="mht-result" style={{ marginTop: "1.25rem" }}>
+              <p className="mht-result-meta">
+                No comparable official cutoff exists for this exact program and seat pool in {props.year} Round {props.round}.
+              </p>
+            </div>
+          )}
+          {best && (
+            <div className="mht-result" data-outcome={best.outcome} style={{ marginTop: "1.25rem" }}>
+              <div className="mht-result-head">
+                {best.outcome === "cleared" ? (
+                  <CheckCircle2 aria-hidden="true" />
+                ) : (
+                  <CircleAlert aria-hidden="true" />
+                )}
+                <div>
+                  <p className="mht-result-kicker">Best observed margin</p>
+                  <p className="mht-result-title">
+                    {best.outcome === "cleared" ? "Cleared" : "Missed"} {best.year} Round {best.round} closing {best.metric === "rank" ? "rank" : "percentile"} by {formatMargin(best.margin, best.metric)} {best.metric === "rank" ? "ranks" : "percentile points"}
+                  </p>
+                  <p className="mht-result-meta">
+                    {best.programName} · {best.seatPool}
+                  </p>
+                </div>
               </div>
-              <div
-                className="mt-3 hidden max-h-[28rem] overflow-auto border border-black/10 lg:block"
-                tabIndex={0}
-                role="region"
-                aria-label="Scrollable historical fit results"
-              >
-                <table className="w-full border-collapse bg-white/80 text-left text-sm">
-                  <thead className="sticky top-0 bg-slate-100 text-xs uppercase tracking-wide text-slate-600">
-                    <tr>
-                      <th scope="col" className="px-3 py-2 font-bold">Program</th>
-                      <th scope="col" className="px-3 py-2 font-bold">Exact seat pool</th>
-                      <th scope="col" className="px-3 py-2 font-bold">Observed result</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-200">
-                    {result.observations.map((observation) => (
-                      <tr key={observation.id}>
-                        <th scope="row" className="px-3 py-2 font-semibold text-slate-950">{observation.programName}</th>
-                        <td className="px-3 py-2 text-slate-600">{observation.seatPool}</td>
-                        <td className="px-3 py-2 font-semibold text-slate-900">
-                          {observation.outcome === "cleared" ? "Cleared by" : "Missed by"} {formatMargin(observation.margin, observation.metric)} {observation.metric === "rank" ? "ranks" : "percentile points"}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              {result.status === "partial" && (
-                <p className="mt-3 text-xs leading-5 text-slate-600">
-                  The response reached its 200-row display limit. Narrow the college or program context before comparing again.
+              {result.history && (
+                <p className="mht-result-history">
+                  The same exact criteria would have cleared {result.history.clearedYears} of {result.history.comparableYears} comparable years.
                 </p>
               )}
-            </details>
-          </div>
-        )}
+              <details>
+                <summary>
+                  View all {result.observations.length} exact {result.observations.length === 1 ? "result" : "results"}
+                </summary>
+                <ul className="mht-result-list">
+                  {result.observations.map((observation) => (
+                    <li key={observation.id}>
+                      <span>{observation.programName}</span>
+                      <span>{observation.seatPool}</span>
+                      <span>{marginText(observation)}</span>
+                    </li>
+                  ))}
+                </ul>
+                {result.status === "partial" && (
+                  <p className="mht-note">
+                    The response reached its 200-row display limit. Narrow the college or program context before comparing again.
+                  </p>
+                )}
+              </details>
+            </div>
+          )}
+        </div>
       </div>
-    </section>
+    </FitSection>
   );
 }
