@@ -43,47 +43,67 @@ export function MhtFooter() {
   const sourceCommit = process.env.NEXT_PUBLIC_SOURCE_COMMIT;
 
   return (
-    <footer className="mht-footer mht-page">
-      <nav className="mht-foot-cols" aria-label="Footer">
-        {linkGroups.map((group) => (
-          <div key={group.label}>
-            <h2>{group.label}</h2>
-            {group.links.map((link) => (
-              <Link href={link.href} key={link.href}>
-                {link.label}
-              </Link>
-            ))}
-          </div>
-        ))}
-        <div>
-          <h2>Legal</h2>
-          {legalLinks.map((link) => (
-            <Link href={link.href} key={link.href}>
-              {link.label}
+    <footer className="mht-footer">
+      <div className="mht-page mht-page-wide">
+        <div className="mht-foot-top">
+          <div className="mht-foot-brand">
+            <Link href="/" className="mht-foot-name">
+              DEETNUTS
             </Link>
-          ))}
-          <ThemeSettingsButton />
-          <CookieSettingsButton />
+            <p>Clear, source-backed college admissions data for students.</p>
+            <ul className="mht-foot-facts" aria-label="About this data">
+              <li className="mht-chip">Official CAP lists</li>
+              <li className="mht-chip">Nothing estimated</li>
+              <li className="mht-chip">Open source</li>
+            </ul>
+          </div>
+
+          <nav className="mht-foot-cols" aria-label="Footer">
+            {linkGroups.map((group) => (
+              <div key={group.label}>
+                <h2>{group.label}</h2>
+                {group.links.map((link) => (
+                  <Link href={link.href} key={link.href}>
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            ))}
+            <div>
+              <h2>Legal</h2>
+              {legalLinks.map((link) => (
+                <Link href={link.href} key={link.href}>
+                  {link.label}
+                </Link>
+              ))}
+              <ThemeSettingsButton />
+              <CookieSettingsButton />
+            </div>
+          </nav>
         </div>
-      </nav>
 
-      <p className="mht-foot-notice" data-nosnippet>
-        DEETNUTS is an independent project, not affiliated with or endorsed by the State CET Cell,
-        Maharashtra, or any listed institution. Cutoffs are compiled from official CAP allotment lists
-        and may contain errors. Confirm admission decisions on the CET Cell website.
-      </p>
+        <div className="mht-foot-base">
+          <p data-nosnippet>
+            DEETNUTS is an independent project, not affiliated with or endorsed by the State CET Cell,
+            Maharashtra, or any listed institution. Cutoffs are compiled from official CAP allotment
+            lists and may contain errors. Confirm admission decisions on the CET Cell website.
+          </p>
+          <div className="mht-foot-meta">
+            <span>© {new Date().getFullYear()} DEETNUTS</span>
+            <a href="https://github.com/kewonit/deetnuts">GitHub</a>
+            <Link href="/creators">Creators</Link>
+            {sourceCommit ? (
+              <a href={`https://github.com/kewonit/deetnuts/tree/${sourceCommit}`}>
+                Source for this version
+              </a>
+            ) : null}
+          </div>
+        </div>
 
-      <div className="mht-foot-base">
-        <span>© {new Date().getFullYear()} DEETNUTS</span>
-        <span>
-          <a href="https://github.com/kewonit/deetnuts">GitHub</a>
-          <Link href="/creators">Creators</Link>
-          {sourceCommit ? (
-            <a href={`https://github.com/kewonit/deetnuts/tree/${sourceCommit}`}>
-              Source for this version
-            </a>
-          ) : null}
-        </span>
+        <p className="mht-foot-mark" aria-hidden="true">
+          DEETNUTS
+          <span className="mht-foot-caret" />
+        </p>
       </div>
     </footer>
   );

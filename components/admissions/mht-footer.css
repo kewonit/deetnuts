@@ -1,14 +1,46 @@
 /* Footer for full MHT-CET college pages. Renders inside .mht-college, so it
-   reads the page's --mht-* tokens and follows its light and dark themes. */
+   reads the page's --mht-* tokens and follows its light and dark themes. The
+   page column stays narrow; the footer spans the wider .mht-page-wide frame. */
 
-.mht-footer { padding-top: 1rem; padding-bottom: 3rem; }
+.mht-footer {
+  margin-top: 3rem;
+  padding-top: 3.5rem;
+  border-top: 1px solid var(--mht-line);
+}
+.mht-footer > .mht-page { container-type: inline-size; }
+
+.mht-foot-top {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.mht-foot-brand { max-width: 22rem; }
+.mht-foot-name {
+  color: var(--mht-ink);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+}
+.mht-foot-brand > p {
+  margin-top: 0.6rem;
+  color: var(--mht-muted);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+.mht-foot-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 1.1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
 
 .mht-footer .mht-foot-cols {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 2rem 1.5rem;
-  padding-top: 2.5rem;
-  border-top: 1px solid var(--mht-line);
 }
 .mht-footer .mht-foot-cols h2 {
   margin: 0 0 0.85rem;
@@ -33,29 +65,76 @@
   cursor: pointer;
   transition: color 0.15s ease;
 }
-.mht-footer .mht-foot-cols :is(a, button):hover { color: var(--mht-ink); }
+.mht-footer :is(.mht-foot-cols, .mht-foot-meta) :is(a, button):hover,
+.mht-foot-name:hover { color: var(--mht-accent); }
 
-.mht-foot-notice {
-  max-width: 60ch;
-  margin-top: 2.5rem;
+.mht-foot-base {
+  display: grid;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--mht-line-soft);
   color: var(--mht-muted);
   font-size: 0.8125rem;
   line-height: 1.6;
 }
-
-.mht-foot-base {
+.mht-foot-base > p { max-width: 62ch; }
+.mht-foot-meta {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0.5rem 1.5rem;
-  margin-top: 2rem;
-  color: var(--mht-muted);
-  font-size: 0.8125rem;
+  gap: 0.35rem 1.25rem;
 }
-.mht-foot-base > span:last-child { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
-.mht-foot-base a { color: var(--mht-muted); text-decoration: none; transition: color 0.15s ease; }
-.mht-foot-base a:hover { color: var(--mht-ink); }
+.mht-foot-meta a { color: var(--mht-muted); text-decoration: none; transition: color 0.15s ease; }
+
+/* The wordmark spans the frame and fades into the page, ending on a
+   blinking caret in the page accent. */
+.mht-foot-mark {
+  margin: 2.5rem 0 0 -0.045em;
+  font-size: 19vw;
+  font-size: 21.4cqi;
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  line-height: 0.78;
+  white-space: nowrap;
+  user-select: none;
+  color: transparent;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--mht-ink) 11%, transparent) 15%,
+    transparent 92%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.mht-foot-caret {
+  display: inline-block;
+  width: 0.045em;
+  height: 0.68em;
+  margin-left: 0.05em;
+  border-radius: 0.01em;
+  background: var(--mht-accent);
+  -webkit-mask-image: linear-gradient(180deg, #000 35%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 35%, transparent 100%);
+  animation: mht-foot-blink 1.1s steps(1) infinite;
+}
+@keyframes mht-foot-blink { 50% { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .mht-foot-caret { animation: none; }
+}
 
 @media (min-width: 640px) {
   .mht-footer .mht-foot-cols { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .mht-foot-base {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 1rem 3rem;
+  }
+}
+
+@media (min-width: 960px) {
+  .mht-foot-top {
+    grid-template-columns: minmax(15rem, 1fr) minmax(0, 2.4fr);
+    gap: 4rem;
+  }
 }
