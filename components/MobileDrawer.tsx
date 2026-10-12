@@ -5,16 +5,12 @@ import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { MAIN_SIDEBAR } from "@/data/sidebar-links";
 import Drawer from "@/components/ui/drawer";
+import { useGitHubStarLabel } from "@/components/GitHubStarCount";
 
 const GITHUB_REPO_URL = "https://github.com/kewonit/deetnuts";
 
-type MobileDrawerProps = {
-  githubStarCount?: string | null;
-};
-
-export default function MobileDrawer({
-  githubStarCount = null,
-}: MobileDrawerProps) {
+export default function MobileDrawer() {
+  const githubStarCount = useGitHubStarLabel();
   const router = useRouter();
   const pathname = usePathname();
   const ACTIVE_SIDEBAR = pathname.includes("/") ? MAIN_SIDEBAR : MAIN_SIDEBAR;

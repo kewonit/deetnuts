@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { GitHubStarCount } from "@/components/GitHubStarCount";
 import MobileDrawer from "@/components/MobileDrawer";
 import NavDropdown from "@/components/NavDropdown";
 import AuthButton from "./authbutton";
@@ -38,7 +39,7 @@ const Navbar = () => {
             >
               <AiFillGithub className="h-5 w-5" />
               <span className="text-sm leading-none">Star</span>
-              <span className="text-xs leading-none text-gray-700">on GitHub</span>
+              <GitHubStarCount />
             </a>
             <AuthButton />
           </div>

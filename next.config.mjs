@@ -197,9 +197,10 @@ const nextConfig = {
         ],
       },
       // API routes default to no-store. Versioned JEE cutoff routes set their
-      // own success/error policy so 400/404/409 responses are never immutable.
+      // own success/error policy so 400/404/409 responses are never immutable,
+      // and the GitHub star count sets a long public cache with a short retry.
       {
-        source: "/api/:path((?!jee-cutoffs(?:/|$)).*)",
+        source: "/api/:path((?!jee-cutoffs(?:/|$)|github-stars(?:/|$)).*)",
         headers: [
           {
             key: "Cache-Control",
