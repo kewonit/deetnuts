@@ -36,7 +36,7 @@ export default function AdmissionsFitGate(props: AdmissionsFitPanelProps) {
         fallback={
           <FitSection>
             <div className="mht-card mht-card-body" aria-live="polite">
-              <p className="mht-note">Loading your private profile form…</p>
+              <p className="mht-note">Loading…</p>
             </div>
           </FitSection>
         }
@@ -55,9 +55,9 @@ export default function AdmissionsFitGate(props: AdmissionsFitPanelProps) {
           aria-expanded="false"
           className="mht-btn mht-btn-primary"
         >
-          Start eligibility check
+          Check my eligibility
         </button>
-        <p className="mht-note">Saved only in this browser, or in a link you choose to share.</p>
+        <p className="mht-note">Stays on this device.</p>
       </div>
     </FitSection>
   );

@@ -7,7 +7,7 @@ export default function CollegeError({ reset }: { reset: () => void }) {
     <AdmissionsRouteError
       reset={reset}
       backPath="/mht-cet/colleges"
-      backLabel="Browse MHT-CET colleges"
+      backLabel="Colleges"
     />
   );
 }

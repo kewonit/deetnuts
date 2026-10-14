@@ -8,19 +8,16 @@ export const metadata: Metadata = {
 
 export default function CollegeNotFound() {
   return (
-    <main className="cutoff-main">
-      <header className="cutoff-hero">
-        <span className="cutoff-kicker">MHT-CET</span>
-        <h1>College not found</h1>
-        <p className="cutoff-lead">
-          This identifier does not match a verified MHT-CET college record.
-        </p>
-        <div className="cutoff-actions">
-          <Link className="cutoff-button cutoff-button-primary" href="/mht-cet/colleges">
+    <main className="mht-main">
+      <div className="mht-page mht-page-wide mht-message">
+        <h1 className="mht-h1">College not found</h1>
+        <p>No MHT-CET college has this code.</p>
+        <div className="mht-cta">
+          <Link className="mht-btn mht-btn-primary" href="/mht-cet/colleges">
             Browse colleges
           </Link>
         </div>
-      </header>
+      </div>
     </main>
   );
 }

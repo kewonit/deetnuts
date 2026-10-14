@@ -19,25 +19,24 @@ import {
 } from "nuqs";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
-import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
+import MhtPill from "@/components/admissions/MhtPill";
 import {
   FilterSidebar,
   type FilterSidebarProps,
 } from "./components/FilterSidebar";
 import { LoginRequiredDialog } from "./components/LoginRequiredDialog";
 import { MobileFilterToast } from "./components/MobileFilterToast";
+import {
+  QueryBar,
+  nextQueryStep,
+  queryStepMessage,
+} from "./components/QueryBar";
 import { TopToolbar } from "./components/TopToolbar";
+import "@/components/admissions/mht-tool.css";
 import { useCutoffData } from "./hooks/use-cutoff-data";
 import { recordAnonymousStateCutoffAction } from "./anonymous-usage";
-import { DEFAULT_YEAR, ROUNDS_BY_YEAR } from "./constants";
+import { DEFAULT_YEAR, ROUNDS_BY_YEAR, YEAR_OPTIONS } from "./constants";
 import {
-  MHT_CET_CANDIDATURE_OPTIONS,
-  MHT_CET_CATEGORY_OPTIONS,
-  MHT_CET_HOME_UNIVERSITIES,
   MHT_CET_CANDIDATURE_IDS,
   MHT_CET_CATEGORY_IDS,
   MHT_CET_HOME_UNIVERSITY_IDS,
@@ -54,16 +53,12 @@ import {
 import { getClampedPage } from "./pagination";
 import { shouldAutoDismissMobileFilterToast } from "./mobile-filter-toast-controller";
 
-// Dynamic import for heavy DataTable component - reduces initial bundle
+// The table loads after the controls so the first paint stays light.
 const DataTable = dynamic(
   () => import("./components/DataTable").then((mod) => mod.DataTable),
   {
     loading: () => (
-      <div className="space-y-3 animate-pulse">
-        {Array.from({ length: 10 }).map((_, i) => (
-          <Skeleton key={i} className="h-12 w-full" />
-        ))}
-      </div>
+      <div className="mht-card mht-data-card mht-skeleton mht-data-placeholder" />
     ),
     ssr: false,
   },
@@ -116,23 +111,15 @@ function StateCutoffsContent() {
       rank: parseAsString.withDefault(""),
       year: parseAsInteger.withDefault(DEFAULT_YEAR),
       round: parseAsInteger.withDefault(1),
-      mht_candidature: parseAsStringLiteral(
-        MHT_CET_CANDIDATURE_IDS,
-      ),
-      mht_home_university: parseAsStringLiteral(
-        MHT_CET_HOME_UNIVERSITY_IDS,
-      ),
-      mht_category: parseAsStringLiteral(
-        MHT_CET_CATEGORY_IDS,
-      ),
+      mht_candidature: parseAsStringLiteral(MHT_CET_CANDIDATURE_IDS),
+      mht_home_university: parseAsStringLiteral(MHT_CET_HOME_UNIVERSITY_IDS),
+      mht_category: parseAsStringLiteral(MHT_CET_CATEGORY_IDS),
       mht_ladies: parseAsBoolean,
       ews: parseAsBoolean.withDefault(false),
       mht_tfws: parseAsBoolean.withDefault(false),
       mht_pwd: parseAsBoolean.withDefault(false),
       mht_orphan: parseAsBoolean.withDefault(false),
-      mht_minority: parseAsStringLiteral(
-        MHT_CET_MINORITY_IDS,
-      ),
+      mht_minority: parseAsStringLiteral(MHT_CET_MINORITY_IDS),
       categories: parseAsArrayOf(parseAsString, ",").withDefault([]),
       page: parseAsInteger.withDefault(1),
     },
@@ -163,14 +150,6 @@ function StateCutoffsContent() {
   const [sortOrder, setSortOrder] = useQueryState(
     "sortOrder",
     parseAsStringLiteral(["asc", "desc"] as const).withDefault("desc"),
-  );
-  const [density, setDensity] = useQueryState(
-    "density",
-    parseAsStringLiteral([
-      "compact",
-      "comfortable",
-      "spacious",
-    ] as const).withDefault("comfortable"),
   );
 
   // Local state for column visibility
@@ -268,7 +247,7 @@ function StateCutoffsContent() {
         homeUniversityId:
           profileParams.mht_candidature === "type-e"
             ? undefined
-            : profileParams.mht_home_university ?? undefined,
+            : (profileParams.mht_home_university ?? undefined),
         categoryId: profileParams.mht_category,
         ladiesSeatEligible: profileParams.mht_ladies,
         eligibilities: {
@@ -533,56 +512,6 @@ function StateCutoffsContent() {
     [markResultAction, setPerPage, setPage],
   );
 
-  const handleSortChange = useCallback(
-    (newSortBy: string, newSortOrder: "asc" | "desc") => {
-      markResultAction();
-      setSortBy(newSortBy);
-      setSortOrder(newSortOrder);
-    },
-    [markResultAction, setSortBy, setSortOrder],
-  );
-
-  const handleRemoveFilter = useCallback(
-    (
-      type: "categories" | "courses" | "statuses" | "universities",
-      value: string,
-    ) => {
-      markResultAction();
-      switch (type) {
-        case "categories":
-          void setProfileParams({
-            categories: categories.filter((c) => c !== value),
-            page: 1,
-          });
-          break;
-        case "courses":
-          setCourses(courses.filter((c) => c !== value));
-          break;
-        case "statuses":
-          setStatuses(statuses.filter((s) => s !== value));
-          break;
-        case "universities":
-          setUniversities(universities.filter((u) => u !== value));
-          break;
-      }
-      if (type !== "categories") {
-        setPage(1);
-      }
-    },
-    [
-      categories,
-      courses,
-      statuses,
-      universities,
-      setCourses,
-      setStatuses,
-      setUniversities,
-      setProfileParams,
-      setPage,
-      markResultAction,
-    ],
-  );
-
   // Memoized handlers for filter sidebar to prevent re-renders
   const handlePercentileChange = useCallback(
     (v: string) => {
@@ -674,10 +603,6 @@ function StateCutoffsContent() {
     },
     [markResultAction, setSearch, setPage],
   );
-  const handleDensityChange = useCallback(
-    (v: "compact" | "comfortable" | "spacious") => setDensity(v),
-    [setDensity],
-  );
   const handleCandidateHomeUniversityChange = useCallback(
     (value: MhtCetHomeUniversityId | "type-e") => {
       markResultAction();
@@ -702,11 +627,7 @@ function StateCutoffsContent() {
         });
       }
     },
-    [
-      markResultAction,
-      profileParams.mht_candidature,
-      setProfileParams,
-    ],
+    [markResultAction, profileParams.mht_candidature, setProfileParams],
   );
   const handleCandidatureChange = useCallback(
     (value: MhtCetCandidatureType) => {
@@ -752,10 +673,7 @@ function StateCutoffsContent() {
     [markResultAction, setProfileParams],
   );
   const handleEligibilityChange = useCallback(
-    (
-      key: "ews" | "mht_tfws" | "mht_pwd" | "mht_orphan",
-      value: boolean,
-    ) => {
+    (key: "ews" | "mht_tfws" | "mht_pwd" | "mht_orphan", value: boolean) => {
       markResultAction();
       void setProfileParams({ [key]: value, page: 1 });
     },
@@ -769,45 +687,20 @@ function StateCutoffsContent() {
     [markResultAction, setProfileParams],
   );
 
-  // Filter sidebar props - memoized
   const filterSidebarProps = useMemo<FilterSidebarProps>(
     () => ({
-      percentile,
-      year,
-      round,
-      categories,
-      courses,
-      statuses,
-      universities,
-      scoreMode,
-      rank,
-      candidateHomeUniversity:
-        profileParams.mht_candidature === "type-e"
-          ? ("type-e" as const)
-          : profileParams.mht_home_university ?? "",
       candidatureType: profileParams.mht_candidature ?? "",
       candidateCategory: profileParams.mht_category ?? "",
-      ladiesSeatEligible: profileParams.mht_ladies,
       ewsEligible: profileParams.ews,
       tfwsEligible: profileParams.mht_tfws,
       pwdEligible: profileParams.mht_pwd,
       orphanEligible: profileParams.mht_orphan,
       minorityCommunity: profileParams.mht_minority ?? "",
+      categories,
+      courses,
+      statuses,
+      universities,
       eligibleSeatPoolGroups,
-      onPercentileChange: handlePercentileChange,
-      onYearChange: handleYearChange,
-      onRoundChange: handleRoundChange,
-      onCategoriesChange: handleCategoriesChange,
-      onCoursesChange: handleCoursesChange,
-      onStatusesChange: handleStatusesChange,
-      onUniversitiesChange: handleUniversitiesChange,
-      onScoreModeChange: handleScoreModeChange,
-      onRankChange: handleRankChange,
-      onCandidateHomeUniversityChange:
-        handleCandidateHomeUniversityChange,
-      onCandidatureChange: handleCandidatureChange,
-      onCandidateCategoryChange: handleCandidateCategoryChange,
-      onLadiesSeatEligibleChange: handleLadiesEligibilityChange,
       onEwsEligibleChange: (value: boolean) =>
         handleEligibilityChange("ews", value),
       onTfwsEligibleChange: (value: boolean) =>
@@ -817,36 +710,26 @@ function StateCutoffsContent() {
       onOrphanEligibleChange: (value: boolean) =>
         handleEligibilityChange("mht_orphan", value),
       onMinorityCommunityChange: handleMinorityChange,
+      onCategoriesChange: handleCategoriesChange,
+      onCoursesChange: handleCoursesChange,
+      onStatusesChange: handleStatusesChange,
+      onUniversitiesChange: handleUniversitiesChange,
       onClearAll: handleClearAll,
       activeFilterCount,
     }),
     [
-      percentile,
-      scoreMode,
-      rank,
-      year,
-      round,
+      profileParams,
       categories,
       courses,
       statuses,
       universities,
-      profileParams,
       eligibleSeatPoolGroups,
-      handlePercentileChange,
-      handleYearChange,
-      handleRoundChange,
+      handleEligibilityChange,
+      handleMinorityChange,
       handleCategoriesChange,
       handleCoursesChange,
       handleStatusesChange,
       handleUniversitiesChange,
-      handleScoreModeChange,
-      handleRankChange,
-      handleCandidateHomeUniversityChange,
-      handleCandidatureChange,
-      handleCandidateCategoryChange,
-      handleLadiesEligibilityChange,
-      handleEligibilityChange,
-      handleMinorityChange,
       handleClearAll,
       activeFilterCount,
     ],
@@ -863,39 +746,20 @@ function StateCutoffsContent() {
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMobileFilterOpen(false);
+    };
+    window.addEventListener("keydown", closeOnEscape);
 
     return () => {
       document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
     };
   }, [mobileFilterOpen]);
-
-  const mobileFilterToastContent = useMemo(
-    () => (
-      <MobileFilterToast
-        {...filterSidebarProps}
-        onApply={handleCloseMobileFilterToast}
-        onClose={handleCloseMobileFilterToast}
-      />
-    ),
-    [filterSidebarProps, handleCloseMobileFilterToast],
-  );
 
   const handleOpenMobileFilterToast = useCallback(() => {
     setMobileFilterOpen(true);
   }, []);
-
-  const handleToggleMobileFilters = useCallback(() => {
-    if (mobileFilterOpen) {
-      handleCloseMobileFilterToast();
-      return;
-    }
-
-    handleOpenMobileFilterToast();
-  }, [
-    mobileFilterOpen,
-    handleCloseMobileFilterToast,
-    handleOpenMobileFilterToast,
-  ]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -911,36 +775,42 @@ function StateCutoffsContent() {
     return () => window.removeEventListener("resize", handleResize);
   }, [mobileFilterOpen, handleCloseMobileFilterToast]);
 
-  // Active filters for toolbar - memoized
-  const activeFilters = useMemo(
-    () => ({
-      categories,
-      courses,
-      statuses,
-      universities,
-    }),
-    [categories, courses, statuses, universities],
-  );
-  const candidateProfileLabel = useMemo(() => {
-    if (!candidateProfile) return undefined;
-    const category = MHT_CET_CATEGORY_OPTIONS.find(
-      ({ value }) => value === candidateProfile.categoryId,
-    )?.label;
-    const candidature = MHT_CET_CANDIDATURE_OPTIONS.find(
-      ({ value }) => value === candidateProfile.candidatureType,
-    )?.label;
-    const homeUniversity = candidateProfile.homeUniversityId
-      ? MHT_CET_HOME_UNIVERSITIES.find(
-          ({ id }) => id === candidateProfile.homeUniversityId,
-        )?.label
-      : "No HU";
-    return `${candidature} · ${category} · ${homeUniversity}${
-      candidateProfile.ladiesSeatEligible ? " · Ladies eligible" : ""
-    }`;
-  }, [candidateProfile]);
+  const refinementCount =
+    categories.length +
+    courses.length +
+    statuses.length +
+    universities.length +
+    [
+      profileParams.ews,
+      profileParams.mht_tfws,
+      profileParams.mht_pwd,
+      profileParams.mht_orphan,
+      Boolean(profileParams.mht_minority),
+    ].filter(Boolean).length;
+  const homeUniversity =
+    profileParams.mht_candidature === "type-e"
+      ? ("type-e" as const)
+      : (profileParams.mht_home_university ?? "");
+  const scoreInvalid = Boolean(scoreValue) && !scoreIsValid;
+  const step = nextQueryStep({
+    scoreReady: scoreIsValid,
+    homeUniversity,
+    candidature: profileParams.mht_candidature ?? "",
+    category: profileParams.mht_category ?? "",
+    ladies: profileParams.mht_ladies,
+  });
+  const allowedRounds = ROUNDS_BY_YEAR[year] ?? [1];
+  const notes = [
+    derivedSeatPools && derivedSeatPools.ignoredRequestedCodes.length > 0
+      ? `Ignored unavailable seat pools: ${derivedSeatPools.ignoredRequestedCodes.join(", ")}.`
+      : null,
+    profileMetadata?.excludedUnmappedRows
+      ? `${profileMetadata.excludedUnmappedRows} unmapped rows left out.`
+      : null,
+  ].filter((note): note is string => Boolean(note));
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#E4DFF2] via-[#daf5f0] to-[#E4DFF2]">
+    <main className="mht-tool">
       <LoginRequiredDialog
         open={loginGateOpen}
         redirectTo={loginRedirectTo}
@@ -949,160 +819,139 @@ function StateCutoffsContent() {
 
       {mobileFilterOpen ? (
         <div
-          className="lg:hidden fixed inset-0 z-[120] bg-black/30"
+          className="mht-sheet-backdrop"
           role="presentation"
           onClick={handleCloseMobileFilterToast}
         >
           <div
-            className="absolute inset-x-0 bottom-0 flex max-h-[calc(100dvh-0.75rem)] justify-center px-3 pb-3"
+            className="mht-sheet-frame"
             role="dialog"
             aria-modal="true"
-            aria-label="State cutoff filters"
+            aria-label="Filters"
             onClick={(event) => event.stopPropagation()}
           >
-            {mobileFilterToastContent}
+            <MobileFilterToast
+              {...filterSidebarProps}
+              onApply={handleCloseMobileFilterToast}
+              onClose={handleCloseMobileFilterToast}
+            />
           </div>
         </div>
       ) : null}
 
-      {/* Mobile Filter Toggle - Fixed at bottom */}
-      <div
-        className={cn(
-          "lg:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-200",
-          mobileFilterOpen && "pointer-events-none translate-y-3 opacity-0",
+      <div className="mht-head">
+        <h1 className="mht-h1">State cutoffs</h1>
+        <div className="mht-year-round">
+          <MhtPill
+            label="Year"
+            value={String(year)}
+            options={YEAR_OPTIONS.map((option) => ({
+              value: String(option.value),
+              label: option.label,
+            }))}
+            onChange={(value) => handleYearChange(Number(value))}
+          />
+          <MhtPill
+            label="Round"
+            value={String(round)}
+            options={allowedRounds.map((value) => ({
+              value: String(value),
+              label: String(value),
+            }))}
+            onChange={(value) => handleRoundChange(Number(value))}
+          />
+        </div>
+      </div>
+
+      <aside className="mht-tool-side" aria-label="Filters">
+        <FilterSidebar {...filterSidebarProps} />
+      </aside>
+
+      <div className="mht-tool-main">
+        <QueryBar
+          scoreMode={scoreMode}
+          score={scoreValue}
+          scoreInvalid={scoreInvalid}
+          homeUniversity={homeUniversity}
+          candidature={profileParams.mht_candidature ?? ""}
+          category={profileParams.mht_category ?? ""}
+          ladies={profileParams.mht_ladies}
+          step={step}
+          onScoreModeChange={handleScoreModeChange}
+          onScoreChange={
+            scoreMode === "rank" ? handleRankChange : handlePercentileChange
+          }
+          onHomeUniversityChange={handleCandidateHomeUniversityChange}
+          onCandidatureChange={handleCandidatureChange}
+          onCategoryChange={handleCandidateCategoryChange}
+          onLadiesChange={handleLadiesEligibilityChange}
+        />
+
+        {notes.length > 0 ? (
+          <p className="mht-tool-note">{notes.join(" ")}</p>
+        ) : null}
+
+        {step ? null : (
+          <TopToolbar
+            totalItems={totalItems}
+            currentPage={page}
+            year={year}
+            round={round}
+            loading={loading}
+            queryReady={profileReady && scoreIsValid}
+            search={search}
+            onSearchChange={handleToolbarSearchChange}
+            sortLabel={
+              scoreMode === "rank"
+                ? "closest rank first"
+                : "closest percentile first"
+            }
+            visibleColumns={visibleColumns}
+            onColumnVisibilityChange={setVisibleColumns}
+            records={records}
+            filterCount={refinementCount}
+            onOpenFilters={handleOpenMobileFilterToast}
+          />
         )}
-      >
-        <Button
-          aria-expanded={mobileFilterOpen}
-          aria-pressed={mobileFilterOpen}
-          className={cn(
-            "h-14 px-6 rounded-full font-bold text-base",
-            mobileFilterOpen
-              ? "bg-black text-white hover:bg-black/90"
-              : "bg-purple-600 text-white hover:bg-purple-700",
-            "shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]",
-            "border-2 border-black",
-            "flex items-center gap-2",
-          )}
-          onClick={handleToggleMobileFilters}
-        >
-          {mobileFilterOpen ? (
-            <X className="h-5 w-5" />
-          ) : (
-            <Menu className="h-5 w-5" />
-          )}
-          {mobileFilterOpen ? "Close filters" : "Filters"}
-          {activeFilterCount > 0 && (
-            <Badge className="bg-white text-purple-700 border-0 ml-1">
-              {activeFilterCount}
-            </Badge>
-          )}
-        </Button>
-      </div>
 
-      {/* Main Layout */}
-      <div className="flex min-h-screen">
-        {/* Desktop Sidebar - Sticky with perfect viewport fit */}
-        <aside className="hidden lg:block w-[380px] flex-shrink-0">
-          <div className="sticky top-0 left-0 w-[380px] h-screen bg-white border-r-2 border-gray-200 shadow-lg overflow-hidden">
-            <FilterSidebar {...filterSidebarProps} />
+        {step ? (
+          <div className="mht-card mht-data-card">
+            <p className="mht-data-state mht-data-prompt">
+              {queryStepMessage(step, scoreMode, scoreInvalid)}
+            </p>
           </div>
-        </aside>
-
-        {/* Main Content */}
-        <main className="flex-1 min-w-0 px-4 lg:px-8 pb-24 lg:pb-8 overflow-x-hidden">
-          <div className="max-w-[1600px] mx-auto space-y-5 py-5">
-            {derivedSeatPools?.ignoredRequestedCodes.length ||
-            profileMetadata?.excludedUnmappedRows ? (
-              <div className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-                {derivedSeatPools &&
-                derivedSeatPools.ignoredRequestedCodes.length > 0 ? (
-                  <span className="block font-medium">
-                    Ignored unavailable refinements:{" "}
-                    {derivedSeatPools.ignoredRequestedCodes.join(", ")}.
-                  </span>
-                ) : null}
-                {profileMetadata?.excludedUnmappedRows ? (
-                  <span className="block font-medium">
-                    {profileMetadata.excludedUnmappedRows} unmapped historical
-                    rows were excluded.
-                  </span>
-                ) : null}
-              </div>
-            ) : null}
-
-            {/* Toolbar */}
-            <TopToolbar
-              totalItems={totalItems}
-              currentPage={page}
-              perPage={perPage}
-              year={year}
-              round={round}
-              loading={loading}
-              queryReady={profileReady && scoreIsValid}
-              onYearChange={handleYearChange}
-              onRoundChange={handleRoundChange}
-              search={search}
-              onSearchChange={handleToolbarSearchChange}
-              sortBy={sortBy}
-              sortOrder={sortOrder}
-              onSortChange={handleSortChange}
-              density={density}
-              onDensityChange={handleDensityChange}
-              visibleColumns={visibleColumns}
-              onColumnVisibilityChange={setVisibleColumns}
-              activeFilters={activeFilters}
-              profileLabel={candidateProfileLabel}
-              fixedSortLabel={
-                scoreMode === "rank"
-                  ? "Closest closing rank first"
-                  : "Closest percentile first"
-              }
-              onRemoveFilter={handleRemoveFilter}
-              records={records}
-            />
-
-            {/* Data Table */}
-            <DataTable
-              records={records}
-              totalItems={totalItems}
-              currentPage={page}
-              perPage={perPage}
-              loading={loading}
-              paginationLoading={paginationLoading}
-              error={error}
-              search={search}
-              searchInsight={searchInsight}
-              percentileTarget={
-                scoreMode === "percentile" ? percentile : ""
-              }
-              hasActiveQuery={profileReady && scoreIsValid}
-              density={density}
-              visibleColumns={visibleColumns}
-              sortBy={sortBy}
-              sortOrder={sortOrder}
-              onPageChange={handlePageChange}
-              onPerPageChange={handlePerPageChange}
-              onSortChange={handleSortChange}
-            />
-          </div>
-        </main>
+        ) : (
+          <DataTable
+            records={records}
+            totalItems={totalItems}
+            currentPage={page}
+            perPage={perPage}
+            loading={loading}
+            paginationLoading={paginationLoading}
+            error={error}
+            search={search}
+            searchInsight={searchInsight}
+            percentileTarget={scoreMode === "percentile" ? percentile : ""}
+            hasActiveQuery={profileReady && scoreIsValid}
+            visibleColumns={visibleColumns}
+            onPageChange={handlePageChange}
+            onPerPageChange={handlePerPageChange}
+          />
+        )}
       </div>
-    </div>
+    </main>
   );
 }
 
-// Main Page Export with Suspense boundary
 export default function StateCutoffsPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-gradient-to-br from-[#E4DFF2] via-[#daf5f0] to-[#E4DFF2] flex items-center justify-center">
-          <div className="flex flex-col items-center gap-4">
-            <div className="w-12 h-12 border-4 border-purple-600 border-t-transparent rounded-full animate-spin" />
-            <p className="text-gray-600 font-medium">Loading cutoff data...</p>
+        <main className="mht-tool" aria-busy="true">
+          <div className="mht-tool-main">
+            <div className="mht-card mht-data-card mht-skeleton mht-data-placeholder" />
           </div>
-        </div>
+        </main>
       }
     >
       <StateCutoffsContent />

@@ -388,13 +388,8 @@ export default function AdmissionsFitPanel(props: AdmissionsFitPanelProps) {
             <div className="mht-privacy">
               <LockKeyhole aria-hidden="true" />
               <p>
-                {savedSource
-                  ? "Saved on this device and encoded in the URL fragment."
-                  : "When saved, this profile stays on this device and is encoded in the URL fragment."}{" "}
-                The fragment is not part of the page request, but anyone you share the link with can read it. Submitted values are sent to the no-store comparison endpoint to calculate the result.
-                {savedSource
-                  ? ` Loaded from ${savedSource === "link" ? "this link" : "this device"}. Profile included when sharing.`
-                  : ""}
+                {savedSource === "link" ? "Loaded from the link. " : ""}
+                Saved on this device and in the link. Sent to our server only to check.
               </p>
             </div>
             <div className="mht-cta" style={{ marginTop: 0 }}>
@@ -422,7 +417,7 @@ export default function AdmissionsFitPanel(props: AdmissionsFitPanelProps) {
           {result?.status === "no-comparable-data" && (
             <div className="mht-result" style={{ marginTop: "1.25rem" }}>
               <p className="mht-result-meta">
-                No comparable official cutoff exists for this exact program and seat pool in {props.year} Round {props.round}.
+                No published cutoff for this seat in {props.year} Round {props.round}.
               </p>
             </div>
           )}
@@ -446,7 +441,7 @@ export default function AdmissionsFitPanel(props: AdmissionsFitPanelProps) {
               </div>
               {result.history && (
                 <p className="mht-result-history">
-                  The same exact criteria would have cleared {result.history.clearedYears} of {result.history.comparableYears} comparable years.
+                  Would have cleared {result.history.clearedYears} of {result.history.comparableYears} comparable years.
                 </p>
               )}
               <details>
@@ -464,7 +459,7 @@ export default function AdmissionsFitPanel(props: AdmissionsFitPanelProps) {
                 </ul>
                 {result.status === "partial" && (
                   <p className="mht-note">
-                    The response reached its 200-row display limit. Narrow the college or program context before comparing again.
+                    Showing the first 200 results.
                   </p>
                 )}
               </details>

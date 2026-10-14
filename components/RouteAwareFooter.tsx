@@ -4,19 +4,12 @@ import { usePathname } from "next/navigation";
 import Footer from "@/components/footer";
 import { ProductFooter } from "@/components/ejam-chrome/product-footer";
 
-const FOOTERLESS_ROUTES = new Set([
-  "/college-predictor",
-  "/mht-cet/state-cutoffs",
-]);
+const FOOTERLESS_ROUTES = new Set(["/college-predictor"]);
 
 const JEE_CUTOFF_ROUTES = ["/jee-cutoffs", "/jee-main", "/jee-advanced", "/josaa"];
 
-function isMhtHubRoute(pathname: string) {
-  return pathname === "/mht-cet" || pathname === "/mht-cet/";
-}
-
-function isMhtCollegeRoute(pathname: string) {
-  return /^\/mht-cet\/colleges\/[^/]+\/?$/.test(pathname);
+function isMhtCetRoute(pathname: string) {
+  return pathname === "/mht-cet" || pathname.startsWith("/mht-cet/");
 }
 
 export default function RouteAwareFooter() {
@@ -28,12 +21,8 @@ export default function RouteAwareFooter() {
     return <ProductFooter />;
   }
 
-  // College pages render MhtFooter inside the page, in the page's own theme.
-  if (isMhtCollegeRoute(pathname)) return null;
-
-  if (isMhtHubRoute(pathname)) {
-    return <ProductFooter />;
-  }
+  // MHT-CET pages render MhtFooter from the section layout, in the section's own theme.
+  if (isMhtCetRoute(pathname)) return null;
 
   if (FOOTERLESS_ROUTES.has(pathname)) {
     return null;

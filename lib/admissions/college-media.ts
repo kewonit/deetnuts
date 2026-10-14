@@ -45,3 +45,11 @@ export function getMhtCetCollegeMedia(
 ): CollegeMediaEntry | null {
   return colleges[String(Number(collegeId)).padStart(5, "0")] ?? null;
 }
+
+// Official names keyed by unpadded college code, for lists whose source data
+// title-cases or strips punctuation from names.
+export function getMhtCetCollegeNames(): Record<string, string> {
+  return Object.fromEntries(
+    Object.values(colleges).map((entry) => [String(Number(entry.code)), entry.collegeName]),
+  );
+}

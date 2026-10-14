@@ -12,23 +12,19 @@ export default function AdmissionsRouteError({
   backLabel: string;
 }) {
   return (
-    <main className="cutoff-main">
-      <header className="cutoff-hero">
-        <span className="cutoff-kicker">Official data</span>
-        <h1>Official data is temporarily unavailable</h1>
-        <p className="cutoff-lead">
-          The page exists, but its source could not be loaded. We have not replaced the missing
-          records with empty or estimated values.
-        </p>
-        <div className="cutoff-actions">
-          <button type="button" className="cutoff-button cutoff-button-primary" onClick={reset}>
+    <main className="mht-main">
+      <div className="mht-page mht-page-wide mht-message">
+        <h1 className="mht-h1">Couldn’t load this page</h1>
+        <p>The official data didn’t load.</p>
+        <div className="mht-cta">
+          <button type="button" className="mht-btn mht-btn-primary" onClick={reset}>
             Try again
           </button>
-          <Link className="cutoff-button" href={backPath}>
+          <Link className="mht-btn" href={backPath}>
             {backLabel}
           </Link>
         </div>
-      </header>
+      </div>
     </main>
   );
 }

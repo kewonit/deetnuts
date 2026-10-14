@@ -1,0 +1,183 @@
+/* MHT-CET hub and college list. Tokens and controls come from mht-base.css. */
+
+/* ---------- Hub ---------- */
+.mht-hub-head {
+  display: grid;
+  gap: 1.5rem;
+  padding: 3rem 0 0;
+}
+.mht-hub-head .mht-search { max-width: 36rem; }
+
+.mht-tiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 2.5rem;
+}
+.mht-tile {
+  position: relative;
+  display: grid;
+  align-content: space-between;
+  gap: 1.5rem;
+  min-height: 7rem;
+  padding: 1.25rem 1.35rem;
+  border: 1px solid var(--mht-line);
+  border-radius: var(--mht-radius);
+  background: var(--mht-panel);
+  text-decoration: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.mht-tile:hover { border-color: var(--mht-muted); background: var(--mht-panel-2); }
+.mht-tile::after {
+  content: "→";
+  position: absolute;
+  top: 1.1rem;
+  right: 1.25rem;
+  color: var(--mht-muted);
+  font-size: 1.05rem;
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+.mht-tile:hover::after { color: var(--mht-ink); transform: translateX(3px); }
+.mht-tile-title { color: var(--mht-ink); font-size: 1.125rem; font-weight: 600; letter-spacing: -0.01em; }
+.mht-tile-fact {
+  color: var(--mht-muted);
+  font-family: var(--mht-num);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+
+/* Ranked list: position, college and program, value. */
+.mht-rank-list { margin: 1.25rem 0 0; padding: 0; list-style: none; }
+.mht-rank-list li + li { border-top: 1px solid var(--mht-line-soft); }
+.mht-rank-list a {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.25rem;
+  text-decoration: none;
+}
+.mht-rank-list a:hover { background: var(--mht-panel-2); }
+.mht-rank-n {
+  color: var(--mht-muted);
+  font-family: var(--mht-num);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+.mht-rank-list strong {
+  display: block;
+  overflow: hidden;
+  color: var(--mht-ink);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mht-rank-list small {
+  display: block;
+  overflow: hidden;
+  color: var(--mht-muted);
+  font-size: 0.8125rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mht-rank-v {
+  color: var(--mht-ink);
+  font-family: var(--mht-num);
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+/* ---------- College list ---------- */
+.mht-dir-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+.mht-dir-bar .mht-search { flex: 1 1 20rem; max-width: 30rem; }
+.mht-dir-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.mht-dir-bar .mht-seg { margin-left: auto; }
+
+.mht-dir-list { margin: 1rem 0 0; padding: 0; list-style: none; }
+.mht-dir-list > li {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 4.25rem;
+}
+.mht-dir-list > li + li { border-top: 1px solid var(--mht-line-soft); }
+.mht-dir-row {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.8rem 1.25rem;
+  text-decoration: none;
+}
+.mht-dir-row:hover { background: var(--mht-panel-2); }
+.mht-dir-logo {
+  position: relative;
+  display: grid;
+  place-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  overflow: hidden;
+  border: 1px solid var(--mht-line);
+  border-radius: 10px;
+  background: var(--mht-logo-bg);
+  color: var(--mht-logo-ink);
+  font-size: 1rem;
+  font-weight: 600;
+}
+.mht-dir-logo img { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0.2rem; object-fit: contain; background: #ffffff; }
+.mht-dir-name {
+  display: block;
+  color: var(--mht-ink);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.mht-dir-meta {
+  display: block;
+  overflow: hidden;
+  margin-top: 0.1rem;
+  color: var(--mht-muted);
+  font-size: 0.8125rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mht-dir-meta .mht-code { font-size: 0.78rem; }
+.mht-dir-top { display: grid; justify-items: end; gap: 0.1rem; min-width: 4.5rem; text-align: right; }
+.mht-dir-top strong {
+  color: var(--mht-ink);
+  font-family: var(--mht-num);
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+.mht-dir-top small {
+  overflow: hidden;
+  max-width: 14rem;
+  color: var(--mht-muted);
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mht-dir-empty { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; padding: 1.25rem; color: var(--mht-muted); }
+
+@media (max-width: 760px) {
+  .mht-hub-head { padding-top: 2rem; }
+  .mht-tiles { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; margin-top: 1.75rem; }
+  .mht-tile { min-height: 0; gap: 0.35rem; padding: 1rem 1.15rem; }
+  .mht-tile::after { top: 50%; transform: translateY(-50%); }
+  .mht-tile:hover::after { transform: translate(3px, -50%); }
+  .mht-dir-bar .mht-search { flex-basis: 100%; max-width: none; }
+  .mht-dir-bar .mht-seg { margin-left: 0; }
+  .mht-dir-row { grid-template-columns: 2.25rem minmax(0, 1fr) auto; gap: 0.75rem; padding: 0.75rem 1rem; }
+  .mht-dir-logo { width: 2.25rem; height: 2.25rem; }
+  .mht-dir-top small { display: none; }
+  .mht-rank-list a { grid-template-columns: 1.5rem minmax(0, 1fr) auto; padding: 0.8rem 1rem; }
+}

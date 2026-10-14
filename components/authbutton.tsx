@@ -14,7 +14,16 @@ interface SessionUser {
   avatarUrl: string | null;
 }
 
-export default function AuthButton() {
+export default function AuthButton({
+  quiet = false,
+  className,
+  menuClassName,
+}: {
+  // The MHT-CET navbar draws its own button and menu styles.
+  quiet?: boolean;
+  className?: string;
+  menuClassName?: string;
+} = {}) {
   const pathname = usePathname();
   const [user, setUser] = useState<SessionUser | null>(null);
 
@@ -41,10 +50,12 @@ export default function AuthButton() {
   }, [pathname]);
 
   if (user) {
-    return <AccountMenu name={user.name} avatarUrl={user.avatarUrl || "/avatar.webp"} />;
+    return <AccountMenu name={user.name} avatarUrl={user.avatarUrl || "/avatar.webp"} quiet={quiet} menuClassName={menuClassName} />;
   }
 
   return (
-    <LoginLink className="py-2 px-3 flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover" />
+    <LoginLink
+      className={className ?? "py-2 px-3 flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover"}
+    />
   );
 }

@@ -95,6 +95,16 @@ async function getOpenGeneralPeaks(year: number, round: number): Promise<MhtCetP
   }
 }
 
+// Each college's highest Open General cutoff this round, for listings that rank colleges.
+// Like peers, listings render without it.
+export async function getMhtCetCollegePeaks(): Promise<MhtCetPeerCollege[]> {
+  try {
+    return await getOpenGeneralPeaks(DEFAULT_YEAR, DEFAULT_ROUND);
+  } catch {
+    return [];
+  }
+}
+
 // Related links are a progressive enhancement; the college page renders without them.
 export async function getMhtCetPeerColleges(collegeId: string): Promise<MhtCetPeerCollege[]> {
   try {

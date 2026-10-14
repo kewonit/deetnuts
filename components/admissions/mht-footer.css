@@ -1,6 +1,5 @@
-/* Footer for full MHT-CET college pages. Renders inside .mht-college, so it
-   reads the page's --mht-* tokens and follows its light and dark themes. The
-   page column stays narrow; the footer spans the wider .mht-page-wide frame. */
+/* Footer for every /mht-cet page. Renders inside .mht, so it reads the
+   --mht-* tokens and follows the light and dark themes. */
 
 .mht-footer {
   margin-top: 3rem;
@@ -21,20 +20,6 @@
   font-weight: 700;
   letter-spacing: -0.03em;
   text-decoration: none;
-}
-.mht-foot-brand > p {
-  margin-top: 0.6rem;
-  color: var(--mht-muted);
-  font-size: 0.9375rem;
-  line-height: 1.55;
-}
-.mht-foot-facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin: 1.1rem 0 0;
-  padding: 0;
-  list-style: none;
 }
 
 .mht-footer .mht-foot-cols {

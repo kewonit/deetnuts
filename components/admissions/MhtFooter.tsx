@@ -50,12 +50,6 @@ export function MhtFooter() {
             <Link href="/" className="mht-foot-name">
               DEETNUTS
             </Link>
-            <p>Clear, source-backed college admissions data for students.</p>
-            <ul className="mht-foot-facts" aria-label="About this data">
-              <li className="mht-chip">Official CAP lists</li>
-              <li className="mht-chip">Nothing estimated</li>
-              <li className="mht-chip">Open source</li>
-            </ul>
           </div>
 
           <nav className="mht-foot-cols" aria-label="Footer">

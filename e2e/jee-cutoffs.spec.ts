@@ -86,12 +86,14 @@ test("homepage retains the original footer", async ({ page }) => {
   await expect(originalFooter.locator("[data-legacy-wordmark] svg")).toBeVisible();
 });
 
-test("mht-cet hub uses the product footer", async ({ page }) => {
+test("mht-cet hub uses the MHT-CET navbar and footer", async ({ page }) => {
   await page.goto("/mht-cet");
-  const footer = page.locator(".jee-cutoff-footer");
+  await expect(page.locator(".mht-nav")).toBeVisible();
+  await expect(page.locator(".site-default-chrome nav")).toHaveCount(0);
+  const footer = page.locator(".mht-footer");
   await expect(footer).toBeVisible();
-  await expect(page.locator("footer.bg-gradient-to-b")).toHaveCount(0);
-  await expect(footer.locator(".jee-cutoff-footer-heading")).toHaveText(["Cutoffs", "Tools", "Data", "Project"]);
+  await expect(page.locator(".jee-cutoff-footer")).toHaveCount(0);
+  await expect(footer.locator(".mht-foot-cols h2")).toHaveText(["MHT-CET", "More cutoffs", "Data", "Legal"]);
 });
 
 test("cutoff surfaces follow light and dark color preferences", async ({ page }) => {

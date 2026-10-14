@@ -1,35 +1,12 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import FAQJsonLd, { MHTCET_FAQS } from "@/components/FAQJsonLd";
-import { EjamPageLayout } from "@/components/ejam-chrome/ejam-page-layout";
+import { getCollegesData } from "@/lib/college-data";
+import { getMhtCetCollegePeaks } from "@/lib/admissions/mht-cet-peers";
+import { formatPercentile } from "@/lib/admissions/mht-cet-college-summary";
+import { DEFAULT_ROUND, DEFAULT_YEAR } from "@/lib/mht-cet/state-cutoffs/config";
 import { PRODUCTION_SITE_URL } from "@/lib/site-url";
-
-const LINKS = [
-  {
-    title: "State cutoffs",
-    href: "/mht-cet/state-cutoffs",
-    kicker: "CAP rounds",
-    description: "Search Maharashtra state counselling cutoffs by rank, category, and university.",
-  },
-  {
-    title: "All India cutoffs",
-    href: "/mht-cet/all-india-cutoffs",
-    kicker: "AI quota",
-    description: "Browse All India quota closing ranks and percentiles by round.",
-  },
-  {
-    title: "College list",
-    href: "/mht-cet/colleges",
-    kicker: "Directory",
-    description: "Open a college for programs, cutoff observations, and the 2024 seat matrix.",
-  },
-  {
-    title: "College predictor",
-    href: "/college-predictor",
-    kicker: "Tool",
-    description: "Estimate admission chances from your rank in the eJam predictor.",
-  },
-];
+import "@/components/admissions/mht-directory.css";
 
 export const metadata: Metadata = {
   title: "MHT-CET 2026 Cutoffs and Admission Planning",
@@ -59,39 +36,85 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Home() {
+// Both data sources are cached; rendering per request keeps the build off PocketBase.
+export const dynamic = "force-dynamic";
+
+const TOP_COUNT = 10;
+
+export default async function Home() {
+  const [colleges, peaks] = await Promise.all([
+    getCollegesData().catch(() => []),
+    getMhtCetCollegePeaks(),
+  ]);
+  const top = [...peaks]
+    .sort((a, b) => b.percentile - a.percentile || a.name.localeCompare(b.name, "en-IN"))
+    .slice(0, TOP_COUNT);
+  const tiles = [
+    { href: "/mht-cet/state-cutoffs", title: "State cutoffs", fact: `${DEFAULT_YEAR} · Round ${DEFAULT_ROUND}` },
+    { href: "/mht-cet/all-india-cutoffs", title: "All India cutoffs", fact: "2024 · Round 1" },
+    {
+      href: "/mht-cet/colleges",
+      title: "Colleges",
+      fact: colleges.length > 0 ? colleges.length.toLocaleString("en-IN") : "Maharashtra",
+    },
+  ];
+
   return (
-    <EjamPageLayout chrome="document">
-      <main className="cutoff-main">
-        <FAQJsonLd faqs={MHTCET_FAQS} />
-        <header className="cutoff-hero">
-          <span className="cutoff-kicker">Maharashtra</span>
-          <h1>MHT-CET cutoffs</h1>
-          <p className="cutoff-lead">
-            Source-backed CAP cutoffs, college pages, and a predictor — in the same eJam workspace language as JEE.
-          </p>
+    <main className="mht-main">
+      <FAQJsonLd faqs={MHTCET_FAQS} />
+      <div className="mht-page mht-page-wide">
+        <header className="mht-hub-head">
+          <h1 className="mht-h1">MHT-CET cutoffs</h1>
+          <form action="/mht-cet/colleges" role="search" className="mht-search mht-search-lg">
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <circle cx="7" cy="7" r="4.75" />
+              <path d="m10.5 10.5 3 3" />
+            </svg>
+            <input
+              type="search"
+              name="q"
+              placeholder="Find a college"
+              aria-label="Find a college"
+              autoComplete="off"
+              enterKeyHint="search"
+            />
+          </form>
         </header>
-        <section className="cutoff-section" aria-labelledby="mht-tools-title">
-          <div className="cutoff-section-heading">
-            <div>
-              <h2 id="mht-tools-title">Choose a tool</h2>
-              <p>State counselling, All India quota, college pages, or the rank predictor.</p>
-            </div>
-          </div>
-          <div className="cutoff-directory">
-            {LINKS.map((link) => (
-              <Link className="cutoff-college-card" href={link.href} key={link.href}>
-                <div>
-                  <span className="cutoff-kicker">{link.kicker}</span>
-                  <h3>{link.title}</h3>
-                  <p>{link.description}</p>
-                </div>
-                <span className="cutoff-card-arrow" aria-hidden="true">↗</span>
+
+        <nav className="mht-tiles" aria-label="MHT-CET">
+          {tiles.map((tile) => (
+            <Link key={tile.href} className="mht-tile" href={tile.href}>
+              <span className="mht-tile-title">{tile.title}</span>
+              <span className="mht-tile-fact">{tile.fact}</span>
+            </Link>
+          ))}
+        </nav>
+
+        {top.length > 0 ? (
+          <section className="mht-section" aria-labelledby="mht-top-title">
+            <div className="mht-section-head">
+              <h2 id="mht-top-title">Top colleges</h2>
+              <Link className="mht-arrow-link" href="/mht-cet/colleges">
+                All colleges
               </Link>
-            ))}
-          </div>
-        </section>
-      </main>
-    </EjamPageLayout>
+            </div>
+            <ol className="mht-card mht-rank-list">
+              {top.map((college, index) => (
+                <li key={college.collegeId}>
+                  <Link href={college.path}>
+                    <span className="mht-rank-n">{index + 1}</span>
+                    <span>
+                      <strong>{college.name}</strong>
+                      <small>{college.program}</small>
+                    </span>
+                    <span className="mht-rank-v">{formatPercentile(college.percentile)}</span>
+                  </Link>
+                </li>
+              ))}
+            </ol>
+          </section>
+        ) : null}
+      </div>
+    </main>
   );
 }

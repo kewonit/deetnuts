@@ -1,17 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { LockKeyhole } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import * as Dialog from "@radix-ui/react-dialog";
+import { MHT_LAYER } from "@/components/admissions/mht-font";
 
 interface LoginRequiredDialogProps {
   open: boolean;
@@ -19,38 +10,25 @@ interface LoginRequiredDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function LoginRequiredDialog({
-  open,
-  redirectTo,
-  onOpenChange,
-}: LoginRequiredDialogProps) {
-  const safeRedirect = redirectTo || "/mht-cet/state-cutoffs";
-  const encodedRedirect = encodeURIComponent(safeRedirect);
+export function LoginRequiredDialog({ open, redirectTo, onOpenChange }: LoginRequiredDialogProps) {
+  const encodedRedirect = encodeURIComponent(redirectTo || "/mht-cet/state-cutoffs");
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
-        <DialogHeader>
-          <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-full border-2 border-black bg-amber-100">
-            <LockKeyhole className="h-6 w-6 text-amber-700" />
-          </div>
-          <DialogTitle>Please login to continue using.</DialogTitle>
-          <DialogDescription className="text-gray-700">
-            We keep a small free preview open for everyone, then ask for login
-            so the cutoff tool stays useful and protected from spam.
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter className="gap-2 sm:gap-2">
-          <Button variant="neutral" asChild>
-            <Link href={`/signup?redirect=${encodedRedirect}`}>
+    <Dialog.Root open={open} onOpenChange={onOpenChange}>
+      <Dialog.Portal>
+        <Dialog.Overlay className={`${MHT_LAYER} mht-dialog-overlay`} />
+        <Dialog.Content className={`${MHT_LAYER} mht-dialog`} aria-describedby={undefined}>
+          <Dialog.Title className="mht-dialog-title">Log in to keep searching</Dialog.Title>
+          <div className="mht-dialog-actions">
+            <Link className="mht-btn mht-btn-ghost" href={`/signup?redirect=${encodedRedirect}`}>
               Create account
             </Link>
-          </Button>
-          <Button asChild>
-            <Link href={`/login?redirect=${encodedRedirect}`}>Login</Link>
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+            <Link className="mht-btn mht-btn-primary" href={`/login?redirect=${encodedRedirect}`}>
+              Log in
+            </Link>
+          </div>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }

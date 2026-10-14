@@ -6,7 +6,6 @@ import { ShareAdmissionsPage } from "@/components/admissions/AdmissionsActions";
 import CopyCollegeCode from "@/components/admissions/CopyCollegeCode";
 import CollegeIdentityMedia from "@/components/admissions/CollegeIdentityMedia";
 import CutoffObservations from "@/components/admissions/CutoffObservations";
-import { MhtFooter } from "@/components/admissions/MhtFooter";
 import ProvenanceCard from "@/components/admissions/ProvenanceCard";
 import type { MhtCetCollegeDetailModel } from "@/lib/admissions/types";
 import type { MhtCetPeerCollege } from "@/lib/admissions/mht-cet-peers";
@@ -25,14 +24,11 @@ function plural(count: number, word: string): string {
 
 export default function MhtCetDetailView({
   model,
-  variant = "full",
   peers = [],
 }: {
   model: MhtCetCollegeDetailModel;
-  variant?: "full" | "sheet";
   peers?: MhtCetPeerCollege[];
 }) {
-  const full = variant === "full";
   const { college } = model;
   const collegeCode = college.collegeId.padStart(5, "0");
   const initial = college.name.trim().charAt(0).toUpperCase() || "—";
@@ -55,35 +51,26 @@ export default function MhtCetDetailView({
         location={{ region: "Maharashtra" }}
         system="MHT-CET"
       />
-      <div className={full ? "mht-college" : "mht-college mht-college-in-sheet"}>
-        {full ? (
-          <nav aria-label="Breadcrumb" className="mht-crumbs mht-page">
-            <Link href="/mht-cet">MHT-CET</Link>
-            <span aria-hidden="true">/</span>
-            <Link href="/mht-cet/colleges">Colleges</Link>
-            <span aria-hidden="true">/</span>
-            <span aria-current="page">{college.name}</span>
-          </nav>
-        ) : null}
+      <main className="mht-main mht-college">
+        <nav aria-label="Breadcrumb" className="mht-crumbs mht-page">
+          <Link href="/mht-cet">MHT-CET</Link>
+          <span aria-hidden="true">/</span>
+          <Link href="/mht-cet/colleges">Colleges</Link>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">{college.name}</span>
+        </nav>
 
         <div className="mht-college-mark mht-page">
           <CollegeIdentityMedia
             key={collegeCode}
             media={getMhtCetCollegeMedia(college.collegeId)}
             initial={initial}
-            variant={variant}
           />
           <div className="mht-hero-actions">
-            {full ? (
-              <a className="mht-btn mht-btn-primary" href="#score">
-                Compare my score
-              </a>
-            ) : (
-              <Link className="mht-btn mht-btn-primary" href={model.canonicalPath}>
-                Open full page
-              </Link>
-            )}
-            <ShareAdmissionsPage className="mht-btn" compact={!full} />
+            <a className="mht-btn mht-btn-primary" href="#score">
+              Compare my score
+            </a>
+            <ShareAdmissionsPage className="mht-btn" />
           </div>
           <header className="mht-college-identity">
             <h1>{college.name}</h1>
@@ -146,13 +133,12 @@ export default function MhtCetDetailView({
               <CutoffObservations
                 observations={model.observations}
                 period={period}
-                anchorId={full ? "score" : undefined}
+                anchorId="score"
                 collegeHomeUniversityId={college.homeUniversityId}
                 footer={
                   <div key="footer" className="mht-card-foot">
-                    <span>Open a program for every seat pool and its choice code.</span>
-                    <Link className="mht-link" href={explorerHref}>
-                      Search every row in the state explorer
+                    <Link className="mht-arrow-link" href={explorerHref}>
+                      Open in state cutoffs
                     </Link>
                   </div>
                 }
@@ -172,10 +158,7 @@ export default function MhtCetDetailView({
           <section id="seats" className="mht-section mht-college-section" aria-labelledby="mht-seats-title">
             <div className="mht-page">
               <div className="mht-section-head">
-                <div>
-                  <h2 id="mht-seats-title">2024 seat matrix</h2>
-                  <p>Not the {model.selectedYear} intake.</p>
-                </div>
+                <h2 id="mht-seats-title">2024 seat matrix</h2>
               </div>
               <div className="mht-card">
                 <table className="mht-table">
@@ -205,13 +188,10 @@ export default function MhtCetDetailView({
         ) : null}
 
         <div className="mht-page">
-          {full && peers.length > 0 ? (
+          {peers.length > 0 ? (
             <section id="similar" className="mht-section mht-college-section" aria-labelledby="mht-similar-title">
               <div className="mht-section-head">
-                <div>
-                  <h2 id="mht-similar-title">Similar colleges</h2>
-                  <p>Closest top Open General cutoffs this year.</p>
-                </div>
+                <h2 id="mht-similar-title">Similar colleges</h2>
               </div>
               <div className="mht-card">
                 <ul className="mht-peers">
@@ -232,9 +212,7 @@ export default function MhtCetDetailView({
           ) : null}
           <ProvenanceCard provenance={model.provenance} coverageNotes={model.coverageNotes} />
         </div>
-
-        {full ? <MhtFooter /> : null}
-      </div>
+      </main>
     </>
   );
 }

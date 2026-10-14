@@ -7,11 +7,9 @@ import type { CollegeMediaEntry } from "@/lib/admissions/college-media";
 export default function CollegeIdentityMedia({
   media,
   initial,
-  variant,
 }: {
   media: CollegeMediaEntry | null;
   initial: string;
-  variant: "full" | "sheet";
 }) {
   const [failedSources, setFailedSources] = useState<string[]>([]);
   const logo =
@@ -39,13 +37,9 @@ export default function CollegeIdentityMedia({
             src={campus.src}
             alt=""
             fill
-            sizes={
-              variant === "sheet"
-                ? "(max-width: 640px) 100vw, 576px"
-                : "(max-width: 1536px) 100vw, 1536px"
-            }
+            sizes="(max-width: 1536px) 100vw, 1536px"
             loading="eager"
-            fetchPriority={variant === "full" ? "high" : undefined}
+            fetchPriority="high"
             style={{ objectFit: "cover", objectPosition: campusPosition }}
             onError={() => failed(campus.src)}
           />

@@ -1,9 +1,5 @@
 "use client";
 
-import { Check, X } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-
 import { FilterSidebar, type FilterSidebarProps } from "./FilterSidebar";
 
 interface MobileFilterToastProps extends FilterSidebarProps {
@@ -11,47 +7,34 @@ interface MobileFilterToastProps extends FilterSidebarProps {
   onClose: () => void;
 }
 
-export function MobileFilterToast({
-  onApply,
-  onClose,
-  activeFilterCount,
-  ...filterSidebarProps
-}: MobileFilterToastProps) {
+// Bottom sheet that holds the sidebar on narrow screens. Changes apply as you make them.
+export function MobileFilterToast({ onApply, onClose, ...filterSidebarProps }: MobileFilterToastProps) {
   return (
-    <div className="w-full max-w-[420px] overflow-hidden rounded-[28px] border-2 border-black bg-[#fffdf5] shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-      <div className="h-[min(82dvh,680px)] max-h-[calc(100dvh-1.5rem)]">
-        <FilterSidebar
-          {...filterSidebarProps}
-          activeFilterCount={activeFilterCount}
-          className="h-full bg-transparent"
-          headerActions={
-            <Button
-              variant="neutral"
-              size="sm"
-              onClick={onClose}
-              className="h-8 w-8 p-0 rounded-md"
-            >
-              <X className="h-4 w-4" />
-              <span className="sr-only">Close filters</span>
-            </Button>
-          }
-          footer={
-            <div className="border-t-2 border-black bg-white px-4 py-3">
-              <div className="flex items-center justify-between gap-3">
-                <p className="text-xs font-medium text-gray-600">
-                  {activeFilterCount > 0
-                    ? `${activeFilterCount} filters active. Changes apply live.`
-                    : "Changes apply live as you edit."}
-                </p>
-                <Button onClick={onApply} className="shrink-0 gap-2">
-                  <Check className="h-4 w-4" />
-                  Done
-                </Button>
-              </div>
-            </div>
-          }
-        />
-      </div>
-    </div>
+    <FilterSidebar
+      {...filterSidebarProps}
+      className="mht-sheet"
+      header={
+        <div className="mht-sheet-head">
+          <h2>Filters</h2>
+          <button type="button" className="mht-btn mht-btn-sm mht-btn-icon" aria-label="Close filters" onClick={onClose}>
+            ×
+          </button>
+        </div>
+      }
+      footer={
+        <div className="mht-side-foot">
+          {filterSidebarProps.activeFilterCount > 0 ? (
+            <button type="button" className="mht-btn mht-btn-sm mht-btn-ghost" onClick={filterSidebarProps.onClearAll}>
+              Reset all
+            </button>
+          ) : (
+            <span />
+          )}
+          <button type="button" className="mht-btn mht-btn-primary" onClick={onApply}>
+            Done
+          </button>
+        </div>
+      }
+    />
   );
 }

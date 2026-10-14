@@ -61,18 +61,30 @@ const AccountMenuTrigger = forwardRef<
 export function AccountMenu({
   name,
   avatarUrl,
+  quiet = false,
+  menuClassName,
 }: {
   name: string;
   avatarUrl: string;
+  quiet?: boolean;
+  menuClassName?: string;
 }) {
   const firstName = getFirstName(name);
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <AccountMenuTrigger displayName={name} avatarUrl={avatarUrl} />
+        {quiet ? (
+          <button type="button" aria-label="Open account menu" className="mht-nav-account">
+            {/* eslint-disable-next-line @next/next/no-img-element -- avatars come from any OAuth host. */}
+            <img src={avatarUrl} alt="" width={24} height={24} />
+            <span>{firstName}</span>
+          </button>
+        ) : (
+          <AccountMenuTrigger displayName={name} avatarUrl={avatarUrl} />
+        )}
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" sideOffset={8} className="w-56">
+      <DropdownMenuContent align="end" sideOffset={8} className={cn("w-56", menuClassName)}>
         <DropdownMenuLabel className="px-2 py-2">
           <div className="flex items-center gap-2">
             <Avatar className="h-8 w-8 outline-1">

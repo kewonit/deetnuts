@@ -83,16 +83,16 @@ export function formatSearchEmptyStateMessage({
     searchInsight.lowestMatchingCutoff === null
   ) {
     return hasFilters
-      ? "No cutoffs match your current filters. Clear a few filters or widen your percentile/rank range."
-      : "Enter your percentile or rank to see colleges and courses you can target.";
+      ? "No cutoffs match. Remove a filter or change your score."
+      : "Enter your rank or percentile.";
   }
 
   if (
     searchInsight.distinctCollegeCount === 1 &&
     searchInsight.sampleCollegeNames.length > 0
   ) {
-    return `${searchInsight.sampleCollegeNames[0]} exists, but its lowest matching cutoff is ${formatCutoff(searchInsight.lowestMatchingCutoff)}%, above your current ${percentileTarget}%. Increase your percentile/rank target or clear the search to keep exploring.`;
+    return `${searchInsight.sampleCollegeNames[0]}’s lowest matching cutoff is ${formatCutoff(searchInsight.lowestMatchingCutoff)}, above your ${percentileTarget}.`;
   }
 
-  return `We found ${searchInsight.totalMatchingRows} matching cutoffs across ${searchInsight.distinctCollegeCount} colleges, but the lowest matching cutoff is ${formatCutoff(searchInsight.lowestMatchingCutoff)}%, above your current ${percentileTarget}%. Increase your percentile/rank target or narrow the search further.`;
+  return `${searchInsight.totalMatchingRows} matching cutoffs at ${searchInsight.distinctCollegeCount} colleges; the lowest is ${formatCutoff(searchInsight.lowestMatchingCutoff)}, above your ${percentileTarget}.`;
 }
