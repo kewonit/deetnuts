@@ -30,10 +30,32 @@ const css = `${await fs.readFile(globals, "utf8")}
 
 const result = await postcss([tailwindcss()]).process(css, { from, to: output });
 
+// eJam's utilities live in `@layer utilities`, so the host's unlayered Tailwind 3
+// preflight and utilities win every conflict (a button loses its vertical padding,
+// `lg:hidden` loses to `.flex`). The predictor is an eJam page end to end, so it also
+// loads this copy: the same utilities, unlayered, scoped to the tool shell. `:where()`
+// keeps their specificity unchanged, so the overrides in ejam-chrome.css still apply.
+const TOOL_SCOPE = ":where(body:has([data-ejam-chrome=tool]))";
+const toolOutput = path.join(root, "public/ejam/tool.css");
+const tool = postcss.root();
+result.root.walkAtRules("layer", (layer) => {
+  if (layer.params !== "utilities" || !layer.nodes) return;
+  for (const node of layer.nodes) tool.append(node.clone());
+});
+tool.walkRules((rule) => {
+  // Nested rules (`&:hover`) inherit the scope from their parent; keyframe steps are not selectors.
+  if (rule.parent?.type === "rule") return;
+  if (rule.parent?.type === "atrule" && /keyframes$/.test(rule.parent.name)) return;
+  rule.selectors = rule.selectors.map((selector) => `${TOOL_SCOPE} ${selector}`);
+});
+const toolCss = tool.toResult().css;
+
 await fs.mkdir(path.dirname(output), { recursive: true });
 await fs.writeFile(output, result.css);
+await fs.writeFile(toolOutput, toolCss);
 if (result.map) {
   await fs.writeFile(`${output}.map`, result.map.toString());
 }
 
 console.log(`Wrote ${path.relative(root, output)} (${result.css.length} bytes)`);
+console.log(`Wrote ${path.relative(root, toolOutput)} (${toolCss.length} bytes)`);

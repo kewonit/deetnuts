@@ -13,6 +13,7 @@ export const dynamic = "force-dynamic";
 export default function CollegePredictorPage() {
   return (
     <AppShell mhtCetEnabled={false}>
+      <h1 className="sr-only">JEE college predictor</h1>
       <Dashboard />
     </AppShell>
   );

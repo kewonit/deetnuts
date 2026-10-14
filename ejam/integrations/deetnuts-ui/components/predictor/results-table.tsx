@@ -215,18 +215,19 @@ function JeeResults({
         onSelect={onSelect}
       />
       <div className="hidden lg:contents">
-        <Table>
+        {/* Fixed columns: long names truncate instead of pushing chance and rank off screen. */}
+        <Table className="table-fixed">
           <TableHeader className={stickyGlassTableHeaderClass}>
             <TableRow className="hover:bg-transparent">
-              <TableHead className="ps-6">Institute</TableHead>
+              <TableHead className="w-[26%] ps-6">Institute</TableHead>
               <TableHead>Program</TableHead>
-              <TableHead className="min-w-24">Band</TableHead>
-              <TableHead className="min-w-24">Chance</TableHead>
-              <TableHead className="w-0 pe-6 whitespace-nowrap tabular-nums">
+              <TableHead className="w-28">Band</TableHead>
+              <TableHead className="w-28">Chance</TableHead>
+              <TableHead className="w-32 pe-6 whitespace-nowrap tabular-nums">
                 Closing rank
               </TableHead>
-              <TableHead className="min-w-[7rem]">Seat pool</TableHead>
-              <TableHead className="w-10 pe-6 text-right" />
+              <TableHead className="w-32">Seat pool</TableHead>
+              <TableHead className="w-12 pe-6 text-right" />
             </TableRow>
           </TableHeader>
           <TableBody className="[&_tr:first-child]:border-t-0">

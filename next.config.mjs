@@ -113,6 +113,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "external-preview.redd.it",
       },
+      {
+        protocol: "https",
+        hostname: "avatars.githubusercontent.com",
+      },
     ],
     // Production image optimization
     minimumCacheTTL: 60,

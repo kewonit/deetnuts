@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { Monitor, Moon, Sun } from "lucide-react";
 
 const STORAGE_KEY = "deetnuts_theme";
 const OPEN_EVENT = "deetnuts:open-theme-settings";
@@ -20,6 +21,56 @@ function applyPreference(preference: ThemePreference) {
   const root = document.documentElement;
   root.classList.toggle("light", preference === "light");
   root.classList.toggle("dark", preference === "dark");
+}
+
+function savePreference(preference: ThemePreference) {
+  try {
+    if (preference === "system") localStorage.removeItem(STORAGE_KEY);
+    else localStorage.setItem(STORAGE_KEY, preference);
+  } catch {
+    // The selected theme still applies for this page when storage is unavailable.
+  }
+  applyPreference(preference);
+  window.dispatchEvent(new Event(CHANGE_EVENT));
+}
+
+const SWITCH_OPTIONS = [
+  { value: "system", label: "System theme", Icon: Monitor },
+  { value: "light", label: "Light theme", Icon: Sun },
+  { value: "dark", label: "Dark theme", Icon: Moon },
+] as const;
+
+// Inline alternative to the dialog. Nothing is pressed until the stored choice is read.
+export function ThemeSwitch({ className = "" }: { className?: string }) {
+  const [preference, setPreference] = useState<ThemePreference | null>(null);
+
+  useEffect(() => {
+    const sync = () => setPreference(readPreference());
+    sync();
+    window.addEventListener(CHANGE_EVENT, sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener(CHANGE_EVENT, sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, []);
+
+  return (
+    <div className={className} role="group" aria-label="Theme">
+      {SWITCH_OPTIONS.map(({ value, label, Icon }) => (
+        <button
+          type="button"
+          key={value}
+          aria-label={label}
+          title={label}
+          aria-pressed={preference === value}
+          onClick={() => savePreference(value)}
+        >
+          <Icon aria-hidden="true" />
+        </button>
+      ))}
+    </div>
+  );
 }
 
 export function ThemeSettingsButton({ className = "" }: { className?: string }) {
@@ -46,11 +97,14 @@ export default function ThemeSettings() {
       setPreference(next);
       applyPreference(next);
     };
+    const follow = () => setPreference(readPreference());
     window.addEventListener(OPEN_EVENT, show);
     window.addEventListener("storage", sync);
+    window.addEventListener(CHANGE_EVENT, follow);
     return () => {
       window.removeEventListener(OPEN_EVENT, show);
       window.removeEventListener("storage", sync);
+      window.removeEventListener(CHANGE_EVENT, follow);
     };
   }, []);
 
@@ -65,15 +119,8 @@ export default function ThemeSettings() {
   }, [open]);
 
   const choose = (next: ThemePreference) => {
-    try {
-      if (next === "system") localStorage.removeItem(STORAGE_KEY);
-      else localStorage.setItem(STORAGE_KEY, next);
-    } catch {
-      // The selected theme still applies for this page when storage is unavailable.
-    }
-    applyPreference(next);
     setPreference(next);
-    window.dispatchEvent(new Event(CHANGE_EVENT));
+    savePreference(next);
   };
 
   if (!open) return null;

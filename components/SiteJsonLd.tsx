@@ -19,7 +19,11 @@ export default function SiteJsonLd() {
       width: 48,
       height: 48,
     },
-    sameAs: ["https://x.com/kewonit", "https://discord.gg/xbtqGcQ6SF"],
+    sameAs: [
+      "https://x.com/kewonit",
+      "https://discord.gg/xbtqGcQ6SF",
+      "https://github.com/kewonit/deetnuts",
+    ],
     description:
       "Maharashtra college and admission data, including MHT-CET cutoffs and seat matrices.",
     contactPoint: {

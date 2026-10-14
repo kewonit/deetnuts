@@ -153,7 +153,7 @@ function chooseChartOffering(rows: CutoffServingRow[]): CutoffOffering {
   return offering;
 }
 
-function buildDefaultSelection(pageRows: CutoffServingRow[]): CutoffSelection {
+export function buildDefaultSelection(pageRows: CutoffServingRow[]): CutoffSelection {
   const bodies = [...new Set(pageRows.map((row) => row.body))];
   const body = preferred<CounsellingBody>(bodies, ["josaa", "csab"]);
   const bodyRows = pageRows.filter((row) => row.body === body);

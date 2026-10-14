@@ -5,7 +5,7 @@ import { Check, Share2 } from "lucide-react";
 
 export function ShareAdmissionsPage({
   compact = false,
-  className = "cutoff-button",
+  className = "mht-btn",
 }: {
   compact?: boolean;
   className?: string;

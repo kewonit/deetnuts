@@ -1,0 +1,167 @@
+/* /creators, rendered inside MhtShell so it reads the --mht-* tokens. */
+
+.mht-page-wide.crt-page {
+  max-width: 64rem;
+  padding-top: 2.5rem;
+}
+
+/* ---------- People ---------- */
+.crt-people {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0.75rem;
+  margin: 1.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.crt-person {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--mht-line);
+  border-radius: 14px;
+  background: var(--mht-panel);
+  text-decoration: none;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.crt-person:hover { border-color: var(--mht-ink-soft); background: var(--mht-panel-2); }
+.crt-person img {
+  flex: none;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--mht-chip);
+}
+.crt-person strong {
+  display: block;
+  color: var(--mht-ink);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.crt-person small {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--mht-muted);
+  font-family: var(--mht-num);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Pull requests ---------- */
+.crt-prs { margin-top: 3rem; }
+.mht .crt-prs h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.crt-count {
+  margin-left: 0.35rem;
+  color: var(--mht-muted);
+  font-family: var(--mht-num);
+  font-variant-numeric: tabular-nums;
+}
+
+.crt-year { margin-top: 1.75rem; }
+.mht .crt-year h3 {
+  margin-bottom: 0.6rem;
+  color: var(--mht-muted);
+  font-family: var(--mht-num);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+.crt-list {
+  margin: 0;
+  padding: 0;
+  overflow: clip;
+  border: 1px solid var(--mht-line);
+  border-radius: 14px;
+  background: var(--mht-panel);
+  list-style: none;
+}
+.crt-list > li + li { border-top: 1px solid var(--mht-line-soft); }
+
+.crt-pr {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  gap: 0.3rem 0.75rem;
+  padding: 0.8rem 1.1rem;
+  color: var(--mht-ink);
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+.crt-pr:hover { background: var(--mht-panel-2); }
+.crt-pr-num {
+  color: var(--mht-muted);
+  font-family: var(--mht-num);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.5rem;
+}
+.crt-pr-title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+}
+.crt-pr-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.9rem;
+  grid-column: 2;
+  color: var(--mht-muted);
+  font-size: 0.8125rem;
+}
+.crt-pr-author {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+}
+.crt-pr-author img {
+  flex: none;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 50%;
+  background: var(--mht-chip);
+}
+.crt-pr-state {
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  background: var(--mht-chip);
+  color: var(--mht-muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.35rem;
+}
+.crt-pr-state[data-state="merged"] { background: var(--mht-accent-wash); color: var(--mht-accent); }
+.crt-pr-state[data-state="open"] { background: var(--mht-good-wash); color: var(--mht-good); }
+.crt-pr time {
+  font-family: var(--mht-num);
+  font-variant-numeric: tabular-nums;
+}
+
+.crt-error {
+  margin-top: 2.5rem;
+  color: var(--mht-muted);
+}
+.crt-error a { color: var(--mht-ink); }
+
+/* Wide screens: one line per pull request with aligned author, state and date columns. */
+@media (min-width: 760px) {
+  .crt-pr {
+    grid-template-columns: 3rem minmax(0, 1fr) 9.5rem 4.75rem 3.75rem;
+    align-items: center;
+    gap: 1rem;
+  }
+  .crt-pr-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .crt-pr-meta { display: contents; }
+  .crt-pr-author { overflow: hidden; white-space: nowrap; }
+  .crt-pr-state { justify-self: start; }
+  .crt-pr time { text-align: right; }
+}

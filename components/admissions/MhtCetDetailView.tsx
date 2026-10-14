@@ -16,6 +16,7 @@ import {
   homeUniversityLabel,
   summarizeMhtCetCollege,
 } from "@/lib/admissions/mht-cet-college-summary";
+import "./mht-explorer.css";
 import "./mht-college.css";
 
 function plural(count: number, word: string): string {

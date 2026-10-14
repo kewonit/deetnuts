@@ -1,0 +1,204 @@
+/* JEE cutoff pages. Tokens and controls come from mht-base.css; the stats strip,
+   explorer, source card and lists from mht-explorer.css and mht-directory.css. */
+
+.jee-crumb { display: inline-flex; align-items: center; gap: 0.35rem; }
+.mht-section-head h2 .mht-count {
+  margin-left: 0.4rem;
+  color: var(--mht-muted);
+  font-size: 0.65em;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+
+/* ---------- Page header ---------- */
+.jee-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.85rem 1.5rem;
+  padding-top: 0.75rem;
+}
+.jee-head .mht-college-meta { margin-top: 0; }
+.jee-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.jee-page .mht-stats { margin-top: 1.5rem; }
+
+@media (min-width: 720px) {
+  .jee-head { grid-template-columns: minmax(0, 1fr) auto; }
+  .jee-head > .mht-h1,
+  .jee-head > .mht-college-meta { grid-column: 1; }
+  .jee-actions { grid-column: 2; grid-row: 1 / span 2; align-self: start; }
+  .jee-page .mht-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .jee-page .mht-stats > div:nth-child(n) { border-top-width: 0; border-left-width: 1px; }
+  .jee-page .mht-stats > div:first-child { border-left-width: 0; }
+}
+
+/* ---------- Rank chart ---------- */
+.jee-chart-card { padding: 1rem 1.25rem 0.75rem; }
+.jee-chart-legend {
+  display: flex;
+  gap: 1rem;
+  color: var(--mht-muted);
+  font-size: 0.75rem;
+}
+.jee-chart-legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+.jee-chart-key { width: 1rem; height: 0; border-top: 2px solid var(--mht-accent); }
+.jee-chart-key-opening { border-top: 2px dashed var(--mht-muted); }
+.jee-chart-tooltip {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 9rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--mht-line);
+  border-radius: 10px;
+  background: var(--mht-bg);
+  box-shadow: var(--mht-shadow);
+  color: var(--mht-muted);
+  font-family: var(--mht-font);
+  font-size: 0.8125rem;
+}
+.jee-chart-tooltip strong { color: var(--mht-ink); font-weight: 600; }
+.jee-chart-tooltip span { display: flex; justify-content: space-between; gap: 1rem; }
+.jee-chart-tooltip b { color: var(--mht-ink); font-variant-numeric: tabular-nums; font-weight: 600; }
+
+/* ---------- Year explorer ---------- */
+.jee-rounds { align-items: center; }
+.jee-rounds > span {
+  padding: 0 0.45rem 0 0.55rem;
+  color: var(--mht-muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+.jee-rounds button { min-width: 2rem; padding: 0 0.55rem; font-variant-numeric: tabular-nums; }
+.jee-explorer .mht-xbar-row .mht-search { flex: 1 1 14rem; }
+.jee-degree {
+  display: block;
+  margin-top: 0.1rem;
+  color: var(--mht-muted);
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+.jee-explorer .mht-program-toggle > span { min-width: 0; }
+
+.jee-grid tbody th a { color: inherit; text-decoration: none; }
+.jee-grid tbody th a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.jee-grid tbody tr[data-current] > th { box-shadow: inset 3px 0 0 var(--mht-accent); }
+.jee-grid td:has(.jee-cell) { padding: 0; }
+.jee-cell {
+  display: block;
+  padding: 0.55rem 0.5rem;
+  color: inherit;
+  text-decoration: none;
+}
+.jee-cell:hover { background: var(--mht-chip); }
+/* Opening ranks sit on shaded cells, so they use the softer ink, not the muted one. */
+.jee-grid .mht-grid-rank { color: var(--mht-ink-soft); }
+.jee-grid tr > td:last-child .jee-cell { padding-right: 1.25rem; }
+
+.jee-detail { margin-bottom: 0.25rem; }
+.jee-detail .mht-detail-head { margin-bottom: 0.75rem; }
+.jee-detail-links { display: inline-flex; gap: 1rem; }
+.jee-detail-links a { color: var(--mht-ink); font-weight: 500; text-decoration: none; }
+.jee-detail-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+.jee-years { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
+.jee-years .mht-chip { text-decoration: none; }
+.jee-years .mht-chip:hover { color: var(--mht-ink); }
+.jee-years .mht-chip[aria-current] { background: var(--mht-btn); color: var(--mht-btn-ink); }
+
+/* ---------- Program list and sources ---------- */
+.jee-program-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+  margin: 1.25rem 0 0;
+  padding: 0.5rem;
+  list-style: none;
+}
+.jee-program-list :is(a, span) {
+  display: block;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  text-decoration: none;
+}
+.jee-program-list a:hover { background: var(--mht-panel-2); }
+.jee-program-list strong { display: block; color: var(--mht-ink); font-size: 0.9rem; font-weight: 600; line-height: 1.35; }
+.jee-program-list small { display: block; margin-top: 0.1rem; color: var(--mht-muted); font-size: 0.78rem; }
+
+.jee-source-list { max-height: 18rem; overflow: auto; }
+.jee-source-list a { color: inherit; text-decoration: none; }
+.jee-source-list a:hover { color: var(--mht-ink); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---------- Directory ---------- */
+.jee-dir-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.6rem; }
+.jee-dir-title .mht-count {
+  color: var(--mht-muted);
+  font-family: var(--mht-num);
+  font-size: 1.125rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+.mht-dir-logo.jee-type {
+  color: var(--mht-ink-soft);
+  font-size: 0.66rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+}
+
+/* ---------- Hub ---------- */
+.jee-hub-lists { display: grid; grid-template-columns: minmax(0, 1fr); column-gap: 1.5rem; }
+@media (min-width: 900px) {
+  .jee-hub-lists { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.jee-search-popup {
+  width: var(--anchor-width);
+  max-width: var(--available-width);
+  overflow: hidden;
+  border: 1px solid var(--mht-line);
+  border-radius: 14px;
+  background: var(--mht-bg);
+  box-shadow: var(--mht-shadow);
+  color: var(--mht-ink);
+  font-family: var(--mht-font);
+}
+.jee-search-popup:not(:has(.jee-search-item, .jee-search-empty)) { display: none; }
+.jee-search-list {
+  max-height: min(24rem, var(--available-height));
+  overflow-y: auto;
+  padding: 0.35rem;
+  outline: 0;
+  overscroll-behavior: contain;
+}
+.jee-search-list:empty { display: none; }
+.jee-search-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 10px;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  outline: 0;
+}
+.jee-search-item[data-highlighted] { background: var(--mht-chip); }
+.jee-search-item .mht-dir-logo { width: 2.25rem; height: 2.25rem; flex: none; border-radius: 8px; }
+.jee-search-item strong { display: block; font-size: 0.9rem; font-weight: 600; line-height: 1.3; }
+.jee-search-item small { display: block; color: var(--mht-muted); font-size: 0.78rem; }
+.jee-search-empty { padding: 1rem; color: var(--mht-muted); font-size: 0.875rem; }
+
+/* ---------- Seat pools ---------- */
+.jee-table-scroll { overflow-x: auto; }
+.jee-pool-filters { margin-top: 1.25rem; }
+.jee-pool-group h3 {
+  margin-top: 1.75rem;
+  color: var(--mht-ink);
+  font-size: 1rem;
+  font-weight: 600;
+}
+.jee-pool-group .mht-card { margin-top: 0.75rem; }
+.jee-pools,
+.jee-siblings { min-width: 34rem; }
+.jee-page .mht-table th a { color: inherit; text-decoration: underline; text-decoration-color: var(--mht-line); text-underline-offset: 3px; }
+.jee-page .mht-table th a:hover { text-decoration-color: currentColor; }
+.jee-page .mht-table td { color: var(--mht-ink-soft); }
+.jee-siblings td { color: var(--mht-muted); }
+.jee-siblings [data-changed] { color: var(--mht-ink); font-weight: 600; }

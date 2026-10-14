@@ -7,7 +7,6 @@ import {
   instrumentSerif,
 } from "./fonts";
 import "./ejam-chrome.css";
-import "@/app/jee-cutoffs/cutoffs.css";
 
 export function EjamPageLayout({
   children,
@@ -24,6 +23,11 @@ export function EjamPageLayout({
     <>
       {/* eslint-disable-next-line @next/next/no-css-tags -- eJAM's stylesheet is compiled outside Next's Tailwind 3 pipeline. */}
       <link rel="stylesheet" href="/ejam/ui.css" />
+      {chrome === "tool" ? (
+        // Unlayered copy of eJam's utilities for the tool shell; see scripts/build-ejam-ui-css.mjs.
+        // eslint-disable-next-line @next/next/no-css-tags -- generated with ui.css, outside Next's pipeline.
+        <link rel="stylesheet" href="/ejam/tool.css" />
+      ) : null}
       <div
         className={cn(
           "deetnuts-ejam-shell antialiased font-sans",

@@ -5,7 +5,8 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  opacity: 0.04; 
-  z-index: 100;
+  opacity: 0.04;
+  /* Under the site navbar (z-index 40) so the bar stays crisp on every page. */
+  z-index: 30;
   pointer-events: none;
 }

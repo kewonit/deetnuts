@@ -5,6 +5,22 @@ import type {
 import { uiQuotaToApi } from "@ejam/predictors/shared/quota-input";
 import { z } from "zod4";
 import type { PredictorDisplayProgram, PredictorDisplayResult } from "./types";
+import institutes from "../../../../data/reference/engineering/institutes.json";
+
+// Predictions carry institute ids; students know colleges by their short names ("NIT Trichy").
+const INSTITUTE_NAMES = new Map(
+  institutes.map((institute) => [institute.id, institute.aliases[0] ?? institute.name]),
+);
+
+const SMALL_WORDS = new Set(["and", "of", "in", "with", "for", "the"]);
+
+// A few programs arrive without a name; their id is a readable slug.
+function programNameFromId(id: string): string {
+  return id
+    .split("-")
+    .map((word, index) => (index > 0 && SMALL_WORDS.has(word) ? word : word.charAt(0).toUpperCase() + word.slice(1)))
+    .join(" ");
+}
 
 const JeeProgramResult = z.looseObject({
   institute_id: z.string(),
@@ -105,10 +121,10 @@ function jeeDisplayProgram(
     key: jeeProgramKey(program),
     exam: "jee",
     instituteId: program.institute_id,
-    instituteName: program.institute_id,
+    instituteName: INSTITUTE_NAMES.get(program.institute_id) ?? program.institute_id,
     instituteType: program.instype,
     programId: program.program_id,
-    programName: program.program_name ?? program.program_id,
+    programName: program.program_name ?? programNameFromId(program.program_id),
     band: program.band,
     overallProbability: program.cumulative_probability,
     predictedClosingRank: program.predicted_closing_rank,

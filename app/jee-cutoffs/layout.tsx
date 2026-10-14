@@ -1,6 +1,5 @@
-import { EjamPageLayout } from "@/components/ejam-chrome/ejam-page-layout";
-import "./cutoffs.css";
+import { MhtShell } from "@/components/admissions/MhtShell";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <EjamPageLayout chrome="document">{children}</EjamPageLayout>;
+  return <MhtShell footer="jee">{children}</MhtShell>;
 }

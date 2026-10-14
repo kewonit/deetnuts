@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { FilterChip } from "@ejam/ui/components/predictor/filter-chip";
+import MhtPill from "@/components/admissions/MhtPill";
 import type { CounsellingBody } from "@/lib/jee-cutoffs/types";
 
 export type SeatPoolRow = {
@@ -35,46 +35,21 @@ const categoryOrder = [
 ];
 const genderOrder = ["Gender-Neutral", "Female-only"];
 
-function orderedValues(rows: SeatPoolRow[], key: "quota" | "seatType" | "genderLabel", order: string[]) {
+function orderedValues(
+  rows: SeatPoolRow[],
+  key: "quota" | "seatType" | "genderLabel",
+  order: string[],
+) {
   const values = [...new Set(rows.map((row) => row[key]).filter(Boolean))];
   return values.sort((left, right) => {
     const leftIndex = order.indexOf(left);
     const rightIndex = order.indexOf(right);
-    if (leftIndex === -1 && rightIndex === -1) return left.localeCompare(right, "en");
+    if (leftIndex === -1 && rightIndex === -1)
+      return left.localeCompare(right, "en");
     if (leftIndex === -1) return 1;
     if (rightIndex === -1) return -1;
     return leftIndex - rightIndex;
   });
-}
-
-function PoolFilter({
-  label,
-  values,
-  active,
-  onSelect,
-}: {
-  label: string;
-  values: string[];
-  active: string | null;
-  onSelect: (value: string) => void;
-}) {
-  if (values.length < 2) return null;
-  return (
-    <div className="cutoff-pool-filter" role="group" aria-label={label}>
-      <span>{label}</span>
-      <div>
-        {values.map((value) => (
-          <FilterChip
-            key={value}
-            instant
-            label={value}
-            active={active === value}
-            onClick={() => onSelect(value)}
-          />
-        ))}
-      </div>
-    </div>
-  );
 }
 
 export function SeatPoolTable({
@@ -86,101 +61,113 @@ export function SeatPoolTable({
   offeringName: string;
   release: string;
 }) {
-  const [quotaFilter, setQuotaFilter] = useState<string | null>(null);
-  const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
-  const [genderFilter, setGenderFilter] = useState<string | null>(null);
+  const [quota, setQuota] = useState("");
+  const [category, setCategory] = useState("");
+  const [gender, setGender] = useState("");
 
-  const quotas = useMemo(() => orderedValues(profiles, "quota", quotaOrder), [profiles]);
-  const categories = useMemo(() => orderedValues(profiles, "seatType", categoryOrder), [profiles]);
-  const genders = useMemo(() => orderedValues(profiles, "genderLabel", genderOrder), [profiles]);
-
-  const visible = useMemo(
-    () =>
-      profiles.filter((row) => {
-        if (quotaFilter && row.quota !== quotaFilter) return false;
-        if (categoryFilter && row.seatType !== categoryFilter) return false;
-        if (genderFilter && row.genderLabel !== genderFilter) return false;
-        return true;
-      }),
-    [profiles, quotaFilter, categoryFilter, genderFilter],
+  const quotas = useMemo(
+    () => orderedValues(profiles, "quota", quotaOrder),
+    [profiles],
+  );
+  const categories = useMemo(
+    () => orderedValues(profiles, "seatType", categoryOrder),
+    [profiles],
+  );
+  const genders = useMemo(
+    () => orderedValues(profiles, "genderLabel", genderOrder),
+    [profiles],
   );
 
-  const bodies = bodyOrder.filter((body) => visible.some((row) => row.body === body));
-  const showGroupHeadings = bodyOrder.filter((body) => profiles.some((row) => row.body === body)).length > 1;
-  const showShortlist = quotas.length > 1 || categories.length > 1 || genders.length > 1;
+  const visible = profiles.filter(
+    (row) =>
+      (!quota || row.quota === quota) &&
+      (!category || row.seatType === category) &&
+      (!gender || row.genderLabel === gender),
+  );
+  const bodies = bodyOrder.filter((body) =>
+    visible.some((row) => row.body === body),
+  );
+  const grouped =
+    bodyOrder.filter((body) => profiles.some((row) => row.body === body))
+      .length > 1;
+  const filters = [
+    { label: "Quota", value: quota, values: quotas, set: setQuota },
+    {
+      label: "Category",
+      value: category,
+      values: categories,
+      set: setCategory,
+    },
+    { label: "Gender", value: gender, values: genders, set: setGender },
+  ].filter((filter) => filter.values.length > 1);
 
   return (
-    <div>
-      {showShortlist ? (
-        <div className="cutoff-pool-shortlist">
-          <PoolFilter
-            label="Quota"
-            values={quotas}
-            active={quotaFilter}
-            onSelect={(quota) => setQuotaFilter((current) => (current === quota ? null : quota))}
-          />
-          <PoolFilter
-            label="Category"
-            values={categories}
-            active={categoryFilter}
-            onSelect={(category) => setCategoryFilter((current) => (current === category ? null : category))}
-          />
-          <PoolFilter
-            label="Gender"
-            values={genders}
-            active={genderFilter}
-            onSelect={(gender) => setGenderFilter((current) => (current === gender ? null : gender))}
-          />
+    <>
+      {filters.length ? (
+        <div className="mht-dir-bar jee-pool-filters">
+          {filters.map((filter) => (
+            <MhtPill
+              key={filter.label}
+              label={filter.label}
+              value={filter.value}
+              emptyLabel="All"
+              options={filter.values.map((value) => ({ value, label: value }))}
+              onChange={filter.set}
+            />
+          ))}
         </div>
       ) : null}
       {visible.length ? (
         bodies.map((body) => {
           const rows = visible.filter((row) => row.body === body);
-          if (!rows.length) return null;
           return (
-            <div className="cutoff-pool-group" key={body}>
-              {showGroupHeadings ? <h3>{rows[0].bodyLabel}</h3> : null}
-              <div className="cutoff-table-scroll">
-                <table className="cutoff-table" data-release={release}>
-                  <caption>
-                    {showGroupHeadings ? `${rows[0].bodyLabel} seat pools` : `Seat pools`} for {offeringName}
+            <div className="jee-pool-group" key={body}>
+              {grouped ? <h3>{rows[0].bodyLabel}</h3> : null}
+              <div className="mht-card jee-table-scroll">
+                <table className="mht-table jee-pools" data-release={release}>
+                  <caption className="mht-sr">
+                    {grouped ? `${rows[0].bodyLabel} seat pools` : "Seat pools"}{" "}
+                    for {offeringName}
                   </caption>
                   <thead>
                     <tr>
-                      <th scope="col">Quota</th>
                       <th scope="col">Category</th>
+                      <th scope="col">Quota</th>
                       <th scope="col">Gender</th>
-                      <th scope="col">Latest</th>
-                      <th scope="col">Opening</th>
-                      <th scope="col">Closing</th>
+                      <th scope="col" className="mht-num">
+                        Round
+                      </th>
+                      <th scope="col" className="mht-num">
+                        Opening
+                      </th>
+                      <th scope="col" className="mht-num">
+                        Closing
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {rows.map((row) => (
                       <tr key={row.path}>
-                        <th scope="row" data-label="Quota" data-field="quota">
-                          {row.quota}
-                        </th>
-                        <td data-label="Category" data-field="category">
+                        <th scope="row" data-field="category">
                           <Link
                             href={row.path}
-                            aria-label={`${row.seatType}, ${row.quota} quota, ${row.genderLabel}${showGroupHeadings ? `, ${row.bodyLabel}` : ""}`}
+                            aria-label={`${row.seatType}, ${row.quota} quota, ${row.genderLabel}${grouped ? `, ${row.bodyLabel}` : ""}`}
                           >
                             {row.seatType}
                           </Link>
-                          {row.indexable ? null : <small>One published round</small>}
-                        </td>
-                        <td data-label="Gender" data-field="gender">
-                          {row.genderLabel}
-                        </td>
-                        <td data-label="Latest" data-field="latest-round">
+                        </th>
+                        <td data-field="quota">{row.quota}</td>
+                        <td data-field="gender">{row.genderLabel}</td>
+                        <td className="mht-num" data-field="latest-round">
                           {row.latestRound}
                         </td>
-                        <td data-label="Opening" data-field="opening-rank">
+                        <td className="mht-num" data-field="opening-rank">
                           {row.openingRank.toLocaleString("en-IN")}
                         </td>
-                        <td data-label="Closing" data-field="closing-rank">
-                          <strong>{row.closingRank.toLocaleString("en-IN")}</strong>
+                        <td className="mht-num" data-field="closing-rank">
+                          <strong>
+                            {row.closingRank.toLocaleString("en-IN")}
+                          </strong>
                         </td>
                       </tr>
                     ))}
@@ -191,8 +178,21 @@ export function SeatPoolTable({
           );
         })
       ) : (
-        <p className="cutoff-empty">No seat pools match this shortlist.</p>
+        <div className="mht-card mht-dir-empty">
+          <span>No seat pools match.</span>
+          <button
+            type="button"
+            className="mht-btn mht-btn-sm"
+            onClick={() => {
+              setQuota("");
+              setCategory("");
+              setGender("");
+            }}
+          >
+            Clear
+          </button>
+        </div>
       )}
-    </div>
+    </>
   );
 }

@@ -42,9 +42,9 @@ export default function Home() {
             <div className="text-6xl tracking-tight text-center text-gray-900 sm:text-[96px]">
               <SparklesText text="DEETNUTS" />
             </div>
-            <h2 className="text-center font-heading text-3xl m1000:text-2xl m500:text-xl m400:text-xl">
+            <h1 className="text-center font-heading text-3xl m1000:text-2xl m500:text-xl m400:text-xl">
               clear college and admission data
-            </h2>
+            </h1>
           </div>
           <div className="relative w-full h-[50vh] flex justify-center items-center overflow-hidden">
             <picture className="w-full h-full">

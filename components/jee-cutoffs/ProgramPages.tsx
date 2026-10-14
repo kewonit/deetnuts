@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import CutoffChart from "./CutoffChart";
-import { bodyLabel, examLabel, genderLabel } from "@/lib/jee-cutoffs/repository";
+import { Crumbs, JsonLd, SourceCard, plural } from "./JeeParts";
+import {
+  bodyLabel,
+  examLabel,
+  genderLabel,
+} from "@/lib/jee-cutoffs/repository";
 import {
   getJeeSeoRoutes,
   getProfilePageModel,
@@ -12,36 +17,66 @@ import {
   seatPoolShortLabel,
 } from "@/lib/jee-cutoffs/seo";
 import { SeatPoolTable } from "./SeatPoolTable";
-import type { CutoffSourceRegistryEntry, JeeExamId, JeeSeoRoute } from "@/lib/jee-cutoffs/types";
+import type {
+  CutoffSourceRegistryEntry,
+  JeeExamId,
+  JeeSeoRoute,
+} from "@/lib/jee-cutoffs/types";
 import { PRODUCTION_SITE_URL } from "@/lib/site-url";
+import "@/components/admissions/mht-explorer.css";
+import "./jee.css";
 
 const baseUrl = PRODUCTION_SITE_URL;
 
-function JsonLd({ value }: { value: unknown }) {
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(value).replace(/</g, "\\u003c") }} />;
-}
-
-function Breadcrumbs({ items }: { items: Array<{ label: string; href?: string }> }) {
-  return <nav className="cutoff-breadcrumbs" aria-label="Breadcrumb">{items.map((item, index) => <span key={`${item.label}-${index}`}>{index ? <span aria-hidden="true">›</span> : null}{item.href ? <Link href={item.href}>{item.label}</Link> : item.label}</span>)}</nav>;
-}
-
-async function redirectExactWrongExam(pathname: string, exam: JeeExamId): Promise<never> {
+async function redirectExactWrongExam(
+  pathname: string,
+  exam: JeeExamId,
+): Promise<never> {
   const suffix = pathname.slice(`/${exam}`.length);
   const candidate = (await getJeeSeoRoutes()).find(
-    (route) => route.path.endsWith(suffix) && route.examId && route.examId !== exam,
+    (route) =>
+      route.path.endsWith(suffix) && route.examId && route.examId !== exam,
   );
   if (candidate) permanentRedirect(candidate.path);
   notFound();
 }
 
-function pageJsonLd(name: string, canonical: string, crumbs: Array<{ name: string; item: string }>) {
+function pageJsonLd(
+  name: string,
+  canonical: string,
+  crumbs: Array<{ name: string; item: string }>,
+) {
   return [
-    { "@context": "https://schema.org", "@type": "WebPage", name, url: canonical },
-    { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: crumbs.map((crumb, index) => ({ "@type": "ListItem", position: index + 1, ...crumb })) },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name,
+      url: canonical,
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: crumbs.map((crumb, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        ...crumb,
+      })),
+    },
   ];
 }
 
-const categoryOrder = ["OPEN", "OPEN (PwD)", "EWS", "EWS (PwD)", "OBC-NCL", "OBC-NCL (PwD)", "SC", "SC (PwD)", "ST", "ST (PwD)"];
+const categoryOrder = [
+  "OPEN",
+  "OPEN (PwD)",
+  "EWS",
+  "EWS (PwD)",
+  "OBC-NCL",
+  "OBC-NCL (PwD)",
+  "SC",
+  "SC (PwD)",
+  "ST",
+  "ST (PwD)",
+];
 const quotaOrder = ["AI", "OS", "HS"];
 const genderOrder = ["Gender-Neutral", "Female-only"];
 const bodyOrder = ["josaa", "csab"];
@@ -52,86 +87,145 @@ function orderIndex(value: string | null, order: readonly string[]) {
   return index === -1 ? order.length : index;
 }
 
-function roundText(count: number) {
-  return count === 1 ? "1 round" : `${count} rounds`;
+function sourceSummary(sources: CutoffSourceRegistryEntry[]) {
+  const byBody = new Map<string, { year: number; rounds: number[] }>();
+  for (const source of sources) {
+    const entry = byBody.get(source.body) ?? { year: source.year, rounds: [] };
+    entry.rounds.push(source.round);
+    byBody.set(source.body, entry);
+  }
+  return [...byBody.entries()]
+    .sort(
+      ([left], [right]) =>
+        orderIndex(left, bodyOrder) - orderIndex(right, bodyOrder),
+    )
+    .map(
+      ([body, entry]) =>
+        `${bodyLabel(body as "josaa" | "csab")} ${entry.year} Rounds 1–${Math.max(...entry.rounds)}`,
+    )
+    .join(" · ");
 }
 
-function escapeHtml(value: string) {
-  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+function OfferingChips({
+  exam,
+  degree,
+  years,
+  extra = [],
+}: {
+  exam: JeeExamId;
+  degree: string;
+  years: number;
+  extra?: string[];
+}) {
+  return (
+    <p className="mht-college-meta">
+      {[examLabel(exam), degree, `${years} years`, ...extra].map((fact) => (
+        <span key={fact} className="mht-chip">
+          {fact}
+        </span>
+      ))}
+    </p>
+  );
 }
 
-function siblingCell(label: string, value: string, changed: boolean) {
-  return `<span data-label="${escapeHtml(label)}" data-changed="${changed ? "true" : "false"}">${escapeHtml(value)}</span>`;
-}
-
-function SiblingPools({ current, siblings }: { current: JeeSeoRoute; siblings: JeeSeoRoute[] }) {
+function SiblingPools({
+  current,
+  siblings,
+}: {
+  current: JeeSeoRoute;
+  siblings: JeeSeoRoute[];
+}) {
   if (!siblings.length) return null;
   const items = [...siblings].sort((left, right) => {
     const leftDiff = profileDifference(current, left);
     const rightDiff = profileDifference(current, right);
-    const leftKey = leftDiff.fields.map((field) => diffFieldRank[field]).sort((a, b) => a - b).join(",");
-    const rightKey = rightDiff.fields.map((field) => diffFieldRank[field]).sort((a, b) => a - b).join(",");
+    const leftKey = leftDiff.fields
+      .map((field) => diffFieldRank[field])
+      .sort((a, b) => a - b)
+      .join(",");
+    const rightKey = rightDiff.fields
+      .map((field) => diffFieldRank[field])
+      .sort((a, b) => a - b)
+      .join(",");
     return (
       leftDiff.fields.length - rightDiff.fields.length ||
       leftKey.localeCompare(rightKey) ||
-      orderIndex(left.seatType, categoryOrder) - orderIndex(right.seatType, categoryOrder) ||
-      orderIndex(left.gender ? genderLabel(left.gender) : null, genderOrder) - orderIndex(right.gender ? genderLabel(right.gender) : null, genderOrder) ||
-      orderIndex(left.quota, quotaOrder) - orderIndex(right.quota, quotaOrder) ||
+      orderIndex(left.seatType, categoryOrder) -
+        orderIndex(right.seatType, categoryOrder) ||
+      orderIndex(left.gender ? genderLabel(left.gender) : null, genderOrder) -
+        orderIndex(
+          right.gender ? genderLabel(right.gender) : null,
+          genderOrder,
+        ) ||
+      orderIndex(left.quota, quotaOrder) -
+        orderIndex(right.quota, quotaOrder) ||
       orderIndex(left.body, bodyOrder) - orderIndex(right.body, bodyOrder) ||
       left.path.localeCompare(right.path)
     );
   });
+  const cell = (value: string, changed: boolean) => (
+    <td data-changed={changed ? "" : undefined}>{value}</td>
+  );
   return (
-    <section className="cutoff-section" aria-labelledby="other-seat-pools-title">
-      <div className="cutoff-section-heading">
-        <div>
-          <h2 id="other-seat-pools-title">Other seat pools</h2>
-          <p>Bold values differ from this page.</p>
-        </div>
-        <span className="cutoff-result-count">{siblings.length.toLocaleString("en-IN")} pools</span>
+    <section className="mht-section" aria-labelledby="other-seat-pools-title">
+      <div className="mht-section-head">
+        <h2 id="other-seat-pools-title">
+          Other seat pools <span className="mht-count">{siblings.length}</span>
+        </h2>
       </div>
-      <div className="cutoff-sibling-board">
-        <div className="cutoff-sibling-head" aria-hidden="true">
-          <span>Counselling</span>
-          <span>Quota</span>
-          <span>Category</span>
-          <span>Gender</span>
-          <span>Rounds</span>
-        </div>
-        <div className="cutoff-sibling-current" aria-current="page" aria-label={`${profileLabel(current)}, this page`}>
-          <span data-label="Counselling">{current.body ? bodyLabel(current.body) : "—"}</span>
-          <span data-label="Quota">{current.quota}</span>
-          <span data-label="Category">{current.seatType}</span>
-          <span data-label="Gender">{current.gender ? genderLabel(current.gender) : "—"}</span>
-          <span>This page</span>
-        </div>
-        {items.map((sibling) => {
-          const changed = new Set(profileDifference(current, sibling).fields);
-          return (
-            <a
-              href={sibling.path}
-              key={sibling.path}
-              aria-label={`${profileLabel(sibling)}, ${roundText(sibling.roundCount)}`}
-              dangerouslySetInnerHTML={{
-                __html: [
-                  siblingCell("Counselling", sibling.body ? bodyLabel(sibling.body) : "—", changed.has("body")),
-                  siblingCell("Quota", sibling.quota ?? "—", changed.has("quota")),
-                  siblingCell("Category", sibling.seatType ?? "—", changed.has("seatType")),
-                  siblingCell("Gender", sibling.gender ? genderLabel(sibling.gender) : "—", changed.has("gender")),
-                  `<span data-label="Rounds">${sibling.roundCount}</span>`,
-                ].join(""),
-              }}
-            />
-          );
-        })}
+      <div className="mht-card jee-table-scroll">
+        <table className="mht-table jee-siblings">
+          <caption className="mht-sr">
+            Other seat pools for this program; values that differ from this page
+            are bold
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Category</th>
+              <th scope="col">Counselling</th>
+              <th scope="col">Quota</th>
+              <th scope="col">Gender</th>
+              <th scope="col" className="mht-num">
+                Rounds
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((sibling) => {
+              const changed = new Set(
+                profileDifference(current, sibling).fields,
+              );
+              return (
+                <tr key={sibling.path}>
+                  <th
+                    scope="row"
+                    data-changed={changed.has("seatType") ? "" : undefined}
+                  >
+                    <Link
+                      href={sibling.path}
+                      aria-label={profileLabel(sibling)}
+                    >
+                      {sibling.seatType ?? "—"}
+                    </Link>
+                  </th>
+                  {cell(
+                    sibling.body ? bodyLabel(sibling.body) : "—",
+                    changed.has("body"),
+                  )}
+                  {cell(sibling.quota ?? "—", changed.has("quota"))}
+                  {cell(
+                    sibling.gender ? genderLabel(sibling.gender) : "—",
+                    changed.has("gender"),
+                  )}
+                  <td className="mht-num">{sibling.roundCount}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     </section>
   );
-}
-
-function SourceContext({ sources }: { sources: CutoffSourceRegistryEntry[] }) {
-  const ordered = [...sources].sort((left, right) => left.title.localeCompare(right.title, "en", { numeric: true }));
-  return <section className="cutoff-source-card"><div><h2>Source records</h2><p>Publisher records used for this exact page.</p></div><ul className="cutoff-source-list">{ordered.map((source) => <li key={source.sourceId}><strong>{source.title}</strong><span>{source.officialDomain}</span></li>)}</ul><p className="cutoff-disclaimer" data-nosnippet>DEETNUTS is independent of the counselling authorities and colleges listed. Public cutoff pages are open to everyone. Verify admission decisions on the applicable official portal; see <Link href="/compliance/data-sources-and-licensing">sources &amp; methodology</Link>.</p></section>;
 }
 
 export async function programMetadata(
@@ -144,7 +238,12 @@ export async function programMetadata(
   if (!model) return {};
   const title = `${model.college.seoName} ${model.offering.name} Cutoff ${year}: ${examLabel(exam)} Ranks`;
   const description = `${model.offering.degree}, ${model.offering.durationYears} years: ${model.profiles.length} source-backed quota, category and gender profiles across JoSAA${model.profiles.some((profile) => profile.route.body === "csab") ? " and CSAB" : ""}.`;
-  return { title, description, alternates: { canonical: model.route.path }, openGraph: { title, description, url: model.route.path, type: "website" } };
+  return {
+    title,
+    description,
+    alternates: { canonical: model.route.path },
+    openGraph: { title, description, url: model.route.path, type: "website" },
+  };
 }
 
 export async function profileMetadata(routePath: string): Promise<Metadata> {
@@ -156,152 +255,360 @@ export async function profileMetadata(routePath: string): Promise<Metadata> {
     title,
     description,
     alternates: { canonical: model.route.path },
-    robots: model.route.indexable ? { index: true, follow: true } : { index: false, follow: true },
+    robots: model.route.indexable
+      ? { index: true, follow: true }
+      : { index: false, follow: true },
     openGraph: { title, description, url: model.route.path, type: "website" },
   };
 }
 
-export async function ProgramPage({ exam, college, year, programSlug }: { exam: JeeExamId; college: string; year: number; programSlug: string }) {
+export async function ProgramPage({
+  exam,
+  college,
+  year,
+  programSlug,
+}: {
+  exam: JeeExamId;
+  college: string;
+  year: number;
+  programSlug: string;
+}) {
   const pathname = `/${exam}/colleges/${college}/cutoffs/${year}/programs/${programSlug}`;
   const model = await getProgramPageModel(exam, college, year, programSlug);
   if (!model) return redirectExactWrongExam(pathname, exam);
   const collegePath = `/${exam}/colleges/${college}`;
   const yearPath = `${collegePath}/cutoffs/${year}`;
   const canonical = `${baseUrl}${model.route.path}`;
-  const includeBody = new Set(model.profiles.map((profile) => profile.route.body)).size > 1;
-  const jsonLd = pageJsonLd(`${model.college.name} ${model.offering.name} cutoff ${year}`, canonical, [
-    { name: "JEE cutoffs", item: `${baseUrl}/jee-cutoffs` },
-    { name: `${examLabel(exam)} colleges`, item: `${baseUrl}/${exam}/colleges` },
-    { name: model.college.name, item: `${baseUrl}${collegePath}` },
-    { name: String(year), item: `${baseUrl}${yearPath}` },
-    { name: model.offering.name, item: canonical },
-  ]);
-  return <main className="cutoff-main"><JsonLd value={jsonLd} /><Breadcrumbs items={[{ label: "JEE cutoffs", href: "/jee-cutoffs" }, { label: `${examLabel(exam)} colleges`, href: `/${exam}/colleges` }, { label: model.college.seoName, href: collegePath }, { label: String(year), href: yearPath }, { label: model.offering.name }]} />
-    <header className="cutoff-hero"><span className="cutoff-kicker">{examLabel(exam)} · {model.offering.degree} · {model.offering.durationYears} years</span><h1>{model.college.seoName} {model.offering.name} cutoff {year}</h1><p className="cutoff-lead">Every published counselling, quota, category and gender profile for this exact offering.</p><div className="cutoff-hero-meta"><span>{model.profiles.length.toLocaleString("en-IN")} profiles</span><span>{model.route.rowCount.toLocaleString("en-IN")} rank records</span><span>Release {model.release}</span></div></header>
-    <section className="cutoff-section"><div className="cutoff-section-heading"><div><h2>Comparable round trend</h2><p>{seatPoolShortLabel(model.defaultProfile.route, includeBody)}</p></div><Link className="cutoff-button" href={model.defaultProfile.route.path}>Open this seat pool</Link></div><div className="cutoff-chart-card cutoff-trend-card"><CutoffChart points={model.chart} label={`${model.offering.name} round cutoff trend`} /></div></section>
-    <section className="cutoff-section" aria-labelledby="profile-list-title"><div className="cutoff-section-heading"><div><h2 id="profile-list-title">Seat pools</h2><p>Latest closing rank for each quota, category and gender.</p></div></div>
-      <SeatPoolTable
-        offeringName={model.offering.name}
-        release={model.release}
-        profiles={model.profiles.flatMap((profile) => {
-          const route = profile.route;
-          if (!route.body || !route.quota || !route.seatType || !route.gender) return [];
-          return [{
-            path: route.path,
-            body: route.body,
-            bodyLabel: bodyLabel(route.body),
-            quota: route.quota,
-            seatType: route.seatType,
-            gender: route.gender,
-            genderLabel: genderLabel(route.gender),
-            latestRound: profile.latestRound,
-            openingRank: profile.openingRank,
-            closingRank: profile.closingRank,
-            indexable: route.indexable,
-          }];
-        })}
-      />
-    </section>
-    {model.adjacentYears.length ? <section className="cutoff-year-nav"><h2>Other years</h2><div className="cutoff-years">{model.adjacentYears.map((route) => <Link className="cutoff-year-link" href={route.path} key={route.path}>{route.year}</Link>)}</div></section> : null}
-    <SourceContext sources={model.sources} />
-  </main>;
+  const includeBody =
+    new Set(model.profiles.map((profile) => profile.route.body)).size > 1;
+  const headline = model.defaultProfile;
+  const bodies = [
+    ...new Set(
+      model.profiles.map((profile) => profile.route.body).filter(Boolean),
+    ),
+  ].sort(
+    (left, right) => orderIndex(left, bodyOrder) - orderIndex(right, bodyOrder),
+  );
+  const jsonLd = pageJsonLd(
+    `${model.college.name} ${model.offering.name} cutoff ${year}`,
+    canonical,
+    [
+      { name: "JEE cutoffs", item: `${baseUrl}/jee-cutoffs` },
+      {
+        name: `${examLabel(exam)} colleges`,
+        item: `${baseUrl}/${exam}/colleges`,
+      },
+      { name: model.college.name, item: `${baseUrl}${collegePath}` },
+      { name: String(year), item: `${baseUrl}${yearPath}` },
+      { name: model.offering.name, item: canonical },
+    ],
+  );
+  return (
+    <main className="mht-main jee-page">
+      <JsonLd value={jsonLd} />
+      <div className="mht-page">
+        <Crumbs
+          items={[
+            { label: "JEE", href: "/jee-cutoffs" },
+            { label: model.college.seoName, href: collegePath },
+            { label: String(year), href: yearPath },
+            { label: model.offering.name },
+          ]}
+        />
+        <header className="jee-head">
+          <h1 className="mht-h1">
+            {model.college.seoName} {model.offering.name} cutoff {year}
+          </h1>
+          <OfferingChips
+            exam={exam}
+            degree={model.offering.degree}
+            years={model.offering.durationYears}
+          />
+          <div className="jee-actions">
+            <Link className="mht-btn mht-btn-primary" href={yearPath}>
+              All {year} programs
+            </Link>
+          </div>
+        </header>
+        <dl className="mht-stats">
+          <div>
+            <dt>Closing rank</dt>
+            <dd>
+              <strong>{headline.closingRank.toLocaleString("en-IN")}</strong>
+              <Link href={headline.route.path}>
+                {seatPoolShortLabel(headline.route, includeBody)}
+              </Link>
+            </dd>
+          </div>
+          <div>
+            <dt>Opening rank</dt>
+            <dd>
+              <strong>{headline.openingRank.toLocaleString("en-IN")}</strong>
+              <span>Round {headline.latestRound}</span>
+            </dd>
+          </div>
+          <div>
+            <dt>Seat pools</dt>
+            <dd>
+              <strong>{model.profiles.length}</strong>
+              <span>{plural(model.route.rowCount, "record")}</span>
+            </dd>
+          </div>
+          <div>
+            <dt>Counselling</dt>
+            <dd>
+              <strong>
+                {bodies.map((body) => bodyLabel(body!)).join(" · ")}
+              </strong>
+              <span>{year}</span>
+            </dd>
+          </div>
+        </dl>
+      </div>
+
+      <section className="mht-section" aria-labelledby="jee-round-title">
+        <div className="mht-page">
+          <div className="mht-section-head">
+            <h2 id="jee-round-title">Ranks by round</h2>
+            <Link className="mht-arrow-link" href={headline.route.path}>
+              {seatPoolShortLabel(headline.route, includeBody)}
+            </Link>
+          </div>
+          <div className="mht-card jee-chart-card">
+            <CutoffChart
+              points={model.chart}
+              label={`${model.offering.name} round cutoff trend`}
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="mht-section" aria-labelledby="profile-list-title">
+        <div className="mht-page mht-page-wide">
+          <div className="mht-section-head">
+            <h2 id="profile-list-title">
+              Seat pools{" "}
+              <span className="mht-count">{model.profiles.length}</span>
+            </h2>
+          </div>
+          <SeatPoolTable
+            offeringName={model.offering.name}
+            release={model.release}
+            profiles={model.profiles.flatMap((profile) => {
+              const route = profile.route;
+              if (
+                !route.body ||
+                !route.quota ||
+                !route.seatType ||
+                !route.gender
+              )
+                return [];
+              return [
+                {
+                  path: route.path,
+                  body: route.body,
+                  bodyLabel: bodyLabel(route.body),
+                  quota: route.quota,
+                  seatType: route.seatType,
+                  gender: route.gender,
+                  genderLabel: genderLabel(route.gender),
+                  latestRound: profile.latestRound,
+                  openingRank: profile.openingRank,
+                  closingRank: profile.closingRank,
+                  indexable: route.indexable,
+                },
+              ];
+            })}
+          />
+          {model.adjacentYears.length ? (
+            <nav className="jee-years" aria-label="Other years">
+              {model.adjacentYears.map((route) => (
+                <Link className="mht-chip" href={route.path} key={route.path}>
+                  {route.year}
+                </Link>
+              ))}
+            </nav>
+          ) : null}
+        </div>
+      </section>
+
+      <div className="mht-page">
+        <SourceCard
+          summary={sourceSummary(model.sources)}
+          sources={model.sources}
+        />
+      </div>
+    </main>
+  );
 }
 
 export async function ProfilePage({ routePath }: { routePath: string }) {
   const model = await getProfilePageModel(routePath);
   const exam = routePath.split("/")[1] as JeeExamId;
   if (!model) return redirectExactWrongExam(routePath, exam);
-  const yearPath = `/${model.route.examId}/colleges/${model.route.collegeId}/cutoffs/${model.route.year}`;
-  const canonical = `${baseUrl}${model.route.path}`;
-  const label = profileLabel(model.route);
+  const route = model.route;
+  const yearPath = `/${route.examId}/colleges/${route.collegeId}/cutoffs/${route.year}`;
+  const canonical = `${baseUrl}${route.path}`;
+  const label = profileLabel(route);
   const first = model.rows[0];
-  const jsonLd = pageJsonLd(`${model.college.name} ${model.offering.name} ${label} cutoff`, canonical, [
-    { name: "JEE cutoffs", item: `${baseUrl}/jee-cutoffs` },
-    { name: model.college.name, item: `${baseUrl}/${model.route.examId}/colleges/${model.route.collegeId}` },
-    { name: String(model.route.year), item: `${baseUrl}${yearPath}` },
-    { name: model.offering.name, item: `${baseUrl}${model.programPath}` },
-    { name: label, item: canonical },
-  ]);
+  const last = model.rows.at(-1)!;
+  const moved = last.closing_rank - first.closing_rank;
+  const jsonLd = pageJsonLd(
+    `${model.college.name} ${model.offering.name} ${label} cutoff`,
+    canonical,
+    [
+      { name: "JEE cutoffs", item: `${baseUrl}/jee-cutoffs` },
+      {
+        name: model.college.name,
+        item: `${baseUrl}/${route.examId}/colleges/${route.collegeId}`,
+      },
+      { name: String(route.year), item: `${baseUrl}${yearPath}` },
+      { name: model.offering.name, item: `${baseUrl}${model.programPath}` },
+      { name: label, item: canonical },
+    ],
+  );
   return (
-    <main className="cutoff-main">
+    <main className="mht-main jee-page">
       <JsonLd value={jsonLd} />
-      <Breadcrumbs
-        items={[
-          { label: "JEE cutoffs", href: "/jee-cutoffs" },
-          { label: model.college.seoName, href: `/${model.route.examId}/colleges/${model.route.collegeId}` },
-          { label: String(model.route.year), href: yearPath },
-          { label: model.offering.name, href: model.programPath },
-          { label },
-        ]}
-      />
-      <header className="cutoff-hero">
-        <span className="cutoff-kicker">
-          {examLabel(model.route.examId!)} · {bodyLabel(model.route.body!)}
-        </span>
-        <h1>
-          {model.college.seoName} {model.offering.name} cutoff {model.route.year}
-        </h1>
-        <p className="cutoff-lead">
-          {model.route.quota} quota · {model.route.seatType} · {genderLabel(model.route.gender!)} · {model.offering.degree}, {model.offering.durationYears} years.
-        </p>
-        <div className="cutoff-hero-meta">
-          <span>
-            {model.rows.length} published round{model.rows.length === 1 ? "" : "s"}
-          </span>
-          <span>{model.route.indexable ? "Multi-round profile" : "One published round"}</span>
-          <span>Release {model.release}</span>
-        </div>
-      </header>
-      <section className="cutoff-section">
-        <div className="cutoff-section-heading">
-          <div>
-            <h2>Opening and closing ranks</h2>
-            <p>Lower is better. Missing counselling rounds are shown as gaps.</p>
-          </div>
-        </div>
-        <div className="cutoff-chart-card cutoff-trend-card">
-          <CutoffChart points={model.chart} label={`${seatPoolShortLabel(model.route)} opening and closing ranks`} />
-        </div>
-      </section>
-      <section className="cutoff-table-section">
-        <div className="cutoff-section-heading">
-          <h2>Published rounds</h2>
-        </div>
-        <div className="cutoff-table-scroll">
-          <table className="cutoff-table" data-release={model.release}>
-            <caption>Opening and closing ranks by round</caption>
-            <thead>
-              <tr>
-                <th scope="col">Round</th>
-                <th scope="col">Opening rank</th>
-                <th scope="col">Closing rank</th>
-              </tr>
-            </thead>
-            <tbody>
-              {model.rows.map((row) => (
-                <tr id={`round-${row.round}`} key={row.round}>
-                  <th scope="row" data-label="Round" data-field="round">
-                    {row.round}
-                  </th>
-                  <td data-label="Opening" data-field="opening-rank">
-                    {row.opening_rank.toLocaleString("en-IN")}
-                  </td>
-                  <td data-label="Closing" data-field="closing-rank">
-                    <strong>{row.closing_rank.toLocaleString("en-IN")}</strong>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        {model.rows.length === 1 ? (
-          <p className="cutoff-muted">
-            Only Round {first.round} is present for this exact source profile; no trend is inferred.
+      <div className="mht-page">
+        <Crumbs
+          items={[
+            { label: "JEE", href: "/jee-cutoffs" },
+            {
+              label: model.college.seoName,
+              href: `/${route.examId}/colleges/${route.collegeId}`,
+            },
+            { label: String(route.year), href: yearPath },
+            { label: model.offering.name, href: model.programPath },
+            { label: route.seatType ?? "Seat pool" },
+          ]}
+        />
+        <header className="jee-head">
+          <h1 className="mht-h1">
+            {model.college.seoName} {model.offering.name} cutoff {route.year}
+          </h1>
+          <p className="mht-college-meta">
+            {[
+              bodyLabel(route.body!),
+              `${route.quota} quota`,
+              route.seatType!,
+              genderLabel(route.gender!),
+              model.offering.degree,
+            ].map((fact) => (
+              <span key={fact} className="mht-chip">
+                {fact}
+              </span>
+            ))}
           </p>
-        ) : null}
+          <div className="jee-actions">
+            <Link className="mht-btn mht-btn-primary" href={model.programPath}>
+              All seat pools
+            </Link>
+          </div>
+        </header>
+        <dl className="mht-stats">
+          <div>
+            <dt>Closing rank</dt>
+            <dd>
+              <strong>{last.closing_rank.toLocaleString("en-IN")}</strong>
+              <span>Round {last.round}</span>
+            </dd>
+          </div>
+          <div>
+            <dt>Opening rank</dt>
+            <dd>
+              <strong>{last.opening_rank.toLocaleString("en-IN")}</strong>
+              <span>Round {last.round}</span>
+            </dd>
+          </div>
+          <div>
+            <dt>Rounds</dt>
+            <dd>
+              <strong>{model.rows.length}</strong>
+              <span>
+                {route.indexable ? "Published" : "One published round"}
+              </span>
+            </dd>
+          </div>
+          <div>
+            <dt>Closing rank moved</dt>
+            <dd>
+              <strong>
+                {model.rows.length > 1
+                  ? `${moved >= 0 ? "+" : "−"}${Math.abs(moved).toLocaleString("en-IN")}`
+                  : "—"}
+              </strong>
+              <span>
+                {model.rows.length > 1
+                  ? `Round ${first.round} to ${last.round}`
+                  : "Needs two rounds"}
+              </span>
+            </dd>
+          </div>
+        </dl>
+      </div>
+
+      <section className="mht-section" aria-labelledby="jee-round-title">
+        <div className="mht-page">
+          <div className="mht-section-head">
+            <h2 id="jee-round-title">Ranks by round</h2>
+          </div>
+          <div className="mht-card jee-chart-card">
+            <CutoffChart
+              points={model.chart}
+              label={`${seatPoolShortLabel(route)} opening and closing ranks`}
+            />
+          </div>
+          <div className="mht-card">
+            <table className="mht-table" data-release={model.release}>
+              <caption className="mht-sr">
+                Published rounds: opening and closing ranks
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Published rounds</th>
+                  <th scope="col" className="mht-num">
+                    Opening
+                  </th>
+                  <th scope="col" className="mht-num">
+                    Closing
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {model.rows.map((row) => (
+                  <tr id={`round-${row.round}`} key={row.round}>
+                    <th scope="row" data-field="round">
+                      Round {row.round}
+                    </th>
+                    <td className="mht-num" data-field="opening-rank">
+                      {row.opening_rank.toLocaleString("en-IN")}
+                    </td>
+                    <td className="mht-num" data-field="closing-rank">
+                      <strong>
+                        {row.closing_rank.toLocaleString("en-IN")}
+                      </strong>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {model.rows.length === 1 ? (
+            <p className="mht-note">
+              Only Round {first.round} is published for this seat.
+            </p>
+          ) : null}
+        </div>
       </section>
-      <SiblingPools current={model.route} siblings={model.siblingProfiles} />
-      <SourceContext sources={model.sources} />
+
+      <div className="mht-page">
+        <SiblingPools current={route} siblings={model.siblingProfiles} />
+        <SourceCard
+          summary={sourceSummary(model.sources)}
+          sources={model.sources}
+        />
+      </div>
     </main>
   );
 }

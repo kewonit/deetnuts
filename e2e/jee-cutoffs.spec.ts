@@ -19,12 +19,12 @@ test("year page is source-useful in server HTML and exposes canonical SEO", asyn
   await page.goto(pagePath);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Assam University Silchar cutoff 2025");
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://www.deetnuts.com/jee-main/colleges/assam-university/cutoffs/2025");
-  await expect(page.locator(".cutoff-table")).toContainText("Computer Science and Engineering");
+  await expect(page.locator(".jee-grid")).toContainText("Computer Science and Engineering");
 });
 
 test("filters cascade, persist in the fragment, and support browser history", async ({ page }) => {
   await page.goto(pagePath);
-  await page.locator(".cutoff-chart").waitFor({ state: "attached" });
+  await page.locator(".jee-explorer").waitFor({ state: "attached" });
   await page.getByRole("group", { name: "Counselling" }).getByRole("button", { name: "CSAB" }).click();
   await expect(page.getByRole("group", { name: "Round" }).getByRole("button", { name: "3" })).toHaveAttribute("aria-pressed", "true");
   await expect(page).toHaveURL(/#body=csab&round=3/);
@@ -37,7 +37,9 @@ test("filters cascade, persist in the fragment, and support browser history", as
 
 test("chart hover shows the exact opening and closing ranks", async ({ page }) => {
   await page.goto(pagePath);
-  const chart = page.locator(".cutoff-chart svg").first();
+  await page.getByRole("button", { name: "Your seat" }).click();
+  await page.locator(".mht-program-toggle").first().click();
+  const chart = page.locator(".jee-chart svg").first();
   await chart.waitFor({ state: "attached" });
   await chart.hover();
   const tooltip = page.locator(".recharts-tooltip-wrapper").first();
@@ -51,8 +53,8 @@ test("chart hover shows the exact opening and closing ranks", async ({ page }) =
 test("mobile restyles the one semantic table without horizontal page overflow", async ({ page }) => {
   test.skip((page.viewportSize()?.width ?? 0) > 390, "Mobile assertion");
   await page.goto(pagePath);
-  await expect(page.locator(".cutoff-table tbody tr").first()).toBeVisible();
-  await expect(page.locator(".cutoff-table")).toHaveCount(1);
+  await expect(page.locator(".jee-grid tbody tr").first()).toBeVisible();
+  await expect(page.locator(".jee-grid")).toHaveCount(1);
   const widths = await page.evaluate(() => ({ viewport: innerWidth, content: document.body.scrollWidth }));
   expect(widths.content).toBeLessThanOrEqual(widths.viewport + 1);
 });
@@ -60,40 +62,42 @@ test("mobile restyles the one semantic table without horizontal page overflow", 
 test("cutoff surface has no detectable WCAG A/AA violations", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "light" });
   await page.goto(pagePath);
-  await page.locator(".cutoff-chart").waitFor({ state: "attached" });
-  const lightResults = await new AxeBuilder({ page }).include(".jee-cutoff-shell").include(".jee-cutoff-footer").analyze();
+  await page.locator(".jee-explorer").waitFor({ state: "attached" });
+  const lightResults = await new AxeBuilder({ page }).include(".jee-cutoff-shell").analyze();
   expect(lightResults.violations).toEqual([]);
   await page.emulateMedia({ colorScheme: "dark" });
-  const darkResults = await new AxeBuilder({ page }).include(".jee-cutoff-shell").include(".jee-cutoff-footer").analyze();
+  const darkResults = await new AxeBuilder({ page }).include(".jee-cutoff-shell").analyze();
   expect(darkResults.violations).toEqual([]);
 });
 
-test("cutoff routes use the structured product footer", async ({ page }) => {
+test("cutoff routes use the site footer with JEE colleges and sources", async ({ page }) => {
   await page.goto(pagePath);
-  const footer = page.locator(".jee-cutoff-footer");
+  const footer = page.locator(".mht-footer");
+  await expect(footer).toHaveCount(1);
   await expect(footer).toBeVisible();
   await expect(page.locator("footer.bg-gradient-to-b")).toHaveCount(0);
-  await expect(footer.locator(".jee-cutoff-footer-heading")).toHaveText(["Cutoffs", "Tools", "Data", "Project"]);
-  expect((await footer.boundingBox())?.height ?? Infinity).toBeLessThan(960);
+  await expect(footer.locator(".mht-foot-cols h2")).toHaveText(["MHT-CET", "JEE", "Data", "Project"]);
+  await expect(footer.locator(".mht-foot-colleges li a").first()).toHaveText("IIT Bombay");
+  await expect(footer.locator(".mht-foot-status")).toContainText("JoSAA");
 });
 
 test("homepage retains the original footer", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator(".jee-cutoff-footer")).toHaveCount(0);
+  await expect(page.locator(".mht-footer")).toHaveCount(0);
   const originalFooter = page.locator(".legacy-site-footer");
   await expect(originalFooter).toBeVisible();
   await expect(originalFooter).toContainText("MHT-CET");
   await expect(originalFooter.locator("[data-legacy-wordmark] svg")).toBeVisible();
 });
 
-test("mht-cet hub uses the MHT-CET navbar and footer", async ({ page }) => {
+test("mht-cet hub uses the site navbar and the MHT-CET footer", async ({ page }) => {
   await page.goto("/mht-cet");
-  await expect(page.locator(".mht-nav")).toBeVisible();
-  await expect(page.locator(".site-default-chrome nav")).toHaveCount(0);
+  await expect(page.locator(".site-nav")).toHaveCount(1);
+  await expect(page.locator(".site-nav")).toBeVisible();
   const footer = page.locator(".mht-footer");
   await expect(footer).toBeVisible();
-  await expect(page.locator(".jee-cutoff-footer")).toHaveCount(0);
-  await expect(footer.locator(".mht-foot-cols h2")).toHaveText(["MHT-CET", "More cutoffs", "Data", "Legal"]);
+  await expect(footer.locator(".mht-foot-cols h2")).toHaveText(["MHT-CET", "JEE", "Data", "Project"]);
+  await expect(footer.locator(".mht-foot-colleges li a")).toHaveCount(18);
 });
 
 test("cutoff surfaces follow light and dark color preferences", async ({ page }) => {
@@ -101,9 +105,9 @@ test("cutoff surfaces follow light and dark color preferences", async ({ page })
   await page.goto(pagePath);
   const colors = () => page.evaluate(() => {
     const shell = getComputedStyle(document.querySelector(".jee-cutoff-shell")!);
-    const footer = getComputedStyle(document.querySelector(".jee-cutoff-footer")!);
-    const openingLine = getComputedStyle(document.querySelector(".cutoff-chart-key-opening")!);
-    return { shell: shell.backgroundColor, footer: footer.backgroundColor, line: openingLine.borderTopColor };
+    const footer = getComputedStyle(document.querySelector(".mht-footer")!);
+    const heading = getComputedStyle(document.querySelector("h1")!);
+    return { shell: shell.backgroundColor, footer: footer.backgroundColor, line: heading.color };
   });
   const light = await colors();
   await page.emulateMedia({ colorScheme: "dark" });
@@ -121,21 +125,20 @@ test("theme settings override the device preference and persist", async ({ page 
   const shell = page.locator(".jee-cutoff-shell");
   const deviceBackground = await shell.evaluate((element) => getComputedStyle(element).backgroundColor);
 
-  await page.getByRole("button", { name: "Theme settings", exact: true }).click();
+  await page.evaluate(() => window.dispatchEvent(new Event("deetnuts:open-theme-settings")));
   const dialog = page.getByRole("dialog", { name: "Theme" });
   await expect(dialog).toBeVisible();
   expect((await new AxeBuilder({ page }).include(".theme-settings-panel").analyze()).violations).toEqual([]);
   await dialog.getByRole("button", { name: /^Light/ }).click();
   await expect(page.locator("html")).toHaveClass(/\blight\b/);
+  await expect(page.locator(".mht-foot-theme").getByRole("button", { name: "Light theme" })).toHaveAttribute("aria-pressed", "true");
   const lightBackground = await shell.evaluate((element) => getComputedStyle(element).backgroundColor);
   expect(lightBackground).not.toBe(deviceBackground);
+  await page.keyboard.press("Escape");
 
   await page.reload();
   await expect(page.locator("html")).toHaveClass(/\blight\b/);
-  await page.getByRole("button", { name: "Theme settings", exact: true }).click();
-  const lightDialog = page.getByRole("dialog", { name: "Theme" });
-  expect((await new AxeBuilder({ page }).include(".theme-settings-panel").analyze()).violations).toEqual([]);
-  await lightDialog.getByRole("button", { name: /^System/ }).click();
+  await page.locator(".mht-foot-theme").getByRole("button", { name: "System theme" }).click();
   await expect(page.locator("html")).not.toHaveClass(/\b(?:light|dark)\b/);
   await expect.poll(() => shell.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe(deviceBackground);
 });
@@ -143,12 +146,12 @@ test("theme settings override the device preference and persist", async ({ page 
 test("header stays in flow with the intended responsive height", async ({ page }) => {
   await page.goto(pagePath);
   const layout = await page.evaluate(() => {
-    const nav = document.querySelector(".site-default-chrome nav")!.getBoundingClientRect();
+    const nav = document.querySelector(".site-nav")!.getBoundingClientRect();
     const main = document.querySelector("main")!.getBoundingClientRect();
-    return { navBottom: nav.bottom, navHeight: nav.height, mainTop: main.top, width: innerWidth };
+    return { navBottom: nav.bottom, navHeight: nav.height, mainTop: main.top };
   });
   expect(layout.mainTop).toBeGreaterThanOrEqual(layout.navBottom - 1);
-  expect(layout.navHeight).toBe(layout.width <= 500 ? 64 : 88);
+  expect(layout.navHeight).toBe(56);
 });
 
 test("program and profile pages expose complete server-rendered facts", async ({ page, request }) => {

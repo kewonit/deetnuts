@@ -1,9 +1,9 @@
-import Navbar from "@/components/Navbar";
 import GrainEffect from "@/components/graineffect";
 import MotionWrapper from "@/components/MotionWrapper";
 import RouteAwareFooter from "@/components/RouteAwareFooter";
 import SanitizedGoogleAnalytics from "@/components/analytics/SanitizedGoogleAnalytics";
-import RouteAwareHeader from "@/components/RouteAwareHeader";
+import RouteAwareHeader, { RouteAwareGrain } from "@/components/RouteAwareHeader";
+import { SiteNavbar } from "@/components/site-nav/SiteNavbar";
 import CookieConsent from "@/components/analytics/CookieConsent";
 import ThemeSettings from "@/components/theme/ThemeSettings";
 
@@ -15,16 +15,14 @@ export default function StandardSiteShell({
   return (
     <>
       <RouteAwareHeader>
-        <div className="site-default-chrome">
-          <Navbar />
-        </div>
+        <SiteNavbar />
       </RouteAwareHeader>
       <MotionWrapper>{children}</MotionWrapper>
-      <RouteAwareHeader>
+      <RouteAwareGrain>
         <div className="site-default-chrome" aria-hidden="true">
           <GrainEffect />
         </div>
-      </RouteAwareHeader>
+      </RouteAwareGrain>
       <SanitizedGoogleAnalytics />
       <CookieConsent />
       <ThemeSettings />

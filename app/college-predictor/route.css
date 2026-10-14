@@ -9,8 +9,8 @@ body:has(.deetnuts-ejam-shell) {
   --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-instrument-sans: "Instrument Sans", var(--font-sans);
   --font-serif-display: "Instrument Serif", ui-serif, Georgia, serif;
-  height: calc(100dvh - 88px);
-  min-height: calc(100dvh - 88px);
+  height: calc(100dvh - var(--site-nav-h));
+  min-height: calc(100dvh - var(--site-nav-h));
   overflow: hidden;
   background: var(--background);
   color: var(--foreground);
@@ -28,23 +28,9 @@ body:has(.deetnuts-ejam-shell) {
 
 @media (min-width: 768px) {
   .deetnuts-ejam-shell [data-slot="sidebar-container"] {
-    top: 88px;
+    top: var(--site-nav-h);
     bottom: auto;
-    height: calc(100dvh - 88px);
-  }
-}
-
-@media (max-width: 639px) {
-  .deetnuts-ejam-shell {
-    height: calc(100dvh - 64px);
-    min-height: calc(100dvh - 64px);
-    margin-top: 64px;
-  }
-
-  body:has(.deetnuts-ejam-shell) [data-slot="sidebar"][data-mobile="true"],
-  body:has(.deetnuts-ejam-shell) [data-slot="sheet-overlay"] {
-    top: 64px;
-    height: calc(100dvh - 64px);
+    height: calc(100dvh - var(--site-nav-h));
   }
 }
 
@@ -52,29 +38,11 @@ body:has(.deetnuts-ejam-shell) {
   .deetnuts-ejam-shell [data-slot="sidebar-header"] {
     display: flex;
   }
-}
 
-@media (max-width: 899px) {
-  body:has(.deetnuts-ejam-shell) .site-mobile-nav-trigger {
-    display: block;
-  }
-
-  body:has(.deetnuts-ejam-shell) .site-desktop-nav-links,
-  body:has(.deetnuts-ejam-shell) .site-desktop-github {
-    display: none;
-  }
-}
-
-@media (min-width: 640px) and (max-width: 767px) {
+  /* The phone sidebar sheet opens below the site navbar. */
   body:has(.deetnuts-ejam-shell) [data-slot="sidebar"][data-mobile="true"],
   body:has(.deetnuts-ejam-shell) [data-slot="sheet-overlay"] {
-    top: 88px;
-    height: calc(100dvh - 88px);
-  }
-}
-
-@media (min-width: 640px) {
-  body:has(.deetnuts-ejam-shell) .site-default-chrome nav {
-    position: relative;
+    top: var(--site-nav-h);
+    height: calc(100dvh - var(--site-nav-h));
   }
 }

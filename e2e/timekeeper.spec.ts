@@ -219,16 +219,17 @@ test("mobile and desktop navigation retain theme scope and return to existing De
   page,
 }) => {
   await page.goto("/");
-  if ((page.viewportSize()?.width ?? 0) <= 900) {
+  if ((page.viewportSize()?.width ?? 0) < 768) {
+    await page.getByRole("button", { name: "Menu", exact: true }).click();
     await page
-      .getByRole("button", { name: "Open navigation menu", exact: true })
-      .click();
-    await page
-      .getByRole("button", { name: "Exam Countdown", exact: true })
+      .getByRole("dialog")
+      .getByRole("link", { name: "Exam countdown", exact: true })
       .click();
   } else {
-    await page.getByRole("button", { name: "Tools", exact: true }).click();
-    await page.getByRole("link", { name: /Exam Countdown/ }).click();
+    await page
+      .locator(".site-nav")
+      .getByRole("link", { name: "Exam countdown", exact: true })
+      .click();
   }
   await expect(page).toHaveURL(new RegExp(`${path}$`));
   await expect(page.getByRole("heading", { level: 1 })).toContainText(

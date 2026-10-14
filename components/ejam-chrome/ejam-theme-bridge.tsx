@@ -26,6 +26,8 @@ export function EjamThemeBridge() {
       document
         .querySelectorAll<HTMLElement>(".deetnuts-ejam-shell")
         .forEach((shell) => shell.classList.toggle("dark", useDarkTheme));
+      // Menus and popovers portal into <body>, outside the shell, so it carries the theme too.
+      document.body.classList.toggle("dark", useDarkTheme);
     };
 
     syncTheme();
@@ -34,6 +36,7 @@ export function EjamThemeBridge() {
     window.addEventListener("deetnuts:theme-change", syncTheme);
 
     return () => {
+      document.body.classList.remove("dark");
       mediaQuery.removeEventListener("change", syncTheme);
       window.removeEventListener("storage", syncTheme);
       window.removeEventListener("deetnuts:theme-change", syncTheme);

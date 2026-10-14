@@ -1,5 +1,5 @@
 /* Shared design system for every /mht-cet page: tokens, type, page frame,
-   navbar and the controls the pages build from. Page styles live in
+   and the controls the pages build from. Page styles live in
    mht-college.css, mht-directory.css and mht-tool.css. */
 
 .mht,
@@ -57,7 +57,7 @@
 .mht {
   display: flex;
   flex-direction: column;
-  min-height: 100dvh;
+  min-height: calc(100dvh - var(--site-nav-h));
   background: var(--mht-bg);
 }
 
@@ -203,161 +203,6 @@ body:has(.deetnuts-ejam-shell.dark > .mht) { --sb-track-color: #000000; --sb-thu
   font-weight: 500;
   letter-spacing: -0.01em;
   vertical-align: 0.15em;
-}
-
-/* ---------- Navbar ---------- */
-.mht-nav {
-  position: relative;
-  z-index: 40;
-  border-bottom: 1px solid var(--mht-line);
-  background: var(--mht-bg);
-}
-.mht-nav-inner {
-  display: flex;
-  align-items: center;
-  gap: 1.75rem;
-  height: 3.5rem;
-  max-width: var(--mht-wide);
-  margin: 0 auto;
-  padding: 0 clamp(1rem, 3vw, 2rem);
-}
-.mht-nav-mark {
-  flex: none;
-  color: var(--mht-ink);
-  font-size: 1.0625rem;
-  font-weight: 700;
-  letter-spacing: -0.035em;
-  text-decoration: none;
-}
-.mht-nav-links { display: flex; align-items: center; gap: 0.15rem; }
-.mht-nav-links a {
-  padding: 0.4rem 0.7rem;
-  border-radius: 8px;
-  color: var(--mht-muted);
-  font-size: 0.875rem;
-  font-weight: 500;
-  line-height: 1.2;
-  text-decoration: none;
-  transition: color 0.15s ease, background 0.15s ease;
-}
-.mht-nav-links a:hover { background: var(--mht-chip); color: var(--mht-ink); }
-.mht-nav-links a[aria-current] { color: var(--mht-ink); }
-.mht-nav-end { display: flex; align-items: center; gap: 0.5rem; margin-left: auto; }
-.mht-nav-star {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  height: 2rem;
-  padding: 0 0.65rem;
-  border: 1px solid var(--mht-line);
-  border-radius: 8px;
-  color: var(--mht-ink-soft);
-  font-family: var(--mht-num);
-  font-size: 0.8125rem;
-  font-variant-numeric: tabular-nums;
-  font-weight: 500;
-  text-decoration: none;
-  transition: border-color 0.15s ease, color 0.15s ease;
-}
-.mht-nav-star:hover { border-color: var(--mht-muted); color: var(--mht-ink); }
-.mht-nav-star svg { width: 15px; height: 15px; flex: none; }
-.mht-nav-star:not(:has(span)) { width: 2rem; padding: 0; justify-content: center; }
-.mht-nav-end :is(a, button).mht-nav-login {
-  display: inline-flex;
-  align-items: center;
-  height: 2rem;
-  padding: 0 0.85rem;
-  border-radius: 8px;
-  background: var(--mht-btn);
-  color: var(--mht-btn-ink);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  text-decoration: none;
-}
-.mht-nav-end .mht-nav-login:hover { background: var(--mht-btn-hover); }
-
-.mht-nav-account {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  height: 2rem;
-  padding: 0 0.7rem 0 0.25rem;
-  border: 1px solid var(--mht-line);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--mht-ink);
-  font: inherit;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  cursor: pointer;
-}
-.mht-nav-account:hover { border-color: var(--mht-muted); }
-.mht-nav-account img { width: 1.5rem; height: 1.5rem; border-radius: 999px; object-fit: cover; }
-.mht-nav-account span { overflow: hidden; max-width: 8rem; text-overflow: ellipsis; white-space: nowrap; }
-
-/* Account menu: overrides the site dropdown's base classes. */
-.mht-menu.mht-layer {
-  min-width: 13rem;
-  padding: 0.35rem;
-  border: 1px solid var(--mht-line);
-  border-radius: 12px;
-  background: var(--mht-bg);
-  box-shadow: var(--mht-shadow);
-  color: var(--mht-ink);
-}
-.mht-menu.mht-layer :is([role="menuitem"], [role="menuitem"] > *) {
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--mht-ink);
-  font-size: 0.875rem;
-}
-.mht-menu.mht-layer [role="menuitem"]:is(:focus, [data-highlighted]) { background: var(--mht-chip); }
-.mht-menu.mht-layer [role="separator"] { background: var(--mht-line); }
-.mht-menu.mht-layer .font-heading { font-family: inherit; font-weight: 600; }
-.mht-menu.mht-layer .text-black\/60 { color: var(--mht-muted); }
-
-.mht-nav-menu { display: none; }
-.mht-nav-menu > summary {
-  display: grid;
-  place-content: center;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 8px;
-  color: var(--mht-ink);
-  list-style: none;
-  cursor: pointer;
-}
-.mht-nav-menu > summary::-webkit-details-marker { display: none; }
-.mht-nav-menu > summary:hover { background: var(--mht-chip); }
-.mht-nav-menu > summary svg { width: 18px; height: 18px; }
-.mht-nav-menu[open] > summary { background: var(--mht-chip); }
-.mht-nav-sheet {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  display: grid;
-  padding: 0.5rem clamp(1rem, 3vw, 2rem) 1rem;
-  border-bottom: 1px solid var(--mht-line);
-  background: var(--mht-bg);
-  box-shadow: 0 16px 24px -16px rgb(0 0 0 / 0.25);
-}
-.mht-nav-sheet a {
-  padding: 0.75rem 0;
-  border-bottom: 1px solid var(--mht-line-soft);
-  color: var(--mht-ink);
-  font-size: 1rem;
-  font-weight: 500;
-  text-decoration: none;
-}
-.mht-nav-sheet a:last-child { border-bottom: 0; }
-.mht-nav-sheet a[aria-current] { color: var(--mht-accent-soft); }
-
-@media (max-width: 760px) {
-  .mht-nav-links,
-  .mht-nav-star { display: none; }
-  .mht-nav-menu { display: block; }
 }
 
 /* ---------- Buttons, chips, links ---------- */
