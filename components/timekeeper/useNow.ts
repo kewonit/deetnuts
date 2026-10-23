@@ -1,5 +1,10 @@
 "use client";
-import { useSyncExternalStore } from "react";
+import { createContext, useContext, useSyncExternalStore } from "react";
+
+// The server render time lets prerendered pages show real countdown values;
+// hydration reads the same value, then the shared clock takes over.
+const RenderedAt = createContext(0);
+export const RenderedAtProvider = RenderedAt.Provider;
 
 let now = 0;
 let clock: ReturnType<typeof setInterval> | undefined;
@@ -27,9 +32,10 @@ function subscribe(notify: () => void) {
   };
 }
 export function useNow() {
+  const renderedAt = useContext(RenderedAt);
   return useSyncExternalStore(
     subscribe,
     () => now,
-    () => 0,
+    () => renderedAt,
   );
 }

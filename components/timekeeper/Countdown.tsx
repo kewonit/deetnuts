@@ -6,6 +6,7 @@ import {
   countdownTarget,
   displaySessions,
   formatExamDate,
+  nextSession,
   timeRemaining,
   type ExamSession,
 } from "@/lib/timekeeper/exams";
@@ -46,12 +47,36 @@ export function CountdownDigits({
   );
 }
 
+function dayCount(days: number) {
+  return `${days} ${days === 1 ? "day" : "days"} left`;
+}
+
+export function DaysLeft({ sessions }: { sessions: ExamSession[] }) {
+  const now = useNow();
+  const session = nextSession(sessions, now);
+  if (!now || !session) return null;
+  const target = countdownTarget(session, now);
+  const remaining = timeRemaining(target, now);
+  if (remaining.expired) return null;
+  return (
+    <p className="text-base sm:text-lg mt-4" data-testid="days-left">
+      <strong>{dayCount(remaining.days)}</strong> · {formatExamDate(target)}
+      {target !== session.date ? " · Under way" : ""}
+      {session.predicted ? " · Expected" : ""}
+    </p>
+  );
+}
+
+export function DaysUntil({ date }: { date: string }) {
+  const now = useNow();
+  const remaining = timeRemaining(date, now);
+  if (!now || remaining.expired) return null;
+  return <> · {dayCount(remaining.days)}</>;
+}
+
 export function CardCountdown({ sessions }: { sessions: ExamSession[] }) {
   const now = useNow();
-  const displayed = displaySessions(sessions, now || 0);
-  const session =
-    displayed.find((item) => Date.parse(item.endDate ?? item.date) >= now) ??
-    displayed[0];
+  const session = nextSession(sessions, now);
   if (!session) return null;
   return (
     <div className="themed-bg-secondary rounded-lg p-3 mt-4">

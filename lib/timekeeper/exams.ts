@@ -11,6 +11,7 @@ export interface ExamSession {
   endDate?: string;
   note?: string;
   predicted?: boolean;
+  cycle?: string;
 }
 
 export interface Exam {
@@ -27,20 +28,25 @@ export interface Exam {
   seats: string;
   officialWebsite?: string;
   relatedExams: string[];
-  metaDescription: string;
   keywords: string[];
+  cycle: string;
   sessions: ExamSession[];
 }
 
-// Keep published schedules unchanged. Prediction is a browser display operation;
-// static content and metadata must not silently turn estimates into official dates.
+export const SCHEDULE_VERIFIED = schedules.verified;
+
+// Keep published schedules unchanged. Prediction is a display operation; every
+// page, card and description that shows an estimate must say it is expected.
 export const exams: Exam[] = Object.entries(metadata.metadata).map(
-  ([id, details]) => ({
-    id,
-    ...details,
-    sessions:
-      schedules.sessions.find((schedule) => schedule.id === id)?.sessions ?? [],
-  }),
+  ([id, details]) => {
+    const schedule = schedules.sessions.find((item) => item.id === id);
+    return {
+      id,
+      ...details,
+      cycle: schedule?.cycle ?? "",
+      sessions: schedule?.sessions ?? [],
+    };
+  },
 );
 
 export function categorySlug(category: string): string {
@@ -112,6 +118,44 @@ export function displaySessions(
       break;
   }
   return predicted;
+}
+
+export function nextSession(
+  sessions: ExamSession[],
+  now: number,
+): ExamSession | undefined {
+  const displayed = displaySessions(sessions, now);
+  return (
+    displayed.find((item) => Date.parse(item.endDate ?? item.date) >= now) ??
+    displayed[0]
+  );
+}
+
+// Sessions can belong to a later cycle than the exam's headline cycle, such as
+// a 2027 prelims listed after the 2026 interviews. Browser predictions shift a
+// whole schedule forward, so their cycle moves forward by the same years.
+export function examCycle(exam: Exam, now: number): string {
+  const session = nextSession(exam.sessions, now);
+  if (!session) return exam.cycle;
+  const cycle = session.cycle ?? exam.cycle;
+  const published = exam.sessions.find(
+    (item) => item.session === session.session,
+  );
+  const years = published
+    ? Number(session.date.slice(0, 4)) - Number(published.date.slice(0, 4))
+    : 0;
+  return years
+    ? cycle.replace(/\d{4}/, (year) => String(Number(year) + years))
+    : cycle;
+}
+
+export function cycleYears(list: Exam[], now: number): string {
+  const years = Array.from(
+    new Set(list.flatMap((exam) => examCycle(exam, now).match(/\d{4}/) ?? [])),
+  ).sort();
+  return years.length > 1
+    ? `${years[0]}-${years[years.length - 1].slice(2)}`
+    : (years[0] ?? "");
 }
 
 export function countdownTarget(session: ExamSession, now: number): string {

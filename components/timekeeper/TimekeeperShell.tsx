@@ -10,11 +10,14 @@ import {
   EXAM_COUNTDOWN_PATH,
 } from "@/lib/timekeeper/exams";
 import { themes, type TimekeeperTheme } from "@/lib/timekeeper/storage";
+import { RenderedAtProvider } from "./useNow";
 
 export default function TimekeeperShell({
   children,
+  renderedAt,
 }: {
   children: React.ReactNode;
+  renderedAt: number;
 }) {
   const pathname = usePathname();
   const detail = pathname.startsWith(`${EXAM_COUNTDOWN_PATH}/exams/`);
@@ -190,7 +193,7 @@ export default function TimekeeperShell({
           </div>
           {detail && <div className="sm:hidden px-4 pb-3">{themeControls}</div>}
         </header>
-        {children}
+        <RenderedAtProvider value={renderedAt}>{children}</RenderedAtProvider>
         <footer className="border-t border-dashed themed-border px-4 py-6 text-center text-xs themed-text-secondary">
           <p className="mb-3">
             <span className="font-serif italic">TimeKeeper</span> · Exams

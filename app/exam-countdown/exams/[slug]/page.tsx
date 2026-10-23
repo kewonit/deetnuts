@@ -1,18 +1,52 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import ExamCountdown, { ShareExam } from "@/components/timekeeper/Countdown";
+import ExamCountdown, {
+  DaysLeft,
+  DaysUntil,
+  ShareExam,
+} from "@/components/timekeeper/Countdown";
 import { CategoryBadge } from "@/components/timekeeper/ExamCards";
 import JsonLd from "@/components/timekeeper/JsonLd";
 import LazyStudyMap from "@/components/timekeeper/LazyStudyMap";
 import {
   categorySlug,
+  examCycle,
   exams,
   formatExamDate,
   getExam,
+  nextSession,
   relatedExams,
   EXAM_COUNTDOWN_PATH,
+  type Exam,
 } from "@/lib/timekeeper/exams";
-import { pageSchema, timekeeperMetadata } from "@/lib/timekeeper/metadata";
+import {
+  breadcrumbSchema,
+  pageSchema,
+  timekeeperMetadata,
+} from "@/lib/timekeeper/metadata";
+
+// Describes the next session from data so the snippet never claims an
+// estimate is official. It names the date rather than a day count because
+// cached HTML can outlive any count.
+function nextSessionSummary(exam: Exam, now: number) {
+  const session = nextSession(exam.sessions, now);
+  const title = `${exam.name} ${examCycle(exam, now)}`;
+  if (!session)
+    return `${title} dates will be announced by ${exam.conductingBody}.`;
+  // Some session names already carry their cycle, e.g. "INI CET January 2027".
+  const name =
+    session.session === "Single Session"
+      ? title
+      : /\d{4}/.test(session.session)
+        ? `${exam.name} ${session.session}`
+        : `${title} ${session.session}`;
+  const date = formatExamDate(session.date);
+  if (session.endDate && now >= Date.parse(session.date))
+    return `${name} is under way until ${formatExamDate(session.endDate)}.`;
+  if (session.predicted)
+    return `${name} is expected ${session.endDate ? "to start " : ""}on ${date}.`;
+  return `${name} ${session.endDate ? "starts" : "is"} on ${date}.`;
+}
 
 export const dynamicParams = false;
 export function generateStaticParams() {
@@ -25,10 +59,11 @@ export async function generateMetadata({
 }) {
   const exam = getExam((await params).slug);
   if (!exam) notFound();
+  const now = Date.now();
   return timekeeperMetadata(
     `${EXAM_COUNTDOWN_PATH}/exams/${exam.slug}`,
-    `${exam.name} Countdown Timer | Live Exam Date Tracker`,
-    exam.metaDescription,
+    `${exam.name} ${examCycle(exam, now)} Countdown: How Many Days Left?`,
+    `${nextSessionSummary(exam, now)} Live countdown of the days, hours and minutes left, with every session date.`,
     exam.keywords,
   );
 }
@@ -40,18 +75,30 @@ export default async function Page({
   const exam = getExam((await params).slug);
   if (!exam) notFound();
   const related = relatedExams(exam);
+  const now = Date.now();
+  const cycle = examCycle(exam, now);
+  const path = `${EXAM_COUNTDOWN_PATH}/exams/${exam.slug}`;
   return (
     <main className="max-w-5xl mx-auto px-4 lg:px-8 py-8">
       <JsonLd
         value={pageSchema(
-          `${EXAM_COUNTDOWN_PATH}/exams/${exam.slug}`,
-          `${exam.name} Countdown Timer`,
-          exam.description,
+          path,
+          `${exam.name} ${cycle} Countdown`,
+          nextSessionSummary(exam, now),
         )}
+      />
+      <JsonLd
+        value={breadcrumbSchema([
+          {
+            name: exam.category,
+            path: `${EXAM_COUNTDOWN_PATH}/category/${categorySlug(exam.category)}`,
+          },
+          { name: `${exam.name} ${cycle}`, path },
+        ])}
       />
       <div className="text-center mb-8">
         <h1 className="font-serif italic text-3xl sm:text-4xl lg:text-6xl mb-4">
-          {exam.name}
+          {exam.name} {cycle}
         </h1>
         <p className="text-lg sm:text-xl lg:text-2xl themed-text-secondary mb-6">
           {exam.fullName}
@@ -69,6 +116,7 @@ export default async function Page({
         <p className="text-base sm:text-lg themed-text-secondary max-w-3xl mx-auto">
           {exam.description}
         </p>
+        <DaysLeft sessions={exam.sessions} />
       </div>
       <ExamCountdown title={exam.name} sessions={exam.sessions} />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
@@ -160,6 +208,7 @@ export default async function Page({
               <strong>{session.session}:</strong> {formatExamDate(session.date)}
               {session.endDate ? ` – ${formatExamDate(session.endDate)}` : ""}
               {session.note ? ` · ${session.note}` : ""}
+              <DaysUntil date={session.date} />
             </li>
           ))}
         </ul>

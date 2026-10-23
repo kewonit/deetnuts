@@ -11,6 +11,10 @@ export const metadata: Metadata = {
   },
 };
 
+// Hourly regeneration keeps prerendered day counts, next sessions and exam
+// cycles current without a deploy.
+export const revalidate = 3600;
+
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <TimekeeperShell>{children}</TimekeeperShell>;
+  return <TimekeeperShell renderedAt={Date.now()}>{children}</TimekeeperShell>;
 }
