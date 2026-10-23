@@ -1445,7 +1445,8 @@
                 "CBSE Class 10 exam date",
                 "CBSE board exams",
                 "CBSE"
-            ]
+            ],
+            "classLevel": 10
         },
         "cbse-class-12-2026": {
             "name": "CBSE Class 12",
@@ -1475,7 +1476,8 @@
                 "CBSE Class 12 exam date",
                 "CBSE board exams",
                 "CBSE"
-            ]
+            ],
+            "classLevel": 12
         },
         "icse-class-10-2026": {
             "name": "ICSE Class 10",
@@ -1505,7 +1507,8 @@
                 "ICSE Class 10 exam date",
                 "ICSE board exams",
                 "CISCE"
-            ]
+            ],
+            "classLevel": 10
         },
         "isc-class-12-2026": {
             "name": "ISC Class 12",
@@ -1532,7 +1535,8 @@
                 "ISC Class 12 exam date",
                 "ISC board exams",
                 "CISCE"
-            ]
+            ],
+            "classLevel": 12
         },
         "maharashtra-hsc-2026": {
             "name": "Maharashtra HSC",
@@ -1562,7 +1566,8 @@
                 "Maharashtra HSC exam date",
                 "Maharashtra board exams",
                 "MSBSHSE"
-            ]
+            ],
+            "classLevel": 12
         },
         "maharashtra-ssc-2026": {
             "name": "Maharashtra SSC",
@@ -1592,7 +1597,8 @@
                 "Maharashtra SSC exam date",
                 "Maharashtra board exams",
                 "MSBSHSE"
-            ]
+            ],
+            "classLevel": 10
         },
         "up-board-10th-2026": {
             "name": "UP Board 10th",
@@ -1622,7 +1628,8 @@
                 "UP Board 10th exam date",
                 "UP board exams",
                 "UPMSP"
-            ]
+            ],
+            "classLevel": 10
         },
         "up-board-12th-2026": {
             "name": "UP Board 12th",
@@ -1650,6 +1657,804 @@
                 "UP Board 12th exam date",
                 "UP board exams",
                 "UPMSP"
+            ],
+            "classLevel": 12
+        },
+        "bseb-10th-2027": {
+            "slug": "bseb-10th",
+            "name": "Bihar Board 10th",
+            "fullName": "Bihar School Examination Board Matric Annual Examination",
+            "description": "Class 10 board examination conducted by BSEB.",
+            "category": "Board Exams",
+            "classLevel": 10,
+            "eligibility": "Class 9 pass students registered with BSEB",
+            "subjects": [
+                "Hindi",
+                "English",
+                "Mathematics",
+                "Science",
+                "Social Science"
+            ],
+            "duration": "3 hours 15 minutes per subject",
+            "conductingBody": "BSEB",
+            "seats": "N/A",
+            "officialWebsite": "https://biharboardonline.bihar.gov.in/",
+            "relatedExams": [
+                "bseb-12th",
+                "cbse-class-10",
+                "up-board-10th"
+            ],
+            "keywords": [
+                "Bihar Board 10th 2027",
+                "Bihar Board 10th countdown",
+                "Bihar Board 10th exam date 2027",
+                "how many days left for bihar board 10th 2027",
+                "BSEB matric 2027"
+            ]
+        },
+        "bseb-12th-2027": {
+            "slug": "bseb-12th",
+            "name": "Bihar Board 12th",
+            "fullName": "Bihar School Examination Board Intermediate Annual Examination",
+            "description": "Class 12 board examination conducted by BSEB.",
+            "category": "Board Exams",
+            "classLevel": 12,
+            "eligibility": "Class 11 pass students registered with BSEB",
+            "subjects": [
+                "Physics",
+                "Chemistry",
+                "Mathematics",
+                "Biology",
+                "English"
+            ],
+            "duration": "3 hours 15 minutes per subject",
+            "conductingBody": "BSEB",
+            "seats": "N/A",
+            "officialWebsite": "https://biharboardonline.bihar.gov.in/",
+            "relatedExams": [
+                "bseb-10th",
+                "cbse-class-12",
+                "up-board-12th"
+            ],
+            "keywords": [
+                "Bihar Board 12th 2027",
+                "Bihar Board 12th countdown",
+                "Bihar Board 12th exam date 2027",
+                "how many days left for bihar board 12th 2027",
+                "BSEB inter 2027"
+            ]
+        },
+        "rbse-10th-2027": {
+            "slug": "rbse-10th",
+            "name": "RBSE 10th",
+            "fullName": "Rajasthan Board Secondary Examination",
+            "description": "Class 10 board examination conducted by BSER, Ajmer.",
+            "category": "Board Exams",
+            "classLevel": 10,
+            "eligibility": "Class 9 pass students registered with BSER",
+            "subjects": [
+                "Hindi",
+                "English",
+                "Mathematics",
+                "Science",
+                "Social Science"
+            ],
+            "duration": "3 hours 15 minutes per subject",
+            "conductingBody": "BSER, Ajmer",
+            "seats": "N/A",
+            "officialWebsite": "https://rajeduboard.rajasthan.gov.in/",
+            "relatedExams": [
+                "rbse-12th",
+                "cbse-class-10"
+            ],
+            "keywords": [
+                "RBSE 10th 2027",
+                "RBSE 10th countdown",
+                "RBSE 10th exam date 2027",
+                "how many days left for rbse 10th 2027",
+                "Rajasthan board 10th 2027"
+            ]
+        },
+        "rbse-12th-2027": {
+            "slug": "rbse-12th",
+            "name": "RBSE 12th",
+            "fullName": "Rajasthan Board Senior Secondary Examination",
+            "description": "Class 12 board examination conducted by BSER, Ajmer.",
+            "category": "Board Exams",
+            "classLevel": 12,
+            "eligibility": "Class 11 pass students registered with BSER",
+            "subjects": [
+                "Physics",
+                "Chemistry",
+                "Mathematics",
+                "Biology",
+                "Hindi"
+            ],
+            "duration": "3 hours 15 minutes per subject",
+            "conductingBody": "BSER, Ajmer",
+            "seats": "N/A",
+            "officialWebsite": "https://rajeduboard.rajasthan.gov.in/",
+            "relatedExams": [
+                "rbse-10th",
+                "cbse-class-12"
+            ],
+            "keywords": [
+                "RBSE 12th 2027",
+                "RBSE 12th countdown",
+                "RBSE 12th exam date 2027",
+                "how many days left for rbse 12th 2027",
+                "Rajasthan board 12th 2027"
+            ]
+        },
+        "wb-madhyamik-2027": {
+            "slug": "wb-madhyamik",
+            "name": "WB Madhyamik",
+            "fullName": "West Bengal Madhyamik Pariksha",
+            "description": "Class 10 board examination conducted by WBBSE.",
+            "category": "Board Exams",
+            "classLevel": 10,
+            "eligibility": "Class 9 pass students registered with WBBSE",
+            "subjects": [
+                "Bengali",
+                "English",
+                "Mathematics",
+                "Physical Science",
+                "Life Science"
+            ],
+            "duration": "3 hours 15 minutes per subject",
+            "conductingBody": "WBBSE",
+            "seats": "N/A",
+            "officialWebsite": "https://wbbse.wb.gov.in/",
+            "relatedExams": [
+                "wb-hs",
+                "cbse-class-10"
+            ],
+            "keywords": [
+                "Madhyamik 2027",
+                "Madhyamik countdown",
+                "Madhyamik exam date 2027",
+                "how many days left for madhyamik 2027",
+                "WB Madhyamik 2027"
+            ]
+        },
+        "wb-hs-2027": {
+            "slug": "wb-hs",
+            "name": "WB HS",
+            "fullName": "West Bengal Uchcha Madhyamik (Semester IV)",
+            "description": "Class 12 board examination conducted by WBCHSE.",
+            "category": "Board Exams",
+            "classLevel": 12,
+            "eligibility": "Semester III completed under WBCHSE",
+            "subjects": [
+                "Bengali",
+                "English",
+                "Physics",
+                "Chemistry",
+                "Mathematics"
+            ],
+            "duration": "Semester IV theory papers",
+            "conductingBody": "WBCHSE",
+            "seats": "N/A",
+            "officialWebsite": "https://wbchse.wb.gov.in/",
+            "relatedExams": [
+                "wb-madhyamik",
+                "cbse-class-12"
+            ],
+            "keywords": [
+                "WB HS 2027",
+                "WB HS countdown",
+                "WB HS exam date 2027",
+                "how many days left for wb hs 2027",
+                "Uchcha Madhyamik 2027"
+            ]
+        },
+        "tn-sslc-2027": {
+            "slug": "tn-sslc",
+            "name": "TN 10th",
+            "fullName": "Tamil Nadu SSLC Public Examination",
+            "description": "Class 10 board examination conducted by DGE Tamil Nadu.",
+            "category": "Board Exams",
+            "classLevel": 10,
+            "eligibility": "Class 9 pass students in Tamil Nadu state board schools",
+            "subjects": [
+                "Tamil",
+                "English",
+                "Mathematics",
+                "Science",
+                "Social Science"
+            ],
+            "duration": "3 hours plus 15 minutes reading time",
+            "conductingBody": "DGE Tamil Nadu",
+            "seats": "N/A",
+            "officialWebsite": "https://dge.tn.gov.in/",
+            "relatedExams": [
+                "tn-hsc",
+                "cbse-class-10"
+            ],
+            "keywords": [
+                "TN 10th 2027",
+                "TN 10th countdown",
+                "TN 10th exam date 2027",
+                "how many days left for tn 10th 2027",
+                "TN SSLC 2027"
+            ]
+        },
+        "tn-hsc-2027": {
+            "slug": "tn-hsc",
+            "name": "TN 12th",
+            "fullName": "Tamil Nadu HSE (+2) Public Examination",
+            "description": "Class 12 board examination conducted by DGE Tamil Nadu.",
+            "category": "Board Exams",
+            "classLevel": 12,
+            "eligibility": "+1 pass students in Tamil Nadu state board schools",
+            "subjects": [
+                "Tamil",
+                "English",
+                "Physics",
+                "Chemistry",
+                "Mathematics"
+            ],
+            "duration": "3 hours plus 15 minutes reading time",
+            "conductingBody": "DGE Tamil Nadu",
+            "seats": "N/A",
+            "officialWebsite": "https://dge.tn.gov.in/",
+            "relatedExams": [
+                "tn-sslc",
+                "cbse-class-12"
+            ],
+            "keywords": [
+                "TN 12th 2027",
+                "TN 12th countdown",
+                "TN 12th exam date 2027",
+                "how many days left for tn 12th 2027",
+                "TN HSC 2027",
+                "TN +2 2027"
+            ]
+        },
+        "mp-board-10th-2027": {
+            "slug": "mp-board-10th",
+            "name": "MP Board 10th",
+            "fullName": "MPBSE High School Certificate Examination",
+            "description": "Class 10 board examination conducted by MPBSE.",
+            "category": "Board Exams",
+            "classLevel": 10,
+            "eligibility": "Class 9 pass students registered with MPBSE",
+            "subjects": [
+                "Hindi",
+                "English",
+                "Mathematics",
+                "Science",
+                "Social Science"
+            ],
+            "duration": "3 hours per subject",
+            "conductingBody": "MPBSE",
+            "seats": "N/A",
+            "officialWebsite": "https://mpbse.nic.in/",
+            "relatedExams": [
+                "mp-board-12th",
+                "cbse-class-10"
+            ],
+            "keywords": [
+                "MP Board 10th 2027",
+                "MP Board 10th countdown",
+                "MP Board 10th exam date 2027",
+                "how many days left for mp board 10th 2027",
+                "MPBSE 10th 2027"
+            ]
+        },
+        "mp-board-12th-2027": {
+            "slug": "mp-board-12th",
+            "name": "MP Board 12th",
+            "fullName": "MPBSE Higher Secondary Certificate Examination",
+            "description": "Class 12 board examination conducted by MPBSE.",
+            "category": "Board Exams",
+            "classLevel": 12,
+            "eligibility": "Class 11 pass students registered with MPBSE",
+            "subjects": [
+                "Physics",
+                "Chemistry",
+                "Mathematics",
+                "Biology",
+                "English"
+            ],
+            "duration": "3 hours per subject",
+            "conductingBody": "MPBSE",
+            "seats": "N/A",
+            "officialWebsite": "https://mpbse.nic.in/",
+            "relatedExams": [
+                "mp-board-10th",
+                "cbse-class-12"
+            ],
+            "keywords": [
+                "MP Board 12th 2027",
+                "MP Board 12th countdown",
+                "MP Board 12th exam date 2027",
+                "how many days left for mp board 12th 2027",
+                "MPBSE 12th 2027"
+            ]
+        },
+        "karnataka-sslc-2027": {
+            "slug": "karnataka-sslc",
+            "name": "Karnataka SSLC",
+            "fullName": "Karnataka SSLC Examination 1 and 2",
+            "description": "Class 10 board examination conducted by KSEAB.",
+            "category": "Board Exams",
+            "classLevel": 10,
+            "eligibility": "Class 9 pass students registered with KSEAB",
+            "subjects": [
+                "Kannada",
+                "English",
+                "Mathematics",
+                "Science",
+                "Social Science"
+            ],
+            "duration": "3 hours 15 minutes per subject",
+            "conductingBody": "KSEAB",
+            "seats": "N/A",
+            "officialWebsite": "https://kseab.karnataka.gov.in/",
+            "relatedExams": [
+                "karnataka-2nd-puc",
+                "cbse-class-10"
+            ],
+            "keywords": [
+                "Karnataka SSLC 2027",
+                "Karnataka SSLC countdown",
+                "Karnataka SSLC exam date 2027",
+                "how many days left for karnataka sslc 2027",
+                "KSEAB SSLC 2027"
+            ]
+        },
+        "karnataka-2nd-puc-2027": {
+            "slug": "karnataka-2nd-puc",
+            "name": "Karnataka 2nd PUC",
+            "fullName": "Karnataka 2nd PUC Examination 1 and 2",
+            "description": "Class 12 board examination conducted by KSEAB.",
+            "category": "Board Exams",
+            "classLevel": 12,
+            "eligibility": "1st PUC pass students registered with KSEAB",
+            "subjects": [
+                "Physics",
+                "Chemistry",
+                "Mathematics",
+                "Biology",
+                "Accountancy"
+            ],
+            "duration": "3 hours 15 minutes per subject",
+            "conductingBody": "KSEAB",
+            "seats": "N/A",
+            "officialWebsite": "https://kseab.karnataka.gov.in/",
+            "relatedExams": [
+                "karnataka-sslc",
+                "kcet",
+                "comedk"
+            ],
+            "keywords": [
+                "Karnataka 2nd PUC 2027",
+                "Karnataka 2nd PUC countdown",
+                "Karnataka 2nd PUC exam date 2027",
+                "how many days left for karnataka 2nd puc 2027",
+                "Karnataka PUC 2027"
+            ]
+        },
+        "gseb-ssc-2027": {
+            "slug": "gseb-ssc",
+            "name": "GSEB 10th",
+            "fullName": "Gujarat Board SSC (Standard 10) Examination",
+            "description": "Class 10 board examination conducted by GSHSEB.",
+            "category": "Board Exams",
+            "classLevel": 10,
+            "eligibility": "Standard 9 pass students registered with GSHSEB",
+            "subjects": [
+                "Gujarati",
+                "English",
+                "Mathematics",
+                "Science",
+                "Social Science"
+            ],
+            "duration": "3 hours per subject",
+            "conductingBody": "GSHSEB",
+            "seats": "N/A",
+            "officialWebsite": "https://www.gseb.org/",
+            "relatedExams": [
+                "gseb-hsc",
+                "cbse-class-10"
+            ],
+            "keywords": [
+                "GSEB 10th 2027",
+                "GSEB 10th countdown",
+                "GSEB 10th exam date 2027",
+                "how many days left for gseb 10th 2027",
+                "Gujarat board SSC 2027"
+            ]
+        },
+        "gseb-hsc-2027": {
+            "slug": "gseb-hsc",
+            "name": "GSEB 12th",
+            "fullName": "Gujarat Board HSC (Standard 12) Examination",
+            "description": "Class 12 board examination conducted by GSHSEB.",
+            "category": "Board Exams",
+            "classLevel": 12,
+            "eligibility": "Standard 11 pass students registered with GSHSEB",
+            "subjects": [
+                "Physics",
+                "Chemistry",
+                "Mathematics",
+                "Biology",
+                "Accountancy"
+            ],
+            "duration": "3 hours per subject",
+            "conductingBody": "GSHSEB",
+            "seats": "N/A",
+            "officialWebsite": "https://www.gseb.org/",
+            "relatedExams": [
+                "gseb-ssc",
+                "cbse-class-12"
+            ],
+            "keywords": [
+                "GSEB 12th 2027",
+                "GSEB 12th countdown",
+                "GSEB 12th exam date 2027",
+                "how many days left for gseb 12th 2027",
+                "Gujarat board HSC 2027"
+            ]
+        },
+        "ap-ssc-2027": {
+            "slug": "ap-ssc",
+            "name": "AP SSC",
+            "fullName": "Andhra Pradesh SSC Public Examination",
+            "description": "Class 10 board examination conducted by BSE Andhra Pradesh.",
+            "category": "Board Exams",
+            "classLevel": 10,
+            "eligibility": "Class 9 pass students in AP state board schools",
+            "subjects": [
+                "Telugu",
+                "English",
+                "Mathematics",
+                "Science",
+                "Social Studies"
+            ],
+            "duration": "3 hours 15 minutes per subject",
+            "conductingBody": "BSE Andhra Pradesh",
+            "seats": "N/A",
+            "officialWebsite": "https://bse.ap.gov.in/",
+            "relatedExams": [
+                "ap-inter",
+                "ts-ssc"
+            ],
+            "keywords": [
+                "AP SSC 2027",
+                "AP SSC countdown",
+                "AP SSC exam date 2027",
+                "how many days left for ap ssc 2027",
+                "AP 10th 2027"
+            ]
+        },
+        "ts-ssc-2027": {
+            "slug": "ts-ssc",
+            "name": "TS SSC",
+            "fullName": "Telangana SSC Public Examination",
+            "description": "Class 10 board examination conducted by BSE Telangana.",
+            "category": "Board Exams",
+            "classLevel": 10,
+            "eligibility": "Class 9 pass students in Telangana state board schools",
+            "subjects": [
+                "Telugu",
+                "Hindi",
+                "English",
+                "Mathematics",
+                "Science"
+            ],
+            "duration": "3 hours per subject",
+            "conductingBody": "BSE Telangana",
+            "seats": "N/A",
+            "officialWebsite": "https://bse.telangana.gov.in/",
+            "relatedExams": [
+                "ts-inter",
+                "ap-ssc"
+            ],
+            "keywords": [
+                "TS SSC 2027",
+                "TS SSC countdown",
+                "TS SSC exam date 2027",
+                "how many days left for ts ssc 2027",
+                "Telangana 10th 2027"
+            ]
+        },
+        "ap-inter-2027": {
+            "slug": "ap-inter",
+            "name": "AP Inter",
+            "fullName": "Andhra Pradesh Intermediate Public Examination",
+            "description": "Class 12 board examination conducted by BIEAP.",
+            "category": "Board Exams",
+            "classLevel": 12,
+            "eligibility": "Intermediate first or second year students enrolled with BIEAP",
+            "subjects": [
+                "English",
+                "Telugu",
+                "Mathematics",
+                "Physics",
+                "Chemistry"
+            ],
+            "duration": "3 hours per subject",
+            "conductingBody": "BIEAP",
+            "seats": "N/A",
+            "officialWebsite": "https://bie.ap.gov.in/",
+            "relatedExams": [
+                "ap-ssc",
+                "ap-eapcet",
+                "ts-inter"
+            ],
+            "keywords": [
+                "AP Inter 2027",
+                "AP Inter countdown",
+                "AP Inter exam date 2027",
+                "how many days left for ap inter 2027",
+                "AP intermediate 2027"
+            ]
+        },
+        "ts-inter-2027": {
+            "slug": "ts-inter",
+            "name": "TS Inter",
+            "fullName": "Telangana Intermediate Public Examination",
+            "description": "Class 12 board examination conducted by TGBIE.",
+            "category": "Board Exams",
+            "classLevel": 12,
+            "eligibility": "Intermediate first or second year students enrolled with TGBIE",
+            "subjects": [
+                "English",
+                "Telugu",
+                "Mathematics",
+                "Physics",
+                "Chemistry"
+            ],
+            "duration": "3 hours per subject",
+            "conductingBody": "TGBIE",
+            "seats": "N/A",
+            "officialWebsite": "https://tgbie.cgg.gov.in/",
+            "relatedExams": [
+                "ts-ssc",
+                "ts-eapcet",
+                "ap-inter"
+            ],
+            "keywords": [
+                "TS Inter 2027",
+                "TS Inter countdown",
+                "TS Inter exam date 2027",
+                "how many days left for ts inter 2027",
+                "Telangana intermediate 2027"
+            ]
+        },
+        "ctet-2026": {
+            "slug": "ctet",
+            "name": "CTET",
+            "fullName": "Central Teacher Eligibility Test",
+            "description": "Eligibility test for teachers of Classes 1 to 8 in central government schools, conducted by CBSE.",
+            "category": "Teaching",
+            "eligibility": "Paper 1: Class 12 with D.El.Ed; Paper 2: graduate with B.Ed",
+            "subjects": [
+                "Child Development and Pedagogy",
+                "Language I",
+                "Language II",
+                "Mathematics",
+                "Environmental Studies"
+            ],
+            "duration": "2 hours 30 minutes per paper",
+            "conductingBody": "CBSE",
+            "seats": "N/A",
+            "officialWebsite": "https://ctet.nic.in/",
+            "relatedExams": [
+                "ugc-net"
+            ],
+            "keywords": [
+                "CTET December 2026",
+                "CTET countdown",
+                "CTET exam date December 2026",
+                "how many days left for ctet December 2026",
+                "CTET 2026"
+            ]
+        },
+        "uppsc-pcs-2026": {
+            "slug": "uppsc-pcs",
+            "name": "UPPSC PCS",
+            "fullName": "UPPSC Combined State / Upper Subordinate Services Examination",
+            "description": "State civil services exam for Uttar Pradesh, conducted by the UP Public Service Commission.",
+            "category": "Civil Services",
+            "eligibility": "Graduate, aged 21 to 40",
+            "subjects": [
+                "General Studies Paper I",
+                "CSAT"
+            ],
+            "duration": "2 hours per paper",
+            "conductingBody": "UPPSC",
+            "seats": "N/A",
+            "officialWebsite": "https://uppsc.up.nic.in/",
+            "relatedExams": [
+                "upsc-cse"
+            ],
+            "keywords": [
+                "UPPSC PCS 2026",
+                "UPPSC PCS countdown",
+                "UPPSC PCS exam date 2026",
+                "how many days left for uppsc pcs 2026",
+                "UPPSC prelims 2026"
+            ]
+        },
+        "ap-eapcet-2027": {
+            "slug": "ap-eapcet",
+            "name": "AP EAPCET",
+            "fullName": "Andhra Pradesh Engineering, Agriculture and Pharmacy Common Entrance Test",
+            "description": "State entrance test for engineering, agriculture and pharmacy admissions in Andhra Pradesh.",
+            "category": "Engineering",
+            "eligibility": "Class 12 with PCM or PCB, 45%",
+            "subjects": [
+                "Mathematics",
+                "Physics",
+                "Chemistry",
+                "Biology"
+            ],
+            "duration": "3 hours, 160 questions",
+            "conductingBody": "APSCHE (JNTU Kakinada)",
+            "seats": "N/A",
+            "officialWebsite": "https://cets.apsche.ap.gov.in/",
+            "relatedExams": [
+                "ts-eapcet",
+                "jee-main",
+                "ap-inter"
+            ],
+            "keywords": [
+                "AP EAPCET 2027",
+                "AP EAPCET countdown",
+                "AP EAPCET exam date 2027",
+                "how many days left for ap eapcet 2027",
+                "AP EAMCET 2027"
+            ]
+        },
+        "ts-eapcet-2027": {
+            "slug": "ts-eapcet",
+            "name": "TG EAPCET",
+            "fullName": "Telangana Engineering, Agriculture and Pharmacy Common Entrance Test",
+            "description": "State entrance test for engineering, agriculture and pharmacy admissions in Telangana.",
+            "category": "Engineering",
+            "eligibility": "Class 12 with PCM or PCB",
+            "subjects": [
+                "Mathematics",
+                "Physics",
+                "Chemistry",
+                "Biology"
+            ],
+            "duration": "3 hours, 160 questions",
+            "conductingBody": "TGCHE (JNTU Hyderabad)",
+            "seats": "N/A",
+            "officialWebsite": "https://eapcet.tgche.ac.in/",
+            "relatedExams": [
+                "ap-eapcet",
+                "jee-main",
+                "ts-inter"
+            ],
+            "keywords": [
+                "TG EAPCET 2027",
+                "TG EAPCET countdown",
+                "TG EAPCET exam date 2027",
+                "how many days left for tg eapcet 2027",
+                "TS EAMCET 2027",
+                "TS EAPCET 2027"
+            ]
+        },
+        "ssc-cpo-2026": {
+            "slug": "ssc-cpo",
+            "name": "SSC CPO",
+            "fullName": "SSC Sub-Inspector in Delhi Police and CAPFs Examination",
+            "description": "Recruitment exam for Sub-Inspectors in Delhi Police and the Central Armed Police Forces.",
+            "category": "Government Jobs",
+            "eligibility": "Graduate, aged 20 to 25",
+            "subjects": [
+                "General Intelligence and Reasoning",
+                "General Knowledge",
+                "Quantitative Aptitude",
+                "English Comprehension"
+            ],
+            "duration": "Paper I computer-based test",
+            "conductingBody": "SSC",
+            "seats": "1,871 posts",
+            "officialWebsite": "https://ssc.gov.in/",
+            "relatedExams": [
+                "ssc-cgl",
+                "capf-ac"
+            ],
+            "keywords": [
+                "SSC CPO 2026",
+                "SSC CPO countdown",
+                "SSC CPO exam date 2026",
+                "how many days left for ssc cpo 2026"
+            ]
+        },
+        "ca-foundation-2027": {
+            "slug": "ca-foundation",
+            "name": "CA Foundation",
+            "fullName": "ICAI Chartered Accountancy Foundation Examination",
+            "description": "Entry-level exam of the Chartered Accountancy course, conducted by ICAI.",
+            "category": "Commerce",
+            "eligibility": "Class 12 students registered with ICAI",
+            "subjects": [
+                "Accounting",
+                "Business Laws",
+                "Quantitative Aptitude",
+                "Business Economics"
+            ],
+            "duration": "3 hours (Papers 1-2), 2 hours (Papers 3-4)",
+            "conductingBody": "ICAI",
+            "seats": "N/A",
+            "officialWebsite": "https://www.icai.org/",
+            "relatedExams": [
+                "ca-inter",
+                "ca-final"
+            ],
+            "keywords": [
+                "CA Foundation January 2027",
+                "CA Foundation countdown",
+                "CA Foundation exam date January 2027",
+                "how many days left for ca foundation January 2027",
+                "CA Foundation Jan 2027"
+            ]
+        },
+        "ca-inter-2027": {
+            "slug": "ca-inter",
+            "name": "CA Inter",
+            "fullName": "ICAI Chartered Accountancy Intermediate Examination",
+            "description": "Second level of the Chartered Accountancy course, conducted by ICAI.",
+            "category": "Commerce",
+            "eligibility": "CA Foundation pass or eligible graduate",
+            "subjects": [
+                "Advanced Accounting",
+                "Corporate Laws",
+                "Taxation",
+                "Cost and Management Accounting",
+                "Auditing"
+            ],
+            "duration": "3 hours per paper",
+            "conductingBody": "ICAI",
+            "seats": "N/A",
+            "officialWebsite": "https://www.icai.org/",
+            "relatedExams": [
+                "ca-foundation",
+                "ca-final"
+            ],
+            "keywords": [
+                "CA Inter January 2027",
+                "CA Inter countdown",
+                "CA Inter exam date January 2027",
+                "how many days left for ca inter January 2027",
+                "CA Intermediate Jan 2027"
+            ]
+        },
+        "ca-final-2026": {
+            "slug": "ca-final",
+            "name": "CA Final",
+            "fullName": "ICAI Chartered Accountancy Final Examination",
+            "description": "Final level of the Chartered Accountancy course, conducted by ICAI.",
+            "category": "Commerce",
+            "eligibility": "CA Intermediate pass with practical training",
+            "subjects": [
+                "Financial Reporting",
+                "Advanced Financial Management",
+                "Advanced Auditing",
+                "Direct Tax Laws",
+                "Indirect Tax Laws"
+            ],
+            "duration": "3 hours per paper",
+            "conductingBody": "ICAI",
+            "seats": "N/A",
+            "officialWebsite": "https://www.icai.org/",
+            "relatedExams": [
+                "ca-inter",
+                "ca-foundation"
+            ],
+            "keywords": [
+                "CA Final November 2026",
+                "CA Final countdown",
+                "CA Final exam date November 2026",
+                "how many days left for ca final November 2026",
+                "CA Final May 2027"
             ]
         }
     }

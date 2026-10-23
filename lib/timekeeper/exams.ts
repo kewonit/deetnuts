@@ -1,3 +1,4 @@
+import details from "./exam-details.json";
 import metadata from "./exam-metadata.json";
 import schedules from "./exam-sessions.json";
 
@@ -29,8 +30,36 @@ export interface Exam {
   officialWebsite?: string;
   relatedExams: string[];
   keywords: string[];
+  classLevel?: number;
   cycle: string;
   sessions: ExamSession[];
+}
+
+// Researched facts beyond exam days, from official bulletins and notices.
+export interface ExamDetails {
+  pattern?: {
+    mode: string;
+    duration: string;
+    papers: {
+      paper: string;
+      subjects: string;
+      questions: string;
+      marks: string;
+    }[];
+    marking: string;
+  };
+  keyDates?: {
+    event: string;
+    date: string;
+    endDate?: string;
+    status: "official" | "expected";
+    note?: string;
+  }[];
+  sources?: { label: string; url: string }[];
+}
+
+export function getExamDetails(slug: string): ExamDetails {
+  return (details as Record<string, ExamDetails>)[slug] ?? {};
 }
 
 export const SCHEDULE_VERIFIED = schedules.verified;
@@ -174,6 +203,40 @@ export function timeRemaining(target: string, now: number) {
     minutes: Math.floor(total / 60) % 60,
     seconds: total % 60,
   };
+}
+
+export function formatShortDate(date: string): string {
+  return new Date(date).toLocaleDateString("en-IN", {
+    timeZone: "UTC",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+export function formatDateRange(item: { date: string; endDate?: string }) {
+  return item.endDate
+    ? `${formatShortDate(item.date)} – ${formatShortDate(item.endDate)}`
+    : formatShortDate(item.date);
+}
+
+export function sessionLabel(session: ExamSession): string {
+  return session.session === "Single Session" ? "Exam" : session.session;
+}
+
+// Every upcoming or in-progress session across exams, soonest first.
+export function upcomingSessions(list: Exam[], now: number) {
+  return list
+    .flatMap((exam) =>
+      displaySessions(exam.sessions, now)
+        .filter((session) => Date.parse(session.endDate ?? session.date) >= now)
+        .map((session) => ({ exam, session })),
+    )
+    .sort((a, b) => Date.parse(a.session.date) - Date.parse(b.session.date));
+}
+
+export function sessionStatus(session: ExamSession): "Official" | "Expected" {
+  return session.predicted ? "Expected" : "Official";
 }
 
 export function formatExamDate(date: string): string {

@@ -385,6 +385,47 @@
   border-top: 1px solid var(--border-primary);
   z-index: 10;
 }
+.timekeeper .tk-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+.timekeeper .tk-table caption {
+  caption-side: top;
+  text-align: left;
+  padding-bottom: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+.timekeeper .tk-table th,
+.timekeeper .tk-table td {
+  padding: 0.5rem 0.75rem 0.5rem 0;
+  border-bottom: 1px dashed var(--border-primary);
+  text-align: left;
+  vertical-align: top;
+}
+.timekeeper .tk-table th:last-child,
+.timekeeper .tk-table td:last-child {
+  padding-right: 0;
+}
+.timekeeper .tk-table thead th {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+.timekeeper .tk-table tbody th {
+  font-weight: 500;
+}
+.timekeeper .tk-table small {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+.timekeeper .tk-table a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
 .timekeeper .tk-avatar {
   width: 40px;
   height: 40px;
