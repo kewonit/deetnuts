@@ -180,7 +180,7 @@ test("every mapped destination has static content, correct canonical and one sco
         `${destination}: full name`,
       ).toBe(true);
       expect(
-        html.includes("Latest published schedule"),
+        html.includes('data-testid="exam-dates"'),
         `${destination}: schedule`,
       ).toBe(true);
       // A fixed date, never a day count that goes stale in search results.
@@ -190,8 +190,8 @@ test("every mapped destination has static content, correct canonical and one sco
       expect(html, `${destination}: heading`).toMatch(
         /<h1[^>]*>[^<]* \d{4}(<!-- -->)? Countdown<\/h1>/,
       );
-      expect(html, `${destination}: prerendered answer`).toMatch(
-        /data-testid="days-left"[^>]*><strong>\d+ days? left<\/strong> for /,
+      expect(html, `${destination}: prerendered days`).toMatch(
+        /data-unit="days">\d+</,
       );
       expect(html, `${destination}: dates table`).toContain(
         'data-testid="exam-dates"',
@@ -669,18 +669,20 @@ test("India map renders locally, fits the viewport and resets after zooming", as
   expect(await page.locator(".leaflet-tile").count()).toBe(0);
 });
 
-test("study map keeps 12-15 labelled examples out of the live count and across refreshes", async ({
+test("study map keeps 12-15 examples across refreshes without counting them as students", async ({
   page,
 }) => {
   // 20:00 IST, the evening peak.
   await page.clock.install({ time: new Date("2026-10-23T14:30:00Z") });
   await page.goto(`${path}/study-map`);
-  await expect(page.locator(".tk-map-toolbar")).toContainText("Live");
+  await expect(page.locator(".tk-map")).toHaveAttribute("data-status", "Live");
   const examples = page.locator(".leaflet-marker-icon .tk-avatar-demo");
   await expect.poll(() => examples.count()).toBeGreaterThanOrEqual(12);
   const count = await examples.count();
   expect(count).toBeLessThanOrEqual(15);
-  await expect(page.locator(".tk-map-toolbar")).toContainText("0 studying now");
+  await expect(
+    page.locator(".leaflet-marker-icon:has(.tk-avatar:not(.tk-avatar-demo))"),
+  ).toHaveCount(0);
   await examples.evaluateAll((items) =>
     items.forEach((item) => item.setAttribute("data-kept", "")),
   );
@@ -695,8 +697,8 @@ test("study map keeps 12-15 labelled examples out of the live count and across r
     .first()
     .press("Enter");
   const popup = page.locator(".leaflet-popup-content");
-  await expect(popup).toContainText("Example session");
   await expect(popup).toContainText(/Studying for \d+/);
+  await expect(popup).not.toContainText("Example");
 });
 
 test("study map connects, starts and ends through the existing RPC contract without HTML injection", async ({
@@ -704,14 +706,16 @@ test("study map connects, starts and ends through the existing RPC contract with
 }) => {
   const calls = await mockMap(page);
   await page.goto(`${path}/study-map`);
-  await expect(page.locator(".tk-map-toolbar")).toContainText("Live");
+  await expect(page.locator(".tk-map")).toHaveAttribute("data-status", "Live");
   await page.getByLabel("COUNTDOWN", { exact: true }).selectOption("jee-main");
   await page.getByLabel("Study subject").selectOption("Physics");
   await page.getByRole("button", { name: "Start", exact: true }).click();
   await expect(
     page.getByRole("button", { name: "End Session", exact: true }),
   ).toBeVisible();
-  await expect(page.locator(".tk-map-toolbar")).toContainText("1 studying now");
+  await expect(
+    page.locator(".leaflet-marker-icon:has(.tk-avatar:not(.tk-avatar-demo))"),
+  ).toHaveCount(1);
   const start = calls.find((call) =>
     call.path.endsWith("upsert_study_session"),
   );
@@ -732,7 +736,9 @@ test("study map connects, starts and ends through the existing RPC contract with
   );
   expect(await page.locator(".leaflet-popup-content script").count()).toBe(0);
   await page.getByRole("button", { name: "End Session", exact: true }).click();
-  await expect(page.locator(".tk-map-toolbar")).toContainText("0 studying now");
+  await expect(
+    page.locator(".leaflet-marker-icon:has(.tk-avatar:not(.tk-avatar-demo))"),
+  ).toHaveCount(0);
   await page.getByRole("link", { name: "← Deetnuts", exact: true }).click();
   expect(calls.some((call) => call.path.endsWith("end_study_session"))).toBe(
     true,

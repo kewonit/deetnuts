@@ -319,6 +319,8 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  /* Map controls stay beneath the sticky page header. */
+  isolation: isolate;
   border: 1px dashed var(--border-primary);
   border-radius: 0.75rem;
   overflow: hidden;
@@ -333,15 +335,28 @@
   flex: none;
   width: 100%;
   z-index: 0;
-  background: var(--bg-secondary);
+  background:
+    radial-gradient(
+      circle at 52% 45%,
+      color-mix(in srgb, #10b981 10%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+        color-mix(in srgb, var(--text-secondary) 22%, transparent) 1px,
+        transparent 1.5px
+      )
+      0 0 / 18px 18px,
+    var(--bg-secondary);
 }
 .timekeeper .tk-map-embedded .tk-map-canvas {
   height: 400px;
 }
 .timekeeper .tk-india-outline {
-  fill: color-mix(in srgb, #10b981 12%, var(--bg-primary));
+  fill: color-mix(in srgb, #10b981 14%, var(--bg-primary));
   fill-opacity: 1;
-  stroke: var(--text-secondary);
+  stroke: color-mix(in srgb, #10b981 55%, var(--text-secondary));
+  stroke-linejoin: round;
+  filter: drop-shadow(0 10px 24px color-mix(in srgb, #10b981 28%, transparent));
 }
 .timekeeper .tk-map-place-label {
   color: var(--text-secondary);
@@ -352,22 +367,32 @@
   text-shadow: 0 1px 2px var(--bg-primary);
 }
 .timekeeper .tk-map-toolbar {
-  order: -1;
-  padding: 0.5rem;
-  background: var(--bg-primary);
-  border-bottom: 1px solid var(--border-primary);
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
   z-index: 10;
-  display: flex;
-  justify-content: space-between;
-  gap: 0.5rem;
-  flex-wrap: wrap;
 }
 .timekeeper .tk-map-toolbar > * {
   background: var(--bg-primary);
-  border-radius: 0.5rem;
-  padding: 0.4rem 0.6rem;
-  box-shadow: 0 2px 8px #0002;
-  font-size: 0.75rem;
+  border: 1px solid var(--border-primary);
+  border-radius: 0.6rem;
+  padding: 0.25rem;
+  box-shadow: 0 4px 14px #0002;
+}
+.timekeeper .tk-map .leaflet-bar {
+  border: 1px solid var(--border-primary);
+  border-radius: 0.6rem;
+  overflow: hidden;
+  box-shadow: 0 4px 14px #0002;
+}
+.timekeeper .tk-map .leaflet-bar a {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border-bottom-color: var(--border-primary);
+}
+.timekeeper .tk-map .leaflet-bar a.leaflet-disabled {
+  color: var(--text-secondary);
+  opacity: 0.5;
 }
 .timekeeper .tk-map-join {
   display: flex;
@@ -384,6 +409,33 @@
   background: var(--bg-primary);
   border-top: 1px solid var(--border-primary);
   z-index: 10;
+}
+.timekeeper .tk-segmented {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--border-primary);
+  border-radius: 0.6rem;
+  background: var(--bg-tertiary);
+}
+.timekeeper .tk-segment {
+  padding: 0.3rem 0.75rem;
+  border-radius: 0.45rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  transition:
+    background-color 150ms,
+    color 150ms;
+}
+.timekeeper .tk-segment:hover {
+  color: var(--text-primary);
+}
+.timekeeper .tk-segment[aria-pressed="true"] {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-weight: 600;
+  box-shadow: 0 1px 4px #0002;
 }
 .timekeeper .tk-table {
   width: 100%;
@@ -429,13 +481,21 @@
 .timekeeper .tk-avatar {
   width: 40px;
   height: 40px;
-  border: 3px solid #10b981;
+  border: 2px solid #fff;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 2px 6px #0003;
+  box-shadow:
+    0 0 0 2.5px #10b981,
+    0 6px 14px #0003;
 }
 .timekeeper .tk-avatar-demo {
-  border-color: #94a3b8;
+  box-shadow:
+    0 0 0 2.5px #94a3b8,
+    0 6px 14px #0003;
+}
+.timekeeper .leaflet-marker-icon:hover .tk-avatar,
+.timekeeper .leaflet-marker-icon:focus-visible .tk-avatar {
+  transform: scale(1.12);
 }
 .timekeeper .leaflet-marker-icon .tk-avatar {
   animation: tk-marker-in 400ms ease-out;
@@ -461,24 +521,52 @@
 @keyframes tk-live-pulse {
   0% {
     box-shadow:
-      0 0 0 0 #10b98166,
-      0 2px 6px #0003;
+      0 0 0 2.5px #10b981,
+      0 0 0 2.5px #10b98166,
+      0 6px 14px #0003;
   }
   70%,
   100% {
     box-shadow:
-      0 0 0 12px #10b98100,
-      0 2px 6px #0003;
+      0 0 0 2.5px #10b981,
+      0 0 0 14px #10b98100,
+      0 6px 14px #0003;
   }
 }
 .timekeeper .leaflet-popup-content-wrapper {
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 28px #0003;
   background: var(--bg-primary);
   color: var(--text-primary);
 }
-.timekeeper .leaflet-control-attribution {
+.timekeeper .leaflet-popup-tip {
+  background: var(--bg-primary);
+}
+.timekeeper .tk-popup {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+.timekeeper .tk-popup strong {
+  display: block;
+  font-size: 0.875rem;
+}
+.timekeeper .tk-popup p {
+  margin: 0.15rem 0 0;
+  color: var(--text-secondary);
+}
+.timekeeper .tk-popup .tk-popup-time {
+  margin-top: 0.4rem;
+  color: #10b981;
+  font-weight: 500;
+}
+.timekeeper .tk-map .leaflet-control-attribution {
   font-size: 9px;
   background: var(--bg-primary);
   color: var(--text-secondary);
+}
+.timekeeper .tk-map .leaflet-control-attribution a {
+  color: inherit;
+  text-decoration: underline;
 }
 .timekeeper .tk-map:fullscreen {
   border: 0;
@@ -515,7 +603,6 @@
     font-size: 3rem;
   }
   .timekeeper .tk-map-toolbar {
-    left: 3.5rem;
     top: 0.5rem;
     right: 0.5rem;
   }

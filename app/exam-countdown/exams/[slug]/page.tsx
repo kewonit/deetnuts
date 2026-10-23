@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ExamCountdown, {
-  DaysLeft,
   DaysLeftAnswer,
   DaysToGo,
   ShareExam,
@@ -25,7 +24,6 @@ import {
   relatedExams,
   sessionLabel,
   sessionStatus,
-  SCHEDULE_VERIFIED,
   EXAM_COUNTDOWN_PATH,
   type Exam,
 } from "@/lib/timekeeper/exams";
@@ -108,7 +106,6 @@ export default async function Page({
       date: session.date,
       endDate: session.endDate,
       status: sessionStatus(session),
-      note: session.note,
     })),
     ...(details.keyDates ?? []).map((item) => ({
       ...item,
@@ -131,9 +128,7 @@ export default async function Page({
     ],
     [
       `Is the ${label} date official?`,
-      upcoming
-        ? `${upcoming.predicted ? "Not yet" : "Yes"}: ${upcoming.note ?? exam.conductingBody}. Checked ${formatShortDate(SCHEDULE_VERIFIED)}.`
-        : `Dates will be announced by ${exam.conductingBody}.`,
+      upcoming?.predicted ? "Not yet." : "Yes.",
     ],
     [`Who conducts ${label}?`, `${exam.conductingBody}.`],
     [
@@ -156,14 +151,6 @@ export default async function Page({
           { name: label, path },
         ])}
       />
-      <nav
-        aria-label="Breadcrumb"
-        className="text-xs themed-text-secondary text-center mb-4"
-      >
-        <Link href={EXAM_COUNTDOWN_PATH}>TimeKeeper</Link> ›{" "}
-        <Link href={categoryPath}>{exam.category}</Link> ›{" "}
-        <span aria-current="page">{label}</span>
-      </nav>
       <div className="text-center mb-8">
         <h1 className="font-serif italic text-3xl sm:text-4xl lg:text-6xl mb-4">
           {label} Countdown
@@ -171,7 +158,7 @@ export default async function Page({
         <p className="text-lg sm:text-xl lg:text-2xl themed-text-secondary mb-6">
           {exam.fullName}
         </p>
-        <div className="flex items-center justify-center gap-3 mb-6">
+        <div className="flex items-center justify-center gap-3">
           <Link href={categoryPath}>
             <CategoryBadge category={exam.category} />
           </Link>
@@ -179,10 +166,6 @@ export default async function Page({
             {exam.conductingBody}
           </span>
         </div>
-        <p className="text-base sm:text-lg themed-text-secondary max-w-3xl mx-auto">
-          {exam.description}
-        </p>
-        <DaysLeft sessions={exam.sessions} label={label} />
       </div>
       <ExamCountdown title={exam.name} sessions={exam.sessions} />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
@@ -250,11 +233,8 @@ export default async function Page({
       </div>
       <section
         className="border border-dashed themed-border p-4 sm:p-6 rounded-lg mb-8"
-        aria-labelledby="dates"
+        aria-label={`${label} dates`}
       >
-        <h2 id="dates" className="font-serif italic text-xl mb-4">
-          {label} Dates
-        </h2>
         <div
           className="overflow-x-auto"
           tabIndex={0}
@@ -273,10 +253,7 @@ export default async function Page({
             <tbody>
               {dates.map((item) => (
                 <tr key={`${item.event}-${item.date}`}>
-                  <th scope="row">
-                    {item.event}
-                    {item.note && <small>{item.note}</small>}
-                  </th>
+                  <th scope="row">{item.event}</th>
                   <td>{formatDateRange(item)}</td>
                   <td>
                     <DaysToGo date={item.date} endDate={item.endDate} />
@@ -287,21 +264,18 @@ export default async function Page({
             </tbody>
           </table>
         </div>
-        <p className="text-xs themed-text-secondary mt-3">
-          Latest published schedule · Checked{" "}
-          {formatShortDate(SCHEDULE_VERIFIED)}
-          {details.sources?.map((source) => (
-            <span key={source.url}>
-              {" · "}
-              <a href={source.url} target="_blank" rel="noopener noreferrer">
-                {source.label} ↗
-              </a>
-            </span>
-          ))}
-          .
-          {dates.some((item) => item.status === "Expected") &&
-            ` Expected dates follow past cycles until ${exam.conductingBody} publishes them.`}
-        </p>
+        {details.sources && (
+          <p className="text-xs themed-text-secondary mt-3">
+            {details.sources.map((source, index) => (
+              <span key={source.url}>
+                {index > 0 && " · "}
+                <a href={source.url} target="_blank" rel="noopener noreferrer">
+                  {source.label} ↗
+                </a>
+              </span>
+            ))}
+          </p>
+        )}
       </section>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8">
         <section className="border border-dashed themed-border p-4 sm:p-6 rounded-lg">
