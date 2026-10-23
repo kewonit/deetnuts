@@ -7,7 +7,6 @@ import {
   displaySessions,
   formatExamDate,
   nextSession,
-  sessionStatus,
   timeRemaining,
   type ExamSession,
 } from "@/lib/timekeeper/exams";
@@ -50,36 +49,6 @@ export function CountdownDigits({
 
 function dayCount(days: number) {
   return `${days} ${days === 1 ? "day" : "days"} left`;
-}
-
-// The page's first sentence answers "how many days left for X".
-export function DaysLeft({
-  sessions,
-  label,
-}: {
-  sessions: ExamSession[];
-  label: string;
-}) {
-  const now = useNow();
-  const session = nextSession(sessions, now);
-  if (!now || !session) return null;
-  const target = countdownTarget(session, now);
-  const remaining = timeRemaining(target, now);
-  if (remaining.expired) return null;
-  return (
-    <p className="text-base sm:text-lg mt-4" data-testid="days-left">
-      <strong>{dayCount(remaining.days)}</strong> for {label} ·{" "}
-      {formatExamDate(target)}
-      {target !== session.date ? " · Under way" : ""} · {sessionStatus(session)}
-    </p>
-  );
-}
-
-export function DaysUntil({ date }: { date: string }) {
-  const now = useNow();
-  const remaining = timeRemaining(date, now);
-  if (!now || remaining.expired) return null;
-  return <> · {dayCount(remaining.days)}</>;
 }
 
 // A table cell: days to the start, then "Under way" until the end date.
@@ -466,24 +435,16 @@ export default function ExamCountdown({
             {formatExamDate(session.date)}
             {session.endDate ? ` – ${formatExamDate(session.endDate)}` : ""}
           </p>
-          {session.predicted && (
-            <p className="text-xs themed-text-secondary mt-2">
-              Predicted next cycle · Awaiting official confirmation
-            </p>
-          )}
-          {session.note && (
-            <p className="text-xs themed-text-secondary mt-1">{session.note}</p>
-          )}
         </div>
-        <div>
+        <div className="flex flex-col items-start sm:items-end gap-3">
           {displayed.length > 1 && (
-            <div className="flex flex-wrap justify-end gap-1 p-1 rounded-lg themed-bg-tertiary mb-3">
+            <div className="tk-segmented" role="group" aria-label="Session">
               {displayed.map((item) => (
                 <button
                   type="button"
                   key={item.session}
                   aria-pressed={item.session === session.session}
-                  className={`px-2 py-1 text-xs rounded-md ${item.session === session.session ? "themed-bg" : "themed-text-secondary"}`}
+                  className="tk-segment"
                   onClick={() => setSelected(item.session)}
                 >
                   {item.session}
@@ -500,9 +461,7 @@ export default function ExamCountdown({
       {session.endDate &&
         now >= Date.parse(session.date) &&
         now < Date.parse(session.endDate) && (
-          <p className="text-center text-xs mt-3">
-            Exam in progress · Countdown to the end of this session
-          </p>
+          <p className="text-center text-xs mt-3">Under way</p>
         )}
     </section>
   );

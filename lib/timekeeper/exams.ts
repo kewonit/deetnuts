@@ -73,7 +73,10 @@ export const exams: Exam[] = Object.entries(metadata.metadata).map(
       id,
       ...details,
       cycle: schedule?.cycle ?? "",
-      sessions: schedule?.sessions ?? [],
+      // Notes record each date's source for maintainers; pages don't show them.
+      sessions: (schedule?.sessions ?? []).map(
+        ({ note: _note, ...session }) => session,
+      ),
     };
   },
 );
@@ -132,12 +135,6 @@ export function displaySessions(
         ? { endDate: shiftDate(session.endDate, years) }
         : {}),
       predicted: true,
-      note: [
-        session.note,
-        "Predicted next cycle from the latest published schedule",
-      ]
-        .filter(Boolean)
-        .join(" · "),
     }));
     if (
       predicted.some(

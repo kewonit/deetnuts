@@ -7,6 +7,8 @@ import { ArrowLeft, Menu, X } from "lucide-react";
 import {
   categories,
   categorySlug,
+  examCycle,
+  getExam,
   EXAM_COUNTDOWN_PATH,
 } from "@/lib/timekeeper/exams";
 import { themes, type TimekeeperTheme } from "@/lib/timekeeper/storage";
@@ -21,6 +23,9 @@ export default function TimekeeperShell({
 }) {
   const pathname = usePathname();
   const detail = pathname.startsWith(`${EXAM_COUNTDOWN_PATH}/exams/`);
+  const exam = detail
+    ? getExam(pathname.slice(`${EXAM_COUNTDOWN_PATH}/exams/`.length))
+    : undefined;
   const [theme, setTheme] = useState<TimekeeperTheme>("light");
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -158,14 +163,33 @@ export default function TimekeeperShell({
       <div className={detail ? undefined : "tk-with-sidebar"}>
         <header className="sticky top-0 z-20 themed-bg border-b border-dashed themed-border">
           <div className="flex items-center justify-between gap-3 h-16 px-4 lg:px-8">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 min-w-0">
               {detail ? (
-                <Link
-                  href={EXAM_COUNTDOWN_PATH}
-                  className="flex items-center gap-2 text-sm"
-                >
-                  <ArrowLeft size={18} /> All Exams
-                </Link>
+                <>
+                  <Link
+                    href={EXAM_COUNTDOWN_PATH}
+                    className="flex items-center gap-2 text-sm shrink-0"
+                  >
+                    <ArrowLeft size={18} /> All Exams
+                  </Link>
+                  {exam && (
+                    <nav
+                      aria-label="Breadcrumb"
+                      className="hidden sm:block text-xs themed-text-secondary truncate"
+                    >
+                      <Link href={EXAM_COUNTDOWN_PATH}>TimeKeeper</Link> ›{" "}
+                      <Link
+                        href={`${EXAM_COUNTDOWN_PATH}/category/${categorySlug(exam.category)}`}
+                      >
+                        {exam.category}
+                      </Link>{" "}
+                      ›{" "}
+                      <span aria-current="page">
+                        {exam.name} {examCycle(exam, renderedAt)}
+                      </span>
+                    </nav>
+                  )}
+                </>
               ) : (
                 <>
                   <button
@@ -204,10 +228,6 @@ export default function TimekeeperShell({
             are not affiliated with any exam conducting body. All information is
             subject to change. Please verify details from official sources
             before making decisions.
-          </p>
-          <p className="mt-3">
-            Built by <a href="https://edbn.me">edbn.me</a> ·{" "}
-            <Link href="/">Back to Deetnuts</Link>
           </p>
         </footer>
       </div>

@@ -39,6 +39,7 @@ type StudySession = z.infer<typeof sessionSchema>;
 
 function studyPopup(student: StudySession) {
   const popup = document.createElement("div");
+  popup.className = "tk-popup";
   const heading = document.createElement("strong");
   heading.textContent = student.exam_name ?? "Study session";
   popup.append(heading);
@@ -53,13 +54,9 @@ function studyPopup(student: StudySession) {
   );
   if (Number.isFinite(minutes)) {
     const time = document.createElement("p");
+    time.className = "tk-popup-time";
     time.textContent = `Studying for ${minutes >= 60 ? `${Math.floor(minutes / 60)} h ${minutes % 60} min` : `${minutes} min`}`;
     popup.append(time);
-  }
-  if (student.is_demonstration) {
-    const label = document.createElement("small");
-    label.textContent = "Example session";
-    popup.append(label);
   }
   return popup;
 }
@@ -156,7 +153,6 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
       resetView.current = fitIndia;
       fitIndia();
       for (const [label, latitude, longitude] of [
-        ["INDIA", 23.5, 80.5],
         ["Lakshadweep", 10.4, 72.1],
         ["Andaman & Nicobar", 10, 94.5],
       ] as const) {
@@ -378,6 +374,7 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
       <div
         ref={element}
         className={`tk-map${examSlug ? " tk-map-embedded" : ""}`}
+        data-status={status}
       >
         <div
           ref={canvas}
@@ -386,10 +383,6 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
           aria-label="Live study sessions across India"
         />
         <div className="tk-map-toolbar">
-          <div>
-            <span role="status">{status}</span> ·{" "}
-            <strong>{sessions.length}</strong> studying now
-          </div>
           <div className="flex gap-1">
             <button
               type="button"
@@ -459,17 +452,7 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
               </select>
             )}
             {session && (
-              <>
-                <CountdownDigits
-                  target={countdownTarget(session, now)}
-                  compact
-                />
-                {session.predicted && (
-                  <p className="text-xs mt-2 themed-text-secondary">
-                    Predicted · Awaiting official confirmation
-                  </p>
-                )}
-              </>
+              <CountdownDigits target={countdownTarget(session, now)} compact />
             )}
           </div>
         )}
@@ -515,7 +498,7 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
       <p className="text-xs themed-text-secondary mt-3">
         Only your approximate city location is shared, with up to 5km of
         randomization. Sessions update every 30 seconds. Gray markers show
-        example sessions; they are excluded from the live count.
+        example sessions.
       </p>
     </div>
   );

@@ -141,7 +141,7 @@ export async function verifyTimekeeper({
       requireThat(
         html.includes(escapeHtml(exam.name)) &&
           html.includes(escapeHtml(exam.fullName)) &&
-          html.includes("Latest published schedule"),
+          html.includes('data-testid="exam-dates"'),
         `${path}: missing original exam content`,
       );
     for (const match of html.matchAll(/(?:src|href)="([^"?#]+)[^"]*"/g))
