@@ -903,6 +903,394 @@
                     "note": "Official UPMSP timetable"
                 }
             ]
+        },
+        {
+            "id": "bseb-10th-2027",
+            "cycle": "2027",
+            "sessions": [
+                {
+                    "session": "Main Exam",
+                    "date": "2027-02-17",
+                    "endDate": "2027-02-25",
+                    "note": "Expected · BSEB timetable awaited",
+                    "predicted": true
+                }
+            ]
+        },
+        {
+            "id": "bseb-12th-2027",
+            "cycle": "2027",
+            "sessions": [
+                {
+                    "session": "Main Exam",
+                    "date": "2027-02-01",
+                    "endDate": "2027-02-13",
+                    "note": "Expected · BSEB timetable awaited",
+                    "predicted": true
+                }
+            ]
+        },
+        {
+            "id": "rbse-10th-2027",
+            "cycle": "2027",
+            "sessions": [
+                {
+                    "session": "Main Exam",
+                    "date": "2027-02-12",
+                    "endDate": "2027-02-28",
+                    "note": "Expected · BSER timetable awaited",
+                    "predicted": true
+                }
+            ]
+        },
+        {
+            "id": "rbse-12th-2027",
+            "cycle": "2027",
+            "sessions": [
+                {
+                    "session": "Main Exam",
+                    "date": "2027-02-12",
+                    "endDate": "2027-03-11",
+                    "note": "Expected · BSER timetable awaited",
+                    "predicted": true
+                }
+            ]
+        },
+        {
+            "id": "wb-madhyamik-2027",
+            "cycle": "2027",
+            "sessions": [
+                {
+                    "session": "Main Exam",
+                    "date": "2027-02-15",
+                    "endDate": "2027-02-25",
+                    "note": "Official WBBSE routine"
+                }
+            ]
+        },
+        {
+            "id": "wb-hs-2027",
+            "cycle": "2027",
+            "sessions": [
+                {
+                    "session": "Practicals",
+                    "date": "2027-01-22",
+                    "endDate": "2027-02-13",
+                    "note": "Official WBCHSE working plan"
+                },
+                {
+                    "session": "Semester IV Theory",
+                    "date": "2027-03-01",
+                    "note": "Expected March 2027 · WBCHSE routine awaited",
+                    "predicted": true
+                }
+            ]
+        },
+        {
+            "id": "tn-sslc-2027",
+            "cycle": "2027",
+            "sessions": [
+                {
+                    "session": "Practicals",
+                    "date": "2027-02-19",
+                    "endDate": "2027-02-26",
+                    "note": "Official DGE Tamil Nadu timetable"
+                },
+                {
+                    "session": "Theory",
+                    "date": "2027-03-17",
+                    "endDate": "2027-04-12",
+                    "note": "Official DGE Tamil Nadu timetable"
+                }
+            ]
+        },
+        {
+            "id": "tn-hsc-2027",
+            "cycle": "2027",
+            "sessions": [
+                {
+                    "session": "Practicals",
+                    "date": "2027-02-08",
+                    "endDate": "2027-02-18",
+                    "note": "Official DGE Tamil Nadu timetable"
+                },
+                {
+                    "session": "Theory",
+                    "date": "2027-03-03",
+                    "endDate": "2027-03-29",
+                    "note": "Official DGE Tamil Nadu timetable"
+                }
+            ]
+        },
+        {
+            "id": "mp-board-10th-2027",
+            "cycle": "2027",
+            "sessions": [
+                {
+                    "session": "Main Exam",
+                    "date": "2027-02-24",
+                    "endDate": "2027-03-18",
+                    "note": "Official MPBSE timetable"
+                }
+            ]
+        },
+        {
+            "id": "mp-board-12th-2027",
+            "cycle": "2027",
+            "sessions": [
+                {
+                    "session": "Main Exam",
+                    "date": "2027-02-17",
+                    "endDate": "2027-03-19",
+                    "note": "Official MPBSE timetable"
+                }
+            ]
+        },
+        {
+            "id": "karnataka-sslc-2027",
+            "cycle": "2027",
+            "sessions": [
+                {
+                    "session": "Exam 1",
+                    "date": "2027-03-22",
+                    "endDate": "2027-04-05",
+                    "note": "KSEAB provisional timetable"
+                },
+                {
+                    "session": "Exam 2",
+                    "date": "2027-05-24",
+                    "endDate": "2027-05-31",
+                    "note": "KSEAB provisional timetable"
+                }
+            ]
+        },
+        {
+            "id": "karnataka-2nd-puc-2027",
+            "cycle": "2027",
+            "sessions": [
+                {
+                    "session": "Exam 1",
+                    "date": "2027-02-27",
+                    "endDate": "2027-03-17",
+                    "note": "KSEAB provisional timetable"
+                },
+                {
+                    "session": "Exam 2",
+                    "date": "2027-05-03",
+                    "endDate": "2027-05-15",
+                    "note": "KSEAB provisional timetable"
+                }
+            ]
+        },
+        {
+            "id": "gseb-ssc-2027",
+            "cycle": "2027",
+            "sessions": [
+                {
+                    "session": "Main Exam",
+                    "date": "2027-02-25",
+                    "endDate": "2027-03-17",
+                    "note": "Official GSHSEB calendar · subject timetable awaited"
+                }
+            ]
+        },
+        {
+            "id": "gseb-hsc-2027",
+            "cycle": "2027",
+            "sessions": [
+                {
+                    "session": "Science Practicals",
+                    "date": "2027-02-05",
+                    "endDate": "2027-02-13",
+                    "note": "Official GSHSEB calendar"
+                },
+                {
+                    "session": "Theory",
+                    "date": "2027-02-25",
+                    "endDate": "2027-03-17",
+                    "note": "Official GSHSEB calendar · subject timetable awaited"
+                }
+            ]
+        },
+        {
+            "id": "ap-ssc-2027",
+            "cycle": "2027",
+            "sessions": [
+                {
+                    "session": "Main Exam",
+                    "date": "2027-03-16",
+                    "endDate": "2027-04-01",
+                    "note": "Expected · BSE AP timetable awaited",
+                    "predicted": true
+                }
+            ]
+        },
+        {
+            "id": "ts-ssc-2027",
+            "cycle": "2027",
+            "sessions": [
+                {
+                    "session": "Main Exam",
+                    "date": "2027-03-14",
+                    "note": "Expected · BSE Telangana timetable awaited",
+                    "predicted": true
+                }
+            ]
+        },
+        {
+            "id": "ap-inter-2027",
+            "cycle": "2027",
+            "sessions": [
+                {
+                    "session": "Main Exam",
+                    "date": "2027-02-23",
+                    "note": "Expected · BIEAP timetable awaited",
+                    "predicted": true
+                }
+            ]
+        },
+        {
+            "id": "ts-inter-2027",
+            "cycle": "2027",
+            "sessions": [
+                {
+                    "session": "Main Exam",
+                    "date": "2027-02-25",
+                    "endDate": "2027-03-18",
+                    "note": "Expected · TGBIE timetable awaited",
+                    "predicted": true
+                }
+            ]
+        },
+        {
+            "id": "ctet-2026",
+            "cycle": "December 2026",
+            "sessions": [
+                {
+                    "session": "Paper 1 & 2",
+                    "date": "2026-12-12",
+                    "endDate": "2026-12-13",
+                    "note": "Official CBSE notice"
+                }
+            ]
+        },
+        {
+            "id": "uppsc-pcs-2026",
+            "cycle": "2026",
+            "sessions": [
+                {
+                    "session": "Preliminary",
+                    "date": "2026-12-06",
+                    "note": "UPPSC exam calendar (provisional)"
+                }
+            ]
+        },
+        {
+            "id": "ap-eapcet-2027",
+            "cycle": "2027",
+            "sessions": [
+                {
+                    "session": "Engineering",
+                    "date": "2027-05-12",
+                    "endDate": "2027-05-18",
+                    "note": "Expected May 2027 · APSCHE notice awaited",
+                    "predicted": true
+                },
+                {
+                    "session": "Agriculture & Pharmacy",
+                    "date": "2027-05-19",
+                    "endDate": "2027-05-20",
+                    "note": "Expected May 2027 · APSCHE notice awaited",
+                    "predicted": true
+                }
+            ]
+        },
+        {
+            "id": "ts-eapcet-2027",
+            "cycle": "2027",
+            "sessions": [
+                {
+                    "session": "Agriculture & Pharmacy",
+                    "date": "2027-05-04",
+                    "endDate": "2027-05-05",
+                    "note": "Expected May 2027 · TGCHE notice awaited",
+                    "predicted": true
+                },
+                {
+                    "session": "Engineering",
+                    "date": "2027-05-09",
+                    "endDate": "2027-05-11",
+                    "note": "Expected May 2027 · TGCHE notice awaited",
+                    "predicted": true
+                }
+            ]
+        },
+        {
+            "id": "ssc-cpo-2026",
+            "cycle": "2026",
+            "sessions": [
+                {
+                    "session": "Paper I",
+                    "date": "2026-11-20",
+                    "endDate": "2026-11-28",
+                    "note": "Official SSC notice"
+                }
+            ]
+        },
+        {
+            "id": "ca-foundation-2027",
+            "cycle": "January 2027",
+            "sessions": [
+                {
+                    "session": "Papers 1-4",
+                    "date": "2027-01-03",
+                    "endDate": "2027-01-09",
+                    "note": "Official ICAI schedule - Jan 3, 5, 7, 9"
+                }
+            ]
+        },
+        {
+            "id": "ca-inter-2027",
+            "cycle": "January 2027",
+            "sessions": [
+                {
+                    "session": "Group I",
+                    "date": "2027-01-02",
+                    "endDate": "2027-01-06",
+                    "note": "Official ICAI schedule - Jan 2, 4, 6"
+                },
+                {
+                    "session": "Group II",
+                    "date": "2027-01-08",
+                    "endDate": "2027-01-12",
+                    "note": "Official ICAI schedule - Jan 8, 10, 12"
+                }
+            ]
+        },
+        {
+            "id": "ca-final-2026",
+            "cycle": "November 2026",
+            "sessions": [
+                {
+                    "session": "Group I",
+                    "date": "2026-11-02",
+                    "endDate": "2026-11-06",
+                    "note": "Official ICAI schedule - Nov 2, 4, 6"
+                },
+                {
+                    "session": "Group II",
+                    "date": "2026-11-09",
+                    "endDate": "2026-11-13",
+                    "note": "Official ICAI schedule - Nov 9, 11, 13"
+                },
+                {
+                    "session": "May 2027 Sitting",
+                    "date": "2027-05-01",
+                    "note": "Expected May 2027 · ICAI notice awaited",
+                    "predicted": true,
+                    "cycle": "May 2027"
+                }
+            ]
         }
     ]
 }

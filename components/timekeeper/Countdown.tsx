@@ -7,6 +7,7 @@ import {
   displaySessions,
   formatExamDate,
   nextSession,
+  sessionStatus,
   timeRemaining,
   type ExamSession,
 } from "@/lib/timekeeper/exams";
@@ -51,7 +52,14 @@ function dayCount(days: number) {
   return `${days} ${days === 1 ? "day" : "days"} left`;
 }
 
-export function DaysLeft({ sessions }: { sessions: ExamSession[] }) {
+// The page's first sentence answers "how many days left for X".
+export function DaysLeft({
+  sessions,
+  label,
+}: {
+  sessions: ExamSession[];
+  label: string;
+}) {
   const now = useNow();
   const session = nextSession(sessions, now);
   if (!now || !session) return null;
@@ -60,9 +68,9 @@ export function DaysLeft({ sessions }: { sessions: ExamSession[] }) {
   if (remaining.expired) return null;
   return (
     <p className="text-base sm:text-lg mt-4" data-testid="days-left">
-      <strong>{dayCount(remaining.days)}</strong> · {formatExamDate(target)}
-      {target !== session.date ? " · Under way" : ""}
-      {session.predicted ? " · Expected" : ""}
+      <strong>{dayCount(remaining.days)}</strong> for {label} ·{" "}
+      {formatExamDate(target)}
+      {target !== session.date ? " · Under way" : ""} · {sessionStatus(session)}
     </p>
   );
 }
@@ -72,6 +80,110 @@ export function DaysUntil({ date }: { date: string }) {
   const remaining = timeRemaining(date, now);
   if (!now || remaining.expired) return null;
   return <> · {dayCount(remaining.days)}</>;
+}
+
+// A table cell: days to the start, then "Under way" until the end date.
+export function DaysToGo({
+  date,
+  endDate,
+}: {
+  date: string;
+  endDate?: string;
+}) {
+  const now = useNow();
+  if (!now) return null;
+  if (now < Date.parse(date)) return <>{timeRemaining(date, now).days}</>;
+  return <>{now < Date.parse(endDate ?? date) ? "Under way" : "Done"}</>;
+}
+
+const IST_OFFSET_MS = 5.5 * 60 * 60 * 1000;
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+// Saturdays and Sundays between today in India and the exam day.
+function weekendsBefore(date: string, now: number) {
+  const today = Math.floor((now + IST_OFFSET_MS) / DAY_MS);
+  const examDay = Math.floor(Date.parse(date) / DAY_MS);
+  let saturdays = 0;
+  let sundays = 0;
+  for (let day = today + 1; day < examDay; day++) {
+    const weekday = new Date(day * DAY_MS).getUTCDay();
+    if (weekday === 6) saturdays++;
+    if (weekday === 0) sundays++;
+  }
+  return { saturdays, sundays };
+}
+
+function plural(count: number, unit: string) {
+  return `${count} ${unit}${count === 1 ? "" : "s"}`;
+}
+
+function weeksAndDays(days: number) {
+  return `${plural(Math.floor(days / 7), "week")} and ${plural(days % 7, "day")}`;
+}
+
+// The next session that has not started, skipping one already under way.
+function upcomingStart(sessions: ExamSession[], now: number) {
+  return displaySessions(sessions, now).find(
+    (session) => now < Date.parse(session.date),
+  );
+}
+
+export function TimeLeft({ sessions }: { sessions: ExamSession[] }) {
+  const now = useNow();
+  const session = upcomingStart(sessions, now);
+  if (!now || !session) return null;
+  const { days } = timeRemaining(session.date, now);
+  const { saturdays, sundays } = weekendsBefore(session.date, now);
+  const rows: [string, string][] = [
+    ["Days", String(days)],
+    ["Weeks", weeksAndDays(days)],
+    ["Saturdays", String(saturdays)],
+    ["Sundays", String(sundays)],
+    ...[4, 6, 8, 10].map((hours): [string, string] => [
+      `Study hours at ${hours} h a day`,
+      String(days * hours),
+    ]),
+  ];
+  return (
+    <table className="tk-table" data-testid="time-left">
+      <caption>Until {formatExamDate(session.date)}</caption>
+      <tbody>
+        {rows.map(([label, value]) => (
+          <tr key={label}>
+            <th scope="row">{label}</th>
+            <td>{value}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+export function DaysLeftAnswer({ sessions }: { sessions: ExamSession[] }) {
+  const now = useNow();
+  const session = upcomingStart(sessions, now);
+  if (!now || !session) return <>The last published session is under way.</>;
+  const today = new Date(now).toLocaleDateString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+  return (
+    <>
+      {dayCount(timeRemaining(session.date, now).days)} as of {today}.{" "}
+      {session.session === "Single Session" ? "The exam" : session.session}{" "}
+      starts on {formatExamDate(session.date)}.
+    </>
+  );
+}
+
+export function WeeksLeftAnswer({ sessions }: { sessions: ExamSession[] }) {
+  const now = useNow();
+  const session = upcomingStart(sessions, now);
+  if (!now || !session) return <>The last published session is under way.</>;
+  return <>{weeksAndDays(timeRemaining(session.date, now).days)}.</>;
 }
 
 export function CardCountdown({ sessions }: { sessions: ExamSession[] }) {

@@ -14,6 +14,13 @@ import {
   DEFAULT_YEAR,
   YEAR_OPTIONS,
 } from "@/lib/mht-cet/state-cutoffs/config";
+import {
+  cycleYears,
+  examCycle,
+  exams,
+  getExam,
+  EXAM_COUNTDOWN_PATH,
+} from "@/lib/timekeeper/exams";
 import "./mht-footer.css";
 
 const REPO = "https://github.com/kewonit/deetnuts";
@@ -209,7 +216,6 @@ const linkGroups: Array<{ label: string; links: FooterLink[] }> = [
   {
     label: "Project",
     links: [
-      { label: "Exam countdown", href: "/exam-countdown" },
       { label: "Creators", href: "/creators" },
       { label: "Source code", href: REPO, external: true },
       { label: "Open-source notices", href: "/compliance/open-source-notices" },
@@ -234,6 +240,33 @@ const legalLinks: FooterLink[] = [
   { label: "Terms", href: "/compliance/terms-and-conditions" },
   { label: "Cookies", href: "/compliance/cookie-policy" },
 ];
+
+// The most searched countdowns, labelled with their current exam year.
+function countdownGroup(now: number) {
+  const featured = ["jee-main", "neet-ug", "cat"].flatMap((slug) => {
+    const exam = getExam(slug);
+    return exam
+      ? [
+          {
+            label: `${exam.name} ${examCycle(exam, now)}`,
+            href: `${EXAM_COUNTDOWN_PATH}/exams/${slug}`,
+          },
+        ]
+      : [];
+  });
+  const boards = exams.filter((exam) => exam.category === "Board Exams");
+  return {
+    label: "Countdowns",
+    links: [
+      ...featured,
+      {
+        label: `Board exams ${cycleYears(boards, now)}`,
+        href: `${EXAM_COUNTDOWN_PATH}/category/board-exams`,
+      },
+      { label: "All countdowns", href: EXAM_COUNTDOWN_PATH },
+    ],
+  };
+}
 
 function FooterAnchor({ link }: { link: FooterLink }) {
   return link.external ? (
@@ -311,7 +344,7 @@ export async function MhtFooter({
           </div>
 
           <nav className="mht-foot-cols" aria-label="Footer">
-            {linkGroups.map((group) => (
+            {[...linkGroups, countdownGroup(Date.now())].map((group) => (
               <div key={group.label}>
                 <h2>{group.label}</h2>
                 <ul>

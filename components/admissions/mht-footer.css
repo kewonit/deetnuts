@@ -261,6 +261,7 @@
 
 @media (min-width: 960px) {
   .mht-foot-colleges ul { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .mht-foot-cols { grid-template-columns: repeat(5, minmax(0, 1fr)); }
   .mht-foot-top {
     grid-template-columns: minmax(15rem, 1fr) minmax(0, 2.5fr);
     gap: 4rem;

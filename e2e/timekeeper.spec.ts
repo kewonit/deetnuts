@@ -183,15 +183,37 @@ test("every mapped destination has static content, correct canonical and one sco
         html.includes("Latest published schedule"),
         `${destination}: schedule`,
       ).toBe(true);
+      // A fixed date, never a day count that goes stale in search results.
       expect(html, `${destination}: title`).toMatch(
-        /<title>[^<]* \d{4} Countdown: How Many Days Left\? \| TimeKeeper<\/title>/,
+        /<title>[^<]* \d{4} Countdown: Days Left (Until|\(Expected) \d{1,2} [A-Z][a-z]{2,3} \d{4}\)? \| TimeKeeper<\/title>/,
       );
-      expect(html, `${destination}: prerendered days left`).toMatch(
-        /data-testid="days-left"[^>]*><strong>\d+ days? left<\/strong>/,
+      expect(html, `${destination}: heading`).toMatch(
+        /<h1[^>]*>[^<]* \d{4}(<!-- -->)? Countdown<\/h1>/,
+      );
+      expect(html, `${destination}: prerendered answer`).toMatch(
+        /data-testid="days-left"[^>]*><strong>\d+ days? left<\/strong> for /,
+      );
+      expect(html, `${destination}: dates table`).toContain(
+        'data-testid="exam-dates"',
+      );
+      expect(html, `${destination}: share image`).toContain(
+        'property="og:image"',
       );
       expect(html, `${destination}: prerendered digits`).not.toContain(">--<");
     }
   }
+  const boards = await (
+    await request.get(`${path}/category/board-exams`)
+  ).text();
+  expect(boards).toMatch(/Class 10 board exams \d{4}/);
+  expect(boards).toMatch(/Class 12 board exams \d{4}/);
+  expect(await (await request.get(`${path}/exams/jee-main`)).text()).toContain(
+    'data-testid="exam-pattern"',
+  );
+  const wallpaper = await request.get(`${path}/exams/jee-main/wallpaper`);
+  expect(wallpaper.headers()["content-type"]).toBe("image/png");
+  const png = await wallpaper.body();
+  expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([1080, 1920]);
   for (const exam of exams)
     for (const slug of exam.relatedExams)
       expect(
@@ -205,7 +227,7 @@ test("every mapped destination has static content, correct canonical and one sco
     404,
   );
   const sitemap = await request.get(`${path}/sitemap.xml`);
-  expect((await sitemap.text()).match(/<loc>/g)).toHaveLength(74);
+  expect((await sitemap.text()).match(/<loc>/g)).toHaveLength(101);
   expect(await (await request.get("/sitemap-index.xml")).text()).toContain(
     `${origin}${path}/sitemap.xml`,
   );

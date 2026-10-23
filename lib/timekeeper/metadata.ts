@@ -7,8 +7,11 @@ export function timekeeperMetadata(
   title: string,
   description: string,
   keywords?: string[],
+  // Pages with their own opengraph-image must not override it with none.
+  shareImage = false,
 ): Metadata {
   const url = `${PRODUCTION_SITE_URL}${path}`;
+  const images = shareImage ? {} : { images: [] };
   return {
     // A short brand keeps the exam name, year and "days left" inside the
     // width search results show before truncating.
@@ -23,9 +26,14 @@ export function timekeeperMetadata(
       siteName: "TimeKeeper on Deetnuts",
       type: "website",
       locale: "en_IN",
-      images: [],
+      ...images,
     },
-    twitter: { card: "summary", title, description, images: [] },
+    twitter: {
+      card: shareImage ? "summary_large_image" : "summary",
+      title,
+      description,
+      ...images,
+    },
   };
 }
 
