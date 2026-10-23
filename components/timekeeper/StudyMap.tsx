@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { LayerGroup, Map as LeafletMap } from "leaflet";
+import type { LayerGroup, Map as LeafletMap, Marker } from "leaflet";
 import type { GeoJsonObject } from "geojson";
 import { LocateFixed, Maximize, RefreshCw } from "lucide-react";
 import { z } from "zod";
@@ -37,11 +37,41 @@ const sessionSchema = z.object({
 });
 type StudySession = z.infer<typeof sessionSchema>;
 
+function studyPopup(student: StudySession) {
+  const popup = document.createElement("div");
+  const heading = document.createElement("strong");
+  heading.textContent = student.exam_name ?? "Study session";
+  popup.append(heading);
+  const details = document.createElement("p");
+  details.textContent = [student.subject, student.city, student.state]
+    .filter(Boolean)
+    .join(" · ");
+  popup.append(details);
+  const minutes = Math.max(
+    0,
+    Math.floor((Date.now() - Date.parse(student.started_at)) / 60_000),
+  );
+  if (Number.isFinite(minutes)) {
+    const time = document.createElement("p");
+    time.textContent = `Studying for ${minutes >= 60 ? `${Math.floor(minutes / 60)} h ${minutes % 60} min` : `${minutes} min`}`;
+    popup.append(time);
+  }
+  if (student.is_demonstration) {
+    const label = document.createElement("small");
+    label.textContent = "Example session";
+    popup.append(label);
+  }
+  return popup;
+}
+
 export default function StudyMap({ examSlug }: { examSlug?: string }) {
   const element = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLDivElement>(null);
   const map = useRef<LeafletMap | null>(null);
   const markers = useRef<LayerGroup | null>(null);
+  const placed = useRef(
+    new Map<string, { marker: Marker; student: StudySession }>(),
+  );
   const resetView = useRef<(() => void) | null>(null);
   const [mapReady, setMapReady] = useState(false);
   const now = useNow();
@@ -63,8 +93,11 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
     displayed[0];
   const demoSlot = Math.floor(now / 30_000);
   const demonstrations = useMemo(
-    () => (demoSlot ? generateDeterministicSessions(demoSlot * 30_000) : []),
-    [demoSlot],
+    () =>
+      demoSlot
+        ? generateDeterministicSessions(demoSlot * 30_000, examSlug)
+        : [],
+    [demoSlot, examSlug],
   );
 
   const refresh = useCallback(async () => {
@@ -145,6 +178,7 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
         instance.remove();
         map.current = null;
         markers.current = null;
+        placed.current.clear();
         resetView.current = null;
       };
       const client = await getStudyClient();
@@ -196,12 +230,37 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
     };
   }, [refresh]);
 
+  // Markers persist by session id, so open popups survive refreshes and only
+  // students who join or leave animate.
   useEffect(() => {
     let cancelled = false;
     void import("leaflet").then((L) => {
-      if (cancelled || !markers.current) return;
-      markers.current.clearLayers();
-      for (const student of [...sessions, ...demonstrations]) {
+      const layer = markers.current;
+      if (cancelled || !layer) return;
+      const students = [...sessions, ...demonstrations];
+      const present = new Set(students.map((student) => student.id));
+      for (const [id, { marker }] of placed.current) {
+        if (present.has(id)) continue;
+        placed.current.delete(id);
+        marker.getElement()?.classList.add("tk-marker-leaving");
+        setTimeout(() => layer.removeLayer(marker), 300);
+      }
+      for (const student of students) {
+        const existing = placed.current.get(student.id);
+        if (
+          existing &&
+          existing.student.avatar_seed === student.avatar_seed &&
+          existing.student.is_demonstration === student.is_demonstration
+        ) {
+          if (
+            existing.student.latitude !== student.latitude ||
+            existing.student.longitude !== student.longitude
+          )
+            existing.marker.setLatLng([student.latitude, student.longitude]);
+          existing.student = student;
+          continue;
+        }
+        if (existing) layer.removeLayer(existing.marker);
         const picture = document.createElement("img");
         picture.src = avatarUrl(student.avatar_seed);
         picture.alt = student.is_demonstration
@@ -211,31 +270,23 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
         picture.height = 40;
         picture.className = `tk-avatar${student.is_demonstration ? " tk-avatar-demo" : ""}`;
         picture.referrerPolicy = "no-referrer";
-        const marker = L.marker([student.latitude, student.longitude], {
-          zIndexOffset: student.is_demonstration ? 0 : 1000,
-          icon: L.divIcon({
-            html: picture,
-            className: "",
-            iconSize: [40, 40],
-            iconAnchor: [20, 20],
+        const entry = {
+          student,
+          marker: L.marker([student.latitude, student.longitude], {
+            zIndexOffset: student.is_demonstration ? 0 : 1000,
+            icon: L.divIcon({
+              html: picture,
+              className: "",
+              iconSize: [40, 40],
+              iconAnchor: [20, 20],
+            }),
           }),
-        });
-        const popup = document.createElement("div");
-        const heading = document.createElement("strong");
-        heading.textContent = student.exam_name ?? "Study session";
-        popup.append(heading);
-        const details = document.createElement("p");
-        details.textContent = [student.subject, student.city, student.state]
-          .filter(Boolean)
-          .join(" · ");
-        popup.append(details);
-        if (student.is_demonstration) {
-          const label = document.createElement("small");
-          label.textContent = "Example session";
-          popup.append(label);
-        }
-        marker.bindPopup(popup);
-        marker.addTo(markers.current);
+        };
+        // Leaflet builds function content each time the popup opens, so the
+        // study time is current.
+        entry.marker.bindPopup(() => studyPopup(entry.student));
+        entry.marker.addTo(layer);
+        placed.current.set(student.id, entry);
       }
     });
     return () => {

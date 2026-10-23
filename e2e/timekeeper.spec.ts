@@ -183,8 +183,21 @@ test("every mapped destination has static content, correct canonical and one sco
         html.includes("Latest published schedule"),
         `${destination}: schedule`,
       ).toBe(true);
+      expect(html, `${destination}: title`).toMatch(
+        /<title>[^<]* \d{4} Countdown: How Many Days Left\? \| TimeKeeper<\/title>/,
+      );
+      expect(html, `${destination}: prerendered days left`).toMatch(
+        /data-testid="days-left"[^>]*><strong>\d+ days? left<\/strong>/,
+      );
+      expect(html, `${destination}: prerendered digits`).not.toContain(">--<");
     }
   }
+  for (const exam of exams)
+    for (const slug of exam.relatedExams)
+      expect(
+        exams.some((item) => item.slug === slug),
+        `${exam.slug} relates to ${slug}`,
+      ).toBe(true);
   expect((await request.get(`${path}/exams/does-not-exist`)).status()).toBe(
     404,
   );
@@ -632,6 +645,36 @@ test("India map renders locally, fits the viewport and resets after zooming", as
   await assertFits();
   expect(externalTiles).toEqual([]);
   expect(await page.locator(".leaflet-tile").count()).toBe(0);
+});
+
+test("study map keeps 12-15 labelled examples out of the live count and across refreshes", async ({
+  page,
+}) => {
+  // 20:00 IST, the evening peak.
+  await page.clock.install({ time: new Date("2026-10-23T14:30:00Z") });
+  await page.goto(`${path}/study-map`);
+  await expect(page.locator(".tk-map-toolbar")).toContainText("Live");
+  const examples = page.locator(".leaflet-marker-icon .tk-avatar-demo");
+  await expect.poll(() => examples.count()).toBeGreaterThanOrEqual(12);
+  const count = await examples.count();
+  expect(count).toBeLessThanOrEqual(15);
+  await expect(page.locator(".tk-map-toolbar")).toContainText("0 studying now");
+  await examples.evaluateAll((items) =>
+    items.forEach((item) => item.setAttribute("data-kept", "")),
+  );
+  const refreshed = page.waitForResponse((response) =>
+    response.url().endsWith("get_active_study_sessions"),
+  );
+  await page.getByRole("button", { name: "Refresh study map" }).click();
+  await refreshed;
+  await expect(page.locator(".tk-avatar-demo[data-kept]")).toHaveCount(count);
+  await page
+    .locator(".leaflet-marker-icon:has(.tk-avatar-demo)")
+    .first()
+    .press("Enter");
+  const popup = page.locator(".leaflet-popup-content");
+  await expect(popup).toContainText("Example session");
+  await expect(popup).toContainText(/Studying for \d+/);
 });
 
 test("study map connects, starts and ends through the existing RPC contract without HTML injection", async ({

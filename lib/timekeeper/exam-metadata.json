@@ -22,9 +22,8 @@
                 "mhtcet"
             ],
             "slug": "jee-main",
-            "metaDescription": "JEE Main 2026 countdown timer. Track days, hours, minutes until JEE Main exam. Get exam dates and preparation tips.",
             "keywords": [
-                "JEE Main 2026",
+                "JEE Main 2027",
                 "JEE Main countdown",
                 "JEE Main exam date",
                 "JEE preparation",
@@ -43,18 +42,16 @@
                 "Mathematics"
             ],
             "duration": "6 hours (2 papers)",
-            "conductingBody": "IIT Roorkee (2026)",
+            "conductingBody": "IITs (organising IIT rotates)",
             "seats": "17,000+",
             "officialWebsite": "https://jeeadv.ac.in/",
             "relatedExams": [
                 "jee-main",
-                "kvpy",
                 "bitsat"
             ],
             "slug": "jee-advanced",
-            "metaDescription": "JEE Advanced 2026 countdown timer. Track time until IIT JEE Advanced exam. Complete exam schedule and preparation guide.",
             "keywords": [
-                "JEE Advanced 2026",
+                "JEE Advanced 2027",
                 "IIT JEE",
                 "JEE Advanced countdown",
                 "IIT entrance exam",
@@ -80,13 +77,11 @@
             "officialWebsite": "https://neet.nta.nic.in/",
             "relatedExams": [
                 "neet-pg",
-                "jipmer",
-                "aiims"
+                "jipmer"
             ],
             "slug": "neet-ug",
-            "metaDescription": "NEET UG 2026 countdown timer. Track days until NEET medical entrance exam. Get exam pattern and prep tips.",
             "keywords": [
-                "NEET UG 2026",
+                "NEET UG 2027",
                 "NEET countdown",
                 "NEET exam date",
                 "medical entrance exam",
@@ -116,9 +111,8 @@
                 "comedk"
             ],
             "slug": "bitsat",
-            "metaDescription": "BITSAT 2026 countdown timer. Track time until BITS admission test. Complete exam guide and preparation strategy.",
             "keywords": [
-                "BITSAT 2026",
+                "BITSAT 2027",
                 "BITS Pilani",
                 "BITSAT countdown",
                 "BITS admission test",
@@ -138,17 +132,15 @@
                 "Quantitative Ability"
             ],
             "duration": "2 hours",
-            "conductingBody": "IIM Calcutta (2026)",
+            "conductingBody": "IIM Indore (2026)",
             "seats": "5,000+",
             "officialWebsite": "https://iimcat.ac.in/",
             "relatedExams": [
                 "xat",
                 "snap",
-                "nmat",
-                "mat"
+                "nmat"
             ],
             "slug": "cat",
-            "metaDescription": "CAT 2026 countdown timer. Track days until Common Admission Test. IIM MBA entrance exam dates and preparation guide.",
             "keywords": [
                 "CAT 2026",
                 "IIM CAT",
@@ -174,14 +166,11 @@
             "seats": "900+",
             "officialWebsite": "https://www.upsc.gov.in/",
             "relatedExams": [
-                "state-pcs",
-                "ssc-cgl",
-                "capf"
+                "ssc-cgl"
             ],
             "slug": "upsc-cse",
-            "metaDescription": "UPSC CSE 2026 countdown timer. Track time until Civil Services Examination. IAS, IPS exam dates and preparation strategy.",
             "keywords": [
-                "UPSC CSE 2026",
+                "UPSC CSE 2027",
                 "IAS exam",
                 "Civil Services",
                 "UPSC countdown",
@@ -200,18 +189,16 @@
                 "General Aptitude"
             ],
             "duration": "3 hours",
-            "conductingBody": "IIT Guwahati (2026)",
+            "conductingBody": "IIT Madras (2027)",
             "seats": "Variable",
             "officialWebsite": "https://gate2026.iitg.ac.in/",
             "relatedExams": [
                 "jee-main",
-                "ese",
-                "isro"
+                "ese"
             ],
             "slug": "gate",
-            "metaDescription": "GATE 2026 countdown timer. Track days until Graduate Aptitude Test in Engineering. M.Tech admission and PSU jobs.",
             "keywords": [
-                "GATE 2026",
+                "GATE 2027",
                 "GATE countdown",
                 "M.Tech admission",
                 "PSU recruitment",
@@ -240,7 +227,6 @@
                 "railway-ntpc"
             ],
             "slug": "ssc-cgl",
-            "metaDescription": "SSC CGL 2026 countdown timer. Track time until Staff Selection Commission exam. Central government jobs preparation.",
             "keywords": [
                 "SSC CGL 2026",
                 "SSC countdown",
@@ -261,18 +247,15 @@
                 "Clinical subjects"
             ],
             "duration": "3 hours 30 minutes",
-            "conductingBody": "NBE",
+            "conductingBody": "NBEMS",
             "seats": "50,000+",
             "officialWebsite": "https://natboard.edu.in/",
             "relatedExams": [
-                "neet-ug",
-                "inicet",
-                "jipmer-pg"
+                "neet-ug"
             ],
             "slug": "neet-pg",
-            "metaDescription": "NEET PG 2026 countdown timer. Track days until NEET postgraduate medical entrance exam. MD/MS admission guide.",
             "keywords": [
-                "NEET PG 2026",
+                "NEET PG 2027",
                 "NEET PG countdown",
                 "MD MS admission",
                 "postgraduate medical",
@@ -296,15 +279,10 @@
             "conductingBody": "Consortium of NLUs",
             "seats": "2,500+",
             "officialWebsite": "https://consortiumofnlus.ac.in/",
-            "relatedExams": [
-                "ailet",
-                "lsat-india",
-                "slat"
-            ],
+            "relatedExams": [],
             "slug": "clat",
-            "metaDescription": "CLAT 2026 countdown timer. Track time until Common Law Admission Test. NLU law admission exam dates and prep guide.",
             "keywords": [
-                "CLAT 2026",
+                "CLAT 2027",
                 "CLAT countdown",
                 "law entrance exam",
                 "NLU admission",
@@ -332,9 +310,8 @@
                 "mhtcet"
             ],
             "slug": "wbjee",
-            "metaDescription": "WBJEE 2026 countdown timer. Track days until West Bengal Joint Entrance Examination. State engineering admission.",
             "keywords": [
-                "WBJEE 2026",
+                "WBJEE 2027",
                 "West Bengal JEE",
                 "WBJEE countdown",
                 "WB engineering admission",
@@ -362,9 +339,8 @@
                 "wbjee"
             ],
             "slug": "mhtcet",
-            "metaDescription": "MHTCET 2026 countdown timer. Track time until Maharashtra CET. State engineering and medical admission exam.",
             "keywords": [
-                "MHTCET 2026",
+                "MHTCET 2027",
                 "Maharashtra CET",
                 "MHTCET countdown",
                 "Maharashtra engineering",
@@ -393,9 +369,8 @@
                 "mhtcet"
             ],
             "slug": "kcet",
-            "metaDescription": "KCET 2026 countdown timer. Track days until Karnataka Common Entrance Test. State engineering admission guide.",
             "keywords": [
-                "KCET 2026",
+                "KCET 2027",
                 "Karnataka CET",
                 "KCET countdown",
                 "Karnataka engineering",
@@ -423,9 +398,8 @@
                 "viteee"
             ],
             "slug": "comedk",
-            "metaDescription": "COMEDK UGET 2026 countdown timer. Track time until Karnataka private engineering admission exam.",
             "keywords": [
-                "COMEDK 2026",
+                "COMEDK 2027",
                 "COMEDK UGET",
                 "Karnataka private engineering",
                 "COMEDK countdown"
@@ -449,13 +423,11 @@
             "officialWebsite": "https://viteee.vit.ac.in/",
             "relatedExams": [
                 "bitsat",
-                "srmjeee",
                 "comedk"
             ],
             "slug": "viteee",
-            "metaDescription": "VITEEE 2026 countdown timer. Track days until VIT Engineering Entrance Examination. VIT admission guide.",
             "keywords": [
-                "VITEEE 2026",
+                "VITEEE 2027",
                 "VIT entrance exam",
                 "VITEEE countdown",
                 "VIT engineering admission"
@@ -484,9 +456,8 @@
                 "nmat"
             ],
             "slug": "xat",
-            "metaDescription": "XAT 2026 countdown timer. Track time until Xavier Aptitude Test. XLRI MBA admission exam dates and preparation.",
             "keywords": [
-                "XAT 2026",
+                "XAT 2027",
                 "Xavier Aptitude Test",
                 "XLRI admission",
                 "XAT countdown",
@@ -512,11 +483,9 @@
             "relatedExams": [
                 "cat",
                 "xat",
-                "mat",
                 "nmat"
             ],
             "slug": "snap",
-            "metaDescription": "SNAP 2026 countdown timer. Track days until Symbiosis National Aptitude Test. MBA admission guide.",
             "keywords": [
                 "SNAP 2026",
                 "Symbiosis MBA",
@@ -543,11 +512,9 @@
             "relatedExams": [
                 "cat",
                 "xat",
-                "snap",
-                "cmat"
+                "snap"
             ],
             "slug": "nmat",
-            "metaDescription": "NMAT 2026 countdown timer. Track time until NMIMS Management Aptitude Test. MBA admission exam guide.",
             "keywords": [
                 "NMAT 2026",
                 "NMIMS MBA",
@@ -574,12 +541,9 @@
             "seats": "4,000+",
             "officialWebsite": "https://www.ibps.in/",
             "relatedExams": [
-                "sbi-po",
-                "ibps-clerk",
-                "rbi-grade-b"
+                "sbi-po"
             ],
             "slug": "ibps-po",
-            "metaDescription": "IBPS PO 2026 countdown timer. Track days until banking PO exam. Public sector bank officer recruitment.",
             "keywords": [
                 "IBPS PO 2026",
                 "banking PO exam",
@@ -606,12 +570,9 @@
             "seats": "2,000+",
             "officialWebsite": "https://sbi.co.in/",
             "relatedExams": [
-                "ibps-po",
-                "sbi-clerk",
-                "rbi-assistant"
+                "ibps-po"
             ],
             "slug": "sbi-po",
-            "metaDescription": "SBI PO 2026 countdown timer. Track time until State Bank of India PO exam. Banking career preparation guide.",
             "keywords": [
                 "SBI PO 2026",
                 "State Bank PO",
@@ -638,11 +599,9 @@
             "officialWebsite": "https://www.rrbcdg.gov.in/",
             "relatedExams": [
                 "ssc-cgl",
-                "ssc-chsl",
-                "railway-group-d"
+                "ssc-chsl"
             ],
             "slug": "railway-ntpc",
-            "metaDescription": "Railway NTPC 2026 countdown timer. Track days until Railway non-technical exam. RRB NTPC preparation guide.",
             "keywords": [
                 "Railway NTPC 2026",
                 "RRB NTPC",
@@ -666,12 +625,9 @@
             "seats": "Variable",
             "officialWebsite": "https://ugcnet.nta.nic.in/",
             "relatedExams": [
-                "csir-net",
-                "set",
-                "slet"
+                "csir-net"
             ],
             "slug": "ugc-net",
-            "metaDescription": "UGC NET 2026 countdown timer. Track time until National Eligibility Test. Assistant Professor and JRF exam.",
             "keywords": [
                 "UGC NET 2026",
                 "NET countdown",
@@ -697,11 +653,9 @@
             "officialWebsite": "https://csirnet.nta.nic.in/",
             "relatedExams": [
                 "ugc-net",
-                "gate",
-                "iit-jam"
+                "gate"
             ],
             "slug": "csir-net",
-            "metaDescription": "CSIR NET 2026 countdown timer. Track days until CSIR NET exam. Science JRF and Lectureship eligibility.",
             "keywords": [
                 "CSIR NET 2026",
                 "CSIR countdown",
@@ -728,11 +682,9 @@
             "officialWebsite": "https://ssc.nic.in/",
             "relatedExams": [
                 "ssc-cgl",
-                "ssc-mts",
                 "railway-ntpc"
             ],
             "slug": "ssc-chsl",
-            "metaDescription": "SSC CHSL 2026 countdown timer. Track time until SSC Combined Higher Secondary Level exam. 12th pass govt jobs.",
             "keywords": [
                 "SSC CHSL 2026",
                 "SSC 12th pass",
@@ -759,12 +711,9 @@
             "seats": "15,000+",
             "officialWebsite": "https://www.ibps.in/",
             "relatedExams": [
-                "ibps-po",
-                "sbi-clerk",
-                "bank-po"
+                "ibps-po"
             ],
             "slug": "bank-clerk",
-            "metaDescription": "Bank Clerk 2026 countdown timer. Track days until banking clerk exam. Banking sector recruitment guide.",
             "keywords": [
                 "Bank Clerk 2026",
                 "banking clerk exam",
@@ -788,14 +737,13 @@
             "seats": "400+",
             "officialWebsite": "https://www.upsc.gov.in/",
             "relatedExams": [
-                "nda-na-2-2026",
-                "cds-1-2026",
-                "afcat-2026"
+                "nda-na-2",
+                "cds-1",
+                "afcat"
             ],
             "slug": "nda-na-1",
-            "metaDescription": "NDA & NA (I) 2026 countdown timer. Track time until the National Defence Academy & Naval Academy (I) exam. Get exam dates, eligibility, and preparation tips.",
             "keywords": [
-                "NDA & NA (I) 2026",
+                "NDA & NA (I) 2027",
                 "NDA countdown",
                 "NDA exam date",
                 "Defence entrance exam",
@@ -817,14 +765,13 @@
             "seats": "400+",
             "officialWebsite": "https://www.upsc.gov.in/",
             "relatedExams": [
-                "nda-na-1-2026",
-                "cds-2-2026",
-                "afcat-2026"
+                "nda-na-1",
+                "cds-2",
+                "afcat"
             ],
             "slug": "nda-na-2",
-            "metaDescription": "NDA & NA (II) 2026 countdown timer. Track time until the National Defence Academy & Naval Academy (II) exam. Get exam dates, eligibility, and preparation tips.",
             "keywords": [
-                "NDA & NA (II) 2026",
+                "NDA & NA (II) 2027",
                 "NDA countdown",
                 "NDA exam date",
                 "Defence entrance exam",
@@ -847,14 +794,13 @@
             "seats": "350+",
             "officialWebsite": "https://www.upsc.gov.in/",
             "relatedExams": [
-                "cds-2-2026",
-                "afcat-2026",
-                "nda-na-1-2026"
+                "cds-2",
+                "afcat",
+                "nda-na-1"
             ],
             "slug": "cds-1",
-            "metaDescription": "CDS (I) 2026 countdown timer. Track time until the Combined Defence Services (I) exam. Get exam dates, eligibility, and preparation tips.",
             "keywords": [
-                "CDS (I) 2026",
+                "CDS (I) 2027",
                 "CDS countdown",
                 "CDS exam date",
                 "Defence entrance exam",
@@ -877,14 +823,13 @@
             "seats": "350+",
             "officialWebsite": "https://www.upsc.gov.in/",
             "relatedExams": [
-                "cds-1-2026",
-                "afcat-2026",
-                "nda-na-2-2026"
+                "cds-1",
+                "afcat",
+                "nda-na-2"
             ],
             "slug": "cds-2",
-            "metaDescription": "CDS (II) 2026 countdown timer. Track time until the Combined Defence Services (II) exam. Get exam dates, eligibility, and preparation tips.",
             "keywords": [
-                "CDS (II) 2026",
+                "CDS (II) 2027",
                 "CDS countdown",
                 "CDS exam date",
                 "Defence entrance exam",
@@ -908,15 +853,14 @@
             "seats": "300+",
             "officialWebsite": "https://afcat.cdac.in/",
             "relatedExams": [
-                "cds-1-2026",
-                "cds-2-2026",
-                "nda-na-1-2026",
-                "nda-na-2-2026"
+                "cds-1",
+                "cds-2",
+                "nda-na-1",
+                "nda-na-2"
             ],
             "slug": "afcat",
-            "metaDescription": "AFCAT 2026 countdown timer. Track time until the Air Force Common Admission Test. Get exam dates, eligibility, and preparation tips.",
             "keywords": [
-                "AFCAT 2026",
+                "AFCAT 2027",
                 "AFCAT countdown",
                 "AFCAT exam date",
                 "Air Force entrance exam",
@@ -945,7 +889,6 @@
                 "upsc-cse"
             ],
             "slug": "ib-acio",
-            "metaDescription": "IB ACIO 2026 countdown timer. Track time until the Intelligence Bureau ACIO exam. Get exam dates, eligibility, and preparation tips.",
             "keywords": [
                 "IB ACIO 2026",
                 "IB ACIO countdown",
@@ -969,14 +912,13 @@
             "seats": "300+",
             "officialWebsite": "https://www.upsc.gov.in/",
             "relatedExams": [
-                "cds-1-2026",
-                "cds-2-2026",
+                "cds-1",
+                "cds-2",
                 "upsc-cse"
             ],
             "slug": "capf-ac",
-            "metaDescription": "CAPF (AC) 2026 countdown timer. Track time until the Central Armed Police Forces (AC) exam. Get exam dates, eligibility, and preparation tips.",
             "keywords": [
-                "CAPF (AC) 2026",
+                "CAPF (AC) 2027",
                 "CAPF countdown",
                 "CAPF exam date",
                 "Assistant Commandant exam",
@@ -1002,9 +944,8 @@
                 "upsc-cse"
             ],
             "slug": "ifs",
-            "metaDescription": "IFS 2026 countdown timer. Track time until the Indian Forest Service Examination. Get exam dates, eligibility, and preparation tips.",
             "keywords": [
-                "IFS 2026",
+                "IFS 2027",
                 "IFS countdown",
                 "IFS exam date",
                 "Indian Forest Service exam",
@@ -1026,13 +967,11 @@
             "seats": "400+",
             "officialWebsite": "https://www.upsc.gov.in/",
             "relatedExams": [
-                "gate-2026",
-                "isro-2026"
+                "gate"
             ],
             "slug": "ese",
-            "metaDescription": "ESE 2026 countdown timer. Track time until the Engineering Services Examination. Get exam dates, eligibility, and preparation tips.",
             "keywords": [
-                "ESE 2026",
+                "ESE 2027",
                 "ESE countdown",
                 "ESE exam date",
                 "Engineering Services Examination",
@@ -1055,9 +994,8 @@
             "officialWebsite": "https://www.upsc.gov.in/",
             "relatedExams": [],
             "slug": "geo-scientist",
-            "metaDescription": "Combined Geo-Scientist 2026 countdown timer. Track time until the Combined Geo-Scientist and Geologist Examination. Get exam dates, eligibility, and preparation tips.",
             "keywords": [
-                "Combined Geo-Scientist 2026",
+                "Combined Geo-Scientist 2027",
                 "Geo-Scientist countdown",
                 "Geo-Scientist exam date",
                 "UPSC Geo-Scientist"
@@ -1081,13 +1019,10 @@
             "seats": "8000+",
             "officialWebsite": "https://www.ibps.in/",
             "relatedExams": [
-                "ibps-po-2026",
-                "ibps-clerk-2026",
-                "sbi-po-2026",
-                "sbi-clerk-2026"
+                "ibps-po",
+                "sbi-po"
             ],
             "slug": "ibps-rrb",
-            "metaDescription": "IBPS RRB 2026 countdown timer. Track time until the IBPS RRB exam. Get exam dates, eligibility, and preparation tips.",
             "keywords": [
                 "IBPS RRB 2026",
                 "IBPS RRB countdown",
@@ -1113,13 +1048,11 @@
             "seats": "50000+",
             "officialWebsite": "https://ssc.nic.in/",
             "relatedExams": [
-                "ssc-chsl-2026",
-                "railway-group-d-2026"
+                "ssc-chsl"
             ],
             "slug": "ssc-gd",
-            "metaDescription": "SSC GD Constable 2026 countdown timer. Track time until the SSC GD Constable exam. Get exam dates, eligibility, and preparation tips.",
             "keywords": [
-                "SSC GD Constable 2026",
+                "SSC GD Constable 2027",
                 "SSC GD countdown",
                 "SSC GD exam date",
                 "Constable exam",
@@ -1140,10 +1073,9 @@
             "seats": "400+",
             "officialWebsite": "https://www.iift.ac.in/",
             "relatedExams": [
-                "cat-2026"
+                "cat"
             ],
             "slug": "iift",
-            "metaDescription": "IIFT Entrance Exam has been discontinued. Admission to IIFT 2026 is through CAT 2025. Check CAT dates.",
             "keywords": [
                 "IIFT 2026",
                 "IIFT CAT",
@@ -1170,13 +1102,12 @@
             "seats": "200+",
             "officialWebsite": "https://www.mica.ac.in/",
             "relatedExams": [
-                "cat-2026",
-                "xat-2026"
+                "cat",
+                "xat"
             ],
             "slug": "micat",
-            "metaDescription": "MICAT 2026 countdown timer. Track time until the MICA Admission Test. Get exam dates, eligibility, and preparation tips.",
             "keywords": [
-                "MICAT 2026",
+                "MICAT 2027",
                 "MICAT countdown",
                 "MICAT exam date",
                 "MICA PGDM-C",
@@ -1200,9 +1131,8 @@
                 "cuet-pg"
             ],
             "slug": "tissnet",
-            "metaDescription": "TISSNET 2026 has been discontinued. Admission to TISS is now through CUET PG 2026. Check CUET PG dates.",
             "keywords": [
-                "TISSNET 2026",
+                "TISSNET 2027",
                 "TISS CUET PG",
                 "TISS admission",
                 "TISS MA"
@@ -1225,13 +1155,12 @@
             "seats": "1500+",
             "officialWebsite": "https://www.iiseradmission.in/",
             "relatedExams": [
-                "nest-2026",
-                "jee-advanced-2026"
+                "nest",
+                "jee-advanced"
             ],
             "slug": "iiser-aptitude-test",
-            "metaDescription": "IISER Aptitude Test 2026 countdown timer. Track time until the IISER Aptitude Test. Get exam dates, eligibility, and preparation tips.",
             "keywords": [
-                "IISER Aptitude Test 2026",
+                "IISER Aptitude Test 2027",
                 "IISER countdown",
                 "IISER exam date",
                 "IISER BS-MS",
@@ -1255,13 +1184,12 @@
             "seats": "200+",
             "officialWebsite": "https://www.nestexam.in/",
             "relatedExams": [
-                "iiser-aptitude-test-2026",
-                "jee-advanced-2026"
+                "iiser-aptitude-test",
+                "jee-advanced"
             ],
             "slug": "nest",
-            "metaDescription": "NEST 2026 countdown timer. Track time until the National Entrance Screening Test. Get exam dates, eligibility, and preparation tips.",
             "keywords": [
-                "NEST 2026",
+                "NEST 2027",
                 "NEST countdown",
                 "NEST exam date",
                 "NISER M.Sc.",
@@ -1284,13 +1212,11 @@
             "seats": "800+",
             "officialWebsite": "https://www.aiimsexams.ac.in/",
             "relatedExams": [
-                "neet-pg-2026",
-                "jipmer-pg-2026"
+                "neet-pg"
             ],
             "slug": "aiims-pg",
-            "metaDescription": "AIIMS PG 2026 countdown timer. Track time until the AIIMS PG exam. Get exam dates, eligibility, and preparation tips.",
             "keywords": [
-                "AIIMS PG 2026",
+                "AIIMS PG 2027",
                 "AIIMS PG countdown",
                 "AIIMS PG exam date",
                 "AIIMS MD/MS",
@@ -1315,13 +1241,12 @@
             "seats": "200+",
             "officialWebsite": "https://jipmer.edu.in/",
             "relatedExams": [
-                "neet-ug-2026",
-                "aiims-mbbs-2026"
+                "neet-ug",
+                "aiims-mbbs"
             ],
             "slug": "jipmer",
-            "metaDescription": "JIPMER 2026 countdown timer. Track time until the JIPMER exam. Get exam dates, eligibility, and preparation tips.",
             "keywords": [
-                "JIPMER 2026",
+                "JIPMER 2027",
                 "JIPMER countdown",
                 "JIPMER exam date",
                 "JIPMER MBBS",
@@ -1346,13 +1271,12 @@
             "seats": "1200+",
             "officialWebsite": "https://www.aiimsexams.ac.in/",
             "relatedExams": [
-                "neet-ug-2026",
-                "jipmer-2026"
+                "neet-ug",
+                "jipmer"
             ],
             "slug": "aiims-mbbs",
-            "metaDescription": "AIIMS MBBS 2026 countdown timer. Track time until the AIIMS MBBS exam. Get exam dates, eligibility, and preparation tips.",
             "keywords": [
-                "AIIMS MBBS 2026",
+                "AIIMS MBBS 2027",
                 "AIIMS MBBS countdown",
                 "AIIMS MBBS exam date",
                 "AIIMS MBBS",
@@ -1377,13 +1301,12 @@
             "seats": "7000+",
             "officialWebsite": "https://www.srmist.edu.in/",
             "relatedExams": [
-                "viteee-2026",
-                "jee-main-2026"
+                "viteee",
+                "jee-main"
             ],
             "slug": "srmjee",
-            "metaDescription": "SRMJEEE 2026 countdown timer. Track time until the SRM Joint Engineering Entrance Examination. Get exam dates, eligibility, and preparation tips.",
             "keywords": [
-                "SRMJEEE 2026",
+                "SRMJEEE 2027",
                 "SRMJEEE countdown",
                 "SRMJEEE exam date",
                 "SRM B.Tech",
@@ -1406,12 +1329,11 @@
             "seats": "500+",
             "officialWebsite": "https://www.amucontrollerexams.com/",
             "relatedExams": [
-                "jee-main-2026"
+                "jee-main"
             ],
             "slug": "amu-engineering",
-            "metaDescription": "AMUEEE 2026 countdown timer. Track time until the Aligarh Muslim University Engineering Entrance Exam. Get exam dates, eligibility, and preparation tips.",
             "keywords": [
-                "AMUEEE 2026",
+                "AMUEEE 2027",
                 "AMUEEE countdown",
                 "AMUEEE exam date",
                 "AMU B.Tech",
@@ -1437,12 +1359,11 @@
             "seats": "2000+",
             "officialWebsite": "https://jam.iitg.ac.in/",
             "relatedExams": [
-                "gate-2026"
+                "gate"
             ],
             "slug": "jam",
-            "metaDescription": "JAM 2026 countdown timer. Track time until the Joint Admission Test for M.Sc.. Get exam dates, eligibility, and preparation tips.",
             "keywords": [
-                "JAM 2026",
+                "JAM 2027",
                 "JAM countdown",
                 "JAM exam date",
                 "IIT M.Sc.",
@@ -1466,9 +1387,8 @@
             "officialWebsite": "https://cuet.samarth.ac.in/",
             "relatedExams": [],
             "slug": "cuet-ug",
-            "metaDescription": "CUET UG 2026 countdown timer. Track time until the Central University Entrance Test (Undergraduate). Get exam dates, eligibility, and preparation tips.",
             "keywords": [
-                "CUET UG 2026",
+                "CUET UG 2027",
                 "CUET UG countdown",
                 "CUET UG exam date",
                 "Central University Entrance Test",
@@ -1490,9 +1410,8 @@
             "officialWebsite": "https://cuet.nta.nic.in/",
             "relatedExams": [],
             "slug": "cuet-pg",
-            "metaDescription": "CUET PG 2026 countdown timer. Track time until the Central University Entrance Test (Postgraduate). Get exam dates, eligibility, and preparation tips.",
             "keywords": [
-                "CUET PG 2026",
+                "CUET PG 2027",
                 "CUET PG countdown",
                 "CUET PG exam date",
                 "Central University Entrance Test",
@@ -1517,12 +1436,11 @@
             "seats": "N/A",
             "officialWebsite": "https://www.cbse.gov.in/",
             "relatedExams": [
-                "cbse-class-12-2026"
+                "cbse-class-12"
             ],
             "slug": "cbse-class-10",
-            "metaDescription": "CBSE Class 10 2026 countdown timer. Track time until the CBSE Class 10 board exams. Get exam dates, syllabus, and preparation tips.",
             "keywords": [
-                "CBSE Class 10 2026",
+                "CBSE Class 10 2027",
                 "CBSE Class 10 countdown",
                 "CBSE Class 10 exam date",
                 "CBSE board exams",
@@ -1547,13 +1465,12 @@
             "seats": "N/A",
             "officialWebsite": "https://www.cbse.gov.in/",
             "relatedExams": [
-                "jee-main-2026",
-                "neet-ug-2026"
+                "jee-main",
+                "neet-ug"
             ],
             "slug": "cbse-class-12",
-            "metaDescription": "CBSE Class 12 2026 countdown timer. Track time until the CBSE Class 12 board exams. Get exam dates, syllabus, and preparation tips.",
             "keywords": [
-                "CBSE Class 12 2026",
+                "CBSE Class 12 2027",
                 "CBSE Class 12 countdown",
                 "CBSE Class 12 exam date",
                 "CBSE board exams",
@@ -1579,12 +1496,11 @@
             "seats": "N/A",
             "officialWebsite": "https://www.cisce.org/",
             "relatedExams": [
-                "isc-class-12-2026"
+                "isc-class-12"
             ],
             "slug": "icse-class-10",
-            "metaDescription": "ICSE Class 10 2026 countdown timer. Track time until the ICSE Class 10 board exams. Get exam dates, syllabus, and preparation tips.",
             "keywords": [
-                "ICSE Class 10 2026",
+                "ICSE Class 10 2027",
                 "ICSE Class 10 countdown",
                 "ICSE Class 10 exam date",
                 "ICSE board exams",
@@ -1606,13 +1522,12 @@
             "seats": "N/A",
             "officialWebsite": "https://www.cisce.org/",
             "relatedExams": [
-                "jee-main-2026",
-                "neet-ug-2026"
+                "jee-main",
+                "neet-ug"
             ],
             "slug": "isc-class-12",
-            "metaDescription": "ISC Class 12 2026 countdown timer. Track time until the ISC Class 12 board exams. Get exam dates, syllabus, and preparation tips.",
             "keywords": [
-                "ISC Class 12 2026",
+                "ISC Class 12 2027",
                 "ISC Class 12 countdown",
                 "ISC Class 12 exam date",
                 "ISC board exams",
@@ -1638,12 +1553,11 @@
             "seats": "N/A",
             "officialWebsite": "https://www.mahahsscboard.in/",
             "relatedExams": [
-                "mhtcet-2026"
+                "mhtcet"
             ],
             "slug": "maharashtra-hsc",
-            "metaDescription": "Maharashtra HSC 2026 countdown timer. Track time until the Maharashtra HSC board exams. Get exam dates, syllabus, and preparation tips.",
             "keywords": [
-                "Maharashtra HSC 2026",
+                "Maharashtra HSC 2027",
                 "Maharashtra HSC countdown",
                 "Maharashtra HSC exam date",
                 "Maharashtra board exams",
@@ -1669,12 +1583,11 @@
             "seats": "N/A",
             "officialWebsite": "https://www.mahahsscboard.in/",
             "relatedExams": [
-                "maharashtra-hsc-2026"
+                "maharashtra-hsc"
             ],
             "slug": "maharashtra-ssc",
-            "metaDescription": "Maharashtra SSC 2026 countdown timer. Track time until the Maharashtra SSC board exams. Get exam dates, syllabus, and preparation tips.",
             "keywords": [
-                "Maharashtra SSC 2026",
+                "Maharashtra SSC 2027",
                 "Maharashtra SSC countdown",
                 "Maharashtra SSC exam date",
                 "Maharashtra board exams",
@@ -1700,12 +1613,11 @@
             "seats": "N/A",
             "officialWebsite": "https://upmsp.edu.in/",
             "relatedExams": [
-                "up-board-12th-2026"
+                "up-board-12th"
             ],
             "slug": "up-board-10th",
-            "metaDescription": "UP Board 10th 2026 countdown timer. Track time until the UP Board 10th board exams. Get exam dates, syllabus, and preparation tips.",
             "keywords": [
-                "UP Board 10th 2026",
+                "UP Board 10th 2027",
                 "UP Board 10th countdown",
                 "UP Board 10th exam date",
                 "UP board exams",
@@ -1732,9 +1644,8 @@
             "officialWebsite": "https://upmsp.edu.in/",
             "relatedExams": [],
             "slug": "up-board-12th",
-            "metaDescription": "UP Board 12th 2026 countdown timer. Track time until the UP Board 12th board exams. Get exam dates, syllabus, and preparation tips.",
             "keywords": [
-                "UP Board 12th 2026",
+                "UP Board 12th 2027",
                 "UP Board 12th countdown",
                 "UP Board 12th exam date",
                 "UP board exams",
