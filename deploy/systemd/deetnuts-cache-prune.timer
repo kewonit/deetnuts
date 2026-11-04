@@ -1,0 +1,11 @@
+[Unit]
+Description=Check the DEETNUTS web cache volumes hourly
+
+[Timer]
+OnCalendar=hourly
+RandomizedDelaySec=10m
+Persistent=true
+Unit=deetnuts-cache-prune.service
+
+[Install]
+WantedBy=timers.target

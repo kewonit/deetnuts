@@ -25,8 +25,8 @@ x-web: &web
     - no-new-privileges:true
   restart: unless-stopped
   stop_grace_period: 30s
-  mem_limit: 1024m
-  memswap_limit: 1280m
+  mem_limit: 640m
+  memswap_limit: 896m
   cpus: 1.0
   pids_limit: 256
   healthcheck:
@@ -51,9 +51,9 @@ services:
     user: "10001:10001"
     environment:
       DEETNUTS_MIGRATION_MODE: ${DEETNUTS_MIGRATION_MODE:-0}
-      GOMEMLIMIT: 320MiB
-    expose:
-      - "8090"
+      GOMEMLIMIT: 128MiB
+    ports:
+      - "127.0.0.1:8090:8090"
     networks:
       - application
     read_only: true
@@ -72,8 +72,8 @@ services:
       - no-new-privileges:true
     restart: unless-stopped
     stop_grace_period: 60s
-    mem_limit: 448m
-    memswap_limit: 640m
+    mem_limit: 192m
+    memswap_limit: 320m
     cpus: 1.0
     pids_limit: 96
     healthcheck:
@@ -129,47 +129,6 @@ services:
       options:
         tag: deetnuts-{{.Name}}
 
-  access-verifier:
-    image: ${ACCESS_VERIFIER_IMAGE:?ACCESS_VERIFIER_IMAGE must be an immutable image digest}
-    init: true
-    user: "10002:10002"
-    env_file:
-      - ${ACCESS_VERIFIER_ENV_FILE:-./deploy/env/access-verifier.env.example}
-    environment:
-      NODE_ENV: production
-      PORT: "8081"
-    expose:
-      - "8081"
-    networks:
-      - application
-    read_only: true
-    tmpfs:
-      - /tmp:rw,noexec,nosuid,size=8m,uid=10002,gid=10002,mode=1777
-    cap_drop:
-      - ALL
-    security_opt:
-      - no-new-privileges:true
-    restart: unless-stopped
-    stop_grace_period: 15s
-    mem_limit: 64m
-    memswap_limit: 96m
-    cpus: 0.25
-    pids_limit: 48
-    healthcheck:
-      test:
-        - CMD
-        - node
-        - -e
-        - fetch('http://127.0.0.1:8081/healthz').then(r=>{if(!r.ok)throw new Error(String(r.status))}).catch(()=>process.exit(1))
-      interval: 20s
-      timeout: 5s
-      retries: 3
-      start_period: 5s
-    logging:
-      driver: journald
-      options:
-        tag: deetnuts-{{.Name}}
-
   web-blue:
     <<: *web
     image: ${WEB_BLUE_IMAGE:?WEB_BLUE_IMAGE must be an immutable image digest}
@@ -203,8 +162,6 @@ services:
     networks:
       - application
     depends_on:
-      access-verifier:
-        condition: service_healthy
       pocketbase:
         condition: service_healthy
     read_only: true
@@ -223,7 +180,7 @@ services:
       - no-new-privileges:true
     restart: unless-stopped
     stop_grace_period: 30s
-    mem_limit: 96m
+    mem_limit: 48m
     cpus: 0.5
     pids_limit: 64
     healthcheck:
@@ -239,32 +196,6 @@ services:
       timeout: 5s
       retries: 3
       start_period: 10s
-    logging:
-      driver: journald
-      options:
-        tag: deetnuts-{{.Name}}
-
-  reddit-worker:
-    profiles:
-      - reddit-worker
-    image: ${WORKER_IMAGE:?WORKER_IMAGE must be an immutable image digest}
-    init: true
-    env_file:
-      - ${WORKER_ENV_FILE:-./deploy/env/worker.env.example}
-    networks:
-      - application
-    read_only: true
-    tmpfs:
-      - /tmp:rw,noexec,nosuid,size=16m,uid=1001,gid=1001,mode=1777
-    cap_drop:
-      - ALL
-    security_opt:
-      - no-new-privileges:true
-    restart: unless-stopped
-    stop_grace_period: 30s
-    mem_limit: 192m
-    cpus: 0.5
-    pids_limit: 128
     logging:
       driver: journald
       options:

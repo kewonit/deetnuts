@@ -25,9 +25,8 @@ Runtime architecture:
 - React 19.2.8 with React Compiler enabled
 - TypeScript across application and scripts
 - Self-hosted PocketBase for auth, application data, and private avatar storage
-- PocketBase publishes no host port. Its optional production administration
-  route is proxied through Cloudflare Access, per-host origin mTLS, Nginx and an
-  origin-side JWT/audience/email verifier.
+- PocketBase has no public route. Administer it over an SSH tunnel to the host's
+  loopback port.
 - Standalone Docker build for deployment
 
 High-level flow:
@@ -137,12 +136,9 @@ The repository is configured for a private, standalone Next.js container deploym
 - `next.config.mjs` enables standalone output, version-skew protection, React Compiler, scoped caching, and production security headers. On-demand prerenders use a release-scoped persistent cache inside the dedicated `.next/cache` volume while the image filesystem stays read-only.
 - `Dockerfile` builds and runs the standalone server as a non-root user on a digest-pinned Node 22 Alpine image.
 - `docker-compose.yml` defines blue/green web slots, private-network PocketBase,
-  an Access JWT verifier, an unprivileged Nginx origin, and a disabled
-  Reddit-worker profile.
+  and an unprivileged Nginx origin.
 - `.github/workflows/production.yaml` verifies the application, publishes private attested image digests, scans them, and invokes the restricted deployment command.
 - `deploy/README.md` documents the host layout, backups, one-time source migration, and external DigitalOcean, Cloudflare, Google OAuth, and GHCR configuration.
-- `docs/PROTECTED_POCKETBASE_API.md` is the guarded, costed rollout and recovery
-  runbook for `api.deetnuts.com`.
 
 ## Migration and Compatibility
 

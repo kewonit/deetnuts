@@ -13,7 +13,7 @@
     "lint:fix": "eslint app bot components lib proxy.ts --fix",
     "format": "prettier --write \"app/**/*.{ts,tsx}\" \"components/**/*.{ts,tsx}\" \"lib/**/*.{ts,tsx}\"",
     "format:check": "prettier --check \"app/**/*.{ts,tsx}\" \"components/**/*.{ts,tsx}\" \"lib/**/*.{ts,tsx}\"",
-    "format:check:platform": "prettier --check access-verifier/*.mjs app/api/health/route.ts lib/deployment.ts lib/site-url.ts scripts/load-test.mjs scripts/seo-xml.mjs scripts/validate-production-build-env.mjs scripts/verify-production.mjs scripts/verify-seo-parity.mjs .github/dependabot.yml .github/workflows/cloudflare-infrastructure.yaml .github/workflows/codeql.yaml .github/workflows/production.yaml docker-compose.yml",
+    "format:check:platform": "prettier --check app/api/health/route.ts lib/deployment.ts lib/site-url.ts scripts/load-test.mjs scripts/seo-xml.mjs scripts/validate-production-build-env.mjs scripts/verify-production.mjs scripts/verify-seo-parity.mjs .github/dependabot.yml .github/workflows/cloudflare-infrastructure.yaml .github/workflows/codeql.yaml .github/workflows/production.yaml docker-compose.yml",
     "upload-cutoffs": "npx tsx scripts/upload-mht-cet-cutoffs.ts",
     "upload-cutoffs-v2": "npx tsx scripts/upload-mht-cet-cutoffs-v2.ts",
     "batch-upload": "npx tsx scripts/batch-upload-mht-cet-cutoffs.ts",

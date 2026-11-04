@@ -173,7 +173,7 @@ grep -qx "permitrootlogin $root_login" <<<"$sshd_effective"
 systemctl reload ssh
 
 if ! swapon --show=NAME --noheadings | grep -q .; then
-  fallocate -l 1G /swapfile
+  fallocate -l 2G /swapfile
   chmod 0600 /swapfile
   mkswap /swapfile
   swapon /swapfile
@@ -188,7 +188,7 @@ cat > /etc/systemd/journald.conf.d/deetnuts-retention.conf <<'EOF'
 [Journal]
 Storage=persistent
 MaxRetentionSec=14day
-SystemMaxUse=512M
+SystemMaxUse=64M
 MaxFileSec=1day
 Compress=yes
 EOF
@@ -236,10 +236,7 @@ find "$APP_ROOT/deploy/bin" -type f -exec chmod 0755 {} +
 for cert_name in \
   origin.pem \
   origin-key.pem \
-  cloudflare-origin-pull-ca.pem \
-  api-origin.pem \
-  api-origin-key.pem \
-  cloudflare-api-origin-pull-ca.pem; do
+  cloudflare-origin-pull-ca.pem; do
   if [[ -f "$APP_ROOT/shared/certs/$cert_name" ]]; then
     chown "root:$TLS_GROUP" "$APP_ROOT/shared/certs/$cert_name"
     chmod 0640 "$APP_ROOT/shared/certs/$cert_name"
@@ -251,24 +248,18 @@ install -o root -g root -m 0755 "$SOURCE_ROOT/deploy/bin/deetnuts-start" /usr/lo
 install -o root -g root -m 0755 "$SOURCE_ROOT/deploy/bin/deetnuts-stop" /usr/local/sbin/deetnuts-stop
 install -o root -g root -m 0755 "$SOURCE_ROOT/deploy/bin/deetnuts-reload" /usr/local/sbin/deetnuts-reload
 install -o root -g root -m 0755 "$SOURCE_ROOT/deploy/bin/deetnuts-pocketbase-backup" /usr/local/sbin/deetnuts-pocketbase-backup
+install -o root -g root -m 0755 "$SOURCE_ROOT/deploy/bin/deetnuts-cache-prune" /usr/local/sbin/deetnuts-cache-prune
 install -o root -g root -m 0755 "$SOURCE_ROOT/deploy/bin/deetnuts-pocketbase-migrate" /usr/local/sbin/deetnuts-pocketbase-migrate
 install -o root -g root -m 0755 "$SOURCE_ROOT/deploy/bin/validate-pocketbase-secrets" /usr/local/sbin/validate-pocketbase-secrets
-install -o root -g root -m 0755 "$SOURCE_ROOT/deploy/bin/validate-access-verifier-env" /usr/local/sbin/validate-access-verifier-env
 install -o root -g root -m 0755 "$SOURCE_ROOT/deploy/bin/deetnuts-command" /usr/local/bin/deetnuts-command
 install -o root -g root -m 0644 "$SOURCE_ROOT/deploy/systemd/deetnuts.service" /etc/systemd/system/deetnuts.service
 install -o root -g root -m 0644 "$SOURCE_ROOT/deploy/systemd/deetnuts-pocketbase-backup.service" /etc/systemd/system/deetnuts-pocketbase-backup.service
 install -o root -g root -m 0644 "$SOURCE_ROOT/deploy/systemd/deetnuts-pocketbase-backup.timer" /etc/systemd/system/deetnuts-pocketbase-backup.timer
+install -o root -g root -m 0644 "$SOURCE_ROOT/deploy/systemd/deetnuts-cache-prune.service" /etc/systemd/system/deetnuts-cache-prune.service
+install -o root -g root -m 0644 "$SOURCE_ROOT/deploy/systemd/deetnuts-cache-prune.timer" /etc/systemd/system/deetnuts-cache-prune.timer
 
 if [[ ! -f "$APP_ROOT/shared/web.env" ]]; then
   install -o root -g root -m 0600 "$SOURCE_ROOT/deploy/env/web.env.example" "$APP_ROOT/shared/web.env"
-fi
-if [[ ! -f "$APP_ROOT/shared/worker.env" ]]; then
-  install -o root -g root -m 0600 "$SOURCE_ROOT/deploy/env/worker.env.example" "$APP_ROOT/shared/worker.env"
-fi
-if [[ ! -f "$APP_ROOT/shared/access-verifier.env" ]]; then
-  install -o root -g root -m 0600 \
-    "$SOURCE_ROOT/deploy/env/access-verifier.env.example" \
-    "$APP_ROOT/shared/access-verifier.env"
 fi
 if [[ ! -f "$APP_ROOT/shared/cloudflare.env" ]]; then
   install -o root -g root -m 0600 "$SOURCE_ROOT/deploy/env/cloudflare.env.example" "$APP_ROOT/shared/cloudflare.env"
@@ -295,8 +286,6 @@ done
 if [[ ! -f "$APP_ROOT/state/compose.env" ]]; then
   sed \
     -e "s#WEB_ENV_FILE=.*#WEB_ENV_FILE=$APP_ROOT/shared/web.env#" \
-    -e "s#WORKER_ENV_FILE=.*#WORKER_ENV_FILE=$APP_ROOT/shared/worker.env#" \
-    -e "s#ACCESS_VERIFIER_ENV_FILE=.*#ACCESS_VERIFIER_ENV_FILE=$APP_ROOT/shared/access-verifier.env#" \
     -e "s#NGINX_CONFIG_ROOT=.*#NGINX_CONFIG_ROOT=$APP_ROOT/deploy/nginx#" \
     -e "s#ORIGIN_CERT_DIR=.*#ORIGIN_CERT_DIR=$APP_ROOT/shared/certs#" \
     -e "s#POCKETBASE_ENCRYPTION_KEY_FILE=.*#POCKETBASE_ENCRYPTION_KEY_FILE=$APP_ROOT/shared/pocketbase/pocketbase_encryption_key#" \
@@ -320,10 +309,6 @@ ensure_compose_value POCKETBASE_IMAGE \
 ensure_compose_value DEETNUTS_MIGRATION_MODE 0
 ensure_compose_value POCKETBASE_MIGRATION_IMAGE \
   "ghcr.io/kewonit/deetnuts-pocketbase-migration@sha256:0000000000000000000000000000000000000000000000000000000000000000"
-ensure_compose_value ACCESS_VERIFIER_IMAGE \
-  "ghcr.io/kewonit/deetnuts-access-verifier@sha256:0000000000000000000000000000000000000000000000000000000000000000"
-ensure_compose_value ACCESS_VERIFIER_ENV_FILE \
-  "$APP_ROOT/shared/access-verifier.env"
 ensure_compose_value POCKETBASE_ENCRYPTION_KEY_FILE \
   "$APP_ROOT/shared/pocketbase/pocketbase_encryption_key"
 ensure_compose_value POCKETBASE_SUPERUSER_EMAIL_FILE \
@@ -375,5 +360,5 @@ chmod 0440 "/etc/sudoers.d/$DEPLOY_USER"
 visudo --check --file "/etc/sudoers.d/$DEPLOY_USER"
 
 systemctl daemon-reload
-systemctl enable --now deetnuts-pocketbase-backup.timer
-echo "Host files installed. Configure secrets, certificates, registry authentication, the DigitalOcean firewall, and monitoring before the first origin-only deployment."
+systemctl enable --now deetnuts-pocketbase-backup.timer deetnuts-cache-prune.timer
+echo "Host files installed. Configure secrets, certificates, registry authentication, and the DigitalOcean firewall before the first origin-only deployment."

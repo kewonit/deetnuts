@@ -133,7 +133,7 @@ Runtime reads and writes use a service-authenticated PocketBase adapter on the p
 
 ### Collection Security
 
-Imported data collections allow only the dedicated `app_services` backend role. The users collection allows each user to view only their own record and update only approved profile fields. Users cannot change email, verification, source IDs, or migration audit fields. Private avatars use an authenticated same-user proxy with MIME, size, redirect, and host checks. PocketBase has no published port.
+Imported data collections allow only the dedicated `app_services` backend role. The users collection allows each user to view only their own record and update only approved profile fields. Users cannot change email, verification, source IDs, or migration audit fields. Private avatars use an authenticated same-user proxy with MIME, size, redirect, and host checks. PocketBase publishes only a host loopback port for administration over SSH.
 
 ## Compatibility Layer
 
@@ -145,7 +145,7 @@ Imported data collections allow only the dedicated `app_services` backend role. 
 
 - `next.config.mjs` enables standalone output, deployment IDs, scoped caching and production headers.
 - `Dockerfile` builds a standalone Next.js server with a BuildKit-mounted Server Actions key and runs it as a non-root user.
-- `docker-compose.yml` defines blue and green web slots, an unprivileged Nginx origin, bounded resources, read-only filesystems and a disabled Reddit-worker profile.
+- `docker-compose.yml` defines blue and green web slots, an unprivileged Nginx origin, bounded resources and read-only filesystems.
 - Only the active web slot and Nginx restart after a host reboot. The inactive slot remains available only during a deployment or rollback window.
 - GHCR images are private, addressed by digest, scanned and attested before the restricted host deployment command accepts them.
 
