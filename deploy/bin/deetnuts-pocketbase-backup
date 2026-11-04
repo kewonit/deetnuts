@@ -131,7 +131,8 @@ else
   ')
 fi
 
-[[ "$latest" =~ ^[A-Za-z0-9._-]+\.zip$ ]] || {
+# PocketBase names its scheduled backups @auto_pb_backup_*.zip.
+[[ "$latest" =~ ^@?[A-Za-z0-9._-]+\.zip$ ]] || {
   echo "No safe PocketBase backup archive was found" >&2
   exit 1
 }
