@@ -55,7 +55,7 @@ export async function signInWithGoogle(formData: FormData) {
 
 export async function signOut() {
   await clearAuthCookie();
-  revalidatePath("/", "layout");
+  revalidatePath("/account");
   redirect("/");
 }
 
@@ -76,7 +76,7 @@ export async function signInWithPassword(formData: FormData) {
     loginError("The email or password is incorrect.", redirectTo);
   }
 
-  revalidatePath("/", "layout");
+  revalidatePath("/account");
   redirect(redirectTo);
 }
 

@@ -169,6 +169,8 @@ jobs:
             -o IdentitiesOnly=yes \
             -o StrictHostKeyChecking=yes \
             -o ConnectTimeout=15 \
+            -o ServerAliveInterval=30 \
+            -o ServerAliveCountMax=6 \
             "$DEPLOY_USER@$DO_HOST" \
             "deploy $GITHUB_SHA ${WEB_IMAGE}@${{ needs.build.outputs.web-digest }} ${WORKER_IMAGE}@${{ needs.build.outputs.worker-digest }} ${POCKETBASE_IMAGE}@${{ needs.build.outputs.pocketbase-digest }} ${ACCESS_VERIFIER_IMAGE}@${{ needs.build.outputs.access-verifier-digest }}"
 

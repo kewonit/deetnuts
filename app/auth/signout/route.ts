@@ -5,7 +5,7 @@ import { type NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
   await clearAuthCookie();
 
-  revalidatePath("/", "layout");
+  revalidatePath("/account");
   return NextResponse.redirect(new URL("/login", getRequestOrigin(req.url)), {
     status: 302,
   });

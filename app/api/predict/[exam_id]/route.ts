@@ -279,11 +279,13 @@ async function handlePrediction(
   const url = new URL(req.url);
   const configured = loadConfiguredExam(exam_id);
   if (!configured.ok) return configured.response;
-  if (exam_id === "mht-cet" && process.env.MHT_CET_ENABLED === "false") {
+  // No page calls this predictor, and loading its index peaks near the
+  // production heap limit, so a single request could crash the server.
+  if (exam_id === "mht-cet") {
     return errResponse(
-      503,
-      "DEPENDENCY_UNAVAILABLE",
-      "MHT-CET predictor is disabled by configuration",
+      404,
+      "EXAM_NOT_FOUND",
+      `exam "${exam_id}" is not configured`,
     );
   }
 
