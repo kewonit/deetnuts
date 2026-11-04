@@ -19,7 +19,7 @@ This directory contains the local, reviewable part of the Vercel-to-DigitalOcean
 - `NEXT_SERVER_ACTIONS_ENCRYPTION_KEY` is a persistent 32-byte base64 build secret. It is embedded in the Next.js output, which is why the image cannot be public.
 - PocketBase is reachable as `http://pocketbase:8090` on the private application
   network and on the host's loopback at `127.0.0.1:8090`. It has no public route.
-  For administration, open an SSH tunnel: `ssh -L 8090:127.0.0.1:8090 <admin-host>`.
+  For administration, open an SSH tunnel: `ssh -L 8090:127.0.0.1:8090 deetnuts-admin@<host>`. Only the admin user may forward, and only to that port.
 - PocketBase encryption, superuser, and migration secrets are separate root-owned files readable only by GID `10001`. The web container receives only a 32-to-72-character backend service password through `web.env`.
 - Deetnuts migration-source Supabase credentials belong only in the root-owned one-time migration environment. The dedicated TimeKeeper public URL/key belong in `web.env`; retain `https://ivmobluuegkikmbwbfhe.supabase.co` and its existing public publishable/anon key. Runtime validation rejects privileged keys and any replacement backend. The browser obtains only these public values from `/api/exam-countdown/config` with `no-store` caching; they are not embedded at build time.
 - Discord command-registration credentials belong in `/opt/deetnuts/shared/discord-admin.env`. The web container does not receive them.
