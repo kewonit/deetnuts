@@ -21,14 +21,10 @@ jobs:
       packages: write
     outputs:
       web-digest: ${{ steps.web.outputs.digest }}
-      worker-digest: ${{ steps.worker.outputs.digest }}
       pocketbase-digest: ${{ steps.pocketbase.outputs.digest }}
-      access-verifier-digest: ${{ steps.access-verifier.outputs.digest }}
     env:
       WEB_IMAGE: ghcr.io/${{ github.repository }}-web
-      WORKER_IMAGE: ghcr.io/${{ github.repository }}-worker
       POCKETBASE_IMAGE: ghcr.io/${{ github.repository }}-pocketbase
-      ACCESS_VERIFIER_IMAGE: ghcr.io/${{ github.repository }}-access-verifier
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -65,22 +61,6 @@ jobs:
           cache-to: type=gha,mode=max,scope=web
           no-cache-filters: builder
 
-      - name: Build and push worker image
-        id: worker
-        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
-        with:
-          context: .
-          file: Dockerfile.bot
-          platforms: linux/amd64
-          push: true
-          tags: ${{ env.WORKER_IMAGE }}:${{ github.sha }}
-          build-args: |
-            OCI_CREATED=${{ github.event.repository.updated_at }}
-            OCI_REVISION=${{ github.sha }}
-            OCI_SOURCE=${{ github.server_url }}/${{ github.repository }}
-          cache-from: type=gha,scope=worker
-          cache-to: type=gha,mode=max,scope=worker
-
       - name: Build and push PocketBase image
         id: pocketbase
         uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
@@ -92,22 +72,6 @@ jobs:
           tags: ${{ env.POCKETBASE_IMAGE }}:${{ github.sha }}
           cache-from: type=gha,scope=pocketbase
           cache-to: type=gha,mode=max,scope=pocketbase
-
-      - name: Build and push Access verifier image
-        id: access-verifier
-        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
-        with:
-          context: access-verifier
-          file: access-verifier/Dockerfile
-          platforms: linux/amd64
-          push: true
-          tags: ${{ env.ACCESS_VERIFIER_IMAGE }}:${{ github.sha }}
-          build-args: |
-            OCI_CREATED=${{ github.event.repository.updated_at }}
-            OCI_REVISION=${{ github.sha }}
-            OCI_SOURCE=${{ github.server_url }}/${{ github.repository }}
-          cache-from: type=gha,scope=access-verifier
-          cache-to: type=gha,mode=max,scope=access-verifier
 
   deploy:
     name: Deploy
@@ -121,9 +85,7 @@ jobs:
       packages: read
     env:
       WEB_IMAGE: ghcr.io/${{ github.repository }}-web
-      WORKER_IMAGE: ghcr.io/${{ github.repository }}-worker
       POCKETBASE_IMAGE: ghcr.io/${{ github.repository }}-pocketbase
-      ACCESS_VERIFIER_IMAGE: ghcr.io/${{ github.repository }}-access-verifier
       DO_HOST: ${{ secrets.DO_HOST }}
       DO_FIREWALL_ID: ${{ secrets.DO_FIREWALL_ID }}
       DO_API_TOKEN: ${{ secrets.DO_API_TOKEN }}
@@ -172,7 +134,7 @@ jobs:
             -o ServerAliveInterval=30 \
             -o ServerAliveCountMax=6 \
             "$DEPLOY_USER@$DO_HOST" \
-            "deploy $GITHUB_SHA ${WEB_IMAGE}@${{ needs.build.outputs.web-digest }} ${WORKER_IMAGE}@${{ needs.build.outputs.worker-digest }} ${POCKETBASE_IMAGE}@${{ needs.build.outputs.pocketbase-digest }} ${ACCESS_VERIFIER_IMAGE}@${{ needs.build.outputs.access-verifier-digest }}"
+            "deploy $GITHUB_SHA ${WEB_IMAGE}@${{ needs.build.outputs.web-digest }} ${POCKETBASE_IMAGE}@${{ needs.build.outputs.pocketbase-digest }}"
 
       - name: Remove temporary deployment SSH rule
         if: always() && steps.runner.outputs.cidr != ''

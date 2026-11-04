@@ -46,7 +46,7 @@ ENV NODE_ENV=production \
     PORT=3000 \
     HOME=/tmp \
     NEXT_TELEMETRY_DISABLED=1 \
-    NODE_OPTIONS=--max-old-space-size=512
+    NODE_OPTIONS=--max-old-space-size=384
 
 RUN apk upgrade --no-cache && \
     rm -rf /usr/local/lib/node_modules/npm \

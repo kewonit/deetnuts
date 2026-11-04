@@ -10,20 +10,19 @@ This directory contains the local, reviewable part of the Vercel-to-DigitalOcean
 - SSH must be restricted to the administrator allowlist. CI receives a temporary runner `/32` rule only while deploying.
 - The forced deployment key can call only `deploy`, `rollback`, or `status`. It cannot open a shell or invoke arbitrary sudo commands.
 - Deployment and rollback commands use a host lock. An overlapping command fails closed.
-- Web and worker images stay private in GHCR. The Droplet uses a dedicated classic token with `read:packages` only.
+- Web and PocketBase images stay private in GHCR. The Droplet uses a dedicated classic token with `read:packages` only.
 - Bootstrap disables SSH passwords and keyboard-interactive login, installs a
   dedicated key-only administrator when its public key is supplied, and can
   disable root SSH only after that administrator has a sudo password. It also
   enables unattended security updates without automatic reboots and validates
   a hardened Docker daemon configuration.
 - `NEXT_SERVER_ACTIONS_ENCRYPTION_KEY` is a persistent 32-byte base64 build secret. It is embedded in the Next.js output, which is why the image cannot be public.
-- PocketBase remains reachable only as `http://pocketbase:8090` on the private
-  application network. No host port is published. The protected
-  `api.deetnuts.com` route terminates at Nginx only after Cloudflare Access,
-  per-host AOP mTLS and origin-side JWT/audience/exact-email verification.
+- PocketBase is reachable as `http://pocketbase:8090` on the private application
+  network and on the host's loopback at `127.0.0.1:8090`. It has no public route.
+  For administration, open an SSH tunnel: `ssh -L 8090:127.0.0.1:8090 <admin-host>`.
 - PocketBase encryption, superuser, and migration secrets are separate root-owned files readable only by GID `10001`. The web container receives only a 32-to-72-character backend service password through `web.env`.
 - Deetnuts migration-source Supabase credentials belong only in the root-owned one-time migration environment. The dedicated TimeKeeper public URL/key belong in `web.env`; retain `https://ivmobluuegkikmbwbfhe.supabase.co` and its existing public publishable/anon key. Runtime validation rejects privileged keys and any replacement backend. The browser obtains only these public values from `/api/exam-countdown/config` with `no-store` caching; they are not embedded at build time.
-- Discord command-registration credentials belong in `/opt/deetnuts/shared/discord-admin.env`. The web and worker containers do not receive them.
+- Discord command-registration credentials belong in `/opt/deetnuts/shared/discord-admin.env`. The web container does not receive them.
 - The Cloudflare token in `/opt/deetnuts/shared/cloudflare.env` is root-only and must be scoped to `Zone / Cache Purge` for only the `deetnuts.com` zone. It is never passed to an application container.
 - Origin TLS material is owned by `root:deetnuts-tls` with mode `0640`. The Nginx container receives only that supplementary GID.
 - Next.js on-demand prerenders are written only to the release-scoped directory in the slot's `.next/cache` volume. Build-generated seed pages remain in the immutable image, and old release cache directories are removed when a new release starts in that slot.
@@ -35,28 +34,24 @@ This directory contains the local, reviewable part of the Vercel-to-DigitalOcean
 - `/opt/deetnuts/docker-compose.yml`
 - `/opt/deetnuts/deploy`: Nginx and deployment helpers
 - `/opt/deetnuts/shared/web.env`: web runtime secrets, mode `0600`
-- `/opt/deetnuts/shared/worker.env`: disabled worker secrets, mode `0600`
-- `/opt/deetnuts/shared/access-verifier.env`: Access team, audience and exact
-  allowed email, mode `0600`
 - `/opt/deetnuts/shared/cloudflare.env`: zone ID and cache-purge-only token, mode `0600`
 - `/opt/deetnuts/shared/discord-admin.env`: offline Discord command-registration credentials, mode `0600`
 - `/opt/deetnuts/shared/pocketbase`: PocketBase secret files, mode `0440`, owner `root:deetnuts-pocketbase`
 - `/opt/deetnuts/backups/pocketbase`: verified PocketBase ZIPs plus SHA-256 and
-  per-table count manifests, with seven-copy retention unless `--no-prune`
-- `/opt/deetnuts/shared/certs`: separate apex/www and API Origin CA keys plus
-  their separate Origin Pull CAs
+  per-table count manifests, with three-copy retention unless `--no-prune`
+- `/opt/deetnuts/shared/certs`: the apex/www Origin CA key and its Origin Pull CA
 - `/opt/deetnuts/state/compose.env`: immutable slot image digests
 - `/opt/deetnuts/state/active-slot`: the only slot permitted to restart
 - `/opt/deetnuts/state/releases`: the latest three rollback manifests
 
 ## Required external configuration
 
-1. Create the FRA1 Ubuntu 24.04 Droplet without backups, snapshots, or a Reserved IP.
+1. Create the BLR1 Ubuntu 24.04 Droplet (1 GiB RAM, 25 GiB disk) without backups, snapshots, or a Reserved IP.
 2. Run the reviewed `bootstrap-host.sh` from this repository. Do not pipe a remote script into a shell.
 3. Authenticate Docker to GHCR using the dedicated read-only token.
 4. Replace every example value in `shared/web.env`. Include only the private PocketBase service account, OAuth-state secret, and application runtime values.
 5. Install `origin.pem`, `origin-key.pem`, and `cloudflare-origin-pull-ca.pem` in `shared/certs`. Keep the directory at `root:deetnuts-tls` with mode `0750`. Keep all three files at `root:deetnuts-tls` with mode `0640`. The group GID must match `NGINX_TLS_GID`, which defaults to 1999.
-6. Configure the DigitalOcean firewall and Monitoring agent before exposing DNS.
+6. Configure the DigitalOcean firewall before exposing DNS.
 7. Set Cloudflare Full (strict), Authenticated Origin Pulls, canonical redirects, WAF exclusions, and cache rules. Create a zone-scoped token with only `Zone / Cache Purge` for `deetnuts.com`, then put it and the zone ID in `shared/cloudflare.env`.
 8. Configure the Google OAuth web client with the exact redirect URI `https://www.deetnuts.com/auth/callback`, then store its client ID and secret only in the root-owned one-time migration environment.
 9. Run `deetnuts-pocketbase-migrate` against the read-only Supabase source. Do not cut over until its global count/digest, Google identity, storage byte/hash, and backup checks pass.
@@ -64,26 +59,24 @@ This directory contains the local, reviewable part of the Vercel-to-DigitalOcean
 11. Add `DO_HOST`, `DO_FIREWALL_ID`, `DO_API_TOKEN`, `DO_SSH_PRIVATE_KEY`, and `DO_SSH_HOST_KEY` to the GitHub Production environment after the host and firewall exist. The DigitalOcean token needs only `firewall:read` and `firewall:update`; use the forced-command deployment account's dedicated SSH key, and pin the existing host key. Set repository variable `DO_DEPLOY_ENABLED=true` only when that configuration is complete. Image publication remains available while deployment is disabled.
 12. Perform the first deployment with the `origin-only` verification mode. Use normal `public` verification only after DNS points through Cloudflare.
 
-The complete protected API sequence, Work-profile account checks, exact Google
-IdP, HCP Terraform review flow, backup/resize gates, service inventory and cost
-total are in [`docs/PROTECTED_POCKETBASE_API.md`](../docs/PROTECTED_POCKETBASE_API.md).
-
 `bootstrap-host.sh` is a provisioning/update operation, not a live reload. For a later host-file update, stop `deetnuts.service`, run the reviewed bootstrap from the desired checkout, then start the service and verify it. The script refuses to replace bind-mounted configuration while the service is active and reconstructs the Nginx upstream from the retained active-slot marker.
-
-The Reddit worker is a disabled Compose profile. Do not start it during web deployment. Its later activation begins with dry-run mode and separate credential validation.
 
 ## Deploying updates
 
-Push to `main` to run the [production workflow](https://github.com/kewonit/deetnuts/actions/workflows/production.yaml). It builds the four images and deploys their exact digests. The workflow temporarily permits only its runner's SSH address and removes that exception afterward. The host checks the new release for ten minutes and restores the previous slot if deployment fails.
+Push to `main` to run the [production workflow](https://github.com/kewonit/deetnuts/actions/workflows/production.yaml). It builds the web and PocketBase images and deploys their exact digests. The workflow temporarily permits only its runner's SSH address and removes that exception afterward. The host checks the new release for 60 seconds and restores the previous slot if deployment fails. Set `DEPLOY_OBSERVATION_SECONDS` on the host to change that. Both slots run during this window, so keep it short on a 1 GiB host.
 
 To rebuild and deploy `main` on demand, run `npm run deploy:production` from a checkout with an authenticated GitHub CLI, or select **Run workflow** on that Actions page. Follow the **Deploy** job to confirm completion; a successful build alone does not confirm deployment.
 
 When renewing the DigitalOcean token, replace `DO_API_TOKEN` in the GitHub `production` environment before the old token expires. Keep the token and deployment private key out of the repository.
 
+## Disk limits
+
+`deetnuts-cache-prune` runs hourly. When the two web cache volumes exceed 6 GiB together, it deletes the oldest files until they are under 4 GiB. On-demand pages and optimized images regenerate on the next request. Each deployment also removes unused images. The stopped slot's container keeps its image, so rollback to the previous release stays local, and older rollbacks pull from GHCR.
+
 ## Cache-safe deployments
 
 The inactive slot is stopped and its release-scoped prerender cache is cleared before the candidate starts. This keeps a large obsolete cache from blocking the candidate's first health request while Next.js removes it synchronously. Retained rollback images and manifests remain available; their pages regenerate when needed.
 
-Public deployments purge only the `www.deetnuts.com` hostname immediately after Nginx switches to the healthy candidate. A purge failure triggers the normal rollback path. This prevents cached HTML or React Server Component responses from referencing static assets that disappeared in the new immutable image. The purge must never target the whole Cloudflare zone because `api.deetnuts.com` and unrelated hostnames are outside the web migration.
+Public deployments purge only the `www.deetnuts.com` hostname immediately after Nginx switches to the healthy candidate. A purge failure triggers the normal rollback path. This prevents cached HTML or React Server Component responses from referencing static assets that disappeared in the new immutable image. The purge must never target the whole Cloudflare zone because unrelated hostnames share it.
 
 After every deployment, verify a cacheable indexed page twice. The first response may be `MISS`. The second response must be `HIT`. Both responses must identify the new deployment. Probe the same URL with the `RSC: 1` header and confirm that it remains `text/x-component`. Fetch normal HTML again and confirm that it remains `text/html`. `robots.txt`, the sitemap index, canonical redirects, and the production verification script must pass before you retire a rollback image.

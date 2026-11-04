@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+# Next.js never evicts on-demand pages or optimized images from the slot cache
+# volumes. Both regenerate on the next request, so the oldest files can go.
+
+VOLUME_ROOT=${DEETNUTS_VOLUME_ROOT:-/var/lib/docker/volumes}
+MAX_KIB=${DEETNUTS_CACHE_MAX_KIB:-6291456}
+TARGET_KIB=${DEETNUTS_CACHE_TARGET_KIB:-4194304}
+
+cache_dirs=()
+for slot in blue green; do
+  cache_dir="$VOLUME_ROOT/deetnuts_web-$slot-cache/_data"
+  if [[ -d "$cache_dir" && ! -L "$cache_dir" ]]; then
+    cache_dirs+=("$cache_dir")
+  fi
+done
+(( ${#cache_dirs[@]} > 0 )) || exit 0
+
+used_kib=$(du -sk "${cache_dirs[@]}" | awk '{ total += $1 } END { print total + 0 }')
+(( used_kib > MAX_KIB )) || exit 0
+
+removed=0
+while IFS= read -r -d '' entry; do
+  (( used_kib > TARGET_KIB )) || break
+  fields=${entry#* }
+  file_kib=${fields%% *}
+  rm -f -- "${fields#* }"
+  used_kib=$((used_kib - file_kib))
+  removed=$((removed + 1))
+done < <(find "${cache_dirs[@]}" -xdev -type f -printf '%T@ %k %p\0' | sort -zn)
+
+echo "Removed $removed cached files; about $((used_kib / 1024)) MiB remain"

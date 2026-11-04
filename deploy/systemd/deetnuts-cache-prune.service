@@ -1,0 +1,17 @@
+[Unit]
+Description=Keep the DEETNUTS web cache volumes under their size limit
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/deetnuts-cache-prune
+User=root
+Group=root
+Nice=19
+IOSchedulingClass=idle
+PrivateTmp=true
+NoNewPrivileges=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/docker/volumes
