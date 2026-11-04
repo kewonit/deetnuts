@@ -161,6 +161,11 @@ AllowTcpForwarding no
 PermitTunnel no
 MaxAuthTries 3
 LoginGraceTime 30
+
+# PocketBase administration uses an SSH tunnel to its loopback port.
+Match User $ADMIN_USER
+  AllowTcpForwarding local
+  PermitOpen 127.0.0.1:8090
 EOF
 sshd -t
 sshd_effective=$(sshd -T)
