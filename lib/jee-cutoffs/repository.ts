@@ -21,6 +21,10 @@ import type {
 const catalogPath = () =>
   path.join(resolveDataRoot(), "tools", "college-cutoffs", "catalog.json");
 
+// Holding all 131 colleges costs about 400 MB of heap, and sitemap crawlers
+// reach every one of them. Oldest-used entries are evicted past this limit.
+const MAX_CACHED_COLLEGES = 24;
+
 let catalogPromise: Promise<JeeCutoffCatalog> | null = null;
 const collegeRows = new Map<string, Promise<CutoffServingRow[]>>();
 
@@ -84,12 +88,20 @@ export async function getCutoffCollegeRows(
 ): Promise<CutoffServingRow[]> {
   const key = `${college.artifactSha256}|${college.id}`;
   let promise = collegeRows.get(key);
-  if (!promise) {
+  if (promise) {
+    // Map keeps insertion order, so re-inserting marks this entry most recent.
+    collegeRows.delete(key);
+  } else {
     const artifactPath = path.join(resolveDataRoot(), college.artifactPath);
     promise = readParquetRows<Record<string, unknown>>(artifactPath).then((rows) =>
       rows.map(normalizeRow),
     );
-    collegeRows.set(key, promise);
+  }
+  collegeRows.set(key, promise);
+
+  if (collegeRows.size > MAX_CACHED_COLLEGES) {
+    const oldest = collegeRows.keys().next().value;
+    if (oldest !== undefined) collegeRows.delete(oldest);
   }
   return promise;
 }

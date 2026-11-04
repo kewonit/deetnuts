@@ -1,4 +1,4 @@
-import { after, NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import {
   getCutoffRecords,
   getProfiledCutoffRecords,
@@ -16,15 +16,10 @@ import {
   ROUNDS_BY_YEAR,
 } from "@/app/mht-cet/state-cutoffs/constants";
 import {
-  buildStateCutoffSearchUsageEvent,
-  scheduleStateCutoffSearchUsage,
-} from "@/lib/mht-cet/state-cutoffs/search-usage";
-import {
   getUtf8ByteLength,
   STATE_CUTOFF_MAX_REQUEST_BYTES,
   StateCutoffApiRequestSchema,
 } from "@/lib/mht-cet/state-cutoffs/api-request";
-import { safeLogBotUsageEvent } from "@/lib/bot/usage";
 
 const ANONYMOUS_API_COOKIE_OPTIONS = {
   httpOnly: true,
@@ -72,26 +67,6 @@ async function isRequestAuthenticated(): Promise<boolean> {
 }
 
 export async function POST(request: NextRequest) {
-  const startedAt = performance.now();
-  const requestId = crypto.randomUUID();
-  let shouldLogUsage = false;
-
-  const scheduleUsage = (status: "served" | "rejected" | "failed") => {
-    if (!shouldLogUsage) {
-      return;
-    }
-
-    scheduleStateCutoffSearchUsage(
-      buildStateCutoffSearchUsageEvent({
-        requestId,
-        status,
-        durationMs: performance.now() - startedAt,
-      }),
-      after,
-      safeLogBotUsageEvent,
-    );
-  };
-
   try {
     const contentLength = Number(request.headers.get("content-length"));
     if (
@@ -166,8 +141,6 @@ export async function POST(request: NextRequest) {
       requestKind,
     } = parsedBody.data;
 
-    shouldLogUsage = requestKind === "search";
-
     const isAuthenticated = await isRequestAuthenticated();
     const currentAnonymousRequestCount = parseAnonymousUsageCount(
       request.cookies.get(ANONYMOUS_STATE_CUTOFF_API_COOKIE)?.value,
@@ -192,7 +165,6 @@ export async function POST(request: NextRequest) {
         String(currentAnonymousRequestCount),
         ANONYMOUS_API_COOKIE_OPTIONS,
       );
-      scheduleUsage("rejected");
       return response;
     }
 
@@ -260,11 +232,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    scheduleUsage(result.success ? "served" : "failed");
     return response;
   } catch (error: unknown) {
     console.error("API Route Error:", error);
-    scheduleUsage("failed");
     return jsonResponse(
       {
         success: false,

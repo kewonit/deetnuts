@@ -119,8 +119,8 @@ const nextConfig = {
       },
     ],
     // Production image optimization
-    minimumCacheTTL: 60,
-    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 2592000,
+    formats: ["image/webp"],
   },
   webpack(config) {
     config.module.rules.push({
