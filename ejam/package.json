@@ -34,6 +34,6 @@
     "@biomejs/biome": "^2.4.14",
     "tsx": "^4.21.0",
     "turbo": "^2.9.18",
-    "typescript": "^6.0.3"
+    "typescript": "^7.0.2"
   }
 }
