@@ -314,6 +314,9 @@ deploy_release() {
 
   rollback_on_error() {
     local exit_code=${1:-$?}
+    # With errtrace, a failure inside $(...) runs this in the subshell and
+    # again in the parent. The first run removes rollback_dir.
+    [[ -d "$rollback_dir" ]] || exit "$exit_code"
     trap - ERR INT TERM HUP
     set +e
     install -o root -g root -m 0600 "$rollback_dir/compose.env" "$STATE_ENV"
