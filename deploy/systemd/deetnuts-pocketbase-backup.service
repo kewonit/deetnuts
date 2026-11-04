@@ -12,4 +12,4 @@ PrivateTmp=true
 NoNewPrivileges=true
 ProtectHome=true
 ProtectSystem=strict
-ReadWritePaths=/opt/deetnuts/backups
+ReadWritePaths=/opt/deetnuts/backups /opt/deetnuts/state
