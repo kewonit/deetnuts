@@ -174,7 +174,12 @@ grep -qx 'kbdinteractiveauthentication no' <<<"$sshd_effective"
 grep -qx 'allowagentforwarding no' <<<"$sshd_effective"
 grep -qx 'allowtcpforwarding no' <<<"$sshd_effective"
 grep -qx 'permittunnel no' <<<"$sshd_effective"
-grep -qx "permitrootlogin $root_login" <<<"$sshd_effective"
+# sshd -T may report prohibit-password under its older name.
+if [[ "$root_login" == prohibit-password ]]; then
+  grep -Eqx 'permitrootlogin (prohibit-password|without-password)' <<<"$sshd_effective"
+else
+  grep -qx "permitrootlogin $root_login" <<<"$sshd_effective"
+fi
 systemctl reload ssh
 
 if ! swapon --show=NAME --noheadings | grep -q .; then
