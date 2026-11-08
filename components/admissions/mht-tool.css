@@ -157,6 +157,7 @@
 .mht-data a:hover { text-decoration: underline; text-decoration-color: var(--mht-muted); text-underline-offset: 3px; }
 .mht-data td[data-col="college_name"] { min-width: 14rem; max-width: 26rem; color: var(--mht-ink); font-weight: 600; }
 .mht-data td[data-col="course_name"] { min-width: 12rem; max-width: 22rem; }
+.mht-data .mht-data-pools { display: block; margin-top: 0.15rem; font-size: 0.75rem; cursor: help; }
 .mht-data-college small { display: block; margin-top: 0.1rem; color: var(--mht-muted); font-size: 0.72rem; font-weight: 400; }
 .mht-data .mht-chip { white-space: nowrap; }
 .mht-data .mht-chip-code { padding-right: 0.6rem; }
