@@ -1,107 +1,243 @@
 import type { Metadata } from "next";
-import { PolicyPage } from "@/components/compliance/PolicyPage";
+import Link from "next/link";
+import { CookieSettingsButton } from "@/components/analytics/CookieConsent";
+import { Clause, PolicyPage } from "@/components/compliance/PolicyPage";
 import { COMPLIANCE } from "@/lib/compliance";
 
 export const metadata: Metadata = {
   title: "Cookie Policy",
-  description: "The complete DEETNUTS inventory of cookies, browser storage, optional analytics, consent controls and retention periods.",
+  description: "The cookies and browser storage used by DEETNUTS, their purposes and durations, and how to manage your preferences.",
   alternates: { canonical: "/compliance/cookie-policy" },
 };
 
+const SECTIONS = [
+  { id: "scope", label: "Introduction and scope" },
+  { id: "technologies", label: "Cookies and similar technologies" },
+  { id: "categories", label: "Categories of storage" },
+  { id: "necessary", label: "Strictly necessary cookies" },
+  { id: "functional", label: "Functional browser storage" },
+  { id: "analytics", label: "Optional analytics cookies" },
+  { id: "third-party", label: "Third-party content and services" },
+  { id: "consent", label: "Consent" },
+  { id: "manage", label: "Managing your preferences" },
+  { id: "changes", label: "Changes to this Cookie Policy" },
+  { id: "contact", label: "Contact" },
+] as const;
+
+const email = <a href={`mailto:${COMPLIANCE.privacyEmail}`}>{COMPLIANCE.privacyEmail}</a>;
+
+type Row = { name: React.ReactNode; type: string; purpose: React.ReactNode; duration: string };
+
+function StorageTable({ label, caption, rows }: { label: string; caption: string; rows: Row[] }) {
+  return (
+    <div className="policy-table-wrap" role="region" aria-label={label} tabIndex={0}>
+      <table className="policy-table">
+        <caption>{caption}</caption>
+        <thead><tr><th scope="col">Name</th><th scope="col">Type</th><th scope="col">Purpose</th><th scope="col">Duration</th></tr></thead>
+        <tbody>
+          {rows.map((row, index) => (
+            <tr key={index}>
+              <th scope="row">{row.name}</th>
+              <td data-label="Type">{row.type}</td>
+              <td data-label="Purpose">{row.purpose}</td>
+              <td data-label="Duration">{row.duration}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+const NECESSARY: Row[] = [
+  {
+    name: <code>{COMPLIANCE.analyticsConsentCookie}</code>,
+    type: "First-party cookie",
+    purpose: "Records whether you have allowed or declined optional analytics, and the version of the consent request to which the choice applies.",
+    duration: "180 days from your latest choice.",
+  },
+  {
+    name: <code>__Host-deetnuts_auth</code>,
+    type: "First-party cookie; HttpOnly, Secure, host-only",
+    purpose: "Holds the signed session token that authenticates you after you sign in. It cannot be read by page scripts or set by other subdomains.",
+    duration: "Up to 7 days; removed on sign-out.",
+  },
+  {
+    name: <code>__Host-deetnuts_oauth</code>,
+    type: "First-party cookie; HttpOnly, Secure, host-only",
+    purpose: "Binds a Google sign-in response to the browser that started sign-in, to prevent forged sign-in requests, and stores a safe return path.",
+    duration: "Up to 10 minutes; removed when sign-in completes.",
+  },
+  {
+    name: <code>mht_cet_state_cutoff_anonymous_requests</code>,
+    type: "First-party cookie; HttpOnly",
+    purpose: "Counts state-cutoff searches made without an Account, to enforce the usage limit for anonymous users and protect the service from excessive use.",
+    duration: "7 days.",
+  },
+  {
+    name: <><code>__cf_bm</code>, <code>cf_clearance</code></>,
+    type: "Cloudflare cookies",
+    purpose: "May be set by Cloudflare to distinguish automated traffic from people and to record that a security challenge has been passed.",
+    duration: "__cf_bm: 30 minutes. cf_clearance: as configured for the challenge, typically up to 30 minutes.",
+  },
+  {
+    name: <><code>CF_Authorization</code>, <code>CF_Binding</code>, <code>CF_AppSession</code>, <code>CF_Session</code>, <code>CF_Device</code></>,
+    type: "Cloudflare Access cookies; HttpOnly",
+    purpose: "Set only on the restricted administrator hostname and the Cloudflare Access login domain. They authenticate an authorised administrator, bind the session to the browser and protect the login flow against forgery.",
+    duration: "From 1 hour (application session) to 30 days (device record), depending on the cookie.",
+  },
+];
+
+const FUNCTIONAL: Row[] = [
+  {
+    name: <code>deetnuts_theme</code>,
+    type: "Local storage",
+    purpose: "Remembers a Light or Dark theme that you select. Selecting System removes the value.",
+    duration: "Until you select System or clear site data.",
+  },
+  {
+    name: <code>deetnuts:admissions-profile:v1:*</code>,
+    type: "Local storage",
+    purpose: "Stores a candidate profile that you save for comparison on this device.",
+    duration: "Until you select Clear profile, replace the profile or clear site data.",
+  },
+  {
+    name: <><code>deetnuts:mht-cet-score:v1</code>, <code>deetnuts:mht-cet-seat-view:v1</code>, <code>deetnuts:mht-cet-cutoff-mode:v1</code></>,
+    type: "Local storage",
+    purpose: "Remember the rank or percentile you entered, the seat categories you selected and the list or grid view on MHT-CET cutoff pages.",
+    duration: "Until you change or clear the value, or clear site data.",
+  },
+  {
+    name: <><code>deetnuts:jee-seat:v1</code>, <code>deetnuts:jee-cutoff-mode:v1</code></>,
+    type: "Local storage",
+    purpose: "Remember the seat pool and view mode you selected on JEE cutoff pages.",
+    duration: "Until you change the selection or clear site data.",
+  },
+  {
+    name: <code>deetnuts:mht-cet-state-cutoffs:anonymous-actions</code>,
+    type: "Local storage",
+    purpose: "Counts state-cutoff actions made without an Account, so that the usage limit can be shown before a request is sent.",
+    duration: "Until reset by the feature or you clear site data.",
+  },
+  {
+    name: <><code>timekeeper-countdown-state</code>, <code>timekeeper-countdowns</code>, <code>timekeeper-theme</code>, <code>timekeeper_avatar_seed</code></>,
+    type: "Local storage",
+    purpose: "Store your saved exam countdowns, countdown theme and the random identifier used to generate your study-map avatar.",
+    duration: "Until you remove them or clear site data.",
+  },
+  {
+    name: <code>timekeeper-study-auth</code>,
+    type: "Local storage",
+    purpose: "Holds the anonymous Supabase session used by the study map. Created only when you open the study map or start a study session.",
+    duration: "Until the session expires or you clear site data.",
+  },
+  {
+    name: <code>timekeeper-pending-import</code>,
+    type: "Session storage",
+    purpose: "Holds countdown data briefly while an import from the TimeKeeper service is completed.",
+    duration: "Until the import completes or the tab is closed.",
+  },
+  {
+    name: <><code>ejam:college-predictor:accuracy-banner-dismissed</code>, <code>github-stars:*</code></>,
+    type: "Session storage",
+    purpose: "Remember that you dismissed the college predictor accuracy notice, and cache the repository star count shown in the page header.",
+    duration: "Until the tab is closed.",
+  },
+];
+
+const ANALYTICS: Row[] = [
+  {
+    name: <code>_ga</code>,
+    type: "First-party cookie set by Google Analytics",
+    purpose: "Distinguishes browsers for aggregate usage measurement.",
+    duration: "Up to 180 days, subject to browser limits and earlier withdrawal.",
+  },
+  {
+    name: <code>_ga_*</code>,
+    type: "First-party cookie set by Google Analytics",
+    purpose: "Maintains session state for the DEETNUTS Google Analytics property.",
+    duration: "Up to 180 days, subject to browser limits and earlier withdrawal.",
+  },
+];
+
 export default function CookiePolicy() {
   return (
-    <PolicyPage
-      title="Cookie policy"
-      summary="DEETNUTS uses a small amount of first-party storage for security and requested features. Google Analytics remains off until you affirmatively allow it, and public cutoff pages continue to work after Decline."
-    >
-      <section id="overview">
-        <h2>1. Scope</h2>
-        <p>This policy explains cookies and similar browser storage used on deetnuts.com. A cookie is a small value a website asks a browser to return with later requests. Local storage keeps a value in the browser but does not automatically send it with every request. Both are covered here so the controls are not hidden behind technical terminology.</p>
-        <p>Storage is divided into <strong>strictly necessary or requested-function storage</strong> and <strong>optional analytics</strong>. Necessary storage supports authentication, security, usage limits, consent memory and a setting or profile you explicitly ask the browser to remember. Optional analytics is disabled unless you select Allow.</p>
-      </section>
+    <PolicyPage title="Cookie Policy" contents={SECTIONS}>
+      <Clause sections={SECTIONS} id="scope">
+        <p>This Cookie Policy explains how DEETNUTS uses cookies and similar technologies on deetnuts.com and its subdomains (the “Service”). It forms part of the <Link href="/compliance/privacy-policy">Privacy Policy</Link>, which describes how personal data collected through these technologies is processed and the rights available to you.</p>
+      </Clause>
 
-      <section id="inventory">
-        <h2>2. First-party storage inventory</h2>
-        <div className="policy-table-wrap" role="region" aria-label="First-party storage inventory" tabIndex={0}>
-          <table className="policy-table">
-            <caption>Cookies and local storage created for DEETNUTS features</caption>
-            <thead><tr><th scope="col">Name or pattern</th><th scope="col">Type</th><th scope="col">Category</th><th scope="col">Purpose</th><th scope="col">Typical duration</th></tr></thead>
-            <tbody>
-              <tr><th scope="row"><code>{COMPLIANCE.analyticsConsentCookie}</code></th><td data-label="Type">First-party cookie readable by the site</td><td data-label="Category">Necessary preference</td><td data-label="Purpose">Stores the current policy version and whether optional analytics is granted or denied. It prevents the banner from repeatedly asking and allows withdrawal to be applied.</td><td data-label="Typical duration">180 days from the latest choice.</td></tr>
-              <tr><th scope="row"><code>mht_cet_state_cutoff_anonymous_requests</code></th><td data-label="Type">First-party HttpOnly cookie</td><td data-label="Category">Security and access control</td><td data-label="Purpose">Maintains a bounded anonymous search count to protect the state-cutoff endpoint from excessive use. It is not available to page JavaScript.</td><td data-label="Typical duration">7 days; removed when the relevant authenticated flow clears it.</td></tr>
-              <tr><th scope="row"><code>__Host-deetnuts_auth</code></th><td data-label="Type">Host-only HttpOnly, Secure authentication cookie</td><td data-label="Category">Strictly necessary when signed in</td><td data-label="Purpose">Carries the signed PocketBase session token used by the server to verify the account. The <code>__Host-</code> boundary prevents sibling subdomains from setting it, and page JavaScript cannot read it.</td><td data-label="Typical duration">Up to 7 days; removed on sign-out and rejected after expiry or invalidation.</td></tr>
-              <tr><th scope="row"><code>__Host-deetnuts_oauth</code></th><td data-label="Type">Host-only HttpOnly, Secure transient cookie</td><td data-label="Category">Sign-in security</td><td data-label="Purpose">Binds a Google OAuth response to the browser that started sign-in, resists cookie spoofing by sibling subdomains, and preserves only a safe same-site return path.</td><td data-label="Typical duration">Up to 10 minutes and removed when the callback completes.</td></tr>
-              <tr><th scope="row"><code>CF_Authorization</code> and <code>CF_Binding</code></th><td data-label="Type">Cloudflare Access HttpOnly authentication and token-binding cookies on the protected API hostname</td><td data-label="Category">Strictly necessary administrator security</td><td data-label="Purpose">Proves that the exact allowed Google identity completed Access authentication and binds the application token to the same browser so a copied token cannot be reused alone.</td><td data-label="Typical duration">Up to 1 hour for this application; removed or rejected after expiry, logout or revocation.</td></tr>
-              <tr><th scope="row"><code>CF_AppSession</code></th><td data-label="Type">Cloudflare Access HttpOnly CSRF cookie on the protected API hostname</td><td data-label="Category">Strictly necessary administrator security</td><td data-label="Purpose">Protects the per-application Cloudflare Access authentication flow against cross-site request forgery.</td><td data-label="Typical duration">Up to 24 hours.</td></tr>
-              <tr><th scope="row"><code>CF_Session</code>, <code>CF_Device</code> and team-domain <code>CF_Authorization</code></th><td data-label="Type">Cloudflare Access HttpOnly cookies on <code>deetnuts.cloudflareaccess.com</code></td><td data-label="Category">Strictly necessary administrator security</td><td data-label="Purpose">Protects the Access login and multi-factor flow, prevents abuse and supports single sign-on before the one-hour application token is issued.</td><td data-label="Typical duration"><code>CF_Session</code> up to 4 hours, <code>CF_Device</code> up to 30 days, and the team token according to the configured Access session.</td></tr>
-              <tr><th scope="row"><code>deetnuts_theme</code></th><td data-label="Type">Local storage</td><td data-label="Category">Requested preference</td><td data-label="Purpose">Remembers a manual Light or Dark selection. System mode removes this value and follows the device preference.</td><td data-label="Typical duration">Until System is selected or site storage is cleared.</td></tr>
-              <tr><th scope="row"><code>deetnuts:admissions-profile:v1:mht-cet</code></th><td data-label="Type">Local storage</td><td data-label="Category">Requested feature</td><td data-label="Purpose">Saves the candidate comparison profile on the current device after you choose to save or compare it.</td><td data-label="Typical duration">Until Clear profile is used, the value is replaced, or site storage is cleared.</td></tr>
-              <tr><th scope="row"><code>deetnuts:mht-cet-state-cutoffs:anonymous-actions</code></th><td data-label="Type">Local storage</td><td data-label="Category">Security and access control</td><td data-label="Purpose">Maintains the browser-side anonymous action count used by the state-cutoff experience.</td><td data-label="Typical duration">Until reset by the feature or site storage is cleared.</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p>DEETNUTS account authentication cookies use host-only scope, <code>SameSite=Lax</code> and high priority. The protected API’s application Access cookie uses <code>SameSite=Lax</code>, HttpOnly and a binding cookie; Cloudflare’s team-domain cookies use the attributes required for its cross-domain login flow. Authentication-cookie values should never be copied into a message, screenshot or support request.</p>
-      </section>
+      <Clause sections={SECTIONS} id="technologies">
+        <p>A cookie is a small text file that a website stores in your browser and that the browser returns with later requests to the same website. Local storage and session storage are browser features that allow a website to keep information on your device; unlike cookies, they are not sent automatically with each request. Session storage is cleared when the browser tab is closed. In this policy, “storage” refers to all of these technologies.</p>
+        <p>First-party storage is set by the Service. Third-party storage is set by another domain, such as an embedded video player.</p>
+      </Clause>
 
-      <section id="analytics-cookies">
-        <h2>3. Optional Google Analytics storage</h2>
-        <p>After Allow, the Google tag may create first-party GA4 cookies. The common values are:</p>
-        <div className="policy-table-wrap" role="region" aria-label="Optional analytics cookie inventory" tabIndex={0}>
-          <table className="policy-table">
-            <caption>Optional analytics cookies</caption>
-            <thead><tr><th scope="col">Name</th><th scope="col">Provider</th><th scope="col">Purpose</th><th scope="col">Default maximum</th></tr></thead>
-            <tbody>
-              <tr><th scope="row"><code>_ga</code></th><td data-label="Provider">Google Analytics</td><td data-label="Purpose">Distinguishes a browser for aggregate analytics.</td><td data-label="Default maximum">Configured for up to 180 days, subject to browser limits and earlier withdrawal.</td></tr>
-              <tr><th scope="row"><code>_ga_*</code></th><td data-label="Provider">Google Analytics</td><td data-label="Purpose">Maintains GA4 session state for the configured measurement property.</td><td data-label="Default maximum">Configured for up to 180 days, subject to browser limits and earlier withdrawal.</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p>The site configures analytics storage as denied by default and does not load the external Google tag before Allow. Advertising storage, advertising user data and advertising personalisation remain denied. Google Signals and ad-personalisation signals are disabled. DEETNUTS does not use analytics cookies for admission decisions or advertising profiles.</p>
-      </section>
-
-      <section id="consent">
-        <h2>4. How consent works</h2>
-        <ol>
-          <li>On a browser with no current versioned choice, the banner presents Decline and Allow with equal access.</li>
-          <li>Until Allow, no external Google Analytics script is loaded and no analytics request is intentionally sent to Google.</li>
-          <li>Allow stores the versioned preference, loads the Google tag and enables only analytics storage.</li>
-          <li>Decline stores the versioned preference and leaves analytics disabled. Public pages and ordinary cutoff filters remain available.</li>
-          <li>Cookie settings reopens the choice. Revoking a prior Allow removes known first-party Google Analytics cookies and reloads the page without the Google tag.</li>
-          <li>A materially changed analytics purpose or consent design uses a new consent version and asks again.</li>
-        </ol>
-        <p>If the browser exposes an active Global Privacy Control signal, DEETNUTS treats optional analytics as denied on that device and does not offer an override while the signal remains active.</p>
-      </section>
-
-      <section id="external">
-        <h2>5. Embedded and external services</h2>
-        <p>Some pages request images from Cloudinary or display a YouTube player using the <code>youtube-nocookie.com</code> privacy-enhanced domain. Those requests disclose ordinary network information to the provider. The privacy-enhanced player is configured to limit personalisation, but YouTube may use cookies or comparable player storage when the embed loads or is used, according to its own controls.</p>
-        <p>Selecting Google sign-in, opening a contribution checkout, or following an external link takes you into an independently operated service that may set its own storage. DEETNUTS’s analytics choice does not delete or control cookies already set by another domain.</p>
-        <p>The restricted API hostname is available only to an authorised administrator. Its Cloudflare Access and Google authentication storage is strictly necessary for that security boundary and is separate from optional public-site analytics.</p>
-      </section>
-
-      <section id="controls">
-        <h2>6. Your controls</h2>
+      <Clause sections={SECTIONS} id="categories">
         <ul>
-          <li>Use <strong>Cookie settings</strong> in either footer to review, decline, allow or revoke analytics.</li>
-          <li>Use <strong>Theme settings</strong> to choose System, Light or Dark and remove the manual theme value.</li>
-          <li>Use <strong>Clear profile</strong> in the candidate tool to remove its saved browser value and profile fragment.</li>
-          <li>Use browser settings to inspect or delete site data, block cookies, clear local storage, or restrict third-party content.</li>
-          <li>Use sign out to end the addressed local account session. Contact privacy support to request account deletion.</li>
+          <li><strong>Strictly necessary.</strong> Required for security, authentication, abuse prevention and recording your consent choices. These cannot be disabled through the Service’s settings because the Service would not function securely without them.</li>
+          <li><strong>Functional.</strong> Used to remember settings and information that you choose to save, such as your theme, candidate profile and countdowns. They are set only when you use the relevant feature.</li>
+          <li><strong>Analytics.</strong> Used to measure aggregate usage and performance. They are optional and are set only after you select Allow.</li>
         </ul>
-        <p>Blocking strictly necessary authentication or security storage may prevent sign-in, usage-limit enforcement or saved settings from working. It does not prevent ordinary access to public cutoff pages.</p>
-      </section>
+        <p>DEETNUTS does not use advertising, targeting or social-media tracking cookies.</p>
+      </Clause>
 
-      <section id="verification">
-        <h2>7. Verifying the promise</h2>
-        <p>Before analytics consent, developer tools should show no request to <code>googletagmanager.com</code> or <code>google-analytics.com</code> from the DEETNUTS analytics component. After Decline, the same remains true. The site’s automated browser test checks this behavior on a real page.</p>
-        <p>Authentication, hosted images, embedded media and links are separate from optional analytics and are described separately above and in the Privacy Policy.</p>
-      </section>
+      <Clause sections={SECTIONS} id="necessary">
+        <StorageTable label="Strictly necessary cookies" caption="Strictly necessary cookies" rows={NECESSARY} />
+        <p>Authentication cookies use the <code>SameSite=Lax</code> attribute. Never copy the value of an authentication cookie into a message, screenshot or support request.</p>
+      </Clause>
 
-      <section id="changes-contact">
-        <h2>8. Changes and contact</h2>
-        <p>The effective date and version at the top apply to this inventory. If a new non-essential cookie or materially different analytics purpose is introduced, this policy and the consent mechanism must be updated before that use begins.</p>
-        <p>Questions or a report that stored behavior differs from this policy may be sent to <a href={`mailto:${COMPLIANCE.privacyEmail}`}>{COMPLIANCE.privacyEmail}</a>. Include the browser, page URL, approximate time and the cookie or request observed; do not include authentication token values.</p>
-      </section>
+      <Clause sections={SECTIONS} id="functional">
+        <StorageTable label="Functional browser storage" caption="Functional local storage and session storage" rows={FUNCTIONAL} />
+      </Clause>
+
+      <Clause sections={SECTIONS} id="analytics">
+        <StorageTable label="Optional analytics cookies" caption="Optional analytics cookies (set only after Allow)" rows={ANALYTICS} />
+        <p>Analytics storage is denied by default, and the Google tag is not loaded until you select Allow. Advertising storage, advertising user data and advertising personalisation remain denied at all times, and Google Signals is disabled. Analytics cookies are not used for admission-related decisions or for advertising.</p>
+      </Clause>
+
+      <Clause sections={SECTIONS} id="third-party">
+        <p>Some pages load content from third parties, which may set their own storage or receive information from your browser under their own policies:</p>
+        <ul>
+          <li><strong>YouTube.</strong> Videos are embedded using the privacy-enhanced <code>youtube-nocookie.com</code> domain. YouTube may store information in your browser when the player loads or when you interact with it.</li>
+          <li><strong>Cloudinary and DiceBear.</strong> Images are delivered from these providers, which receive ordinary request information such as your IP address and browser details.</li>
+          <li><strong>Google sign-in.</strong> When you choose to sign in with Google, Google’s pages may set their own cookies.</li>
+          <li><strong>Payment providers and external links.</strong> Sites you visit from the Service may set their own cookies.</li>
+        </ul>
+        <p>Your analytics choice on the Service does not control storage set by other domains. Refer to the relevant provider’s policy for details.</p>
+      </Clause>
+
+      <Clause sections={SECTIONS} id="consent">
+        <ol>
+          <li>On your first visit, or when the consent request changes, a notice offers Decline and Allow with equal prominence.</li>
+          <li>Until you select Allow, the Google tag is not loaded and no analytics request is sent to Google.</li>
+          <li>Selecting Allow records your choice, loads the Google tag and enables analytics storage only.</li>
+          <li>Selecting Decline records your choice and keeps analytics disabled. All features of the Service remain available.</li>
+          <li>You may change your choice at any time. Withdrawing consent removes the first-party Google Analytics cookies and reloads the page without the Google tag.</li>
+          <li>If the purposes of analytics change materially, we will ask for your consent again.</li>
+        </ol>
+        <p>If your browser sends a Global Privacy Control signal, analytics is treated as declined and the option to allow it is unavailable while the signal remains active.</p>
+      </Clause>
+
+      <Clause sections={SECTIONS} id="manage">
+        <p>You can manage storage in the following ways:</p>
+        <ul>
+          <li><strong>Cookie settings:</strong> use the button below or the “Cookie settings” link in the site footer to allow, decline or withdraw analytics consent.</li>
+          <li><strong>Theme settings:</strong> select System to remove the stored theme preference.</li>
+          <li><strong>Clear profile:</strong> remove a saved candidate profile in the comparison tool.</li>
+          <li><strong>Sign out:</strong> remove the authentication cookie from your browser.</li>
+          <li><strong>Browser settings:</strong> view and delete cookies and site data, block cookies, or restrict third-party content. Guidance is available from the provider of your browser.</li>
+        </ul>
+        <p>Blocking strictly necessary cookies may prevent sign-in, usage limits and saved settings from working. Public cutoff pages remain available.</p>
+        <CookieSettingsButton className="policy-action" />
+      </Clause>
+
+      <Clause sections={SECTIONS} id="changes">
+        <p>We will update this Cookie Policy before introducing any new non-essential cookie or materially changing the purpose of existing storage. Updates are published on this page with a revised effective date and version.</p>
+      </Clause>
+
+      <Clause sections={SECTIONS} id="contact">
+        <p>Questions about this Cookie Policy, or reports that the Service’s storage differs from this policy, may be sent to {email}. Please include your browser, the page URL, the approximate time and the name of the cookie or request observed. Do not include authentication cookie values.</p>
+      </Clause>
     </PolicyPage>
   );
 }

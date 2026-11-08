@@ -9,7 +9,7 @@ export default function CommunityPartners() {
       description:
         "Community for MHT-CET aspirants to discuss exams, colleges, and admissions.",
       url: "https://www.reddit.com/r/mht_cet/",
-      members: "15k+",
+      members: "32k+",
       logo: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1743018533/deetnuts/communityIcon_a7um82b5fowa1_rifsjq.webp",
       banner:
         "https://res.cloudinary.com/dfyrk32ua/image/upload/v1743018683/deetnuts/bannerBackgroundImage_pgczyvumruxa1_ji8x8s.webp",

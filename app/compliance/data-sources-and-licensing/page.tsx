@@ -15,7 +15,6 @@ export default async function DataSources() {
   return (
     <PolicyPage
       title="JEE data sources and methodology"
-      summary={`${catalog.totals.rows.toLocaleString("en-IN")} exact cutoff rows in release ${catalog.releaseVersion}, ${sources.length} source records, explicit lineage and a public page for every validated college-year combination.`}
     >
       <section id="public-access">
         <h2>Public access</h2>

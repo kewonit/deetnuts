@@ -192,16 +192,16 @@ test("analytics makes no Google request before consent", async ({ page }) => {
 
 test("analytics consent is versioned and revocation clears GA cookies", async ({ page }) => {
   await page.goto(pagePath);
-  await page.evaluate((policyVersion) => {
-    document.cookie = `deetnuts_analytics_consent=granted:${policyVersion}; Path=/; SameSite=Lax`;
+  await page.evaluate((consentVersion) => {
+    document.cookie = `deetnuts_analytics_consent=granted:${consentVersion}; Path=/; SameSite=Lax`;
     document.cookie = "_ga=test-client; Path=/; SameSite=Lax";
     document.cookie = "_ga_TEST=test-session; Path=/; SameSite=Lax";
-  }, COMPLIANCE.policyVersion);
+  }, COMPLIANCE.analyticsConsentVersion);
   await page.reload();
   await page.getByRole("button", { name: "Cookie settings", exact: true }).click();
   await expect(page.getByRole("dialog", { name: "Analytics cookie settings" })).toContainText("Current choice: analytics allowed");
   await page.getByRole("button", { name: "Decline" }).click();
-  await expect.poll(() => page.evaluate(() => document.cookie)).toContain(`deetnuts_analytics_consent=denied:${COMPLIANCE.policyVersion}`);
+  await expect.poll(() => page.evaluate(() => document.cookie)).toContain(`deetnuts_analytics_consent=denied:${COMPLIANCE.analyticsConsentVersion}`);
   expect(await page.evaluate(() => document.cookie)).not.toMatch(/(?:^|; )_ga(?:_|=)/);
 });
 
