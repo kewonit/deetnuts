@@ -99,10 +99,6 @@ html.dark .analytics-consent {
 .policy-meta dt { color: var(--policy-muted); }
 .policy-meta dd { margin: 0; font-weight: 650; }
 .policy-meta a { color: inherit; text-underline-offset: 3px; }
-.policy-switcher { display: flex; gap: 8px; margin: 22px 0 0; padding: 0 0 22px; overflow-x: auto; border-bottom: 1px solid var(--policy-line); scrollbar-width: thin; }
-.policy-switcher a { flex: 0 0 auto; padding: 8px 11px; border: 1px solid var(--policy-line); background: var(--policy-paper); color: var(--policy-ink); font-size: 12px; font-weight: 650; text-decoration: none; }
-.policy-switcher a:hover { border-color: var(--policy-ink); }
-.policy-switcher a:focus-visible,
 .policy-contents a:focus-visible,
 .policy-content a:focus-visible,
 .policy-content button:focus-visible { outline: 3px solid rgb(124 58 237 / .35); outline-offset: 3px; }

@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { COMPLIANCE, COMPLIANCE_LINKS } from "@/lib/compliance";
+import { COMPLIANCE } from "@/lib/compliance";
 
 export type PolicySection = { id: string; label: string };
 
@@ -43,9 +42,6 @@ export function PolicyPage({
             <div><dt>Contact</dt><dd><a href={`mailto:${COMPLIANCE.privacyEmail}`}>{COMPLIANCE.privacyEmail}</a></dd></div>
           </dl>
         </header>
-        <nav className="policy-switcher" aria-label="Legal documents">
-          {COMPLIANCE_LINKS.map((link) => <Link href={link.href} key={link.href}>{link.label}</Link>)}
-        </nav>
         {contents && contents.length > 0 ? (
           <nav className="policy-contents" aria-labelledby="policy-contents-heading">
             <h2 id="policy-contents-heading">Contents</h2>
