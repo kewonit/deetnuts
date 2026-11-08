@@ -1,3 +1,4 @@
+import { getCanonicalMhtCetCollegePath } from "@/lib/admissions/proxy-canonical";
 import { NextRequest, NextResponse } from "next/server";
 import {
   getCutoffRecords,
@@ -212,7 +213,19 @@ export async function POST(request: NextRequest) {
           sortOrder,
         );
 
-    const response = jsonResponse(stripPrivateErrorDetails(result), {
+    // College links are resolved here so the browser never loads the link manifest.
+    const body =
+      result.success && Array.isArray(result.data)
+        ? {
+            ...result,
+            data: (result.data as Array<{ college_code?: string | number }>).map((row) => ({
+              ...row,
+              college_path: row.college_code ? getCanonicalMhtCetCollegePath(row.college_code) : null,
+            })),
+          }
+        : result;
+
+    const response = jsonResponse(stripPrivateErrorDetails(body), {
       status:
         !result.success && "fieldErrors" in result
           ? 400

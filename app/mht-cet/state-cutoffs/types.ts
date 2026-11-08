@@ -24,6 +24,8 @@ export interface CutoffRecord {
    * that also match the profile.
    */
   alternative_pools?: AlternativeSeatPool[];
+  /** Canonical college page, resolved by the API. */
+  college_path?: string | null;
 }
 
 export interface AlternativeSeatPool {

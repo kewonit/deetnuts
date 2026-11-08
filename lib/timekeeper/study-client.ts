@@ -60,7 +60,10 @@ export function avatarSeed() {
   }
 }
 
+export class StudyLocationError extends Error {}
+
 export async function studyLocation() {
+  let data: { loc?: unknown; city?: unknown; region?: unknown };
   try {
     const response = await fetch("https://ipinfo.io/json", {
       signal: AbortSignal.timeout(5000),
@@ -68,34 +71,30 @@ export async function studyLocation() {
       referrerPolicy: "no-referrer",
     });
     if (!response.ok) throw new Error("Location unavailable");
-    const data = await response.json();
-    const [latitude, longitude] = String(data.loc).split(",").map(Number);
-    if (
-      !Number.isFinite(latitude) ||
-      !Number.isFinite(longitude) ||
-      latitude < 6 ||
-      latitude > 38 ||
-      longitude < 68 ||
-      longitude > 98
-    )
-      throw new Error("Location outside the study map");
-    // Share an approximate city position only; the original coordinates never
-    // enter browser storage or the session RPC.
-    const random = crypto.getRandomValues(new Uint32Array(2));
-    const angle = (random[0] / 2 ** 32) * Math.PI * 2;
-    const radius = Math.sqrt(random[1] / 2 ** 32) * 0.045;
-    return {
-      latitude: latitude + Math.cos(angle) * radius,
-      longitude: longitude + Math.sin(angle) * radius,
-      city: String(data.city ?? "").slice(0, 50),
-      state: String(data.region ?? "").slice(0, 50),
-    };
+    data = await response.json();
   } catch {
-    return {
-      latitude: 28.6139,
-      longitude: 77.209,
-      city: "New Delhi",
-      state: "Delhi",
-    };
+    // Never guess a city: a wrong pin is worse than asking again.
+    throw new StudyLocationError(
+      "We couldn't detect your city. If an ad or tracker blocker is on, allow ipinfo.io and try again.",
+    );
   }
+  const [latitude, longitude] = String(data.loc).split(",").map(Number);
+  if (
+    !Number.isFinite(latitude) ||
+    !Number.isFinite(longitude) ||
+    Math.abs(latitude) > 85 ||
+    Math.abs(longitude) > 180
+  )
+    throw new StudyLocationError("We couldn't detect your city. Please try again.");
+  // Share an approximate city position only; the original coordinates never
+  // enter browser storage or the session RPC.
+  const random = crypto.getRandomValues(new Uint32Array(2));
+  const angle = (random[0] / 2 ** 32) * Math.PI * 2;
+  const radius = Math.sqrt(random[1] / 2 ** 32) * 0.045;
+  return {
+    latitude: latitude + Math.cos(angle) * radius,
+    longitude: longitude + Math.sin(angle) * radius,
+    city: String(data.city ?? "").slice(0, 50),
+    state: String(data.region ?? "").slice(0, 50),
+  };
 }

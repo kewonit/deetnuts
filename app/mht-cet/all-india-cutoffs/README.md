@@ -1,100 +1,17 @@
-# MHT-CET All-India Cutoffs 2024
+# MHT-CET All India cutoffs
 
-## Overview
+`/mht-cet/all-india-cutoffs?year=2026&round=1` lists the closing All India merit
+rank for every choice code in a CAP round (2026 Rounds 1-4, 2024 Rounds 1-3;
+see `lib/mht-cet/all-india/config.ts`).
 
-This module serves the 2024 MHT-CET all-India quota dataset through dedicated API handlers and a filterable client page.
-
-Current repository state:
-
-- the API surface supports round one, round two, and round three
-- the checked-in `page.tsx` currently renders round one as the visible tab in the UI
-
-## File Layout
-
-```text
-app/mht-cet/all-india-cutoffs/
-├── page.tsx
-├── data-table.tsx
-├── filters.tsx
-├── types.ts
-├── constants.ts
-├── use-all-india-cutoffs.ts
-├── README.md
-└── TEST_GUIDE.md
-
-app/api/mht-cet/all-india-cutoffs/
-├── _shared.ts
-├── 2024-round-one/route.ts
-├── 2024-round-two/route.ts
-└── 2024-round-three/route.ts
-```
-
-## Data Access Pattern
-
-The route handlers call the shared request builder in `_shared.ts`, which:
-
-- parses pagination and sort parameters
-- sanitizes free-text inputs
-- builds collection-style filter strings
-- queries the private service-authenticated PocketBase adapter in `lib/pocketbaseClient.ts`
-
-## API Surface
-
-Endpoints:
-
-```text
-GET /api/mht-cet/all-india-cutoffs/2024-round-one
-GET /api/mht-cet/all-india-cutoffs/2024-round-two
-GET /api/mht-cet/all-india-cutoffs/2024-round-three
-```
-
-Supported query parameters:
-
-- `page`
-- `perPage`
-- `sort`
-- `search`
-- `branch`
-- `branches`
-- `minPercentile`, `maxPercentile`
-- `minRank`, `maxRank`
-- `collegeName`
-
-Returned record fields are intentionally narrow and include:
-
-- `id`
-- `sr_no`
-- `rank`
-- `percentile`
-- `choice_code`
-- `institute_code`
-- `merit_exam`
-- `type`
-- `seat_type`
-- `college_code`
-- `course_name`
-- `college_name`
-- `created`, `updated`
-
-## UI Behavior
-
-The active page implementation includes:
-
-- debounced data fetching through `use-all-india-cutoffs.ts`
-- server-driven pagination and sorting
-- branch and percentile/rank filters
-- dynamic import of the heavy table component
-- error and loading feedback in the page shell
-
-## Important Current Limitation
-
-The data layer and route handlers support all three rounds, but the checked-in `page.tsx` only exposes round one through the visible tab list. Validate round two or round three through the API routes until those tabs are intentionally enabled.
-
-## Stack Notes
-
-- framework: Next.js 16 App Router
-- UI runtime: React 19
-- table layer: TanStack Table
-- backend access: PocketBase on the private application network
-
-For test steps, see `TEST_GUIDE.md` in the same directory.
+- `page.tsx` renders the first page on the server (`lib/mht-cet/all-india/query.ts`),
+  so the list arrives complete. College names and page links are resolved there too.
+- Year, round, filters, sorting and paging then load from
+  `GET /api/mht-cet/all-india-cutoffs`, which takes the same `year`, `round`,
+  `page`, `perPage`, `sort`, `search`, `branches`, `minPercentile`/`maxPercentile`,
+  `minRank`/`maxRank` and `collegeName` parameters and is cached publicly, since
+  published cutoffs only change on a data import.
+- 2026 rows come from the institute-wise allotment lists
+  (`scripts/scrape_mahacet_allotments.py`, `scripts/import-mahacet-2026-cap-rounds.ts`)
+  and include admitted counts; `MI-AI` rows are minority seats released to All
+  India candidates.

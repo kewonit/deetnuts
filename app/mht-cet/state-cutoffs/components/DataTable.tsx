@@ -1,9 +1,8 @@
 "use client";
 
 import { memo, useEffect, type ReactNode } from "react";
-import Link from "next/link";
+import { IntentPrefetchLink } from "@/components/admissions/IntentPrefetchLink";
 import { MhtPagination } from "@/components/admissions/MhtPagination";
-import { getCanonicalMhtCetCollegePath } from "@/lib/admissions/proxy-canonical";
 import { CutoffRecord } from "../types";
 import { formatSearchEmptyStateMessage, type SearchInsight } from "../search-insights";
 import { calculatePercentileDistance, formatPercentileDistance } from "../utils";
@@ -76,8 +75,11 @@ function OtherSeatPools({ record }: { record: CutoffRecord }) {
 function renderCell(column: string, record: CutoffRecord, target: number | null): ReactNode {
   switch (column) {
     case "college_name": {
-      const path = getCanonicalMhtCetCollegePath(record.college_code);
-      return path ? <Link href={path}>{record.college_name}</Link> : record.college_name;
+      return record.college_path ? (
+        <IntentPrefetchLink href={record.college_path}>{record.college_name}</IntentPrefetchLink>
+      ) : (
+        record.college_name
+      );
     }
     case "course_name":
       return (

@@ -180,7 +180,7 @@ const nextConfig = {
         ],
       },
       {
-        source: "/exam-countdown/maps/india-outline.geojson",
+        source: "/exam-countdown/maps/:file(india-outline|world-india-view).geojson",
         headers: [
           {
             key: "Cache-Control",
@@ -202,9 +202,11 @@ const nextConfig = {
       },
       // API routes default to no-store. Versioned JEE cutoff routes set their
       // own success/error policy so 400/404/409 responses are never immutable,
-      // and the GitHub star count sets a long public cache with a short retry.
+      // the GitHub star count sets a long public cache with a short retry, and
+      // published All India cutoffs are cached until the next data import.
       {
-        source: "/api/:path((?!jee-cutoffs(?:/|$)|github-stars(?:/|$)).*)",
+        source:
+          "/api/:path((?!jee-cutoffs(?:/|$)|github-stars(?:/|$)|mht-cet/all-india-cutoffs(?:/|$)).*)",
         headers: [
           {
             key: "Cache-Control",
