@@ -25,6 +25,57 @@ import {
   escapeFilterValue,
 } from "./search-filter";
 import type { CutoffRecord } from "./types";
+import { collapseProfileRowsToBranches } from "./profile-branches";
+
+const PROFILE_FIELDS =
+  "id,college_code,college_name,course_code,course_name,category,seat_allocation_section,cutoff_score,last_rank,total_admitted,status,home_university,institute_home_university_id,affiliating_university_id,minority_community_id";
+// A profile matches at most a few thousand seat pools (about 6.5k for an OBC
+// candidate at rank 1 in 2026 Round IV). Keep the collapsed list briefly so
+// paging through it does not refetch; the data only changes on imports.
+const PROFILE_CACHE_TTL_MS = 2 * 60 * 1000;
+const PROFILE_CACHE_MAX_ENTRIES = 20;
+type CollapsedProfileRows = ReturnType<
+  typeof collapseProfileRowsToBranches<CutoffRecord>
+>;
+const profileBranchCache = new Map<
+  string,
+  { expiresAt: number; value: Promise<CollapsedProfileRows> }
+>();
+
+function getCollapsedProfileRows(
+  collectionName: string,
+  filter: string,
+  sort: string,
+  scoreMode: "percentile" | "rank",
+): Promise<CollapsedProfileRows> {
+  const key = JSON.stringify([collectionName, filter, sort, scoreMode]);
+  const now = Date.now();
+  const cached = profileBranchCache.get(key);
+  if (cached && cached.expiresAt > now) return cached.value;
+
+  const value = getPocketBase()
+    .collection(collectionName)
+    .getFullList<CutoffRecord>({
+      batch: 1000,
+      fields: PROFILE_FIELDS,
+      filter,
+      sort,
+    })
+    .then((rows) => collapseProfileRowsToBranches(rows, scoreMode));
+  profileBranchCache.delete(key);
+  profileBranchCache.set(key, { expiresAt: now + PROFILE_CACHE_TTL_MS, value });
+  value.catch(() => profileBranchCache.delete(key));
+  for (const [staleKey, entry] of profileBranchCache) {
+    if (
+      profileBranchCache.size <= PROFILE_CACHE_MAX_ENTRIES &&
+      entry.expiresAt > now
+    ) {
+      break;
+    }
+    profileBranchCache.delete(staleKey);
+  }
+  return value;
+}
 
 interface ProfiledCutoffQuery {
   page: number;
@@ -209,23 +260,22 @@ export async function getProfiledCutoffRecords(
       );
     }
 
-    const result = await getPocketBase().collection(collectionName).getList(
-      page,
-      perPage,
-      {
-        fields:
-          "id,college_code,college_name,course_code,course_name,category,seat_allocation_section,cutoff_score,last_rank,total_admitted,status,home_university,institute_home_university_id,affiliating_university_id,minority_community_id",
-        filter: filterParts.join(" && "),
-        sort,
-      },
+    // One row per college branch: a candidate is usually eligible for several
+    // seat pools of the same branch (open and own category, TFWS, separate
+    // intakes), which otherwise repeats the branch 2-4 times in the list.
+    const collapsed = await getCollapsedProfileRows(
+      collectionName,
+      filterParts.join(" && "),
+      sort,
+      input.scoreMode === "rank" ? "rank" : "percentile",
     );
-
-    const totalItems = result.totalItems;
+    const totalItems = collapsed.rows.length;
+    const start = (page - 1) * perPage;
     return {
       success: true,
-      data: result.items,
+      data: collapsed.rows.slice(start, start + perPage),
       totalItems,
-      totalPages: result.totalPages,
+      totalPages: Math.ceil(totalItems / perPage),
       page,
       perPage,
       round: sanitizedRound,
@@ -236,6 +286,7 @@ export async function getProfiledCutoffRecords(
         ignoredRequestedCodes: derived.ignoredRequestedCodes,
         excludedUnmappedRows: 0,
         stageSemanticsAvailable: false,
+        collapsedSeatPools: collapsed.collapsedSeatPools,
       },
     };
   } catch (error) {

@@ -52,6 +52,27 @@ function Margin({ cutoff, target }: { cutoff: number; target: number }) {
   );
 }
 
+// Profile results show each college branch once; the other seat pools that
+// also match the candidate are listed here instead of as repeated rows.
+function OtherSeatPools({ record }: { record: CutoffRecord }) {
+  const pools = record.alternative_pools ?? [];
+  if (pools.length === 0) return null;
+  const details = pools
+    .map((pool) => {
+      const rank = Number.isFinite(pool.last_rank) ? `rank ${formatInteger(pool.last_rank)}` : null;
+      const cutoff = Number.isFinite(pool.cutoff_score) ? formatPercentile(String(pool.cutoff_score)) : null;
+      const code = pool.course_code !== record.course_code ? `choice code ${pool.course_code}` : null;
+      return [pool.category, cutoff, rank, code].filter(Boolean).join(" · ");
+    })
+    .join("\n");
+  const label = `+${pools.length} more seat ${pools.length === 1 ? "pool" : "pools"}`;
+  return (
+    <small className="mht-dim mht-data-pools" title={`Shown: ${record.category}\n${details}`}>
+      {label}
+    </small>
+  );
+}
+
 function renderCell(column: string, record: CutoffRecord, target: number | null): ReactNode {
   switch (column) {
     case "college_name": {
@@ -59,7 +80,12 @@ function renderCell(column: string, record: CutoffRecord, target: number | null)
       return path ? <Link href={path}>{record.college_name}</Link> : record.college_name;
     }
     case "course_name":
-      return record.course_name;
+      return (
+        <>
+          {record.course_name}
+          <OtherSeatPools record={record} />
+        </>
+      );
     case "category":
       return <span className="mht-chip mht-chip-code">{record.category}</span>;
     case "last_rank":
