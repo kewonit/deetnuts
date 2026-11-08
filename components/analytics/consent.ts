@@ -3,7 +3,7 @@ import { COMPLIANCE } from "@/lib/compliance";
 export type AnalyticsConsentChoice = "granted" | "denied";
 
 const consentValue = (choice: AnalyticsConsentChoice) =>
-  `${choice}:${COMPLIANCE.policyVersion}`;
+  `${choice}:${COMPLIANCE.analyticsConsentVersion}`;
 
 export function hasGlobalPrivacyControl(): boolean {
   return (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl === true;

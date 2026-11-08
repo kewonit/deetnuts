@@ -1,139 +1,272 @@
 import type { Metadata } from "next";
-import { PolicyPage } from "@/components/compliance/PolicyPage";
+import Link from "next/link";
+import { Clause, PolicyPage } from "@/components/compliance/PolicyPage";
 import { COMPLIANCE } from "@/lib/compliance";
 
 export const metadata: Metadata = {
   title: "Terms and Conditions",
-  description: "The terms governing access to and use of DEETNUTS, its college information, accounts, comparison tools and public pages.",
+  description: "The terms governing access to and use of DEETNUTS, including its college data, cutoff pages, comparison tools, accounts and community integrations.",
   alternates: { canonical: "/compliance/terms-and-conditions" },
 };
 
+const SECTIONS = [
+  { id: "acceptance", label: "Acceptance of these Terms" },
+  { id: "definitions", label: "Definitions" },
+  { id: "eligibility", label: "Eligibility and use by minors" },
+  { id: "service", label: "Nature of the Service" },
+  { id: "no-advice", label: "No professional advice" },
+  { id: "accuracy", label: "Accuracy of information and tool outputs" },
+  { id: "accounts", label: "Accounts and security" },
+  { id: "licence", label: "Licence to use the Service" },
+  { id: "acceptable-use", label: "Acceptable use" },
+  { id: "automated-access", label: "Automated access" },
+  { id: "submissions", label: "User Submissions" },
+  { id: "public-features", label: "Study map and other public features" },
+  { id: "community", label: "Community Integrations and partners" },
+  { id: "third-party", label: "Third-party services and links" },
+  { id: "payments", label: "Payments and voluntary contributions" },
+  { id: "intellectual-property", label: "Intellectual property and infringement notices" },
+  { id: "availability", label: "Changes to and availability of the Service" },
+  { id: "disclaimers", label: "Disclaimer of warranties" },
+  { id: "liability", label: "Limitation of liability" },
+  { id: "indemnity", label: "Indemnity" },
+  { id: "termination", label: "Suspension and termination" },
+  { id: "disputes", label: "Governing law and dispute resolution" },
+  { id: "force-majeure", label: "Force majeure" },
+  { id: "changes", label: "Changes to these Terms" },
+  { id: "general", label: "General provisions" },
+  { id: "contact", label: "Contact and grievances" },
+] as const;
+
+const email = <a href={`mailto:${COMPLIANCE.privacyEmail}`}>{COMPLIANCE.privacyEmail}</a>;
+
 export default function Terms() {
   return (
-    <PolicyPage
-      title="Terms and conditions"
-      summary="These terms govern the DEETNUTS website, public college information, comparison tools, accounts and related services. Please read them before relying on or using the service."
-    >
-      <section id="agreement">
-        <h2>1. Agreement and scope</h2>
-        <p>These Terms and Conditions form an agreement between you and DEETNUTS concerning your access to and use of deetnuts.com, its subpages, interfaces, accounts, tools and content (collectively, the “Service”). “You” means the individual using the Service and, where that individual acts for an organisation, that organisation.</p>
-        <p>By accessing the Service, creating an account, or selecting a button that states you agree to these terms, you confirm that you have read and accepted them. If you do not agree, do not create an account or use restricted or interactive features. You may still review this document and any page that must remain available for legal or support purposes.</p>
-        <p>The <a href="/compliance/privacy-policy">Privacy Policy</a>, <a href="/compliance/cookie-policy">Cookie Policy</a>, and <a href="/compliance/automated-access">Automated Access Policy</a> are incorporated into these terms where relevant to the activity they describe.</p>
-      </section>
+    <PolicyPage title="Terms and Conditions" contents={SECTIONS}>
+      <Clause sections={SECTIONS} id="acceptance">
+        <p>These Terms and Conditions (the “Terms”) govern your access to and use of the website at deetnuts.com and its subdomains, together with all content, data, tools, application programming interfaces, accounts, community integrations and related services made available by DEETNUTS (collectively, the “Service”).</p>
+        <p>By accessing or using any part of the Service, you agree to be bound by these Terms. If you do not agree to these Terms, you must not access or use the Service.</p>
+        <p>If you access or use the Service on behalf of an organisation, you represent and warrant that you have authority to bind that organisation to these Terms, and references to “you” include that organisation.</p>
+        <p>The <Link href="/compliance/privacy-policy">Privacy Policy</Link>, <Link href="/compliance/cookie-policy">Cookie Policy</Link>, <Link href="/compliance/automated-access">Automated Access Policy</Link> and <Link href="/compliance/data-sources-and-licensing">Data Sources and Methodology</Link> are incorporated into and form part of these Terms. In the event of a conflict concerning the processing of personal data, the Privacy Policy prevails.</p>
+        <p>This document is an electronic record within the meaning of the Information Technology Act, 2000 and the rules made under it. It is generated by a computer system and does not require a physical or digital signature.</p>
+      </Clause>
 
-      <section id="service">
-        <h2>2. What DEETNUTS provides</h2>
-        <p>DEETNUTS is an independent educational-information service. Public cutoff pages and their published facts are open to everyone without requiring an account. The Service organises college, programme, counselling, seat-pool, opening-rank and closing-rank information and may provide historical comparisons or candidate-specific filtering.</p>
-        <p>DEETNUTS is not JoSAA, CSAB, NTA, CET Cell Maharashtra, a university, a college, an examination authority, a counselling authority or a government body. References to those organisations identify the relevant examination, institution or source; they do not imply affiliation, approval, sponsorship or endorsement.</p>
-        <div className="policy-callout"><p><strong>Admission decisions must be verified officially.</strong> The Service is a research aid, not an admission offer, eligibility certificate, counselling allocation, legal opinion or professional educational advice.</p></div>
-      </section>
-
-      <section id="eligibility">
-        <h2>3. Eligibility and users under 18</h2>
-        <p>You must be capable of entering a binding agreement under applicable law. If you are under 18, use account features, personalised comparisons, support channels and optional analytics only with the involvement and permission of a parent or lawful guardian. A parent or guardian who permits such use accepts responsibility for supervising it.</p>
-        <p>Do not submit identity documents, passwords, application credentials, payment-card information, medical records or other information that the Service does not expressly request. DEETNUTS may suspend an account or remove submitted material when reasonably necessary to protect a child, another person or the Service.</p>
-      </section>
-
-      <section id="information">
-        <h2>4. College data, cutoffs and comparisons</h2>
-        <h3>Historical information</h3>
-        <p>Cutoffs describe past published counselling outcomes. They do not predict future demand, establish eligibility, reserve a seat, show real-time vacancy, or guarantee admission at any rank, percentile, category or preference. Rules, seat matrices, rank lists, programme names, quotas and counselling rounds can change between releases and years.</p>
-        <h3>Data quality</h3>
-        <p>DEETNUTS applies validation, lineage and checksum controls, but source publications and processing can still contain omissions, formatting irregularities or errors. A page marked “available through Round N” is partial. Missing rounds remain missing; they are not estimated. Where the Service conflicts with an applicable official notice or portal, use the official information.</p>
-        <h3>Candidate-specific tools</h3>
-        <p>Fit, predictor and filtering tools compare the values you submit with historical records under stated assumptions. They are not probabilistic guarantees unless expressly labelled as such, and they do not account for every rule, document, tie-break, preference order or change in counselling procedure. You remain responsible for checking current eligibility rules and submitting applications correctly and on time.</p>
-      </section>
-
-      <section id="accounts">
-        <h2>5. Accounts and authentication</h2>
-        <p>Some features may require an account authenticated with Google or an existing email and password. Account records are maintained in the self-hosted DEETNUTS PocketBase service. You must provide accurate account information, keep access to your Google account and password secure, and promptly notify <a href={`mailto:${COMPLIANCE.privacyEmail}`}>{COMPLIANCE.privacyEmail}</a> if you suspect unauthorised access. Do not share an authenticated session or use another person’s account without authority.</p>
-        <p>You may stop using an account at any time and request deletion through the privacy contact. Signing out ends the local authenticated session addressed by that action; it may not erase the account or records that must be retained for security, dispute handling or legal compliance. Account processing is described in the Privacy Policy.</p>
-      </section>
-
-      <section id="acceptable-use">
-        <h2>6. Acceptable use</h2>
-        <p>You may browse, link to and make ordinary use of public pages. Respectful automated retrieval of public HTML is permitted when it follows robots.txt and the Automated Access Policy. In using the Service, you must not:</p>
+      <Clause sections={SECTIONS} id="definitions">
+        <p>In these Terms, unless the context requires otherwise:</p>
         <ul>
-          <li>break any applicable law, court order, contractual restriction or third-party privacy obligation;</li>
-          <li>bypass authentication, access controls, rate limits, robots instructions, security measures or technical restrictions;</li>
-          <li>probe, scan or test vulnerabilities without prior written authorisation, or introduce malware, destructive code or abusive traffic;</li>
-          <li>interfere with availability, overload infrastructure, repeatedly request unchanged resources, or ignore a 429 response or <code>Retry-After</code> instruction;</li>
-          <li>collect personal information from users, attempt to identify anonymous visitors, or expose another person’s credentials or confidential information without authority;</li>
-          <li>misrepresent DEETNUTS output as an official result, fabricate an affiliation, remove material context, or use the Service to deceive applicants;</li>
-          <li>use an automated output as the sole basis for a decision that materially affects a person; or</li>
-          <li>assist another person in doing any of the above.</li>
+          <li><strong>“DEETNUTS”, “we”, “us” and “our”</strong> refer to the operator of the Service, together with its maintainers acting on its behalf.</li>
+          <li><strong>“Account”</strong> means a registered user account on the Service.</li>
+          <li><strong>“Content”</strong> means all text, data, tables, charts, images, software, code and other material made available through the Service.</li>
+          <li><strong>“Official Sources”</strong> means examination authorities, counselling authorities, government bodies, universities and institutions, and their official publications, notices and portals, including the Joint Seat Allocation Authority (JoSAA), the Central Seat Allocation Board (CSAB), the National Testing Agency (NTA) and the State Common Entrance Test Cell, Maharashtra.</li>
+          <li><strong>“User Submissions”</strong> means any information or material that you provide to the Service, including account details, candidate profile values, study-session details, messages, correction requests and feedback.</li>
+          <li><strong>“Community Integrations”</strong> means features of the Service that operate on third-party platforms, including the DEETNUTS applications for Discord and Reddit.</li>
+          <li><strong>“Applicable Law”</strong> means all laws, rules, regulations and binding orders that apply to you, to DEETNUTS or to the relevant activity.</li>
         </ul>
-        <p>We may use proportionate technical measures to protect the Service and may restrict abusive clients. If a legitimate crawler is blocked, use the contact in the Automated Access Policy.</p>
-      </section>
+      </Clause>
 
-      <section id="submissions">
-        <h2>7. Information you submit</h2>
-        <p>You retain responsibility for names, avatars, messages, correction evidence and other material you choose to submit. You confirm that you may submit it and that it is accurate, lawful, non-malicious and does not expose another person’s confidential or personal information without authority.</p>
-        <p>You permit DEETNUTS and its service providers to host, copy, transmit, resize and otherwise process submitted material only as reasonably necessary to operate, secure and support the requested feature. This permission ends when the material is deleted from active systems, subject to reasonable backup, security and legal-retention periods.</p>
-      </section>
+      <Clause sections={SECTIONS} id="eligibility">
+        <p>You may use the Service only if you are legally capable of entering into a binding contract under Applicable Law, or if your use is authorised and supervised in accordance with this section.</p>
+        <p>If you are under 18 years of age, you may view public pages of the Service. You may create an Account, save or submit a candidate profile, participate in the study map, contact us with personal information or make any payment only with the consent and under the supervision of a parent or lawful guardian. By permitting such use, the parent or lawful guardian agrees to these Terms on your behalf and accepts responsibility for your use of the Service.</p>
+        <p>We may request confirmation that such consent has been given. We may suspend features, close an Account or delete personal data where we have reason to believe that required consent was not obtained, subject to any retention required by Applicable Law.</p>
+      </Clause>
 
-      <section id="contributions">
-        <h2>8. Voluntary contributions</h2>
-        <p>A contribution is voluntary support for the project. It does not purchase admission assistance, preferential treatment, guaranteed uptime, a seat, a prediction or access to otherwise public cutoff facts. Checkout is provided on an external payment page. Do not send card or bank details to DEETNUTS by email or through cutoff fields.</p>
-        <p>The checkout provider’s displayed terms, privacy notice, price, currency, tax treatment and transaction process apply on its page. For a billing error, include the transaction reference—but never a full card number or security code—in a message to the checkout provider and <a href={`mailto:${COMPLIANCE.privacyEmail}`}>{COMPLIANCE.privacyEmail}</a>.</p>
-      </section>
+      <Clause sections={SECTIONS} id="service">
+        <p>DEETNUTS is an independent educational information service. The Service compiles, organises and presents publicly available information concerning colleges, programmes, counselling rounds, seat categories, opening and closing ranks, percentiles and examination schedules, and provides tools to search, filter and compare that information.</p>
+        <p>DEETNUTS is not an examination authority, counselling authority, university, college, government body or admission agent. DEETNUTS is not affiliated with, authorised by, sponsored by or endorsed by any Official Source. Names, marks and logos of institutions and authorities are used solely to identify them and remain the property of their respective owners.</p>
+        <p>DEETNUTS does not accept or process applications, allot or reserve seats, collect counselling or admission fees, or act on your behalf before any authority or institution. Any person who claims to offer admission, seat allotment, a management or institutional quota seat, or any similar service on behalf of DEETNUTS is not authorised by us. Please report any such claim to {email}.</p>
+      </Clause>
 
-      <section id="external-services">
-        <h2>9. External services and links</h2>
-        <p>The Service may link to official portals, GitHub, Discord, X, Google, a payment checkout, or other third-party sites, and may display hosted images or privacy-enhanced YouTube embeds. Those services operate independently and may apply their own terms and privacy practices. A link is provided for convenience or attribution and is not a warranty of the third party’s availability, accuracy or security.</p>
-        <p>Use official portals directly for application submission, fees, deadlines, document upload, choice filling and counselling results. DEETNUTS does not ask for or receive your official admission-portal password.</p>
-      </section>
+      <Clause sections={SECTIONS} id="no-advice">
+        <p>All Content and all outputs of the Service’s tools are provided for general information only. They do not constitute educational counselling, career guidance, legal, financial or any other form of professional advice, and no professional or advisory relationship is created by your use of the Service.</p>
+        <p>Before taking any admission-related action, including registration, choice filling, locking choices, paying fees, submitting or verifying documents, accepting, freezing, floating or sliding a seat, or withdrawing from a process, you must verify all relevant information with the applicable Official Sources.</p>
+        <div className="policy-callout"><p><strong>Official Sources are the only authoritative record</strong> of eligibility, seat availability, cutoffs, schedules and admission outcomes. Where the Service differs from an Official Source, the Official Source prevails.</p></div>
+      </Clause>
 
-      <section id="availability">
-        <h2>10. Changes, corrections and availability</h2>
-        <p>We may correct, update, add, remove, suspend or discontinue data, routes or features when reasonably necessary for accuracy, security, legal compliance, source changes or operation of the Service. We may preserve redirects for changed public routes but do not promise that every historical URL or feature will remain available.</p>
-        <p>Maintenance, network events, provider failures and security incidents may interrupt access. No service-level commitment applies unless DEETNUTS expressly signs a separate written agreement that identifies one.</p>
-      </section>
+      <Clause sections={SECTIONS} id="accuracy">
+        <h3>Historical data</h3>
+        <p>Cutoff, rank and percentile information describes the outcomes of past counselling rounds. It does not predict future cutoffs, establish eligibility, indicate current seat vacancies or guarantee admission at any rank, percentile, category, quota or preference. Rules, seat matrices, programme names, reservation policies and counselling procedures may change between rounds and years.</p>
+        <h3>Sources and processing</h3>
+        <p>The Service compiles information from Official Sources and other publicly available documents using automated and manual processes. Source documents may themselves contain errors, and extraction, transformation and presentation may introduce omissions, misclassifications or other errors despite the validation controls described in the <Link href="/compliance/data-sources-and-licensing">Data Sources and Methodology</Link>. Information may be incomplete, delayed or superseded. Data for a counselling cycle that is still in progress is identified as partial, and missing rounds are not estimated.</p>
+        <h3>Predictors, comparisons and estimates</h3>
+        <p>Predictor, comparison, fit and filtering tools apply defined rules or statistical methods to historical data and to the values that you enter. Their outputs are estimates. They depend on the accuracy of your inputs and on assumptions that may not hold, and they do not account for every reservation rule, tie-breaking rule, document requirement, preference order or procedural change. A description of a college or programme as “likely”, “possible”, “reachable”, “safe” or by any similar term is not a representation that you will be offered or allotted a seat.</p>
+        <h3>Examination dates and countdowns</h3>
+        <p>Examination dates and countdowns are compiled from public announcements and may change without notice. Confirm all dates with the conducting body.</p>
+        <h3>Corrections</h3>
+        <p>We are under no obligation to update the Content, but we may correct, revise or remove any Content at any time without notice. Suspected errors may be reported in accordance with the correction process in the Data Sources and Methodology.</p>
+      </Clause>
 
-      <section id="disclaimers">
-        <h2>11. Disclaimers</h2>
-        <p>To the fullest extent permitted by applicable law, the Service is provided on an “as available” and “as presented” basis. DEETNUTS does not make an express or implied promise that the Service will be uninterrupted, complete, current for your particular counselling event, free from every error, or suitable as the sole basis for an admission, financial or career decision.</p>
-        <p>Nothing in these terms excludes a warranty, remedy or responsibility that applicable law does not permit to be excluded. Statements on the Service do not create a fiduciary, advisory, agency, partnership, employment or professional-client relationship.</p>
-      </section>
-
-      <section id="liability">
-        <h2>12. Limitation of liability</h2>
-        <p>To the fullest extent permitted by applicable law, DEETNUTS and its maintainers will not be liable for indirect, incidental, special, exemplary or consequential loss; loss of opportunity, data, goodwill or expected admission outcome; or loss caused by reliance on stale, incomplete or incorrectly entered information.</p>
-        <p>This limitation does not apply to liability that cannot lawfully be limited, including where applicable liability for fraud, wilful misconduct, or personal injury caused by negligence. Any limitation is to be read down only to the minimum extent necessary to make it enforceable.</p>
-      </section>
-
-      <section id="indemnity">
-        <h2>13. Responsibility for misuse</h2>
-        <p>To the extent permitted by law, if your unlawful misuse of the Service, malicious submission, security attack or material breach of these terms causes a third-party claim against DEETNUTS, you are responsible for the resulting reasonable, documented losses and defence costs. This provision does not apply to losses caused by DEETNUTS or to the extent prohibited by consumer law.</p>
-      </section>
-
-      <section id="enforcement">
-        <h2>14. Suspension and termination</h2>
-        <p>We may suspend or terminate access when reasonably necessary to stop abuse, secure an account, comply with law, investigate a material breach or protect users and infrastructure. Where appropriate and lawful, we may give notice and an opportunity to correct the issue. Provisions that by their nature should continue—such as disclaimers, limitations, dispute terms and obligations arising before termination—survive.</p>
-      </section>
-
-      <section id="law">
-        <h2>15. Governing law and disputes</h2>
-        <p>These terms are governed by the laws of India, without overriding any mandatory protection that applies to you. Before filing a non-urgent claim, please send a clear description and requested resolution to <a href={`mailto:${COMPLIANCE.privacyEmail}`}>{COMPLIANCE.privacyEmail}</a> and allow a reasonable opportunity to respond. Nothing prevents either party from seeking urgent protective relief or using a regulator, consumer forum or other process available under applicable law.</p>
-        <p>Subject to any mandatory consumer forum or statutory venue, disputes will be brought before a court of competent jurisdiction in India. You and DEETNUTS remain free to resolve a dispute by mutual written agreement.</p>
-      </section>
-
-      <section id="general">
-        <h2>16. General provisions</h2>
+      <Clause sections={SECTIONS} id="accounts">
+        <p>Certain features require an Account. An Account may be created through Google sign-in or, where available, with an email address and password. When you create or use an Account, you agree to:</p>
         <ul>
-          <li><strong>Severability.</strong> If a provision is unenforceable, it will be limited or removed only to the necessary extent; the remainder continues.</li>
-          <li><strong>No waiver.</strong> A delay in enforcing a provision is not a waiver.</li>
-          <li><strong>Assignment.</strong> You may not transfer your account or this agreement without consent. DEETNUTS may transfer the Service together with these obligations as part of a genuine reorganisation or transfer of operation, subject to applicable law.</li>
-          <li><strong>Entire agreement.</strong> These terms and the incorporated policies are the agreement about the Service, except for a separately signed agreement.</li>
-          <li><strong>Headings.</strong> Headings aid navigation and do not narrow the text.</li>
+          <li>provide accurate and current information and keep it up to date;</li>
+          <li>maintain only one Account and not create an Account for, or impersonate, another person;</li>
+          <li>keep your credentials, and access to the Google account used for sign-in, secure and confidential;</li>
+          <li>not share, sell or transfer your Account or an authenticated session; and</li>
+          <li>notify us promptly at {email} of any actual or suspected unauthorised access to your Account.</li>
         </ul>
-      </section>
+        <p>You are responsible for all activity that occurs under your Account. To the extent permitted by Applicable Law, DEETNUTS is not liable for any loss arising from your failure to safeguard your credentials.</p>
+        <p>We may refuse registration, require re-authentication, change a display name that violates these Terms, or suspend an Account in accordance with these Terms. You may request deletion of your Account at any time by writing to {email}. Certain records may be retained after deletion as described in the Privacy Policy.</p>
+      </Clause>
 
-      <section id="changes-contact">
-        <h2>17. Changes and contact</h2>
-        <p>Material changes will be posted with a new effective date and, where required, an additional notice or renewed consent. Changes do not retroactively reduce obligations already accrued. Continued use after the stated effective date constitutes acceptance only where that method is lawful and adequate for the change.</p>
-        <p>Questions, security notices, correction requests and legal communications may be sent to <a href={`mailto:${COMPLIANCE.privacyEmail}`}>{COMPLIANCE.privacyEmail}</a>. Include the relevant URL and enough detail to investigate, but do not send passwords, full payment-card numbers, government identity documents or admission-portal credentials.</p>
-      </section>
+      <Clause sections={SECTIONS} id="licence">
+        <p>Subject to your compliance with these Terms, DEETNUTS grants you a limited, non-exclusive, non-transferable, non-sublicensable and revocable licence to access and use the Service for personal, educational and non-commercial purposes.</p>
+        <p>Within that licence, you may:</p>
+        <ul>
+          <li>view, print and link to pages of the Service;</li>
+          <li>quote or reproduce reasonable extracts of the Content, provided that you attribute DEETNUTS, link to the source page and preserve the counselling body, year, round, seat category, programme and source context so that the extract is not misleading; and</li>
+          <li>retrieve public pages by automated means in accordance with the Automated Access Policy.</li>
+        </ul>
+        <p>Except as expressly permitted by these Terms or with our prior written consent, you must not:</p>
+        <ul>
+          <li>copy, mirror, frame or republish the Service, its design, or substantial portions of its original Content in a manner that substitutes for the Service;</li>
+          <li>sell, license, rent or otherwise commercially exploit the Content or access to the Service;</li>
+          <li>remove, obscure or alter any attribution, source reference, copyright notice or other proprietary notice;</li>
+          <li>present the Content as your own work, as an official publication or as endorsed by DEETNUTS or any Official Source; or</li>
+          <li>use the DEETNUTS name, logo or wordmark in a manner likely to cause confusion or to imply affiliation or endorsement.</li>
+        </ul>
+        <p>Source code published in the public DEETNUTS repository is licensed under the <a href="https://github.com/kewonit/deetnuts/blob/main/LICENSE" rel="noopener noreferrer">MIT License</a>. That licence governs the code to which it is applied. It does not grant any right in the DEETNUTS name, logo, wordmark or third-party materials. Credits for incorporated software are listed in the <Link href="/compliance/open-source-notices">Open-Source Notices</Link>.</p>
+        <p>DEETNUTS does not claim ownership of facts published by Official Sources. Our rights extend to the selection, arrangement, presentation and original elements of the Service to the extent protected by Applicable Law. All rights not expressly granted in these Terms are reserved.</p>
+      </Clause>
+
+      <Clause sections={SECTIONS} id="acceptable-use">
+        <p>You must not, and must not attempt to, or assist any other person to:</p>
+        <ul>
+          <li>use the Service in violation of Applicable Law, a court order or the rights of any person;</li>
+          <li>gain unauthorised access to any Account, system, network, database or non-public area of the Service;</li>
+          <li>bypass, disable or interfere with authentication, access controls, rate limits, CAPTCHA, robots instructions or other security or technical measures;</li>
+          <li>probe, scan or test the vulnerability of the Service without our prior written authorisation;</li>
+          <li>upload or transmit malware, malicious code or any material designed to damage, disrupt or gain control of a system;</li>
+          <li>impose an unreasonable or disproportionately large load on the Service, including through denial-of-service activity, excessive concurrent requests or failure to respect a <code>429</code> response or <code>Retry-After</code> instruction;</li>
+          <li>collect, harvest or infer personal data relating to other users, or attempt to identify, track or locate any user of the study map or any other feature;</li>
+          <li>impersonate any person or misrepresent your identity or affiliation, including with DEETNUTS or an Official Source;</li>
+          <li>use the Service or its Content to deceive or defraud applicants or their families, including by presenting outputs as official results or offering paid admission, seat allotment or quota services;</li>
+          <li>submit content that is unlawful, defamatory, obscene, harassing, threatening, hateful, invasive of privacy, infringing of intellectual property, or harmful to minors;</li>
+          <li>reverse engineer, decompile or disassemble any part of the Service that is not published as open source, except to the extent that Applicable Law expressly permits;</li>
+          <li>use the Service to develop, train or benchmark a competing service in breach of these Terms; or</li>
+          <li>use any output of the Service as the sole basis for a decision that materially affects another person.</li>
+        </ul>
+        <p>We may investigate any suspected breach of this section, take technical measures to protect the Service, remove content and report conduct to the appropriate authorities.</p>
+      </Clause>
+
+      <Clause sections={SECTIONS} id="automated-access">
+        <p>Automated retrieval of public pages is permitted only in accordance with <code>robots.txt</code> and the <Link href="/compliance/automated-access">Automated Access Policy</Link>. Interactive application programming interfaces support the website and are not provided as a bulk data service. We may limit, throttle or block any client whose activity degrades the Service, disregards those rules or presents a security risk, with or without notice.</p>
+      </Clause>
+
+      <Clause sections={SECTIONS} id="submissions">
+        <p>You are solely responsible for your User Submissions. You represent and warrant that you have all rights necessary to provide each User Submission, that it is accurate and lawful, and that it does not infringe or violate the rights of any person or disclose another person’s personal or confidential information without authority.</p>
+        <p>You must not submit passwords or one-time codes, admission-portal credentials, government identification numbers or documents, payment-card or bank details, medical records or diagnoses, certificate numbers or any other information that the Service does not expressly request.</p>
+        <p>You retain ownership of your User Submissions. You grant DEETNUTS and its service providers a worldwide, non-exclusive, royalty-free licence to host, store, reproduce, transmit, display and otherwise process your User Submissions solely to the extent reasonably necessary to operate, secure, maintain and improve the Service and to provide the features you request, including public display where a feature is described as public. This licence continues for as long as the User Submission is retained in accordance with the Privacy Policy.</p>
+        <p>If you send us suggestions, ideas or other feedback about the Service, you grant DEETNUTS a perpetual, irrevocable, worldwide, royalty-free right to use that feedback for any purpose without obligation or compensation to you.</p>
+        <p>We are not obliged to monitor User Submissions, but we may review, refuse, edit or remove any User Submission that we reasonably consider to breach these Terms or Applicable Law.</p>
+      </Clause>
+
+      <Clause sections={SECTIONS} id="public-features">
+        <p>The study map on the exam countdown pages is a public feature. When you start a study session, the following details are displayed to other visitors in real time: the selected examination and session, the selected subject, an approximate city and state, an approximate map position, a generated avatar and the elapsed study time. The map position is derived from your network address and deliberately offset from the location reported by the lookup service; it is not your precise location.</p>
+        <p>Do not start a study session if you do not wish these details to be displayed. A session remains visible until you end it or it expires after a period of inactivity. Processing of study-map data is described in the Privacy Policy.</p>
+      </Clause>
+
+      <Clause sections={SECTIONS} id="community">
+        <p>Community Integrations operate on Discord, Reddit and other third-party platforms. Your use of those platforms is governed by their own terms and policies. Commands you issue and the responses posted by DEETNUTS are visible to other members of the relevant community in accordance with that platform’s settings. Responses are subject to the limitations in section 6. We may limit, rate-limit or withdraw a Community Integration in any community at any time.</p>
+        <p>Community partners listed on the Service, including the r/mht_cet community on Reddit, are independently owned and moderated. A partner listing reflects a reciprocal relationship only. DEETNUTS does not control, review or endorse content posted in those communities and is not responsible for it.</p>
+      </Clause>
+
+      <Clause sections={SECTIONS} id="third-party">
+        <p>The Service may contain links to, or embed content from, websites and services operated by third parties, including Official Sources, Google, YouTube, GitHub, Discord, Reddit, X and payment providers. Those websites and services are not under our control. Links and embeds are provided for convenience, attribution or reference only and do not constitute an endorsement or a warranty of the availability, accuracy, security or lawfulness of the third party or its content.</p>
+        <p>Your use of a third-party website or service is at your own risk and is governed by that third party’s terms and privacy practices. Application submission, fee payment, document upload, choice filling and counselling results must be handled directly on the relevant Official Source portal. DEETNUTS will never ask for your admission-portal password.</p>
+      </Clause>
+
+      <Clause sections={SECTIONS} id="payments">
+        <p>Access to the Service is currently free of charge. Where DEETNUTS offers a means to make a voluntary contribution or other payment, the following terms apply:</p>
+        <ul>
+          <li>payments are processed by an independent payment provider on its own page, under its own terms and privacy policy, and DEETNUTS does not receive or store your full card or bank account details;</li>
+          <li>a voluntary contribution supports the operation of the Service and does not purchase any service, feature, priority, guaranteed availability or admission outcome;</li>
+          <li>contributions are non-refundable, except where a refund is required by Applicable Law or where a duplicate or erroneous charge is reported to {email} within thirty (30) days of the transaction; and</li>
+          <li>you must not send payment-card numbers, security codes or banking credentials to DEETNUTS by email or through any form on the Service.</li>
+        </ul>
+      </Clause>
+
+      <Clause sections={SECTIONS} id="intellectual-property">
+        <p>The DEETNUTS name, logo, wordmark and the original design, text, graphics and compilations of the Service are owned by or licensed to DEETNUTS and are protected by applicable intellectual property laws, subject to the open-source licences described in section 8. Third-party names, marks and materials are the property of their respective owners.</p>
+        <p>If you believe that any Content infringes your copyright, trade mark or other rights, send a written notice to {email} containing:</p>
+        <ul>
+          <li>your name, postal address, telephone number and email address;</li>
+          <li>a description of the work or right that you claim has been infringed;</li>
+          <li>the exact URL or other information sufficient to locate the material complained of;</li>
+          <li>a statement that you believe in good faith that the use is not authorised by the rights holder, its agent or the law; and</li>
+          <li>a statement that the information in the notice is accurate and that you are the rights holder or are authorised to act on its behalf.</li>
+        </ul>
+        <p>We will review notices that meet these requirements and take action that we consider appropriate, which may include removing or disabling access to the material. Knowingly submitting a false or misleading notice may expose you to liability.</p>
+      </Clause>
+
+      <Clause sections={SECTIONS} id="availability">
+        <p>We may add, modify, suspend or discontinue any part of the Service, including any data, page, route, tool, Community Integration or feature, at any time and without liability, whether for reasons of accuracy, security, legal compliance, changes to Official Sources or operational need. We may preserve redirects for changed routes but do not undertake that any URL or feature will remain available.</p>
+        <p>Access may be interrupted by maintenance, network failures, provider outages, security incidents or other events. DEETNUTS does not provide any service-level commitment unless agreed in a separate written agreement signed by DEETNUTS.</p>
+      </Clause>
+
+      <Clause sections={SECTIONS} id="disclaimers">
+        <p>To the maximum extent permitted by Applicable Law, the Service and all Content are provided on an “as is” and “as available” basis, without warranties of any kind, whether express, implied or statutory. DEETNUTS disclaims all warranties, including implied warranties of merchantability, fitness for a particular purpose, title, non-infringement, accuracy, completeness and timeliness, and any warranty that the Service will be uninterrupted, secure, free of errors or free of harmful components.</p>
+        <p>DEETNUTS does not warrant that any Content or tool output is accurate, complete or current for any particular counselling round or admission process, or that use of the Service will result in any admission, seat allotment or other outcome. You assume full responsibility for your decisions and for verifying information with Official Sources.</p>
+        <p>Nothing in these Terms excludes any warranty, right or remedy that cannot lawfully be excluded under Applicable Law.</p>
+      </Clause>
+
+      <Clause sections={SECTIONS} id="liability">
+        <p>To the maximum extent permitted by Applicable Law, DEETNUTS and its maintainers, contributors and service providers shall not be liable for any indirect, incidental, special, consequential, exemplary or punitive damages, or for any loss of admission opportunity, seat, scholarship, academic year, fees paid to third parties, profits, revenue, data or goodwill, whether arising in contract, tort (including negligence), statute or otherwise, in connection with:</p>
+        <ul>
+          <li>your access to, use of, or inability to access or use the Service;</li>
+          <li>your reliance on any Content or tool output, or any error, omission or delay in it;</li>
+          <li>any decision taken or not taken in any admission or counselling process;</li>
+          <li>any error in, or change to, information published by an Official Source;</li>
+          <li>unauthorised access to or alteration of your data or transmissions; or</li>
+          <li>the conduct, content or services of any third party, including Community Integration platforms and community partners.</li>
+        </ul>
+        <p>To the maximum extent permitted by Applicable Law, the total aggregate liability of DEETNUTS for all claims arising out of or relating to the Service or these Terms shall not exceed the greater of (a) the total amount you paid to DEETNUTS in the twelve (12) months preceding the event giving rise to the claim and (b) one thousand Indian rupees (INR 1,000).</p>
+        <p>These limitations do not apply to liability that cannot be limited or excluded under Applicable Law, including liability for fraud or for death or personal injury caused by negligence. The Service is provided free of charge, and these limitations reflect a reasonable allocation of risk between you and DEETNUTS.</p>
+      </Clause>
+
+      <Clause sections={SECTIONS} id="indemnity">
+        <p>To the extent permitted by Applicable Law, you agree to indemnify and hold harmless DEETNUTS and its maintainers and contributors from and against any claims, liabilities, damages, losses and reasonable costs, including reasonable legal fees, arising out of or relating to (a) your breach of these Terms, (b) your violation of Applicable Law or the rights of any third party, (c) your User Submissions, or (d) any unauthorised or abusive use of the Service by you or through your Account. This obligation does not apply to the extent that a loss was caused by DEETNUTS.</p>
+      </Clause>
+
+      <Clause sections={SECTIONS} id="termination">
+        <p>You may stop using the Service at any time. We may suspend or terminate your access to all or part of the Service, or close your Account, at any time where we reasonably consider it necessary to address a breach of these Terms, to protect users, the Service or third parties, to investigate suspected misuse, or to comply with Applicable Law or a request from a competent authority. Where appropriate and lawful, we will give notice and an opportunity to remedy the issue.</p>
+        <p>On termination, the licence granted in section 8 ends. Sections 5, 6, 8 (as to restrictions), 11, 16 and 18 to 25, and any other provision that by its nature is intended to survive, survive termination.</p>
+      </Clause>
+
+      <Clause sections={SECTIONS} id="disputes">
+        <p>These Terms and any dispute or claim arising out of or in connection with them or the Service are governed by the laws of India, without regard to conflict-of-law principles.</p>
+        <p>Before commencing any formal proceeding, you agree to send a written notice of the dispute to {email} describing the nature of the claim and the relief sought. The parties will attempt in good faith to resolve the dispute within thirty (30) days of receipt of the notice. This requirement does not prevent either party from seeking urgent interim or injunctive relief.</p>
+        <p>Subject to the preceding paragraph and to any mandatory forum provided by Applicable Law, the courts of competent jurisdiction in India shall have exclusive jurisdiction over any dispute arising out of or in connection with these Terms or the Service.</p>
+        <p>Nothing in these Terms limits any right you have under the Consumer Protection Act, 2019 or other Applicable Law that cannot be waived by agreement.</p>
+      </Clause>
+
+      <Clause sections={SECTIONS} id="force-majeure">
+        <p>DEETNUTS is not liable for any failure or delay in performance caused by events beyond its reasonable control, including natural disasters, epidemics, acts of government, war, terrorism, civil unrest, labour disputes, power or internet failures, failures of hosting, network or other service providers, cyberattacks, and changes in or delays to publications by Official Sources.</p>
+      </Clause>
+
+      <Clause sections={SECTIONS} id="changes">
+        <p>We may amend these Terms from time to time. The amended Terms will be published on this page with a revised effective date and version. Where an amendment is material, we will provide reasonable additional notice, such as a notice on the Service or an email to the address associated with your Account. Amendments take effect on the stated effective date and do not apply retrospectively.</p>
+        <p>Your continued use of the Service after an amendment takes effect constitutes acceptance of the amended Terms. If you do not accept the amended Terms, you must stop using the Service and may request deletion of your Account.</p>
+      </Clause>
+
+      <Clause sections={SECTIONS} id="general">
+        <ul>
+          <li><strong>Entire agreement.</strong> These Terms, together with the documents incorporated by reference, constitute the entire agreement between you and DEETNUTS concerning the Service and supersede any prior agreement or understanding on that subject.</li>
+          <li><strong>Severability.</strong> If any provision of these Terms is held invalid or unenforceable, that provision will be enforced to the maximum extent permissible and the remaining provisions will continue in full force and effect.</li>
+          <li><strong>No waiver.</strong> A failure or delay in exercising any right under these Terms does not operate as a waiver of that right.</li>
+          <li><strong>Assignment.</strong> You may not assign or transfer your rights or obligations under these Terms without our prior written consent. DEETNUTS may assign or transfer its rights and obligations in connection with a reorganisation or a transfer of the operation of the Service, subject to Applicable Law.</li>
+          <li><strong>No third-party beneficiaries.</strong> These Terms do not confer any rights on any person other than you and DEETNUTS.</li>
+          <li><strong>Relationship.</strong> Nothing in these Terms creates any partnership, agency, employment, fiduciary or joint-venture relationship between you and DEETNUTS.</li>
+          <li><strong>Notices.</strong> We may give notice to you by email to the address associated with your Account or by publication on the Service. You must give notice to us by email to {email}.</li>
+          <li><strong>Interpretation.</strong> Headings are for convenience only and do not affect interpretation. The words “including” and “include” mean “including without limitation”.</li>
+          <li><strong>Language.</strong> These Terms are written in English. If a translation is provided, the English version prevails in the event of any inconsistency.</li>
+        </ul>
+      </Clause>
+
+      <Clause sections={SECTIONS} id="contact">
+        <p>Questions about these Terms, legal notices, security reports and correction requests may be sent to {email}.</p>
+        <p>Grievances concerning the Service, its Content or the processing of personal data may be addressed to the Grievance Officer at {email} with the subject line “Grievance”. We aim to acknowledge a grievance within seven (7) days and to resolve it within thirty (30) days of receipt, or within any shorter period required by Applicable Law.</p>
+        <p>Please include the relevant URL and sufficient detail for us to investigate. Do not include passwords, one-time codes, full payment-card numbers, government identification documents or admission-portal credentials in any message.</p>
+      </Clause>
     </PolicyPage>
   );
 }
