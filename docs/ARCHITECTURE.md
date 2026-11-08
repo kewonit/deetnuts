@@ -26,7 +26,7 @@ The live runtime uses PocketBase directly. Supabase remains only as the read-onl
                                                v
                                      +--------------------+
                                      | PocketBase SDK     |
-                                     | batch ingestion    |
+                                     | via SSH tunnel     |
                                      +---------+----------+
                                                |
                                                v
@@ -53,7 +53,7 @@ The live runtime uses PocketBase directly. Supabase remains only as the read-onl
 
 | Layer              | Current Choice          | Notes                                                 |
 | ------------------ | ----------------------- | ----------------------------------------------------- |
-| Framework          | Next.js 16.2.12         | App Router, standalone output                         |
+| Framework          | Next.js 16.3.8          | App Router, standalone output                         |
 | UI runtime         | React 19.2.8            | React Compiler enabled                                |
 | Language           | TypeScript              | Used across app and scripts                           |
 | Styling            | Tailwind CSS            | Shared UI primitives plus project-specific components |
@@ -150,7 +150,7 @@ Imported data collections allow only the dedicated `app_services` backend role. 
 - `Dockerfile` builds a standalone Next.js server with a BuildKit-mounted Server Actions key and runs it as a non-root user.
 - `docker-compose.yml` defines blue and green web slots, an unprivileged Nginx origin, bounded resources and read-only filesystems.
 - Only the active web slot and Nginx restart after a host reboot. The inactive slot remains available only during a deployment or rollback window.
-- GHCR images are private, addressed by digest, scanned and attested before the restricted host deployment command accepts them.
+- GHCR images are private and deployed by digest. The restricted host deployment command accepts only `ghcr.io/kewonit/deetnuts-web@sha256:` and `ghcr.io/kewonit/deetnuts-pocketbase@sha256:` references.
 
 ### Availability Boundary
 
@@ -179,14 +179,21 @@ Route request
         -> protected query or redirect/error path
 ```
 
-### Batch Ingestion
+### Ingestion
 
 ```text
-CSV file
-  -> scripts/*.ts parser
-    -> compatibility wrapper batch builder
-      -> PocketBase inserts / upserts / deletes
-        -> operational logs and validation output
+Official CAP allotment PDFs (2026)
+  -> scripts/scrape_mahacet_allotments.py
+    -> CSVs + SHA-256 manifests (PDFs purged)
+      -> scripts/import-mahacet-2026-cap-rounds.ts
+        -> PocketBase over the admin SSH tunnel, record by record
+
+Pre-2026 datasets
+  -> one-time Supabase migration (scripts/migrate-supabase-to-pocketbase.ts)
+
+CSV reloads
+  -> scripts/batch-upload-*.ts
+    -> PocketBase batch API (disabled in production)
 ```
 
 ## Known Maintenance Hotspots
@@ -194,6 +201,6 @@ CSV file
 - Some npm aliases in `package.json` still point to files that are no longer present in `scripts/`.
 - Supabase credentials are migration-source inputs only and are rejected by runtime environment validation.
 - The all-India cutoff UI and the all-India API surface are not perfectly aligned at the moment.
-- One older seat-matrix helper still uses a shortened table name.
+- The `scripts/batch-upload-*.ts` utilities use the PocketBase batch API, which production keeps disabled. Re-enable it for the load or write record by record as the 2026 importer does.
 
 These do not block the current application runtime, but they are the places most likely to cause confusion during maintenance.

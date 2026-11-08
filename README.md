@@ -136,7 +136,7 @@ sequenceDiagram
 
 ## Data ingestion
 
-MHT-CET 2026 cutoffs are derived from the official per-institute CAP allotment PDFs. Earlier years were loaded from CSV with the `scripts/batch-upload-*.ts` utilities.
+MHT-CET 2026 cutoffs are derived from the official per-institute CAP allotment PDFs. Earlier datasets came from the original Supabase project through the one-time migration in `scripts/migrate-supabase-to-pocketbase.ts`.
 
 ```mermaid
 sequenceDiagram
