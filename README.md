@@ -21,7 +21,7 @@ Live at **[www.deetnuts.com](https://www.deetnuts.com)**.
 | Area                      | Routes                                                                          | Data                                                                                          |
 | ------------------------- | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
 | MHT-CET state cutoffs     | `/mht-cet/state-cutoffs`, `/mht-cet/all-state-cutoffs/[year]/[round]`           | PocketBase. 2024 rounds 1-3, 2025 rounds 1-4, 2026 rounds 1-4                                 |
-| MHT-CET All-India cutoffs | `/mht-cet/all-india-cutoffs`                                                    | PocketBase. 2024 rounds 1-3 via API (UI shows round 1). 2026 rounds 1-4 loaded, not yet in UI |
+| MHT-CET All-India cutoffs | `/mht-cet/all-india-cutoffs?year=[year]&round=[round]`                          | PocketBase. 2026 rounds 1-4, 2024 rounds 1-3                                                  |
 | MHT-CET colleges          | `/mht-cet/colleges`, `/mht-cet/colleges/[slug]`                                 | PocketBase. 2024 college master and seat matrix                                               |
 | JEE cutoffs               | `/jee-main/colleges/...`, `/jee-advanced/colleges/...`, `/josaa/institutes/...` | eJAM Parquet release (JoSAA, CSAB), bundled in the image                                      |
 | College predictor         | `/college-predictor`, `/api/predict/[exam_id]`                                  | eJAM predictors for JEE Main, JEE Advanced, MHT-CET                                           |
@@ -64,7 +64,7 @@ flowchart LR
 
 | Layer     | Choice                                                                        |
 | --------- | ----------------------------------------------------------------------------- |
-| Framework | Next.js 16.3 (App Router, standalone output, React Compiler)                  |
+| Framework | Next.js 16.4 (App Router, standalone output, React Compiler)                  |
 | UI        | React 19.2, Tailwind CSS 3.4, TypeScript 5.9                                  |
 | Data/auth | PocketBase 0.40 (SQLite), JS SDK 0.28                                         |
 | JEE data  | eJAM workspace (`ejam/`), Parquet verified against a pinned SHA-256 manifest |

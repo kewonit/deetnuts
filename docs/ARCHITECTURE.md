@@ -53,7 +53,7 @@ The live runtime uses PocketBase directly. Supabase remains only as the read-onl
 
 | Layer              | Current Choice          | Notes                                                 |
 | ------------------ | ----------------------- | ----------------------------------------------------- |
-| Framework          | Next.js 16.3.8          | App Router, standalone output                         |
+| Framework          | Next.js 16.4.5          | App Router, standalone output                         |
 | UI runtime         | React 19.2.8            | React Compiler enabled                                |
 | Language           | TypeScript              | Used across app and scripts                           |
 | Styling            | Tailwind CSS            | Shared UI primitives plus project-specific components |
@@ -100,7 +100,7 @@ Current tables referenced by code:
 - `2026_mht_cet_round_three_cutoffs`
 - `2026_mht_cet_round_four_cutoffs`
 
-The state-cutoff UI is year-aware. It exposes rounds 1-3 for 2024, and rounds 1-4 for both 2025 and 2026. The 2026 rounds are derived from the official per-institute CAP allotment PDFs by `scripts/scrape_mahacet_allotments.py` and loaded by `scripts/import-mahacet-2026-cap-rounds.ts`, which also loads All-India cutoffs into `2026_all_india_rounds_one` through `2026_all_india_rounds_four` (not yet shown in the UI). Candidate-profile filtering maps candidature, home-university, category, ladies, and supported special-reservation eligibility to the source seat pools before querying cutoff rows.
+The state-cutoff UI is year-aware. It exposes rounds 1-3 for 2024, and rounds 1-4 for both 2025 and 2026. The 2026 rounds are derived from the official per-institute CAP allotment PDFs by `scripts/scrape_mahacet_allotments.py` and loaded by `scripts/import-mahacet-2026-cap-rounds.ts`, which also loads All-India cutoffs into `2026_all_india_rounds_one` through `2026_all_india_rounds_four`. Candidate-profile filtering maps candidature, home-university, category, ladies, and supported special-reservation eligibility to the source seat pools before querying cutoff rows.
 
 ### MHT-CET College and Seat Data
 
@@ -115,11 +115,10 @@ The application uses the full `2024_mht_cet_colleges_seat_matrix` table name for
 
 Primary tables:
 
-- `2024_all_india_rounds_one`
-- `2024_all_india_rounds_two`
-- `2024_all_india_rounds_three`
+- `2026_all_india_rounds_one` through `2026_all_india_rounds_four`
+- `2024_all_india_rounds_one` through `2024_all_india_rounds_three`
 
-The API surface supports all three rounds. The checked-in `app/mht-cet/all-india-cutoffs/page.tsx` currently renders one visible round tab. The other rounds are available through the API handlers.
+`lib/mht-cet/all-india/config.ts` maps each year and round to its collection; add a round there to publish it. The page and `GET /api/mht-cet/all-india-cutoffs?year=&round=` share `lib/mht-cet/all-india/query.ts`: the page renders the first result page on the server, and the API serves later filters, sorting, and pages with public edge caching. Unknown years or rounds fall back to the latest year and round 1. See [app/mht-cet/all-india-cutoffs/README.md](../app/mht-cet/all-india-cutoffs/README.md).
 
 ## Auth and Data Access Boundaries
 
@@ -200,7 +199,6 @@ CSV reloads
 
 - Some npm aliases in `package.json` still point to files that are no longer present in `scripts/`.
 - Supabase credentials are migration-source inputs only and are rejected by runtime environment validation.
-- The all-India cutoff UI and the all-India API surface are not perfectly aligned at the moment.
 - The `scripts/batch-upload-*.ts` utilities use the PocketBase batch API, which production keeps disabled. Re-enable it for the load or write record by record as the 2026 importer does.
 
 These do not block the current application runtime, but they are the places most likely to cause confusion during maintenance.
