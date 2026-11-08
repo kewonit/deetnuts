@@ -3,11 +3,9 @@ import Link from "next/link";
 import MhtCollegeDirectory, {
   type MhtDirectoryCollege,
 } from "@/components/admissions/MhtCollegeDirectory";
-import { getCollegesData } from "@/lib/college-data";
 import { getMhtCetCollegeMedia } from "@/lib/admissions/college-media";
+import { getMhtCetDirectory } from "@/lib/admissions/mht-cet-directory";
 import { getMhtCetCollegePeaks } from "@/lib/admissions/mht-cet-peers";
-import { getCanonicalMhtCetCollegePath } from "@/lib/admissions/proxy-canonical";
-import { getMhtCetCollegePath } from "@/lib/admissions/canonical";
 import "@/components/admissions/mht-directory.css";
 
 export const metadata: Metadata = {
@@ -17,6 +15,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/mht-cet/colleges" },
 };
 
+// Top cutoffs come from PocketBase (cached), which the build cannot reach; the
+// page is identical for every visitor, so it is cached at the edge instead.
 export const dynamic = "force-dynamic";
 
 export default async function CollegesPage({
@@ -24,25 +24,22 @@ export default async function CollegesPage({
 }: {
   searchParams: Promise<{ q?: string | string[] }>;
 }) {
-  const [colleges, peaks, { q }] = await Promise.all([
-    getCollegesData(),
-    getMhtCetCollegePeaks(),
+  const [peaks, { q }] = await Promise.all([
+    getMhtCetCollegePeaks().catch(() => []),
     searchParams,
   ]);
   const peakByCode = new Map(peaks.map((peak) => [peak.collegeId, peak]));
-  const rows: MhtDirectoryCollege[] = colleges.map((college) => {
-    const id = String(Number(college.college_id));
+  // Every college in the current CAP year, as named and classified in its lists.
+  const rows: MhtDirectoryCollege[] = getMhtCetDirectory().map((college) => {
+    const id = String(Number(college.code));
     const logo = getMhtCetCollegeMedia(id)?.logo;
     const peak = peakByCode.get(id);
     return {
-      code: id.padStart(5, "0"),
-      // The current CAP list spells names as the college pages do; the 2024 directory title-cases them.
-      name: peak?.name || college.college_name.trim(),
-      path:
-        getCanonicalMhtCetCollegePath(id) ??
-        getMhtCetCollegePath(college.college_name, college.college_id),
-      university: college.home_university?.trim() ?? "",
-      status: college.status?.trim() ?? "",
+      code: college.code,
+      name: college.name,
+      path: college.path,
+      university: college.homeUniversity,
+      status: college.status,
       logo: logo ? { src: logo.src, background: logo.backgroundColor } : null,
       top: peak ? { percentile: peak.percentile, program: peak.program } : null,
     };

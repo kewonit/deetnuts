@@ -1,86 +1,91 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useCallback, useDeferredValue, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { SortingState } from "@tanstack/react-table";
+import type { SortingState } from "@tanstack/react-table";
+import MhtPill from "@/components/admissions/MhtPill";
 import { MhtPagination } from "@/components/admissions/MhtPagination";
+import { ALL_INDIA_ROUNDS_BY_YEAR, ALL_INDIA_YEARS } from "@/lib/mht-cet/all-india/config";
 import { DataTable } from "./data-table";
-import { EMPTY_FILTERS, Filters } from "./filters";
+import { Filters } from "./filters";
+import { DEFAULT_SORTING, EMPTY_FILTERS, type AllIndiaInitialPage } from "./query";
 import { useAllIndiaCutoffs } from "./use-all-india-cutoffs";
-import { FilterState, RoundType } from "./types";
+import type { FilterState } from "./types";
 import "@/components/admissions/mht-tool.css";
 
-// Only the 2024 Round 1 list is published.
-const ROUND: RoundType = "round-one";
 const PER_PAGE = 50;
+const FILTER_DEBOUNCE_MS = 300;
 
-export default function AllIndiaCutoffs({ collegeNames }: { collegeNames: Record<string, string> }) {
+function useDebounced<T>(value: T, delay: number): T {
+  const [debounced, setDebounced] = useState(value);
+  useEffect(() => {
+    const timer = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(timer);
+  }, [value, delay]);
+  return debounced;
+}
+
+export default function AllIndiaCutoffs({
+  initialYear,
+  initialRound,
+  initial,
+}: {
+  initialYear: number;
+  initialRound: number;
+  initial: AllIndiaInitialPage | null;
+}) {
+  const [year, setYear] = useState(initialYear);
+  const [round, setRound] = useState(initialRound);
   const [filters, setFilters] = useState<FilterState>(EMPTY_FILTERS);
-  const [sorting, setSorting] = useState<SortingState>([{ id: "rank", desc: false }]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [sorting, setSorting] = useState<SortingState>(DEFAULT_SORTING);
+  const [page, setPage] = useState(1);
   const tableRef = useRef<HTMLDivElement>(null);
 
-  const { data, pagination, loading, error, refetch } = useAllIndiaCutoffs({
-    round: ROUND,
-    filters,
-    sorting,
-    page: currentPage,
-    perPage: PER_PAGE,
-  });
+  // Typing settles before a request; selections apply at once.
+  const debouncedFilters = useDeferredValue(useDebounced(filters, FILTER_DEBOUNCE_MS));
+  const { data, pagination, loading, error, refetch } = useAllIndiaCutoffs(
+    { year, round, filters: debouncedFilters, sorting, page, perPage: PER_PAGE },
+    initial,
+  );
 
-  const isInitialMount = useRef(true);
-  const currentPageRef = useRef(currentPage);
-
+  // A new filter starts from the first page.
+  const filtersKey = JSON.stringify(debouncedFilters);
+  const lastFiltersKey = useRef(filtersKey);
   useEffect(() => {
-    currentPageRef.current = currentPage;
-  }, [currentPage]);
+    if (lastFiltersKey.current === filtersKey) return;
+    lastFiltersKey.current = filtersKey;
+    setPage(1);
+  }, [filtersKey]);
 
-  // Page and sort changes fetch immediately.
+  // Keep the year and round in the address so a reload or shared link opens the same list.
   useEffect(() => {
-    // The filter effect below handles the first fetch.
-    if (isInitialMount.current) {
-      return;
-    }
-    refetch();
-  }, [currentPage, sorting, refetch]);
+    const url = new URL(window.location.href);
+    url.searchParams.set("year", String(year));
+    url.searchParams.set("round", String(round));
+    window.history.replaceState(window.history.state, "", url);
+  }, [year, round]);
 
-  // Filter changes fetch after a pause and always return to page 1.
-  useEffect(() => {
-    const debounceTimer = setTimeout(() => {
-      if (currentPageRef.current !== 1) {
-        setCurrentPage(1);
-      } else {
-        refetch();
-      }
-    }, 500);
+  const rounds = ALL_INDIA_ROUNDS_BY_YEAR[year] ?? [1];
 
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-    }
+  const changeYear = useCallback((value: number) => {
+    setYear(value);
+    setRound((current) => ((ALL_INDIA_ROUNDS_BY_YEAR[value] ?? [1]).includes(current) ? current : 1));
+    setPage(1);
+  }, []);
 
-    return () => clearTimeout(debounceTimer);
-  }, [filters, refetch]);
-
-  const handleSearch = useCallback(() => {
-    if (currentPage !== 1) {
-      setCurrentPage(1);
-    } else {
-      refetch();
-    }
-  }, [currentPage, refetch]);
-
-  const handlePageChange = useCallback((page: number) => {
-    setCurrentPage(page);
+  const handlePageChange = useCallback((next: number) => {
+    setPage(next);
     const top = tableRef.current?.getBoundingClientRect().top ?? 0;
     if (top < 0) tableRef.current?.scrollIntoView({ block: "start" });
   }, []);
 
-  const handleSortChange = useCallback((newSorting: SortingState) => {
-    setSorting(newSorting);
-    setCurrentPage(1);
+  const handleSortChange = useCallback((next: SortingState) => {
+    setSorting(next);
+    setPage(1);
   }, []);
 
   const hasFilters = Object.values(filters).some((value) => value.length > 0);
+  const showAdmitted = data.some((row) => row.total_admitted !== null);
 
   return (
     <main className="mht-main">
@@ -92,16 +97,29 @@ export default function AllIndiaCutoffs({ collegeNames }: { collegeNames: Record
         </nav>
         <div className="mht-head">
           <h1 className="mht-h1">All India cutoffs</h1>
-          <p className="mht-head-facts">
-            <span className="mht-chip">2024</span>
-            <span className="mht-chip">Round 1</span>
-          </p>
+          <div className="mht-year-round">
+            <MhtPill
+              label="Year"
+              value={String(year)}
+              options={ALL_INDIA_YEARS.map((value) => ({ value: String(value), label: String(value) }))}
+              onChange={(value) => changeYear(Number(value))}
+            />
+            <MhtPill
+              label="Round"
+              value={String(round)}
+              options={rounds.map((value) => ({ value: String(value), label: String(value) }))}
+              onChange={(value) => {
+                setRound(Number(value));
+                setPage(1);
+              }}
+            />
+          </div>
         </div>
 
-        <Filters filters={filters} onFiltersChange={setFilters} onSearch={handleSearch} />
+        <Filters filters={filters} onFiltersChange={setFilters} onSearch={refetch} />
 
         <div ref={tableRef} className="mht-card mht-data-card">
-          {error ? (
+          {error && data.length === 0 ? (
             <div className="mht-data-state" role="alert">
               <span>Couldn’t load cutoffs.</span>
               <button type="button" className="mht-btn mht-btn-sm" onClick={refetch}>
@@ -123,14 +141,15 @@ export default function AllIndiaCutoffs({ collegeNames }: { collegeNames: Record
               loading={loading}
               sorting={sorting}
               onSortChange={handleSortChange}
-              collegeNames={collegeNames}
+              showAdmitted={showAdmitted}
+              skeletonRows={PER_PAGE}
             />
           )}
         </div>
 
-        {pagination.totalItems > 0 && !error ? (
+        {pagination.totalItems > 0 ? (
           <MhtPagination
-            page={currentPage}
+            page={page}
             perPage={PER_PAGE}
             totalItems={pagination.totalItems}
             onPageChange={handlePageChange}

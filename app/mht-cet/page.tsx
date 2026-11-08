@@ -1,10 +1,12 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import FAQJsonLd, { MHTCET_FAQS } from "@/components/FAQJsonLd";
-import { getCollegesData } from "@/lib/college-data";
+import { IntentPrefetchLink } from "@/components/admissions/IntentPrefetchLink";
+import { getMhtCetDirectory, MHT_CET_DIRECTORY_SOURCE } from "@/lib/admissions/mht-cet-directory";
 import { getMhtCetCollegePeaks } from "@/lib/admissions/mht-cet-peers";
 import { formatPercentile } from "@/lib/admissions/mht-cet-college-summary";
-import { DEFAULT_ROUND, DEFAULT_YEAR } from "@/lib/mht-cet/state-cutoffs/config";
+import { ALL_INDIA_ROUNDS_BY_YEAR } from "@/lib/mht-cet/all-india/config";
+import { DEFAULT_YEAR, ROUNDS_BY_YEAR } from "@/lib/mht-cet/state-cutoffs/config";
 import { PRODUCTION_SITE_URL } from "@/lib/site-url";
 import "@/components/admissions/mht-directory.css";
 
@@ -36,26 +38,44 @@ export const metadata: Metadata = {
   },
 };
 
-// Both data sources are cached; rendering per request keeps the build off PocketBase.
+// Top cutoffs come from PocketBase (cached), which the build cannot reach; the
+// page is identical for every visitor, so it is cached at the edge instead.
 export const dynamic = "force-dynamic";
+
+function roundsLabel(year: number, rounds: readonly number[] | undefined) {
+  if (!rounds || rounds.length === 0) return String(year);
+  const first = rounds[0];
+  const last = rounds[rounds.length - 1];
+  return first === last ? `${year} · Round ${first}` : `${year} · Rounds ${first}–${last}`;
+}
 
 const TOP_COUNT = 10;
 
 export default async function Home() {
-  const [colleges, peaks] = await Promise.all([
-    getCollegesData().catch(() => []),
-    getMhtCetCollegePeaks(),
-  ]);
+  const colleges = getMhtCetDirectory();
+  const peaks = await getMhtCetCollegePeaks();
+  const allIndiaYear = Math.max(...Object.keys(ALL_INDIA_ROUNDS_BY_YEAR).map(Number));
   const top = [...peaks]
     .sort((a, b) => b.percentile - a.percentile || a.name.localeCompare(b.name, "en-IN"))
     .slice(0, TOP_COUNT);
   const tiles = [
-    { href: "/mht-cet/state-cutoffs", title: "State cutoffs", fact: `${DEFAULT_YEAR} · Round ${DEFAULT_ROUND}` },
-    { href: "/mht-cet/all-india-cutoffs", title: "All India cutoffs", fact: "2024 · Round 1" },
+    {
+      href: "/mht-cet/state-cutoffs",
+      title: "State cutoffs",
+      fact: roundsLabel(DEFAULT_YEAR, ROUNDS_BY_YEAR[DEFAULT_YEAR]),
+    },
+    {
+      href: "/mht-cet/all-india-cutoffs",
+      title: "All India cutoffs",
+      fact: roundsLabel(allIndiaYear, ALL_INDIA_ROUNDS_BY_YEAR[allIndiaYear]),
+    },
     {
       href: "/mht-cet/colleges",
       title: "Colleges",
-      fact: colleges.length > 0 ? colleges.length.toLocaleString("en-IN") : "Maharashtra",
+      fact:
+        colleges.length > 0
+          ? `${MHT_CET_DIRECTORY_SOURCE.mhtCetYear} · ${colleges.length.toLocaleString("en-IN")}`
+          : "Maharashtra",
     },
   ];
 
@@ -101,14 +121,14 @@ export default async function Home() {
             <ol className="mht-card mht-rank-list">
               {top.map((college, index) => (
                 <li key={college.collegeId}>
-                  <Link href={college.path}>
+                  <IntentPrefetchLink href={college.path}>
                     <span className="mht-rank-n">{index + 1}</span>
                     <span>
                       <strong>{college.name}</strong>
                       <small>{college.program}</small>
                     </span>
                     <span className="mht-rank-v">{formatPercentile(college.percentile)}</span>
-                  </Link>
+                  </IntentPrefetchLink>
                 </li>
               ))}
             </ol>

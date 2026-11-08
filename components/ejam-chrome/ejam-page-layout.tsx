@@ -22,11 +22,11 @@ export function EjamPageLayout({
   return (
     <>
       {/* eslint-disable-next-line @next/next/no-css-tags -- eJAM's stylesheet is compiled outside Next's Tailwind 3 pipeline. */}
-      <link rel="stylesheet" href="/ejam/ui.css" />
+      <link rel="stylesheet" href="/ejam/ui.css" precedence="ejam" />
       {chrome === "tool" ? (
         // Unlayered copy of eJam's utilities for the tool shell; see scripts/build-ejam-ui-css.mjs.
         // eslint-disable-next-line @next/next/no-css-tags -- generated with ui.css, outside Next's pipeline.
-        <link rel="stylesheet" href="/ejam/tool.css" />
+        <link rel="stylesheet" href="/ejam/tool.css" precedence="ejam-tool" />
       ) : null}
       <div
         className={cn(

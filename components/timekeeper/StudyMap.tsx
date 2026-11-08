@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { LayerGroup, Map as LeafletMap, Marker } from "leaflet";
 import type { GeoJsonObject } from "geojson";
-import { LocateFixed, Maximize, RefreshCw } from "lucide-react";
+import { Globe2, LocateFixed, Maximize, RefreshCw } from "lucide-react";
 import { z } from "zod";
 import {
   displaySessions,
@@ -24,8 +24,8 @@ import "leaflet/dist/leaflet.css";
 
 const sessionSchema = z.object({
   id: z.string(),
-  latitude: z.number().min(6).max(38),
-  longitude: z.number().min(68).max(98),
+  latitude: z.number().min(-90).max(90),
+  longitude: z.number().min(-180).max(180),
   city: z.string().nullable(),
   state: z.string().nullable(),
   avatar_seed: z.string().max(100),
@@ -70,6 +70,7 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
     new Map<string, { marker: Marker; student: StudySession }>(),
   );
   const resetView = useRef<(() => void) | null>(null);
+  const worldView = useRef<(() => void) | null>(null);
   const [mapReady, setMapReady] = useState(false);
   const now = useNow();
   const [selection, setSelection] = useState(examSlug ?? "");
@@ -114,14 +115,21 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
     let cleanup: (() => void) | undefined;
     let polling: ReturnType<typeof setInterval> | undefined;
     async function initialize() {
-      const [L, outlineResponse] = await Promise.all([
+      const [L, outlineResponse, worldResponse] = await Promise.all([
         import("leaflet"),
         fetch("/exam-countdown/maps/india-outline.geojson", {
           cache: "force-cache",
         }),
+        fetch("/exam-countdown/maps/world-india-view.geojson", {
+          cache: "force-cache",
+        }),
       ]);
-      if (!outlineResponse.ok) throw new Error("Could not load India map");
-      const outline: GeoJsonObject = await outlineResponse.json();
+      if (!outlineResponse.ok || !worldResponse.ok)
+        throw new Error("Could not load the map");
+      const [outline, world]: GeoJsonObject[] = await Promise.all([
+        outlineResponse.json(),
+        worldResponse.json(),
+      ]);
       if (cancelled || !canvas.current) return;
       const reducedMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
@@ -131,27 +139,61 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
         trackResize: false,
         zoomSnap: 0.25,
         maxZoom: 8,
+        worldCopyJump: false,
+        maxBounds: [
+          [-60, -180],
+          [85, 180],
+        ],
+        maxBoundsViscosity: 1,
         zoomAnimation: !reducedMotion,
         markerZoomAnimation: !reducedMotion,
         inertia: !reducedMotion,
       });
       map.current = instance;
-      markers.current = L.layerGroup().addTo(instance);
+      // Neighbouring countries come from Natural Earth's India point of view,
+      // so the world layer agrees with India's official boundary drawn on top.
+      L.geoJSON(world, {
+        interactive: false,
+        style: { className: "tk-world-country", weight: 0.6 },
+        attribution:
+          'Countries: <a href="https://www.naturalearthdata.com/">Natural Earth</a>',
+      }).addTo(instance);
       const geography = L.geoJSON(outline, {
         interactive: false,
         style: { className: "tk-india-outline", weight: 1.25 },
         attribution:
-          'India outline: <a href="https://github.com/datameet/maps/tree/master/Country">DataMeet</a> (CC0)',
+          'India: <a href="https://github.com/datameet/maps/tree/master/Country">DataMeet</a> (CC0)',
       }).addTo(instance);
+      markers.current = L.layerGroup().addTo(instance);
       const bounds = geography.getBounds();
+      const worldBounds = L.latLngBounds([-55, -165], [75, 180]);
+      let showingWorld = false;
       const fitIndia = () => {
+        showingWorld = false;
         instance.invalidateSize({ pan: false });
+        // Zooming out reaches the whole world; India frames the opening view.
         instance.setMinZoom(0);
+        instance.setMinZoom(instance.getBoundsZoom(worldBounds));
         instance.fitBounds(bounds, { padding: [24, 24], animate: false });
-        instance.setMinZoom(instance.getZoom());
+      };
+      const fitWorld = () => {
+        showingWorld = true;
+        instance.invalidateSize({ pan: false });
+        instance.fitBounds(worldBounds, { animate: !reducedMotion });
       };
       resetView.current = fitIndia;
+      worldView.current = fitWorld;
       fitIndia();
+      // Island labels only make sense at country zoom; far out they collide.
+      const labelZoom = instance.getZoom() - 1.5;
+      const canvasElement = canvas.current;
+      const toggleLabels = () =>
+        canvasElement.classList.toggle(
+          "tk-map-far",
+          instance.getZoom() < labelZoom,
+        );
+      instance.on("zoomend", toggleLabels);
+      toggleLabels();
       for (const [label, latitude, longitude] of [
         ["Lakshadweep", 10.4, 72.1],
         ["Andaman & Nicobar", 10, 94.5],
@@ -167,7 +209,9 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
         }).addTo(instance);
       }
       setMapReady(true);
-      const resize = new ResizeObserver(fitIndia);
+      const resize = new ResizeObserver(() =>
+        showingWorld ? fitWorld() : fitIndia(),
+      );
       resize.observe(canvas.current);
       cleanup = () => {
         resize.disconnect();
@@ -176,6 +220,7 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
         markers.current = null;
         placed.current.clear();
         resetView.current = null;
+        worldView.current = null;
       };
       const client = await getStudyClient();
       await ensureStudyIdentity(client);
@@ -243,11 +288,7 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
       }
       for (const student of students) {
         const existing = placed.current.get(student.id);
-        if (
-          existing &&
-          existing.student.avatar_seed === student.avatar_seed &&
-          existing.student.is_demonstration === student.is_demonstration
-        ) {
+        if (existing && existing.student.avatar_seed === student.avatar_seed) {
           if (
             existing.student.latitude !== student.latitude ||
             existing.student.longitude !== student.longitude
@@ -259,12 +300,10 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
         if (existing) layer.removeLayer(existing.marker);
         const picture = document.createElement("img");
         picture.src = avatarUrl(student.avatar_seed);
-        picture.alt = student.is_demonstration
-          ? "Example study session"
-          : "Student studying";
+        picture.alt = "Student studying";
         picture.width = 40;
         picture.height = 40;
-        picture.className = `tk-avatar${student.is_demonstration ? " tk-avatar-demo" : ""}`;
+        picture.className = "tk-avatar";
         picture.referrerPolicy = "no-referrer";
         const entry = {
           student,
@@ -380,17 +419,27 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
           ref={canvas}
           className="tk-map-canvas"
           role="region"
-          aria-label="Live study sessions across India"
+          aria-label="Live study map"
         />
         <div className="tk-map-toolbar">
           <div className="flex gap-1">
             <button
               type="button"
               className="tk-button"
-              aria-label="Show all of India"
+              aria-label="Show India"
+              title="Show India"
               onClick={() => resetView.current?.()}
             >
               <LocateFixed size={16} />
+            </button>
+            <button
+              type="button"
+              className="tk-button"
+              aria-label="Show the whole world"
+              title="Show the whole world"
+              onClick={() => worldView.current?.()}
+            >
+              <Globe2 size={16} />
             </button>
             <button
               type="button"
@@ -497,9 +546,16 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
       )}
       <p className="text-xs themed-text-secondary mt-3">
         Only your approximate city location is shared, with up to 5km of
-        randomization. Sessions update every 30 seconds. Gray markers show
-        example sessions.
+        randomization. Sessions update every 30 seconds.
       </p>
+      <details className="tk-map-about text-xs themed-text-secondary mt-2">
+        <summary>About this map</summary>
+        <p>
+          Alongside students studying right now, the map shows illustrative
+          study sessions so it is never empty. See the{" "}
+          <a href="/compliance/terms-and-conditions#public-features">terms</a>.
+        </p>
+      </details>
     </div>
   );
 }

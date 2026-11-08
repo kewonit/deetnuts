@@ -10,3 +10,22 @@ Original composite SHA-256: `5e44c39b18aa8fe57267d8018fa4ad4a10eaa3aa4cb7cb7382a
 For the country overview, the source was simplified with mapshaper 0.7.82, `-explode -simplify dp interval=500 keep-shapes -o format=geojson precision=0.0001`. Splitting the source into polygon features before simplification preserves each island. The resulting polygons were combined into a MultiPolygon and wrapped in a single FeatureCollection with `properties.name = "India"`. The 500-metre display simplification retains the island groups and the full national extent; it is not street-level or navigational data. Map coordinates and student markers use WGS84 longitude/latitude through Leaflet's standard projection.
 
 The map fits the complete country at initialization and resize, supports zoom/pan and an explicit reset, and follows TimeKeeper's themes. Session controls sit outside the geography so they do not cover it on mobile. The existing live-session backend and approximate-location behavior are unchanged. The map requires no external tile server, API key or new runtime configuration.
+
+## World layer
+
+`world-india-view.geojson` draws the other countries around India so the map can open on India and zoom out to the whole world. It comes from Natural Earth's [Admin 0 – Countries, India point of view](https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_10m_admin_0_countries_ind.geojson) (public domain). In this edition the shapes of neighbouring countries follow India's official boundary, so they meet the DataMeet outline above, which is drawn on top. India and Antarctica are removed from the layer.
+
+Pinned source revision: `ca96624a56bd078437bca8184e78163e5039ad19`.
+Original file SHA-256: `3e67a5a6ddeff3247ca8400cd2514fd4a5ac6e5432823b25d610a7028597d45f`.
+
+Built with mapshaper 0.7.82:
+
+```sh
+mapshaper ne_10m_admin_0_countries_ind.geojson \
+  -filter 'ADM0_A3 != "IND" && ADM0_A3 != "ATA"' \
+  -filter-fields NAME \
+  -simplify dp 2% keep-shapes -clean \
+  -o format=geojson precision=0.01 world-india-view.geojson
+```
+
+The 2% display simplification keeps borders legible at country zoom; it is not navigational data. Real study sessions anywhere in the world are shown; illustrative sessions are placed in Indian cities (see `lib/timekeeper/demo-sessions.ts`).

@@ -8,6 +8,7 @@ import { Menu } from "@base-ui/react/menu";
 import { NavigationMenu } from "@base-ui/react/navigation-menu";
 import { ChevronDown, LogOut, SunMoon, UserRound } from "lucide-react";
 import { signOut } from "@/app/login/actions";
+import { loadSessionUser } from "@/lib/session-client";
 import { BrandIcon } from "@/components/brand-icons";
 import { useGitHubStarLabel } from "@/components/GitHubStarCount";
 import { LoginLink } from "@/components/login-link";
@@ -82,19 +83,13 @@ function useSessionUser(pathname: string) {
 
   useEffect(() => {
     if (SESSIONLESS_PREFIXES.some((prefix) => within(pathname, prefix))) return;
-    const controller = new AbortController();
-    void fetch("/api/auth/session", {
-      cache: "no-store",
-      credentials: "same-origin",
-      signal: controller.signal,
-    })
-      .then((response) => (response.ok ? response.json() : { user: null }))
-      .then((data: { user?: SessionUser | null }) => setUser(data.user || null))
-      .catch((error) => {
-        if (error instanceof Error && error.name !== "AbortError")
-          setUser(null);
-      });
-    return () => controller.abort();
+    let current = true;
+    void loadSessionUser().then((sessionUser) => {
+      if (current) setUser((sessionUser as SessionUser | null) || null);
+    });
+    return () => {
+      current = false;
+    };
   }, [pathname]);
 
   return user;

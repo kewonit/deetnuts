@@ -18,16 +18,8 @@ const BRANCH_GROUPS: Record<string, string[]> = Object.fromEntries(
   ].filter(([, branches]) => branches.length > 0),
 );
 
-export const EMPTY_FILTERS: FilterState = {
-  search: "",
-  branch: "",
-  branches: [],
-  minPercentile: "",
-  maxPercentile: "",
-  minRank: "",
-  maxRank: "",
-  collegeName: "",
-};
+import { EMPTY_FILTERS } from "./query";
+export { EMPTY_FILTERS };
 
 function isTypingTarget(target: EventTarget | null) {
   return (

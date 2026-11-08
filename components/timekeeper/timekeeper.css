@@ -351,12 +351,21 @@
 .timekeeper .tk-map-embedded .tk-map-canvas {
   height: 400px;
 }
+.timekeeper .tk-world-country {
+  fill: color-mix(in srgb, var(--text-secondary) 14%, var(--bg-secondary));
+  fill-opacity: 1;
+  stroke: color-mix(in srgb, var(--text-secondary) 35%, transparent);
+  stroke-linejoin: round;
+}
 .timekeeper .tk-india-outline {
   fill: color-mix(in srgb, #10b981 14%, var(--bg-primary));
   fill-opacity: 1;
   stroke: color-mix(in srgb, #10b981 55%, var(--text-secondary));
   stroke-linejoin: round;
   filter: drop-shadow(0 10px 24px color-mix(in srgb, #10b981 28%, transparent));
+}
+.timekeeper .tk-map-far .tk-map-place-label {
+  visibility: hidden;
 }
 .timekeeper .tk-map-place-label {
   color: var(--text-secondary);
@@ -488,11 +497,6 @@
     0 0 0 2.5px #10b981,
     0 6px 14px #0003;
 }
-.timekeeper .tk-avatar-demo {
-  box-shadow:
-    0 0 0 2.5px #94a3b8,
-    0 6px 14px #0003;
-}
 .timekeeper .leaflet-marker-icon:hover .tk-avatar,
 .timekeeper .leaflet-marker-icon:focus-visible .tk-avatar {
   transform: scale(1.12);
@@ -503,7 +507,7 @@
     opacity 300ms ease-in,
     transform 300ms ease-in;
 }
-.timekeeper .leaflet-marker-icon .tk-avatar:not(.tk-avatar-demo) {
+.timekeeper .leaflet-marker-icon .tk-avatar {
   animation:
     tk-marker-in 400ms ease-out,
     tk-live-pulse 2.4s ease-out 400ms infinite;
@@ -624,4 +628,15 @@
     transition: none !important;
     scroll-behavior: auto !important;
   }
+}
+
+.timekeeper .tk-map-about summary {
+  cursor: pointer;
+  width: fit-content;
+}
+.timekeeper .tk-map-about p {
+  margin-top: 0.25rem;
+}
+.timekeeper .tk-map-about a {
+  text-decoration: underline;
 }

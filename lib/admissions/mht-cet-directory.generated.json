@@ -1,0 +1,2723 @@
+{
+  "version": 1,
+  "source": {
+    "mhtCetYear": 2026,
+    "mhtCetRounds": [
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "colleges": [
+    {
+      "code": "03475",
+      "name": "A. P. Shah Institute of Technology, Thane",
+      "status": "Un-Aided Religious Minority - Jain",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/a-p-shah-institute-of-technology-thane-03475"
+    },
+    {
+      "code": "02146",
+      "name": "Adarsh Shikshan Prasarak Mandal's K. T. Patil College of Engineering and Technology, Osmanabad",
+      "status": "Un-Aided",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/adarsh-shikshan-prasarak-mandals-k-t-patil-college-of-engineering-and-technology-osmanabad-02146"
+    },
+    {
+      "code": "02136",
+      "name": "Aditya Engineering College , Beed",
+      "status": "Un-Aided",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/aditya-engineering-college-beed-02136"
+    },
+    {
+      "code": "05380",
+      "name": "Adsul's Technical Campus, Chas Dist. Ahmednagar",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/adsuls-technical-campus-chas-dist-ahmednagar-05380"
+    },
+    {
+      "code": "03197",
+      "name": "Agnel Charities' FR. C. Rodrigues Institute of Technology, Vashi, Navi Mumbai",
+      "status": "Un-Aided Autonomous Religious Minority - Christian",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/agnel-charities-fr-c-rodrigues-institute-of-technology-vashi-navi-mumbai-03197"
+    },
+    {
+      "code": "05382",
+      "name": "Ahmednagar Jilha Maratha Vidya Prasarak Samajache, Shri. Chhatrapati Shivaji Maharaj College of Engineering, Nepti",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/ahmednagar-jilha-maratha-vidya-prasarak-samajache-shri-chhatrapati-shivaji-maharaj-college-of-engineering-nepti-05382"
+    },
+    {
+      "code": "06732",
+      "name": "Ajeenkya DY Patil School of Engineering, Lohegaon, Pune",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/ajeenkya-dy-patil-school-of-engineering-lohegaon-pune-06732"
+    },
+    {
+      "code": "06183",
+      "name": "Al-Ameen Educational and Medical Foundation, College of Engineering, Koregaon, Bhima",
+      "status": "Un-Aided Religious Minority - Muslim",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/al-ameen-educational-and-medical-foundation-college-of-engineering-koregaon-bhima-06183"
+    },
+    {
+      "code": "03218",
+      "name": "Aldel Education Trust's St. John College of Engineering & Management, Vevoor, Palghar",
+      "status": "Un-Aided Autonomous Religious Minority - Christian",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/aldel-education-trusts-st-john-college-of-engineering-management-vevoor-palghar-03218"
+    },
+    {
+      "code": "06278",
+      "name": "All India Shri Shivaji Memorial Society's College of Engineering, Pune",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/all-india-shri-shivaji-memorial-societys-college-of-engineering-pune-06278"
+    },
+    {
+      "code": "06282",
+      "name": "All India Shri Shivaji Memorial Society's Institute of Information Technology,Pune",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/all-india-shri-shivaji-memorial-societys-institute-of-information-technologypune-06282"
+    },
+    {
+      "code": "04135",
+      "name": "Amar Seva Mandal's Shree Govindrao Vanjari College of Engineering & Technology, Nagpur",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/amar-seva-mandals-shree-govindrao-vanjari-college-of-engineering-technology-nagpur-04135"
+    },
+    {
+      "code": "02771",
+      "name": "Amolak College of Engineering Kada",
+      "status": "Un-Aided Religious Minority - Jain",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/amolak-college-of-engineering-kada-02771"
+    },
+    {
+      "code": "05184",
+      "name": "Amruta Vaishnavi Education & Welfare Trust's Shatabdi Institute of Engineering & Research, Agaskhind Tal. Sinnar",
+      "status": "Un-Aided Religious Minority - Christian",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/amruta-vaishnavi-education-welfare-trusts-shatabdi-institute-of-engineering-research-agaskhind-tal-sinnar-05184"
+    },
+    {
+      "code": "05162",
+      "name": "Amrutvahini Sheti & Shikshan Vikas Sanstha's Amrutvahini College of Engineering, Sangamner",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/amrutvahini-sheti-shikshan-vikas-sansthas-amrutvahini-college-of-engineering-sangamner-05162"
+    },
+    {
+      "code": "06794",
+      "name": "Anantrao Pawar College of Engineering & Research, Pune",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/anantrao-pawar-college-of-engineering-research-pune-06794"
+    },
+    {
+      "code": "04172",
+      "name": "Anjuman College of Engineering & Technology, Nagpur",
+      "status": "Un-Aided Religious Minority - Muslim",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/anjuman-college-of-engineering-technology-nagpur-04172"
+    },
+    {
+      "code": "03439",
+      "name": "Anjuman-I-Islam's Kalsekar Technical Campus School of Engineering & Technology",
+      "status": "Un-Aided Autonomous Religious Minority - Muslim",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/anjuman-i-islams-kalsekar-technical-campus-school-of-engineering-technology-03439"
+    },
+    {
+      "code": "03183",
+      "name": "Anjuman-I-Islam's M.H. Saboo Siddik College of Engineering, Byculla, Mumbai",
+      "status": "Un-Aided Religious Minority - Muslim",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/anjuman-i-islams-mh-saboo-siddik-college-of-engineering-byculla-mumbai-03183"
+    },
+    {
+      "code": "04116",
+      "name": "Ankush Shikshan Sanstha's G.H.Raisoni College of Engineering, Nagpur",
+      "status": "Un-Aided Autonomous Linguistic Minority - Hindi",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/ankush-shikshan-sansthas-ghraisoni-college-of-engineering-nagpur-04116"
+    },
+    {
+      "code": "06283",
+      "name": "Annasaheb Dange College of Engineering and Technology, Ashta, Sangli",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/annasaheb-dange-college-of-engineering-and-technology-ashta-sangli-06283"
+    },
+    {
+      "code": "01119",
+      "name": "ANURADHA COLLEGE OF ENGINEERING & TECHNOLOGY",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/anuradha-college-of-engineering-technology-01119"
+    },
+    {
+      "code": "06714",
+      "name": "APPASAHEB ALIAS SA.RE.PATIL INSTITUTE OF TECHNOLOGY, Dattanagar Tal-Shirol, Dist Kolhapur",
+      "status": "Un-Aided",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/appasaheb-alias-sarepatil-institute-of-technology-dattanagar-tal-shirol-dist-kolhapur-06714"
+    },
+    {
+      "code": "05395",
+      "name": "Ashok Institute of Engineering & Technology",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/ashok-institute-of-engineering-technology-05395"
+    },
+    {
+      "code": "03203",
+      "name": "Atharva College of Engineering,Malad(West),Mumbai",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/atharva-college-of-engineeringmaladwestmumbai-03203"
+    },
+    {
+      "code": "16355",
+      "name": "Audyogik Shikshan Mandal's Nextgen Technical Campus",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/audyogik-shikshan-mandals-nextgen-technical-campus-16355"
+    },
+    {
+      "code": "03436",
+      "name": "B.R. Harne College of Engineering & Technology, Karav, Tal-Ambernath.",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/br-harne-college-of-engineering-technology-karav-tal-ambernath-03436"
+    },
+    {
+      "code": "06715",
+      "name": "Babasaheb Phadtare Engineering & Technology Kalamb-Walchandnagar Tal Indapur Dist Pune",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/babasaheb-phadtare-engineering-technology-kalamb-walchandnagar-tal-indapur-dist-pune-06715"
+    },
+    {
+      "code": "04649",
+      "name": "Bajaj Institute of Technology, Wardha",
+      "status": "Un-Aided Linguistic Minority - Hindi",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/bajaj-institute-of-technology-wardha-04649"
+    },
+    {
+      "code": "06273",
+      "name": "Bansilal Ramnath Agarawal Charitable Trust's Vishwakarma Institute of Technology, Bibwewadi, Pune",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/bansilal-ramnath-agarawal-charitable-trusts-vishwakarma-institute-of-technology-bibwewadi-pune-06273"
+    },
+    {
+      "code": "04118",
+      "name": "Bapurao Deshmukh College of Engineering, Sevagram",
+      "status": "Un-Aided",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/bapurao-deshmukh-college-of-engineering-sevagram-04118"
+    },
+    {
+      "code": "06781",
+      "name": "Bhagwant Institute of Technology, Barshi",
+      "status": "Un-Aided",
+      "homeUniversity": "Punyashlok Ahilyadevi Holkar Solapur University",
+      "path": "/mht-cet/colleges/bhagwant-institute-of-technology-barshi-06781"
+    },
+    {
+      "code": "03351",
+      "name": "Bharat College of Engineering, Kanhor, Badlapur(W)",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/bharat-college-of-engineering-kanhor-badlapurw-03351"
+    },
+    {
+      "code": "03189",
+      "name": "Bharati Vidyapeeth College of Engineering, Navi Mumbai",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/bharati-vidyapeeth-college-of-engineering-navi-mumbai-03189"
+    },
+    {
+      "code": "06285",
+      "name": "Bharati Vidyapeeth's College of Engineering for Women, Katraj, Dhankawadi, Pune",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/bharati-vidyapeeths-college-of-engineering-for-women-katraj-dhankawadi-pune-06285"
+    },
+    {
+      "code": "06288",
+      "name": "Bharati Vidyapeeth's College of Engineering, Kolhapur",
+      "status": "Un-Aided",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/bharati-vidyapeeths-college-of-engineering-kolhapur-06288"
+    },
+    {
+      "code": "06796",
+      "name": "Bharati Vidyapeeth's College of Engineering,Lavale, Pune",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/bharati-vidyapeeths-college-of-engineeringlavale-pune-06796"
+    },
+    {
+      "code": "03215",
+      "name": "Bhartiya Vidya Bhavan's Sardar Patel Institute of Technology , Andheri, Mumbai",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/bhartiya-vidya-bhavans-sardar-patel-institute-of-technology-andheri-mumbai-03215"
+    },
+    {
+      "code": "05130",
+      "name": "Brahma Valley College of Engineering & Research, Trimbakeshwar, Nashik",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/brahma-valley-college-of-engineering-research-trimbakeshwar-nashik-05130"
+    },
+    {
+      "code": "02777",
+      "name": "CDS College of Engineering",
+      "status": "Un-Aided",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/cds-college-of-engineering-02777"
+    },
+    {
+      "code": "03477",
+      "name": "Chhartrapati Shivaji Maharaj Institute of Technology, Shedung, Panvel",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/chhartrapati-shivaji-maharaj-institute-of-technology-shedung-panvel-03477"
+    },
+    {
+      "code": "02250",
+      "name": "CHHATRAPATI SAMBHAJI MAHARAJ COLLEGE OF ENGINEERING",
+      "status": "Un-Aided",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/chhatrapati-sambhaji-maharaj-college-of-engineering-02250"
+    },
+    {
+      "code": "16006",
+      "name": "COEP Technological University",
+      "status": "University Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/coep-technological-university-16006"
+    },
+    {
+      "code": "05396",
+      "name": "College of Engineering and Technology ,North Maharashtra Knowledge City, Jalgaon",
+      "status": "Un-Aided",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/college-of-engineering-and-technology-north-maharashtra-knowledge-city-jalgaon-05396"
+    },
+    {
+      "code": "02533",
+      "name": "CSMSS Chh. Shahu College of Engineering, Aurangabad",
+      "status": "Un-Aided",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/csmss-chh-shahu-college-of-engineering-aurangabad-02533"
+    },
+    {
+      "code": "04304",
+      "name": "Cummins College of Engineering For Women, Sukhali (Gupchup), Tal. Hingna Hingna Nagpur",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/cummins-college-of-engineering-for-women-sukhali-gupchup-tal-hingna-hingna-nagpur-04304"
+    },
+    {
+      "code": "06250",
+      "name": "D.Y. Patil College of Engineering and Technology, Kolhapur",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/dy-patil-college-of-engineering-and-technology-kolhapur-06250"
+    },
+    {
+      "code": "06780",
+      "name": "D.Y.Patil Education Society's,D.Y.Patil Technical Campus, Faculty of Engineering & Faculty of Management,Talsande,Kolhapur.",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/dypatil-education-societysdypatil-technical-campus-faculty-of-engineering-faculty-of-managementtalsandekolhapur-06780"
+    },
+    {
+      "code": "06222",
+      "name": "Dattajirao Kadam Technical Education Society's Textile & Engineering Institute, Ichalkaranji.",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/dattajirao-kadam-technical-education-societys-textile-engineering-institute-ichalkaranji-06222"
+    },
+    {
+      "code": "06628",
+      "name": "Dattakala Group Of Institutions, Swami - Chincholi Tal. Daund Dist. Pune",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/dattakala-group-of-institutions-swami-chincholi-tal-daund-dist-pune-06628"
+    },
+    {
+      "code": "02037",
+      "name": "Deen Dayal Upadhyay Kaushal Kendra, Dr.Babasaheb Ambedkar Marathwada University, Chhatrapati Sambhaji nagar",
+      "status": "University",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/deen-dayal-upadhyay-kaushal-kendra-drbabasaheb-ambedkar-marathwada-university-chhatrapati-sambhaji-nagar-02037"
+    },
+    {
+      "code": "02114",
+      "name": "Deogiri Institute of Engineering and Management Studies, Aurangabad",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/deogiri-institute-of-engineering-and-management-studies-aurangabad-02114"
+    },
+    {
+      "code": "03546",
+      "name": "Devi Mahalaxmi College of Engineering and Technology",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/devi-mahalaxmi-college-of-engineering-and-technology-03546"
+    },
+    {
+      "code": "06307",
+      "name": "Dhole Patil Education Society, Dhole Patil College of Engineering, Wagholi, Tal. Haveli",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/dhole-patil-education-society-dhole-patil-college-of-engineering-wagholi-tal-haveli-06307"
+    },
+    {
+      "code": "03353",
+      "name": "Dilkap Research Institute Of Engineering and Management Studies, At.Mamdapur, Post- Neral, Tal- Karjat, Mumbai",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/dilkap-research-institute-of-engineering-and-management-studies-atmamdapur-post-neral-tal-karjat-mumbai-03353"
+    },
+    {
+      "code": "06797",
+      "name": "Dnyanshree Institute Engineering and Technology, Satara",
+      "status": "Un-Aided",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/dnyanshree-institute-engineering-and-technology-satara-06797"
+    },
+    {
+      "code": "16354",
+      "name": "DNYANVILAS COLLEGE OF ENGINEERING PIMPRI -CHINCHWAD , PUNE",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/dnyanvilas-college-of-engineering-pimpri-chinchwad-pune-16354"
+    },
+    {
+      "code": "03208",
+      "name": "Don Bosco Institute of Technology, Mumbai",
+      "status": "Un-Aided Autonomous Religious Minority - Roman Catholics",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/don-bosco-institute-of-technology-mumbai-03208"
+    },
+    {
+      "code": "06878",
+      "name": "Dr. A. D. Shinde College Of Engineering, Tal.Gadhinglaj, Kolhapur",
+      "status": "Un-Aided",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/dr-a-d-shinde-college-of-engineering-talgadhinglaj-kolhapur-06878"
+    },
+    {
+      "code": "04766",
+      "name": "Dr. Arun Motghare College of Engineering and Technology",
+      "status": "Un-Aided",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/dr-arun-motghare-college-of-engineering-and-technology-04766"
+    },
+    {
+      "code": "06303",
+      "name": "Dr. Ashok Gujar Technical Institute's Dr. Daulatrao Aher College of Engineering, Karad",
+      "status": "Un-Aided",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/dr-ashok-gujar-technical-institutes-dr-daulatrao-aher-college-of-engineering-karad-06303"
+    },
+    {
+      "code": "03033",
+      "name": "Dr. Babasaheb Ambedkar Technological University, Lonere",
+      "status": "University",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/dr-babasaheb-ambedkar-technological-university-lonere-03033"
+    },
+    {
+      "code": "06839",
+      "name": "Dr. D Y Patil Pratishthan's College of Engineering, Kolhapur",
+      "status": "Un-Aided",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/dr-d-y-patil-pratishthans-college-of-engineering-kolhapur-06839"
+    },
+    {
+      "code": "06272",
+      "name": "Dr. D. Y. Patil Pratishthan's D.Y.Patil College of Engineering Akurdi, Pune",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/dr-d-y-patil-pratishthans-dypatil-college-of-engineering-akurdi-pune-06272"
+    },
+    {
+      "code": "06207",
+      "name": "Dr. D. Y. Patil Unitech Society's Dr. D. Y. Patil Institute of Technology, Pimpri, Pune",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/dr-d-y-patil-unitech-societys-dr-d-y-patil-institute-of-technology-pimpri-pune-06207"
+    },
+    {
+      "code": "06991",
+      "name": "Dr. D.Y. Patil Technical Campus, Varale, Talegaon, Pune",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/dr-dy-patil-technical-campus-varale-talegaon-pune-06991"
+    },
+    {
+      "code": "06815",
+      "name": "DR. G.V.SHINGRE VPS COLLEGE OF ENGINEERING AND TECHNOLOGY, LONAVALA, MAUJE WAKSAI, TAL MAVAL, DIST PUNE",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/dr-gvshingre-vps-college-of-engineering-and-technology-lonavala-mauje-waksai-tal-maval-dist-pune-06815"
+    },
+    {
+      "code": "06277",
+      "name": "Dr. J. J. Magdum Charitable Trust's Dr. J.J. Magdum College of Engineering, Jaysingpur",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/dr-j-j-magdum-charitable-trusts-dr-jj-magdum-college-of-engineering-jaysingpur-06277"
+    },
+    {
+      "code": "02641",
+      "name": "Dr. V.K. Patil College of Engineering & Technology",
+      "status": "Un-Aided",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/dr-vk-patil-college-of-engineering-technology-02641"
+    },
+    {
+      "code": "05161",
+      "name": "Dr. Vithalrao Vikhe Patil College of Engineering, Ahmednagar",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/dr-vithalrao-vikhe-patil-college-of-engineering-ahmednagar-05161"
+    },
+    {
+      "code": "06834",
+      "name": "Dr.D.Y.Patil College Of Engineering & Innovation,Talegaon",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/drdypatil-college-of-engineering-innovationtalegaon-06834"
+    },
+    {
+      "code": "01123",
+      "name": "Dr.Rajendra Gode Institute of Technology & Research, Amravati",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/drrajendra-gode-institute-of-technology-research-amravati-01123"
+    },
+    {
+      "code": "01125",
+      "name": "Dwarka Bahu Uddeshiya Gramin Vikas Foundation, Rajarshi Shahu College of Engineering, Buldhana",
+      "status": "Un-Aided",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/dwarka-bahu-uddeshiya-gramin-vikas-foundation-rajarshi-shahu-college-of-engineering-buldhana-01125"
+    },
+    {
+      "code": "02634",
+      "name": "Eaglewood Polytechnic Institute, A.P Phulepimpalgaon",
+      "status": "Un-Aided",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/eaglewood-polytechnic-institute-ap-phulepimpalgaon-02634"
+    },
+    {
+      "code": "02111",
+      "name": "Everest Education Society, Group of Institutions (Integrated Campus), Ohar",
+      "status": "Un-Aided Religious Minority - Muslim",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/everest-education-society-group-of-institutions-integrated-campus-ohar-02111"
+    },
+    {
+      "code": "03210",
+      "name": "Excelsior Education Society's K.C. College of Engineering and Management Studies and Research, Kopri, Thane (E)",
+      "status": "Un-Aided Linguistic Minority - Punjabi",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/excelsior-education-societys-kc-college-of-engineering-and-management-studies-and-research-kopri-thane-e-03210"
+    },
+    {
+      "code": "06756",
+      "name": "Fabtech Technical Campus College of Engineering and Research, Sangola",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Punyashlok Ahilyadevi Holkar Solapur University",
+      "path": "/mht-cet/colleges/fabtech-technical-campus-college-of-engineering-and-research-sangola-06756"
+    },
+    {
+      "code": "06771",
+      "name": "Flora Institute of Technology, Khopi, Near Khed Shivapur Toll Plaza, Pune",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/flora-institute-of-technology-khopi-near-khed-shivapur-toll-plaza-pune-06771"
+    },
+    {
+      "code": "03184",
+      "name": "Fr. Conceicao Rodrigues College of Engineering, Bandra,Mumbai",
+      "status": "Un-Aided Autonomous Religious Minority - Christian",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/fr-conceicao-rodrigues-college-of-engineering-bandramumbai-03184"
+    },
+    {
+      "code": "04142",
+      "name": "G H Raisoni College of Engineering & Management, Nagpur",
+      "status": "Un-Aided Autonomous Linguistic Minority - Hindi",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/g-h-raisoni-college-of-engineering-management-nagpur-04142"
+    },
+    {
+      "code": "05152",
+      "name": "G H Raisoni College of Engineering and Management, Jalgaon",
+      "status": "Un-Aided Autonomous Linguistic Minority - Hindi",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/g-h-raisoni-college-of-engineering-and-management-jalgaon-05152"
+    },
+    {
+      "code": "02113",
+      "name": "G. S. Mandal's Maharashtra Institute of Technology, Aurangabad",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/g-s-mandals-maharashtra-institute-of-technology-aurangabad-02113"
+    },
+    {
+      "code": "06155",
+      "name": "G.H.Raisoni College of Engineering & Management, Wagholi, Pune",
+      "status": "Un-Aided Autonomous Linguistic Minority - Hindi",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/ghraisoni-college-of-engineering-management-wagholi-pune-06155"
+    },
+    {
+      "code": "03447",
+      "name": "G.M.Vedak Institute of Technology, Tala, Raigad.",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/gmvedak-institute-of-technology-tala-raigad-03447"
+    },
+    {
+      "code": "06144",
+      "name": "Genba Sopanrao Moze College of Engineering, Baner-Balewadi, Pune",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/genba-sopanrao-moze-college-of-engineering-baner-balewadi-pune-06144"
+    },
+    {
+      "code": "06138",
+      "name": "Genba Sopanrao Moze Trust Parvatibai Genba Moze College of Engineering,Wagholi, Pune",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/genba-sopanrao-moze-trust-parvatibai-genba-moze-college-of-engineeringwagholi-pune-06138"
+    },
+    {
+      "code": "03216",
+      "name": "GHARDA INSTITUTE OF TECHNOLOGY & MANAGEMENT",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/gharda-institute-of-technology-management-03216"
+    },
+    {
+      "code": "05171",
+      "name": "Godavari Foundation's Godavari College Of Engineering, Jalgaon",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/godavari-foundations-godavari-college-of-engineering-jalgaon-05171"
+    },
+    {
+      "code": "05181",
+      "name": "Gokhale Education Society's, R.H. Sapat College of Engineering, Management Studies and Research, Nashik",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/gokhale-education-societys-rh-sapat-college-of-engineering-management-studies-and-research-nashik-05181"
+    },
+    {
+      "code": "04302",
+      "name": "Gondia Education Society's Manoharbhai Patel Institute Of Engineering & Technology, Shahapur, Bhandara",
+      "status": "Un-Aided",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/gondia-education-societys-manoharbhai-patel-institute-of-engineering-technology-shahapur-bhandara-04302"
+    },
+    {
+      "code": "06004",
+      "name": "Government College of Engineering & Research, Avasari Khurd",
+      "status": "Government",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/government-college-of-engineering-research-avasari-khurd-06004"
+    },
+    {
+      "code": "01002",
+      "name": "Government College of Engineering, Amravati",
+      "status": "Government Autonomous",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/government-college-of-engineering-amravati-01002"
+    },
+    {
+      "code": "04004",
+      "name": "Government College of Engineering, Chandrapur",
+      "status": "Government",
+      "homeUniversity": "Gondwana University, Gadchiroli",
+      "path": "/mht-cet/colleges/government-college-of-engineering-chandrapur-04004"
+    },
+    {
+      "code": "02008",
+      "name": "Government College of Engineering, Chhatrapati Sambhajinagar",
+      "status": "Government Autonomous",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/government-college-of-engineering-chhatrapati-sambhajinagar-02008"
+    },
+    {
+      "code": "05004",
+      "name": "Government College of Engineering, Jalgaon",
+      "status": "Government Autonomous",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/government-college-of-engineering-jalgaon-05004"
+    },
+    {
+      "code": "06005",
+      "name": "Government College of Engineering, Karad",
+      "status": "Government Autonomous",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/government-college-of-engineering-karad-06005"
+    },
+    {
+      "code": "06036",
+      "name": "Government College of Engineering, Kolhapur",
+      "status": "Government",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/government-college-of-engineering-kolhapur-06036"
+    },
+    {
+      "code": "04025",
+      "name": "Government College of Engineering, Nagpur",
+      "status": "Government",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/government-college-of-engineering-nagpur-04025"
+    },
+    {
+      "code": "01012",
+      "name": "Government College of Engineering,Yavatmal",
+      "status": "Government",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/government-college-of-engineeringyavatmal-01012"
+    },
+    {
+      "code": "02508",
+      "name": "GRAMIN TECHNICAL AND MANAGEMENT CAMPUS NANDED.",
+      "status": "Un-Aided",
+      "homeUniversity": "Swami Ramanand Teerth Marathwada University, Nanded",
+      "path": "/mht-cet/colleges/gramin-technical-and-management-campus-nanded-02508"
+    },
+    {
+      "code": "05418",
+      "name": "Guru Gobind Singh College of Engineering & Research Centre, Nashik.",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/guru-gobind-singh-college-of-engineering-research-centre-nashik-05418"
+    },
+    {
+      "code": "04134",
+      "name": "Guru Nanak Institute of Engineering & Technology,Kalmeshwar, Nagpur",
+      "status": "Un-Aided",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/guru-nanak-institute-of-engineering-technologykalmeshwar-nagpur-04134"
+    },
+    {
+      "code": "04196",
+      "name": "Gurunanak Educational Society's Gurunanak Institute of Technology, Nagpur",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/gurunanak-educational-societys-gurunanak-institute-of-technology-nagpur-04196"
+    },
+    {
+      "code": "03222",
+      "name": "Haji Jamaluddin Thim Trust's Theem College of Engineering, At. Villege Betegaon, Boisar",
+      "status": "Un-Aided Religious Minority - Muslim",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/haji-jamaluddin-thim-trusts-theem-college-of-engineering-at-villege-betegaon-boisar-03222"
+    },
+    {
+      "code": "02135",
+      "name": "Hi-Tech Institute of Technology, Aurangabad",
+      "status": "Un-Aided",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/hi-tech-institute-of-technology-aurangabad-02135"
+    },
+    {
+      "code": "05170",
+      "name": "Hindi Seva Mandal's Shri Sant Gadgebaba College of Engineering & Technology, Bhusawal",
+      "status": "Un-Aided Autonomous Linguistic Minority - Hindi",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/hindi-seva-mandals-shri-sant-gadgebaba-college-of-engineering-technology-bhusawal-05170"
+    },
+    {
+      "code": "05303",
+      "name": "Hon. Shri. Babanrao Pachpute Vichardhara Trust, Group of Institutions (Integrated Campus)-Parikrama, Kashti Shrigondha,",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/hon-shri-babanrao-pachpute-vichardhara-trust-group-of-institutions-integrated-campus-parikrama-kashti-shrigondha-05303"
+    },
+    {
+      "code": "03200",
+      "name": "Hope Foundation and research center's Finolex Academy of Management and Technology, Ratnagiri",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/hope-foundation-and-research-centers-finolex-academy-of-management-and-technology-ratnagiri-03200"
+    },
+    {
+      "code": "03465",
+      "name": "Ideal Institute of Technology, Wada, Dist.Thane",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/ideal-institute-of-technology-wada-distthane-03465"
+    },
+    {
+      "code": "03726",
+      "name": "IImperial College of Engineering",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/iimperial-college-of-engineering-03726"
+    },
+    {
+      "code": "03503",
+      "name": "Indala College Of Engineering, Bapsai Tal.Kalyan",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/indala-college-of-engineering-bapsai-talkalyan-03503"
+    },
+    {
+      "code": "06179",
+      "name": "Indira College of Engineering & Management, Pune",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/indira-college-of-engineering-management-pune-06179"
+    },
+    {
+      "code": "03036",
+      "name": "Institute of Chemical Technology, Matunga, Mumbai",
+      "status": "Deemed to be University Autonomous",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/institute-of-chemical-technology-matunga-mumbai-03036"
+    },
+    {
+      "code": "02032",
+      "name": "Institute of Chemical Technology, Mumbai Marathwada off campus, Jalna",
+      "status": "University Managed Autonomous",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/institute-of-chemical-technology-mumbai-marathwada-off-campus-jalna-02032"
+    },
+    {
+      "code": "02516",
+      "name": "International Centre Of Excellence In Engineering and Management (ICEEM)",
+      "status": "Un-Aided",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/international-centre-of-excellence-in-engineering-and-management-iceem-02516"
+    },
+    {
+      "code": "06754",
+      "name": "International Institute of Information Technology (I²IT), Pune.",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/international-institute-of-information-technology-iit-pune-06754"
+    },
+    {
+      "code": "06622",
+      "name": "ISBM College Of Engineering Pune",
+      "status": "Un-Aided Linguistic Minority - Hindi",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/isbm-college-of-engineering-pune-06622"
+    },
+    {
+      "code": "05124",
+      "name": "Jagadamba Education Soc. Nashik's S.N.D. College of Engineering & Research, Babulgaon",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/jagadamba-education-soc-nashiks-snd-college-of-engineering-research-babulgaon-05124"
+    },
+    {
+      "code": "01127",
+      "name": "Jagadambha Bahuuddeshiya Gramin Vikas Sanstha's Jagdambha College of Engineering and Technology, Yavatmal",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/jagadambha-bahuuddeshiya-gramin-vikas-sansthas-jagdambha-college-of-engineering-and-technology-yavatmal-01127"
+    },
+    {
+      "code": "04197",
+      "name": "Jai Mahakali Shikshan Sanstha, Agnihotri College of Engineering, Sindhi(Meghe)",
+      "status": "Un-Aided",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/jai-mahakali-shikshan-sanstha-agnihotri-college-of-engineering-sindhimeghe-04197"
+    },
+    {
+      "code": "04138",
+      "name": "Jaidev Education Society, J D College of Engineering and Management, Nagpur",
+      "status": "Un-Aided Autonomous Linguistic Minority - Hindi",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/jaidev-education-society-j-d-college-of-engineering-and-management-nagpur-04138"
+    },
+    {
+      "code": "06609",
+      "name": "Jaihind College Of Engineering,Kuran",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/jaihind-college-of-engineeringkuran-06609"
+    },
+    {
+      "code": "05239",
+      "name": "JAMIA INSTITUTE OF TECHNOLOGY",
+      "status": "Un-Aided Religious Minority - Muslim",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/jamia-institute-of-technology-05239"
+    },
+    {
+      "code": "01117",
+      "name": "Janata Shikshan Prasarak Mandal’s Babasaheb Naik College Of Engineering, Pusad",
+      "status": "Un-Aided",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/janata-shikshan-prasarak-mandals-babasaheb-naik-college-of-engineering-pusad-01117"
+    },
+    {
+      "code": "03146",
+      "name": "Jawahar Education Society's Annasaheb Chudaman Patil College of Engineering,Kharghar, Navi Mumbai",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/jawahar-education-societys-annasaheb-chudaman-patil-college-of-engineeringkharghar-navi-mumbai-03146"
+    },
+    {
+      "code": "05401",
+      "name": "Jawahar Education Society's Institute of Technology, Management & Research, Nashik.",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/jawahar-education-societys-institute-of-technology-management-research-nashik-05401"
+    },
+    {
+      "code": "01120",
+      "name": "Jawaharlal Darda Institute of Engineering and Technology, Yavatmal",
+      "status": "Un-Aided Autonomous Linguistic Minority - Hindi",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/jawaharlal-darda-institute-of-engineering-and-technology-yavatmal-01120"
+    },
+    {
+      "code": "06311",
+      "name": "Jayawant Shikshan Prasarak Mandal, Bhivarabai Sawant Institute of Technology & Research, Wagholi",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/jayawant-shikshan-prasarak-mandal-bhivarabai-sawant-institute-of-technology-research-wagholi-06311"
+    },
+    {
+      "code": "06313",
+      "name": "Jaywant College of Engineering & Polytechnic , Kille Macchindragad Tal. Walva District- Sangali",
+      "status": "Un-Aided",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/jaywant-college-of-engineering-polytechnic-kille-macchindragad-tal-walva-district-sangali-06313"
+    },
+    {
+      "code": "06141",
+      "name": "Jaywant Shikshan Prasarak Mandal's,Rajarshi Shahu College of Engineering, Tathawade, Pune",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/jaywant-shikshan-prasarak-mandalsrajarshi-shahu-college-of-engineering-tathawade-pune-06141"
+    },
+    {
+      "code": "02637",
+      "name": "Jijau Institute of Engineering Technology and Management, Khandgaon (Bendri), Taluka Naigaon, District Nanded",
+      "status": "Un-Aided",
+      "homeUniversity": "Swami Ramanand Teerth Marathwada University, Nanded",
+      "path": "/mht-cet/colleges/jijau-institute-of-engineering-technology-and-management-khandgaon-bendri-taluka-naigaon-district-nanded-02637"
+    },
+    {
+      "code": "04175",
+      "name": "JMSS Shri Shankarprasad Agnihotri College of Engineering, Wardha",
+      "status": "Un-Aided",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/jmss-shri-shankarprasad-agnihotri-college-of-engineering-wardha-04175"
+    },
+    {
+      "code": "02772",
+      "name": "JSPM College of Engineering, Latur",
+      "status": "Un-Aided",
+      "homeUniversity": "Swami Ramanand Teerth Marathwada University, Nanded",
+      "path": "/mht-cet/colleges/jspm-college-of-engineering-latur-02772"
+    },
+    {
+      "code": "06755",
+      "name": "JSPM Narhe Technical Campus, Pune.",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/jspm-narhe-technical-campus-pune-06755"
+    },
+    {
+      "code": "06145",
+      "name": "JSPM'S Jaywantrao Sawant College of Engineering,Pune",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/jspms-jaywantrao-sawant-college-of-engineeringpune-06145"
+    },
+    {
+      "code": "03209",
+      "name": "K J Somaiya Institute of Technology",
+      "status": "Un-Aided Autonomous Linguistic Minority - Gujarathi",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/k-j-somaiya-institute-of-technology-03209"
+    },
+    {
+      "code": "06214",
+      "name": "K. E. Society's Rajarambapu Institute of Technology, Walwa, Sangli",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/k-e-societys-rajarambapu-institute-of-technology-walwa-sangli-06214"
+    },
+    {
+      "code": "06184",
+      "name": "K. J.'s Educational Institut Trinity College of Engineering and Research, Pisoli, Haveli",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/k-js-educational-institut-trinity-college-of-engineering-and-research-pisoli-haveli-06184"
+    },
+    {
+      "code": "05121",
+      "name": "K. K. Wagh Institute of Engineering Education and Research, Nashik",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/k-k-wagh-institute-of-engineering-education-and-research-nashik-05121"
+    },
+    {
+      "code": "04147",
+      "name": "K.D.K. College of Engineering, Nagpur",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/kdk-college-of-engineering-nagpur-04147"
+    },
+    {
+      "code": "04193",
+      "name": "K.D.M. Education Society, Vidharbha Institute of Technology,Umred Road ,Nagpur",
+      "status": "Un-Aided Autonomous Linguistic Minority - Hindi",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/kdm-education-society-vidharbha-institute-of-technologyumred-road-nagpur-04193"
+    },
+    {
+      "code": "06320",
+      "name": "K.J.'s Educational Institute's K.J.College of Engineering & Management Research, Pisoli",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/kjs-educational-institutes-kjcollege-of-engineering-management-research-pisoli-06320"
+    },
+    {
+      "code": "06814",
+      "name": "K.P. Patil Institute ( Polytechnic ), Bhudargad, Dist.Kolhapur",
+      "status": "Un-Aided",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/kp-patil-institute-polytechnic-bhudargad-distkolhapur-06814"
+    },
+    {
+      "code": "05390",
+      "name": "K.V.N. Naik S. P. Sansth's Loknete Gopinathji Munde Institute of Engineering Education & Research, Nashik.",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/kvn-naik-s-p-sansths-loknete-gopinathji-munde-institute-of-engineering-education-research-nashik-05390"
+    },
+    {
+      "code": "06293",
+      "name": "Kai Amdar Bramhadevdada Mane Shikshan & Samajik Prathistan's Bramhadevdada Mane Institute of Technology, Solapur",
+      "status": "Un-Aided",
+      "homeUniversity": "Punyashlok Ahilyadevi Holkar Solapur University",
+      "path": "/mht-cet/colleges/kai-amdar-bramhadevdada-mane-shikshan-samajik-prathistans-bramhadevdada-mane-institute-of-technology-solapur-06293"
+    },
+    {
+      "code": "16371",
+      "name": "Kai. Nirmalatai Pingle Institute of Engineering & Management studies",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/kai-nirmalatai-pingle-institute-of-engineering-management-studies-16371"
+    },
+    {
+      "code": "05182",
+      "name": "Kalyani Charitable Trust, Late Gambhirrao Natuba Sapkal College of Engineering, Anjaneri, Trimbakeshwar Road, Nashik",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/kalyani-charitable-trust-late-gambhirrao-natuba-sapkal-college-of-engineering-anjaneri-trimbakeshwar-road-nashik-05182"
+    },
+    {
+      "code": "04679",
+      "name": "Karanjekar College of Engineering & Management, Sakoli",
+      "status": "Un-Aided",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/karanjekar-college-of-engineering-management-sakoli-04679"
+    },
+    {
+      "code": "06326",
+      "name": "Karmayogi Institute of Technology",
+      "status": "Un-Aided",
+      "homeUniversity": "Punyashlok Ahilyadevi Holkar Solapur University",
+      "path": "/mht-cet/colleges/karmayogi-institute-of-technology-06326"
+    },
+    {
+      "code": "04104",
+      "name": "Kavi Kulguru Institute of Technology & Science, Ramtek",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/kavi-kulguru-institute-of-technology-science-ramtek-04104"
+    },
+    {
+      "code": "05370",
+      "name": "Kedareshwar Gramin Vikas Pratishthan, Samajbhushan Eknathrao Dhakane College, of Engineering, Shevgaon",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/kedareshwar-gramin-vikas-pratishthan-samajbhushan-eknathrao-dhakane-college-of-engineering-shevgaon-05370"
+    },
+    {
+      "code": "06808",
+      "name": "Keystone School of Engineering, Pune",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/keystone-school-of-engineering-pune-06808"
+    },
+    {
+      "code": "05106",
+      "name": "Khandesh College Education Society's College Of Engineering And Management, Jalgaon",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/khandesh-college-education-societys-college-of-engineering-and-management-jalgaon-05106"
+    },
+    {
+      "code": "06634",
+      "name": "KJEI's Trinity Academy of Engineering, Yewalewadi, Pune",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/kjeis-trinity-academy-of-engineering-yewalewadi-pune-06634"
+    },
+    {
+      "code": "06267",
+      "name": "Kolhapur Institute of Technology's College of Engineering(Autonomous), Kolhapur",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/kolhapur-institute-of-technologys-college-of-engineeringautonomous-kolhapur-06267"
+    },
+    {
+      "code": "03198",
+      "name": "Konkan Gyanpeeth College of Engineering, Karjat",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/konkan-gyanpeeth-college-of-engineering-karjat-03198"
+    },
+    {
+      "code": "03219",
+      "name": "Koti Vidya Charitable Trust's Smt. Alamuri Ratnamala Institute of Engineering and Technology, Sapgaon, Tal. Shahapur",
+      "status": "Un-Aided Linguistic Minority - Hindi",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/koti-vidya-charitable-trusts-smt-alamuri-ratnamala-institute-of-engineering-and-technology-sapgaon-tal-shahapur-03219"
+    },
+    {
+      "code": "04188",
+      "name": "Krushi Jivan Vikas Pratishthan, Ballarpur Institute of Technology, Mouza Bamni",
+      "status": "Un-Aided",
+      "homeUniversity": "Gondwana University, Gadchiroli",
+      "path": "/mht-cet/colleges/krushi-jivan-vikas-pratishthan-ballarpur-institute-of-technology-mouza-bamni-04188"
+    },
+    {
+      "code": "06219",
+      "name": "KSGBS's Bharat- Ratna Indira Gandhi College of Engineering, Kegaon, Solapur",
+      "status": "Un-Aided",
+      "homeUniversity": "Punyashlok Ahilyadevi Holkar Solapur University",
+      "path": "/mht-cet/colleges/ksgbss-bharat-ratna-indira-gandhi-college-of-engineering-kegaon-solapur-06219"
+    },
+    {
+      "code": "05235",
+      "name": "Late Bhausaheb Hiray Smarnika Samiti Trust Sanchalit Polytechnic, Malegaon, Nashik",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/late-bhausaheb-hiray-smarnika-samiti-trust-sanchalit-polytechnic-malegaon-nashik-05235"
+    },
+    {
+      "code": "06305",
+      "name": "Late Narayandas Bhawandas Chhabada Institute of Engineering & Technology, Satara",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/late-narayandas-bhawandas-chhabada-institute-of-engineering-technology-satara-06305"
+    },
+    {
+      "code": "14005",
+      "name": "Laxminarayan Innovation Technological University, Nagpur",
+      "status": "University Autonomous",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/laxminarayan-innovation-technological-university-nagpur-14005"
+    },
+    {
+      "code": "03224",
+      "name": "Leela Education Society, G.V. Acharya Institute of Engineering and Technology, Shelu, Karjat",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/leela-education-society-gv-acharya-institute-of-engineering-and-technology-shelu-karjat-03224"
+    },
+    {
+      "code": "01347",
+      "name": "LET.DR. D. B. DOD COLLEGE OF ENGINEERING",
+      "status": "Un-Aided",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/letdr-d-b-dod-college-of-engineering-01347"
+    },
+    {
+      "code": "03196",
+      "name": "Lokmanya Tilak College of Engineering, Kopar Khairane, Navi Mumbai",
+      "status": "Un-Aided Autonomous Linguistic Minority - Hindi",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/lokmanya-tilak-college-of-engineering-kopar-khairane-navi-mumbai-03196"
+    },
+    {
+      "code": "04123",
+      "name": "Lokmanya Tilak Jankalyan Shikshan Sanstha, Priyadarshani College of Engineering, Nagpur",
+      "status": "Un-Aided Autonomous Linguistic Minority - Hindi",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/lokmanya-tilak-jankalyan-shikshan-sanstha-priyadarshani-college-of-engineering-nagpur-04123"
+    },
+    {
+      "code": "06304",
+      "name": "Loknete Hanumantrao Charitable Trust's Adarsh Institute of Technology and Research Centre, Vita,Sangli",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/loknete-hanumantrao-charitable-trusts-adarsh-institute-of-technology-and-research-centre-vitasangli-06304"
+    },
+    {
+      "code": "03042",
+      "name": "Loknete Shamrao Peje Government College of Engineering, Ratnagiri",
+      "status": "Government",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/loknete-shamrao-peje-government-college-of-engineering-ratnagiri-03042"
+    },
+    {
+      "code": "05686",
+      "name": "Loknete Suhas Dwarkanath Kande College of Engineering Management and Research",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/loknete-suhas-dwarkanath-kande-college-of-engineering-management-and-research-05686"
+    },
+    {
+      "code": "04190",
+      "name": "M.D. Yergude Memorial Shikshan Prasarak Mandal's Shri Sai College of Engineering & Technology, Bhadrawati",
+      "status": "Un-Aided",
+      "homeUniversity": "Gondwana University, Gadchiroli",
+      "path": "/mht-cet/colleges/md-yergude-memorial-shikshan-prasarak-mandals-shri-sai-college-of-engineering-technology-bhadrawati-04190"
+    },
+    {
+      "code": "03175",
+      "name": "M.G.M.'s College of Engineering and Technology, Kamothe, Navi Mumbai",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/mgms-college-of-engineering-and-technology-kamothe-navi-mumbai-03175"
+    },
+    {
+      "code": "02129",
+      "name": "M.S. Bidve Engineering College, Latur",
+      "status": "Un-Aided",
+      "homeUniversity": "Swami Ramanand Teerth Marathwada University, Nanded",
+      "path": "/mht-cet/colleges/ms-bidve-engineering-college-latur-02129"
+    },
+    {
+      "code": "03725",
+      "name": "MAEER's Maharashtra Institute of Technology, Thane",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/maeers-maharashtra-institute-of-technology-thane-03725"
+    },
+    {
+      "code": "06901",
+      "name": "MAEER's MIT College of Railway Engineering and Research, Jamgaon, Barshi",
+      "status": "Un-Aided",
+      "homeUniversity": "Punyashlok Ahilyadevi Holkar Solapur University",
+      "path": "/mht-cet/colleges/maeers-mit-college-of-railway-engineering-and-research-jamgaon-barshi-06901"
+    },
+    {
+      "code": "02133",
+      "name": "Mahatma Basaweshwar Education Society's College of Engineering, Ambejogai",
+      "status": "Un-Aided",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/mahatma-basaweshwar-education-societys-college-of-engineering-ambejogai-02133"
+    },
+    {
+      "code": "03223",
+      "name": "Mahatma Education Society's Pillai HOC College of Engineering & Technology, Tal. Khalapur. Dist. Raigad",
+      "status": "Un-Aided Autonomous Linguistic Minority - Malyalam",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/mahatma-education-societys-pillai-hoc-college-of-engineering-technology-tal-khalapur-dist-raigad-03223"
+    },
+    {
+      "code": "02127",
+      "name": "Mahatma Gandhi Missions College of Engineering, Hingoli Rd, Nanded.",
+      "status": "Un-Aided",
+      "homeUniversity": "Swami Ramanand Teerth Marathwada University, Nanded",
+      "path": "/mht-cet/colleges/mahatma-gandhi-missions-college-of-engineering-hingoli-rd-nanded-02127"
+    },
+    {
+      "code": "03148",
+      "name": "Mahavir Education Trust's Shah & Anchor Kutchhi Engineering College, Mumbai",
+      "status": "Un-Aided Autonomous Linguistic Minority - Gujarathi(Jain)",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/mahavir-education-trusts-shah-anchor-kutchhi-engineering-college-mumbai-03148"
+    },
+    {
+      "code": "04192",
+      "name": "Maitraya Education Society, Nagarjuna Institute of Engineering Technology & Management, Nagpur",
+      "status": "Un-Aided",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/maitraya-education-society-nagarjuna-institute-of-engineering-technology-management-nagpur-04192"
+    },
+    {
+      "code": "01276",
+      "name": "Manav School of Engineering & Technology, Gut No. 1035 Nagpur Surat Highway, NH No. 6 Tal.Vyala, Balapur, Akola, 444302",
+      "status": "Un-Aided",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/manav-school-of-engineering-technology-gut-no-1035-nagpur-surat-highway-nh-no-6-talvyala-balapur-akola-444302-01276"
+    },
+    {
+      "code": "02666",
+      "name": "Mangaldeep College of Engineering",
+      "status": "Un-Aided",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/mangaldeep-college-of-engineering-02666"
+    },
+    {
+      "code": "03135",
+      "name": "Manjara Charitable Trust's Rajiv Gandhi Institute of Technology, Mumbai",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/manjara-charitable-trusts-rajiv-gandhi-institute-of-technology-mumbai-03135"
+    },
+    {
+      "code": "05108",
+      "name": "Maratha Vidya Prasarak Samaj's Karmaveer Adv. Baburao Ganpatrao Thakare College Of Engineering, Nashik",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/maratha-vidya-prasarak-samajs-karmaveer-adv-baburao-ganpatrao-thakare-college-of-engineering-nashik-05108"
+    },
+    {
+      "code": "06156",
+      "name": "Marathwada Mitra Mandal's College of Engineering, Karvenagar, Pune",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/marathwada-mitra-mandals-college-of-engineering-karvenagar-pune-06156"
+    },
+    {
+      "code": "06203",
+      "name": "Marathwada Mitra Mandal's Institute of Technology, Lohgaon, Pune",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/marathwada-mitra-mandals-institute-of-technology-lohgaon-pune-06203"
+    },
+    {
+      "code": "02252",
+      "name": "Marathwada Shikshan Prasarak Mandal's Shri Shivaji Institute of Engineering and Management Studies, Parbhani",
+      "status": "Un-Aided",
+      "homeUniversity": "Swami Ramanand Teerth Marathwada University, Nanded",
+      "path": "/mht-cet/colleges/marathwada-shikshan-prasarak-mandals-shri-shivaji-institute-of-engineering-and-management-studies-parbhani-02252"
+    },
+    {
+      "code": "04762",
+      "name": "Mata Mahakali College of Engineering & Technology, Warora",
+      "status": "Un-Aided",
+      "homeUniversity": "Gondwana University, Gadchiroli",
+      "path": "/mht-cet/colleges/mata-mahakali-college-of-engineering-technology-warora-04762"
+    },
+    {
+      "code": "05256",
+      "name": "Matoshri Aasarabai Institute of Technology and Research Centre",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/matoshri-aasarabai-institute-of-technology-and-research-centre-05256"
+    },
+    {
+      "code": "05177",
+      "name": "Matoshri College of Engineering and Research Centre, Eklahare, Nashik",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/matoshri-college-of-engineering-and-research-centre-eklahare-nashik-05177"
+    },
+    {
+      "code": "05263",
+      "name": "Matoshri Education Soceity, Matoshri Institute Of Technology, Dhanore, Nashik",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/matoshri-education-soceity-matoshri-institute-of-technology-dhanore-nashik-05263"
+    },
+    {
+      "code": "02116",
+      "name": "Matoshri Pratishan's Group of Institutions (Integrated Campus), Kupsarwadi , Nanded",
+      "status": "Un-Aided",
+      "homeUniversity": "Swami Ramanand Teerth Marathwada University, Nanded",
+      "path": "/mht-cet/colleges/matoshri-pratishans-group-of-institutions-integrated-campus-kupsarwadi-nanded-02116"
+    },
+    {
+      "code": "02138",
+      "name": "Matsyodari Shikshan Sansatha's College of Engineering and Technology, Jalna",
+      "status": "Un-Aided",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/matsyodari-shikshan-sansathas-college-of-engineering-and-technology-jalna-02138"
+    },
+    {
+      "code": "05411",
+      "name": "Maulana Mukhtar Ahmad Nadvi Technical Campus, Malegaon.",
+      "status": "Un-Aided Religious Minority - Muslim",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/maulana-mukhtar-ahmad-nadvi-technical-campus-malegaon-05411"
+    },
+    {
+      "code": "01265",
+      "name": "Mauli Group of Institutions, College of Engineering and Technology, Shegaon.",
+      "status": "Un-Aided",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/mauli-group-of-institutions-college-of-engineering-and-technology-shegaon-01265"
+    },
+    {
+      "code": "05688",
+      "name": "MES Institute of Engineering and Technology, sonai",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/mes-institute-of-engineering-and-technology-sonai-05688"
+    },
+    {
+      "code": "16357",
+      "name": "MES MUKUNDDAS LOHIA COLLEGE OF ENGINEERING",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/mes-mukunddas-lohia-college-of-engineering-16357"
+    },
+    {
+      "code": "05151",
+      "name": "MET Bhujbal Knowledge City MET League's Engineering College, Adgaon, Nashik.",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/met-bhujbal-knowledge-city-met-leagues-engineering-college-adgaon-nashik-05151"
+    },
+    {
+      "code": "05244",
+      "name": "MET's Institute of Technology Polytechnic, Bhujbal Knowledge City, Adgaon Nashik",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/mets-institute-of-technology-polytechnic-bhujbal-knowledge-city-adgaon-nashik-05244"
+    },
+    {
+      "code": "03440",
+      "name": "Metropolitan Institute of Technology & Management, Sukhalwad, Sindhudurg.",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/metropolitan-institute-of-technology-management-sukhalwad-sindhudurg-03440"
+    },
+    {
+      "code": "06146",
+      "name": "MIT Academy of Engineering,Alandi, Pune",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/mit-academy-of-engineeringalandi-pune-06146"
+    },
+    {
+      "code": "02282",
+      "name": "Mitthulalji Sarada Institute Of Technology, Nalwandi Road, Beed",
+      "status": "Un-Aided",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/mitthulalji-sarada-institute-of-technology-nalwandi-road-beed-02282"
+    },
+    {
+      "code": "05513",
+      "name": "MKD Institute of Technology, Nadurbar",
+      "status": "Un-Aided",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/mkd-institute-of-technology-nadurbar-05513"
+    },
+    {
+      "code": "06276",
+      "name": "MKSSS's Cummins College of Engineering for Women, Karvenagar,Pune",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/mkssss-cummins-college-of-engineering-for-women-karvenagarpune-06276"
+    },
+    {
+      "code": "06281",
+      "name": "Modern Education Society's Wadia College of Engineering, Pune",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/modern-education-societys-wadia-college-of-engineering-pune-06281"
+    },
+    {
+      "code": "06640",
+      "name": "N. B. Navale Sinhgad College of Engineering, Kegaon, solapur",
+      "status": "Un-Aided",
+      "homeUniversity": "Punyashlok Ahilyadevi Holkar Solapur University",
+      "path": "/mht-cet/colleges/n-b-navale-sinhgad-college-of-engineering-kegaon-solapur-06640"
+    },
+    {
+      "code": "03187",
+      "name": "N.Y.S.S.'s Datta Meghe College of Engineering, Airoli, Navi Mumbai",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/nysss-datta-meghe-college-of-engineering-airoli-navi-mumbai-03187"
+    },
+    {
+      "code": "05169",
+      "name": "Nagaon Education Society's Gangamai College of Engineering, Nagaon, Tal Dist Dhule",
+      "status": "Un-Aided",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/nagaon-education-societys-gangamai-college-of-engineering-nagaon-tal-dist-dhule-05169"
+    },
+    {
+      "code": "02137",
+      "name": "Nagnathappa Halge Engineering College, Parli, Beed",
+      "status": "Un-Aided",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/nagnathappa-halge-engineering-college-parli-beed-02137"
+    },
+    {
+      "code": "06762",
+      "name": "Nanasaheb Mahadik College of Engineering,Walwa, Sangli.",
+      "status": "Un-Aided",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/nanasaheb-mahadik-college-of-engineeringwalwa-sangli-06762"
+    },
+    {
+      "code": "03723",
+      "name": "Navjeevan Education Society's College of Engineering, Bhandup(W), Mumbai",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/navjeevan-education-societys-college-of-engineering-bhandupw-mumbai-03723"
+    },
+    {
+      "code": "06632",
+      "name": "Navsahyadri Education Society's Group of Institutions",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/navsahyadri-education-societys-group-of-institutions-06632"
+    },
+    {
+      "code": "06772",
+      "name": "NBN Sinhgad Technical Institutes Campus, Pune",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/nbn-sinhgad-technical-institutes-campus-pune-06772"
+    },
+    {
+      "code": "05413",
+      "name": "Netaji Subhashchandra Bose Edu Trust,Netaji Polytechnic.,Dhule",
+      "status": "Un-Aided",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/netaji-subhashchandra-bose-edu-trustnetaji-polytechnicdhule-05413"
+    },
+    {
+      "code": "03471",
+      "name": "New Horizon Institute of Technology & Management, Thane",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/new-horizon-institute-of-technology-management-thane-03471"
+    },
+    {
+      "code": "06402",
+      "name": "NEW INSTITUTE OF TECHNOLOGY,KOLHAPUR",
+      "status": "Un-Aided",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/new-institute-of-technologykolhapur-06402"
+    },
+    {
+      "code": "06725",
+      "name": "New Satara Shikshan Sankul,New Satara College of Engineering & Management, Pandharpur",
+      "status": "Un-Aided",
+      "homeUniversity": "Punyashlok Ahilyadevi Holkar Solapur University",
+      "path": "/mht-cet/colleges/new-satara-shikshan-sankulnew-satara-college-of-engineering-management-pandharpur-06725"
+    },
+    {
+      "code": "05414",
+      "name": "Nikam Institute of Technology And Management Studies ,Dhule",
+      "status": "Un-Aided",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/nikam-institute-of-technology-and-management-studies-dhule-05414"
+    },
+    {
+      "code": "02779",
+      "name": "NKSPT INSTITUTE OF ENGINEERING AND TECHNOLOGY PATHIKAR CAMPUS",
+      "status": "Un-Aided",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/nkspt-institute-of-engineering-and-technology-pathikar-campus-02779"
+    },
+    {
+      "code": "06310",
+      "name": "Nutan Maharashtra Vidya Prasarak Mandal, Nutan Maharashtra Institute of Engineering &Technology, Talegaon station, Pune",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/nutan-maharashtra-vidya-prasarak-mandal-nutan-maharashtra-institute-of-engineering-technology-talegaon-station-pune-06310"
+    },
+    {
+      "code": "01107",
+      "name": "P. R. Pote Patil College of Engineering & Management, Amravati",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/p-r-pote-patil-college-of-engineering-management-amravati-01107"
+    },
+    {
+      "code": "05497",
+      "name": "P.G. College of Engineering & Technology, Nandurbar",
+      "status": "Un-Aided",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/pg-college-of-engineering-technology-nandurbar-05497"
+    },
+    {
+      "code": "06768",
+      "name": "P.K. Technical Campus, Pune.",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/pk-technical-campus-pune-06768"
+    },
+    {
+      "code": "05164",
+      "name": "P.S.G.V.P. Mandal's D.N. Patel College of Engineering, Shahada, Dist. Nandurbar",
+      "status": "Un-Aided Linguistic Minority - Gujar",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/psgvp-mandals-dn-patel-college-of-engineering-shahada-dist-nandurbar-05164"
+    },
+    {
+      "code": "01182",
+      "name": "Padmashri Dr. V.B. Kolte College of Engineering, Malkapur, Buldhana",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/padmashri-dr-vb-kolte-college-of-engineering-malkapur-buldhana-01182"
+    },
+    {
+      "code": "02134",
+      "name": "Peoples Education Society's College of Engineering, Aurangabad",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/peoples-education-societys-college-of-engineering-aurangabad-02134"
+    },
+    {
+      "code": "06766",
+      "name": "Phaltan Education Society's College of Engineering Thakurki Tal- Phaltan Dist-Satara",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/phaltan-education-societys-college-of-engineering-thakurki-tal-phaltan-dist-satara-06766"
+    },
+    {
+      "code": "06175",
+      "name": "Pimpri Chinchwad Education Trust, Pimpri Chinchwad College of Engineering, Pune",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/pimpri-chinchwad-education-trust-pimpri-chinchwad-college-of-engineering-pune-06175"
+    },
+    {
+      "code": "06822",
+      "name": "Pimpri Chinchwad Education Trust's Pimpri Chinchwad College Of Engineering And Research, Ravet",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/pimpri-chinchwad-education-trusts-pimpri-chinchwad-college-of-engineering-and-research-ravet-06822"
+    },
+    {
+      "code": "06223",
+      "name": "Pradnya Niketan Education Society's Nagesh Karajagi Orchid College of Engineering & Technology, Solapur",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Punyashlok Ahilyadevi Holkar Solapur University",
+      "path": "/mht-cet/colleges/pradnya-niketan-education-societys-nagesh-karajagi-orchid-college-of-engineering-technology-solapur-06223"
+    },
+    {
+      "code": "05139",
+      "name": "Pravara Rural College of Engineering, Loni, Pravaranagar, Ahmednagar.",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/pravara-rural-college-of-engineering-loni-pravaranagar-ahmednagar-05139"
+    },
+    {
+      "code": "05125",
+      "name": "Pravara Rural Education Society's Sir Visvesvaraya Institute of Technology, Chincholi Dist. Nashik",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/pravara-rural-education-societys-sir-visvesvaraya-institute-of-technology-chincholi-dist-nashik-05125"
+    },
+    {
+      "code": "03277",
+      "name": "Pravin Rohidas Patil College of Engineering & Technology",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/pravin-rohidas-patil-college-of-engineering-technology-03277"
+    },
+    {
+      "code": "04177",
+      "name": "Priyadarshini Bhagwati College of Engineering, Harpur Nagar, Umred Road,Nagpur",
+      "status": "Un-Aided Autonomous Linguistic Minority - Hindi",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/priyadarshini-bhagwati-college-of-engineering-harpur-nagar-umred-roadnagpur-04177"
+    },
+    {
+      "code": "01128",
+      "name": "Prof Ram Meghe College of Engineering and Management, Badnera",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/prof-ram-meghe-college-of-engineering-and-management-badnera-01128"
+    },
+    {
+      "code": "01105",
+      "name": "Prof. Ram Meghe Institute of Technology & Research, Amravati",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/prof-ram-meghe-institute-of-technology-research-amravati-01105"
+    },
+    {
+      "code": "06139",
+      "name": "Progressive Education Society's Modern College of Engineering, Pune",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/progressive-education-societys-modern-college-of-engineering-pune-06139"
+    },
+    {
+      "code": "06206",
+      "name": "Pune District Education Association's College of Engineering, Manjari(Bk), Hadapsar, Pune",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/pune-district-education-associations-college-of-engineering-manjaribk-hadapsar-pune-06206"
+    },
+    {
+      "code": "06271",
+      "name": "Pune Institute of Computer Technology",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/pune-institute-of-computer-technology-06271"
+    },
+    {
+      "code": "05330",
+      "name": "PUNE VIDYARTHI GRIHA’S COLLEGE OF ENGINEERING & SHRIKRUSHNA S. DHAMANKAR INSTITUTE OF MANAGEMENT, NASHIK",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/pune-vidyarthi-grihas-college-of-engineering-shrikrushna-s-dhamankar-institute-of-management-nashik-05330"
+    },
+    {
+      "code": "06041",
+      "name": "Punyashlok Ahilyadevi Holkar Solapur University, Solapur",
+      "status": "University Department",
+      "homeUniversity": "Punyashlok Ahilyadevi Holkar Solapur University",
+      "path": "/mht-cet/colleges/punyashlok-ahilyadevi-holkar-solapur-university-solapur-06041"
+    },
+    {
+      "code": "02015",
+      "name": "PURANMAL LAHOTI GOVERNMENT INSTITUTE OF ENGINEERING AND TECHNOLOGY, LATUR",
+      "status": "Government",
+      "homeUniversity": "Swami Ramanand Teerth Marathwada University, Nanded",
+      "path": "/mht-cet/colleges/puranmal-lahoti-government-institute-of-engineering-and-technology-latur-02015"
+    },
+    {
+      "code": "06274",
+      "name": "PVG's College of Engineering, Technology & Management",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/pvgs-college-of-engineering-technology-management-06274"
+    },
+    {
+      "code": "05172",
+      "name": "R. C. Patel Institute of Technology, Shirpur",
+      "status": "Un-Aided Autonomous Linguistic Minority - Gujarathi",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/r-c-patel-institute-of-technology-shirpur-05172"
+    },
+    {
+      "code": "05433",
+      "name": "R.C. Patel College of Engineering and Polytechnic, Shirpur",
+      "status": "Un-Aided Linguistic Minority - Gujarathi",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/rc-patel-college-of-engineering-and-polytechnic-shirpur-05433"
+    },
+    {
+      "code": "04648",
+      "name": "R.V. Parankar College of Engineering & Technology, Arvi, Dist Wardha",
+      "status": "Un-Aided",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/rv-parankar-college-of-engineering-technology-arvi-dist-wardha-04648"
+    },
+    {
+      "code": "03202",
+      "name": "Rajendra Mane College of Engineering & Technology Ambav Deorukh",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/rajendra-mane-college-of-engineering-technology-ambav-deorukh-03202"
+    },
+    {
+      "code": "06324",
+      "name": "Rajgad Technical Campus",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/rajgad-technical-campus-06324"
+    },
+    {
+      "code": "04163",
+      "name": "Rajiv Gandhi College of Engineering Research & Technology Chandrapur",
+      "status": "Un-Aided",
+      "homeUniversity": "Gondwana University, Gadchiroli",
+      "path": "/mht-cet/colleges/rajiv-gandhi-college-of-engineering-research-technology-chandrapur-04163"
+    },
+    {
+      "code": "05409",
+      "name": "Rajiv Gandhi College of Engineering, At Post Karjule Hariya Tal.Parner, Dist.Ahmednagar",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/rajiv-gandhi-college-of-engineering-at-post-karjule-hariya-talparner-distahmednagar-05409"
+    },
+    {
+      "code": "06769",
+      "name": "Rasiklal M. Dhariwal Sinhgad Technical Institutes Campus, Warje, Pune.",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/rasiklal-m-dhariwal-sinhgad-technical-institutes-campus-warje-pune-06769"
+    },
+    {
+      "code": "06270",
+      "name": "Rayat Shikshan Sanstha's Karmaveer Bhaurao Patil College of Engineering, Satara",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/rayat-shikshan-sansthas-karmaveer-bhaurao-patil-college-of-engineering-satara-06270"
+    },
+    {
+      "code": "03201",
+      "name": "Rizvi Education Society's Rizvi College of Engineering, Bandra,Mumbai",
+      "status": "Un-Aided Religious Minority - Muslim",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/rizvi-education-societys-rizvi-college-of-engineering-bandramumbai-03201"
+    },
+    {
+      "code": "06643",
+      "name": "S K N Sinhgad College of Engineering, Korti Tal. Pandharpur Dist Solapur",
+      "status": "Un-Aided",
+      "homeUniversity": "Punyashlok Ahilyadevi Holkar Solapur University",
+      "path": "/mht-cet/colleges/s-k-n-sinhgad-college-of-engineering-korti-tal-pandharpur-dist-solapur-06643"
+    },
+    {
+      "code": "03211",
+      "name": "S.I.E.S. Graduate School of Technology, Nerul, Navi Mumbai",
+      "status": "Un-Aided Autonomous Linguistic Minority - Tamil",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/sies-graduate-school-of-technology-nerul-navi-mumbai-03211"
+    },
+    {
+      "code": "03206",
+      "name": "S.S.P.M.'s College of Engineering, Kankavli",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/sspms-college-of-engineering-kankavli-03206"
+    },
+    {
+      "code": "06782",
+      "name": "Sahakar Maharshee Shankarrao Mohite Patil Institute of Technology & Research, Akluj",
+      "status": "Un-Aided",
+      "homeUniversity": "Punyashlok Ahilyadevi Holkar Solapur University",
+      "path": "/mht-cet/colleges/sahakar-maharshee-shankarrao-mohite-patil-institute-of-technology-research-akluj-06782"
+    },
+    {
+      "code": "06758",
+      "name": "Sahyadri Valley College of Engineering & Technology, Rajuri, Pune.",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/sahyadri-valley-college-of-engineering-technology-rajuri-pune-06758"
+    },
+    {
+      "code": "05682",
+      "name": "Sai College of Engineering and Technology",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/sai-college-of-engineering-and-technology-05682"
+    },
+    {
+      "code": "06635",
+      "name": "Samarth College of Engineering and Management",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/samarth-college-of-engineering-and-management-06635"
+    },
+    {
+      "code": "06545",
+      "name": "Samarth Education Trust's Arvind Gavali College Of Engineering Panwalewadi, Varye,Satara.",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/samarth-education-trusts-arvind-gavali-college-of-engineering-panwalewadi-varyesatara-06545"
+    },
+    {
+      "code": "04139",
+      "name": "Samridhi Sarwajanik Charitable Trust, Jhulelal Institute of Technology, Nagpur",
+      "status": "Un-Aided Autonomous Linguistic Minority - Sindhi",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/samridhi-sarwajanik-charitable-trust-jhulelal-institute-of-technology-nagpur-04139"
+    },
+    {
+      "code": "05109",
+      "name": "Sandip Foundation, Sandip Institute of Technology and Research Centre, Mahiravani, Nashik",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/sandip-foundation-sandip-institute-of-technology-and-research-centre-mahiravani-nashik-05109"
+    },
+    {
+      "code": "05331",
+      "name": "Sandip Foundation's, Sandip Institute of Engineering & Management, Nashik",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/sandip-foundations-sandip-institute-of-engineering-management-nashik-05331"
+    },
+    {
+      "code": "05399",
+      "name": "Sanghavi College of Engineering, Varvandi, Nashik.",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/sanghavi-college-of-engineering-varvandi-nashik-05399"
+    },
+    {
+      "code": "06811",
+      "name": "Sanjay Ghodawat Institute",
+      "status": "Un-Aided",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/sanjay-ghodawat-institute-06811"
+    },
+    {
+      "code": "06315",
+      "name": "Sanjeevan Group of Institutions",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/sanjeevan-group-of-institutions-06315"
+    },
+    {
+      "code": "05160",
+      "name": "Sanjivani Rural Education Society's Sanjivani College of Engineering, Kopargaon",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/sanjivani-rural-education-societys-sanjivani-college-of-engineering-kopargaon-05160"
+    },
+    {
+      "code": "04143",
+      "name": "Sanmarg Shikshan Sanstha, Mandukarrao Pandav College of Engineering, Bhandara",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/sanmarg-shikshan-sanstha-mandukarrao-pandav-college-of-engineering-bhandara-04143"
+    },
+    {
+      "code": "04133",
+      "name": "Sanmarg Shikshan Sanstha's Smt. Radhikatai Pandav College of Engineering, Nagpur",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/sanmarg-shikshan-sansthas-smt-radhikatai-pandav-college-of-engineering-nagpur-04133"
+    },
+    {
+      "code": "01180",
+      "name": "Sanmati Engineering College, Sawargaon Barde, Washim",
+      "status": "Un-Aided",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/sanmati-engineering-college-sawargaon-barde-washim-01180"
+    },
+    {
+      "code": "02758",
+      "name": "Sant Eknath College of Engineering",
+      "status": "Un-Aided",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/sant-eknath-college-of-engineering-02758"
+    },
+    {
+      "code": "01005",
+      "name": "Sant Gadge Baba Amravati University,Amravati",
+      "status": "University Department",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/sant-gadge-baba-amravati-universityamravati-01005"
+    },
+    {
+      "code": "06803",
+      "name": "Sant Gajanan Maharaj College of Engineering, Gadhinglaj",
+      "status": "Un-Aided",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/sant-gajanan-maharaj-college-of-engineering-gadhinglaj-06803"
+    },
+    {
+      "code": "05683",
+      "name": "Saptashrungi College of Engineering and Polytechnic",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/saptashrungi-college-of-engineering-and-polytechnic-05683"
+    },
+    {
+      "code": "03147",
+      "name": "Saraswati Education Society, Yadavrao Tasgaonkar Institute of Engineering & Technology, Karjat",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/saraswati-education-society-yadavrao-tasgaonkar-institute-of-engineering-technology-karjat-03147"
+    },
+    {
+      "code": "03154",
+      "name": "Saraswati Education Society's Saraswati College of Engineering,Kharghar Navi Mumbai",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/saraswati-education-societys-saraswati-college-of-engineeringkharghar-navi-mumbai-03154"
+    },
+    {
+      "code": "03014",
+      "name": "Sardar Patel College of Engineering, Andheri",
+      "status": "Government-Aided Autonomous",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/sardar-patel-college-of-engineering-andheri-03014"
+    },
+    {
+      "code": "16372",
+      "name": "Sawkar Women's Institute of Technology",
+      "status": "Un-Aided",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/sawkar-womens-institute-of-technology-16372"
+    },
+    {
+      "code": "06319",
+      "name": "Shahajirao Patil Vikas Pratishthan, S.B.Patil College of Engineering, Vangali, Tal. Indapur",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/shahajirao-patil-vikas-pratishthan-sbpatil-college-of-engineering-vangali-tal-indapur-06319"
+    },
+    {
+      "code": "06308",
+      "name": "Shanti Education Society, A.G. Patil Institute of Technology, Soregaon, Solapur(North)",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Punyashlok Ahilyadevi Holkar Solapur University",
+      "path": "/mht-cet/colleges/shanti-education-society-ag-patil-institute-of-technology-soregaon-solapurnorth-06308"
+    },
+    {
+      "code": "06317",
+      "name": "Sharad Institute of Technology College of Engineering, Yadrav(Ichalkaranji)",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/sharad-institute-of-technology-college-of-engineering-yadravichalkaranji-06317"
+    },
+    {
+      "code": "06269",
+      "name": "Shetkari Shikshan Mandal's Pad. Vasantraodada Patil Institute of Technology, Budhgaon, Sangli",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/shetkari-shikshan-mandals-pad-vasantraodada-patil-institute-of-technology-budhgaon-sangli-06269"
+    },
+    {
+      "code": "02770",
+      "name": "Shetkari Shikshan Prasarak Mandal's Mahesh Institute of Engineering and Technology , Ashti",
+      "status": "Un-Aided",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/shetkari-shikshan-prasarak-mandals-mahesh-institute-of-engineering-and-technology-ashti-02770"
+    },
+    {
+      "code": "06028",
+      "name": "SHIVAJI UNIVERSITY SCHOOL OF ENGINEERING AND TECHNOLOGY (DEPARTMENT OF TECHNOLOGY)",
+      "status": "University Department",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/shivaji-university-school-of-engineering-and-technology-department-of-technology-06028"
+    },
+    {
+      "code": "03193",
+      "name": "Shivajirao S. Jondhale College of Engineering, Dombivali,Mumbai",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/shivajirao-s-jondhale-college-of-engineering-dombivalimumbai-03193"
+    },
+    {
+      "code": "06799",
+      "name": "Shivganga Charitable Trust, Sangli Vishveshwarya Technical Campus, Faculty of Diploma Engineering, Patgaon, Miraj",
+      "status": "Un-Aided",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/shivganga-charitable-trust-sangli-vishveshwarya-technical-campus-faculty-of-diploma-engineering-patgaon-miraj-06799"
+    },
+    {
+      "code": "06275",
+      "name": "Shivnagar Vidya Prasarak Mandal's College of Engineering, Malegaon-Baramati",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/shivnagar-vidya-prasarak-mandals-college-of-engineering-malegaon-baramati-06275"
+    },
+    {
+      "code": "05104",
+      "name": "Shramsadhana Bombay Trust, College of Engineering & Technology, Jalgaon",
+      "status": "Un-Aided",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/shramsadhana-bombay-trust-college-of-engineering-technology-jalgaon-05104"
+    },
+    {
+      "code": "06322",
+      "name": "Shree Gajanan Maharaj Shikshan Prasarak Manda'l Sharadchandra Pawar College of Engineering, Dumbarwadi",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/shree-gajanan-maharaj-shikshan-prasarak-mandal-sharadchandra-pawar-college-of-engineering-dumbarwadi-06322"
+    },
+    {
+      "code": "03423",
+      "name": "Shree L.R. Tiwari College of Engineering, Mira Road, Mumbai",
+      "status": "Un-Aided Autonomous Linguistic Minority - Hindi",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/shree-lr-tiwari-college-of-engineering-mira-road-mumbai-03423"
+    },
+    {
+      "code": "06759",
+      "name": "Shree Ramchandra College of Engineering, Lonikand,Pune",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/shree-ramchandra-college-of-engineering-lonikandpune-06759"
+    },
+    {
+      "code": "06466",
+      "name": "Shree Santkrupa Shikshan Sanstha, Shree Santkrupa Institute Of Engineering & Technology, Karad",
+      "status": "Un-Aided",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/shree-santkrupa-shikshan-sanstha-shree-santkrupa-institute-of-engineering-technology-karad-06466"
+    },
+    {
+      "code": "06938",
+      "name": "Shree Siddheshwar Women's College Of Engineering Solapur.",
+      "status": "Un-Aided",
+      "homeUniversity": "Punyashlok Ahilyadevi Holkar Solapur University",
+      "path": "/mht-cet/colleges/shree-siddheshwar-womens-college-of-engineering-solapur-06938"
+    },
+    {
+      "code": "02131",
+      "name": "Shree Tuljabhavani College of Engineering, Tuljapur",
+      "status": "Un-Aided",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/shree-tuljabhavani-college-of-engineering-tuljapur-02131"
+    },
+    {
+      "code": "02112",
+      "name": "Shree Yash Pratishthan, Shreeyash College of Engineering and Technology, Aurangabad",
+      "status": "Un-Aided",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/shree-yash-pratishthan-shreeyash-college-of-engineering-and-technology-aurangabad-02112"
+    },
+    {
+      "code": "02020",
+      "name": "Shri Guru Gobind Singhji Institute of Engineering and Technology, Nanded",
+      "status": "Government-Aided Autonomous",
+      "homeUniversity": "Swami Ramanand Teerth Marathwada University, Nanded",
+      "path": "/mht-cet/colleges/shri-guru-gobind-singhji-institute-of-engineering-and-technology-nanded-02020"
+    },
+    {
+      "code": "01121",
+      "name": "Shri Hanuman Vyayam Prasarak Mandals College of Engineering & Technology, Amravati",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/shri-hanuman-vyayam-prasarak-mandals-college-of-engineering-technology-amravati-01121"
+    },
+    {
+      "code": "01101",
+      "name": "Shri Sant Gajanan Maharaj College of Engineering,Shegaon",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/shri-sant-gajanan-maharaj-college-of-engineeringshegaon-01101"
+    },
+    {
+      "code": "01116",
+      "name": "Shri Shivaji Education Society's College of Engineering and Technology, Akola",
+      "status": "Un-Aided",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/shri-shivaji-education-societys-college-of-engineering-and-technology-akola-01116"
+    },
+    {
+      "code": "05103",
+      "name": "Shri Shivaji Vidya Prasarak Sanstha's Late Bapusaheb Shivaji Rao Deore College of Engineering,Dhule",
+      "status": "Un-Aided",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/shri-shivaji-vidya-prasarak-sansthas-late-bapusaheb-shivaji-rao-deore-college-of-engineeringdhule-05103"
+    },
+    {
+      "code": "05509",
+      "name": "Shri Swami Samarth Institute of Management and Technology, Malwadi-Bota",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/shri-swami-samarth-institute-of-management-and-technology-malwadi-bota-05509"
+    },
+    {
+      "code": "05545",
+      "name": "Shri Vile Parle Kelavani Mandal's College of Engineering, Shirpur",
+      "status": "Un-Aided Linguistic Minority - Gujarathi",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/shri-vile-parle-kelavani-mandals-college-of-engineering-shirpur-05545"
+    },
+    {
+      "code": "03199",
+      "name": "Shri Vile Parle Kelvani Mandal's Dwarkadas J. Sanghvi College of Engineering, Vile Parle,Mumbai",
+      "status": "Un-Aided Autonomous Linguistic Minority - Gujarathi",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/shri-vile-parle-kelvani-mandals-dwarkadas-j-sanghvi-college-of-engineering-vile-parlemumbai-03199"
+    },
+    {
+      "code": "06644",
+      "name": "Shri. Ambabai Talim Sanstha's Sanjay Bhokare Group of Institutes, Miraj",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/shri-ambabai-talim-sansthas-sanjay-bhokare-group-of-institutes-miraj-06644"
+    },
+    {
+      "code": "16121",
+      "name": "Shri. Anandrao Abitkar College of Engineering, Pal",
+      "status": "Un-Aided",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/shri-anandrao-abitkar-college-of-engineering-pal-16121"
+    },
+    {
+      "code": "06217",
+      "name": "Shri. Balasaheb Mane Shikshan Prasarak Mandal's, Ashokrao Mane Group of Institutions",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/shri-balasaheb-mane-shikshan-prasarak-mandals-ashokrao-mane-group-of-institutions-06217"
+    },
+    {
+      "code": "05381",
+      "name": "Shri. Jaykumar Rawal Institute of Technology, Dondaicha.",
+      "status": "Un-Aided",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/shri-jaykumar-rawal-institute-of-technology-dondaicha-05381"
+    },
+    {
+      "code": "04144",
+      "name": "Shri. Sai Shikshan Sanstha, Nagpur Institute of Technology, Nagpur",
+      "status": "Un-Aided",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/shri-sai-shikshan-sanstha-nagpur-institute-of-technology-nagpur-04144"
+    },
+    {
+      "code": "06795",
+      "name": "Shri.Someshwar Shikshan Prasarak Mandal, Sharadchandra Pawar College of Engineering & Technology, Someshwar Nagar",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/shrisomeshwar-shikshan-prasarak-mandal-sharadchandra-pawar-college-of-engineering-technology-someshwar-nagar-06795"
+    },
+    {
+      "code": "04141",
+      "name": "Shriram Gram Vikas Shikshan Sanstha, Vilasrao Deshmukh College of Engineering and Technology, Nagpur",
+      "status": "Un-Aided",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/shriram-gram-vikas-shikshan-sanstha-vilasrao-deshmukh-college-of-engineering-and-technology-nagpur-04141"
+    },
+    {
+      "code": "06444",
+      "name": "Shriram Institute Of Engineering & Technology, (Poly), Paniv",
+      "status": "Un-Aided",
+      "homeUniversity": "Punyashlok Ahilyadevi Holkar Solapur University",
+      "path": "/mht-cet/colleges/shriram-institute-of-engineering-technology-poly-paniv-06444"
+    },
+    {
+      "code": "06149",
+      "name": "Siddhant College of Engineering, A/p Sudumbare, Tal.Maval, Dist-Pune",
+      "status": "Un-Aided Linguistic Minority - Hindi",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/siddhant-college-of-engineering-ap-sudumbare-talmaval-dist-pune-06149"
+    },
+    {
+      "code": "01268",
+      "name": "Siddhivinayak Technical Campus, School of Engineering & Research Technology, Shirasgon, Nile",
+      "status": "Un-Aided",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/siddhivinayak-technical-campus-school-of-engineering-research-technology-shirasgon-nile-01268"
+    },
+    {
+      "code": "06187",
+      "name": "Sinhgad Academy of Engineering, Kondhwa (BK) Kondhwa-Saswad Road, Pune",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/sinhgad-academy-of-engineering-kondhwa-bk-kondhwa-saswad-road-pune-06187"
+    },
+    {
+      "code": "06177",
+      "name": "Sinhgad College of Engineering, Vadgaon (BK), Pune",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/sinhgad-college-of-engineering-vadgaon-bk-pune-06177"
+    },
+    {
+      "code": "06185",
+      "name": "Sinhgad Institute of Technology, Kusgaon (BK) Lonavala",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/sinhgad-institute-of-technology-kusgaon-bk-lonavala-06185"
+    },
+    {
+      "code": "06182",
+      "name": "Sinhgad Technical Education Society, Sinhgad Institute of Technology and Science, Narhe (Ambegaon)",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/sinhgad-technical-education-society-sinhgad-institute-of-technology-and-science-narhe-ambegaon-06182"
+    },
+    {
+      "code": "06178",
+      "name": "Sinhgad Technical Education Society's Smt. Kashibai Navale College of Engineering,Vadgaon,Pune",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/sinhgad-technical-education-societys-smt-kashibai-navale-college-of-engineeringvadgaonpune-06178"
+    },
+    {
+      "code": "01114",
+      "name": "Sipna Shikshan Prasarak Mandal College of Engineering & Technology, Amravati",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/sipna-shikshan-prasarak-mandal-college-of-engineering-technology-amravati-01114"
+    },
+    {
+      "code": "04137",
+      "name": "Sir Shantilal Badjate Charitable Trust's S. B. Jain Institute of technology, Management & Research, Nagpur",
+      "status": "Un-Aided Autonomous Linguistic Minority - Hindi",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/sir-shantilal-badjate-charitable-trusts-s-b-jain-institute-of-technology-management-research-nagpur-04137"
+    },
+    {
+      "code": "16373",
+      "name": "SJVPM College of Engineering",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/sjvpm-college-of-engineering-16373"
+    },
+    {
+      "code": "06770",
+      "name": "SKN Sinhgad Institute of Technology & Science, Kusgaon(BK),Pune.",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/skn-sinhgad-institute-of-technology-science-kusgaonbkpune-06770"
+    },
+    {
+      "code": "03192",
+      "name": "Smt. Indira Gandhi College of Engineering, Navi Mumbai",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/smt-indira-gandhi-college-of-engineering-navi-mumbai-03192"
+    },
+    {
+      "code": "05223",
+      "name": "SMT. SHARCHCHANDRIKA SURESH PATIL INSTITUTE OF TECHNOLOGY (ENGINEERING & POLYTECHNIC), CHOPDA",
+      "status": "Un-Aided",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/smt-sharchchandrika-suresh-patil-institute-of-technology-engineering-polytechnic-chopda-05223"
+    },
+    {
+      "code": "05173",
+      "name": "SNJB's Late Sau. Kantabai Bhavarlalji Jain College of Engineering, (Jain Gurukul), Neminagar,Chandwad,(Nashik)",
+      "status": "Un-Aided Autonomous Religious Minority - Jain",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/snjbs-late-sau-kantabai-bhavarlalji-jain-college-of-engineering-jain-gurukul-neminagarchandwadnashik-05173"
+    },
+    {
+      "code": "04703",
+      "name": "Somayya Institute of Technology, Chandrapur",
+      "status": "Un-Aided",
+      "homeUniversity": "Gondwana University, Gadchiroli",
+      "path": "/mht-cet/colleges/somayya-institute-of-technology-chandrapur-04703"
+    },
+    {
+      "code": "03204",
+      "name": "St. Francis Institute of Technology,Borivali, Mumbai",
+      "status": "Un-Aided Autonomous Religious Minority - Christian",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/st-francis-institute-of-technologyborivali-mumbai-03204"
+    },
+    {
+      "code": "04174",
+      "name": "ST. Vincent Pallotti College of Engineering & Technology, Nagpur",
+      "status": "Un-Aided Autonomous Religious Minority - Christian",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/st-vincent-pallotti-college-of-engineering-technology-nagpur-04174"
+    },
+    {
+      "code": "02522",
+      "name": "STMEI's Sandipani Technical Campus-Faculty of Engineering, Latur.",
+      "status": "Un-Aided",
+      "homeUniversity": "Swami Ramanand Teerth Marathwada University, Nanded",
+      "path": "/mht-cet/colleges/stmeis-sandipani-technical-campus-faculty-of-engineering-latur-02522"
+    },
+    {
+      "code": "06767",
+      "name": "Suman Ramesh Tulsiani Technical Campus: Faculty of Engineering, Kamshet,Pune.",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/suman-ramesh-tulsiani-technical-campus-faculty-of-engineering-kamshetpune-06767"
+    },
+    {
+      "code": "04613",
+      "name": "Suryodaya College of Engineering & Technology, Nagpur",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/suryodaya-college-of-engineering-technology-nagpur-04613"
+    },
+    {
+      "code": "06220",
+      "name": "SVERI's College of Engineering, Pandharpur",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Punyashlok Ahilyadevi Holkar Solapur University",
+      "path": "/mht-cet/colleges/sveris-college-of-engineering-pandharpur-06220"
+    },
+    {
+      "code": "03025",
+      "name": "Svkm's Shri Bhagubhai Mafatlal Polytechnic & College of Engineering",
+      "status": "Un-Aided Linguistic Minority - Gujarathi",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/svkms-shri-bhagubhai-mafatlal-polytechnic-college-of-engineering-03025"
+    },
+    {
+      "code": "06467",
+      "name": "Swami Vivekanand Institute Of Technology, Solapur",
+      "status": "Un-Aided",
+      "homeUniversity": "Punyashlok Ahilyadevi Holkar Solapur University",
+      "path": "/mht-cet/colleges/swami-vivekanand-institute-of-technology-solapur-06467"
+    },
+    {
+      "code": "06468",
+      "name": "Swami Vivekananda Shikshan Sanstha, Dr. Bapuji Salunkhe Institute Of Engineering & Technology,Kolhapur",
+      "status": "Un-Aided",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/swami-vivekananda-shikshan-sanstha-dr-bapuji-salunkhe-institute-of-engineering-technologykolhapur-06468"
+    },
+    {
+      "code": "04181",
+      "name": "Swaminarayan Siddhanta Institute Of Technology, Nagpur",
+      "status": "Un-Aided",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/swaminarayan-siddhanta-institute-of-technology-nagpur-04181"
+    },
+    {
+      "code": "05168",
+      "name": "T.M.E. Society's J.T.Mahajan College of Engineering, Faizpur",
+      "status": "Un-Aided",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/tme-societys-jtmahajan-college-of-engineering-faizpur-05168"
+    },
+    {
+      "code": "01126",
+      "name": "Takshashila Institute of Engineering & Technology, Darapur, Amravati",
+      "status": "Un-Aided",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/takshashila-institute-of-engineering-technology-darapur-amravati-01126"
+    },
+    {
+      "code": "06268",
+      "name": "Tatyasaheb Kore Institute of Engineering and Technology, Warananagar",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/tatyasaheb-kore-institute-of-engineering-and-technology-warananagar-06268"
+    },
+    {
+      "code": "03190",
+      "name": "Terna Engineering College, Nerul, Navi Mumbai",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/terna-engineering-college-nerul-navi-mumbai-03190"
+    },
+    {
+      "code": "02130",
+      "name": "Terna Public Charitable Trust's College of Engineering, Osmanabad",
+      "status": "Un-Aided",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/terna-public-charitable-trusts-college-of-engineering-osmanabad-02130"
+    },
+    {
+      "code": "03182",
+      "name": "Thadomal Shahani Engineering College, Bandra, Mumbai",
+      "status": "Un-Aided Linguistic Minority - Sindhi",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/thadomal-shahani-engineering-college-bandra-mumbai-03182"
+    },
+    {
+      "code": "03176",
+      "name": "Thakur College of Engineering and Technology, Kandivali, Mumbai",
+      "status": "Un-Aided Autonomous Linguistic Minority - Hindi",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/thakur-college-of-engineering-and-technology-kandivali-mumbai-03176"
+    },
+    {
+      "code": "03724",
+      "name": "Thakur Shree DPS College of Engineering & Management",
+      "status": "Un-Aided Linguistic Minority - Hindi",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/thakur-shree-dps-college-of-engineering-management-03724"
+    },
+    {
+      "code": "03143",
+      "name": "Thakur Shyamnarayan Engineering College, Mumbai",
+      "status": "Un-Aided Linguistic Minority - Hindi",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/thakur-shyamnarayan-engineering-college-mumbai-03143"
+    },
+    {
+      "code": "05249",
+      "name": "Trimurti Shikshan Prasarak Mandal, Trimurti Institute Of Technology, Paladhi Bk, Jalgaon",
+      "status": "Un-Aided",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/trimurti-shikshan-prasarak-mandal-trimurti-institute-of-technology-paladhi-bk-jalgaon-05249"
+    },
+    {
+      "code": "06649",
+      "name": "TSSM's Bhivarabai Sawant College of Engineering and Research, Narhe, Pune",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/tssms-bhivarabai-sawant-college-of-engineering-and-research-narhe-pune-06649"
+    },
+    {
+      "code": "06122",
+      "name": "TSSMS's Pd. Vasantdada Patil Institute of Technology, Bavdhan, Pune",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/tssmss-pd-vasantdada-patil-institute-of-technology-bavdhan-pune-06122"
+    },
+    {
+      "code": "04151",
+      "name": "Tulsiramji Gaikwad Patil College of Engineering & Technology, Nagpur",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/tulsiramji-gaikwad-patil-college-of-engineering-technology-nagpur-04151"
+    },
+    {
+      "code": "06625",
+      "name": "Universal College of Engineering & Research, Sasewadi",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/universal-college-of-engineering-research-sasewadi-06625"
+    },
+    {
+      "code": "02021",
+      "name": "University Department of Chemical Technology, Aurangabad",
+      "status": "University Department",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/university-department-of-chemical-technology-aurangabad-02021"
+    },
+    {
+      "code": "05003",
+      "name": "University Institute of Chemical Technology, North Maharashtra University, Jalgaon",
+      "status": "University Department",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/university-institute-of-chemical-technology-north-maharashtra-university-jalgaon-05003"
+    },
+    {
+      "code": "04026",
+      "name": "University Institute of Technology",
+      "status": "University Managed",
+      "homeUniversity": "Gondwana University, Gadchiroli",
+      "path": "/mht-cet/colleges/university-institute-of-technology-04026"
+    },
+    {
+      "code": "02805",
+      "name": "Urvara Pathrikar Engineering College",
+      "status": "Un-Aided",
+      "homeUniversity": "Dr. Babasaheb Ambedkar Marathwada University",
+      "path": "/mht-cet/colleges/urvara-pathrikar-engineering-college-02805"
+    },
+    {
+      "code": "03035",
+      "name": "Usha Mittal Institute of Technology SNDT Women's University, Mumbai",
+      "status": "University Managed (Un-Aided)",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/usha-mittal-institute-of-technology-sndt-womens-university-mumbai-03035"
+    },
+    {
+      "code": "05597",
+      "name": "VAMANRAO ITHAPE COLLEGE OF ENGINEERING AND MANAGEMENT",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/vamanrao-ithape-college-of-engineering-and-management-05597"
+    },
+    {
+      "code": "05365",
+      "name": "Vardhaman Education & Welfare Society, Ahinsa Institute of Technology, Post. Dondaicha, Dhule",
+      "status": "Un-Aided Religious Minority - Jain",
+      "homeUniversity": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "path": "/mht-cet/colleges/vardhaman-education-welfare-society-ahinsa-institute-of-technology-post-dondaicha-dhule-05365"
+    },
+    {
+      "code": "03188",
+      "name": "Vasantdada Patil Pratishthan's College Of Engineering and Visual Arts, Sion, Mumbai",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/vasantdada-patil-pratishthans-college-of-engineering-and-visual-arts-sion-mumbai-03188"
+    },
+    {
+      "code": "03012",
+      "name": "Veermata Jijabai Technological Institute(VJTI), Matunga, Mumbai",
+      "status": "Government-Aided Autonomous",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/veermata-jijabai-technological-institutevjti-matunga-mumbai-03012"
+    },
+    {
+      "code": "05408",
+      "name": "Vidya Niketan College of Engineering, Bota Sangamner",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/vidya-niketan-college-of-engineering-bota-sangamner-05408"
+    },
+    {
+      "code": "16351",
+      "name": "Vidya Niketan Institute of Engineering & Technology, Lakhewadi",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/vidya-niketan-institute-of-engineering-technology-lakhewadi-16351"
+    },
+    {
+      "code": "03257",
+      "name": "Vidya Prasarak Mandal's College of Engineering, Thane",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/vidya-prasarak-mandals-college-of-engineering-thane-03257"
+    },
+    {
+      "code": "06284",
+      "name": "Vidya Pratishthan's Kamalnayan Bajaj Institute of Engineering & Technology, Baramati Dist.Pune",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/vidya-pratishthans-kamalnayan-bajaj-institute-of-engineering-technology-baramati-distpune-06284"
+    },
+    {
+      "code": "06321",
+      "name": "Vidya Vikas Pratishthan Institute of Engineering and Technology, Solapur",
+      "status": "Un-Aided",
+      "homeUniversity": "Punyashlok Ahilyadevi Holkar Solapur University",
+      "path": "/mht-cet/colleges/vidya-vikas-pratishthan-institute-of-engineering-and-technology-solapur-06321"
+    },
+    {
+      "code": "03139",
+      "name": "Vidyalankar Institute of Technology,Wadala, Mumbai",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/vidyalankar-institute-of-technologywadala-mumbai-03139"
+    },
+    {
+      "code": "03194",
+      "name": "Vidyavardhini's College of Engineering and Technology, Vasai",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/vidyavardhinis-college-of-engineering-and-technology-vasai-03194"
+    },
+    {
+      "code": "03217",
+      "name": "Vighnaharata Trust's Shivajirao S. Jondhale College of Engineering & Technology, Shahapur, Asangaon, Dist Thane",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/vighnaharata-trusts-shivajirao-s-jondhale-college-of-engineering-technology-shahapur-asangaon-dist-thane-03217"
+    },
+    {
+      "code": "02254",
+      "name": "Vilasrao Deshmukh Foundation Group of Institutions, Latur",
+      "status": "Un-Aided",
+      "homeUniversity": "Swami Ramanand Teerth Marathwada University, Nanded",
+      "path": "/mht-cet/colleges/vilasrao-deshmukh-foundation-group-of-institutions-latur-02254"
+    },
+    {
+      "code": "03221",
+      "name": "Vishnu Waman Thakur Charitable Trust's VIVA Institute of Technology, Virar",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/vishnu-waman-thakur-charitable-trusts-viva-institute-of-technology-virar-03221"
+    },
+    {
+      "code": "05179",
+      "name": "Vishwabharati Academy's College of Engineering, Ahmednagar",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/vishwabharati-academys-college-of-engineering-ahmednagar-05179"
+    },
+    {
+      "code": "03467",
+      "name": "Vishwaniketan's Institute of Management Entrepreneurship and Engineering Technology(i MEET), Khalapur Dist Raigad",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/vishwaniketans-institute-of-management-entrepreneurship-and-engineering-technologyi-meet-khalapur-dist-raigad-03467"
+    },
+    {
+      "code": "03445",
+      "name": "Vishwatmak Jangli Maharaj Ashram Trust (Kokamthan), Atma Malik Institute Of Technology & Research",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/vishwatmak-jangli-maharaj-ashram-trust-kokamthan-atma-malik-institute-of-technology-research-03445"
+    },
+    {
+      "code": "02189",
+      "name": "Vishweshwarayya Institute Of Engineering And Technology, Almala, Tq. Ausa, Dist. Latur",
+      "status": "Un-Aided",
+      "homeUniversity": "Swami Ramanand Teerth Marathwada University, Nanded",
+      "path": "/mht-cet/colleges/vishweshwarayya-institute-of-engineering-and-technology-almala-tq-ausa-dist-latur-02189"
+    },
+    {
+      "code": "01130",
+      "name": "Vision Buldhana Educational & Welfare Society's Pankaj Laddhad Institute of Technology & Management Studies, Yelgaon",
+      "status": "Un-Aided",
+      "homeUniversity": "Sant Gadge Baba Amravati University",
+      "path": "/mht-cet/colleges/vision-buldhana-educational-welfare-societys-pankaj-laddhad-institute-of-technology-management-studies-yelgaon-01130"
+    },
+    {
+      "code": "03185",
+      "name": "Vivekanand Education Society's Institute of Technology, Chembur, Mumbai",
+      "status": "Un-Aided Autonomous Linguistic Minority - Sindhi",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/vivekanand-education-societys-institute-of-technology-chembur-mumbai-03185"
+    },
+    {
+      "code": "03462",
+      "name": "VPM's Maharshi Parshuram College of Engineering, Velneshwar, Ratnagiri.",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/vpms-maharshi-parshuram-college-of-engineering-velneshwar-ratnagiri-03462"
+    },
+    {
+      "code": "04145",
+      "name": "Wainganga College of Engineering and Management, Dongargaon, Nagpur",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/wainganga-college-of-engineering-and-management-dongargaon-nagpur-04145"
+    },
+    {
+      "code": "06007",
+      "name": "Walchand College of Engineering, Sangli",
+      "status": "Government-Aided Autonomous",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/walchand-college-of-engineering-sangli-06007"
+    },
+    {
+      "code": "06265",
+      "name": "Walchand Institute of Technology, Solapur",
+      "status": "Un-Aided Autonomous Religious Minority - Jain",
+      "homeUniversity": "Punyashlok Ahilyadevi Holkar Solapur University",
+      "path": "/mht-cet/colleges/walchand-institute-of-technology-solapur-06265"
+    },
+    {
+      "code": "03212",
+      "name": "Watumull Institute of Engineering & Technology, Ulhasnagar",
+      "status": "Un-Aided Linguistic Minority - Sindhi",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/watumull-institute-of-engineering-technology-ulhasnagar-03212"
+    },
+    {
+      "code": "03214",
+      "name": "Xavier Institute Of Engineering C/O Xavier Technical Institute,Mahim,Mumbai",
+      "status": "Un-Aided Autonomous Religious Minority - Christian",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/xavier-institute-of-engineering-co-xavier-technical-institutemahimmumbai-03214"
+    },
+    {
+      "code": "03220",
+      "name": "Yadavrao Tasgaonkar College of Engineering & Management",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/yadavrao-tasgaonkar-college-of-engineering-management-03220"
+    },
+    {
+      "code": "16352",
+      "name": "Yashoda Mahadeo Kakade College of Engineering, Talegaon",
+      "status": "Un-Aided",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/yashoda-mahadeo-kakade-college-of-engineering-talegaon-16352"
+    },
+    {
+      "code": "06757",
+      "name": "Yashoda Technical Campus, Wadhe, Satara.",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Shivaji University, Kolhapur",
+      "path": "/mht-cet/colleges/yashoda-technical-campus-wadhe-satara-06757"
+    },
+    {
+      "code": "03470",
+      "name": "YASHWANTRAO BHONSALE INSTITUTE OF TECHNOLOGY",
+      "status": "Un-Aided",
+      "homeUniversity": "University of Mumbai",
+      "path": "/mht-cet/colleges/yashwantrao-bhonsale-institute-of-technology-03470"
+    },
+    {
+      "code": "04167",
+      "name": "Yeshwantrao Chavan College of Engineering,Wanadongri, Nagpur",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Rashtrasant Tukadoji Maharaj Nagpur University",
+      "path": "/mht-cet/colleges/yeshwantrao-chavan-college-of-engineeringwanadongri-nagpur-04167"
+    },
+    {
+      "code": "06298",
+      "name": "Zeal Education Society's Zeal College of Engineering & Reserch, Narhe, Pune",
+      "status": "Un-Aided Autonomous",
+      "homeUniversity": "Savitribai Phule Pune University",
+      "path": "/mht-cet/colleges/zeal-education-societys-zeal-college-of-engineering-reserch-narhe-pune-06298"
+    }
+  ]
+}

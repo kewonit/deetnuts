@@ -18,6 +18,7 @@ import {
   parseAsStringLiteral,
 } from "nuqs";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import MhtPill from "@/components/admissions/MhtPill";
 import {
@@ -34,8 +35,14 @@ import {
 import { TopToolbar } from "./components/TopToolbar";
 import "@/components/admissions/mht-tool.css";
 import { useCutoffData } from "./hooks/use-cutoff-data";
+import { loadSessionUser } from "@/lib/session-client";
 import { recordAnonymousStateCutoffAction } from "./anonymous-usage";
-import { DEFAULT_YEAR, ROUNDS_BY_YEAR, YEAR_OPTIONS } from "./constants";
+import {
+  DEFAULT_ROUND,
+  DEFAULT_YEAR,
+  ROUNDS_BY_YEAR,
+  YEAR_OPTIONS,
+} from "./constants";
 import {
   MHT_CET_CANDIDATURE_IDS,
   MHT_CET_CATEGORY_IDS,
@@ -110,7 +117,7 @@ function StateCutoffsContent() {
       ] as const).withDefault("rank"),
       rank: parseAsString.withDefault(""),
       year: parseAsInteger.withDefault(DEFAULT_YEAR),
-      round: parseAsInteger.withDefault(1),
+      round: parseAsInteger.withDefault(DEFAULT_ROUND),
       mht_candidature: parseAsStringLiteral(MHT_CET_CANDIDATURE_IDS),
       mht_home_university: parseAsStringLiteral(MHT_CET_HOME_UNIVERSITY_IDS),
       mht_category: parseAsStringLiteral(MHT_CET_CATEGORY_IDS),
@@ -175,23 +182,14 @@ function StateCutoffsContent() {
   const lastFetchRef = useRef<string>("");
   const pendingUserFetchActionRef = useRef(false);
 
+  // Shares the navbar's session request.
   useEffect(() => {
-    const controller = new AbortController();
-    fetch("/api/auth/session", {
-      cache: "no-store",
-      credentials: "same-origin",
-      signal: controller.signal,
-    })
-      .then((response) => (response.ok ? response.json() : { user: null }))
-      .then((data: { user?: unknown }) => {
-        setIsAuthenticated(Boolean(data.user));
-      })
-      .catch(() => {
-        if (!controller.signal.aborted) setIsAuthenticated(false);
-      });
-
+    let current = true;
+    void loadSessionUser().then((user) => {
+      if (current) setIsAuthenticated(Boolean(user));
+    });
     return () => {
-      controller.abort();
+      current = false;
     };
   }, []);
 
@@ -839,6 +837,11 @@ function StateCutoffsContent() {
         </div>
       ) : null}
 
+      <nav aria-label="Breadcrumb" className="mht-crumbs">
+        <Link href="/mht-cet">MHT-CET</Link>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">State cutoffs</span>
+      </nav>
       <div className="mht-head">
         <h1 className="mht-h1">State cutoffs</h1>
         <div className="mht-year-round">
@@ -943,17 +946,106 @@ function StateCutoffsContent() {
   );
 }
 
+const noop = () => {};
+
+// The page reads its state from the URL, so it renders in the browser. The
+// server sends this frame instead: the same components in their default state,
+// so the heading and filters are in the HTML and nothing moves on hydration.
+function StateCutoffsFrame() {
+  const step = nextQueryStep({
+    scoreReady: false,
+    homeUniversity: "",
+    candidature: "",
+    category: "",
+    ladies: null,
+  });
+  return (
+    <main className="mht-tool" aria-busy="true">
+      <nav aria-label="Breadcrumb" className="mht-crumbs">
+        <Link href="/mht-cet">MHT-CET</Link>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">State cutoffs</span>
+      </nav>
+      <div className="mht-head">
+        <h1 className="mht-h1">State cutoffs</h1>
+        <div className="mht-year-round">
+          <MhtPill
+            label="Year"
+            value={String(DEFAULT_YEAR)}
+            options={YEAR_OPTIONS.map((option) => ({
+              value: String(option.value),
+              label: option.label,
+            }))}
+            onChange={noop}
+          />
+          <MhtPill
+            label="Round"
+            value={String(DEFAULT_ROUND)}
+            options={(ROUNDS_BY_YEAR[DEFAULT_YEAR] ?? [1]).map((value) => ({
+              value: String(value),
+              label: String(value),
+            }))}
+            onChange={noop}
+          />
+        </div>
+      </div>
+      <aside className="mht-tool-side" aria-label="Filters">
+        <FilterSidebar
+          candidatureType=""
+          candidateCategory=""
+          ewsEligible={false}
+          tfwsEligible={false}
+          pwdEligible={false}
+          orphanEligible={false}
+          minorityCommunity=""
+          categories={[]}
+          courses={[]}
+          statuses={[]}
+          universities={[]}
+          eligibleSeatPoolGroups={{}}
+          onEwsEligibleChange={noop}
+          onTfwsEligibleChange={noop}
+          onPwdEligibleChange={noop}
+          onOrphanEligibleChange={noop}
+          onMinorityCommunityChange={noop}
+          onCategoriesChange={noop}
+          onCoursesChange={noop}
+          onStatusesChange={noop}
+          onUniversitiesChange={noop}
+          onClearAll={noop}
+          activeFilterCount={0}
+        />
+      </aside>
+      <div className="mht-tool-main">
+        <QueryBar
+          scoreMode="rank"
+          score=""
+          scoreInvalid={false}
+          homeUniversity=""
+          candidature=""
+          category=""
+          ladies={null}
+          step={step}
+          onScoreModeChange={noop}
+          onScoreChange={noop}
+          onHomeUniversityChange={noop}
+          onCandidatureChange={noop}
+          onCategoryChange={noop}
+          onLadiesChange={noop}
+        />
+        <div className="mht-card mht-data-card">
+          <p className="mht-data-state mht-data-prompt">
+            {step ? queryStepMessage(step, "rank", false) : null}
+          </p>
+        </div>
+      </div>
+    </main>
+  );
+}
+
 export default function StateCutoffsPage() {
   return (
-    <Suspense
-      fallback={
-        <main className="mht-tool" aria-busy="true">
-          <div className="mht-tool-main">
-            <div className="mht-card mht-data-card mht-skeleton mht-data-placeholder" />
-          </div>
-        </main>
-      }
-    >
+    <Suspense fallback={<StateCutoffsFrame />}>
       <StateCutoffsContent />
     </Suspense>
   );

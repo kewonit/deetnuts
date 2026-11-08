@@ -16,6 +16,7 @@
   margin: 0 auto;
   padding: 1.75rem clamp(1rem, 3vw, 2rem) 1rem;
 }
+.mht-tool > .mht-crumbs { grid-column: 1 / -1; margin: -1.75rem 0 -0.75rem; }
 .mht-tool > .mht-head { grid-column: 1 / -1; padding-top: 0; }
 .mht-tool-side { display: none; }
 .mht-tool-main { min-width: 0; }

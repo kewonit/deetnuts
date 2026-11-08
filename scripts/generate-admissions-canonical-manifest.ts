@@ -4,6 +4,8 @@ import { writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import PocketBase from "pocketbase";
 import { getMhtCetCollegePath } from "../lib/admissions/canonical";
+import { MHT_CET_HOME_UNIVERSITIES } from "../lib/mht-cet/state-cutoffs/candidate-profile";
+import { ROUND_CONFIG_2026 } from "../lib/mht-cet/state-cutoffs/config";
 
 function required(name: string, minimumLength = 1): string {
   const value = process.env[name];
@@ -58,10 +60,26 @@ function mode(values: string[]): string | null {
 
 async function main() {
   const pb = await createClient();
-  const [masterColleges, currentColleges] = await Promise.all([
-    fetchAll(pb, "2024_mht_cet_colleges", "college_id,college_name"),
-    fetchAll(pb, "2026_mht_cet_round_one_cutoffs", "college_code,college_name"),
-  ]);
+  // Later CAP rounds add institutes that had no earlier list, so every round counts.
+  const currentRounds = Object.entries(ROUND_CONFIG_2026).sort(
+    ([a], [b]) => Number(a) - Number(b),
+  );
+  const masterColleges = await fetchAll(
+    pb,
+    "2024_mht_cet_colleges",
+    "college_id,college_name",
+  );
+  // One collection at a time keeps the load on the small production host low.
+  const currentColleges: Record<string, unknown>[] = [];
+  for (const [, collection] of currentRounds) {
+    currentColleges.push(
+      ...(await fetchAll(
+        pb,
+        collection,
+        "college_code,college_name,status,institute_home_university_id",
+      )),
+    );
+  }
 
   const currentNames = new Map<string, string[]>();
   for (const row of currentColleges) {
@@ -88,6 +106,47 @@ async function main() {
     }
   }
 
+  // A small server-side directory of the current year's colleges, so listing
+  // pages render without querying every cutoff row.
+  const universityLabels = new Map(
+    MHT_CET_HOME_UNIVERSITIES.map((option) => [option.id, option.label]),
+  );
+  const directory = [...currentNames.keys()]
+    .map((id) => {
+      const rows = currentColleges.filter(
+        (row) => String(Number(row.college_code)) === id,
+      );
+      const universityId = mode(
+        rows.map((row) => String(row.institute_home_university_id || "")),
+      );
+      return {
+        code: id.padStart(5, "0"),
+        name: mode(currentNames.get(id) || []) || `College ${id}`,
+        status: mode(rows.map((row) => String(row.status || ""))) || "",
+        homeUniversity: (universityId && universityLabels.get(universityId)) || "",
+        path: mhtCetColleges[id],
+      };
+    })
+    .sort((a, b) => a.name.localeCompare(b.name, "en-IN"));
+  const directoryDestination = resolve(
+    process.cwd(),
+    "lib/admissions/mht-cet-directory.generated.json",
+  );
+  writeFileSync(
+    directoryDestination,
+    `${JSON.stringify(
+      {
+        version: 1,
+        source: { mhtCetYear: 2026, mhtCetRounds: currentRounds.map(([round]) => Number(round)) },
+        colleges: directory,
+      },
+      null,
+      2,
+    )}\n`,
+    "utf8",
+  );
+  console.log(`Wrote ${directoryDestination} (${directory.length} current colleges)`);
+
   const sortedColleges = Object.fromEntries(
     Object.entries(mhtCetColleges).sort(([a], [b]) => a.localeCompare(b)),
   );
@@ -95,7 +154,7 @@ async function main() {
     version: 1,
     source: {
       mhtCetYear: 2026,
-      mhtCetRound: 1,
+      mhtCetRounds: currentRounds.map(([round]) => Number(round)),
     },
     mhtCetColleges: sortedColleges,
   };
@@ -112,6 +171,10 @@ async function main() {
 
 main().catch((error) => {
   const message = error instanceof Error ? error.message : "Unknown failure";
-  console.error(`Manifest generation failed: ${message}`);
+  const detail =
+    error && typeof error === "object" && "status" in error
+      ? ` (status ${String((error as { status: unknown }).status)}, ${String((error as { url?: unknown }).url ?? "")} ${String((error as { originalError?: { message?: unknown } }).originalError?.message ?? "")})`
+      : "";
+  console.error(`Manifest generation failed: ${message}${detail}`);
   process.exitCode = 1;
 });

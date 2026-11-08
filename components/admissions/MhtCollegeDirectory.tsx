@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { IntentPrefetchLink } from "@/components/admissions/IntentPrefetchLink";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import MhtPill from "@/components/admissions/MhtPill";
 import { collegeSearchTier, prepareCollegeSearch } from "@/lib/admissions/college-search";
@@ -175,7 +175,7 @@ export default function MhtCollegeDirectory({
           <ul className="mht-dir-list">
             {visible.map((college) => (
               <li key={college.code}>
-                <Link className="mht-dir-row" href={college.path}>
+                <IntentPrefetchLink className="mht-dir-row" href={college.path}>
                   <span className="mht-dir-logo" aria-hidden="true">
                     {college.logo ? (
                       <Image
@@ -183,7 +183,6 @@ export default function MhtCollegeDirectory({
                         alt=""
                         width={40}
                         height={40}
-                        sizes="40px"
                         style={college.logo.background ? { background: college.logo.background } : undefined}
                       />
                     ) : (
@@ -205,7 +204,7 @@ export default function MhtCollegeDirectory({
                   ) : (
                     <span />
                   )}
-                </Link>
+                </IntentPrefetchLink>
               </li>
             ))}
           </ul>

@@ -2,7 +2,12 @@
   "version": 1,
   "source": {
     "mhtCetYear": 2026,
-    "mhtCetRound": 1
+    "mhtCetRounds": [
+      1,
+      2,
+      3,
+      4
+    ]
   },
   "mhtCetColleges": {
     "1002": "/mht-cet/colleges/government-college-of-engineering-amravati-01002",
@@ -28,11 +33,13 @@
     "1265": "/mht-cet/colleges/mauli-group-of-institutions-college-of-engineering-and-technology-shegaon-01265",
     "1268": "/mht-cet/colleges/siddhivinayak-technical-campus-school-of-engineering-research-technology-shirasgon-nile-01268",
     "1276": "/mht-cet/colleges/manav-school-of-engineering-technology-gut-no-1035-nagpur-surat-highway-nh-no-6-talvyala-balapur-akola-444302-01276",
+    "1347": "/mht-cet/colleges/letdr-d-b-dod-college-of-engineering-01347",
     "2008": "/mht-cet/colleges/government-college-of-engineering-chhatrapati-sambhajinagar-02008",
     "2015": "/mht-cet/colleges/puranmal-lahoti-government-institute-of-engineering-and-technology-latur-02015",
     "2020": "/mht-cet/colleges/shri-guru-gobind-singhji-institute-of-engineering-and-technology-nanded-02020",
     "2021": "/mht-cet/colleges/university-department-of-chemical-technology-aurangabad-02021",
     "2032": "/mht-cet/colleges/institute-of-chemical-technology-mumbai-marathwada-off-campus-jalna-02032",
+    "2037": "/mht-cet/colleges/deen-dayal-upadhyay-kaushal-kendra-drbabasaheb-ambedkar-marathwada-university-chhatrapati-sambhaji-nagar-02037",
     "2111": "/mht-cet/colleges/everest-education-society-group-of-institutions-integrated-campus-ohar-02111",
     "2112": "/mht-cet/colleges/shree-yash-pratishthan-shreeyash-college-of-engineering-and-technology-aurangabad-02112",
     "2113": "/mht-cet/colleges/g-s-mandals-maharashtra-institute-of-technology-aurangabad-02113",
@@ -190,6 +197,7 @@
     "4679": "/mht-cet/colleges/karanjekar-college-of-engineering-management-sakoli-04679",
     "4703": "/mht-cet/colleges/somayya-institute-of-technology-chandrapur-04703",
     "4762": "/mht-cet/colleges/mata-mahakali-college-of-engineering-technology-warora-04762",
+    "4766": "/mht-cet/colleges/dr-arun-motghare-college-of-engineering-and-technology-04766",
     "5003": "/mht-cet/colleges/university-institute-of-chemical-technology-north-maharashtra-university-jalgaon-05003",
     "5004": "/mht-cet/colleges/government-college-of-engineering-jalgaon-05004",
     "5103": "/mht-cet/colleges/shri-shivaji-vidya-prasarak-sansthas-late-bapusaheb-shivaji-rao-deore-college-of-engineeringdhule-05103",
@@ -220,6 +228,7 @@
     "5182": "/mht-cet/colleges/kalyani-charitable-trust-late-gambhirrao-natuba-sapkal-college-of-engineering-anjaneri-trimbakeshwar-road-nashik-05182",
     "5184": "/mht-cet/colleges/amruta-vaishnavi-education-welfare-trusts-shatabdi-institute-of-engineering-research-agaskhind-tal-sinnar-05184",
     "5223": "/mht-cet/colleges/smt-sharchchandrika-suresh-patil-institute-of-technology-engineering-polytechnic-chopda-05223",
+    "5235": "/mht-cet/colleges/late-bhausaheb-hiray-smarnika-samiti-trust-sanchalit-polytechnic-malegaon-nashik-05235",
     "5239": "/mht-cet/colleges/jamia-institute-of-technology-05239",
     "5244": "/mht-cet/colleges/mets-institute-of-technology-polytechnic-bhujbal-knowledge-city-adgaon-nashik-05244",
     "5249": "/mht-cet/colleges/trimurti-shikshan-prasarak-mandal-trimurti-institute-of-technology-paladhi-bk-jalgaon-05249",
@@ -255,6 +264,7 @@
     "5682": "/mht-cet/colleges/sai-college-of-engineering-and-technology-05682",
     "5683": "/mht-cet/colleges/saptashrungi-college-of-engineering-and-polytechnic-05683",
     "5686": "/mht-cet/colleges/loknete-suhas-dwarkanath-kande-college-of-engineering-management-and-research-05686",
+    "5688": "/mht-cet/colleges/mes-institute-of-engineering-and-technology-sonai-05688",
     "6004": "/mht-cet/colleges/government-college-of-engineering-research-avasari-khurd-06004",
     "6005": "/mht-cet/colleges/government-college-of-engineering-karad-06005",
     "6007": "/mht-cet/colleges/walchand-college-of-engineering-sangli-06007",
@@ -394,6 +404,7 @@
     "16355": "/mht-cet/colleges/audyogik-shikshan-mandals-nextgen-technical-campus-16355",
     "16357": "/mht-cet/colleges/mes-mukunddas-lohia-college-of-engineering-16357",
     "16371": "/mht-cet/colleges/kai-nirmalatai-pingle-institute-of-engineering-management-studies-16371",
-    "16372": "/mht-cet/colleges/sawkar-womens-institute-of-technology-16372"
+    "16372": "/mht-cet/colleges/sawkar-womens-institute-of-technology-16372",
+    "16373": "/mht-cet/colleges/sjvpm-college-of-engineering-16373"
   }
 }
