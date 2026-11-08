@@ -12,7 +12,7 @@ The current codebase covers the following data domains:
 
 | Domain                      | Coverage in Repository                         | Notes                                                |
 | --------------------------- | ---------------------------------------------- | ---------------------------------------------------- |
-| MHT-CET state cutoffs       | 2024 rounds 1-3, 2025 rounds 1-4, 2026 round 1 | Profile-aware cutoffs derived from official CAP data |
+| MHT-CET state cutoffs       | 2024 rounds 1-3, 2025 rounds 1-4, 2026 rounds 1-4 | Profile-aware cutoffs derived from official CAP data |
 | MHT-CET all-India cutoffs   | 2024 rounds 1-3                                | API handlers exist for all three rounds              |
 | MHT-CET seat matrix         | 2024                                           | Batch-ingested from CSV                              |
 | MHT-CET college master data | 2024                                           | Used for directory and detail pages                  |
