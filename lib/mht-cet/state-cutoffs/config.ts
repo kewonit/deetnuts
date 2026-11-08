@@ -47,10 +47,13 @@ export const ROUND_CONFIG_2025: Record<number, string> = {
 
 export const ROUND_CONFIG_2026: Record<number, string> = {
   1: "2026_mht_cet_round_one_cutoffs",
+  2: "2026_mht_cet_round_two_cutoffs",
+  3: "2026_mht_cet_round_three_cutoffs",
+  4: "2026_mht_cet_round_four_cutoffs",
 } as const;
 
 export const ROUNDS_BY_YEAR: Record<number, readonly number[]> = {
-  2026: [1],
+  2026: [1, 2, 3, 4],
   2024: [1, 2, 3],
   2025: [1, 2, 3, 4],
 } as const;

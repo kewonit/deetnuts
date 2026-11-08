@@ -96,8 +96,11 @@ Current tables referenced by code:
 - `2025_mht_cet_round_three_cutoffs`
 - `2025_mht_cet_round_four_cutoffs`
 - `2026_mht_cet_round_one_cutoffs`
+- `2026_mht_cet_round_two_cutoffs`
+- `2026_mht_cet_round_three_cutoffs`
+- `2026_mht_cet_round_four_cutoffs`
 
-The state-cutoff UI is year-aware. It exposes rounds 1-3 for 2024, rounds 1-4 for 2025, and the currently available Round 1 dataset for 2026. Candidate-profile filtering maps candidature, home-university, category, ladies, and supported special-reservation eligibility to the source seat pools before querying cutoff rows.
+The state-cutoff UI is year-aware. It exposes rounds 1-3 for 2024, and rounds 1-4 for both 2025 and 2026. The 2026 rounds are derived from the official per-institute CAP allotment PDFs by `scripts/scrape_mahacet_allotments.py` and loaded by `scripts/import-mahacet-2026-cap-rounds.ts`, which also loads All-India cutoffs into `2026_all_india_rounds_one` through `2026_all_india_rounds_four` (not yet shown in the UI). Candidate-profile filtering maps candidature, home-university, category, ladies, and supported special-reservation eligibility to the source seat pools before querying cutoff rows.
 
 ### MHT-CET College and Seat Data
 

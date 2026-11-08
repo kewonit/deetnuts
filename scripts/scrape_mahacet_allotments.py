@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
-"""Archive and strictly extract the official 2026 MAHACET CAP-I allotment PDFs.
+"""Archive and strictly extract the official 2026 MAHACET CAP allotment PDFs.
 
-This script is intentionally local-only: it writes under data/output and has no
-database imports or upload code. Existing valid PDFs are reused on later runs.
+One official index page links every institute's allotment PDF for CAP Rounds
+I-IV. This script downloads one round into a caller-chosen local directory,
+validates every PDF, extracts candidate-level rows, and derives Maharashtra
+state and All-India cutoffs. It has no database code; see
+scripts/import-mahacet-2026-cap-rounds.ts for the PocketBase import.
+
+Pass --purge-pdfs to delete the downloaded PDFs once extraction passes (their
+SHA-256 hashes stay in manifests/downloads.json).
 """
 
 from __future__ import annotations
@@ -12,6 +18,7 @@ import csv
 import hashlib
 import json
 import re
+import shutil
 import threading
 import time
 from collections import Counter, defaultdict
@@ -21,6 +28,7 @@ from datetime import datetime, timezone
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any, Iterable, Optional
+from urllib.error import HTTPError
 from urllib.parse import urljoin, urlparse
 from urllib.request import Request, urlopen
 
@@ -32,9 +40,8 @@ DEFAULT_URL = (
     "https://fe2026.mahacet.org/StaticPages/"
     "frmInstituteWiseAllotmentList?did=2021"
 )
-DEFAULT_OUTPUT = Path("data/output/mahacet_2026_cap_round_1")
 USER_AGENT = "DeetNuts-MAHACET-Local-Archiver/1.0"
-PDF_NAME_RE = re.compile(r"^CAPR-I_(\d{5})\.pdf$", re.IGNORECASE)
+ROUND_NUMERALS = {1: "I", 2: "II", 3: "III", 4: "IV"}
 APPLICATION_ID_RE = re.compile(r"^EN\d{8}$")
 INTEGER_RE = re.compile(r"^\d+$")
 SCORE_RE = re.compile(r"^\d{1,3}(?:\.\d+)?$")
@@ -64,8 +71,20 @@ CSV_FIELDS = [
     "gender",
     "candidate_category",
     "seat_type",
+    "allotment_status",
     "is_vacant",
 ]
+
+# From the legend printed on every later-round allotment PDF. Lists after CAP-I are
+# cumulative: every seat holder appears, marked with how the seat changed.
+ALLOTMENT_STATUS_MARKERS = {
+    "*": "BETTERMENT_IN_CHOICE_CODE",
+    "@": "BETTERMENT_IN_SEAT_TYPE",
+    "~": "NO_CHANGE",
+    "^": "ADMITTED_TO_INSTITUTE",
+    "&": "NEWLY_ALLOTTED",
+}
+STATUS_MARKER_RE = re.compile(r"^([*@~^&])\s*(.*)$")
 
 
 @dataclass(frozen=True)
@@ -77,25 +96,36 @@ class Institute:
     pdf_filename: str
 
 
+def pdf_name_pattern(round_number: int) -> re.Pattern[str]:
+    numeral = ROUND_NUMERALS[round_number]
+    return re.compile(rf"^CAPR-{numeral}_(\d{{5}})\.pdf$")
+
+
 class InstituteListParser(HTMLParser):
+    """Collect every institute row that links at least one allotment PDF.
+
+    The official page writes links as `<a href ="..."target="_blank">`; the
+    standard-library parser tolerates that, a naive href regex does not.
+    """
+
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
-        self.rows: list[tuple[list[str], str]] = []
+        self.rows: list[tuple[list[str], list[str]]] = []
         self._row: Optional[list[str]] = None
         self._cell: Optional[list[str]] = None
-        self._pdf_link: Optional[str] = None
+        self._pdf_links: list[str] = []
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, Optional[str]]]) -> None:
         attributes = dict(attrs)
         if tag == "tr":
             self._row = []
-            self._pdf_link = None
+            self._pdf_links = []
         elif tag == "td" and self._row is not None:
             self._cell = []
         elif tag == "a" and self._row is not None:
-            href = attributes.get("href") or ""
+            href = (attributes.get("href") or "").strip()
             if ".pdf" in href.lower():
-                self._pdf_link = href
+                self._pdf_links.append(href)
 
     def handle_data(self, data: str) -> None:
         if self._cell is not None:
@@ -106,10 +136,10 @@ class InstituteListParser(HTMLParser):
             self._row.append(clean_text("".join(self._cell)))
             self._cell = None
         elif tag == "tr" and self._row is not None:
-            if self._pdf_link:
-                self.rows.append((self._row, self._pdf_link))
+            if self._pdf_links:
+                self.rows.append((self._row, self._pdf_links))
             self._row = None
-            self._pdf_link = None
+            self._pdf_links = []
 
 
 class RequestRateLimiter:
@@ -151,13 +181,21 @@ def fetch_bytes(url: str, timeout: float) -> tuple[bytes, dict[str, str]]:
     return body, headers
 
 
-def parse_institutes(html: bytes, page_url: str) -> list[Institute]:
+def parse_institutes(
+    html: bytes, page_url: str, round_number: int
+) -> tuple[list[Institute], list[dict[str, Any]]]:
+    """Return the institutes that link a PDF for this round, plus those that do not."""
     parser = InstituteListParser()
     parser.feed(html.decode("utf-8", errors="strict"))
     institutes: list[Institute] = []
+    unpublished: list[dict[str, Any]] = []
     expected_host = urlparse(page_url).hostname
+    numeral = ROUND_NUMERALS[round_number]
+    name_pattern = pdf_name_pattern(round_number)
+    all_serials: list[int] = []
+    all_codes: list[str] = []
 
-    for cells, href in parser.rows:
+    for cells, hrefs in parser.rows:
         if len(cells) < 3:
             raise ValueError(f"PDF row has fewer than three cells: {cells!r}")
         serial_text, code, name = cells[:3]
@@ -167,30 +205,43 @@ def parse_institutes(html: bytes, page_url: str) -> list[Institute]:
             raise ValueError(f"Invalid institute code: {code!r}")
         if not name:
             raise ValueError(f"Institute {code} has a blank name")
-        pdf_url = urljoin(page_url, href.strip())
-        parsed_url = urlparse(pdf_url)
-        filename = Path(parsed_url.path).name
-        match = PDF_NAME_RE.fullmatch(filename)
-        if parsed_url.scheme != "https" or parsed_url.hostname != expected_host:
-            raise ValueError(f"Unexpected PDF origin for institute {code}: {pdf_url}")
+        serial = int(serial_text.rstrip("."))
+        all_serials.append(serial)
+        all_codes.append(code)
+
+        round_links: list[str] = []
+        for href in hrefs:
+            pdf_url = urljoin(page_url, href)
+            parsed_url = urlparse(pdf_url)
+            if parsed_url.scheme != "https" or parsed_url.hostname != expected_host:
+                raise ValueError(f"Unexpected PDF origin for institute {code}: {pdf_url}")
+            if not re.fullmatch(r"/CAP-(I|II|III|IV)/CAPR-\1_\d{5}\.pdf", parsed_url.path):
+                raise ValueError(f"Unexpected PDF path for institute {code}: {pdf_url}")
+            if parsed_url.path.startswith(f"/CAP-{numeral}/"):
+                round_links.append(pdf_url)
+        if len(round_links) > 1:
+            raise ValueError(f"Institute {code} links more than one CAP-{numeral} PDF")
+        if not round_links:
+            unpublished.append({"serial": serial, "code": code, "name": name})
+            continue
+
+        pdf_url = round_links[0]
+        filename = Path(urlparse(pdf_url).path).name
+        match = name_pattern.fullmatch(filename)
         if not match or match.group(1) != code:
             raise ValueError(f"PDF filename/code mismatch for institute {code}: {filename}")
-        institutes.append(
-            Institute(int(serial_text.rstrip(".")), code, name, pdf_url, filename)
-        )
+        institutes.append(Institute(serial, code, name, pdf_url, filename))
 
     if not institutes:
-        raise ValueError("No PDF rows were found on the official institute list")
-    serials = [item.serial for item in institutes]
-    if serials != list(range(1, len(institutes) + 1)):
+        raise ValueError(f"No CAP-{numeral} PDF links were found on the official institute list")
+    if all_serials != list(range(1, len(all_serials) + 1)):
         raise ValueError("Institute serials are not contiguous and ordered from 1")
-    codes = [item.code for item in institutes]
-    urls = [item.pdf_url for item in institutes]
-    if len(codes) != len(set(codes)):
+    if len(all_codes) != len(set(all_codes)):
         raise ValueError("Duplicate institute codes found on the official list")
+    urls = [item.pdf_url for item in institutes]
     if len(urls) != len(set(urls)):
         raise ValueError("Duplicate PDF URLs found on the official list")
-    return institutes
+    return institutes, unpublished
 
 
 def inspect_pdf(path: Path, expected_code: Optional[str] = None) -> dict[str, Any]:
@@ -252,6 +303,14 @@ def download_pdf(
                 "content_type": content_type,
                 "error": "",
             }
+        except HTTPError as error:
+            part.unlink(missing_ok=True)
+            if error.code == 404:
+                # Listed on the index but absent on the server; reported, never imported.
+                return {**asdict(institute), "status": "not_found", "error": "HTTP 404"}
+            last_error = error
+            if attempt < retries:
+                time.sleep(min(8.0, 0.75 * (2 ** (attempt - 1))))
         except Exception as error:
             last_error = error
             part.unlink(missing_ok=True)
@@ -281,6 +340,13 @@ def group_lines(words: list[dict[str, Any]], tolerance: float = 2.5) -> list[dic
 
 
 SECTION_PATTERNS = [
+    # From CAP-II on, vacant minority seats are released to non-minority candidates.
+    # These headings must win over the generic minority and All India patterns.
+    ("Minority Seats Allotted to Maharashtra State Candidature Candidates", "MINORITY_TO_MAHARASHTRA"),
+    ("Minority Seats Allotted to All India Candidature Candidates", "MINORITY_TO_ALL_INDIA"),
+    # CAP-IV gives vacant state seats to All India candidates; their merit numbers fit
+    # neither the state nor the All India list, so they stay a separate pool.
+    ("Maharashtra State Seats Allotted to All India Candidature Candidates", "MAHARASHTRA_TO_ALL_INDIA"),
     ("All India Seats Allotted", "ALL_INDIA"),
     ("All India Candidature Candidates", "ALL_INDIA"),
     ("Other Than Home University Seats Allotted to Home University Candidates", "OTHER_TO_HOME"),
@@ -291,6 +357,9 @@ SECTION_PATTERNS = [
     ("ORPHAN Seats", "ORPHAN"),
     ("Minority Seats Allotted", "MINORITY"),
     ("State Level Seats", "STATE_LEVEL"),
+    # CAP-IV offers remaining seats to Diploma holders on a separate merit list whose
+    # scores are diploma percentages; they must never mix with MHT-CET rows.
+    ("Diploma Candidates", "DIPLOMA"),
 ]
 
 BASE_ALLOCATION_SECTIONS = {
@@ -357,9 +426,16 @@ def update_course_metadata(course: dict[str, str], lines: list[dict[str, Any]]) 
             course["home_university"] = clean_text(match.group(2))
 
 
+# Seat types that are only valid under one allocation heading.
+SECTION_BOUND_SEAT_TYPES = {
+    "MI-MH": "MINORITY_TO_MAHARASHTRA",
+    "MI-AI": "MINORITY_TO_ALL_INDIA",
+}
+ALL_INDIA_SECTIONS = {"ALL_INDIA", "MINORITY_TO_ALL_INDIA"}
+
 SEAT_TYPE_SUFFIX_RE = re.compile(
     r"(?:"
-    r"AI|EWS|MI|TFWS|ORPHANI|ORPHANN|"
+    r"MI-MH|MI-AI|AI|EWS|MI|TFWS|ORPHANI|ORPHANN|"
     r"DEF(?:R)?(?:OPEN|OBC|SC|ST|SEBC|VJ|NT[123])S|"
     r"PWD(?:R)?(?:OPEN|OBC|SC|ST|SEBC|VJ|NT[123])[HOS]|"
     r"[GL](?:OPEN|OBC|SC|ST|SEBC|VJ|NT[123])[HOS]"
@@ -372,6 +448,18 @@ def split_merged_category_seat(text: str) -> tuple[str, str]:
     if not match:
         return text, ""
     return clean_text(text[: match.start()]), match.group(0)
+
+
+def split_status_marker(seat_text: str) -> tuple[str, str]:
+    """Split a leading allotment-status marker (e.g. `* GOPENS`) from the seat type."""
+    match = STATUS_MARKER_RE.match(seat_text)
+    if not match:
+        return "", seat_text
+    return ALLOTMENT_STATUS_MARKERS[match.group(1)], clean_text(match.group(2))
+
+
+# Gender letters sit at x~416; long candidate categories can start as early as x~428.
+CATEGORY_X_MIN = 426
 
 
 def words_in_column(
@@ -395,10 +483,21 @@ def parse_candidate_rows(
     words: list[dict[str, Any]],
     lines: list[dict[str, Any]],
     inherited_base_section: Optional[str],
-) -> tuple[list[dict[str, str]], list[dict[str, Any]], Optional[str]]:
+    inherited_section: Optional[tuple[str, str]] = None,
+) -> tuple[list[dict[str, str]], list[dict[str, Any]], Optional[str], Optional[tuple[str, str]]]:
+    """Parse one page. A page that starts with rows before any heading continues the
+    previous page's last section (`inherited_section`, reset at each new course)."""
     sections: list[tuple[float, str, str]] = []
     exam_markers: list[tuple[float, str, bool]] = []
+    # The legend printed at the foot of each page reuses heading words
+    # ("MI-Minority Seats Allotted to ..."); nothing below it is a heading.
+    legend_top = min(
+        (line["top"] for line in lines if line["text"].startswith("Legends for")),
+        default=float("inf"),
+    )
     for line in lines:
+        if line["top"] >= legend_top or line["text"].startswith("MI-"):
+            continue
         normalized = section_from_line(line["text"])
         if normalized:
             sections.append((line["top"], normalized, line["text"]))
@@ -432,12 +531,16 @@ def parse_candidate_rows(
         is_vacant = "VACANT" in same_line_text.upper()
 
         application_id = join_words(application_words)
-        seat_type = join_words(seat_words)
+        allotment_status, seat_type = split_status_marker(join_words(seat_words))
         merged_category = ""
         if not seat_type:
             merged_category, seat_type = split_merged_category_seat(
-                join_words(words_in_column(words, 430, 590, top))
+                join_words(words_in_column(words, CATEGORY_X_MIN, 590, top))
             )
+            marker_match = re.search(r"\s*([*@~^&])$", merged_category)
+            if marker_match:
+                allotment_status = ALLOTMENT_STATUS_MARKERS[marker_match.group(1)]
+                merged_category = clean_text(merged_category[: marker_match.start()])
         likely_candidate = bool(seat_type or is_vacant)
         if not is_vacant and not APPLICATION_ID_RE.fullmatch(application_id):
             if likely_candidate:
@@ -463,20 +566,29 @@ def parse_candidate_rows(
 
         merit_rank = join_words(words_in_column(words, 65, 108, top))
         score = join_words(words_in_column(words, 108, 165, top))
-        gender = join_words(words_in_column(words, 400, 430, top))
-        category = merged_category or join_words(words_in_column(words, 430, 512, top))
+        gender = join_words(words_in_column(words, 400, CATEGORY_X_MIN, top))
+        category = merged_category or join_words(words_in_column(words, CATEGORY_X_MIN, 512, top))
+        # Long categories (e.g. "NT 3 (NT-D)/PH1/DEF&") can swallow the status marker.
+        trailing_marker = re.search(r"([*@~^&])$", category)
+        if trailing_marker:
+            allotment_status = allotment_status or ALLOTMENT_STATUS_MARKERS[trailing_marker.group(1)]
+            category = clean_text(category[: trailing_marker.start()])
         candidate_name = "VACANT" if is_vacant else join_words(name_words)
 
         preceding_sections = [item for item in sections if item[0] < top]
-        section_top, allocation_section, section_raw = (
-            preceding_sections[-1] if preceding_sections else (-1.0, "", "")
-        )
+        if preceding_sections:
+            section_top, allocation_section, section_raw = preceding_sections[-1]
+        elif inherited_section:
+            section_top = -1.0
+            allocation_section, section_raw = inherited_section
+        else:
+            issues.append({"serial_no": serial_no, "top": top, "reason": "missing allocation section"})
+            continue
         section_exams = [item for item in exam_markers if section_top <= item[0] < top]
         explicit_exams = [item for item in section_exams if item[2]]
         exam = (explicit_exams or section_exams)[-1][1] if section_exams else "MHT_CET"
-        if section_top < 0:
-            issues.append({"serial_no": serial_no, "top": top, "reason": "missing allocation section"})
-            continue
+        if allocation_section == "DIPLOMA":
+            exam = "DIPLOMA"
         preceding_base_sections = [
             item for item in preceding_sections if item[1] in BASE_ALLOCATION_SECTIONS
         ]
@@ -496,7 +608,7 @@ def parse_candidate_rows(
                     }
                 )
                 continue
-        if allocation_section != "ALL_INDIA" and exam != "MHT_CET":
+        if allocation_section not in ALL_INDIA_SECTIONS | {"DIPLOMA"} and exam != "MHT_CET":
             issues.append(
                 {
                     "serial_no": serial_no,
@@ -506,12 +618,24 @@ def parse_candidate_rows(
             )
             continue
         if not SEAT_TYPE_SUFFIX_RE.fullmatch(seat_type):
-            issues.append({"serial_no": serial_no, "top": top, "reason": "unknown seat type"})
+            issues.append(
+                {"serial_no": serial_no, "top": top, "reason": f"unknown seat type {seat_type!r}"}
+            )
+            continue
+        bound_section = SECTION_BOUND_SEAT_TYPES.get(seat_type)
+        if bound_section and allocation_section != bound_section:
+            issues.append(
+                {
+                    "serial_no": serial_no,
+                    "top": top,
+                    "reason": f"seat type {seat_type} under unexpected section {allocation_section}",
+                }
+            )
             continue
 
         if not is_vacant:
             problems = []
-            rank_can_be_blank = exam == "UNSPECIFIED" and allocation_section == "ALL_INDIA"
+            rank_can_be_blank = exam == "UNSPECIFIED" and allocation_section in ALL_INDIA_SECTIONS
             if not INTEGER_RE.fullmatch(merit_rank) and not (rank_can_be_blank and not merit_rank):
                 problems.append("invalid merit rank")
             if not SCORE_RE.fullmatch(score):
@@ -548,6 +672,7 @@ def parse_candidate_rows(
                 "gender": gender,
                 "candidate_category": category,
                 "seat_type": seat_type,
+                "allotment_status": allotment_status,
                 "is_vacant": "true" if is_vacant else "false",
             }
         )
@@ -555,7 +680,8 @@ def parse_candidate_rows(
         section for _, section, _ in sections if section in BASE_ALLOCATION_SECTIONS
     ]
     final_base_section = page_base_sections[-1] if page_base_sections else inherited_base_section
-    return rows, issues, final_base_section
+    final_section = (sections[-1][1], sections[-1][2]) if sections else inherited_section
+    return rows, issues, final_base_section, final_section
 
 
 def extract_pdf(institute: Institute, path: Path) -> dict[str, Any]:
@@ -564,6 +690,7 @@ def extract_pdf(institute: Institute, path: Path) -> dict[str, Any]:
     issues: list[dict[str, Any]] = []
     current_course: Optional[dict[str, str]] = None
     current_base_section: Optional[str] = None
+    current_section: Optional[tuple[str, str]] = None
     previous_page_max_serial: Optional[int] = None
 
     with pdfplumber.open(path) as pdf:
@@ -574,13 +701,14 @@ def extract_pdf(institute: Institute, path: Path) -> dict[str, Any]:
             if header:
                 current_course = header
                 current_base_section = None
+                current_section = None
                 previous_page_max_serial = None
             if current_course:
                 update_course_metadata(current_course, lines)
                 courses[(current_course["choice_code"], current_course["course_variant"])] = dict(current_course)
 
-            page_rows, page_issues, current_base_section = parse_candidate_rows(
-                words, lines, current_base_section
+            page_rows, page_issues, current_base_section, current_section = parse_candidate_rows(
+                words, lines, current_base_section, current_section
             )
             if (page_rows or page_issues) and current_course is None:
                 page_issues.append({"reason": "candidate data found before course metadata"})
@@ -629,6 +757,7 @@ def extract_pdf(institute: Institute, path: Path) -> dict[str, Any]:
                 "reason": f"duplicate application IDs within PDF: {len(duplicate_applications)}",
             }
         )
+    warnings: list[dict[str, Any]] = []
     rows_by_course: dict[tuple[str, str], list[dict[str, str]]] = defaultdict(list)
     for row in rows:
         rows_by_course[(row["choice_code"], row["course_variant"])].append(row)
@@ -636,7 +765,8 @@ def extract_pdf(institute: Institute, path: Path) -> dict[str, Any]:
         course_rows = rows_by_course.get(course_key, [])
         serials = sorted(int(row["serial_no"]) for row in course_rows)
         expected_serials = list(range(1, max(serials) + 1)) if serials else []
-        if serials != expected_serials:
+        serials_contiguous = serials == expected_serials
+        if not serials_contiguous:
             issues.append(
                 {
                     "source_pdf": institute.pdf_filename,
@@ -655,6 +785,22 @@ def extract_pdf(institute: Institute, path: Path) -> dict[str, Any]:
                     "reason": f"missing CAP seat count for {course_key[0]} {course_key[1]}",
                 }
             )
+        elif len(course_rows) > int(cap_seats) and serials_contiguous:
+            # The official list itself prints more seats than its own header (seen for
+            # EWS in CAP-III). Rows cannot appear from nowhere when serials run 1..N with
+            # no gaps, so record it for review instead of rejecting the round. Fewer rows
+            # than CAP seats still fails: that is what a lost row looks like.
+            warnings.append(
+                {
+                    "source_pdf": institute.pdf_filename,
+                    "institute_code": institute.code,
+                    "choice_code": course_key[0],
+                    "course_variant": course_key[1],
+                    "cap_seats": int(cap_seats),
+                    "listed_rows": len(course_rows),
+                    "reason": "official list prints more seat rows than its CAP seat header",
+                }
+            )
         elif len(course_rows) != int(cap_seats):
             issues.append(
                 {
@@ -667,7 +813,7 @@ def extract_pdf(institute: Institute, path: Path) -> dict[str, Any]:
                     ),
                 }
             )
-    return {"rows": rows, "courses": list(courses.values()), "issues": issues}
+    return {"rows": rows, "courses": list(courses.values()), "issues": issues, "warnings": warnings}
 
 
 def derive_cutoffs(rows: list[dict[str, str]]) -> list[dict[str, str]]:
@@ -710,6 +856,59 @@ def derive_cutoffs(rows: list[dict[str, str]]) -> list[dict[str, str]]:
     return cutoffs
 
 
+ALL_INDIA_CUTOFF_FIELDS = [
+    "institute_code",
+    "institute_name",
+    "choice_code",
+    "course_name",
+    "course_variant",
+    "exam",
+    "seat_type",
+    "cutoff_score",
+    "last_rank",
+    "total_admitted",
+    "admitted_by_exam",
+    "cutoff_source_pdf",
+    "cutoff_source_page",
+    "cutoff_source_serial_no",
+]
+
+
+def derive_all_india_cutoffs(rows: list[dict[str, str]]) -> list[dict[str, str]]:
+    """One All-India cutoff per choice code and seat type (AI, or MI-AI from CAP-II on).
+
+    All India merit numbers form one list across exams (JEE(Main) candidates first,
+    then MHT-CET), so the admitted row with the greatest merit number closes the pool.
+    """
+    groups: dict[tuple[str, ...], list[dict[str, str]]] = defaultdict(list)
+    key_fields = ["institute_code", "institute_name", "choice_code", "course_name", "course_variant", "seat_type"]
+    for row in rows:
+        if row["allocation_section"] in ALL_INDIA_SECTIONS and row["is_vacant"] == "false":
+            groups[tuple(row[field] for field in key_fields)].append(row)
+
+    cutoffs: list[dict[str, str]] = []
+    for key, group in sorted(groups.items()):
+        ranked = [row for row in group if row["merit_rank"]]
+        if not ranked:
+            continue
+        cutoff_row = max(ranked, key=lambda row: int(row["merit_rank"]))
+        record = dict(zip(key_fields, key))
+        record.update(
+            {
+                "exam": cutoff_row["exam"],
+                "cutoff_score": cutoff_row["score"],
+                "last_rank": cutoff_row["merit_rank"],
+                "total_admitted": str(len(group)),
+                "admitted_by_exam": json.dumps(dict(sorted(Counter(row["exam"] for row in group).items()))),
+                "cutoff_source_pdf": cutoff_row["source_pdf"],
+                "cutoff_source_page": cutoff_row["source_page"],
+                "cutoff_source_serial_no": cutoff_row["serial_no"],
+            }
+        )
+        cutoffs.append(record)
+    return cutoffs
+
+
 def write_csv(path: Path, rows: list[dict[str, Any]], fields: list[str]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".tmp")
@@ -729,8 +928,14 @@ def write_json(path: Path, value: Any) -> None:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--round", type=int, required=True, choices=sorted(ROUND_NUMERALS), dest="round_number")
+    parser.add_argument(
+        "--output",
+        type=Path,
+        required=True,
+        help="Local archive directory for this round (keep it outside the repository)",
+    )
     parser.add_argument("--url", default=DEFAULT_URL)
-    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--workers", type=int, default=2, help="PDF download workers (capped at 4)")
     parser.add_argument("--request-interval", type=float, default=0.20)
     parser.add_argument("--timeout", type=float, default=60.0)
@@ -739,18 +944,45 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--download-only", action="store_true")
     parser.add_argument("--skip-download", action="store_true")
     parser.add_argument("--allow-extraction-issues", action="store_true")
+    parser.add_argument(
+        "--purge-pdfs",
+        action="store_true",
+        help="Delete the downloaded PDFs after extraction passes strict verification",
+    )
+    parser.add_argument(
+        "--purge-only",
+        action="store_true",
+        help="Only delete PDFs from an existing --output archive, then exit",
+    )
     return parser.parse_args()
+
+
+def purge_pdfs(output: Path) -> int:
+    """Delete every PDF artifact under the archive; hashes remain in the manifests."""
+    removed = 0
+    for directory in (output / "pdfs", output / "quarantine"):
+        if directory.exists():
+            removed += sum(1 for _ in directory.rglob("*.pdf*"))
+            shutil.rmtree(directory)
+    leftovers = [path for path in output.rglob("*") if path.suffix.lower() in {".pdf", ".part"}]
+    for path in leftovers:
+        path.unlink()
+    return removed + len(leftovers)
 
 
 def main() -> int:
     args = parse_args()
+    output = args.output.resolve()
+    if args.purge_only:
+        print(f"Purged {purge_pdfs(output)} PDF files from {output}", flush=True)
+        return 0
     if args.request_interval < 0:
         raise ValueError("--request-interval cannot be negative")
     if args.timeout <= 0:
         raise ValueError("--timeout must be positive")
     if args.retries < 1:
         raise ValueError("--retries must be at least 1")
-    output = args.output.resolve()
+    numeral = ROUND_NUMERALS[args.round_number]
     source_dir = output / "source"
     pdf_dir = output / "pdfs"
     manifest_dir = output / "manifests"
@@ -771,18 +1003,29 @@ def main() -> int:
             raise ValueError("official institute list response is not HTML")
         (source_dir / "institute_list.html").write_bytes(html)
 
-    institutes = parse_institutes(html, args.url)
+    institutes, unpublished = parse_institutes(html, args.url, args.round_number)
     source_count = len(institutes)
     if args.limit:
         if args.limit < 1:
             raise ValueError("--limit must be positive")
         institutes = institutes[: args.limit]
-    print(f"Validated {source_count} official PDF links; processing {len(institutes)}", flush=True)
+    print(
+        f"Validated {source_count} official CAP-{numeral} PDF links "
+        f"({len(unpublished)} institutes without one); processing {len(institutes)}",
+        flush=True,
+    )
     write_csv(manifest_dir / "institutes.csv", [asdict(item) for item in institutes], list(asdict(institutes[0])))
+    write_json(manifest_dir / "unpublished_institutes.json", unpublished)
 
     if args.skip_download:
+        previous_path = manifest_dir / "downloads.json"
+        previous = json.loads(previous_path.read_text(encoding="utf-8")) if previous_path.exists() else []
+        previously_missing = {record["code"] for record in previous if record.get("status") == "not_found"}
         download_records = []
         for item in institutes:
+            if item.code in previously_missing:
+                download_records.append({**asdict(item), "status": "not_found", "error": "HTTP 404"})
+                continue
             metadata = inspect_pdf(pdf_dir / item.pdf_filename, item.code)
             download_records.append({**asdict(item), **metadata, "status": "reused", "error": ""})
     else:
@@ -797,7 +1040,7 @@ def main() -> int:
             for completed, future in enumerate(as_completed(futures), start=1):
                 record = future.result()
                 download_records.append(record)
-                if record["status"] == "failed" or completed % 25 == 0 or completed == len(futures):
+                if record["status"] in {"failed", "not_found"} or completed % 25 == 0 or completed == len(futures):
                     print(
                         f"Downloads checked: {completed}/{len(futures)}; latest={record['status']} {record['pdf_filename']}",
                         flush=True,
@@ -808,15 +1051,21 @@ def main() -> int:
     failures = [record for record in download_records if record["status"] == "failed"]
     if failures:
         raise RuntimeError(f"{len(failures)} PDFs failed; see manifests/downloads.json")
+    not_found = [record for record in download_records if record["status"] == "not_found"]
     if args.download_only:
         print("Download-only run complete", flush=True)
         return 0
 
+    available_codes = {
+        record["code"] for record in download_records if record["status"] in {"downloaded", "reused"}
+    }
+    extract_institutes = [item for item in institutes if item.code in available_codes]
     all_rows: list[dict[str, str]] = []
     all_courses: list[dict[str, str]] = []
     all_issues: list[dict[str, Any]] = []
+    all_warnings: list[dict[str, Any]] = []
     print("Extracting PDFs sequentially to keep CPU and memory bounded", flush=True)
-    for index, institute in enumerate(institutes, start=1):
+    for index, institute in enumerate(extract_institutes, start=1):
         extracted = extract_pdf(institute, pdf_dir / institute.pdf_filename)
         all_rows.extend(extracted["rows"])
         for course in extracted["courses"]:
@@ -829,9 +1078,10 @@ def main() -> int:
                 }
             )
         all_issues.extend(extracted["issues"])
-        if index % 10 == 0 or index == len(institutes):
+        all_warnings.extend(extracted["warnings"])
+        if index % 10 == 0 or index == len(extract_institutes):
             print(
-                f"Extracted {index}/{len(institutes)} PDFs: {len(all_rows)} rows, {len(all_issues)} quarantined issues",
+                f"Extracted {index}/{len(extract_institutes)} PDFs: {len(all_rows)} rows, {len(all_issues)} quarantined issues",
                 flush=True,
             )
 
@@ -877,6 +1127,9 @@ def main() -> int:
         for course in unique_courses
         if course["cap_seats"].isdigit()
     )
+    cap_seat_overage = sum(item["listed_rows"] - item["cap_seats"] for item in all_warnings)
+    expected_listed_rows = expected_cap_rows + cap_seat_overage
+    write_json(manifest_dir / "source_warnings.json", all_warnings)
     cutoffs = derive_cutoffs(all_rows)
     cutoff_fields = [
         "institute_code",
@@ -897,6 +1150,8 @@ def main() -> int:
         "cutoff_source_serial_no",
     ]
     write_csv(cleaned_dir / "derived_cutoffs.csv", cutoffs, cutoff_fields)
+    all_india_cutoffs = derive_all_india_cutoffs(all_rows)
+    write_csv(cleaned_dir / "derived_all_india_cutoffs.csv", all_india_cutoffs, ALL_INDIA_CUTOFF_FIELDS)
     issue_fields = sorted({key for issue in all_issues for key in issue} or {"reason"})
     write_csv(manifest_dir / "extraction_issues.csv", all_issues, issue_fields)
 
@@ -904,51 +1159,63 @@ def main() -> int:
         "started_at_utc": started_at,
         "finished_at_utc": utc_now(),
         "source_url": args.url,
+        "round": args.round_number,
+        "round_numeral": numeral,
         "source_pdf_link_count": source_count,
+        "unpublished_institute_count": len(unpublished),
         "processed_institute_count": len(institutes),
         "complete_source_run": args.limit is None and len(institutes) == source_count,
         "download_failures": len(failures),
+        "not_found_on_server": [record["code"] for record in not_found],
         "download_status_counts": dict(Counter(record["status"] for record in download_records)),
-        "total_pdf_bytes": sum(int(record["size_bytes"]) for record in download_records),
-        "total_pdf_pages": sum(int(record["page_count"]) for record in download_records),
+        "extracted_pdf_count": len(extract_institutes),
+        "total_pdf_bytes": sum(int(record.get("size_bytes", 0)) for record in download_records),
+        "total_pdf_pages": sum(int(record.get("page_count", 0)) for record in download_records),
         "course_count": len(unique_courses),
         "all_courses_have_cap_counts": all_courses_have_cap_counts,
         "expected_rows_from_cap_seats": expected_cap_rows,
-        "row_count_matches_cap_seats": len(all_rows) == expected_cap_rows,
+        "source_cap_seat_overage_rows": cap_seat_overage,
+        "source_warnings": all_warnings,
+        "row_count_matches_cap_seats": len(all_rows) == expected_listed_rows,
         "allotment_row_count": len(all_rows),
         "filled_row_count": sum(row["is_vacant"] == "false" for row in all_rows),
         "vacant_row_count": sum(row["is_vacant"] == "true" for row in all_rows),
         "derived_cutoff_count": len(cutoffs),
+        "derived_all_india_cutoff_count": len(all_india_cutoffs),
         "extraction_issue_count": len(all_issues),
         "verified": (
             not failures
             and not all_issues
             and args.limit is None
             and all_courses_have_cap_counts
-            and len(all_rows) == expected_cap_rows
+            and len(all_rows) == expected_listed_rows
         ),
         "verification_scope": {
-            "source": "contiguous unique institute list, same-origin HTTPS PDF URLs, filename/code match",
-            "downloads": "PDF signature and EOF, strict parse, nonempty unencrypted pages, institute code on page 1, SHA-256",
+            "source": "contiguous unique institute list, same-origin HTTPS PDF URLs, round path and filename/code match",
+            "downloads": "PDF signature and EOF, strict parse, nonempty unencrypted pages, institute code on page 1, SHA-256; HTTP 404 links reported and skipped",
             "rows": "strict column formats, score bounds, section/course provenance, serial ordering; failures quarantined",
+            "row_totals": "rows == CAP seats per course; a course whose official list prints more contiguous valid rows than its header is a named source warning, never fewer",
             "cutoffs": "derived from the admitted row with the greatest official merit rank in each exact seat group",
+            "all_india_cutoffs": "per choice code, the All India admitted row with the greatest All India merit rank",
         },
     }
     write_json(manifest_dir / "verification.json", verification)
-    readme = f"""# Local MAHACET 2026 CAP Round I archive
+    readme = f"""# Local MAHACET 2026 CAP Round {numeral} archive
 
 Generated from: {args.url}
 Generated at (UTC): {verification['finished_at_utc']}
 
-- Official institute/PDF links: {source_count}
-- Valid local PDFs: {len(download_records)}
+- Official CAP-{numeral} institute/PDF links: {source_count}
+- Links missing on the server (HTTP 404): {len(not_found)}
+- Extracted PDFs: {len(extract_institutes)}
 - PDF pages: {verification['total_pdf_pages']}
 - Extracted allotment rows: {len(all_rows)}
 - Quarantined extraction issues: {len(all_issues)}
+- Source warnings (list longer than its CAP seat header): {len(all_warnings)}
 - Strict verification passed: {verification['verified']}
 
 `allotments.csv` preserves the official candidate-level values. `derived_cutoffs.csv`
-is a local derivative and is not database-ready without domain review. See
+and `derived_all_india_cutoffs.csv` are local derivatives. See
 `manifests/verification.json` for the exact checks and limitations.
 """
     (output / "README.md").write_text(readme, encoding="utf-8")
@@ -959,6 +1226,11 @@ is a local derivative and is not database-ready without domain review. See
             flush=True,
         )
         return 2
+    if args.purge_pdfs:
+        if not verification["verified"]:
+            print("Strict verification did not pass; PDFs kept for review", flush=True)
+            return 2
+        print(f"Purged {purge_pdfs(output)} PDF files after verification", flush=True)
     print(f"Completed: {output}", flush=True)
     return 0
 
