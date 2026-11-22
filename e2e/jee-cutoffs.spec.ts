@@ -81,8 +81,14 @@ test("cutoff routes use the site footer with JEE colleges and sources", async ({
   await expect(footer.locator(".mht-foot-status")).toContainText("JoSAA");
 });
 
-test("homepage retains the original footer", async ({ page }) => {
+test("homepage uses the MHT-CET footer", async ({ page }) => {
   await page.goto("/");
+  await expect(page.locator(".legacy-site-footer")).toHaveCount(0);
+  await expect(page.locator(".mht-footer")).toBeVisible();
+});
+
+test("pages outside the shell keep the original footer", async ({ page }) => {
+  await page.goto("/datasource");
   await expect(page.locator(".mht-footer")).toHaveCount(0);
   const originalFooter = page.locator(".legacy-site-footer");
   await expect(originalFooter).toBeVisible();

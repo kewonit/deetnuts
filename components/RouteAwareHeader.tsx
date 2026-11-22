@@ -26,6 +26,6 @@ const THEMED_PREFIXES = [
 // The grain belongs to the original site design; pages with their own theme leave it out.
 export function RouteAwareGrain({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  if (THEMED_PREFIXES.some((prefix) => within(pathname, prefix))) return null;
+  if (pathname === "/" || THEMED_PREFIXES.some((prefix) => within(pathname, prefix))) return null;
   return children;
 }
