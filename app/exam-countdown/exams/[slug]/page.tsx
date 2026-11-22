@@ -13,6 +13,7 @@ import LazyStudyMap from "@/components/timekeeper/LazyStudyMap";
 import {
   categorySlug,
   countdownTarget,
+  daysUntil,
   examCycle,
   exams,
   formatDateRange,
@@ -37,19 +38,24 @@ import {
 // estimate is official. It names the date rather than a day count because
 // cached HTML can outlive any count.
 function nextSessionSummary(exam: Exam, now: number) {
+  if (exam.discontinued)
+    return `${exam.name} is no longer held. ${exam.discontinued.note}`;
   const session = nextSession(exam.sessions, now);
   const title = `${exam.name} ${examCycle(exam, now)}`;
   if (!session)
     return `${title} dates will be announced by ${exam.conductingBody}.`;
-  // Some session names already carry their cycle, e.g. "INI CET January 2027".
+  // Some session names already carry their cycle, e.g. "INI CET January 2027"
+  // or "December Session" in the "December 2026" cycle.
+  const month = session.session.replace(/ Session$/, "");
   const name =
-    session.session === "Single Session"
+    session.session === "Single Session" ||
+    (month !== session.session && title.includes(month))
       ? title
       : /\d{4}/.test(session.session)
         ? `${exam.name} ${session.session}`
         : `${title} ${session.session}`;
   const date = formatExamDate(session.date);
-  if (session.endDate && now >= Date.parse(session.date))
+  if (session.endDate && daysUntil(session.date, now) <= 0)
     return `${name} is under way until ${formatExamDate(session.endDate)}.`;
   if (session.predicted)
     return `${name} is expected ${session.endDate ? "to start " : ""}on ${date}.`;
@@ -68,6 +74,17 @@ export async function generateMetadata({
   const exam = getExam((await params).slug);
   if (!exam) notFound();
   const now = Date.now();
+  const path = `${EXAM_COUNTDOWN_PATH}/exams/${exam.slug}`;
+  const replacement =
+    exam.discontinued && getExam(exam.discontinued.replacedBy);
+  if (replacement)
+    return timekeeperMetadata(
+      path,
+      `${exam.name}: Admission Through ${replacement.name}`,
+      `${nextSessionSummary(exam, now)} See the ${replacement.name} countdown.`,
+      exam.keywords,
+      true,
+    );
   // The title carries the fixed date; a day count would be stale by the time
   // search results show it.
   const session = nextSession(exam.sessions, now);
@@ -78,7 +95,7 @@ export async function generateMetadata({
       ? ` (Expected ${target})`
       : ` Until ${target}`;
   return timekeeperMetadata(
-    `${EXAM_COUNTDOWN_PATH}/exams/${exam.slug}`,
+    path,
     `${exam.name} ${examCycle(exam, now)} Countdown: Days Left${until}`,
     `${nextSessionSummary(exam, now)} Live countdown with weeks and study hours left, and every key date.`,
     exam.keywords,
@@ -99,6 +116,9 @@ export default async function Page({
   const label = `${exam.name} ${cycle}`;
   const path = `${EXAM_COUNTDOWN_PATH}/exams/${exam.slug}`;
   const categoryPath = `${EXAM_COUNTDOWN_PATH}/category/${categorySlug(exam.category)}`;
+  const replacement =
+    exam.discontinued && getExam(exam.discontinued.replacedBy);
+  const heading = replacement ? exam.name : `${label} Countdown`;
   const upcoming = nextSession(exam.sessions, now);
   const dates = [
     ...exam.sessions.map((session) => ({
@@ -112,48 +132,49 @@ export default async function Page({
       status: item.status === "official" ? "Official" : "Expected",
     })),
   ].sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
-  const questions: [string, React.ReactNode][] = [
-    [
-      `How many days are left for ${label}?`,
-      <DaysLeftAnswer key="days" sessions={exam.sessions} />,
-    ],
-    [
-      `When is ${label}?`,
-      exam.sessions
-        .map(
-          (session) =>
-            `${sessionLabel(session)}: ${formatDateRange(session)}${session.predicted ? " (expected)" : ""}`,
-        )
-        .join("; ") + ".",
-    ],
-    [
-      `Is the ${label} date official?`,
-      upcoming?.predicted ? "Not yet." : "Yes.",
-    ],
-    [`Who conducts ${label}?`, `${exam.conductingBody}.`],
-    [
-      `How many weeks are left for ${label}?`,
-      <WeeksLeftAnswer key="weeks" sessions={exam.sessions} />,
-    ],
-  ];
+  const questions: [string, React.ReactNode][] = replacement
+    ? [
+        [`Is the exam still held?`, `No. ${exam.discontinued?.note}`],
+        [`Who conducts ${exam.name}?`, `${exam.conductingBody}.`],
+      ]
+    : [
+        [
+          `How many days are left for ${label}?`,
+          <DaysLeftAnswer key="days" sessions={exam.sessions} />,
+        ],
+        [
+          `When is ${label}?`,
+          exam.sessions
+            .map(
+              (session) =>
+                `${sessionLabel(session)}: ${formatDateRange(session)}${session.predicted ? " (expected)" : ""}`,
+            )
+            .join("; ") + ".",
+        ],
+        [
+          `Is the ${label} date official?`,
+          upcoming?.predicted ? "Not yet." : "Yes.",
+        ],
+        [`Who conducts ${label}?`, `${exam.conductingBody}.`],
+        [
+          `How many weeks are left for ${label}?`,
+          <WeeksLeftAnswer key="weeks" sessions={exam.sessions} />,
+        ],
+      ];
   return (
     <main className="max-w-5xl mx-auto px-4 lg:px-8 py-8">
       <JsonLd
-        value={pageSchema(
-          path,
-          `${label} Countdown`,
-          nextSessionSummary(exam, now),
-        )}
+        value={pageSchema(path, heading, nextSessionSummary(exam, now))}
       />
       <JsonLd
         value={breadcrumbSchema([
           { name: exam.category, path: categoryPath },
-          { name: label, path },
+          { name: replacement ? exam.name : label, path },
         ])}
       />
       <div className="text-center mb-8">
         <h1 className="font-serif italic text-3xl sm:text-4xl lg:text-6xl mb-4">
-          {label} Countdown
+          {heading}
         </h1>
         <p className="text-lg sm:text-xl lg:text-2xl themed-text-secondary mb-6">
           {exam.fullName}
@@ -167,7 +188,25 @@ export default async function Page({
           </span>
         </div>
       </div>
-      <ExamCountdown title={exam.name} sessions={exam.sessions} />
+      {replacement ? (
+        <section
+          className="border border-dashed themed-border rounded-lg p-4 sm:p-6 lg:p-8 mb-8 text-center"
+          aria-label="Exam status"
+        >
+          <h2 className="text-xl sm:text-2xl mb-2">No longer held</h2>
+          <p className="themed-text-secondary mb-4">
+            {exam.discontinued?.note}
+          </p>
+          <Link
+            href={`${EXAM_COUNTDOWN_PATH}/exams/${replacement.slug}`}
+            className="tk-button"
+          >
+            {replacement.name} {examCycle(replacement, now)} Countdown →
+          </Link>
+        </section>
+      ) : (
+        <ExamCountdown title={exam.name} sessions={exam.sessions} />
+      )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
         <section className="border border-dashed themed-border p-4 sm:p-6 rounded-lg">
           <h2 className="font-serif italic text-xl mb-4">Basic Information</h2>
@@ -214,14 +253,16 @@ export default async function Page({
                 Official Website ↗
               </a>
             )}
-            <ShareExam title={`${label} Countdown`} />
-            <a
-              href={`${path}/wallpaper`}
-              download={`${exam.slug}-countdown-wallpaper.png`}
-              className="tk-button w-full"
-            >
-              Phone Wallpaper
-            </a>
+            <ShareExam title={heading} />
+            {!replacement && (
+              <a
+                href={`${path}/wallpaper`}
+                download={`${exam.slug}-countdown-wallpaper.png`}
+                className="tk-button w-full"
+              >
+                Phone Wallpaper
+              </a>
+            )}
             <Link
               href={`${EXAM_COUNTDOWN_PATH}/countdown`}
               className="tk-button w-full"
@@ -251,6 +292,14 @@ export default async function Page({
               </tr>
             </thead>
             <tbody>
+              {replacement && (
+                <tr>
+                  <th scope="row">Exam</th>
+                  <td>No longer held</td>
+                  <td>—</td>
+                  <td>Discontinued</td>
+                </tr>
+              )}
               {dates.map((item) => (
                 <tr key={`${item.event}-${item.date}`}>
                   <th scope="row">{item.event}</th>
@@ -278,10 +327,12 @@ export default async function Page({
         )}
       </section>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8">
-        <section className="border border-dashed themed-border p-4 sm:p-6 rounded-lg">
-          <h2 className="font-serif italic text-xl mb-4">Time Left</h2>
-          <TimeLeft sessions={exam.sessions} />
-        </section>
+        {!replacement && (
+          <section className="border border-dashed themed-border p-4 sm:p-6 rounded-lg">
+            <h2 className="font-serif italic text-xl mb-4">Time Left</h2>
+            <TimeLeft sessions={exam.sessions} />
+          </section>
+        )}
         <section
           className="border border-dashed themed-border p-4 sm:p-6 rounded-lg"
           aria-labelledby="questions"
@@ -339,10 +390,12 @@ export default async function Page({
           )}
         </section>
       )}
-      <section className="mb-8">
-        <h2 className="font-serif italic text-xl mb-4">Live Study Map</h2>
-        <LazyStudyMap examSlug={exam.slug} />
-      </section>
+      {!replacement && (
+        <section className="mb-8">
+          <h2 className="font-serif italic text-xl mb-4">Live Study Map</h2>
+          <LazyStudyMap examSlug={exam.slug} />
+        </section>
+      )}
       {related.length > 0 && (
         <section className="border border-dashed themed-border p-4 sm:p-6 rounded-lg mb-8">
           <h2 className="font-serif italic text-2xl mb-6">Related Exams</h2>

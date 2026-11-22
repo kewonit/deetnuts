@@ -4,9 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { Maximize, PictureInPicture2, Share2 } from "lucide-react";
 import {
   countdownTarget,
+  DAY_MS,
+  daysUntil,
   displaySessions,
   formatExamDate,
+  istDay,
   nextSession,
+  sessionEnds,
   timeRemaining,
   type ExamSession,
 } from "@/lib/timekeeper/exams";
@@ -15,16 +19,18 @@ import { useNow } from "./useNow";
 export function CountdownDigits({
   target,
   compact = false,
+  ended = "Countdown Ended",
 }: {
   target: string;
   compact?: boolean;
+  ended?: string;
 }) {
   const now = useNow();
   const remaining = timeRemaining(target, now);
   if (now && remaining.expired)
     return (
       <p className="text-center themed-text-secondary" role="status">
-        Countdown Ended
+        {ended}
       </p>
     );
   return (
@@ -61,17 +67,20 @@ export function DaysToGo({
 }) {
   const now = useNow();
   if (!now) return null;
-  if (now < Date.parse(date)) return <>{timeRemaining(date, now).days}</>;
-  return <>{now < Date.parse(endDate ?? date) ? "Under way" : "Done"}</>;
+  const days = daysUntil(date, now);
+  if (days > 0) return <>{days}</>;
+  return <>{now < sessionEnds({ date, endDate }) ? "Under way" : "Done"}</>;
 }
 
-const IST_OFFSET_MS = 5.5 * 60 * 60 * 1000;
-const DAY_MS = 24 * 60 * 60 * 1000;
+// What the timer says once the last exam day has begun.
+export function examDayLabel(session: ExamSession) {
+  return session.endDate ? "Under way" : "Exam day";
+}
 
 // Saturdays and Sundays between today in India and the exam day.
 function weekendsBefore(date: string, now: number) {
-  const today = Math.floor((now + IST_OFFSET_MS) / DAY_MS);
-  const examDay = Math.floor(Date.parse(date) / DAY_MS);
+  const today = istDay(now);
+  const examDay = istDay(date);
   let saturdays = 0;
   let sundays = 0;
   for (let day = today + 1; day < examDay; day++) {
@@ -90,10 +99,11 @@ function weeksAndDays(days: number) {
   return `${plural(Math.floor(days / 7), "week")} and ${plural(days % 7, "day")}`;
 }
 
-// The next session that has not started, skipping one already under way.
+// The next session whose first day is still ahead in India, skipping one
+// already under way.
 function upcomingStart(sessions: ExamSession[], now: number) {
   return displaySessions(sessions, now).find(
-    (session) => now < Date.parse(session.date),
+    (session) => daysUntil(session.date, now) > 0,
   );
 }
 
@@ -101,7 +111,7 @@ export function TimeLeft({ sessions }: { sessions: ExamSession[] }) {
   const now = useNow();
   const session = upcomingStart(sessions, now);
   if (!now || !session) return null;
-  const { days } = timeRemaining(session.date, now);
+  const days = daysUntil(session.date, now);
   const { saturdays, sundays } = weekendsBefore(session.date, now);
   const rows: [string, string][] = [
     ["Days", String(days)],
@@ -141,7 +151,7 @@ export function DaysLeftAnswer({ sessions }: { sessions: ExamSession[] }) {
   });
   return (
     <>
-      {dayCount(timeRemaining(session.date, now).days)} as of {today}.{" "}
+      {dayCount(daysUntil(session.date, now))} as of {today}.{" "}
       {session.session === "Single Session" ? "The exam" : session.session}{" "}
       starts on {formatExamDate(session.date)}.
     </>
@@ -152,7 +162,7 @@ export function WeeksLeftAnswer({ sessions }: { sessions: ExamSession[] }) {
   const now = useNow();
   const session = upcomingStart(sessions, now);
   if (!now || !session) return <>The last published session is under way.</>;
-  return <>{weeksAndDays(timeRemaining(session.date, now).days)}.</>;
+  return <>{weeksAndDays(daysUntil(session.date, now))}.</>;
 }
 
 export function CardCountdown({ sessions }: { sessions: ExamSession[] }) {
@@ -168,7 +178,11 @@ export function CardCountdown({ sessions }: { sessions: ExamSession[] }) {
       <p className="text-xs themed-text-secondary mb-3">
         {formatExamDate(session.date)}
       </p>
-      <CountdownDigits target={countdownTarget(session, now)} compact />
+      <CountdownDigits
+        target={countdownTarget(session, now)}
+        compact
+        ended={examDayLabel(session)}
+      />
     </div>
   );
 }
@@ -400,7 +414,10 @@ export function TimerActions({
           <p>
             {session.session} · {formatExamDate(session.date)}
           </p>
-          <CountdownDigits target={countdownTarget(session, now)} />
+          <CountdownDigits
+            target={countdownTarget(session, now)}
+            ended={examDayLabel(session)}
+          />
         </div>
       </dialog>
     </>
@@ -419,7 +436,7 @@ export default function ExamCountdown({
   const displayed = displaySessions(sessions, now);
   const session =
     displayed.find((item) => item.session === selected) ??
-    displayed.find((item) => Date.parse(item.endDate ?? item.date) >= now) ??
+    displayed.find((item) => sessionEnds(item) > now) ??
     displayed[0];
   if (!session)
     return <p>Exam dates will be announced by the conducting body.</p>;
@@ -456,8 +473,12 @@ export default function ExamCountdown({
         </div>
       </div>
       <div className="themed-bg-secondary p-4 sm:p-8 lg:p-12 rounded-lg">
-        <CountdownDigits target={countdownTarget(session, now)} />
+        <CountdownDigits
+          target={countdownTarget(session, now)}
+          ended={examDayLabel(session)}
+        />
       </div>
+      {/* The digits take over with "Under way" on the last exam day. */}
       {session.endDate &&
         now >= Date.parse(session.date) &&
         now < Date.parse(session.endDate) && (
