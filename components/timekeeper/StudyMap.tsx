@@ -9,6 +9,7 @@ import {
   countdownTarget,
   exams,
   getExam,
+  sessionEnds,
 } from "@/lib/timekeeper/exams";
 import {
   avatarSeed,
@@ -18,7 +19,7 @@ import {
   studyLocation,
 } from "@/lib/timekeeper/study-client";
 import { generateDeterministicSessions } from "@/lib/timekeeper/demo-sessions";
-import { CountdownDigits } from "./Countdown";
+import { CountdownDigits, examDayLabel } from "./Countdown";
 import { useNow } from "./useNow";
 import "leaflet/dist/leaflet.css";
 
@@ -87,7 +88,7 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
   const displayed = exam ? displaySessions(exam.sessions, now) : [];
   const session =
     displayed.find((item) => item.session === sessionName) ??
-    displayed.find((item) => Date.parse(item.endDate ?? item.date) >= now) ??
+    displayed.find((item) => sessionEnds(item) > now) ??
     displayed[0];
   const demoSlot = Math.floor(now / 30_000);
   const demonstrations = useMemo(
@@ -501,7 +502,11 @@ export default function StudyMap({ examSlug }: { examSlug?: string }) {
               </select>
             )}
             {session && (
-              <CountdownDigits target={countdownTarget(session, now)} compact />
+              <CountdownDigits
+                target={countdownTarget(session, now)}
+                compact
+                ended={examDayLabel(session)}
+              />
             )}
           </div>
         )}

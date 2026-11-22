@@ -1081,7 +1081,11 @@
                 "IIFT CAT",
                 "IIFT admission",
                 "MBA International Business"
-            ]
+            ],
+            "discontinued": {
+                "note": "Admission to the IIFT MBA (IB) and MBA (BA) is through CAT.",
+                "replacedBy": "cat"
+            }
         },
         "micat-2026": {
             "name": "MICAT",
@@ -1136,7 +1140,11 @@
                 "TISS CUET PG",
                 "TISS admission",
                 "TISS MA"
-            ]
+            ],
+            "discontinued": {
+                "note": "Admission to TISS master's programmes is through CUET PG, and to four Mumbai programmes through CAT.",
+                "replacedBy": "cuet-pg"
+            }
         },
         "iiser-aptitude-test-2026": {
             "name": "IISER Aptitude Test",

@@ -31,6 +31,8 @@ export interface Exam {
   relatedExams: string[];
   keywords: string[];
   classLevel?: number;
+  // How admission works now that the exam is no longer held.
+  discontinued?: { note: string; replacedBy: string };
   cycle: string;
   sessions: ExamSession[];
 }
@@ -74,9 +76,13 @@ export const exams: Exam[] = Object.entries(metadata.metadata).map(
       ...details,
       cycle: schedule?.cycle ?? "",
       // Notes record each date's source for maintainers; pages don't show them.
-      sessions: (schedule?.sessions ?? []).map(
-        ({ note: _note, ...session }) => session,
-      ),
+      // A discontinued exam has no dates to count down to.
+      sessions:
+        "discontinued" in details
+          ? []
+          : (schedule?.sessions ?? []).map(
+              ({ note: _note, ...session }) => session,
+            ),
     };
   },
 );
@@ -115,6 +121,32 @@ export function shiftDate(date: string, years: number): string {
   return shifted.toISOString().slice(0, 10);
 }
 
+export const IST_OFFSET_MS = 5.5 * 60 * 60 * 1000;
+export const DAY_MS = 24 * 60 * 60 * 1000;
+
+// Exam dates are calendar days in India. A date-only string parses as UTC
+// midnight, which is 05:30 IST, so it is already the IST day number.
+export function istDay(date: string | number): number {
+  if (typeof date === "number")
+    return Math.floor((date + IST_OFFSET_MS) / DAY_MS);
+  return date.includes("T")
+    ? Math.floor((Date.parse(date) + IST_OFFSET_MS) / DAY_MS)
+    : Math.floor(Date.parse(date) / DAY_MS);
+}
+
+// A session lasts until midnight IST after its last exam day.
+export function sessionEnds(session: { date: string; endDate?: string }) {
+  const last = session.endDate ?? session.date;
+  return last.includes("T")
+    ? Date.parse(last)
+    : (istDay(last) + 1) * DAY_MS - IST_OFFSET_MS;
+}
+
+// Calendar days from today in India to the exam day.
+export function daysUntil(date: string, now: number): number {
+  return istDay(date) - istDay(now);
+}
+
 export function displaySessions(
   sessions: ExamSession[],
   now: number,
@@ -122,9 +154,7 @@ export function displaySessions(
   const sorted = [...sessions].sort(
     (a, b) => Date.parse(a.date) - Date.parse(b.date),
   );
-  const upcoming = sorted.filter(
-    (session) => Date.parse(session.endDate ?? session.date) >= now,
-  );
+  const upcoming = sorted.filter((session) => sessionEnds(session) > now);
   if (upcoming.length) return upcoming;
   let predicted = sorted;
   for (let years = 1; years <= 5; years++) {
@@ -136,12 +166,7 @@ export function displaySessions(
         : {}),
       predicted: true,
     }));
-    if (
-      predicted.some(
-        (session) => Date.parse(session.endDate ?? session.date) >= now,
-      )
-    )
-      break;
+    if (predicted.some((session) => sessionEnds(session) > now)) break;
   }
   return predicted;
 }
@@ -151,10 +176,7 @@ export function nextSession(
   now: number,
 ): ExamSession | undefined {
   const displayed = displaySessions(sessions, now);
-  return (
-    displayed.find((item) => Date.parse(item.endDate ?? item.date) >= now) ??
-    displayed[0]
-  );
+  return displayed.find((item) => sessionEnds(item) > now) ?? displayed[0];
 }
 
 // Sessions can belong to a later cycle than the exam's headline cycle, such as
@@ -226,7 +248,7 @@ export function upcomingSessions(list: Exam[], now: number) {
   return list
     .flatMap((exam) =>
       displaySessions(exam.sessions, now)
-        .filter((session) => Date.parse(session.endDate ?? session.date) >= now)
+        .filter((session) => sessionEnds(session) > now)
         .map((session) => ({ exam, session })),
     )
     .sort((a, b) => Date.parse(a.session.date) - Date.parse(b.session.date));
