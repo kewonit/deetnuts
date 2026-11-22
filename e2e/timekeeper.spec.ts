@@ -183,6 +183,20 @@ test("every mapped destination has static content, correct canonical and one sco
         html.includes('data-testid="exam-dates"'),
         `${destination}: schedule`,
       ).toBe(true);
+      if (exam.discontinued) {
+        // A discontinued exam points to its replacement instead of counting down.
+        expect(html, `${destination}: title`).toMatch(
+          /<title>[^<]+: Admission Through [^<]+ \| TimeKeeper<\/title>/,
+        );
+        expect(html, `${destination}: status`).toContain("No longer held");
+        expect(html, `${destination}: no timer`).not.toContain(
+          'data-unit="days"',
+        );
+        expect(html, `${destination}: replacement`).toContain(
+          `href="${path}/exams/${exam.discontinued.replacedBy}"`,
+        );
+        continue;
+      }
       // A fixed date, never a day count that goes stale in search results.
       expect(html, `${destination}: title`).toMatch(
         /<title>[^<]* \d{4} Countdown: Days Left (Until|\(Expected) \d{1,2} [A-Z][a-z]{2,3} \d{4}\)? \| TimeKeeper<\/title>/,
