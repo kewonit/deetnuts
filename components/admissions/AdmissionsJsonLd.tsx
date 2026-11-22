@@ -4,7 +4,7 @@ import { getCanonicalUrl } from "@/lib/admissions/canonical";
 interface AdmissionsJsonLdProps {
   kind: "college";
   name: string;
-  alternateName?: string | null;
+  alternateName?: string | string[] | null;
   canonicalPath: string;
   parentName?: string;
   parentPath?: string;
@@ -12,18 +12,23 @@ interface AdmissionsJsonLdProps {
   website?: string | null;
   degreeType?: string;
   durationYears?: number;
-  system: "MHT-CET";
+  // The breadcrumb levels above the college, e.g. MHT-CET → Colleges.
+  crumbs: Array<{ name: string; path: string }>;
 }
 
 export default function AdmissionsJsonLd(props: AdmissionsJsonLdProps) {
   const canonicalUrl = getCanonicalUrl(props.canonicalPath);
-  const directoryPath = "/mht-cet/colleges";
+  const alternateName = Array.isArray(props.alternateName)
+    ? props.alternateName.length > 0
+      ? props.alternateName
+      : undefined
+    : props.alternateName || undefined;
   const entity = {
           "@context": "https://schema.org",
           "@type": "CollegeOrUniversity",
           "@id": canonicalUrl,
           name: props.name,
-          alternateName: props.alternateName || undefined,
+          alternateName,
           url: canonicalUrl,
           sameAs: props.website ? [props.website] : undefined,
           address:
@@ -40,21 +45,15 @@ export default function AdmissionsJsonLd(props: AdmissionsJsonLdProps) {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
+      ...props.crumbs.map((crumb, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: crumb.name,
+        item: getCanonicalUrl(crumb.path),
+      })),
       {
         "@type": "ListItem",
-        position: 1,
-        name: props.system,
-        item: getCanonicalUrl("/mht-cet"),
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Colleges",
-        item: getCanonicalUrl(directoryPath),
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
+        position: props.crumbs.length + 1,
         name: props.name,
         item: canonicalUrl,
       },

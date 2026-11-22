@@ -4,9 +4,8 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { readParquetRows } from "@ejam/data/college-predictor";
 import { resolveDataRoot } from "@ejam/data/data-root";
+import { bodyLabel, genderPoolLabel as genderLabel } from "./labels";
 import {
-  bodyLabel,
-  genderLabel,
   getCutoffCollege,
   getCutoffCollegeRows,
   getJeeCutoffCatalog,

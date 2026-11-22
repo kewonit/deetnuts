@@ -33,7 +33,8 @@ export async function GET(
 ) {
   const { exam, year: rawYear } = await context.params;
   const year = Number(rawYear);
-  if ((exam !== "jee-main" && exam !== "jee-advanced") || !Number.isInteger(year) || year < 2016 || year > 2025) {
+  // Years come from the data: a year without indexable routes falls through to the 404 below.
+  if ((exam !== "jee-main" && exam !== "jee-advanced") || !Number.isInteger(year)) {
     return new NextResponse("Not found", { status: 404, headers: { "Content-Type": "text/plain; charset=utf-8", "X-Robots-Tag": "noindex" } });
   }
   const routes = (await getJeeSeoRoutes()).filter(

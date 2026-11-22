@@ -1,14 +1,11 @@
 import { createHash } from "node:crypto";
+import { bodyLabel } from "./labels";
 import type {
   CounsellingBody,
   CutoffFilterOptions,
   CutoffSelection,
   CutoffServingRow,
 } from "./types";
-
-function bodyLabel(body: CounsellingBody): string {
-  return body === "josaa" ? "JoSAA" : "CSAB";
-}
 
 function offeringFromRow(row: CutoffServingRow) {
   return {

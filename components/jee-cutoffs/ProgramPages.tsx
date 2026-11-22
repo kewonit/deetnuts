@@ -3,11 +3,12 @@ import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import CutoffChart from "./CutoffChart";
 import { Crumbs, JsonLd, SourceCard, plural } from "./JeeParts";
+import { examLabel } from "@/lib/jee-cutoffs/repository";
 import {
   bodyLabel,
-  examLabel,
-  genderLabel,
-} from "@/lib/jee-cutoffs/repository";
+  formatRounds,
+  genderPoolLabel as genderLabel,
+} from "@/lib/jee-cutoffs/labels";
 import {
   getJeeSeoRoutes,
   getProfilePageModel,
@@ -101,7 +102,7 @@ function sourceSummary(sources: CutoffSourceRegistryEntry[]) {
     )
     .map(
       ([body, entry]) =>
-        `${bodyLabel(body as "josaa" | "csab")} ${entry.year} Rounds 1–${Math.max(...entry.rounds)}`,
+        `${bodyLabel(body as "josaa" | "csab")} ${entry.year} ${formatRounds(entry.rounds)}`,
     )
     .join(" · ");
 }
@@ -310,6 +311,7 @@ export async function ProgramPage({
         <Crumbs
           items={[
             { label: "JEE", href: "/jee-cutoffs" },
+            { label: `${examLabel(exam)} colleges`, href: `/${exam}/colleges` },
             { label: model.college.seoName, href: collegePath },
             { label: String(year), href: yearPath },
             { label: model.offering.name },
@@ -459,6 +461,10 @@ export async function ProfilePage({ routePath }: { routePath: string }) {
     [
       { name: "JEE cutoffs", item: `${baseUrl}/jee-cutoffs` },
       {
+        name: `${examLabel(exam)} colleges`,
+        item: `${baseUrl}/${exam}/colleges`,
+      },
+      {
         name: model.college.name,
         item: `${baseUrl}/${route.examId}/colleges/${route.collegeId}`,
       },
@@ -474,6 +480,10 @@ export async function ProfilePage({ routePath }: { routePath: string }) {
         <Crumbs
           items={[
             { label: "JEE", href: "/jee-cutoffs" },
+            {
+              label: `${examLabel(exam)} colleges`,
+              href: `/${exam}/colleges`,
+            },
             {
               label: model.college.seoName,
               href: `/${route.examId}/colleges/${route.collegeId}`,

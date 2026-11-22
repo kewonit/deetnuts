@@ -31,6 +31,16 @@
   .jee-page .mht-stats > div:first-child { border-left-width: 0; }
 }
 
+/* The crest falls back to the institute type ("IIT", "IIEST") instead of an initial. */
+.jee-page .mht-college-logo > span {
+  color: var(--mht-ink-soft);
+  font-size: 1.35rem;
+  letter-spacing: 0.02em;
+}
+@media (min-width: 640px) {
+  .jee-page .mht-college-logo > span { font-size: 1.75rem; }
+}
+
 /* ---------- Rank chart ---------- */
 .jee-chart-card { padding: 1rem 1.25rem 0.75rem; }
 .jee-chart-legend {

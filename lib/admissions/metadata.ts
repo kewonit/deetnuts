@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { getCanonicalUrl } from "@/lib/admissions/canonical";
-import { getMhtCetCollegeMedia } from "@/lib/admissions/college-media";
+import {
+  getMhtCetCollegeMedia,
+  type CollegeMediaAsset,
+} from "@/lib/admissions/college-media";
 import {
   headlineFigure,
   summarizeMhtCetCollege,
@@ -29,20 +32,30 @@ export function getMhtCetCollegeDocumentMetadata(
 const SITE_PREVIEW_IMAGE =
   "https://res.cloudinary.com/dfyrk32ua/image/upload/v1722186653/deetnuts/preview_o5ykn7.png";
 
+// A college's campus photo as its share image, or the site preview without one.
+export function collegeShareImage(
+  campus: CollegeMediaAsset | null | undefined,
+  name: string,
+) {
+  return campus
+    ? {
+        url: getCanonicalUrl(campus.src),
+        width: campus.width,
+        height: campus.height,
+        alt: name,
+      }
+    : { url: SITE_PREVIEW_IMAGE, width: 1200, height: 630, alt: "DEETNUTS" };
+}
+
 export function buildMhtCetCollegeMetadata(
   model: MhtCetCollegeDetailModel,
 ): Metadata {
   const { title, description, canonical } =
     getMhtCetCollegeDocumentMetadata(model);
-  const campus = getMhtCetCollegeMedia(model.college.collegeId)?.campus;
-  const image = campus
-    ? {
-        url: getCanonicalUrl(campus.src),
-        width: campus.width,
-        height: campus.height,
-        alt: model.college.name,
-      }
-    : { url: SITE_PREVIEW_IMAGE, width: 1200, height: 630, alt: "DEETNUTS" };
+  const image = collegeShareImage(
+    getMhtCetCollegeMedia(model.college.collegeId)?.campus,
+    model.college.name,
+  );
   return {
     title,
     description,

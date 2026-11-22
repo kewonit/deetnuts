@@ -1,6 +1,7 @@
 import "server-only";
 
 import manifest from "@/data/mht-cet/college-media.json";
+import jeeManifest from "@/data/jee/college-media.json";
 
 export interface CollegeMediaAsset {
   src: string;
@@ -39,6 +40,9 @@ export interface CollegeMediaEntry {
 
 const colleges = (manifest as { colleges: Record<string, CollegeMediaEntry> })
   .colleges;
+const jeeColleges = (
+  jeeManifest as { colleges: Record<string, CollegeMediaEntry> }
+).colleges;
 
 export function getMhtCetCollegeMedia(
   collegeId: string | number,
@@ -52,4 +56,9 @@ export function getMhtCetCollegeNames(): Record<string, string> {
   return Object.fromEntries(
     Object.values(colleges).map((entry) => [String(Number(entry.code)), entry.collegeName]),
   );
+}
+
+// JEE institutes are keyed by their catalog id, e.g. "iit-bombay".
+export function getJeeCollegeMedia(collegeId: string): CollegeMediaEntry | null {
+  return jeeColleges[collegeId] ?? null;
 }
