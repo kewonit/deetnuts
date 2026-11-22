@@ -13,6 +13,7 @@ export default function RouteAwareFooter() {
 
   if (pathname === "/exam-countdown" || pathname.startsWith("/exam-countdown/")) return null;
 
+  if (pathname === "/") return null;
   if (SHELL_ROUTES.some((route) => pathname === route || pathname.startsWith(`${route}/`))) return null;
 
   if (FOOTERLESS_ROUTES.has(pathname)) {
