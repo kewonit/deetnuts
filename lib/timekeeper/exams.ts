@@ -255,3 +255,26 @@ export const indexablePaths = [
     (category) => `${EXAM_COUNTDOWN_PATH}/category/${categorySlug(category)}`,
   ),
 ];
+
+// The day an exam's dates last changed, or the last full schedule check.
+function examUpdated(exam: Exam): string {
+  const schedule = schedules.sessions.find((item) => item.id === exam.id) as
+    { updated?: string } | undefined;
+  return schedule?.updated ?? SCHEDULE_VERIFIED;
+}
+
+// A list page changes when any exam on it does; the tools only change with a
+// full schedule check.
+export function lastModified(path: string): string {
+  const latest = (list: Exam[]) =>
+    list.map(examUpdated).reduce((a, b) => (a > b ? a : b), SCHEDULE_VERIFIED);
+  const slug = path.split("/").pop() ?? "";
+  if (path.startsWith(`${EXAM_COUNTDOWN_PATH}/exams/`)) {
+    const exam = getExam(slug);
+    return exam ? examUpdated(exam) : SCHEDULE_VERIFIED;
+  }
+  if (path.startsWith(`${EXAM_COUNTDOWN_PATH}/category/`))
+    return latest(exams.filter((exam) => categorySlug(exam.category) === slug));
+  if (path === EXAM_COUNTDOWN_PATH) return latest(exams);
+  return SCHEDULE_VERIFIED;
+}
