@@ -364,13 +364,13 @@
             "sessions": [
                 {
                     "session": "UG Typing Test",
-                    "date": "2026-12-04",
-                    "note": "RRB exam calendar (tentative) · CEN 07/2025"
+                    "date": "2026-11-27",
+                    "note": "RRB notice of 2026-11-02 (tentative) · CEN 07/2025 · reported by PW, Adda247, FreeJobAlert"
                 },
                 {
                     "session": "Graduate CBT 1",
-                    "date": "2027-03-01",
-                    "note": "Expected March 2027 · CEN 06/2026",
+                    "date": "2026-12-22",
+                    "note": "Expected · RRB indicative notice of 2026-10-12 says 4th week of December 2026 · CEN 06/2026",
                     "predicted": true
                 },
                 {
@@ -379,7 +379,8 @@
                     "note": "Expected May 2027 · CEN 07/2026",
                     "predicted": true
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "ugc-net-2026",
@@ -670,12 +671,11 @@
             "sessions": [
                 {
                     "session": "AFCAT 1",
-                    "date": "2027-01-30",
-                    "endDate": "2027-01-31",
-                    "note": "Expected late January 2027 · IAF notice awaited",
-                    "predicted": true
+                    "date": "2027-01-31",
+                    "note": "AFCAT 01/2027 notification as reported by Careerindia, PW, SSBCrack · registration 12 Nov-11 Dec 2026"
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "ib-acio-2026",
@@ -743,13 +743,6 @@
                     "date": "2027-06-19",
                     "endDate": "2027-06-20",
                     "note": "Official SRMIST SRMJEEE (UG) 2027 important dates (srmist.edu.in)"
-                },
-                {
-                    "session": "Phase 3",
-                    "date": "2027-07-04",
-                    "endDate": "2027-07-05",
-                    "note": "Expected July 2027 · SRMIST notice awaited",
-                    "predicted": true
                 }
             ],
             "updated": "2026-11-23"
@@ -944,12 +937,12 @@
             "sessions": [
                 {
                     "session": "Main Exam",
-                    "date": "2027-02-12",
-                    "endDate": "2027-02-28",
-                    "note": "Expected · BSER timetable awaited",
+                    "date": "2027-03-08",
+                    "note": "Expected March 2027 · BSER ruled out February for Census duty (official X post, 2026-11-14); timetable awaited",
                     "predicted": true
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "rbse-12th-2027",
@@ -957,12 +950,12 @@
             "sessions": [
                 {
                     "session": "Main Exam",
-                    "date": "2027-02-12",
-                    "endDate": "2027-03-11",
-                    "note": "Expected · BSER timetable awaited",
+                    "date": "2027-03-08",
+                    "note": "Expected March 2027 · BSER ruled out February for Census duty (official X post, 2026-11-14); timetable awaited",
                     "predicted": true
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "wb-madhyamik-2027",
@@ -972,7 +965,7 @@
                     "session": "Main Exam",
                     "date": "2027-02-15",
                     "endDate": "2027-02-25",
-                    "note": "Official WBBSE routine"
+                    "note": "Official WBBSE routine (EMU/C/35, 2026-07-13) · board proposed Mar 2-16 for Census, not notified"
                 }
             ]
         },
@@ -988,11 +981,13 @@
                 },
                 {
                     "session": "Semester IV Theory",
-                    "date": "2027-03-01",
-                    "note": "Expected March 2027 · WBCHSE routine awaited",
+                    "date": "2027-03-19",
+                    "endDate": "2027-04-12",
+                    "note": "Expected · WBCHSE proposal shared by the education minister, 2026-11-19 (PTI); routine awaited",
                     "predicted": true
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "tn-sslc-2027",
@@ -1111,8 +1106,7 @@
                     "session": "Science Practicals",
                     "date": "2027-02-05",
                     "endDate": "2027-02-13",
-                    "note": "Expected · not in the GSHSEB 2026-27 calendar; same dates as 2026",
-                    "predicted": true
+                    "note": "Official GSHSEB school activity calendar 2026-27 (letter dated 2026-05-02)"
                 },
                 {
                     "session": "Theory",
@@ -1154,11 +1148,13 @@
             "sessions": [
                 {
                     "session": "Main Exam",
-                    "date": "2027-02-23",
-                    "note": "Expected · BIEAP timetable awaited",
+                    "date": "2027-02-25",
+                    "endDate": "2027-03-16",
+                    "note": "BIEAP tentative timetable, 2026-10-22 · 2nd year Feb 25-Mar 16 (Careers360, Shiksha, Hans India)",
                     "predicted": true
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "ts-inter-2027",
