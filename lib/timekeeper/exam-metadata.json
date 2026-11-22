@@ -1083,7 +1083,7 @@
                 "MBA International Business"
             ],
             "discontinued": {
-                "note": "Admission to the IIFT MBA (IB) is through CAT.",
+                "note": "Admission to the IIFT MBA (IB) and MBA (BA) is through CAT.",
                 "replacedBy": "cat"
             }
         },
@@ -1142,7 +1142,7 @@
                 "TISS MA"
             ],
             "discontinued": {
-                "note": "Admission to TISS MA programmes is through CUET PG.",
+                "note": "Admission to TISS master's programmes is through CUET PG, and to four Mumbai programmes through CAT.",
                 "replacedBy": "cuet-pg"
             }
         },
