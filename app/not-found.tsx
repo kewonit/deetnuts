@@ -1,34 +1,32 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import Link from "next/link";
+import { MhtShell } from "@/components/admissions/MhtShell";
 
 export const metadata: Metadata = {
   title: "Page not found",
-  description: "The requested DEETNUTS page could not be found.",
+  robots: { index: false, follow: false },
 };
 
+// Renders for any route without its own not-found, outside that route's layout.
 export default function NotFound() {
   return (
-    <div className="min-h-screen w-full">
-      <div className="bg-indigo-900 relative overflow-hidden h-screen">
-        <Image
-          src="https://external-preview.redd.it/4MddL-315mp40uH18BgGL2-5b6NIPHcDMBSWuN11ynM.jpg?width=960&crop=smart&auto=webp&s=b98d54a43b3dac555df398588a2c791e0f3076d9"
-          alt="404 not found"
-          fill={true}
-          priority
-          className="object-cover"
-        />
-        <div className="inset-0 bg-black opacity-25 absolute"></div>
-        <div className="container mx-auto px-6 md:px-12 relative z-10 flex items-center py-32 xl:py-40">
-          <div className="w-full font-mono flex flex-col items-center relative z-10">
-            <h1 className="font-extrabold text-5xl text-center text-white leading-tight mt-4">
-              You are all alone here
-            </h1>
-            <p className="font-extrabold text-8xl my-44 text-white animate">
-              404
-            </p>
+    <MhtShell>
+      <main className="mht-main">
+        <div className="mht-page mht-page-wide mht-message">
+          <h1 className="mht-h1">Page not found</h1>
+          <div className="mht-cta">
+            <Link className="mht-btn mht-btn-primary" href="/">
+              Home
+            </Link>
+            <Link className="mht-btn" href="/mht-cet">
+              MHT-CET
+            </Link>
+            <Link className="mht-btn" href="/jee-cutoffs">
+              JEE
+            </Link>
           </div>
         </div>
-      </div>
-    </div>
+      </main>
+    </MhtShell>
   );
 }

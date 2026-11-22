@@ -30,7 +30,7 @@ const AUTH_COOKIE_NAME =
   process.env.NODE_ENV === "production"
     ? "__Host-deetnuts_auth"
     : "deetnuts_auth";
-const PROTECTED_ROUTES = ["/account", "/dashboard", "/profile", "/settings"];
+const PROTECTED_ROUTES = ["/account", "/dashboard", "/settings"];
 
 function hasPredictorQueryParams(request: NextRequest): boolean {
   return PREDICTOR_QUERY_KEYS.some((key) =>

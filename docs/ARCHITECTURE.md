@@ -70,7 +70,7 @@ The live runtime uses PocketBase directly. Supabase remains only as the read-onl
 The `app/` directory is organized by data domain and product surface.
 
 - `app/mht-cet/`: state cutoffs, college detail pages, seat matrix views, and all-India cutoff pages
-- `app/auth/`, `app/account/`, `app/profile/`, `app/signup/`, `app/login/`: authenticated user flows
+- `app/auth/`, `app/account/`, `app/signup/`, `app/login/`: authenticated user flows
 - `app/api/`: route handlers for MHT-CET cutoffs, college detail access, and other server endpoints
 
 ### Shared Libraries

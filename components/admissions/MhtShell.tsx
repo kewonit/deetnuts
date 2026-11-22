@@ -3,8 +3,8 @@ import { MhtFooter } from "@/components/admissions/MhtFooter";
 import { googleSans } from "@/components/admissions/mht-font";
 import "@/components/admissions/mht-base.css";
 
-// The page frame for MHT-CET, JEE and /creators: body and footer in the section's light
-// and dark theme, under the site navbar. RouteAwareFooter skips routes that use it.
+// The page frame for every page except TimeKeeper and the college predictor: body and
+// footer in the site's light and dark theme, under the site navbar.
 export function MhtShell({
   children,
   footer = "mht",

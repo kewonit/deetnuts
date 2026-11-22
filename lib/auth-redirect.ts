@@ -3,14 +3,12 @@ import { getSiteUrl } from "@/lib/site-url";
 const LOCAL_REDIRECT_ORIGIN = "https://deetnuts.local";
 
 export const DEFAULT_AUTH_REDIRECT = "/";
-export const DEFAULT_MHT_CET_REDIRECT = "/mht-cet";
 
 const BLOCKED_REDIRECT_PREFIXES = [
   "/login",
   "/signup",
   "/auth/confirm",
   "/auth/callback",
-  "/mht-cet-login-required",
 ];
 
 function getFirstString(value: unknown): string {
@@ -62,10 +60,6 @@ export function sanitizeRedirectPath(
 
   const parsed = new URL(candidate, LOCAL_REDIRECT_ORIGIN);
   return `${parsed.pathname}${parsed.search}${parsed.hash}`;
-}
-
-export function sanitizeMhtCetRedirectPath(value: unknown): string {
-  return sanitizeRedirectPath(value, DEFAULT_MHT_CET_REDIRECT);
 }
 
 function getBaseUrl(): string {

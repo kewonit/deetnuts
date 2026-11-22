@@ -75,26 +75,19 @@ test("cutoff routes use the site footer with JEE colleges and sources", async ({
   const footer = page.locator(".mht-footer");
   await expect(footer).toHaveCount(1);
   await expect(footer).toBeVisible();
-  await expect(page.locator("footer.bg-gradient-to-b")).toHaveCount(0);
-  await expect(footer.locator(".mht-foot-cols h2")).toHaveText(["MHT-CET", "JEE", "Data", "Project"]);
+  await expect(footer.locator(".mht-foot-cols h2")).toHaveText(["MHT-CET", "JEE", "Data", "Project", "Countdowns"]);
   await expect(footer.locator(".mht-foot-colleges li a").first()).toHaveText("IIT Bombay");
   await expect(footer.locator(".mht-foot-status")).toContainText("JoSAA");
 });
 
-test("homepage uses the MHT-CET footer", async ({ page }) => {
-  await page.goto("/");
-  await expect(page.locator(".legacy-site-footer")).toHaveCount(0);
-  await expect(page.locator(".mht-footer")).toBeVisible();
-});
-
-test("pages outside the shell keep the original footer", async ({ page }) => {
-  await page.goto("/datasource");
-  await expect(page.locator(".mht-footer")).toHaveCount(0);
-  const originalFooter = page.locator(".legacy-site-footer");
-  await expect(originalFooter).toBeVisible();
-  await expect(originalFooter).toContainText("MHT-CET");
-  await expect(originalFooter.locator("[data-legacy-wordmark] svg")).toBeVisible();
-});
+for (const path of ["/", "/compliance/privacy-policy", "/login", "/no-such-page"]) {
+  test(`${path} uses the site footer`, async ({ page }) => {
+    await page.goto(path);
+    const footer = page.locator(".mht-footer");
+    await expect(footer).toHaveCount(1);
+    await expect(footer).toBeVisible();
+  });
+}
 
 test("mht-cet hub uses the site navbar and the MHT-CET footer", async ({ page }) => {
   await page.goto("/mht-cet");
@@ -102,7 +95,7 @@ test("mht-cet hub uses the site navbar and the MHT-CET footer", async ({ page })
   await expect(page.locator(".site-nav")).toBeVisible();
   const footer = page.locator(".mht-footer");
   await expect(footer).toBeVisible();
-  await expect(footer.locator(".mht-foot-cols h2")).toHaveText(["MHT-CET", "JEE", "Data", "Project"]);
+  await expect(footer.locator(".mht-foot-cols h2")).toHaveText(["MHT-CET", "JEE", "Data", "Project", "Countdowns"]);
   await expect(footer.locator(".mht-foot-colleges li a")).toHaveCount(18);
 });
 
@@ -226,9 +219,10 @@ test("legal pages are complete, canonical and readable in both themes", async ({
     await expect(page.locator(".policy-page")).toBeVisible();
   }
   await page.emulateMedia({ colorScheme: "light" });
-  const light = await page.locator(".policy-page").evaluate((element) => getComputedStyle(element).backgroundColor);
+  const light = await page.locator(".mht").evaluate((element) => getComputedStyle(element).backgroundColor);
   await page.emulateMedia({ colorScheme: "dark" });
-  const dark = await page.locator(".policy-page").evaluate((element) => getComputedStyle(element).backgroundColor);
+  await expect(page.locator(".deetnuts-ejam-shell")).toHaveClass(/\bdark\b/);
+  const dark = await page.locator(".mht").evaluate((element) => getComputedStyle(element).backgroundColor);
   expect(light).not.toBe(dark);
   expect((await new AxeBuilder({ page }).include(".policy-page").analyze()).violations).toEqual([]);
 });

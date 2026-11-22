@@ -15,7 +15,6 @@ export default async function Signup({ searchParams }: AuthPageProps) {
   return (
     <GoogleAuthForm
       title="Create account"
-      description="Use your Google account to get started."
       redirectTo={redirectTo}
       message={typeof params?.message === "string" ? params.message : undefined}
     />
