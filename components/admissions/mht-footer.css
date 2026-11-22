@@ -1,4 +1,4 @@
-/* Footer for every /mht-cet page. Renders inside .mht, so it reads the
+/* The site footer, rendered by MhtShell. Renders inside .mht, so it reads the
    --mht-* tokens and follows the light and dark themes. */
 
 .mht-footer {

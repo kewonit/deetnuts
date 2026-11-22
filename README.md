@@ -26,7 +26,7 @@ Live at **[www.deetnuts.com](https://www.deetnuts.com)**.
 | JEE cutoffs               | `/jee-main/colleges/...`, `/jee-advanced/colleges/...`, `/josaa/institutes/...` | eJAM Parquet release (JoSAA, CSAB), bundled in the image                                      |
 | College predictor         | `/college-predictor`, `/api/predict/[exam_id]`                                  | eJAM predictors for JEE Main, JEE Advanced, MHT-CET                                           |
 | Exam countdown            | `/exam-countdown`                                                               | Checked-in exam metadata. Study map uses TimeKeeper's Supabase project                        |
-| Accounts                  | `/login`, `/account`, `/profile`                                                | PocketBase auth with Google OAuth                                                             |
+| Accounts                  | `/login`, `/account`                                                            | PocketBase auth with Google OAuth                                                             |
 | Cutoff bot                | `/api/bot/*`                                                                    | Discord interactions and a Reddit worker (`bot/`)                                             |
 
 ## Architecture
@@ -132,7 +132,7 @@ sequenceDiagram
   W-->>B: Set HttpOnly auth cookie, redirect to original page
 ```
 
-`proxy.ts` redirects `/account` and `/profile` to `/login` when the auth cookie is absent. Server code refreshes the token against PocketBase on each authenticated request.
+`proxy.ts` redirects `/account` to `/login` when the auth cookie is absent. Server code refreshes the token against PocketBase on each authenticated request.
 
 ## Data ingestion
 

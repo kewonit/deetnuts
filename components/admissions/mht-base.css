@@ -670,7 +670,7 @@ select.mht-input {
 }
 
 /* Small standalone pages: not found, errors. */
-.mht-message { padding: 4rem 0 3rem; }
+.mht-message { padding-top: 4rem; padding-bottom: 3rem; }
 .mht-message p { margin-top: 0.75rem; color: var(--mht-muted); }
 .mht-message .mht-cta { margin-top: 1.75rem; }
 

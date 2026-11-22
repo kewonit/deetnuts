@@ -1,4 +1,5 @@
 import { COMPLIANCE } from "@/lib/compliance";
+import "./policy.css";
 
 export type PolicySection = { id: string; label: string };
 
@@ -32,8 +33,8 @@ export function PolicyPage({
   children: React.ReactNode;
 }) {
   return (
-    <main className="policy-page">
-      <div className="policy-page-inner">
+    <main className="mht-main">
+      <div className="policy-page">
         <header className="policy-header">
           <h1>{title}</h1>
           <dl className="policy-meta">

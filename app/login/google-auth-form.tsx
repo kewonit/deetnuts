@@ -1,66 +1,36 @@
 import Link from "next/link";
 import { SubmitButton } from "./submit-button";
 import { signInWithGoogle, signInWithPassword } from "./actions";
+import "./auth.css";
 
 type GoogleAuthFormProps = {
   title: string;
-  description: string;
   redirectTo: string;
   message?: string;
 };
 
 export function GoogleAuthForm({
   title,
-  description,
   redirectTo,
   message,
 }: GoogleAuthFormProps) {
   return (
-    <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2 mx-auto pt-28 min-h-screen">
-      <Link
-        href={redirectTo}
-        className="absolute left-8 top-8 py-2 px-4 rounded-md no-underline text-foreground bg-btn-background hover:bg-btn-background-hover flex items-center group text-sm"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1"
-        >
-          <polyline points="15 18 9 12 15 6" />
-        </svg>{" "}
-        Back
-      </Link>
-
-      <div className="animate-in flex-1 flex flex-col w-full justify-center gap-4 text-foreground">
-        {message && (
-          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
-            <p className="text-red-800 text-sm text-center">{message}</p>
-          </div>
-        )}
-
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold">{title}</h1>
-          <p className="text-muted-foreground">{description}</p>
-        </div>
+    <main className="mht-main">
+      <div className="mht-page auth-page">
+        <h1 className="mht-h1">{title}</h1>
+        {message ? (
+          <p className="auth-message" role="status">
+            {message}
+          </p>
+        ) : null}
 
         <form action={signInWithGoogle}>
           <input type="hidden" name="redirect" value={redirectTo} />
           <SubmitButton
-            className="w-full bg-white border-2 border-black mt-4 gap-3"
+            className="mht-btn mht-btn-primary"
             pendingText="Opening Google..."
           >
-            <svg
-              aria-hidden="true"
-              viewBox="0 0 18 18"
-              className="h-5 w-5"
-            >
+            <svg aria-hidden="true" viewBox="0 0 18 18">
               <path
                 fill="#4285F4"
                 d="M17.64 9.205c0-.638-.057-1.252-.164-1.841H9v3.482h4.844a4.14 4.14 0 0 1-1.797 2.715v2.258h2.909c1.702-1.567 2.684-3.877 2.684-6.614Z"
@@ -82,56 +52,43 @@ export function GoogleAuthForm({
           </SubmitButton>
         </form>
 
-        <div className="flex items-center gap-3 py-2" aria-hidden="true">
-          <span className="h-px flex-1 bg-border" />
-          <span className="text-xs uppercase tracking-wider text-muted-foreground">or</span>
-          <span className="h-px flex-1 bg-border" />
-        </div>
+        <p className="auth-or">or</p>
 
-        <form action={signInWithPassword} className="flex flex-col gap-3">
+        <form action={signInWithPassword} className="auth-form">
           <input type="hidden" name="redirect" value={redirectTo} />
-          <label htmlFor="email" className="text-sm font-medium">Email</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            required
-            className="h-11 rounded-md border-2 border-black bg-background px-3"
-          />
-          <label htmlFor="password" className="text-sm font-medium">Password</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            required
-            minLength={6}
-            className="h-11 rounded-md border-2 border-black bg-background px-3"
-          />
-          <SubmitButton className="w-full" pendingText="Signing in...">
+          <label className="mht-field">
+            <span>Email</span>
+            <input
+              className="mht-input"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+            />
+          </label>
+          <label className="mht-field">
+            <span>Password</span>
+            <input
+              className="mht-input"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              required
+              minLength={6}
+            />
+          </label>
+          <SubmitButton className="mht-btn" pendingText="Signing in...">
             Sign in with password
           </SubmitButton>
         </form>
 
-        <p className="mt-4 text-center text-xs text-muted-foreground">
+        <p className="mht-note">
           By continuing, you agree to our{" "}
-          <Link
-            href="/compliance/terms-and-conditions"
-            className="underline hover:text-foreground"
-          >
-            Terms
-          </Link>{" "}
-          and acknowledge our{" "}
-          <Link
-            href="/compliance/privacy-policy"
-            className="underline hover:text-foreground"
-          >
-            Privacy Policy
-          </Link>
-          .
+          <Link href="/compliance/terms-and-conditions">Terms</Link> and
+          acknowledge our{" "}
+          <Link href="/compliance/privacy-policy">Privacy Policy</Link>.
         </p>
       </div>
-    </div>
+    </main>
   );
 }

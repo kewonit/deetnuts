@@ -228,7 +228,7 @@ export default function CookiePolicy() {
           <li><strong>Browser settings:</strong> view and delete cookies and site data, block cookies, or restrict third-party content. Guidance is available from the provider of your browser.</li>
         </ul>
         <p>Blocking strictly necessary cookies may prevent sign-in, usage limits and saved settings from working. Public cutoff pages remain available.</p>
-        <CookieSettingsButton className="policy-action" />
+        <CookieSettingsButton className="mht-btn" />
       </Clause>
 
       <Clause sections={SECTIONS} id="changes">
