@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PRODUCTION_SITE_URL } from "@/lib/site-url";
-import { EXAM_COUNTDOWN_PATH, SCHEDULE_VERIFIED } from "./exams";
+import { EXAM_COUNTDOWN_PATH, lastModified } from "./exams";
 
 export function timekeeperMetadata(
   path: string,
@@ -45,7 +45,7 @@ export function pageSchema(path: string, name: string, description: string) {
     url: `${PRODUCTION_SITE_URL}${path}`,
     name,
     description,
-    dateModified: SCHEDULE_VERIFIED,
+    dateModified: lastModified(path),
     isPartOf: { "@type": "WebSite", "@id": `${PRODUCTION_SITE_URL}/#website` },
   };
 }
