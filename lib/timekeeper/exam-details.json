@@ -28,33 +28,39 @@
     "keyDates": [
       {
         "event": "Registration",
-        "date": "2026-10-31",
-        "endDate": "2026-11-27",
-        "status": "expected",
-        "note": "2026 cycle: Oct 31–Nov 27, 2025"
+        "date": "2026-10-24",
+        "endDate": "2026-11-26",
+        "status": "official",
+        "note": "NTA public notice · regular till Nov 22; late fee Nov 23-26"
       },
       {
         "event": "Correction window",
-        "date": "2026-12-01",
-        "endDate": "2026-12-02",
-        "status": "expected",
-        "note": "2026 cycle: Dec 1–2, 2025"
+        "date": "2026-11-27",
+        "endDate": "2026-11-29",
+        "status": "official",
+        "note": "NTA public notice"
+      },
+      {
+        "event": "City intimation slip",
+        "date": "2026-12-30",
+        "status": "official",
+        "note": "NTA public notice"
       },
       {
         "event": "Admit card",
-        "date": "2027-01-18",
-        "status": "expected",
-        "note": "2026: 4 days before first exam day"
+        "date": "2027-01-13",
+        "status": "official",
+        "note": "NTA public notice"
       },
       {
         "event": "Provisional answer key",
-        "date": "2027-02-05",
+        "date": "2027-02-03",
         "status": "expected",
         "note": "2026: Feb 4, 6 days after last exam day"
       },
       {
         "event": "Result",
-        "date": "2027-02-17",
+        "date": "2027-02-15",
         "status": "expected",
         "note": "2026 S1 result: Feb 16, 18 days after exams"
       }
@@ -97,26 +103,26 @@
     "keyDates": [
       {
         "event": "Registration",
-        "date": "2027-04-22",
-        "endDate": "2027-05-01",
+        "date": "2027-04-29",
+        "endDate": "2027-05-08",
         "status": "expected",
-        "note": "2026: Apr 23–May 5; assumes mid-May exam"
+        "note": "2026: Apr 23-May 5 for a May 17 exam"
       },
       {
         "event": "Admit card",
-        "date": "2027-05-10",
+        "date": "2027-05-17",
         "status": "expected",
         "note": "2026: May 11, 6 days before exam"
       },
       {
         "event": "Provisional answer key",
-        "date": "2027-05-24",
+        "date": "2027-05-31",
         "status": "expected",
         "note": "2026: May 25, 8 days after exam"
       },
       {
         "event": "Result",
-        "date": "2027-05-31",
+        "date": "2027-06-07",
         "status": "expected",
         "note": "2026: Jun 1, 15 days after exam"
       }
@@ -286,9 +292,9 @@
       {
         "event": "Registration",
         "date": "2026-08-03",
-        "endDate": "2026-10-31",
+        "endDate": "2026-11-07",
         "status": "official",
-        "note": "Consortium press release, Jul 22, 2026"
+        "note": "Consortium of NLUs; extended from Oct 31"
       },
       {
         "event": "Admit card",
@@ -349,9 +355,9 @@
       {
         "event": "Application rectification",
         "date": "2026-10-14",
-        "endDate": "2026-10-31",
+        "endDate": "2026-11-30",
         "status": "official",
-        "note": "Scrutiny defects only"
+        "note": "Scrutiny defects only; extended from Oct 31 (gate2027.iitm.ac.in)"
       },
       {
         "event": "Special registration window",
@@ -359,6 +365,13 @@
         "endDate": "2026-10-16",
         "status": "official",
         "note": "With late fee"
+      },
+      {
+        "event": "Data correction window",
+        "date": "2026-11-10",
+        "endDate": "2026-11-14",
+        "status": "official",
+        "note": "Candidate request, with fee (gate2027.iitm.ac.in)"
       },
       {
         "event": "Exam city slip",
@@ -571,9 +584,9 @@
       },
       {
         "event": "Date sheet",
-        "date": "2026-11-15",
-        "status": "expected",
-        "note": "Not out by Oct 23; came Oct 30 last year"
+        "date": "2026-11-06",
+        "status": "official",
+        "note": "Released Nov 6, 2026 on cbse.gov.in"
       },
       {
         "event": "Practicals and internal assessment",
@@ -671,17 +684,17 @@
         "note": "Name and DOB fixes only"
       },
       {
-        "event": "Practicals (winter-bound schools)",
+        "event": "Date sheet",
         "date": "2026-11-06",
-        "endDate": "2026-12-06",
-        "status": "expected",
-        "note": "Nov 6–Dec 6 in 2025"
+        "status": "official",
+        "note": "Released Nov 6, 2026 on cbse.gov.in"
       },
       {
-        "event": "Date sheet",
-        "date": "2026-11-15",
-        "status": "expected",
-        "note": "Not out by Oct 23; came Oct 30 last year"
+        "event": "Practicals (winter-bound schools)",
+        "date": "2026-11-09",
+        "endDate": "2026-12-19",
+        "status": "official",
+        "note": "CBSE circular, Nov 5, 2026"
       },
       {
         "event": "Practical exams",
@@ -760,9 +773,9 @@
       },
       {
         "event": "Timetable",
-        "date": "2026-11-13",
-        "status": "expected",
-        "note": "Released Nov 13 in 2025"
+        "date": "2026-11-10",
+        "status": "official",
+        "note": "Released Nov 10, 2026 on cisce.org"
       },
       {
         "event": "Result",
@@ -828,9 +841,9 @@
       },
       {
         "event": "Timetable",
-        "date": "2026-11-13",
-        "status": "expected",
-        "note": "Released Nov 13 in 2025"
+        "date": "2026-11-10",
+        "status": "official",
+        "note": "Released Nov 10, 2026 on cisce.org"
       },
       {
         "event": "Result",
@@ -896,9 +909,9 @@
       },
       {
         "event": "Subject-wise timetable",
-        "date": "2026-11-05",
-        "status": "expected",
-        "note": "Final timetable came Oct 31 in 2025"
+        "date": "2026-11-07",
+        "status": "official",
+        "note": "Released Nov 7, 2026 on mahahsscboard.in"
       },
       {
         "event": "Hall ticket",
@@ -983,9 +996,9 @@
       },
       {
         "event": "Subject-wise timetable",
-        "date": "2026-11-05",
-        "status": "expected",
-        "note": "Final timetable came Oct 31 in 2025"
+        "date": "2026-11-07",
+        "status": "official",
+        "note": "Released Nov 7, 2026 on mahahsscboard.in"
       },
       {
         "event": "Hall ticket",
@@ -1116,6 +1129,20 @@
         "endDate": "2027-02-24",
         "status": "expected",
         "note": "Jan 10–Feb 24 in 2026; 2027 dates not announced"
+      },
+      {
+        "event": "PCB attempt 1",
+        "date": "2027-04-08",
+        "endDate": "2027-04-13",
+        "status": "expected",
+        "note": "CET Cell tentative schedule (cetcell.mahacet.org), 2026-11-16"
+      },
+      {
+        "event": "PCB attempt 2",
+        "date": "2027-05-06",
+        "endDate": "2027-05-08",
+        "status": "expected",
+        "note": "CET Cell tentative schedule (cetcell.mahacet.org), 2026-11-16 · optional"
       },
       {
         "event": "Results",

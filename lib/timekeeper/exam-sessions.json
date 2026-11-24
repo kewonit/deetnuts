@@ -7,18 +7,18 @@
             "sessions": [
                 {
                     "session": "Session 1",
-                    "date": "2027-01-22",
-                    "endDate": "2027-01-30",
-                    "note": "Official NTA exam calendar 2026-27"
+                    "date": "2027-01-20",
+                    "endDate": "2027-01-28",
+                    "note": "Official NTA JEE (Main) 2027 public notice, 2026-10-24 · Jan 20-24 and 28"
                 },
                 {
                     "session": "Session 2",
-                    "date": "2027-04-01",
-                    "endDate": "2027-04-10",
-                    "note": "Expected April 2027 · NTA notice awaited",
-                    "predicted": true
+                    "date": "2027-04-02",
+                    "endDate": "2027-04-07",
+                    "note": "Official NTA revised exam calendar (nta.ac.in), 2026-10-26"
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "jee-advanced-2026",
@@ -26,11 +26,11 @@
             "sessions": [
                 {
                     "session": "Paper 1 & 2",
-                    "date": "2027-05-16",
-                    "note": "Expected mid-May 2027 · organising IIT notice awaited",
-                    "predicted": true
+                    "date": "2027-05-23",
+                    "note": "Official JEE (Advanced) 2027 site (jeeadv.ac.in), 2026-11-13 · IIT Delhi"
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "neet-ug-2026",
@@ -125,7 +125,8 @@
                     "date": "2027-02-21",
                     "note": "Official IIT Madras dates - Feb 6, 7, 13, 14, 20, 21"
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "ssc-cgl-2026",
@@ -166,7 +167,8 @@
                     "date": "2026-12-06",
                     "note": "Official Consortium of NLUs schedule for CLAT 2027"
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "wbjee-2026",
@@ -185,18 +187,21 @@
             "cycle": "2027",
             "sessions": [
                 {
-                    "session": "Attempt 1",
-                    "date": "2027-03-01",
-                    "note": "Expected March 2027 · CET Cell schedule awaited",
+                    "session": "PCM Attempt 1",
+                    "date": "2027-04-16",
+                    "endDate": "2027-04-26",
+                    "note": "CET Cell tentative schedule (cetcell.mahacet.org), 2026-11-16 · PCM group",
                     "predicted": true
                 },
                 {
-                    "session": "Attempt 2",
-                    "date": "2027-05-01",
-                    "note": "Expected May 2027 · CET Cell schedule awaited",
+                    "session": "PCM Attempt 2",
+                    "date": "2027-05-10",
+                    "endDate": "2027-05-15",
+                    "note": "CET Cell tentative schedule (cetcell.mahacet.org), 2026-11-16 · PCM group, optional",
                     "predicted": true
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "kcet-2026",
@@ -230,10 +235,11 @@
                 {
                     "session": "Single Session",
                     "date": "2027-04-27",
-                    "endDate": "2027-04-30",
-                    "note": "VIT schedule (tentative)"
+                    "endDate": "2027-05-02",
+                    "note": "VIT VITEEE 2027 dates (viteee.vit.ac.in), tentative"
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "xat-2026",
@@ -358,13 +364,13 @@
             "sessions": [
                 {
                     "session": "UG Typing Test",
-                    "date": "2026-12-04",
-                    "note": "RRB exam calendar (tentative) · CEN 07/2025"
+                    "date": "2026-11-27",
+                    "note": "RRB notice of 2026-11-02 (tentative) · CEN 07/2025 · reported by PW, Adda247, FreeJobAlert"
                 },
                 {
                     "session": "Graduate CBT 1",
-                    "date": "2027-03-01",
-                    "note": "Expected March 2027 · CEN 06/2026",
+                    "date": "2026-12-22",
+                    "note": "Expected · RRB indicative notice of 2026-10-12 says 4th week of December 2026 · CEN 06/2026",
                     "predicted": true
                 },
                 {
@@ -373,7 +379,8 @@
                     "note": "Expected May 2027 · CEN 07/2026",
                     "predicted": true
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "ugc-net-2026",
@@ -664,12 +671,11 @@
             "sessions": [
                 {
                     "session": "AFCAT 1",
-                    "date": "2027-01-30",
-                    "endDate": "2027-01-31",
-                    "note": "Expected late January 2027 · IAF notice awaited",
-                    "predicted": true
+                    "date": "2027-01-31",
+                    "note": "AFCAT 01/2027 notification as reported by Careerindia, PW, SSBCrack · registration 12 Nov-11 Dec 2026"
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "ib-acio-2026",
@@ -728,26 +734,18 @@
             "sessions": [
                 {
                     "session": "Phase 1",
-                    "date": "2027-04-24",
-                    "endDate": "2027-04-29",
-                    "note": "Expected April 2027 · SRMIST notice awaited",
-                    "predicted": true
+                    "date": "2027-04-17",
+                    "endDate": "2027-04-18",
+                    "note": "Official SRMIST SRMJEEE (UG) 2027 important dates (srmist.edu.in)"
                 },
                 {
                     "session": "Phase 2",
-                    "date": "2027-06-10",
-                    "endDate": "2027-06-15",
-                    "note": "Expected June 2027 · SRMIST notice awaited",
-                    "predicted": true
-                },
-                {
-                    "session": "Phase 3",
-                    "date": "2027-07-04",
-                    "endDate": "2027-07-05",
-                    "note": "Expected July 2027 · SRMIST notice awaited",
-                    "predicted": true
+                    "date": "2027-06-19",
+                    "endDate": "2027-06-20",
+                    "note": "Official SRMIST SRMJEEE (UG) 2027 important dates (srmist.edu.in)"
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "amu-engineering-2026",
@@ -791,11 +789,12 @@
             "sessions": [
                 {
                     "session": "Exam Window",
-                    "date": "2027-03-01",
-                    "endDate": "2027-03-25",
-                    "note": "Official NTA exam calendar 2026-27"
+                    "date": "2027-03-02",
+                    "endDate": "2027-03-31",
+                    "note": "Official NTA revised exam calendar (nta.ac.in), 2026-10-26 · 17 days"
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "cbse-class-10-2026",
@@ -803,10 +802,9 @@
             "sessions": [
                 {
                     "session": "Phase 1",
-                    "date": "2027-02-15",
-                    "endDate": "2027-03-10",
-                    "note": "Expected · CBSE date sheet awaited",
-                    "predicted": true
+                    "date": "2027-02-16",
+                    "endDate": "2027-03-09",
+                    "note": "Official CBSE date sheet (cbse.gov.in), released 2026-11-06"
                 },
                 {
                     "session": "Phase 2",
@@ -815,7 +813,8 @@
                     "note": "Expected · optional second board exam",
                     "predicted": true
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "cbse-class-12-2026",
@@ -823,12 +822,12 @@
             "sessions": [
                 {
                     "session": "Main Exam",
-                    "date": "2027-02-15",
+                    "date": "2027-02-16",
                     "endDate": "2027-04-09",
-                    "note": "Expected · CBSE date sheet awaited",
-                    "predicted": true
+                    "note": "Official CBSE date sheet (cbse.gov.in), released 2026-11-06"
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "icse-class-10-2026",
@@ -836,12 +835,12 @@
             "sessions": [
                 {
                     "session": "Main Exam",
-                    "date": "2027-02-17",
-                    "endDate": "2027-03-30",
-                    "note": "Expected · CISCE date sheet awaited",
-                    "predicted": true
+                    "date": "2027-02-15",
+                    "endDate": "2027-03-31",
+                    "note": "Official CISCE timetable (cisce.org), released 2026-11-10"
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "isc-class-12-2026",
@@ -849,12 +848,12 @@
             "sessions": [
                 {
                     "session": "Main Exam",
-                    "date": "2027-02-12",
-                    "endDate": "2027-04-06",
-                    "note": "Expected · CISCE date sheet awaited",
-                    "predicted": true
+                    "date": "2027-02-09",
+                    "endDate": "2027-04-08",
+                    "note": "Official CISCE timetable (cisce.org), released 2026-11-10"
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "maharashtra-hsc-2026",
@@ -863,10 +862,11 @@
                 {
                     "session": "Main Exam",
                     "date": "2027-02-08",
-                    "endDate": "2027-03-16",
-                    "note": "Official MSBSHSE dates · subject timetable awaited"
+                    "endDate": "2027-03-18",
+                    "note": "Official MSBSHSE timetable (mahahsscboard.in), released 2026-11-07 · written papers to Mar 11; online IT and GK papers Mar 12-18"
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "maharashtra-ssc-2026",
@@ -875,10 +875,11 @@
                 {
                     "session": "Main Exam",
                     "date": "2027-02-15",
-                    "endDate": "2027-03-11",
-                    "note": "Official MSBSHSE dates · subject timetable awaited"
+                    "endDate": "2027-03-15",
+                    "note": "Official MSBSHSE timetable (mahahsscboard.in), released 2026-11-07"
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "up-board-10th-2026",
@@ -936,12 +937,12 @@
             "sessions": [
                 {
                     "session": "Main Exam",
-                    "date": "2027-02-12",
-                    "endDate": "2027-02-28",
-                    "note": "Expected · BSER timetable awaited",
+                    "date": "2027-03-08",
+                    "note": "Expected March 2027 · BSER ruled out February for Census duty (official X post, 2026-11-14); timetable awaited",
                     "predicted": true
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "rbse-12th-2027",
@@ -949,12 +950,12 @@
             "sessions": [
                 {
                     "session": "Main Exam",
-                    "date": "2027-02-12",
-                    "endDate": "2027-03-11",
-                    "note": "Expected · BSER timetable awaited",
+                    "date": "2027-03-08",
+                    "note": "Expected March 2027 · BSER ruled out February for Census duty (official X post, 2026-11-14); timetable awaited",
                     "predicted": true
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "wb-madhyamik-2027",
@@ -964,7 +965,7 @@
                     "session": "Main Exam",
                     "date": "2027-02-15",
                     "endDate": "2027-02-25",
-                    "note": "Official WBBSE routine"
+                    "note": "Official WBBSE routine (EMU/C/35, 2026-07-13) · board proposed Mar 2-16 for Census, not notified"
                 }
             ]
         },
@@ -980,11 +981,13 @@
                 },
                 {
                     "session": "Semester IV Theory",
-                    "date": "2027-03-01",
-                    "note": "Expected March 2027 · WBCHSE routine awaited",
+                    "date": "2027-03-19",
+                    "endDate": "2027-04-12",
+                    "note": "Expected · WBCHSE proposal shared by the education minister, 2026-11-19 (PTI); routine awaited",
                     "predicted": true
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "tn-sslc-2027",
@@ -1054,13 +1057,13 @@
                     "session": "Exam 1",
                     "date": "2027-03-22",
                     "endDate": "2027-04-05",
-                    "note": "KSEAB provisional timetable"
+                    "note": "KSEAB final timetable (kseab.karnataka.gov.in), released 2026-10-29"
                 },
                 {
                     "session": "Exam 2",
                     "date": "2027-05-24",
                     "endDate": "2027-05-31",
-                    "note": "KSEAB provisional timetable"
+                    "note": "KSEAB final timetable (kseab.karnataka.gov.in), released 2026-10-29"
                 }
             ]
         },
@@ -1071,16 +1074,17 @@
                 {
                     "session": "Exam 1",
                     "date": "2027-02-27",
-                    "endDate": "2027-03-17",
-                    "note": "KSEAB provisional timetable"
+                    "endDate": "2027-03-18",
+                    "note": "KSEAB final timetable (kseab.karnataka.gov.in), released 2026-10-29"
                 },
                 {
                     "session": "Exam 2",
                     "date": "2027-05-03",
                     "endDate": "2027-05-15",
-                    "note": "KSEAB provisional timetable"
+                    "note": "KSEAB final timetable (kseab.karnataka.gov.in), released 2026-10-29"
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "gseb-ssc-2027",
@@ -1102,7 +1106,7 @@
                     "session": "Science Practicals",
                     "date": "2027-02-05",
                     "endDate": "2027-02-13",
-                    "note": "Official GSHSEB calendar"
+                    "note": "Official GSHSEB school activity calendar 2026-27 (letter dated 2026-05-02)"
                 },
                 {
                     "session": "Theory",
@@ -1110,7 +1114,8 @@
                     "endDate": "2027-03-17",
                     "note": "Official GSHSEB calendar · subject timetable awaited"
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "ap-ssc-2027",
@@ -1143,11 +1148,13 @@
             "sessions": [
                 {
                     "session": "Main Exam",
-                    "date": "2027-02-23",
-                    "note": "Expected · BIEAP timetable awaited",
+                    "date": "2027-02-25",
+                    "endDate": "2027-03-16",
+                    "note": "BIEAP tentative timetable, 2026-10-22 · 2nd year Feb 25-Mar 16 (Careers360, Shiksha, Hans India)",
                     "predicted": true
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "ts-inter-2027",
@@ -1156,11 +1163,12 @@
                 {
                     "session": "Main Exam",
                     "date": "2027-02-25",
-                    "endDate": "2027-03-18",
-                    "note": "Expected · TGBIE timetable awaited",
+                    "endDate": "2027-03-20",
+                    "note": "TGBIE tentative timetable (tgbie.cgg.gov.in), released 2026-11-19",
                     "predicted": true
                 }
-            ]
+            ],
+            "updated": "2026-11-23"
         },
         {
             "id": "ctet-2026",
