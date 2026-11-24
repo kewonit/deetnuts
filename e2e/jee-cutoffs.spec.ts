@@ -22,6 +22,44 @@ test("year page is source-useful in server HTML and exposes canonical SEO", asyn
   await expect(page.locator(".jee-grid")).toContainText("Computer Science and Engineering");
 });
 
+const collegePath = "/jee-main/colleges/assam-university";
+
+test("college page carries the latest explorer, college schema and a share image", async ({ page, request }) => {
+  const response = await request.get(collegePath);
+  expect(response.status()).toBe(200);
+  const html = await response.text();
+  expect(html).toContain('"@type":"CollegeOrUniversity"');
+  expect(html).toContain('"@type":"BreadcrumbList"');
+  expect(html).toContain("Computer Science and Engineering");
+  expect(html).toContain(`${collegePath}/cutoffs/2025`);
+  expect(html).toContain("Source records");
+  expect(html).toMatch(/<meta property="og:image" content="https:\/\/[^"]+"/);
+
+  await page.goto(collegePath);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Assam University Silchar");
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", `https://www.deetnuts.com${collegePath}`);
+  await expect(page.locator(".jee-grid")).toContainText("Computer Science and Engineering");
+  await expect(page.getByRole("heading", { name: "Similar colleges" })).toBeVisible();
+});
+
+test("compare my rank focuses the rank box and keeps the chosen filters", async ({ page }) => {
+  await page.goto(collegePath);
+  const rounds = page.getByRole("group", { name: "Round" });
+  await rounds.getByRole("button", { name: "2", exact: true }).click();
+  await expect(rounds.locator('[aria-pressed="true"]')).toHaveText("2");
+  await page.getByRole("link", { name: "Compare my rank" }).click();
+  await expect(page.locator("#score input[type=number]")).toBeFocused();
+  await expect(rounds.locator('[aria-pressed="true"]')).toHaveText("2");
+});
+
+test("bare exam paths redirect to their college directories", async ({ request }) => {
+  for (const exam of ["jee-main", "jee-advanced"]) {
+    const response = await request.get(`/${exam}`, { maxRedirects: 0 });
+    expect(response.status()).toBe(308);
+    expect(response.headers().location).toMatch(new RegExp(`/${exam}/colleges$`));
+  }
+});
+
 test("filters cascade, persist in the fragment, and support browser history", async ({ page }) => {
   await page.goto(pagePath);
   await page.locator(".jee-explorer").waitFor({ state: "attached" });
@@ -60,14 +98,16 @@ test("mobile restyles the one semantic table without horizontal page overflow", 
 });
 
 test("cutoff surface has no detectable WCAG A/AA violations", async ({ page }) => {
-  await page.emulateMedia({ colorScheme: "light" });
-  await page.goto(pagePath);
-  await page.locator(".jee-explorer").waitFor({ state: "attached" });
-  const lightResults = await new AxeBuilder({ page }).include(".jee-cutoff-shell").analyze();
-  expect(lightResults.violations).toEqual([]);
-  await page.emulateMedia({ colorScheme: "dark" });
-  const darkResults = await new AxeBuilder({ page }).include(".jee-cutoff-shell").analyze();
-  expect(darkResults.violations).toEqual([]);
+  for (const path of [pagePath, collegePath]) {
+    await page.emulateMedia({ colorScheme: "light" });
+    await page.goto(path);
+    await page.locator(".jee-explorer").waitFor({ state: "attached" });
+    const lightResults = await new AxeBuilder({ page }).include(".jee-cutoff-shell").analyze();
+    expect(lightResults.violations).toEqual([]);
+    await page.emulateMedia({ colorScheme: "dark" });
+    const darkResults = await new AxeBuilder({ page }).include(".jee-cutoff-shell").analyze();
+    expect(darkResults.violations).toEqual([]);
+  }
 });
 
 test("cutoff routes use the site footer with JEE colleges and sources", async ({ page }) => {

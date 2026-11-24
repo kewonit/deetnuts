@@ -1,6 +1,7 @@
 import "server-only";
 
 import manifest from "@/data/mht-cet/college-media.json";
+import jeeManifest from "@/data/jee/college-media.json";
 
 export interface CollegeMediaAsset {
   src: string;
@@ -19,6 +20,9 @@ export interface CollegeMediaAsset {
   extractedFrom?:
     | { page: number; embeddedImage: string; documentSha256: string }
     | { selector: string; documentSha256: string };
+  // Set for Wikimedia files, whose licence may require credit.
+  license?: string;
+  credit?: string;
 }
 
 export interface CollegeMediaEntry {
@@ -39,6 +43,9 @@ export interface CollegeMediaEntry {
 
 const colleges = (manifest as { colleges: Record<string, CollegeMediaEntry> })
   .colleges;
+const jeeColleges = (
+  jeeManifest as { colleges: Record<string, CollegeMediaEntry> }
+).colleges;
 
 export function getMhtCetCollegeMedia(
   collegeId: string | number,
@@ -52,4 +59,41 @@ export function getMhtCetCollegeNames(): Record<string, string> {
   return Object.fromEntries(
     Object.values(colleges).map((entry) => [String(Number(entry.code)), entry.collegeName]),
   );
+}
+
+// JEE institutes are keyed by their catalog id, e.g. "iit-bombay".
+export function getJeeCollegeMedia(collegeId: string): CollegeMediaEntry | null {
+  return jeeColleges[collegeId] ?? null;
+}
+
+export interface CollegeMediaCredit {
+  collegeName: string;
+  canonicalPath: string;
+  kind: "logo" | "campus";
+  sourcePage: string;
+  license: string;
+  credit: string | null;
+}
+
+// Openly licensed JEE images, for the credits on the open-source notices page. Fair-use
+// logos identify their institution and need no credit line.
+export function getJeeMediaCredits(): CollegeMediaCredit[] {
+  return Object.values(jeeColleges)
+    .flatMap((entry) =>
+      (["logo", "campus"] as const).flatMap((kind) => {
+        const asset = entry[kind];
+        if (!asset?.license || /fair use/i.test(asset.license)) return [];
+        return [
+          {
+            collegeName: entry.collegeName,
+            canonicalPath: entry.canonicalPath,
+            kind,
+            sourcePage: asset.sourcePage,
+            license: asset.license,
+            credit: asset.credit ?? null,
+          },
+        ];
+      }),
+    )
+    .sort((left, right) => left.collegeName.localeCompare(right.collegeName, "en"));
 }

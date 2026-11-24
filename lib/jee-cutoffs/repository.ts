@@ -4,6 +4,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { readParquetRows } from "@ejam/data/college-predictor";
 import { resolveDataRoot } from "@ejam/data/data-root";
+import { bodyLabel } from "./labels";
 import type {
   CounsellingBody,
   CutoffChartPoint,
@@ -108,15 +109,6 @@ export async function getCutoffCollegeRows(
 
 export function examLabel(examId: JeeExamId): string {
   return examId === "jee-main" ? "JEE Main" : "JEE Advanced";
-}
-
-export function bodyLabel(body: CounsellingBody): string {
-  return body === "josaa" ? "JoSAA" : "CSAB";
-}
-
-export function genderLabel(gender: string): string {
-  if (gender === "NA") return "Not specified in source";
-  return gender.replace("Female-only (including Supernumerary)", "Female-only");
 }
 
 export function offeringFromRow(row: CutoffServingRow): CutoffOffering {

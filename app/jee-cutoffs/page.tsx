@@ -77,7 +77,10 @@ export default async function Page() {
     {
       href: "/jee-advanced/colleges",
       title: "JEE Advanced colleges",
-      fact: `${advanced.length} IITs`,
+      // IISc also admits on JEE Advanced ranks, so only name IITs when they are all there is.
+      fact: advanced.every((college) => college.type === "IIT")
+        ? `${advanced.length} IITs`
+        : `${advanced.length} colleges`,
     },
     {
       href: "/college-predictor",

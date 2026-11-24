@@ -7,7 +7,19 @@ import { promisify } from "node:util";
 import sharp from "sharp";
 
 const root = process.cwd();
-const scratch = resolve(root, "data/output/college-media");
+// `--system jee` (or COLLEGE_MEDIA_SYSTEM=jee) works on JEE institutes, keyed by catalog
+// id; the default is MHT-CET, keyed by five-digit CAP code.
+const systemFlag = process.argv.indexOf("--system");
+export const system =
+  (systemFlag >= 0
+    ? process.argv.splice(systemFlag, 2)[1]
+    : process.env.COLLEGE_MEDIA_SYSTEM) ?? "mht-cet";
+if (!["mht-cet", "jee"].includes(system))
+  throw new Error("--system must be mht-cet or jee");
+const scratch = resolve(
+  root,
+  system === "mht-cet" ? "data/output/college-media" : `data/output/college-media/${system}`,
+);
 const runFile = promisify(execFile);
 const userAgent =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36";
@@ -250,7 +262,7 @@ export async function promoteAsset(
 ) {
   if (!["logo", "campus"].includes(kind))
     throw new Error("Asset kind must be logo or campus");
-  const directory = resolve(root, "public/mht-cet/colleges", candidate.code);
+  const directory = resolve(root, `public/${system}/colleges`, candidate.code);
   await mkdir(directory, { recursive: true });
   let image = sharp(candidate.originalPath).rotate();
   if (candidate.crop) image = image.extract(candidate.crop);
@@ -270,7 +282,7 @@ export async function promoteAsset(
   const { data, info } = await image.toBuffer({ resolveWithObject: true });
   await writeFile(resolve(directory, `${kind}.webp`), data);
   return {
-    src: `/mht-cet/colleges/${candidate.code}/${kind}.webp`,
+    src: `/${system}/colleges/${candidate.code}/${kind}.webp`,
     width: info.width,
     height: info.height,
     sourcePage: candidate.sourcePage,
@@ -366,6 +378,6 @@ if (
     );
   else
     throw new Error(
-      "Use inspect <page-url> or candidate <code> <image-url> <source-page> [official|secondary]",
+      "Use [--system mht-cet|jee] inspect <page-url> or candidate <code> <image-url> <source-page> [official|secondary]",
     );
 }

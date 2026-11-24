@@ -1,7 +1,8 @@
 "use client";
 
-import Link from "next/link";
+import Image from "next/image";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+import { IntentPrefetchLink } from "@/components/admissions/IntentPrefetchLink";
 import MhtPill from "@/components/admissions/MhtPill";
 import {
   collegeSearchTier,
@@ -19,6 +20,7 @@ export interface JeeDirectoryCollege {
   years: number;
   aliases: string[];
   top: { rank: number; program: string } | null;
+  logo: { src: string; background?: string } | null;
 }
 
 type Sort = "rank" | "name";
@@ -220,13 +222,30 @@ export function JeeCollegeDirectory({
           <ul className="mht-dir-list">
             {visible.map((college) => (
               <li key={college.id}>
-                <Link
+                <IntentPrefetchLink
                   className="mht-dir-row"
                   href={college.path}
                   title={college.fullName}
                 >
-                  <span className="mht-dir-logo jee-type" aria-hidden="true">
-                    {college.type}
+                  <span
+                    className={`mht-dir-logo${college.logo ? "" : " jee-type"}`}
+                    aria-hidden="true"
+                  >
+                    {college.logo ? (
+                      <Image
+                        src={college.logo.src}
+                        alt=""
+                        width={40}
+                        height={40}
+                        style={
+                          college.logo.background
+                            ? { background: college.logo.background }
+                            : undefined
+                        }
+                      />
+                    ) : (
+                      college.type
+                    )}
                   </span>
                   <span>
                     <span className="mht-dir-name">{college.name}</span>
@@ -245,7 +264,7 @@ export function JeeCollegeDirectory({
                   ) : (
                     <span />
                   )}
-                </Link>
+                </IntentPrefetchLink>
               </li>
             ))}
           </ul>

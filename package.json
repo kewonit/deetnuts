@@ -36,6 +36,7 @@
     "generate:mht-cet-eligibility-map": "tsx scripts/generate-mht-cet-eligibility-map.ts",
     "generate:admissions-canonical-manifest": "tsx scripts/generate-admissions-canonical-manifest.ts",
     "verify:mht-cet-media": "node scripts/verify-college-media.mjs",
+    "verify:jee-media": "node scripts/verify-college-media.mjs --system jee",
     "test:e2e:jee-cutoffs": "playwright test e2e/jee-cutoffs.spec.ts",
     "verify:jee-cutoff-data": "node --import tsx ejam/packages/data-cli/src/release/fetch-data.ts && node --import tsx ejam/packages/data-cli/src/jee/cutoff-pages/verify.ts",
     "verify:production": "node scripts/verify-production.mjs",

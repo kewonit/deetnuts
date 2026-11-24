@@ -5,6 +5,7 @@ import {
   getCutoffCollegeRows,
   getJeeCutoffCatalog,
 } from "./repository";
+import { PAPER_TWO } from "./labels";
 import { getJeeSeoRoutes } from "./seo";
 import type { CounsellingBody, CutoffServingRow, JeeExamId } from "./types";
 
@@ -137,10 +138,6 @@ export interface CollegePeak {
   program: string;
 }
 
-// Architecture and planning seats are allotted on JEE Main Paper 2 ranks, so they never
-// rank against engineering programs.
-const PAPER_TWO = /arch|plan/i;
-
 function peakFor(
   collegeId: string,
   year: number,
@@ -173,7 +170,24 @@ function peakFor(
 
 // Each college's most competitive engineering closing rank in its latest year, in the default
 // seat pool the college page charts: JoSAA last round, OPEN, Gender-Neutral, AI before OS before HS.
-export async function getCutoffCollegePeaks(
+// The data ships with the build, so each exam's peaks are computed once per process:
+// the directory and every college page's similar colleges read the same map.
+const peaksByExam = new Map<string, Promise<Map<string, CollegePeak>>>();
+
+export function getCutoffCollegePeaks(
+  exam?: JeeExamId,
+): Promise<Map<string, CollegePeak>> {
+  const key = exam ?? "all";
+  let promise = peaksByExam.get(key);
+  if (!promise) {
+    promise = computeCollegePeaks(exam);
+    peaksByExam.set(key, promise);
+    promise.catch(() => peaksByExam.delete(key));
+  }
+  return promise;
+}
+
+async function computeCollegePeaks(
   exam?: JeeExamId,
 ): Promise<Map<string, CollegePeak>> {
   const catalog = await getJeeCutoffCatalog();

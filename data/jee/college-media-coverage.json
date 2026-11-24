@@ -1,0 +1,340 @@
+{
+  "totalColleges": 131,
+  "reviewedColleges": 131,
+  "logos": 131,
+  "campusBackgrounds": 107,
+  "photoAvatars": 0,
+  "initialAvatars": 0,
+  "neutralBackgrounds": 24,
+  "officialAssets": 87,
+  "secondaryAssets": 151,
+  "decodedAssets": 238,
+  "losslessLogos": 131,
+  "assetBytes": 27198486,
+  "unavailableLogos": [],
+  "unavailableBackgrounds": [
+    "bit-deoghar",
+    "cit-kokrajhar",
+    "gati-shakti-vishwavidyalaya",
+    "gkciet-malda",
+    "gurukula-kangri-vishwavidyalaya",
+    "ict-iocl-bhubaneswar",
+    "iet-dr-hsg-university",
+    "iiht-salem",
+    "iiit-agartala",
+    "iiit-bhopal",
+    "iiit-nagpur",
+    "iiit-ranchi",
+    "iiit-sonepat",
+    "iiit-sri-city",
+    "iiit-surat",
+    "iiit-vadodara-diu",
+    "iiitdm-kurnool",
+    "iit-goa",
+    "nielit-aurangabad",
+    "nielit-gorakhpur",
+    "nielit-ropar",
+    "nit-bhopal",
+    "nit-manipur",
+    "nit-mizoram"
+  ],
+  "unavailable": [],
+  "partial": [
+    {
+      "code": "bit-deoghar",
+      "name": "Birla Institute of Technology Deoghar Off-Campus",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: Wikipedia Birla Institute of Technology Mesra.png (Fair use). No campus photograph clear enough to use. BIT Mesra off-campus centre; the logo is BIT Mesra's. No photograph shows this centre itself."
+    },
+    {
+      "code": "cit-kokrajhar",
+      "name": "Central Institute of Technology Kokrajhar",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: official website. No campus photograph clear enough to use."
+    },
+    {
+      "code": "gati-shakti-vishwavidyalaya",
+      "name": "Gati Shakti Vishwavidyalaya Vadodara",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: Wikipedia Gati Shakti Vishwavidyalaya Logo.png (Fair use). No campus photograph clear enough to use."
+    },
+    {
+      "code": "gkciet-malda",
+      "name": "Ghani Khan Choudhary Institute of Engineering and Technology Malda",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: official website. No campus photograph clear enough to use."
+    },
+    {
+      "code": "gurukula-kangri-vishwavidyalaya",
+      "name": "Gurukula Kangri Vishwavidyalaya Haridwar",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: Wikipedia Gurukul Kangri Vishwavidyalaya logo.jpg (Fair use). No campus photograph clear enough to use."
+    },
+    {
+      "code": "ict-iocl-bhubaneswar",
+      "name": "Institute of Chemical Technology Mumbai Indian Oil Odisha Campus Bhubaneswar",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: Wikipedia Institute of Chemical Technology logo.png (Fair use). No campus photograph clear enough to use."
+    },
+    {
+      "code": "iet-dr-hsg-university",
+      "name": "Institute of Engineering and Technology Dr HS Gour University Sagar",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: official website. No campus photograph clear enough to use. Part of Dr. Harisingh Gour University; the logo is the university's."
+    },
+    {
+      "code": "iiht-salem",
+      "name": "Indian Institute of Handloom Technology Salem",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: official website. No campus photograph clear enough to use."
+    },
+    {
+      "code": "iiit-agartala",
+      "name": "Indian Institute of Information Technology Agartala",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: official website. No campus photograph clear enough to use."
+    },
+    {
+      "code": "iiit-bhopal",
+      "name": "Indian Institute of Information Technology Bhopal",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: Wikipedia Indian Institute of Information Technology, Bhopal Logo.png (Fair use). No campus photograph clear enough to use."
+    },
+    {
+      "code": "iiit-nagpur",
+      "name": "Indian Institute of Information Technology Nagpur",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: Wikipedia Indian Institute of Information Technology, Nagpur Logo.svg (PD). No campus photograph clear enough to use."
+    },
+    {
+      "code": "iiit-ranchi",
+      "name": "Indian Institute of Information Technology Ranchi",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: Wikipedia Indian Institute of Information Technology, Ranchi Logo.png (Fair use). No campus photograph clear enough to use."
+    },
+    {
+      "code": "iiit-sonepat",
+      "name": "Indian Institute of Information Technology Sonepat",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: Wikipedia Indian Institute of Information Technology, Sonepat logo.png (Fair use). No campus photograph clear enough to use."
+    },
+    {
+      "code": "iiit-sri-city",
+      "name": "Indian Institute of Information Technology Sri City",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: official website. No campus photograph clear enough to use."
+    },
+    {
+      "code": "iiit-surat",
+      "name": "Indian Institute of Information Technology Surat",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: Wikipedia IIIT Surat logo.jpg (Fair use). No campus photograph clear enough to use."
+    },
+    {
+      "code": "iiit-vadodara-diu",
+      "name": "Indian Institute of Information Technology Vadodara International Campus Diu",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: Wikipedia Indian Institute of Information Technology Vadodara Logo.svg (Fair use). No campus photograph clear enough to use. Shares IIIT Vadodara's logo. The institute's own photos could not be tied to the Diu campus, so none is used."
+    },
+    {
+      "code": "iiitdm-kurnool",
+      "name": "Indian Institute of Information Technology Design and Manufacturing Kurnool",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: official website. No campus photograph clear enough to use."
+    },
+    {
+      "code": "iit-goa",
+      "name": "Indian Institute of Technology Goa",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: Wikipedia Indian Institute of Technology Goa Logo.svg (Fair use). No campus photograph clear enough to use."
+    },
+    {
+      "code": "nielit-aurangabad",
+      "name": "National Institute of Electronics and Information Technology Aurangabad",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: Wikipedia NIELIT Logo.jpg (Fair use). No campus photograph clear enough to use. Uses the NIELIT logo shared by all NIELIT centres."
+    },
+    {
+      "code": "nielit-gorakhpur",
+      "name": "National Institute of Electronics and Information Technology Gorakhpur",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: Wikipedia NIELIT Logo.jpg (Fair use). No campus photograph clear enough to use. Uses the NIELIT logo shared by all NIELIT centres."
+    },
+    {
+      "code": "nielit-ropar",
+      "name": "National Institute of Electronics and Information Technology Ropar",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: Wikipedia NIELIT Logo.jpg (Fair use). No campus photograph clear enough to use. Uses the NIELIT logo shared by all NIELIT centres. Wikipedia photos of Ropar show IIT Ropar, not this centre."
+    },
+    {
+      "code": "nit-bhopal",
+      "name": "Maulana Azad National Institute of Technology Bhopal",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: Wikipedia Maulana Azad National Institute of Technology Logo.png (Fair use). No campus photograph clear enough to use."
+    },
+    {
+      "code": "nit-manipur",
+      "name": "National Institute of Technology Manipur",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: Wikipedia National Institute of Technology, Manipur logo.png (Fair use). No campus photograph clear enough to use."
+    },
+    {
+      "code": "nit-mizoram",
+      "name": "National Institute of Technology Mizoram",
+      "missing": [
+        "campus"
+      ],
+      "notes": "Logo: official website. No campus photograph clear enough to use."
+    }
+  ],
+  "sharedAssets": [
+    [
+      {
+        "code": "bit-deoghar",
+        "kind": "logo"
+      },
+      {
+        "code": "bit-mesra",
+        "kind": "logo"
+      },
+      {
+        "code": "bit-patna",
+        "kind": "logo"
+      }
+    ],
+    [
+      {
+        "code": "iicpt-thanjavur",
+        "kind": "logo"
+      },
+      {
+        "code": "niftem-thanjavur",
+        "kind": "logo"
+      }
+    ],
+    [
+      {
+        "code": "iicpt-thanjavur",
+        "kind": "campus"
+      },
+      {
+        "code": "niftem-thanjavur",
+        "kind": "campus"
+      }
+    ],
+    [
+      {
+        "code": "iiht-salem",
+        "kind": "logo"
+      },
+      {
+        "code": "iiht-varanasi",
+        "kind": "logo"
+      }
+    ],
+    [
+      {
+        "code": "iiit-vadodara",
+        "kind": "logo"
+      },
+      {
+        "code": "iiit-vadodara-diu",
+        "kind": "logo"
+      }
+    ],
+    [
+      {
+        "code": "niamt-ranchi",
+        "kind": "logo"
+      },
+      {
+        "code": "nifft-ranchi",
+        "kind": "logo"
+      }
+    ],
+    [
+      {
+        "code": "niamt-ranchi",
+        "kind": "campus"
+      },
+      {
+        "code": "nifft-ranchi",
+        "kind": "campus"
+      }
+    ],
+    [
+      {
+        "code": "nielit-ajmer",
+        "kind": "logo"
+      },
+      {
+        "code": "nielit-aurangabad",
+        "kind": "logo"
+      },
+      {
+        "code": "nielit-gorakhpur",
+        "kind": "logo"
+      },
+      {
+        "code": "nielit-ropar",
+        "kind": "logo"
+      }
+    ],
+    [
+      {
+        "code": "pec-puducherry",
+        "kind": "logo"
+      },
+      {
+        "code": "ptu-puducherry",
+        "kind": "logo"
+      }
+    ]
+  ]
+}

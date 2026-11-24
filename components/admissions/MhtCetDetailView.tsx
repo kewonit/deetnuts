@@ -50,7 +50,10 @@ export default function MhtCetDetailView({
         name={college.name}
         canonicalPath={model.canonicalPath}
         location={{ region: "Maharashtra" }}
-        system="MHT-CET"
+        crumbs={[
+          { name: "MHT-CET", path: "/mht-cet" },
+          { name: "Colleges", path: "/mht-cet/colleges" },
+        ]}
       />
       <main className="mht-main mht-college">
         <nav aria-label="Breadcrumb" className="mht-crumbs mht-page">

@@ -28,6 +28,15 @@ import type {
   JeeExamId,
 } from "@/lib/jee-cutoffs/types";
 import type { JeeYearData, YearPool } from "@/lib/jee-cutoffs/year-data";
+import {
+  CATEGORY_ORDER,
+  GENDER_ORDER,
+  PAPER_TWO,
+  QUOTA_ORDER,
+  bodyLabel,
+  genderLabel,
+  quotaLabel,
+} from "@/lib/jee-cutoffs/labels";
 
 type Mode = "grid" | "seat";
 type Sort = "rank" | "name";
@@ -43,53 +52,12 @@ type Cell = { opening: number; closing: number; pool: YearPool };
 const MODE_STORAGE_KEY = "deetnuts:jee-cutoff-mode:v1";
 const SEAT_STORAGE_KEY = "deetnuts:jee-seat:v1";
 
-// Main categories first, then their PwD seats, the way students scan them.
-const CATEGORY_ORDER = [
-  "OPEN",
-  "EWS",
-  "OBC-NCL",
-  "SC",
-  "ST",
-  "OPEN (PwD)",
-  "EWS (PwD)",
-  "OBC-NCL (PwD)",
-  "SC (PwD)",
-  "ST (PwD)",
-];
-const QUOTA_ORDER = ["AI", "OS", "HS"];
-const GENDER_ORDER = [
-  "Gender-Neutral",
-  "NA",
-  "Female-only (including Supernumerary)",
-];
-const QUOTA_LABELS: Record<string, string> = {
-  AI: "All India",
-  HS: "Home state",
-  OS: "Other state",
-  GO: "Goa",
-  JK: "J&K",
-  LA: "Ladakh",
-  AP: "Andhra Pradesh",
-};
-
-const bodyLabel = (body: CounsellingBody) =>
-  body === "josaa" ? "JoSAA" : "CSAB";
-const quotaLabel = (quota: string) => QUOTA_LABELS[quota] ?? quota;
-const genderLabel = (gender: string) =>
-  gender === "NA"
-    ? "Not specified"
-    : gender === "Gender-Neutral"
-      ? "Gender-neutral"
-      : "Female-only";
 // JoSAA ranks each category seat against that category's rank list.
 const rankName = (seatType: string) =>
   seatType === "OPEN"
     ? "CRL"
     : seatType.replace("OPEN", "CRL").replace(" (PwD)", "-PwD");
 const formatRank = (value: number) => value.toLocaleString("en-IN");
-// Architecture and planning seats are allotted on JEE Main Paper 2 ranks, so a Paper 1
-// rank is never compared with them and they sort after engineering programs.
-const PAPER_TWO = /arch|plan/i;
 
 function ordered(values: Iterable<string>, order: string[]) {
   return [...new Set(values)].sort((left, right) => {
@@ -182,6 +150,7 @@ export function JeeYearExplorer({
   collegePath,
   data,
   initial,
+  anchorId,
 }: {
   exam: JeeExamId;
   year: number;
@@ -189,6 +158,8 @@ export function JeeYearExplorer({
   collegePath: string;
   data: JeeYearData;
   initial: CutoffSelection;
+  // A link to `#${anchorId}` focuses the rank box instead of resetting the filters.
+  anchorId?: string;
 }) {
   const router = useRouter();
   const yearPath = `${collegePath}/cutoffs/${year}`;
@@ -218,6 +189,7 @@ export function JeeYearExplorer({
   const [rankText, setRankText] = useState("");
   const [onlyCleared, setOnlyCleared] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
+  const rankRef = useRef<HTMLInputElement>(null);
   const rankId = useId();
 
   // Every choice cascades from the data this college published, so no combination is empty.
@@ -340,7 +312,18 @@ export function JeeYearExplorer({
           : "grid"),
     );
 
+    const atAnchor = () =>
+      Boolean(anchorId) && location.hash === `#${anchorId}`;
+    const focusRank = () => {
+      if (atAnchor()) rankRef.current?.focus({ preventScroll: true });
+    };
+    focusRank();
+
     const onPopState = () => {
+      if (atAnchor()) {
+        rankRef.current?.focus({ preventScroll: true });
+        return;
+      }
       const next = fromHash();
       setSlice(next.slice);
       setOpenId(next.open);
@@ -359,9 +342,11 @@ export function JeeYearExplorer({
       searchRef.current?.focus();
     };
     window.addEventListener("popstate", onPopState);
+    window.addEventListener("hashchange", focusRank);
     window.addEventListener("keydown", focusSearch);
     return () => {
       window.removeEventListener("popstate", onPopState);
+      window.removeEventListener("hashchange", focusRank);
       window.removeEventListener("keydown", focusSearch);
     };
     // The fragment and saved seat are read once, on arrival.
@@ -518,6 +503,7 @@ export function JeeYearExplorer({
 
   return (
     <div
+      id={anchorId}
       className="mht-cutoff-explorer jee-explorer"
       data-mode={mode}
       data-scored={score ? "" : undefined}
@@ -534,6 +520,7 @@ export function JeeYearExplorer({
                 Your {rankName(slice.seatType)} rank
               </label>
               <input
+                ref={rankRef}
                 id={rankId}
                 type="number"
                 inputMode="numeric"
@@ -990,7 +977,10 @@ export function JeeYearExplorer({
                             style={
                               heat === null
                                 ? undefined
-                                : ({ "--heat": heat } as CSSProperties)
+                                : // Rounded so the server and browser print the same value.
+                                  ({
+                                    "--heat": Math.round(heat * 1000) / 1000,
+                                  } as CSSProperties)
                             }
                           >
                             {cell ? (

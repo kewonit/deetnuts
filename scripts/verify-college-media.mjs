@@ -5,18 +5,42 @@ import { resolve } from "node:path";
 import sharp from "sharp";
 
 const root = process.cwd();
-const canonical = JSON.parse(
-  await readFile(
-    resolve(root, "lib/admissions/canonical-manifest.generated.json"),
-    "utf8",
-  ),
-);
+// `--system jee` checks the JEE manifest against the cutoff catalog; the default is MHT-CET.
+const systemFlag = process.argv.indexOf("--system");
+const system = systemFlag >= 0 ? process.argv[systemFlag + 1] : "mht-cet";
+assert.ok(["mht-cet", "jee"].includes(system), "--system must be mht-cet or jee");
 const manifest = JSON.parse(
-  await readFile(resolve(root, "data/mht-cet/college-media.json"), "utf8"),
+  await readFile(resolve(root, `data/${system}/college-media.json`), "utf8"),
 );
-const expected = Object.keys(canonical.mhtCetColleges)
-  .map((code) => code.padStart(5, "0"))
-  .sort();
+let expected;
+let canonicalPathFor;
+if (system === "mht-cet") {
+  const canonical = JSON.parse(
+    await readFile(
+      resolve(root, "lib/admissions/canonical-manifest.generated.json"),
+      "utf8",
+    ),
+  );
+  expected = Object.keys(canonical.mhtCetColleges)
+    .map((code) => code.padStart(5, "0"))
+    .sort();
+  canonicalPathFor = (code) => canonical.mhtCetColleges[String(Number(code))];
+} else {
+  const catalog = JSON.parse(
+    await readFile(
+      resolve(root, "ejam/data/tools/college-cutoffs/catalog.json"),
+      "utf8",
+    ),
+  );
+  const paths = new Map(
+    catalog.colleges.map((college) => [
+      college.id,
+      `/${college.examId}/colleges/${college.id}`,
+    ]),
+  );
+  expected = [...paths.keys()].sort();
+  canonicalPathFor = (id) => paths.get(id);
+}
 assert.equal(manifest.version, 1);
 assert.deepEqual(
   Object.keys(manifest.colleges).sort(),
@@ -52,10 +76,7 @@ for (const code of expected) {
     `${code}: missing assets must be explicitly null`,
   );
   assert.equal(college.code, code);
-  assert.equal(
-    college.canonicalPath,
-    canonical.mhtCetColleges[String(Number(code))],
-  );
+  assert.equal(college.canonicalPath, canonicalPathFor(code));
   assert.ok(college.collegeName?.trim());
   assert.match(college.review.reviewedAt, /^\d{4}-\d{2}-\d{2}/);
   assert.ok(college.review.notes?.trim(), `${code}: review notes required`);
@@ -63,7 +84,7 @@ for (const code of expected) {
     college.attemptedSources.length > 0,
     `${code}: source attempts required`,
   );
-  if (college.identitySource) {
+  if (system === "mht-cet" && college.identitySource) {
     const identity = new URL(college.identitySource);
     const instituteCode = identity.searchParams.get("InstituteCode");
     if (instituteCode)
@@ -105,7 +126,7 @@ for (const code of expected) {
   for (const kind of ["logo", "campus"]) {
     const asset = college[kind];
     if (!asset) continue;
-    assert.equal(asset.src, `/mht-cet/colleges/${code}/${kind}.webp`);
+    assert.equal(asset.src, `/${system}/colleges/${code}/${kind}.webp`);
     assert.ok(["official", "secondary"].includes(asset.sourceType));
     for (const url of [asset.sourcePage, asset.sourceUrl])
       assert.ok(["http:", "https:"].includes(new URL(url).protocol));
@@ -163,7 +184,7 @@ for (const code of expected) {
     hashes.set(asset.sha256, owners);
   }
 }
-const assetDirectory = resolve(root, "public/mht-cet/colleges");
+const assetDirectory = resolve(root, `public/${system}/colleges`);
 for (const collegeDirectory of await readdir(assetDirectory, {
   withFileTypes: true,
 })) {
@@ -184,7 +205,7 @@ report.sharedAssets = [...hashes.values()].filter(
 );
 if (process.argv.includes("--write-report"))
   await writeFile(
-    resolve(root, "data/mht-cet/college-media-coverage.json"),
+    resolve(root, `data/${system}/college-media-coverage.json`),
     JSON.stringify(report, null, 2) + "\n",
   );
 console.log(JSON.stringify(report, null, 2));
